@@ -29,6 +29,7 @@ OVERVIEW_FILES = [
 
 MICRO_COURSE_DIR = "2_2微机系统"
 OOP_COURSE_DIR = "1_2面向对象程序设计"
+OOP_MOCK_DIR = "模拟题及其解析"
 MICRO_TYPE_ORDER = {
     "复习资料": 0,
     "习题精讲": 1,
@@ -145,6 +146,9 @@ def append_directory(lines: list[str], directory: Path, level: int) -> None:
     if directory.name == OOP_COURSE_DIR:
         append_oop_directory(lines, directory, level)
         return
+    if directory.name == OOP_MOCK_DIR:
+        append_oop_mock_directory(lines, directory, level)
+        return
 
     files = sorted(
         (path for path in directory.iterdir() if path.is_file() and should_include(path)),
@@ -233,6 +237,36 @@ def append_oop_directory(lines: list[str], directory: Path, level: int) -> None:
                 lines.append(f"{child_indent}- [{kind}]({link_for(file_path)})")
 
     for file_path in sorted(standalone, key=sort_key):
+        lines.append(f"{indent}- [{title_for(file_path)}]({link_for(file_path)})")
+
+    child_dirs = sorted(
+        (
+            path for path in directory.iterdir()
+            if path.is_dir() and any(child.is_file() and should_include(child) for child in path.rglob("*"))
+        ),
+        key=lambda path: path.name.casefold(),
+    )
+    for child_dir in child_dirs:
+        lines.append(f"{indent}- **{display_name(child_dir.name)}**")
+        append_directory(lines, child_dir, level + 1)
+
+
+def append_oop_mock_directory(lines: list[str], directory: Path, level: int) -> None:
+    """Show the recalled final first, followed by mock exams in numeric order."""
+    mock_number_re = re.compile(r"模拟试题（(?P<number>\d+)）")
+
+    def exam_key(path: Path) -> tuple[int, int, str]:
+        match = mock_number_re.search(path.stem)
+        if match:
+            return (1, int(match.group("number")), path.name.casefold())
+        return (0, 0, path.name.casefold())
+
+    indent = "  " * level
+    files = sorted(
+        (path for path in directory.iterdir() if path.is_file() and should_include(path)),
+        key=exam_key,
+    )
+    for file_path in files:
         lines.append(f"{indent}- [{title_for(file_path)}]({link_for(file_path)})")
 
 
