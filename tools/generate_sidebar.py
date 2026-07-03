@@ -23,16 +23,21 @@ INCLUDED_SUFFIXES = {".md", ".pdf"}
 
 OVERVIEW_FILES = [
     ROOT / "课程总览.md",
+    ROOT / "大一下课程总览.md",
     ROOT / "大二下课程总览.md",
 ]
 
 MICRO_COURSE_DIR = "2_2微机系统"
+OOP_COURSE_DIR = "1_2面向对象程序设计"
 MICRO_TYPE_ORDER = {
     "复习资料": 0,
     "习题精讲": 1,
     "自学理解手册": 2,
 }
 MICRO_FILE_RE = re.compile(r"^(?P<number>\d+)_(?P<title>.+?)(?P<kind>习题精讲|自学理解手册)?$")
+OOP_FILE_RE = re.compile(
+    r"^第(?P<number>\d+)章_(?P<title>.+?)_(?P<kind>讲解版|考前速记版)$"
+)
 
 SEMESTER_NAMES = {
     "1_1": "大一上",
@@ -137,6 +142,9 @@ def append_directory(lines: list[str], directory: Path, level: int) -> None:
     if directory.name == MICRO_COURSE_DIR:
         append_microcomputer_directory(lines, directory, level)
         return
+    if directory.name == OOP_COURSE_DIR:
+        append_oop_directory(lines, directory, level)
+        return
 
     files = sorted(
         (path for path in directory.iterdir() if path.is_file() and should_include(path)),
@@ -196,6 +204,35 @@ def append_microcomputer_directory(lines: list[str], directory: Path, level: int
             lines.append(f"{child_indent}- [{kind}]({link_for(file_path)})")
 
     for file_path in standalone:
+        lines.append(f"{indent}- [{title_for(file_path)}]({link_for(file_path)})")
+
+
+def append_oop_directory(lines: list[str], directory: Path, level: int) -> None:
+    """Group the two editions of each OOP chapter under one chapter heading."""
+    chapters: dict[int, dict[str, object]] = {}
+    standalone: list[Path] = []
+
+    for file_path in directory.iterdir():
+        if not file_path.is_file() or not should_include(file_path):
+            continue
+        match = OOP_FILE_RE.match(file_path.stem)
+        if not match:
+            standalone.append(file_path)
+            continue
+        number = int(match.group("number"))
+        chapter = chapters.setdefault(number, {"title": match.group("title"), "items": {}})
+        chapter["items"][match.group("kind")] = file_path
+
+    indent = "  " * level
+    child_indent = "  " * (level + 1)
+    for number, chapter in sorted(chapters.items()):
+        lines.append(f"{indent}- **第{number}章 {display_name(chapter['title'])}**")
+        for kind in ("讲解版", "考前速记版"):
+            file_path = chapter["items"].get(kind)
+            if file_path:
+                lines.append(f"{child_indent}- [{kind}]({link_for(file_path)})")
+
+    for file_path in sorted(standalone, key=sort_key):
         lines.append(f"{indent}- [{title_for(file_path)}]({link_for(file_path)})")
 
 
