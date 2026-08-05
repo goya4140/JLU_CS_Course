@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>排序算法可视化</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans SC", sans-serif;
+    background: #f8fafc;
+    padding: 20px;
+  }
+  .container { max-width: 800px; margin: 0 auto; }
+  h2 { color: #1e293b; margin-bottom: 16px; font-size: 20px; }
+  .controls {
+    display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px;
+    align-items: center;
+  }
+  button {
+    padding: 8px 16px; border: none; border-radius: 6px;
+    background: #0f766e; color: white; cursor: pointer;
+    font-size: 14px; transition: background 0.2s;
+  }
+  button:hover { background: #115e59; }
+  button:disabled { background: #94a3b8; cursor: not-allowed; }
+  select, input[type="range"] {
+    padding: 6px 10px; border-radius: 6px; border: 1px solid #cbd5e1;
+    font-size: 14px;
+  }
+  .visualization {
+    background: white; border-radius: 12px; padding: 20px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1); margin-bottom: 20px;
+  }
+  .bars {
+    display: flex; align-items: flex-end; justify-content: center;
+    height: 280px; gap: 3px; padding: 10px;
+  }
+  .bar {
+    flex: 1; max-width: 40px;
+    border-radius: 4px 4px 0 0;
+    transition: height 0.15s ease, background 0.15s ease;
+    display: flex; align-items: flex-end; justify-content: center;
+    color: white; font-size: 11px; font-weight: bold;
+    padding-bottom: 4px;
+  }
+  .bar.normal { background: #0ea5e9; }
+  .bar.compare { background: #f59e0b; }
+  .bar.swap { background: #ef4444; }
+  .bar.sorted { background: #10b981; }
+  .info {
+    background: #f1f5f9; border-radius: 8px; padding: 12px 16px;
+    font-size: 14px; color: #334155; line-height: 1.6;
+  }
+  .info .step { color: #0f766e; font-weight: 600; }
+  .legend {
+    display: flex; gap: 16px; margin-top: 12px; flex-wrap: wrap;
+    font-size: 13px; color: #64748b;
+  }
+  .legend-item { display: flex; align-items: center; gap: 6px; }
+  .legend-color {
+    width: 16px; height: 16px; border-radius: 4px;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <h2>排序算法交互演示</h2>
+  
+  <div class="controls">
+    <select id="algorithm">
+      <option value="bubble">冒泡排序</option>
+      <option value="insertion">直接插入排序</option>
+      <option value="selection">选择排序</option>
+      <option value="quick">快速排序</option>
+    </select>
+    <button id="generate">生成新数据</button>
+    <button id="start">开始排序</button>
+    <button id="reset">重置</button>
+    <label>速度: <input type="range" id="speed" min="1" max="10" value="5"></label>
+  </div>
+  
+  <div class="visualization">
+    <div class="bars" id="bars"></div>
+  </div>
+  
+  <div class="info">
+    <div class="step" id="stepInfo">点击「开始排序」观看算法执行过程</div>
+    <div id="detailInfo"></div>
+  </div>
+  
+  <div class="legend">
+    <div class="legend-item"><div class="legend-color" style="background:#0ea5e9"></div>未排序</div>
+    <div class="legend-item"><div class="legend-color" style="background:#f59e0b"></div>比较中</div>
+    <div class="legend-item"><div class="legend-color" style="background:#ef4444"></div>交换/移动</div>
+    <div class="legend-item"><div class="legend-color" style="background:#10b981"></div>已排序</div>
+  </div>
+</div>
+
+<script>
+const barsContainer = document.getElementById('bars');
+const stepInfo = document.getElementById('stepInfo');
+const detailInfo = document.getElementById('detailInfo');
+const algorithmSelect = document.getElementById('algorithm');
+const speedInput = document.getElementById('speed');
+
+let array = [];
+let isRunning = false;
+let abortFlag = false;
+const ARRAY_SIZE = 20;
+
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+function getDelay() {
+  // 速度 1-10，值越大越快，延迟越小
+  const speed = parseInt(speedInput.value);
+  return Math.max(20, 500 - speed * 45);
+}
+
+function generateArray() {
+  array = [];
+  for (let i = 0; i < ARRAY_SIZE; i++) {
+    array.push(Math.floor(Math.random() * 90) + 10);
+  }
+  renderBars();
+  stepInfo.textContent = '已生成随机数据，选择算法后点击「开始排序」';
+  detailInfo.textContent = '';
+}
+
+function renderBars(indices = {}, sortedCount = 0) {
+  barsContainer.innerHTML = '';
+  const maxVal = Math.max(...array);
+  array.forEach((val, i) => {
+    const bar = document.createElement('div');
+    bar.className = 'bar';
+    bar.style.height = `${(val / maxVal) * 100}%`;
+    bar.textContent = val;
+    
+    if (indices.swap && indices.swap.includes(i)) {
+      bar.classList.add('swap');
+    } else if (indices.compare && indices.compare.includes(i)) {
+      bar.classList.add('compare');
+    } else if (i >= array.length - sortedCount) {
+      bar.classList.add('sorted');
+    } else {
+      bar.classList.add('normal');
+    }
+    
+    barsContainer.appendChild(bar);
+  });
+}
+
+async function bubbleSort() {
+  const n = array.length;
+  stepInfo.textContent = '冒泡排序：反复扫描数组，将大的元素逐步"冒泡"到末尾';
+  
+  for (let i = 0; i < n - 1; i++) {
+    if (abortFlag) return;
+    let swapped = false;
+    
+    for (let j = 0; j < n - 1 - i; j++) {
+      if (abortFlag) return;
+      
+      detailInfo.textContent = `比较 ${array[j]} 和 ${array[j+1]}`;
+      renderBars({ compare: [j, j + 1] }, i);
+      await sleep(getDelay());
+      
+      if (array[j] > array[j + 1]) {
+        detailInfo.textContent = `${array[j]} > ${array[j+1]}，交换位置`;
+        renderBars({ swap: [j, j + 1] }, i);
+        await sleep(getDelay());
+        
+        [array[j], array[j + 1]] = [array[j + 1], array[j]];
+        swapped = true;
+        renderBars({ swap: [j, j + 1] }, i);
+        await sleep(getDelay());
+      }
+    }
+    
+    if (!swapped) {
+      detailInfo.textContent = '本轮没有交换，数组已有序，提前结束！';
+      renderBars({}, n);
+      break;
+    }
+  }
+  
+  renderBars({}, n);
+  stepInfo.textContent = '排序完成！';
+}
+
+async function insertionSort() {
+  const n = array.length;
+  stepInfo.textContent = '直接插入排序：维护有序区，将新元素插入到正确位置';
+  
+  for (let i = 1; i < n; i++) {
+    if (abortFlag) return;
+    let key = array[i];
+    let j = i - 1;
+    
+    detailInfo.textContent = `取出第 ${i+1} 个元素 ${key}，向前寻找插入位置`;
+    renderBars({ compare: [i] }, 0);
+    await sleep(getDelay());
+    
+    while (j >= 0 && array[j] > key) {
+      if (abortFlag) return;
+      detailInfo.textContent = `${array[j]} > ${key}，后移`;
+      renderBars({ compare: [j], swap: [j + 1] }, 0);
+      await sleep(getDelay());
+      
+      array[j + 1] = array[j];
+      j--;
+    }
+    
+    array[j + 1] = key;
+    detailInfo.textContent = `将 ${key} 插入到位置 ${j + 2}`;
+    renderBars({ swap: [j + 1] }, 0);
+    await sleep(getDelay());
+  }
+  
+  renderBars({}, n);
+  stepInfo.textContent = '排序完成！';
+}
+
+async function selectionSort() {
+  const n = array.length;
+  stepInfo.textContent = '选择排序：每轮从无序区选出最小元素，放到有序区末尾';
+  
+  for (let i = 0; i < n - 1; i++) {
+    if (abortFlag) return;
+    let minIdx = i;
+    
+    for (let j = i + 1; j < n; j++) {
+      if (abortFlag) return;
+      detailInfo.textContent = `查找无序区最小值，当前最小: ${array[minIdx]}`;
+      renderBars({ compare: [j, minIdx] }, i);
+      await sleep(getDelay());
+      
+      if (array[j] < array[minIdx]) {
+        minIdx = j;
+      }
+    }
+    
+    if (minIdx !== i) {
+      detailInfo.textContent = `交换 ${array[i]} 和最小值 ${array[minIdx]}`;
+      renderBars({ swap: [i, minIdx] }, i);
+      await sleep(getDelay());
+      [array[i], array[minIdx]] = [array[minIdx], array[i]];
+    }
+    
+    renderBars({}, i + 1);
+    await sleep(getDelay());
+  }
+  
+  renderBars({}, n);
+  stepInfo.textContent = '排序完成！';
+}
+
+async function quickSort() {
+  stepInfo.textContent = '快速排序：选择枢轴，将数组划分为"小"和"大"两部分，递归排序';
+  
+  async function partition(left, right) {
+    let pivot = array[right];
+    detailInfo.textContent = `区间 [${left+1}, ${right+1}]，选择枢轴: ${pivot}`;
+    renderBars({ compare: [right] });
+    await sleep(getDelay());
+    
+    let i = left - 1;
+    for (let j = left; j < right; j++) {
+      if (abortFlag) return -1;
+      detailInfo.textContent = `比较 ${array[j]} 和枢轴 ${pivot}`;
+      renderBars({ compare: [j, right] });
+      await sleep(getDelay());
+      
+      if (array[j] <= pivot) {
+        i++;
+        if (i !== j) {
+          detailInfo.textContent = `${array[j]} ≤ ${pivot}，交换到左侧区域`;
+          renderBars({ swap: [i, j] });
+          await sleep(getDelay());
+          [array[i], array[j]] = [array[j], array[i]];
+        }
+      }
+    }
+    
+    detailInfo.textContent = `将枢轴 ${pivot} 放到正确位置`;
+    renderBars({ swap: [i + 1, right] });
+    await sleep(getDelay());
+    [array[i + 1], array[right]] = [array[right], array[i + 1]];
+    
+    return i + 1;
+  }
+  
+  async function quickSortRec(left, right) {
+    if (left < right) {
+      let pivotPos = await partition(left, right);
+      if (pivotPos === -1) return;
+      await quickSortRec(left, pivotPos - 1);
+      await quickSortRec(pivotPos + 1, right);
+    }
+  }
+  
+  await quickSortRec(0, array.length - 1);
+  if (!abortFlag) {
+    renderBars({}, array.length);
+    stepInfo.textContent = '排序完成！';
+  }
+}
+
+async function startSort() {
+  if (isRunning) return;
+  isRunning = true;
+  abortFlag = false;
+  
+  document.getElementById('start').disabled = true;
+  document.getElementById('generate').disabled = true;
+  
+  const algo = algorithmSelect.value;
+  switch (algo) {
+    case 'bubble': await bubbleSort(); break;
+    case 'insertion': await insertionSort(); break;
+    case 'selection': await selectionSort(); break;
+    case 'quick': await quickSort(); break;
+  }
+  
+  isRunning = false;
+  document.getElementById('start').disabled = false;
+  document.getElementById('generate').disabled = false;
+}
+
+function resetSort() {
+  abortFlag = true;
+  isRunning = false;
+  generateArray();
+  document.getElementById('start').disabled = false;
+  document.getElementById('generate').disabled = false;
+}
+
+document.getElementById('generate').addEventListener('click', generateArray);
+document.getElementById('start').addEventListener('click', startSort);
+document.getElementById('reset').addEventListener('click', resetSort);
+
+// 初始化
+generateArray();
+</script>
+</body>
+</html>
