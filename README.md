@@ -9,7 +9,7 @@
 ## 在线阅读
 
 - [课程资料阅读站](https://goya4140.github.io/JLU_Course_2024/)
-- [GitHub 仓库](https://github.com/goya4140/JLU_Course_2024)
+- [GitHub 仓库](https://github.com/goya4140/JLU_CS_Course)
 - [吉林大学个人培养方案查询](https://iedu.jlu.edu.cn/jwapp/sys/xsfacx/*default/index.do?EMAP_LANG=zh#/ckgrpyfa)（需登录统一身份认证）
 
 阅读站基于 Docsify 构建，支持侧边栏导航、全文搜索、代码复制、图片预览和数学公式渲染。
