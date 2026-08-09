@@ -112,6 +112,9 @@
         ? window.location.pathname
         : window.location.pathname.replace(/\/[^/]*$/, '/'),
       loadSidebar: '_sidebar.md',
+      alias: {
+        '/.*/_sidebar.md': '/_sidebar.md'
+      },
       subMaxLevel: 0,
       sidebarDisplayLevel: 1,
       auto2top: true,

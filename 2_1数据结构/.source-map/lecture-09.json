@@ -1,0 +1,194 @@
+{
+  "source_file": "Lecture 9-树和二叉树的定义和性质.pdf",
+  "source_format": "powerpoint-export-pdf",
+  "powerpoint_provenance_verified": true,
+  "total_slides": 37,
+  "mapping_note": "连续动画帧合并为概念过程；引语、课程管理信息和非讲解型任务页不进入学习正文。",
+  "slides": [
+    {
+      "slide": 1,
+      "disposition": "used",
+      "target": "04_树与二叉树/04_1_树的基本概念.md"
+    },
+    {
+      "slide": 2,
+      "disposition": "omitted",
+      "reason": "课程引语或装饰页"
+    },
+    {
+      "slide": 3,
+      "disposition": "omitted",
+      "reason": "非讲解型课堂任务或课程管理信息"
+    },
+    {
+      "slide": 4,
+      "disposition": "merged",
+      "target": "04_树与二叉树/04_1_树的基本概念.md"
+    },
+    {
+      "slide": 5,
+      "disposition": "merged",
+      "target": "04_树与二叉树/04_1_树的基本概念.md"
+    },
+    {
+      "slide": 6,
+      "disposition": "merged",
+      "target": "04_树与二叉树/04_1_树的基本概念.md"
+    },
+    {
+      "slide": 7,
+      "disposition": "merged",
+      "target": "04_树与二叉树/04_1_树的基本概念.md"
+    },
+    {
+      "slide": 8,
+      "disposition": "merged",
+      "target": "04_树与二叉树/04_1_树的基本概念.md"
+    },
+    {
+      "slide": 9,
+      "disposition": "merged",
+      "target": "04_树与二叉树/04_1_树的基本概念.md"
+    },
+    {
+      "slide": 10,
+      "disposition": "merged",
+      "target": "04_树与二叉树/04_1_树的基本概念.md"
+    },
+    {
+      "slide": 11,
+      "disposition": "merged",
+      "target": "04_树与二叉树/04_1_树的基本概念.md"
+    },
+    {
+      "slide": 12,
+      "disposition": "merged",
+      "target": "04_树与二叉树/04_1_树的基本概念.md"
+    },
+    {
+      "slide": 13,
+      "disposition": "merged",
+      "target": "04_树与二叉树/04_1_树的基本概念.md"
+    },
+    {
+      "slide": 14,
+      "disposition": "merged",
+      "target": "04_树与二叉树/04_1_树的基本概念.md"
+    },
+    {
+      "slide": 15,
+      "disposition": "merged",
+      "target": "04_树与二叉树/04_1_树的基本概念.md"
+    },
+    {
+      "slide": 16,
+      "disposition": "merged",
+      "target": "04_树与二叉树/04_1_树的基本概念.md"
+    },
+    {
+      "slide": 17,
+      "disposition": "merged",
+      "target": "04_树与二叉树/04_1_树的基本概念.md"
+    },
+    {
+      "slide": 18,
+      "disposition": "merged",
+      "target": "04_树与二叉树/04_1_树的基本概念.md"
+    },
+    {
+      "slide": 19,
+      "disposition": "merged",
+      "target": "04_树与二叉树/04_1_树的基本概念.md"
+    },
+    {
+      "slide": 20,
+      "disposition": "merged",
+      "target": "04_树与二叉树/04_1_树的基本概念.md"
+    },
+    {
+      "slide": 21,
+      "disposition": "omitted",
+      "reason": "非讲解型课堂任务或课程管理信息"
+    },
+    {
+      "slide": 22,
+      "disposition": "omitted",
+      "reason": "非讲解型课堂任务或课程管理信息"
+    },
+    {
+      "slide": 23,
+      "disposition": "merged",
+      "target": "04_树与二叉树/04_1_树的基本概念.md"
+    },
+    {
+      "slide": 24,
+      "disposition": "merged",
+      "target": "04_树与二叉树/04_1_树的基本概念.md"
+    },
+    {
+      "slide": 25,
+      "disposition": "omitted",
+      "reason": "非讲解型课堂任务或课程管理信息"
+    },
+    {
+      "slide": 26,
+      "disposition": "merged",
+      "target": "04_树与二叉树/04_1_树的基本概念.md"
+    },
+    {
+      "slide": 27,
+      "disposition": "merged",
+      "target": "04_树与二叉树/04_1_树的基本概念.md"
+    },
+    {
+      "slide": 28,
+      "disposition": "merged",
+      "target": "04_树与二叉树/04_1_树的基本概念.md"
+    },
+    {
+      "slide": 29,
+      "disposition": "merged",
+      "target": "04_树与二叉树/04_1_树的基本概念.md"
+    },
+    {
+      "slide": 30,
+      "disposition": "omitted",
+      "reason": "非讲解型课堂任务或课程管理信息"
+    },
+    {
+      "slide": 31,
+      "disposition": "merged",
+      "target": "04_树与二叉树/04_1_树的基本概念.md"
+    },
+    {
+      "slide": 32,
+      "disposition": "merged",
+      "target": "04_树与二叉树/04_1_树的基本概念.md"
+    },
+    {
+      "slide": 33,
+      "disposition": "merged",
+      "target": "04_树与二叉树/04_1_树的基本概念.md"
+    },
+    {
+      "slide": 34,
+      "disposition": "omitted",
+      "reason": "非讲解型课堂任务或课程管理信息"
+    },
+    {
+      "slide": 35,
+      "disposition": "merged",
+      "target": "04_树与二叉树/04_1_树的基本概念.md"
+    },
+    {
+      "slide": 36,
+      "disposition": "omitted",
+      "reason": "非讲解型课堂任务或课程管理信息"
+    },
+    {
+      "slide": 37,
+      "disposition": "omitted",
+      "reason": "非讲解型课堂任务或课程管理信息"
+    }
+  ]
+}

@@ -1,0 +1,964 @@
+{
+  "source_file": "Lecture 5-栈及其应用.pdf",
+  "source_format": "powerpoint-export-pdf",
+  "powerpoint_provenance_verified": true,
+  "total_slides": 191,
+  "mapping_note": "连续动画帧合并为概念过程；引语、课程管理信息和非讲解型任务页不进入学习正文。",
+  "slides": [
+    {
+      "slide": 1,
+      "disposition": "used",
+      "target": "02_线性表栈与队列/02_2_栈.md"
+    },
+    {
+      "slide": 2,
+      "disposition": "omitted",
+      "reason": "课程引语或装饰页"
+    },
+    {
+      "slide": 3,
+      "disposition": "merged",
+      "target": "02_线性表栈与队列/02_2_栈.md"
+    },
+    {
+      "slide": 4,
+      "disposition": "merged",
+      "target": "02_线性表栈与队列/02_2_栈.md"
+    },
+    {
+      "slide": 5,
+      "disposition": "merged",
+      "target": "02_线性表栈与队列/02_2_栈.md"
+    },
+    {
+      "slide": 6,
+      "disposition": "merged",
+      "target": "02_线性表栈与队列/02_2_栈.md"
+    },
+    {
+      "slide": 7,
+      "disposition": "merged",
+      "target": "02_线性表栈与队列/02_2_栈.md"
+    },
+    {
+      "slide": 8,
+      "disposition": "merged",
+      "target": "02_线性表栈与队列/02_2_栈.md"
+    },
+    {
+      "slide": 9,
+      "disposition": "merged",
+      "target": "02_线性表栈与队列/02_2_栈.md"
+    },
+    {
+      "slide": 10,
+      "disposition": "merged",
+      "target": "02_线性表栈与队列/02_2_栈.md"
+    },
+    {
+      "slide": 11,
+      "disposition": "merged",
+      "target": "02_线性表栈与队列/02_2_栈.md"
+    },
+    {
+      "slide": 12,
+      "disposition": "merged",
+      "target": "02_线性表栈与队列/02_2_栈.md"
+    },
+    {
+      "slide": 13,
+      "disposition": "omitted",
+      "reason": "非讲解型课堂任务或课程管理信息"
+    },
+    {
+      "slide": 14,
+      "disposition": "omitted",
+      "reason": "非讲解型课堂任务或课程管理信息"
+    },
+    {
+      "slide": 15,
+      "disposition": "merged",
+      "target": "02_线性表栈与队列/02_2_栈.md"
+    },
+    {
+      "slide": 16,
+      "disposition": "merged",
+      "target": "02_线性表栈与队列/02_2_栈.md"
+    },
+    {
+      "slide": 17,
+      "disposition": "omitted",
+      "reason": "非讲解型课堂任务或课程管理信息"
+    },
+    {
+      "slide": 18,
+      "disposition": "merged",
+      "target": "02_线性表栈与队列/02_2_栈.md"
+    },
+    {
+      "slide": 19,
+      "disposition": "merged",
+      "target": "02_线性表栈与队列/02_2_栈.md"
+    },
+    {
+      "slide": 20,
+      "disposition": "merged",
+      "target": "02_线性表栈与队列/02_2_栈.md"
+    },
+    {
+      "slide": 21,
+      "disposition": "merged",
+      "target": "02_线性表栈与队列/02_2_栈.md"
+    },
+    {
+      "slide": 22,
+      "disposition": "merged",
+      "target": "02_线性表栈与队列/02_2_栈.md"
+    },
+    {
+      "slide": 23,
+      "disposition": "merged",
+      "target": "02_线性表栈与队列/02_2_栈.md"
+    },
+    {
+      "slide": 24,
+      "disposition": "merged",
+      "target": "02_线性表栈与队列/02_2_栈.md"
+    },
+    {
+      "slide": 25,
+      "disposition": "merged",
+      "target": "02_线性表栈与队列/02_2_栈.md"
+    },
+    {
+      "slide": 26,
+      "disposition": "omitted",
+      "reason": "非讲解型课堂任务或课程管理信息"
+    },
+    {
+      "slide": 27,
+      "disposition": "merged",
+      "target": "02_线性表栈与队列/02_2_栈.md"
+    },
+    {
+      "slide": 28,
+      "disposition": "merged",
+      "target": "02_线性表栈与队列/02_2_栈.md"
+    },
+    {
+      "slide": 29,
+      "disposition": "merged",
+      "target": "02_线性表栈与队列/02_2_栈.md"
+    },
+    {
+      "slide": 30,
+      "disposition": "merged",
+      "target": "02_线性表栈与队列/02_2_栈.md"
+    },
+    {
+      "slide": 31,
+      "disposition": "merged",
+      "target": "02_线性表栈与队列/02_2_栈.md"
+    },
+    {
+      "slide": 32,
+      "disposition": "merged",
+      "target": "02_线性表栈与队列/02_2_栈.md"
+    },
+    {
+      "slide": 33,
+      "disposition": "merged",
+      "target": "02_线性表栈与队列/02_2_栈.md"
+    },
+    {
+      "slide": 34,
+      "disposition": "merged",
+      "target": "02_线性表栈与队列/02_2_栈.md"
+    },
+    {
+      "slide": 35,
+      "disposition": "merged",
+      "target": "02_线性表栈与队列/02_2_栈.md"
+    },
+    {
+      "slide": 36,
+      "disposition": "merged",
+      "target": "02_线性表栈与队列/02_2_栈.md"
+    },
+    {
+      "slide": 37,
+      "disposition": "merged",
+      "target": "02_线性表栈与队列/02_2_栈.md"
+    },
+    {
+      "slide": 38,
+      "disposition": "merged",
+      "target": "02_线性表栈与队列/02_2_栈.md"
+    },
+    {
+      "slide": 39,
+      "disposition": "merged",
+      "target": "02_线性表栈与队列/02_2_栈.md"
+    },
+    {
+      "slide": 40,
+      "disposition": "merged",
+      "target": "02_线性表栈与队列/02_2_栈.md"
+    },
+    {
+      "slide": 41,
+      "disposition": "merged",
+      "target": "02_线性表栈与队列/02_2_栈.md"
+    },
+    {
+      "slide": 42,
+      "disposition": "merged",
+      "target": "02_线性表栈与队列/02_2_栈.md"
+    },
+    {
+      "slide": 43,
+      "disposition": "merged",
+      "target": "02_线性表栈与队列/02_2_栈.md"
+    },
+    {
+      "slide": 44,
+      "disposition": "merged",
+      "target": "02_线性表栈与队列/02_2_栈.md"
+    },
+    {
+      "slide": 45,
+      "disposition": "merged",
+      "target": "02_线性表栈与队列/02_2_栈.md"
+    },
+    {
+      "slide": 46,
+      "disposition": "merged",
+      "target": "02_线性表栈与队列/02_2_栈.md"
+    },
+    {
+      "slide": 47,
+      "disposition": "merged",
+      "target": "02_线性表栈与队列/02_2_栈.md"
+    },
+    {
+      "slide": 48,
+      "disposition": "merged",
+      "target": "02_线性表栈与队列/02_2_栈.md"
+    },
+    {
+      "slide": 49,
+      "disposition": "merged",
+      "target": "02_线性表栈与队列/02_2_栈.md"
+    },
+    {
+      "slide": 50,
+      "disposition": "merged",
+      "target": "02_线性表栈与队列/02_2_栈.md"
+    },
+    {
+      "slide": 51,
+      "disposition": "merged",
+      "target": "02_线性表栈与队列/02_2_栈.md"
+    },
+    {
+      "slide": 52,
+      "disposition": "merged",
+      "target": "02_线性表栈与队列/02_2_栈.md"
+    },
+    {
+      "slide": 53,
+      "disposition": "merged",
+      "target": "02_线性表栈与队列/02_2_栈.md"
+    },
+    {
+      "slide": 54,
+      "disposition": "merged",
+      "target": "02_线性表栈与队列/02_2_栈.md"
+    },
+    {
+      "slide": 55,
+      "disposition": "merged",
+      "target": "02_线性表栈与队列/02_2_栈.md"
+    },
+    {
+      "slide": 56,
+      "disposition": "merged",
+      "target": "02_线性表栈与队列/02_2_栈.md"
+    },
+    {
+      "slide": 57,
+      "disposition": "merged",
+      "target": "02_线性表栈与队列/02_2_栈.md"
+    },
+    {
+      "slide": 58,
+      "disposition": "merged",
+      "target": "02_线性表栈与队列/02_2_栈.md"
+    },
+    {
+      "slide": 59,
+      "disposition": "merged",
+      "target": "02_线性表栈与队列/02_2_栈.md"
+    },
+    {
+      "slide": 60,
+      "disposition": "merged",
+      "target": "02_线性表栈与队列/02_2_栈.md"
+    },
+    {
+      "slide": 61,
+      "disposition": "merged",
+      "target": "02_线性表栈与队列/02_2_栈.md"
+    },
+    {
+      "slide": 62,
+      "disposition": "merged",
+      "target": "02_线性表栈与队列/02_2_栈.md"
+    },
+    {
+      "slide": 63,
+      "disposition": "merged",
+      "target": "02_线性表栈与队列/02_2_栈.md"
+    },
+    {
+      "slide": 64,
+      "disposition": "merged",
+      "target": "02_线性表栈与队列/02_2_栈.md"
+    },
+    {
+      "slide": 65,
+      "disposition": "merged",
+      "target": "02_线性表栈与队列/02_2_栈.md"
+    },
+    {
+      "slide": 66,
+      "disposition": "merged",
+      "target": "02_线性表栈与队列/02_2_栈.md"
+    },
+    {
+      "slide": 67,
+      "disposition": "merged",
+      "target": "02_线性表栈与队列/02_2_栈.md"
+    },
+    {
+      "slide": 68,
+      "disposition": "merged",
+      "target": "02_线性表栈与队列/02_2_栈.md"
+    },
+    {
+      "slide": 69,
+      "disposition": "merged",
+      "target": "02_线性表栈与队列/02_2_栈.md"
+    },
+    {
+      "slide": 70,
+      "disposition": "merged",
+      "target": "02_线性表栈与队列/02_2_栈.md"
+    },
+    {
+      "slide": 71,
+      "disposition": "merged",
+      "target": "02_线性表栈与队列/02_2_栈.md"
+    },
+    {
+      "slide": 72,
+      "disposition": "merged",
+      "target": "02_线性表栈与队列/02_2_栈.md"
+    },
+    {
+      "slide": 73,
+      "disposition": "merged",
+      "target": "02_线性表栈与队列/02_2_栈.md"
+    },
+    {
+      "slide": 74,
+      "disposition": "merged",
+      "target": "02_线性表栈与队列/02_2_栈.md"
+    },
+    {
+      "slide": 75,
+      "disposition": "merged",
+      "target": "02_线性表栈与队列/02_2_栈.md"
+    },
+    {
+      "slide": 76,
+      "disposition": "merged",
+      "target": "02_线性表栈与队列/02_2_栈.md"
+    },
+    {
+      "slide": 77,
+      "disposition": "merged",
+      "target": "02_线性表栈与队列/02_2_栈.md"
+    },
+    {
+      "slide": 78,
+      "disposition": "omitted",
+      "reason": "非讲解型课堂任务或课程管理信息"
+    },
+    {
+      "slide": 79,
+      "disposition": "omitted",
+      "reason": "非讲解型课堂任务或课程管理信息"
+    },
+    {
+      "slide": 80,
+      "disposition": "merged",
+      "target": "02_线性表栈与队列/02_2_栈.md"
+    },
+    {
+      "slide": 81,
+      "disposition": "merged",
+      "target": "02_线性表栈与队列/02_2_栈.md"
+    },
+    {
+      "slide": 82,
+      "disposition": "merged",
+      "target": "02_线性表栈与队列/02_2_栈.md"
+    },
+    {
+      "slide": 83,
+      "disposition": "merged",
+      "target": "02_线性表栈与队列/02_2_栈.md"
+    },
+    {
+      "slide": 84,
+      "disposition": "merged",
+      "target": "02_线性表栈与队列/02_2_栈.md"
+    },
+    {
+      "slide": 85,
+      "disposition": "merged",
+      "target": "02_线性表栈与队列/02_2_栈.md"
+    },
+    {
+      "slide": 86,
+      "disposition": "merged",
+      "target": "02_线性表栈与队列/02_2_栈.md"
+    },
+    {
+      "slide": 87,
+      "disposition": "merged",
+      "target": "02_线性表栈与队列/02_2_栈.md"
+    },
+    {
+      "slide": 88,
+      "disposition": "merged",
+      "target": "02_线性表栈与队列/02_2_栈.md"
+    },
+    {
+      "slide": 89,
+      "disposition": "merged",
+      "target": "02_线性表栈与队列/02_2_栈.md"
+    },
+    {
+      "slide": 90,
+      "disposition": "merged",
+      "target": "02_线性表栈与队列/02_2_栈.md"
+    },
+    {
+      "slide": 91,
+      "disposition": "merged",
+      "target": "02_线性表栈与队列/02_2_栈.md"
+    },
+    {
+      "slide": 92,
+      "disposition": "merged",
+      "target": "02_线性表栈与队列/02_2_栈.md"
+    },
+    {
+      "slide": 93,
+      "disposition": "merged",
+      "target": "02_线性表栈与队列/02_2_栈.md"
+    },
+    {
+      "slide": 94,
+      "disposition": "merged",
+      "target": "02_线性表栈与队列/02_2_栈.md"
+    },
+    {
+      "slide": 95,
+      "disposition": "merged",
+      "target": "02_线性表栈与队列/02_2_栈.md"
+    },
+    {
+      "slide": 96,
+      "disposition": "merged",
+      "target": "02_线性表栈与队列/02_2_栈.md"
+    },
+    {
+      "slide": 97,
+      "disposition": "merged",
+      "target": "02_线性表栈与队列/02_2_栈.md"
+    },
+    {
+      "slide": 98,
+      "disposition": "merged",
+      "target": "02_线性表栈与队列/02_2_栈.md"
+    },
+    {
+      "slide": 99,
+      "disposition": "omitted",
+      "reason": "非讲解型课堂任务或课程管理信息"
+    },
+    {
+      "slide": 100,
+      "disposition": "merged",
+      "target": "02_线性表栈与队列/02_2_栈.md"
+    },
+    {
+      "slide": 101,
+      "disposition": "merged",
+      "target": "02_线性表栈与队列/02_2_栈.md"
+    },
+    {
+      "slide": 102,
+      "disposition": "merged",
+      "target": "02_线性表栈与队列/02_2_栈.md"
+    },
+    {
+      "slide": 103,
+      "disposition": "merged",
+      "target": "02_线性表栈与队列/02_2_栈.md"
+    },
+    {
+      "slide": 104,
+      "disposition": "omitted",
+      "reason": "非讲解型课堂任务或课程管理信息"
+    },
+    {
+      "slide": 105,
+      "disposition": "merged",
+      "target": "02_线性表栈与队列/02_2_栈.md"
+    },
+    {
+      "slide": 106,
+      "disposition": "merged",
+      "target": "02_线性表栈与队列/02_2_栈.md"
+    },
+    {
+      "slide": 107,
+      "disposition": "omitted",
+      "reason": "非讲解型课堂任务或课程管理信息"
+    },
+    {
+      "slide": 108,
+      "disposition": "merged",
+      "target": "02_线性表栈与队列/02_2_栈.md"
+    },
+    {
+      "slide": 109,
+      "disposition": "merged",
+      "target": "02_线性表栈与队列/02_2_栈.md"
+    },
+    {
+      "slide": 110,
+      "disposition": "merged",
+      "target": "02_线性表栈与队列/02_2_栈.md"
+    },
+    {
+      "slide": 111,
+      "disposition": "merged",
+      "target": "02_线性表栈与队列/02_2_栈.md"
+    },
+    {
+      "slide": 112,
+      "disposition": "merged",
+      "target": "02_线性表栈与队列/02_2_栈.md"
+    },
+    {
+      "slide": 113,
+      "disposition": "merged",
+      "target": "02_线性表栈与队列/02_2_栈.md"
+    },
+    {
+      "slide": 114,
+      "disposition": "merged",
+      "target": "02_线性表栈与队列/02_2_栈.md"
+    },
+    {
+      "slide": 115,
+      "disposition": "merged",
+      "target": "02_线性表栈与队列/02_2_栈.md"
+    },
+    {
+      "slide": 116,
+      "disposition": "omitted",
+      "reason": "非讲解型课堂任务或课程管理信息"
+    },
+    {
+      "slide": 117,
+      "disposition": "omitted",
+      "reason": "非讲解型课堂任务或课程管理信息"
+    },
+    {
+      "slide": 118,
+      "disposition": "merged",
+      "target": "02_线性表栈与队列/02_2_栈.md"
+    },
+    {
+      "slide": 119,
+      "disposition": "merged",
+      "target": "02_线性表栈与队列/02_2_栈.md"
+    },
+    {
+      "slide": 120,
+      "disposition": "merged",
+      "target": "02_线性表栈与队列/02_2_栈.md"
+    },
+    {
+      "slide": 121,
+      "disposition": "merged",
+      "target": "02_线性表栈与队列/02_2_栈.md"
+    },
+    {
+      "slide": 122,
+      "disposition": "merged",
+      "target": "02_线性表栈与队列/02_2_栈.md"
+    },
+    {
+      "slide": 123,
+      "disposition": "merged",
+      "target": "02_线性表栈与队列/02_2_栈.md"
+    },
+    {
+      "slide": 124,
+      "disposition": "merged",
+      "target": "02_线性表栈与队列/02_2_栈.md"
+    },
+    {
+      "slide": 125,
+      "disposition": "merged",
+      "target": "02_线性表栈与队列/02_2_栈.md"
+    },
+    {
+      "slide": 126,
+      "disposition": "merged",
+      "target": "02_线性表栈与队列/02_2_栈.md"
+    },
+    {
+      "slide": 127,
+      "disposition": "merged",
+      "target": "02_线性表栈与队列/02_2_栈.md"
+    },
+    {
+      "slide": 128,
+      "disposition": "merged",
+      "target": "02_线性表栈与队列/02_2_栈.md"
+    },
+    {
+      "slide": 129,
+      "disposition": "merged",
+      "target": "02_线性表栈与队列/02_2_栈.md"
+    },
+    {
+      "slide": 130,
+      "disposition": "merged",
+      "target": "02_线性表栈与队列/02_2_栈.md"
+    },
+    {
+      "slide": 131,
+      "disposition": "merged",
+      "target": "02_线性表栈与队列/02_2_栈.md"
+    },
+    {
+      "slide": 132,
+      "disposition": "merged",
+      "target": "02_线性表栈与队列/02_2_栈.md"
+    },
+    {
+      "slide": 133,
+      "disposition": "merged",
+      "target": "02_线性表栈与队列/02_2_栈.md"
+    },
+    {
+      "slide": 134,
+      "disposition": "merged",
+      "target": "02_线性表栈与队列/02_2_栈.md"
+    },
+    {
+      "slide": 135,
+      "disposition": "merged",
+      "target": "02_线性表栈与队列/02_2_栈.md"
+    },
+    {
+      "slide": 136,
+      "disposition": "merged",
+      "target": "02_线性表栈与队列/02_2_栈.md"
+    },
+    {
+      "slide": 137,
+      "disposition": "merged",
+      "target": "02_线性表栈与队列/02_2_栈.md"
+    },
+    {
+      "slide": 138,
+      "disposition": "merged",
+      "target": "02_线性表栈与队列/02_2_栈.md"
+    },
+    {
+      "slide": 139,
+      "disposition": "merged",
+      "target": "02_线性表栈与队列/02_2_栈.md"
+    },
+    {
+      "slide": 140,
+      "disposition": "merged",
+      "target": "02_线性表栈与队列/02_2_栈.md"
+    },
+    {
+      "slide": 141,
+      "disposition": "merged",
+      "target": "02_线性表栈与队列/02_2_栈.md"
+    },
+    {
+      "slide": 142,
+      "disposition": "merged",
+      "target": "02_线性表栈与队列/02_2_栈.md"
+    },
+    {
+      "slide": 143,
+      "disposition": "merged",
+      "target": "02_线性表栈与队列/02_2_栈.md"
+    },
+    {
+      "slide": 144,
+      "disposition": "merged",
+      "target": "02_线性表栈与队列/02_2_栈.md"
+    },
+    {
+      "slide": 145,
+      "disposition": "merged",
+      "target": "02_线性表栈与队列/02_2_栈.md"
+    },
+    {
+      "slide": 146,
+      "disposition": "merged",
+      "target": "02_线性表栈与队列/02_2_栈.md"
+    },
+    {
+      "slide": 147,
+      "disposition": "merged",
+      "target": "02_线性表栈与队列/02_2_栈.md"
+    },
+    {
+      "slide": 148,
+      "disposition": "merged",
+      "target": "02_线性表栈与队列/02_2_栈.md"
+    },
+    {
+      "slide": 149,
+      "disposition": "merged",
+      "target": "02_线性表栈与队列/02_2_栈.md"
+    },
+    {
+      "slide": 150,
+      "disposition": "merged",
+      "target": "02_线性表栈与队列/02_2_栈.md"
+    },
+    {
+      "slide": 151,
+      "disposition": "merged",
+      "target": "02_线性表栈与队列/02_2_栈.md"
+    },
+    {
+      "slide": 152,
+      "disposition": "merged",
+      "target": "02_线性表栈与队列/02_2_栈.md"
+    },
+    {
+      "slide": 153,
+      "disposition": "merged",
+      "target": "02_线性表栈与队列/02_2_栈.md"
+    },
+    {
+      "slide": 154,
+      "disposition": "merged",
+      "target": "02_线性表栈与队列/02_2_栈.md"
+    },
+    {
+      "slide": 155,
+      "disposition": "merged",
+      "target": "02_线性表栈与队列/02_2_栈.md"
+    },
+    {
+      "slide": 156,
+      "disposition": "merged",
+      "target": "02_线性表栈与队列/02_2_栈.md"
+    },
+    {
+      "slide": 157,
+      "disposition": "merged",
+      "target": "02_线性表栈与队列/02_2_栈.md"
+    },
+    {
+      "slide": 158,
+      "disposition": "merged",
+      "target": "02_线性表栈与队列/02_2_栈.md"
+    },
+    {
+      "slide": 159,
+      "disposition": "merged",
+      "target": "02_线性表栈与队列/02_2_栈.md"
+    },
+    {
+      "slide": 160,
+      "disposition": "merged",
+      "target": "02_线性表栈与队列/02_2_栈.md"
+    },
+    {
+      "slide": 161,
+      "disposition": "merged",
+      "target": "02_线性表栈与队列/02_2_栈.md"
+    },
+    {
+      "slide": 162,
+      "disposition": "merged",
+      "target": "02_线性表栈与队列/02_2_栈.md"
+    },
+    {
+      "slide": 163,
+      "disposition": "merged",
+      "target": "02_线性表栈与队列/02_2_栈.md"
+    },
+    {
+      "slide": 164,
+      "disposition": "merged",
+      "target": "02_线性表栈与队列/02_2_栈.md"
+    },
+    {
+      "slide": 165,
+      "disposition": "merged",
+      "target": "02_线性表栈与队列/02_2_栈.md"
+    },
+    {
+      "slide": 166,
+      "disposition": "merged",
+      "target": "02_线性表栈与队列/02_2_栈.md"
+    },
+    {
+      "slide": 167,
+      "disposition": "merged",
+      "target": "02_线性表栈与队列/02_2_栈.md"
+    },
+    {
+      "slide": 168,
+      "disposition": "omitted",
+      "reason": "非讲解型课堂任务或课程管理信息"
+    },
+    {
+      "slide": 169,
+      "disposition": "omitted",
+      "reason": "非讲解型课堂任务或课程管理信息"
+    },
+    {
+      "slide": 170,
+      "disposition": "merged",
+      "target": "02_线性表栈与队列/02_2_栈.md"
+    },
+    {
+      "slide": 171,
+      "disposition": "merged",
+      "target": "02_线性表栈与队列/02_2_栈.md"
+    },
+    {
+      "slide": 172,
+      "disposition": "merged",
+      "target": "02_线性表栈与队列/02_2_栈.md"
+    },
+    {
+      "slide": 173,
+      "disposition": "merged",
+      "target": "02_线性表栈与队列/02_2_栈.md"
+    },
+    {
+      "slide": 174,
+      "disposition": "merged",
+      "target": "02_线性表栈与队列/02_2_栈.md"
+    },
+    {
+      "slide": 175,
+      "disposition": "merged",
+      "target": "02_线性表栈与队列/02_2_栈.md"
+    },
+    {
+      "slide": 176,
+      "disposition": "merged",
+      "target": "02_线性表栈与队列/02_2_栈.md"
+    },
+    {
+      "slide": 177,
+      "disposition": "merged",
+      "target": "02_线性表栈与队列/02_2_栈.md"
+    },
+    {
+      "slide": 178,
+      "disposition": "merged",
+      "target": "02_线性表栈与队列/02_2_栈.md"
+    },
+    {
+      "slide": 179,
+      "disposition": "omitted",
+      "reason": "非讲解型课堂任务或课程管理信息"
+    },
+    {
+      "slide": 180,
+      "disposition": "merged",
+      "target": "02_线性表栈与队列/02_2_栈.md"
+    },
+    {
+      "slide": 181,
+      "disposition": "merged",
+      "target": "02_线性表栈与队列/02_2_栈.md"
+    },
+    {
+      "slide": 182,
+      "disposition": "merged",
+      "target": "02_线性表栈与队列/02_2_栈.md"
+    },
+    {
+      "slide": 183,
+      "disposition": "merged",
+      "target": "02_线性表栈与队列/02_2_栈.md"
+    },
+    {
+      "slide": 184,
+      "disposition": "merged",
+      "target": "02_线性表栈与队列/02_2_栈.md"
+    },
+    {
+      "slide": 185,
+      "disposition": "merged",
+      "target": "02_线性表栈与队列/02_2_栈.md"
+    },
+    {
+      "slide": 186,
+      "disposition": "merged",
+      "target": "02_线性表栈与队列/02_2_栈.md"
+    },
+    {
+      "slide": 187,
+      "disposition": "merged",
+      "target": "02_线性表栈与队列/02_2_栈.md"
+    },
+    {
+      "slide": 188,
+      "disposition": "omitted",
+      "reason": "非讲解型课堂任务或课程管理信息"
+    },
+    {
+      "slide": 189,
+      "disposition": "merged",
+      "target": "02_线性表栈与队列/02_2_栈.md"
+    },
+    {
+      "slide": 190,
+      "disposition": "merged",
+      "target": "02_线性表栈与队列/02_2_栈.md"
+    },
+    {
+      "slide": 191,
+      "disposition": "omitted",
+      "reason": "非讲解型课堂任务或课程管理信息"
+    }
+  ]
+}
