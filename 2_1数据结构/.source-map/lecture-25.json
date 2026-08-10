@@ -1,0 +1,579 @@
+{
+  "source_file": "Lecture 25-二叉查找树（新）.pdf",
+  "source_format": "powerpoint-export-pdf",
+  "powerpoint_provenance_verified": true,
+  "total_slides": 114,
+  "mapping_note": "连续动画帧合并为概念过程；引语、课程管理信息和非讲解型任务页不进入学习正文。",
+  "slides": [
+    {
+      "slide": 1,
+      "disposition": "used",
+      "target": "07_查找/07_3_二叉查找树.md"
+    },
+    {
+      "slide": 2,
+      "disposition": "omitted",
+      "reason": "课程引语或装饰页"
+    },
+    {
+      "slide": 3,
+      "disposition": "merged",
+      "target": "07_查找/07_3_二叉查找树.md"
+    },
+    {
+      "slide": 4,
+      "disposition": "merged",
+      "target": "07_查找/07_3_二叉查找树.md"
+    },
+    {
+      "slide": 5,
+      "disposition": "merged",
+      "target": "07_查找/07_3_二叉查找树.md"
+    },
+    {
+      "slide": 6,
+      "disposition": "merged",
+      "target": "07_查找/07_3_二叉查找树.md"
+    },
+    {
+      "slide": 7,
+      "disposition": "merged",
+      "target": "07_查找/07_3_二叉查找树.md"
+    },
+    {
+      "slide": 8,
+      "disposition": "merged",
+      "target": "07_查找/07_3_二叉查找树.md"
+    },
+    {
+      "slide": 9,
+      "disposition": "omitted",
+      "reason": "非讲解型课堂任务或课程管理信息"
+    },
+    {
+      "slide": 10,
+      "disposition": "merged",
+      "target": "07_查找/07_3_二叉查找树.md"
+    },
+    {
+      "slide": 11,
+      "disposition": "merged",
+      "target": "07_查找/07_3_二叉查找树.md"
+    },
+    {
+      "slide": 12,
+      "disposition": "merged",
+      "target": "07_查找/07_3_二叉查找树.md"
+    },
+    {
+      "slide": 13,
+      "disposition": "merged",
+      "target": "07_查找/07_3_二叉查找树.md"
+    },
+    {
+      "slide": 14,
+      "disposition": "merged",
+      "target": "07_查找/07_3_二叉查找树.md"
+    },
+    {
+      "slide": 15,
+      "disposition": "omitted",
+      "reason": "非讲解型课堂任务或课程管理信息"
+    },
+    {
+      "slide": 16,
+      "disposition": "merged",
+      "target": "07_查找/07_3_二叉查找树.md"
+    },
+    {
+      "slide": 17,
+      "disposition": "merged",
+      "target": "07_查找/07_3_二叉查找树.md"
+    },
+    {
+      "slide": 18,
+      "disposition": "merged",
+      "target": "07_查找/07_3_二叉查找树.md"
+    },
+    {
+      "slide": 19,
+      "disposition": "merged",
+      "target": "07_查找/07_3_二叉查找树.md"
+    },
+    {
+      "slide": 20,
+      "disposition": "merged",
+      "target": "07_查找/07_3_二叉查找树.md"
+    },
+    {
+      "slide": 21,
+      "disposition": "merged",
+      "target": "07_查找/07_3_二叉查找树.md"
+    },
+    {
+      "slide": 22,
+      "disposition": "merged",
+      "target": "07_查找/07_3_二叉查找树.md"
+    },
+    {
+      "slide": 23,
+      "disposition": "merged",
+      "target": "07_查找/07_3_二叉查找树.md"
+    },
+    {
+      "slide": 24,
+      "disposition": "merged",
+      "target": "07_查找/07_3_二叉查找树.md"
+    },
+    {
+      "slide": 25,
+      "disposition": "merged",
+      "target": "07_查找/07_3_二叉查找树.md"
+    },
+    {
+      "slide": 26,
+      "disposition": "merged",
+      "target": "07_查找/07_3_二叉查找树.md"
+    },
+    {
+      "slide": 27,
+      "disposition": "merged",
+      "target": "07_查找/07_3_二叉查找树.md"
+    },
+    {
+      "slide": 28,
+      "disposition": "merged",
+      "target": "07_查找/07_3_二叉查找树.md"
+    },
+    {
+      "slide": 29,
+      "disposition": "merged",
+      "target": "07_查找/07_3_二叉查找树.md"
+    },
+    {
+      "slide": 30,
+      "disposition": "merged",
+      "target": "07_查找/07_3_二叉查找树.md"
+    },
+    {
+      "slide": 31,
+      "disposition": "merged",
+      "target": "07_查找/07_3_二叉查找树.md"
+    },
+    {
+      "slide": 32,
+      "disposition": "merged",
+      "target": "07_查找/07_3_二叉查找树.md"
+    },
+    {
+      "slide": 33,
+      "disposition": "omitted",
+      "reason": "非讲解型课堂任务或课程管理信息"
+    },
+    {
+      "slide": 34,
+      "disposition": "merged",
+      "target": "07_查找/07_3_二叉查找树.md"
+    },
+    {
+      "slide": 35,
+      "disposition": "merged",
+      "target": "07_查找/07_3_二叉查找树.md"
+    },
+    {
+      "slide": 36,
+      "disposition": "merged",
+      "target": "07_查找/07_3_二叉查找树.md"
+    },
+    {
+      "slide": 37,
+      "disposition": "merged",
+      "target": "07_查找/07_3_二叉查找树.md"
+    },
+    {
+      "slide": 38,
+      "disposition": "omitted",
+      "reason": "非讲解型课堂任务或课程管理信息"
+    },
+    {
+      "slide": 39,
+      "disposition": "merged",
+      "target": "07_查找/07_3_二叉查找树.md"
+    },
+    {
+      "slide": 40,
+      "disposition": "merged",
+      "target": "07_查找/07_3_二叉查找树.md"
+    },
+    {
+      "slide": 41,
+      "disposition": "merged",
+      "target": "07_查找/07_3_二叉查找树.md"
+    },
+    {
+      "slide": 42,
+      "disposition": "omitted",
+      "reason": "非讲解型课堂任务或课程管理信息"
+    },
+    {
+      "slide": 43,
+      "disposition": "merged",
+      "target": "07_查找/07_3_二叉查找树.md"
+    },
+    {
+      "slide": 44,
+      "disposition": "omitted",
+      "reason": "非讲解型课堂任务或课程管理信息"
+    },
+    {
+      "slide": 45,
+      "disposition": "merged",
+      "target": "07_查找/07_3_二叉查找树.md"
+    },
+    {
+      "slide": 46,
+      "disposition": "merged",
+      "target": "04_树与二叉树/04_6_平衡二叉树.md"
+    },
+    {
+      "slide": 47,
+      "disposition": "merged",
+      "target": "04_树与二叉树/04_6_平衡二叉树.md"
+    },
+    {
+      "slide": 48,
+      "disposition": "merged",
+      "target": "04_树与二叉树/04_6_平衡二叉树.md"
+    },
+    {
+      "slide": 49,
+      "disposition": "merged",
+      "target": "04_树与二叉树/04_6_平衡二叉树.md"
+    },
+    {
+      "slide": 50,
+      "disposition": "merged",
+      "target": "04_树与二叉树/04_6_平衡二叉树.md"
+    },
+    {
+      "slide": 51,
+      "disposition": "merged",
+      "target": "04_树与二叉树/04_6_平衡二叉树.md"
+    },
+    {
+      "slide": 52,
+      "disposition": "merged",
+      "target": "04_树与二叉树/04_6_平衡二叉树.md"
+    },
+    {
+      "slide": 53,
+      "disposition": "merged",
+      "target": "04_树与二叉树/04_6_平衡二叉树.md"
+    },
+    {
+      "slide": 54,
+      "disposition": "merged",
+      "target": "04_树与二叉树/04_6_平衡二叉树.md"
+    },
+    {
+      "slide": 55,
+      "disposition": "merged",
+      "target": "04_树与二叉树/04_6_平衡二叉树.md"
+    },
+    {
+      "slide": 56,
+      "disposition": "merged",
+      "target": "04_树与二叉树/04_6_平衡二叉树.md"
+    },
+    {
+      "slide": 57,
+      "disposition": "merged",
+      "target": "04_树与二叉树/04_6_平衡二叉树.md"
+    },
+    {
+      "slide": 58,
+      "disposition": "merged",
+      "target": "04_树与二叉树/04_6_平衡二叉树.md"
+    },
+    {
+      "slide": 59,
+      "disposition": "merged",
+      "target": "04_树与二叉树/04_6_平衡二叉树.md"
+    },
+    {
+      "slide": 60,
+      "disposition": "merged",
+      "target": "04_树与二叉树/04_6_平衡二叉树.md"
+    },
+    {
+      "slide": 61,
+      "disposition": "merged",
+      "target": "04_树与二叉树/04_6_平衡二叉树.md"
+    },
+    {
+      "slide": 62,
+      "disposition": "merged",
+      "target": "04_树与二叉树/04_6_平衡二叉树.md"
+    },
+    {
+      "slide": 63,
+      "disposition": "merged",
+      "target": "04_树与二叉树/04_6_平衡二叉树.md"
+    },
+    {
+      "slide": 64,
+      "disposition": "merged",
+      "target": "04_树与二叉树/04_6_平衡二叉树.md"
+    },
+    {
+      "slide": 65,
+      "disposition": "merged",
+      "target": "04_树与二叉树/04_6_平衡二叉树.md"
+    },
+    {
+      "slide": 66,
+      "disposition": "merged",
+      "target": "04_树与二叉树/04_6_平衡二叉树.md"
+    },
+    {
+      "slide": 67,
+      "disposition": "merged",
+      "target": "04_树与二叉树/04_6_平衡二叉树.md"
+    },
+    {
+      "slide": 68,
+      "disposition": "merged",
+      "target": "04_树与二叉树/04_6_平衡二叉树.md"
+    },
+    {
+      "slide": 69,
+      "disposition": "merged",
+      "target": "04_树与二叉树/04_6_平衡二叉树.md"
+    },
+    {
+      "slide": 70,
+      "disposition": "merged",
+      "target": "04_树与二叉树/04_6_平衡二叉树.md"
+    },
+    {
+      "slide": 71,
+      "disposition": "merged",
+      "target": "04_树与二叉树/04_6_平衡二叉树.md"
+    },
+    {
+      "slide": 72,
+      "disposition": "merged",
+      "target": "04_树与二叉树/04_6_平衡二叉树.md"
+    },
+    {
+      "slide": 73,
+      "disposition": "merged",
+      "target": "04_树与二叉树/04_6_平衡二叉树.md"
+    },
+    {
+      "slide": 74,
+      "disposition": "merged",
+      "target": "04_树与二叉树/04_6_平衡二叉树.md"
+    },
+    {
+      "slide": 75,
+      "disposition": "merged",
+      "target": "04_树与二叉树/04_6_平衡二叉树.md"
+    },
+    {
+      "slide": 76,
+      "disposition": "merged",
+      "target": "04_树与二叉树/04_6_平衡二叉树.md"
+    },
+    {
+      "slide": 77,
+      "disposition": "omitted",
+      "reason": "非讲解型课堂任务或课程管理信息"
+    },
+    {
+      "slide": 78,
+      "disposition": "omitted",
+      "reason": "非讲解型课堂任务或课程管理信息"
+    },
+    {
+      "slide": 79,
+      "disposition": "merged",
+      "target": "04_树与二叉树/04_6_平衡二叉树.md"
+    },
+    {
+      "slide": 80,
+      "disposition": "merged",
+      "target": "04_树与二叉树/04_6_平衡二叉树.md"
+    },
+    {
+      "slide": 81,
+      "disposition": "merged",
+      "target": "04_树与二叉树/04_6_平衡二叉树.md"
+    },
+    {
+      "slide": 82,
+      "disposition": "merged",
+      "target": "04_树与二叉树/04_6_平衡二叉树.md"
+    },
+    {
+      "slide": 83,
+      "disposition": "omitted",
+      "reason": "非讲解型课堂任务或课程管理信息"
+    },
+    {
+      "slide": 84,
+      "disposition": "omitted",
+      "reason": "非讲解型课堂任务或课程管理信息"
+    },
+    {
+      "slide": 85,
+      "disposition": "omitted",
+      "reason": "非讲解型课堂任务或课程管理信息"
+    },
+    {
+      "slide": 86,
+      "disposition": "omitted",
+      "reason": "非讲解型课堂任务或课程管理信息"
+    },
+    {
+      "slide": 87,
+      "disposition": "merged",
+      "target": "04_树与二叉树/04_6_平衡二叉树.md"
+    },
+    {
+      "slide": 88,
+      "disposition": "merged",
+      "target": "04_树与二叉树/04_6_平衡二叉树.md"
+    },
+    {
+      "slide": 89,
+      "disposition": "merged",
+      "target": "04_树与二叉树/04_6_平衡二叉树.md"
+    },
+    {
+      "slide": 90,
+      "disposition": "merged",
+      "target": "04_树与二叉树/04_6_平衡二叉树.md"
+    },
+    {
+      "slide": 91,
+      "disposition": "merged",
+      "target": "04_树与二叉树/04_6_平衡二叉树.md"
+    },
+    {
+      "slide": 92,
+      "disposition": "merged",
+      "target": "04_树与二叉树/04_6_平衡二叉树.md"
+    },
+    {
+      "slide": 93,
+      "disposition": "merged",
+      "target": "04_树与二叉树/04_6_平衡二叉树.md"
+    },
+    {
+      "slide": 94,
+      "disposition": "merged",
+      "target": "04_树与二叉树/04_6_平衡二叉树.md"
+    },
+    {
+      "slide": 95,
+      "disposition": "omitted",
+      "reason": "非讲解型课堂任务或课程管理信息"
+    },
+    {
+      "slide": 96,
+      "disposition": "merged",
+      "target": "04_树与二叉树/04_6_平衡二叉树.md"
+    },
+    {
+      "slide": 97,
+      "disposition": "merged",
+      "target": "04_树与二叉树/04_6_平衡二叉树.md"
+    },
+    {
+      "slide": 98,
+      "disposition": "merged",
+      "target": "04_树与二叉树/04_6_平衡二叉树.md"
+    },
+    {
+      "slide": 99,
+      "disposition": "merged",
+      "target": "04_树与二叉树/04_6_平衡二叉树.md"
+    },
+    {
+      "slide": 100,
+      "disposition": "merged",
+      "target": "04_树与二叉树/04_6_平衡二叉树.md"
+    },
+    {
+      "slide": 101,
+      "disposition": "merged",
+      "target": "04_树与二叉树/04_6_平衡二叉树.md"
+    },
+    {
+      "slide": 102,
+      "disposition": "merged",
+      "target": "04_树与二叉树/04_6_平衡二叉树.md"
+    },
+    {
+      "slide": 103,
+      "disposition": "merged",
+      "target": "04_树与二叉树/04_6_平衡二叉树.md"
+    },
+    {
+      "slide": 104,
+      "disposition": "merged",
+      "target": "04_树与二叉树/04_6_平衡二叉树.md"
+    },
+    {
+      "slide": 105,
+      "disposition": "merged",
+      "target": "04_树与二叉树/04_6_平衡二叉树.md"
+    },
+    {
+      "slide": 106,
+      "disposition": "merged",
+      "target": "04_树与二叉树/04_6_平衡二叉树.md"
+    },
+    {
+      "slide": 107,
+      "disposition": "merged",
+      "target": "04_树与二叉树/04_6_平衡二叉树.md"
+    },
+    {
+      "slide": 108,
+      "disposition": "merged",
+      "target": "04_树与二叉树/04_6_平衡二叉树.md"
+    },
+    {
+      "slide": 109,
+      "disposition": "merged",
+      "target": "04_树与二叉树/04_6_平衡二叉树.md"
+    },
+    {
+      "slide": 110,
+      "disposition": "merged",
+      "target": "04_树与二叉树/04_6_平衡二叉树.md"
+    },
+    {
+      "slide": 111,
+      "disposition": "merged",
+      "target": "04_树与二叉树/04_6_平衡二叉树.md"
+    },
+    {
+      "slide": 112,
+      "disposition": "merged",
+      "target": "04_树与二叉树/04_6_平衡二叉树.md"
+    },
+    {
+      "slide": 113,
+      "disposition": "merged",
+      "target": "04_树与二叉树/04_6_平衡二叉树.md"
+    },
+    {
+      "slide": 114,
+      "disposition": "merged",
+      "target": "04_树与二叉树/04_6_平衡二叉树.md"
+    }
+  ]
+}

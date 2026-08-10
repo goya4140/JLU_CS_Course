@@ -1,0 +1,149 @@
+{
+  "source_file": "Lecture 28-堆和优先级队列.pdf",
+  "source_format": "powerpoint-export-pdf",
+  "powerpoint_provenance_verified": true,
+  "total_slides": 28,
+  "mapping_note": "连续动画帧合并为概念过程；引语、课程管理信息和非讲解型任务页不进入学习正文。",
+  "slides": [
+    {
+      "slide": 1,
+      "disposition": "used",
+      "target": "07_查找/07_6_堆与优先级队列.md"
+    },
+    {
+      "slide": 2,
+      "disposition": "omitted",
+      "reason": "课程引语或装饰页"
+    },
+    {
+      "slide": 3,
+      "disposition": "merged",
+      "target": "07_查找/07_6_堆与优先级队列.md"
+    },
+    {
+      "slide": 4,
+      "disposition": "omitted",
+      "reason": "非讲解型课堂任务或课程管理信息"
+    },
+    {
+      "slide": 5,
+      "disposition": "merged",
+      "target": "07_查找/07_6_堆与优先级队列.md"
+    },
+    {
+      "slide": 6,
+      "disposition": "merged",
+      "target": "07_查找/07_6_堆与优先级队列.md"
+    },
+    {
+      "slide": 7,
+      "disposition": "merged",
+      "target": "07_查找/07_6_堆与优先级队列.md"
+    },
+    {
+      "slide": 8,
+      "disposition": "omitted",
+      "reason": "非讲解型课堂任务或课程管理信息"
+    },
+    {
+      "slide": 9,
+      "disposition": "merged",
+      "target": "07_查找/07_6_堆与优先级队列.md"
+    },
+    {
+      "slide": 10,
+      "disposition": "merged",
+      "target": "07_查找/07_6_堆与优先级队列.md"
+    },
+    {
+      "slide": 11,
+      "disposition": "merged",
+      "target": "07_查找/07_6_堆与优先级队列.md"
+    },
+    {
+      "slide": 12,
+      "disposition": "merged",
+      "target": "07_查找/07_6_堆与优先级队列.md"
+    },
+    {
+      "slide": 13,
+      "disposition": "merged",
+      "target": "07_查找/07_6_堆与优先级队列.md"
+    },
+    {
+      "slide": 14,
+      "disposition": "merged",
+      "target": "07_查找/07_6_堆与优先级队列.md"
+    },
+    {
+      "slide": 15,
+      "disposition": "merged",
+      "target": "07_查找/07_6_堆与优先级队列.md"
+    },
+    {
+      "slide": 16,
+      "disposition": "merged",
+      "target": "07_查找/07_6_堆与优先级队列.md"
+    },
+    {
+      "slide": 17,
+      "disposition": "merged",
+      "target": "07_查找/07_6_堆与优先级队列.md"
+    },
+    {
+      "slide": 18,
+      "disposition": "omitted",
+      "reason": "非讲解型课堂任务或课程管理信息"
+    },
+    {
+      "slide": 19,
+      "disposition": "merged",
+      "target": "07_查找/07_6_堆与优先级队列.md"
+    },
+    {
+      "slide": 20,
+      "disposition": "merged",
+      "target": "07_查找/07_6_堆与优先级队列.md"
+    },
+    {
+      "slide": 21,
+      "disposition": "merged",
+      "target": "07_查找/07_6_堆与优先级队列.md"
+    },
+    {
+      "slide": 22,
+      "disposition": "merged",
+      "target": "07_查找/07_6_堆与优先级队列.md"
+    },
+    {
+      "slide": 23,
+      "disposition": "merged",
+      "target": "07_查找/07_6_堆与优先级队列.md"
+    },
+    {
+      "slide": 24,
+      "disposition": "merged",
+      "target": "07_查找/07_6_堆与优先级队列.md"
+    },
+    {
+      "slide": 25,
+      "disposition": "merged",
+      "target": "07_查找/07_6_堆与优先级队列.md"
+    },
+    {
+      "slide": 26,
+      "disposition": "merged",
+      "target": "07_查找/07_6_堆与优先级队列.md"
+    },
+    {
+      "slide": 27,
+      "disposition": "omitted",
+      "reason": "非讲解型课堂任务或课程管理信息"
+    },
+    {
+      "slide": 28,
+      "disposition": "merged",
+      "target": "07_查找/07_6_堆与优先级队列.md"
+    }
+  ]
+}
