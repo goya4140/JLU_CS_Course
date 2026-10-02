@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none">
+  <!-- v4 音律节拍
+       Four vertical bars of staggered heights — like an audio visualizer
+       or osu! beatmap timeline. Rising left-to-right suggests build-up.
+       Metaphor: rhythm, precision timing, the pulse of interaction. -->
+  <rect x="3" y="11" width="3" height="9" rx="1.2" fill="currentColor" opacity="0.45"/>
+  <rect x="8" y="7" width="3" height="13" rx="1.2" fill="currentColor" opacity="0.65"/>
+  <rect x="13" y="4" width="3" height="16" rx="1.2" fill="currentColor" opacity="0.85"/>
+  <rect x="18" y="9" width="3" height="11" rx="1.2" fill="currentColor"/>
+</svg>

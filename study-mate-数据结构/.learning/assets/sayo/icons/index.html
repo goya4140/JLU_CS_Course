@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sayo UI · Icons</title>
+<link rel="stylesheet" href="../sayo.css">
+<style>
+  body { padding: var(--syo-space-8); }
+  h1 { margin-bottom: var(--syo-space-2); }
+  .icon-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: var(--syo-space-4); margin-top: var(--syo-space-6); }
+  .icon-card {
+    display: flex; flex-direction: column; align-items: center; gap: var(--syo-space-3);
+    padding: var(--syo-space-6); background: var(--syo-bg-surface); border: 1px solid var(--syo-border); border-radius: var(--syo-radius-md);
+  }
+  .icon-card svg { width: 32px; height: 32px; color: var(--syo-accent); }
+  .icon-card code { font-size: 0.75rem; text-align: center; word-break: break-all; }
+  .icon-card .label { font-size: 0.75rem; color: var(--syo-fg-muted); text-align: center; }
+  .icon-card .size-demo { display: flex; gap: var(--syo-space-2); align-items: center; }
+  .icon-card .size-demo svg { width: 13px; height: 13px; }
+  .icon-card .size-demo svg:last-child { width: 20px; height: 20px; }
+  .section-title { margin-top: var(--syo-space-8); margin-bottom: var(--syo-space-3); padding-bottom: var(--syo-space-2); border-bottom: 1px solid var(--syo-border); }
+</style>
+</head>
+<body>
+
+<h1>Sayo UI Icons</h1>
+<p class="syo-text-muted">
+  全部图标 &middot; 单线描边 <code>stroke="currentColor"</code> &middot; 继承文字颜色 &middot; 14×14 viewBox
+</p>
+<p class="syo-text-sm syo-text-muted syo-mt-2">路径：<code>sayo-ui/icons/</code></p>
+
+<!-- Logo -->
+<h3 class="section-title">Logo — 六版方案对比</h3>
+<style>
+  .logo-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--syo-space-4); margin-top: var(--syo-space-4); }
+  .logo-card { display: flex; flex-direction: column; align-items: center; gap: var(--syo-space-3); padding: var(--syo-space-8) var(--syo-space-4); background: var(--syo-bg-surface); border: 2px solid var(--syo-border); border-radius: var(--syo-radius-lg); transition: border-color 200ms var(--syo-ease-out); }
+  .logo-card:hover { border-color: var(--syo-accent); }
+  .logo-card svg { width: 48px; height: 48px; color: var(--syo-accent); }
+  .logo-card .name { font-weight: 600; font-size: 0.875rem; color: var(--syo-fg-default); }
+  .logo-card .desc { font-size: 0.75rem; color: var(--syo-fg-muted); text-align: center; line-height: 1.45; max-width: 200px; }
+  .logo-card .file { font-size: 0.6875rem; color: var(--syo-fg-muted); font-family: var(--syo-font-mono); opacity: 0.7; }
+  @media (max-width: 640px) { .logo-grid { grid-template-columns: 1fr; } }
+</style>
+<div class="logo-grid">
+  <div class="logo-card">
+    <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.4"/><circle cx="12" cy="12" r="4.5" stroke="currentColor" stroke-width="1.4"/><circle cx="12" cy="12" r="1.5" fill="currentColor"/></svg>
+    <span class="name">v1 同心圆·精炼</span>
+    <span class="desc">逼近圈 → 命中圈 → 精准命中。经典三环，节奏收紧。</span>
+    <span class="file">logo-v1-rings-refined.svg</span>
+  </div>
+  <div class="logo-card">
+    <svg viewBox="0 0 24 24" fill="none"><path d="M16 7a3 3 0 00-3-3H9a3 3 0 00-3 3v0a3 3 0 003 3h4a3 3 0 013 3v0a3 3 0 01-3 3H7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="14.5" cy="6" r="1.3" fill="currentColor"/></svg>
+    <span class="name">v2 S 字母几何</span>
+    <span class="desc">"S" for Sayo。四段弧线拼接，平滑曲线感。右上角点缀。</span>
+    <span class="file">logo-v2-s-monogram.svg</span>
+  </div>
+  <div class="logo-card">
+    <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.5"/><path d="M12 4v5M12 15v5M4 12h5M15 12h5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="12" cy="12" r="2.2" fill="currentColor"/></svg>
+    <span class="name">v3 游标十字环</span>
+    <span class="desc">Sayo 自定义光标浓缩为符号。外环 + 十字准星 + 中心点。</span>
+    <span class="file">logo-v3-cursor-crosshair.svg</span>
+  </div>
+  <div class="logo-card">
+    <svg viewBox="0 0 24 24" fill="none"><rect x="3" y="11" width="3" height="9" rx="1.2" fill="currentColor" opacity="0.45"/><rect x="8" y="7" width="3" height="13" rx="1.2" fill="currentColor" opacity="0.65"/><rect x="13" y="4" width="3" height="16" rx="1.2" fill="currentColor" opacity="0.85"/><rect x="18" y="9" width="3" height="11" rx="1.2" fill="currentColor"/></svg>
+    <span class="name">v4 音律节拍</span>
+    <span class="desc">音频可视化 / 节拍柱状图。从左到右渐强，节奏感。</span>
+    <span class="file">logo-v4-rhythm-bars.svg</span>
+  </div>
+  <div class="logo-card" style="border-color:var(--syo-accent);box-shadow:0 0 20px rgba(188,140,255,0.15)">
+    <svg viewBox="0 0 24 24" fill="none"><circle cx="8" cy="12" r="7.5" stroke="currentColor" stroke-width="1.3"/><circle cx="16" cy="12" r="7.5" stroke="currentColor" stroke-width="1.3"/><path d="M10.7 7.6a7.5 7.5 0 012.6 0 7.5 7.5 0 010 8.8 7.5 7.5 0 01-2.6 0 7.5 7.5 0 010-8.8z" fill="currentColor" opacity="0.18"/></svg>
+    <span class="name">v5 重叠透镜 ← 当前</span>
+    <span class="desc">两圆交叠形成透镜。Primer × Sayo 的交集——形式与动效的融合。</span>
+    <span class="file">logo-v5-overlap-lens.svg</span>
+  </div>
+  <div class="logo-card">
+    <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9.5" stroke="currentColor" stroke-width="1.5"/><path d="M7 7l10 10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="15.5" cy="15.5" r="1.8" fill="currentColor"/></svg>
+    <span class="name">v6 单环斜切</span>
+    <span class="desc">极简。一环 + 一刀。负空间隐约构成 "S"。果断，不废话。</span>
+    <span class="file">logo-v6-ring-slash.svg</span>
+  </div>
+</div>
+
+<!-- Doc sidebar -->
+<h3 class="section-title">侧边栏 / 导航图标 (13×13)</h3>
+<div class="icon-grid">
+  <div class="icon-card">
+    <div class="size-demo">
+      <svg viewBox="0 0 20 20" fill="none"><path d="M5 3h8l4 4v10a1.5 1.5 0 01-1.5 1.5h-9A1.5 1.5 0 014 17V4.5A1.5 1.5 0 015.5 3z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M13 3v4h4M7 9h6M7 12.5h4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+      <svg viewBox="0 0 20 20" fill="none"><path d="M5 3h8l4 4v10a1.5 1.5 0 01-1.5 1.5h-9A1.5 1.5 0 014 17V4.5A1.5 1.5 0 015.5 3z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M13 3v4h4M7 9h6M7 12.5h4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+    </div>
+    <code>doc-document.svg</code>
+    <span class="label">文档 · Getting Started</span>
+  </div>
+  <div class="icon-card">
+    <div class="size-demo">
+      <svg viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="8" stroke="currentColor" stroke-width="1.5"/><circle cx="10" cy="10" r="4.5" stroke="currentColor" stroke-width="1.5"/><circle cx="10" cy="6" r="1.5" fill="currentColor"/></svg>
+      <svg viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="8" stroke="currentColor" stroke-width="1.5"/><circle cx="10" cy="10" r="4.5" stroke="currentColor" stroke-width="1.5"/><circle cx="10" cy="6" r="1.5" fill="currentColor"/></svg>
+    </div>
+    <code>doc-tokens.svg</code>
+    <span class="label">同心圆+色点 · Design Tokens</span>
+  </div>
+  <div class="icon-card">
+    <div class="size-demo">
+      <svg viewBox="0 0 20 20" fill="none"><rect x="3" y="3" width="6" height="6" rx="1" stroke="currentColor" stroke-width="1.5"/><rect x="11" y="3" width="6" height="6" rx="1" stroke="currentColor" stroke-width="1.5"/><rect x="3" y="11" width="6" height="6" rx="1" stroke="currentColor" stroke-width="1.5"/><rect x="11" y="11" width="6" height="6" rx="1" stroke="currentColor" stroke-width="1.5"/></svg>
+      <svg viewBox="0 0 20 20" fill="none"><rect x="3" y="3" width="6" height="6" rx="1" stroke="currentColor" stroke-width="1.5"/><rect x="11" y="3" width="6" height="6" rx="1" stroke="currentColor" stroke-width="1.5"/><rect x="3" y="11" width="6" height="6" rx="1" stroke="currentColor" stroke-width="1.5"/><rect x="11" y="11" width="6" height="6" rx="1" stroke="currentColor" stroke-width="1.5"/></svg>
+    </div>
+    <code>doc-components.svg</code>
+    <span class="label">2×2 网格 · Components</span>
+  </div>
+  <div class="icon-card">
+    <div class="size-demo">
+      <svg viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="8" stroke="currentColor" stroke-width="1.5"/><path d="M10 2a8 8 0 010 16V2z" fill="currentColor" opacity="0.3"/></svg>
+      <svg viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="8" stroke="currentColor" stroke-width="1.5"/><path d="M10 2a8 8 0 010 16V2z" fill="currentColor" opacity="0.3"/></svg>
+    </div>
+    <code>doc-theme.svg</code>
+    <span class="label">半圆 · Light/Dark Theme</span>
+  </div>
+  <div class="icon-card">
+    <div class="size-demo">
+      <svg viewBox="0 0 20 20" fill="none"><path d="M11 2L5 11h5l-1 7 6-9h-5l1-7z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
+      <svg viewBox="0 0 20 20" fill="none"><path d="M11 2L5 11h5l-1 7 6-9h-5l1-7z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
+    </div>
+    <code>doc-motion.svg</code>
+    <span class="label">闪电 · Motion &amp; JS</span>
+  </div>
+</div>
+
+<!-- Toggle icons -->
+<h3 class="section-title">Toggle 图标</h3>
+<div class="icon-grid">
+  <div class="icon-card">
+    <svg viewBox="0 0 20 20" fill="none" style="color:#f57c00"><circle cx="10" cy="10" r="3.5" stroke="currentColor" stroke-width="1.5"/><path d="M10 2v2.5M10 15.5V18M2 10h2.5M15.5 10H18M4.34 4.34l1.77 1.77M13.89 13.89l1.77 1.77M4.34 15.66l1.77-1.77M13.89 6.11l1.77-1.77" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+    <code>toggle-sun.svg</code>
+    <span class="label">太阳 · 日间模式</span>
+  </div>
+  <div class="icon-card">
+    <svg viewBox="0 0 20 20" fill="none" style="color:#5c6bc0"><path d="M16.5 12.5A6 6 0 019 4.5a6 6 0 007.5 8z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
+    <code>toggle-moon.svg</code>
+    <span class="label">月牙 · 夜间模式</span>
+  </div>
+</div>
+
+<!-- Toast icons -->
+<h3 class="section-title">Toast 通知图标 (20×20)</h3>
+<div class="icon-grid">
+  <div class="icon-card">
+    <svg viewBox="0 0 20 20" fill="none" style="color:var(--syo-green)"><circle cx="10" cy="10" r="8" stroke="currentColor" stroke-width="1.5"/><path d="M6 10l3 3 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <code>toast-success.svg</code>
+    <span class="label">成功 · --syo-green</span>
+  </div>
+  <div class="icon-card">
+    <svg viewBox="0 0 20 20" fill="none" style="color:var(--syo-red)"><circle cx="10" cy="10" r="8" stroke="currentColor" stroke-width="1.5"/><path d="M7 7l6 6M13 7l-6 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+    <code>toast-error.svg</code>
+    <span class="label">错误 · --syo-red</span>
+  </div>
+  <div class="icon-card">
+    <svg viewBox="0 0 20 20" fill="none" style="color:var(--syo-blue)"><circle cx="10" cy="10" r="8" stroke="currentColor" stroke-width="1.5"/><path d="M10 9v5M10 6.5v0" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+    <code>toast-info.svg</code>
+    <span class="label">信息 · --syo-blue</span>
+  </div>
+  <div class="icon-card">
+    <svg viewBox="0 0 20 20" fill="none" style="color:var(--syo-yellow)"><path d="M10 2L1 18h18L10 2z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M10 8v4M10 14.5v0" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+    <code>toast-warning.svg</code>
+    <span class="label">警告 · --syo-yellow</span>
+  </div>
+</div>
+
+<!-- General / UI icons -->
+<h3 class="section-title">通用 / UI 图标</h3>
+<div class="icon-grid">
+  <div class="icon-card">
+    <svg viewBox="0 0 20 20" fill="none"><path d="M5 5l10 10M15 5l-10 10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+    <code>x-close.svg</code>
+    <span class="label">关闭 · Close</span>
+  </div>
+  <div class="icon-card">
+    <svg viewBox="0 0 20 20" fill="none"><path d="M3 5h14M3 10h14M3 15h14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+    <code>hamburger.svg</code>
+    <span class="label">菜单 · Hamburger</span>
+  </div>
+  <div class="icon-card">
+    <svg viewBox="0 0 20 20" fill="none"><path d="M7 4l6 6-6 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <code>chevron-right.svg</code>
+    <span class="label">右箭头 · Chevron Right</span>
+  </div>
+  <div class="icon-card">
+    <svg viewBox="0 0 20 20" fill="none"><path d="M13 4l-6 6 6 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <code>chevron-left.svg</code>
+    <span class="label">左箭头 · Chevron Left</span>
+  </div>
+  <div class="icon-card">
+    <svg viewBox="0 0 20 20" fill="none"><path d="M4 7l6 6 6-6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <code>chevron-down.svg</code>
+    <span class="label">下箭头 · Chevron Down</span>
+  </div>
+  <div class="icon-card">
+    <svg viewBox="0 0 20 20" fill="none"><path d="M4 13l6-6 6 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <code>chevron-up.svg</code>
+    <span class="label">上箭头 · Chevron Up</span>
+  </div>
+  <div class="icon-card">
+    <svg viewBox="0 0 20 20" fill="none"><circle cx="9" cy="9" r="5.5" stroke="currentColor" stroke-width="1.5"/><path d="M13 13l4.5 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+    <code>search.svg</code>
+    <span class="label">搜索 · Search</span>
+  </div>
+  <div class="icon-card">
+    <svg viewBox="0 0 20 20" fill="none"><path d="M3 8l7-5.5L17 8v8.5a1 1 0 01-1 1H4a1 1 0 01-1-1V8z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M8 17.5V11h4v6.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <code>home.svg</code>
+    <span class="label">首页 · Home</span>
+  </div>
+  <div class="icon-card">
+    <svg viewBox="0 0 20 20" fill="none"><path d="M10 1.5l2.3 5.3 5.7.6-4.3 3.8 1.2 5.8L10 14.3 4.1 17l1.2-5.8L1 7.4l5.7-.6L10 1.5z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
+    <code>star.svg</code>
+    <span class="label">收藏 · Star</span>
+  </div>
+  <div class="icon-card">
+    <svg viewBox="0 0 20 20" fill="none"><path d="M10 17c-4-3-7.5-5.4-7.5-8.5A4.25 4.25 0 0110 6.2a4.25 4.25 0 017.5 2.3c0 3.1-3.5 5.5-7.5 8.5z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
+    <code>heart.svg</code>
+    <span class="label">喜欢 · Heart</span>
+  </div>
+  <div class="icon-card">
+    <svg viewBox="0 0 20 20" fill="none"><circle cx="10" cy="7" r="4" stroke="currentColor" stroke-width="1.5"/><path d="M3 18c0-3.3 3.1-6 7-6s7 2.7 7 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+    <code>user.svg</code>
+    <span class="label">用户 · User</span>
+  </div>
+  <div class="icon-card">
+    <svg viewBox="0 0 20 20" fill="none"><path d="M13.5 3.5l-12 12 3 3 12-12-3-3z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M11 9l-3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M14 5l1.5 1.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+    <code>pencil.svg</code>
+    <span class="label">编辑 · Edit</span>
+  </div>
+  <div class="icon-card">
+    <svg viewBox="0 0 20 20" fill="none"><path d="M4 10.5l3.5 3.5 8.5-8.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <code>check.svg</code>
+    <span class="label">勾选 · Check</span>
+  </div>
+  <div class="icon-card">
+    <svg viewBox="0 0 20 20" fill="none"><path d="M10 4v12M4 10h12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+    <code>plus.svg</code>
+    <span class="label">添加 · Plus</span>
+  </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,5 @@
+name: 数据结构 · StudyMate 样例
+slug: data-structures
+goal: 从真实问题出发，走通链表操作、最短路径与快速排序的关键不变量，并能独立解释复杂度和适用边界。
+created_at: "2026-10-02"
+status: 进行中

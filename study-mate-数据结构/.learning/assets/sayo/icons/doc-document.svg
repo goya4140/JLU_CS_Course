@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="none">
+  <!-- Sidebar: Getting Started — document with lines -->
+  <path d="M5 3h8l4 4v10a1.5 1.5 0 01-1.5 1.5h-9A1.5 1.5 0 014 17V4.5A1.5 1.5 0 015.5 3z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M13 3v4h4M7 9h6M7 12.5h4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+</svg>

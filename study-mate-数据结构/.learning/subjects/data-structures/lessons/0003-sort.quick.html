@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>快速排序与分划 · 数据结构 · StudyMate 样例</title>
+
+<!-- 共享层在 .learning/assets/，课件在 .learning/subjects/<slug>/lessons/ 下，所以是 ../../../assets/ -->
+<link rel="stylesheet" href="../../../assets/sayo/sayo.css">
+<link rel="stylesheet" href="../../../assets/learn-theme.css">
+<link rel="stylesheet" href="../assets/style.css">
+
+<!-- 主题要在首帧前应用，避免闪白/闪黑 -->
+<script src="../../../assets/learn-theme.js"></script>
+<script>LearnTheme.apply();</script>
+</head>
+
+<body class="lesson-body">
+
+<nav class="lesson-bar">
+  <a href="../index.html">← 返回课程</a>
+  <span>数据结构 · StudyMate 样例</span>
+  <span class="lesson-bar__no">0003</span>
+  <!-- 课件页自带主题开关：学生从文件管理器直接打开课件时也能切暗色 -->
+  <label class="syo-toggle syo-toggle--theme lesson-bar__toggle" title="切换深浅主题" aria-label="切换深浅主题">
+    <input type="checkbox" id="lesson-theme-checkbox" checked>
+    <span class="syo-toggle-track"></span>
+    <span class="syo-toggle-knob">
+      <svg class="syo-toggle-sun" viewBox="0 0 20 20" fill="none" aria-hidden="true"><circle cx="10" cy="10" r="3.5" stroke="#f57c00" stroke-width="1.5"/><path d="M10 2v2.5M10 15.5V18M2 10h2.5M15.5 10H18M4.34 4.34l1.77 1.77M13.89 13.89l1.77 1.77M4.34 15.66l1.77-1.77M13.89 6.11l1.77-1.77" stroke="#f57c00" stroke-width="1.2" stroke-linecap="round"/></svg>
+      <svg class="syo-toggle-moon" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M16.5 12.5A6 6 0 019 4.5a6 6 0 007.5 8z" stroke="#5c6bc0" stroke-width="1.5" stroke-linejoin="round"/></svg>
+    </span>
+  </label>
+</nav>
+
+<article class="lesson">
+
+  <header class="lesson-header">
+    <span class="lesson-header__eyebrow">0003 · 快速排序与分划</span>
+    <h1>快速排序与分划</h1>
+    <p class="lesson-goal"><b>本节目标：</b>能跟踪主元的一轮分划，并解释平均与最坏时间复杂度的差别。</p>
+  </header>
+
+  <!-- ── 正文：渲染器按内容文件（lessons/<序号>-<节点id>.md）产出，块词汇见 docs/规范/课件内容格式.md ── -->
+
+  <h2>先把一个元素放对位置</h2>
+
+  <p>数组 <code>[7, 4, 9, 2, 6, 5]</code> 要升序。以末尾的 <code>5</code> 为<b>主元</b>，把不大于它的元素放左边，其余放右边，得到 <code>[4, 2, 5, 7, 6, 9]</code>。此时只有主元 <code>5</code> 的最终位置被确定；左右两边各自还要继续排序。这个“分划、再递归处理两侧”的思路就是快速排序。</p>
+
+  <p>下面采用 Lomuto 分划：<code>pivot</code> 是区间末元素；<code>i</code> 表示“不大于主元”区域的尾端；<code>j</code> 逐项扫描。每看见一个不大于主元的值，就扩大左区域并交换到前面。最后把主元放在两个区域之间。</p>
+
+  <pre data-lang="cpp"><code>int partition(int a[], int left, int right) {
+    int pivot = a[right];
+    int i = left;
+    for (int j = left; j &lt; right; ++j) {
+        if (a[j] &lt;= pivot) {
+            std::swap(a[i], a[j]);
+            ++i;
+        }
+    }
+    std::swap(a[i], a[right]);
+    return i;
+}</code></pre>
+
+  <p>每轮扫描时，<code>[left, i)</code> 中的元素都不大于主元，<code>[i, j)</code> 中的元素都大于主元，<code>[j, right)</code> 尚未检查。这个<b>循环不变量</b>能帮你检验代码，而不只是记住两个指针的名字。</p>
+
+  <div class="quiz" data-quiz='[
+  {
+    "q": "一轮分划后，哪一部分一定已经在最终位置？",
+    "opts": [
+      "左侧全部元素",
+      "右侧全部元素",
+      "当前主元元素",
+      "整个数组元素"
+    ],
+    "ans": 2,
+    "why": "分划只保证主元落在最终位置、左右满足大小关系；两边内部还可能无序。"
+  },
+  {
+    "q": "末元素作主元时，已经升序的 n 个元素为什么可能导致 O(n²) 时间？",
+    "answer": "主元总是最大值，每次分划得到 n-1 个元素和一个空区间，递归深度为 n，扫描总量为 n+(n-1)+…+1，即 O(n²)。",
+    "criteria": "说清极端不平衡分划、线性递归深度与求和得 O(n²) 三点。"
+  }
+]'></div>
+
+  <h2>复杂度来自分得均不均</h2>
+
+  <p>一轮分划要扫描当前区间一次，耗时 <span class="math-inline">O(n)</span>。若每轮大致对半分，递归深度约为 <span class="math-inline">\log n</span>，每一层的总扫描量仍为 <span class="math-inline">O(n)</span>，总时间为 <span class="math-inline">O(n\log n)</span>。若每次只分出一个空区间和一个大小为 <span class="math-inline">n-1</span> 的区间，扫描量是 <span class="math-inline">n+(n-1)+\cdots+1</span>，总时间为 <span class="math-inline">O(n^2)</span>。</p>
+
+  <p>用“末元素做主元”的实现，已经有序的数组就会造成极端分划，递归栈最坏需要 <span class="math-inline">O(n)</span> 空间。随机选主元或三数取中可以降低经常遇到坏分划的概率；处理大量重复元素时，三路分划能把等于主元的部分一次放好。快速排序通常不是稳定排序，因为交换可能改变相等元素的先后次序。</p>
+
+  <h2>用数组走一遍</h2>
+
+  <p>对 <code>[7, 4, 9, 2, 6, 5]</code> 使用上面的代码：主元为 <code>5</code>，扫描 <code>7</code> 时不动；扫描 <code>4</code> 时与首位 <code>7</code> 交换，变为 <code>[4, 7, 9, 2, 6, 5]</code>；扫描 <code>9</code> 时不动；扫描 <code>2</code> 时与当前位置的 <code>7</code> 交换，变为 <code>[4, 2, 9, 7, 6, 5]</code>；扫描 <code>6</code> 时不动；最后把主元 <code>5</code> 与 <code>9</code> 交换，得到 <code>[4, 2, 5, 7, 6, 9]</code>，主元下标为 <code>2</code>。左侧 <code>[4, 2]</code> 与右侧 <code>[7, 6, 9]</code> 仍要继续排序。</p>
+
+  <div class="lesson-practice">
+    <div class="lesson-practice__head">
+      <span class="lesson-practice__level">上手做</span>
+      <span class="lesson-practice__title">找出坏分划</span>
+    </div>
+
+      <p>对 <code>[1, 2, 3, 4, 5]</code> 和 <code>[5, 4, 3, 2, 1]</code> 各执行一轮末元素分划，记录返回下标和左右区间大小。再把 <code>[4, 4, 4, 4, 4]</code> 带入，观察为什么两路分划效率差，并思考如何把“等于主元”的元素单独聚成一段。</p>
+  </div>
+
+  <p>课程讲义还对比了其他分划写法；不同写法的指针移动顺序和“等于主元”归属可以不同。做题时先写明自己使用的分划约定，再追踪数组。更多排序算法见<a href="https://goya4140.github.io/JLU_CS_Course/#/2_1数据结构/06_排序/06_0_章节导览">本站排序笔记</a>。</p>
+
+  <!-- ── 提问提示：固定写法，别删 ── -->
+
+  <div class="lesson-ask">
+    <b>没看懂？随时问</b>
+    把看不懂的段落（或报错）原样复制回会话，说一句哪里不懂就行，我只解释这一段，不打断你的进度。
+  </div>
+
+  <!-- ── 上/下节课指针由渲染器按 curriculum.yaml 的 nodes 顺序算（第一课无 --prev、最后一课无 --next） ── -->
+
+  <nav class="lesson-nav" aria-label="上一课 / 下一课">
+    <a class="lesson-nav__link lesson-nav__link--prev" href="0002-graph.dijkstra.html">
+      <span class="lesson-nav__dir">上节课</span>
+      <span class="lesson-nav__title">Dijkstra 最短路径</span>
+    </a>
+  </nav>
+
+  <footer class="lesson-footer">
+    StudyMate · 0003 快速排序与分划 · 本地学习工作区
+  </footer>
+
+</article>
+
+<script src="../../../assets/sayo/sayo.js"></script>
+<link rel="stylesheet" href="../../../assets/katex/katex.min.css">
+<script src="../../../assets/katex/katex.min.js" defer></script>
+<script src="../../../assets/lesson-math.js" defer></script>
+<script src="../assets/quiz.js" defer></script>
+<script src="../assets/lesson-toc.js" defer></script>
+<script>LearnTheme.wire(document.getElementById('lesson-theme-checkbox'));</script>
+</body>
+</html>

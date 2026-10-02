@@ -1,0 +1,750 @@
+/* ═══════════════════════════════════════════════════════════════
+   StudyMate · 课件层（叠在 Sayo + learn-theme.css 之上）
+   ═══════════════════════════════════════════════════════════════
+   加载顺序（课件页）：
+     ../../../assets/sayo/sayo.css
+     ../../../assets/learn-theme.css
+     ../assets/style.css          ← 本文件
+     ../assets/quiz.js            ← 交互练习
+
+   定位：课件是"读+练"的长文页面。
+   - 讲解部分按可读性排版（46rem 行宽、1.8 行高、克制的层级）
+   - 题目部分用约定类名：选择题 .quiz / .feedback / .correct / .wrong；
+     开放题 .quiz__open / .quiz__answer / .quiz__criteria（点开对照参考答案与判分要点）
+     数据契约见 quiz.js 顶部注释；出题与判分规范见 <root>/.dsh/skills/layered-practice
+   - 颜色一律走 Sayo 令牌（--syo-*），亮色是暖纸白+深绿、暗色是 Sayo 暗色
+   ═══════════════════════════════════════════════════════════════ */
+
+:root {
+  --lesson-width: 46rem;
+  --lesson-gap: var(--syo-space-6);
+}
+
+/* ── 页面骨架 ───────────────────────────────────────────────── */
+
+.lesson-body {
+  margin: 0;
+  background: var(--syo-bg-base);
+  color: var(--syo-fg-body);
+}
+
+/* 顶部条：返回科目 + 课件编号 */
+.lesson-bar {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  gap: var(--syo-space-3);
+  padding: 10px clamp(16px, 4vw, 32px);
+  background: var(--syo-bg-surface);
+  border-bottom: 1px solid var(--syo-border);
+  font-size: .8125rem;
+}
+.lesson-bar a { color: var(--syo-fg-muted); text-decoration: none; }
+.lesson-bar a:hover { color: var(--syo-accent); }
+.lesson-bar__no { margin-left: auto; font-family: var(--syo-font-mono); color: var(--syo-fg-muted); }
+
+/* 顶栏右侧的主题开关：课件是学生“从文件管理器直接打开”的页面，
+   没有主页那套导航，所以开关必须长在课件自己身上（见 lesson.html） */
+.lesson-bar__toggle { margin-left: var(--syo-space-3); }
+
+/* ═══════════════════════════════════════════════════════════════
+   侧边目录：照搬 sayo-ui 文档页的 .doc-sidebar（含折叠 rail 与移动端抽屉）
+   来源：该页 <style> 块里的 .doc-grid / .doc-sidebar /
+        .sidebar-toggle / .doc-sidebar-title / .nav-hamburger / .sidebar-backdrop + 两段媒体查询
+   只改两处：① var(--syo-nav-height) → 本页顶栏高度 var(--lesson-nav-h)；
+            ② 第二列改 minmax(0, 1fr)（防宽内容撑破），去掉与课件无关的 .doc-main/.doc-section/syo-hero-logo
+   目录内容由 lesson-toc.js 自动生成，页面里不用手写
+   ═══════════════════════════════════════════════════════════════ */
+
+.lesson-body { --lesson-nav-h: 44px; }
+
+  .doc-grid {
+    display: grid; grid-template-columns: auto minmax(0, 1fr); min-height: 100vh;
+  }
+
+  .doc-sidebar {
+    position: sticky; top: var(--lesson-nav-h);
+    height: calc(100vh - var(--lesson-nav-h));
+    width: 220px;
+    padding: var(--syo-space-6) var(--syo-space-5);
+    overflow-y: auto;
+    overflow-x: hidden;
+    background: var(--syo-bg-surface);
+    border-right: 1px solid var(--syo-border);
+    transition: width 350ms var(--syo-ease-out),
+                padding 350ms var(--syo-ease-out);
+  }
+  .doc-sidebar.collapsed {
+    width: 44px;
+    padding: var(--syo-space-3) var(--syo-space-1);
+  }
+
+  /* ── Sidebar toggle button ── */
+  .sidebar-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px; height: 28px;
+    margin-bottom: var(--syo-space-3);
+    border: 1px solid var(--syo-border);
+    border-radius: var(--syo-radius-sm);
+    background: var(--syo-bg-surface);
+    color: var(--syo-fg-muted);
+    cursor: pointer;
+    transition: color 180ms var(--syo-ease-out),
+                border-color 180ms var(--syo-ease-out),
+                margin 350ms var(--syo-ease-out);
+    flex-shrink: 0;
+  }
+  .sidebar-toggle:hover { color: var(--syo-accent); border-color: var(--syo-accent); }
+  .sidebar-toggle svg { width: 13px; height: 13px; transition: transform 350ms var(--syo-ease-out); }
+  .doc-sidebar.collapsed .sidebar-toggle { margin-left: auto; margin-right: auto; }
+  .doc-sidebar.collapsed .sidebar-toggle svg { transform: rotate(180deg); }
+
+  /* Text — fade out during collapse */
+  .doc-sidebar a,
+  .doc-sidebar .doc-sidebar-title span {
+    white-space: nowrap;
+    opacity: 1;
+    transition: opacity 180ms ease;
+  }
+
+  /* Collapsed: links shrink to zero, titles keep only icon */
+  .doc-sidebar.collapsed a {
+    opacity: 0;
+    padding-top: 0; padding-bottom: 0;
+    height: 0; margin: 0;
+    overflow: hidden;
+    border-left: none;
+    transition: opacity 100ms ease, height 0ms linear 100ms,
+                padding 0ms linear 100ms, margin 0ms linear 100ms;
+  }
+  .doc-sidebar.collapsed .doc-sidebar-title span {
+    opacity: 0;
+    position: absolute;
+    pointer-events: none;
+    transition: opacity 100ms ease;
+  }
+
+  /* Collapsed: keep icons as nav dots, center them */
+  .doc-sidebar.collapsed .doc-sidebar-title {
+    justify-content: center;
+    position: relative;
+    margin-top: var(--syo-space-2);
+    margin-bottom: var(--syo-space-2);
+  }
+  .doc-sidebar.collapsed .doc-sidebar-title svg { width: 15px; height: 15px; }
+
+  .doc-sidebar a {
+    display: block;
+    padding: 6px 10px;
+    margin-bottom: 1px;
+    font-size: 0.8125rem;
+    color: var(--syo-fg-muted);
+    border-radius: var(--syo-radius-sm);
+    border-left: 2px solid transparent;
+    transition: color 180ms var(--syo-ease-out),
+                background 180ms var(--syo-ease-out),
+                border-color 200ms var(--syo-ease-out);
+  }
+  .doc-sidebar a:hover {
+    color: var(--syo-fg-default);
+    background: var(--syo-bg-surface);
+    border-left-color: var(--syo-border);
+  }
+  .doc-sidebar a.active {
+    color: var(--syo-accent);
+    /* 底色用强调色的柔和版令牌，不要写死 Primer 紫的 rgba：
+       亮色强调色是绿，写死紫色就变成「绿字绿条 + 淡紫底」，那个底在亮色下几乎是白的。 */
+    background: var(--learn-soft-accent);
+    border-left-color: var(--syo-accent);
+    font-weight: 500;
+  }
+
+  /* ── 侧栏底部：上/下节课指针 ────────────────────────────────────
+     正文里由 render_lesson.py 渲染一份 <nav class="lesson-nav">（真实链接，js 关掉也还在），
+     lesson-toc.js 生成目录后把它搬到侧栏目录下面——页面上只有一份。
+     样式写在这里对两种位置都成立：搬进侧栏后吃 .doc-sidebar a 的内边距与 hover，
+     没搬（无 js）时就是正文末尾一块普通导航。 */
+  .lesson-nav {
+    margin-top: var(--syo-space-5);
+    padding-top: var(--syo-space-4);
+    border-top: 1px solid var(--syo-border-muted);
+  }
+  .lesson-nav__link { display: block; text-decoration: none; }
+  .lesson-nav__dir {
+    display: block;
+    font-size: .6875rem;
+    color: var(--syo-fg-muted);
+  }
+  .lesson-nav__title {
+    display: block;
+    /* 侧栏的通用 a 规则是 nowrap（目录条目那样），长标题会顶出侧栏宽度 → 这里要能换行 */
+    white-space: normal;
+    overflow-wrap: break-word;
+    color: var(--syo-accent);
+  }
+  .lesson-nav__link:hover .lesson-nav__title { color: var(--syo-fg-default); }
+  /* 折叠成 rail 时整块收掉（侧栏的 a 规则只会把链接压成 0 高，边框块还在） */
+  .doc-sidebar.collapsed .lesson-nav { display: none; }
+  .doc-sidebar-title {
+    display: flex;
+    align-items: center;
+    gap: var(--syo-space-2);
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--syo-fg-default);
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    margin-top: var(--syo-space-5);
+    margin-bottom: var(--syo-space-2);
+  }
+  .doc-sidebar-title:first-child { margin-top: 0; }
+  .doc-sidebar-title svg {
+    flex-shrink: 0;
+    color: var(--syo-accent);
+  }
+
+  /* ── Hamburger button ── */
+  .nav-hamburger {
+    display: none;
+    align-items: center; justify-content: center;
+    width: 32px; height: 32px;
+    margin-right: var(--syo-space-2);
+    border: none; background: none;
+    color: var(--syo-fg-muted);
+    cursor: pointer;
+    border-radius: var(--syo-radius-sm);
+    transition: color 150ms, background 150ms;
+    flex-shrink: 0;
+  }
+  .nav-hamburger:hover { color: var(--syo-fg-default); background: var(--syo-bg-surface); }
+
+  /* ── Sidebar backdrop (mobile) ── */
+  .sidebar-backdrop {
+    display: none;
+    position: fixed; inset: 0;
+    top: var(--lesson-nav-h);
+    background: rgba(0,0,0,0.5);
+    z-index: 150;
+    opacity: 0;
+    transition: opacity 300ms ease;
+    pointer-events: none;
+  }
+  .sidebar-backdrop.show { opacity: 1; pointer-events: auto; }
+
+  /* ≤1024px 的默认折叠由 lesson-toc.js 设置 .collapsed，点击后可正常展开。 */
+
+  /* ═══════════════════════════════════════════════════════════════
+     MOBILE: ≤768px
+     Single column · off-canvas sidebar · hamburger visible
+     ═══════════════════════════════════════════════════════════════ */
+  @media (max-width: 768px) {
+    .nav-hamburger { display: flex; }
+    .doc-grid { grid-template-columns: 1fr; }
+
+    .doc-sidebar {
+      position: fixed;
+      top: var(--lesson-nav-h); left: 0; bottom: 0;
+      width: 260px; z-index: 200;
+      transform: translateX(-100%);
+      transition: transform 300ms var(--syo-ease-out);
+      box-shadow: 2px 0 16px rgba(0,0,0,0.3);
+      padding: var(--syo-space-5) var(--syo-space-4) !important;
+    }
+    .doc-sidebar.mobile-open { transform: translateX(0); }
+
+    /* Reset collapsed state when open on mobile */
+    .doc-sidebar.mobile-open,
+    .doc-sidebar.mobile-open.collapsed { width: 260px; }
+    .doc-sidebar.mobile-open a {
+      opacity: 1; padding-top: 6px; padding-bottom: 6px;
+      height: auto; margin-bottom: 1px; overflow: visible;
+    }
+    .doc-sidebar.mobile-open .doc-sidebar-title {
+      justify-content: flex-start; position: static;
+      margin-top: var(--syo-space-5); margin-bottom: var(--syo-space-2);
+    }
+    .doc-sidebar.mobile-open .doc-sidebar-title span {
+      opacity: 1; position: static; pointer-events: auto;
+    }
+    .doc-sidebar.mobile-open .doc-sidebar-title svg { width: 13px; height: 13px; }
+    .doc-sidebar.mobile-open .sidebar-toggle { margin-left: 0; margin-right: 0; }
+    .doc-sidebar.mobile-open .sidebar-toggle svg { transform: rotate(0); }
+    .doc-sidebar.mobile-open .lesson-nav { display: block; }
+
+    .sidebar-backdrop { display: block; }
+  }
+
+  /* ═══════════════════════════════════════════════════════════════
+     SMALL: ≤480px
+     Compact nav · tighter spacing
+     ═══════════════════════════════════════════════════════════════ */
+
+/* 目录条目允许换行：照搬来的样式是 white-space: nowrap，而小节标题是中文长句，
+   220px 的侧栏（去掉内边距只剩约 180px）会把尾巴裁掉。标题行仍保持 nowrap（折叠动画要靠它）。 */
+.doc-sidebar a {
+  white-space: normal;
+  overflow-wrap: break-word;
+  line-height: 1.5;
+}
+
+/* 目录跳转时，标题别被吸顶的顶栏盖住 */
+.lesson h2, .lesson h3 { scroll-margin-top: 64px; }
+
+
+.lesson {
+  max-width: var(--lesson-width);
+  margin: 0 auto;
+  padding: clamp(28px, 5vw, 52px) clamp(18px, 4vw, 28px) 80px;
+  line-height: 1.8;
+}
+
+/* ── 课件头 ─────────────────────────────────────────────────── */
+
+.lesson-header { margin-bottom: var(--syo-space-8); }
+
+.lesson-header__eyebrow {
+  display: block;
+  margin-bottom: var(--syo-space-2);
+  font-family: var(--syo-font-mono);
+  font-size: .75rem;
+  color: var(--syo-fg-muted);
+}
+
+.lesson-header h1 {
+  margin: 0;
+  font-size: clamp(24px, 3.6vw, 32px);
+  font-weight: 600;
+  line-height: 1.35;
+  letter-spacing: -.02em;
+  color: var(--syo-fg-default);
+}
+
+/* 本节目标：一句话说清"学完能做什么" */
+.lesson-goal {
+  margin-top: var(--syo-space-4);
+  padding: var(--syo-space-3) var(--syo-space-4);
+  background: var(--learn-soft-accent);
+  border-radius: var(--syo-radius-md);
+  font-size: .875rem;
+}
+.lesson-goal b { color: var(--syo-fg-default); }
+
+/* ── 正文排版 ───────────────────────────────────────────────── */
+
+.lesson h2 {
+  margin: var(--syo-space-10) 0 var(--syo-space-3);
+  padding-bottom: var(--syo-space-2);
+  font-size: 1.25rem;
+  font-weight: 600;
+  line-height: 1.5;
+  color: var(--syo-fg-default);
+  border-bottom: 1px solid var(--syo-border);
+}
+
+.lesson h3 {
+  margin: var(--syo-space-6) 0 var(--syo-space-2);
+  font-size: 1.0313rem;
+  font-weight: 600;
+  color: var(--syo-fg-default);
+}
+
+.lesson p { margin: 0 0 var(--syo-space-4); }
+
+.lesson ul, .lesson ol { margin: 0 0 var(--syo-space-4); padding-left: 1.35em; }
+.lesson li { margin-bottom: 6px; }
+.lesson li::marker { color: var(--syo-fg-muted); }
+
+.lesson a { color: var(--syo-accent); text-underline-offset: 3px; }
+.lesson a:hover { text-decoration-thickness: 2px; }
+
+.lesson strong { color: var(--syo-fg-default); }
+
+.lesson hr {
+  margin: var(--syo-space-8) 0;
+  border: 0;
+  border-top: 1px solid var(--syo-border);
+}
+
+.lesson blockquote {
+  margin: var(--syo-space-5) 0;
+  padding: var(--syo-space-3) var(--syo-space-4);
+  background: var(--syo-bg-surface);
+  border-radius: var(--syo-radius-md);
+  color: var(--syo-fg-muted);
+  font-size: .9375rem;
+}
+.lesson blockquote p:last-child { margin-bottom: 0; }
+
+/* 行内代码 */
+.lesson code {
+  padding: 1px 5px;
+  font-family: var(--syo-font-mono);
+  font-size: .875em;
+  background: var(--syo-bg-surface);
+  border: 1px solid var(--syo-border-muted);
+  border-radius: var(--syo-radius-sm);
+  color: var(--syo-fg-default);
+}
+
+/* 代码块：默认朴素样式；需要标题栏/行号时用 Sayo 的 .syo-editor 结构 */
+.lesson pre {
+  margin: var(--syo-space-4) 0;
+  padding: var(--syo-space-4);
+  background: var(--syo-bg-surface);
+  border: 1px solid var(--syo-border);
+  border-radius: var(--syo-radius-md);
+  overflow-x: auto;
+  line-height: 1.7;
+}
+.lesson pre code {
+  padding: 0;
+  background: none;
+  border: 0;
+  font-size: .8125rem;
+}
+/* .syo-editor 里的代码不要再套一层边框 */
+.lesson .syo-editor pre { margin: 0; border: 0; background: none; padding: 0; }
+
+.lesson table {
+  width: 100%;
+  margin: var(--syo-space-4) 0;
+  border-collapse: collapse;
+  font-size: .875rem;
+}
+.lesson th, .lesson td {
+  padding: 8px 12px;
+  text-align: left;
+  border-bottom: 1px solid var(--syo-border);
+}
+.lesson th { color: var(--syo-fg-default); font-weight: 600; }
+
+.lesson kbd {
+  padding: 1px 6px;
+  font-family: var(--syo-font-mono);
+  font-size: .8125em;
+  background: var(--syo-bg-surface);
+  border: 1px solid var(--syo-border);
+  border-bottom-width: 2px;
+  border-radius: var(--syo-radius-sm);
+}
+
+.lesson img, .lesson svg { max-width: 100%; }
+
+/* ── 配图 ─────────────────────────────────────────────────────
+   两种放法：① 内联 <svg>（首选：用 currentColor 就跟主题走、体积小、中文用页面字体）
+   ② 图片文件（PNG/WebP，从科目图片库 `assets/img/pool/` 挑，见 lesson-design 第三节）。
+   ②的问题是自己不带主题信息——深色页面上一张白底图会刺眼、浅色线条图又会看不见，
+   所以统一给 figure 一块"纸面"：浅色底 + 细边框，深浅主题下都当插图看
+   （图像内容不必跟着换）。 */
+.lesson-figure {
+  margin: var(--syo-space-5) 0;
+  padding: var(--syo-space-4);
+  background: var(--learn-figure-paper);
+  border: 1px solid var(--syo-border);
+  border-radius: var(--syo-radius-md);
+  text-align: center;
+}
+.lesson-figure img,
+.lesson-figure svg {
+  display: block;
+  margin: 0 auto;
+  max-width: 100%;
+  height: auto;
+}
+/* 内联 SVG 跟着主题走时不要把纸面刷成白色：纸面只服务于位图。
+   写了 .lesson-figure--inline 就透明底，线条颜色取 currentColor。 */
+.lesson-figure--inline { background: none; border: 0; padding: 0; }
+.lesson-figure figcaption {
+  margin-top: var(--syo-space-3);
+  font-size: .8125rem;
+  line-height: 1.6;
+  color: var(--syo-fg-muted);
+}
+
+/* ── 提示块：三个语气 ───────────────────────────────────────── */
+
+.lesson-note,
+.lesson-tip,
+.lesson-warn {
+  margin: var(--syo-space-4) 0;
+  padding: var(--syo-space-3) var(--syo-space-4);
+  border-radius: var(--syo-radius-md);
+  font-size: .875rem;
+  line-height: 1.75;
+}
+.lesson-note > b:first-child,
+.lesson-tip > b:first-child,
+.lesson-warn > b:first-child {
+  display: block;
+  margin-bottom: 4px;
+  font-size: .75rem;
+  letter-spacing: .04em;
+}
+.lesson-note { background: var(--syo-bg-surface); }
+.lesson-tip  { background: var(--learn-soft-green); }
+.lesson-warn { background: var(--learn-soft-yellow); }
+.lesson-note > b:first-child { color: var(--syo-fg-muted); }
+.lesson-tip  > b:first-child { color: var(--syo-green); }
+.lesson-warn > b:first-child { color: var(--syo-yellow); }
+.lesson-note p:last-child, .lesson-tip p:last-child, .lesson-warn p:last-child { margin-bottom: 0; }
+
+/* ── 练习：选择题（类名沿用计划约定） ─────────────────────────── */
+
+.quiz {
+  margin: var(--syo-space-5) 0;
+  padding: var(--syo-space-4) var(--syo-space-5) var(--syo-space-5);
+  background: var(--syo-bg-surface);
+  border: 1px solid var(--syo-border);
+  border-radius: var(--syo-radius-md);
+  /* 页面底色与卡片底色只差 1.09:1，不靠阴影的话卡片形状立不住。
+     阴影是分主题的 → 取值放令牌（learn-theme.css）：亮色暖褐、暗色纯黑。 */
+  box-shadow: var(--learn-shadow-card);
+  /* 题面、选项、why、参考答案、判分要点都是 quiz.js 写进去的纯文本，可以含 \n
+     （L3 排错题要「给一段代码或真实报错」，多行是常态）。不声明的话浏览器把换行折叠成一行，
+     代码挤成一串没法读。pre-wrap = 保留 \n **与行首缩进**，同时照常在行尾换行。
+     缩进必须留住：有的题面就拿缩进提问（`else` 对齐、嵌套层次），折叠掉等于把题抽掉。
+     多行代码另写进 ``` 围栏 → quiz.js 渲染成真 <pre><code>（等宽 + 上色 + 横向滚动），
+     见 quiz.js 顶部契约；这条 pre-wrap 是给没进围栏的普通多行文本兜底的。 */
+  white-space: pre-wrap;
+}
+
+/* 围栏渲染出的代码块。底色/边框/横向滚动由 .lesson pre 给（题目块在 .lesson 里），
+   这里只补字重与行距：.quiz__q 是 600，代码跟着变粗会很难读。 */
+.quiz__code {
+  white-space: pre;
+  tab-size: 4;
+  line-height: 1.6;
+}
+.quiz__code code { font-weight: 400; }
+
+.quiz__q {
+  margin: 0 0 var(--syo-space-4);
+  font-size: .9375rem;
+  font-weight: 600;
+  color: var(--syo-fg-default);
+  line-height: 1.7;
+}
+/* 题与题之间画一条分隔线：线画在第二题及其后每一题的顶边。
+   要留出两段空白，线才像分界：
+   ① **选项卡组下面**留 margin-bottom——这是关键。线是 .quiz__q 的 border-top，
+      而它紧邻的上一个盒子就是选项卡组；不在选项卡组下面留白，线就会贴着选项卡底边
+      （padding-top 画在线**下方**，只能推开题目文字，对这一段间距毫无帮助）。
+   ② 题目文字与线之间留 padding-top。
+   选择器用通用兄弟（~）而不是相邻兄弟（+）：quiz.js 给每道选择题都**无条件**插入一个
+   feedback 元素（先建好、答完才显示），两道 .quiz__q 之间永远隔着它，`+` 一个都匹配不到。 */
+.quiz__q ~ .quiz__q {
+  padding-top: var(--syo-space-4);
+  border-top: 1px solid color-mix(in srgb, var(--syo-border) 55%, var(--syo-fg-muted));
+}
+/* 首题不画线（也不留上内边距）：它上面就是卡片边缘。
+   用 :has 判定「这个卡片里不止一道题」，两条规则分工：
+   - 多题卡片：~ 规则给后面的题画线，首题由本规则清掉（本规则在后面，覆盖前者）
+   - 单题卡片：~ 规则本来就不匹配，本规则把 padding/线一并清为 0 更保险 */
+.quiz:has(.quiz__q ~ .quiz__q) .quiz__q:first-child,
+.quiz:not(:has(.quiz__q ~ .quiz__q)) .quiz__q:first-child {
+  padding-top: 0;
+  border-top: 0;
+}
+
+.quiz__opts {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  /* 选项卡组下面留出的空白，就是分隔线到选项卡的距离（见上方说明） */
+  margin-bottom: var(--syo-space-4);
+}
+
+/* 选项做成整行按钮：好点、好读，且能容纳较长选项 */
+.quiz button,
+.quiz__opt {
+  display: block;
+  width: 100%;
+  padding: 11px 15px;
+  font-family: inherit;
+  font-size: .875rem;
+  line-height: 1.6;
+  text-align: left;
+  color: var(--syo-fg-body);
+  background: var(--syo-bg-base);
+  border: 1px solid var(--syo-border);
+  border-radius: var(--syo-radius-sm);
+  cursor: pointer;
+  transition: border-color 140ms var(--syo-ease-out), background-color 140ms var(--syo-ease-out), color 140ms var(--syo-ease-out), transform 80ms var(--syo-ease-out);
+}
+/* hover **不动底色**：底色是暖米色（--syo-bg-base），往上面盖任何一层半透明色都会变成脏滤镜
+   ——盖绿的发绿、盖灰的发灰，两个主题各脏一边（用户两次实测反馈都是这个）。可点改用三件事表达：
+   accent 边框 + 文字加深 + 上浮 1px（上浮是科目页节点卡已经在用的手法，:active 的
+   translateY(1px) 正好与它配成一按一抬）。语义绿只留给「答对了」，不再兼职 hover。 */
+.quiz button:hover,
+.quiz__opt:hover { border-color: var(--syo-accent); color: var(--syo-fg-default); transform: translateY(-1px); }
+.quiz button:active,
+.quiz__opt:active { transform: translateY(1px); }
+.quiz button:focus-visible,
+.quiz__opt:focus-visible { outline: 2px solid var(--syo-accent); outline-offset: 2px; }
+
+.quiz__opt.is-picked { border-color: var(--syo-accent); }
+.quiz__opt.is-correct {
+  border-color: var(--syo-green);
+  background: var(--learn-soft-green);
+  color: var(--syo-fg-default);
+}
+.quiz__opt.is-wrong {
+  border-color: var(--syo-red);
+  background: var(--learn-soft-red);
+  color: var(--syo-fg-default);
+}
+
+/* 反馈：计划约定的 .feedback/.correct/.wrong 保留 */
+.feedback {
+  margin: var(--syo-space-3) 0 0;
+  font-size: .875rem;
+  font-weight: 600;
+  line-height: 1.7;
+}
+.feedback.correct { color: var(--syo-green); }
+.feedback.wrong   { color: var(--syo-red); }
+.feedback code { font-weight: 400; }
+
+.quiz__score {
+  margin: var(--syo-space-3) 0 0;
+  padding-top: var(--syo-space-2);
+  font-size: .8125rem;
+  text-align: right;
+  color: var(--syo-fg-muted);
+}
+
+/* ── 练习：开放题（自己先答，点开对照参考答案与判分要点） ───────── */
+
+.quiz__reveal { font-weight: 600; }
+
+.quiz__answer {
+  margin: var(--syo-space-3) 0 0;
+  padding: var(--syo-space-3) var(--syo-space-4) var(--syo-space-4);
+  background: var(--syo-bg-base);
+  border: 1px solid var(--syo-border);
+  border-left: 3px solid var(--syo-accent);
+  border-radius: var(--syo-radius-sm);
+}
+
+.quiz__answer-label {
+  margin: 0 0 4px;
+  font-family: var(--syo-font-mono);
+  font-size: .6875rem;
+  letter-spacing: .04em;
+  color: var(--syo-fg-muted);
+}
+
+.quiz__answer-text {
+  margin: 0 0 var(--syo-space-3);
+  font-size: .875rem;
+  line-height: 1.75;
+  color: var(--syo-fg-body);
+}
+
+.quiz__criteria {
+  margin: 0;
+  font-size: .875rem;
+  line-height: 1.75;
+  color: var(--syo-fg-body);
+}
+
+/* ── 练习任务块（四层练习：L1 理解 / L2 改造 / L3 排错 / L4 应用） ── */
+
+.lesson-practice {
+  margin: var(--syo-space-5) 0;
+  padding: var(--syo-space-4) var(--syo-space-5);
+  background: var(--syo-bg-surface);
+  border: 1px solid var(--syo-border);
+  border-radius: var(--syo-radius-md);
+}
+
+.lesson-practice__head {
+  display: flex;
+  align-items: center;
+  gap: var(--syo-space-2);
+  margin-bottom: var(--syo-space-2);
+}
+
+.lesson-practice__level {
+  padding: 1px 8px;
+  font-family: var(--syo-font-mono);
+  font-size: .6875rem;
+  color: var(--syo-accent);
+  border: 1px solid var(--learn-line-accent);
+  border-radius: 999px;
+}
+
+.lesson-practice__title {
+  margin: 0;
+  font-size: .9375rem;
+  font-weight: 600;
+  color: var(--syo-fg-default);
+}
+
+.lesson-practice p:last-child { margin-bottom: 0; }
+
+/* ── 资源引用与相关课件 ─────────────────────────────────────── */
+
+.lesson-resources { margin: var(--syo-space-4) 0 0; padding: 0; list-style: none; }
+.lesson-resources li {
+  padding: 10px 0;
+  border-bottom: 1px solid var(--syo-border-muted);
+  font-size: .875rem;
+}
+.lesson-resources li:last-child { border-bottom: 0; }
+.lesson-resources__meta {
+  display: block;
+  margin-top: 2px;
+  font-family: var(--syo-font-mono);
+  font-size: .6875rem;
+  color: var(--syo-fg-muted);
+}
+
+.lesson-related { display: flex; flex-wrap: wrap; gap: 8px; margin: var(--syo-space-3) 0 0; }
+.lesson-related a {
+  padding: 4px 10px;
+  font-size: .8125rem;
+  text-decoration: none;
+  border: 1px solid var(--syo-border);
+  border-radius: 999px;
+}
+.lesson-related a:hover { border-color: var(--syo-accent); }
+
+/* ── 底部"不懂就问"提示 ─────────────────────────────────────── */
+
+.lesson-ask {
+  margin-top: var(--syo-space-10);
+  padding: var(--syo-space-4) var(--syo-space-5);
+  background: var(--learn-soft-accent);
+  border-radius: var(--syo-radius-md);
+  font-size: .875rem;
+  line-height: 1.8;
+}
+.lesson-ask b { display: block; margin-bottom: 4px; color: var(--syo-fg-default); }
+.lesson-ask code {
+  font-family: var(--syo-font-mono);
+  background: var(--syo-bg-base);
+  border: 1px solid var(--syo-border);
+}
+
+.lesson-footer {
+  margin-top: var(--syo-space-8);
+  padding-top: var(--syo-space-4);
+  border-top: 1px solid var(--syo-border);
+  font-family: var(--syo-font-mono);
+  font-size: .75rem;
+  color: var(--syo-fg-muted);
+}
+
+/* ── 窄屏 ───────────────────────────────────────────────────── */
+
+@media (max-width: 640px) {
+  .lesson { padding-top: var(--syo-space-6); }
+  .lesson h2 { margin-top: var(--syo-space-8); }
+  .lesson pre { padding: var(--syo-space-3); }
+  .quiz { padding: var(--syo-space-3) var(--syo-space-4) var(--syo-space-4); }
+}

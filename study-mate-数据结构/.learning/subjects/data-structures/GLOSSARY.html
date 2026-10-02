@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>术语表 · 数据结构 · StudyMate 样例</title>
+<link rel="stylesheet" href="../../assets/sayo/sayo.css">
+<link rel="stylesheet" href="../../assets/learn-theme.css">
+<link rel="stylesheet" href="assets/style.css">
+<script src="../../assets/learn-theme.js"></script>
+<script>LearnTheme.apply();</script>
+<style>
+.lesson h1 {
+  margin: var(--syo-space-2, 8px) 0 var(--syo-space-4, 16px);
+  font-size: clamp(1.6rem, 3.2vw, 2.25rem);
+  font-weight: 700;
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+  color: var(--syo-fg-default);
+}
+</style>
+</head>
+<body class="lesson-body">
+<nav class="lesson-bar">
+  <a href="index.html">← 返回科目</a>
+  <span>数据结构 · StudyMate 样例</span>
+  <span class="lesson-bar__no">术语表</span>
+  <label class="syo-toggle syo-toggle--theme lesson-bar__toggle" title="切换深浅主题" aria-label="切换深浅主题">
+    <input type="checkbox" id="attachment-theme-checkbox" checked>
+    <span class="syo-toggle-track"></span>
+    <span class="syo-toggle-knob">
+      <svg class="syo-toggle-sun" viewBox="0 0 20 20" fill="none" aria-hidden="true"><circle cx="10" cy="10" r="3.5" stroke="#f57c00" stroke-width="1.5"/><path d="M10 2v2.5M10 15.5V18M2 10h2.5M15.5 10H18M4.34 4.34l1.77 1.77M13.89 13.89l1.77 1.77M4.34 15.66l1.77-1.77M13.89 6.11l1.77-1.77" stroke="#f57c00" stroke-width="1.2" stroke-linecap="round"/></svg>
+      <svg class="syo-toggle-moon" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M16.5 12.5A6 6 0 019 4.5a6 6 0 007.5 8z" stroke="#5c6bc0" stroke-width="1.5" stroke-linejoin="round"/></svg>
+    </span>
+  </label>
+</nav>
+
+<article class="lesson">
+<h1>数据结构 Glossary</h1>
+<h2>待掌握</h2>
+<p><strong>哨位结点</strong>：放在第一个有效数据结点前的辅助结点，不计入表长，用于统一表头和中间位置的操作。</p>
+<p><strong>松弛</strong>：发现一条经当前顶点到达邻点的更短路径时，更新邻点的暂定距离。</p>
+<p><strong>分划</strong>：围绕主元重新安排区间，使主元落在最终位置，左右两侧分别满足约定的大小关系。</p>
+  <footer class="lesson-footer">
+    StudyMate · 术语表 · 本地学习工作区
+  </footer>
+</article>
+
+<script src="../../assets/sayo/sayo.js"></script>
+<script>LearnTheme.wire(document.getElementById('attachment-theme-checkbox'));</script>
+</body>
+</html>

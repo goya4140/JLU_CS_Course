@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>单链表与哨位结点 · 数据结构 · StudyMate 样例</title>
+
+<!-- 共享层在 .learning/assets/，课件在 .learning/subjects/<slug>/lessons/ 下，所以是 ../../../assets/ -->
+<link rel="stylesheet" href="../../../assets/sayo/sayo.css">
+<link rel="stylesheet" href="../../../assets/learn-theme.css">
+<link rel="stylesheet" href="../assets/style.css">
+
+<!-- 主题要在首帧前应用，避免闪白/闪黑 -->
+<script src="../../../assets/learn-theme.js"></script>
+<script>LearnTheme.apply();</script>
+</head>
+
+<body class="lesson-body">
+
+<nav class="lesson-bar">
+  <a href="../index.html">← 返回课程</a>
+  <span>数据结构 · StudyMate 样例</span>
+  <span class="lesson-bar__no">0001</span>
+  <!-- 课件页自带主题开关：学生从文件管理器直接打开课件时也能切暗色 -->
+  <label class="syo-toggle syo-toggle--theme lesson-bar__toggle" title="切换深浅主题" aria-label="切换深浅主题">
+    <input type="checkbox" id="lesson-theme-checkbox" checked>
+    <span class="syo-toggle-track"></span>
+    <span class="syo-toggle-knob">
+      <svg class="syo-toggle-sun" viewBox="0 0 20 20" fill="none" aria-hidden="true"><circle cx="10" cy="10" r="3.5" stroke="#f57c00" stroke-width="1.5"/><path d="M10 2v2.5M10 15.5V18M2 10h2.5M15.5 10H18M4.34 4.34l1.77 1.77M13.89 13.89l1.77 1.77M4.34 15.66l1.77-1.77M13.89 6.11l1.77-1.77" stroke="#f57c00" stroke-width="1.2" stroke-linecap="round"/></svg>
+      <svg class="syo-toggle-moon" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M16.5 12.5A6 6 0 019 4.5a6 6 0 007.5 8z" stroke="#5c6bc0" stroke-width="1.5" stroke-linejoin="round"/></svg>
+    </span>
+  </label>
+</nav>
+
+<article class="lesson">
+
+  <header class="lesson-header">
+    <span class="lesson-header__eyebrow">0001 · 单链表与哨位结点</span>
+    <h1>单链表与哨位结点</h1>
+    <p class="lesson-goal"><b>本节目标：</b>能画出一次插入和删除的指针变化，并解释哨位结点如何统一边界。</p>
+  </header>
+
+  <!-- ── 正文：渲染器按内容文件（lessons/<序号>-<节点id>.md）产出，块词汇见 docs/规范/课件内容格式.md ── -->
+
+  <h2>从删除第一个结点开始</h2>
+
+  <p>假设待办事项顺序是 <code>A → B → C</code>。若只用 <code>head</code> 指向 <code>A</code>，删除 <code>B</code> 时让 <code>A-&gt;next</code> 指向 <code>C</code>；删除 <code>A</code> 时却必须直接改 <code>head</code>。两个位置需要两套逻辑，因为第一个结点没有普通的前驱。</p>
+
+  <p>在最前面加一个不存有效数据的<b>哨位结点</b> <code>S</code>，链就变成 <code>S → A → B → C</code>。现在删除 <code>A</code> 的前驱是 <code>S</code>，删除 <code>B</code> 的前驱是 <code>A</code>。两种操作都可以写成“让前驱跳过目标结点”。哨位不计入表长；空表就是 <code>S-&gt;next == nullptr</code>。</p>
+
+  <figure class="lesson-figure lesson-figure--inline" role="img" aria-label="哨位 S 指向 A，A 指向 B，B 指向 C；删除 A 后 S 直接指向 B">
+<svg viewBox="0 0 620 150" role="img" aria-hidden="true">
+  <g fill="none" stroke="currentColor" stroke-width="2">
+    <rect x="26" y="42" width="75" height="48" rx="8"/><rect x="160" y="42" width="75" height="48" rx="8"/>
+    <rect x="294" y="42" width="75" height="48" rx="8"/><rect x="428" y="42" width="75" height="48" rx="8"/>
+    <path d="M101 66 H153 M235 66 H287 M369 66 H421"/>
+    <path d="M145 60 L153 66 L145 72 M279 60 L287 66 L279 72 M413 60 L421 66 L413 72"/>
+    <path d="M62 38 C128 -15 293 0 332 35" stroke-dasharray="5 5"/>
+  </g>
+  <g fill="currentColor" font-family="sans-serif" font-size="20" text-anchor="middle">
+    <text x="63" y="73">S</text><text x="197" y="73">A</text><text x="331" y="73">B</text><text x="465" y="73">C</text>
+    <text x="197" y="125" font-size="15">删除 A 后，S 的 next 改指 B</text>
+  </g>
+</svg>
+    <figcaption>图 1 · 有了哨位，删除首元素也能按“前驱跳过目标”处理</figcaption>
+  </figure>
+
+  <h2>指针顺序决定是否丢链</h2>
+
+  <p>在已知 <code>previous</code> 指向前驱的前提下，要把新结点 <code>node</code> 插入它后面，先让新结点接住原后继，再改前驱：</p>
+
+  <pre data-lang="cpp"><code>node-&gt;next = previous-&gt;next;
+previous-&gt;next = node;</code></pre>
+
+  <p>如果先执行第二句，原后继地址可能失去访问入口。删除则先保存目标结点，再越过它并释放：</p>
+
+  <pre data-lang="cpp"><code>Node* removed = previous-&gt;next;
+if (removed != nullptr) {
+    previous-&gt;next = removed-&gt;next;
+    delete removed;
+}</code></pre>
+
+  <p>这里的两段修改都是 <span class="math-inline">O(1)</span>；如果题目只给“删除值为 7 的结点”，仍需从头找前驱，总时间为 <span class="math-inline">O(n)</span>。这种“定位成本”和“改链接成本”的区分，比背“链表插删是常数时间”更重要。</p>
+
+  <div class="quiz" data-quiz='[
+  {
+    "q": "带哨位结点的链表 S → 4 → 7 → 9 要删除第一个有效结点。应修改哪个结点的 next？",
+    "opts": [
+      "哨位 S",
+      "结点 4",
+      "结点 7",
+      "结点 9"
+    ],
+    "ans": 0,
+    "why": "首个有效结点的前驱就是哨位 S，所以让 S-&gt;next 指向 7。"
+  },
+  {
+    "q": "只知道目标值、未给目标结点或前驱指针时，单链表删除该值的最坏时间复杂度是什么？为什么？",
+    "answer": "O(n)。定位目标及其前驱最坏需要遍历整条链，找到之后改链接才是 O(1)。",
+    "criteria": "同时指出定位为 O(n)、改链接为 O(1)，并得出总时间 O(n)。"
+  }
+]'></div>
+
+  <h2>走一遍具体例子</h2>
+
+  <p>表为 <code>S → 4 → 7 → 9</code>，要求删除值为 <code>7</code> 的结点。扫描时 <code>previous</code> 先指向 <code>S</code>，随后指向 <code>4</code>；这时 <code>previous-&gt;next</code> 正好是 <code>7</code>。保存 <code>7</code>，让 <code>4-&gt;next</code> 改指 <code>9</code>，最后释放原来的 <code>7</code>。结果是 <code>S → 4 → 9</code>，长度从三变成二。</p>
+
+  <p>如果目标是第一个有效结点 <code>4</code>，前驱就是 <code>S</code>，后面的代码完全相同。若目标不存在，不应解引用空指针；若有多个 <code>7</code>，要提前说明删除第一个还是全部。</p>
+
+  <div class="lesson-practice">
+    <div class="lesson-practice__head">
+      <span class="lesson-practice__level">上手做</span>
+      <span class="lesson-practice__title">先画箭头，再写代码</span>
+    </div>
+
+      <p>从 <code>S → 3 → 5 → 8</code> 出发，先在 <code>S</code> 后插入 <code>1</code>，再删除 <code>5</code>。每一步都画出 <code>next</code> 的指向，并指出操作时的前驱是谁。最后写一个函数：输入哨位指针和目标值，只删除第一个匹配结点，返回是否删除成功。</p>
+  </div>
+
+  <h2>易错边界与下一步</h2>
+
+  <ul>
+    <li>空表只有哨位，<code>S-&gt;next</code> 为 <code>nullptr</code>，不能直接读目标结点的数据。</li>
+    <li>哨位负责统一边界，不意味着任何查找都会变成 <span class="math-inline">O(1)</span>。</li>
+    <li>删除前要明确结点所有权；示例使用 <code>new</code> 创建的结点才用 <code>delete</code> 释放。</li>
+  </ul>
+
+  <p>对应的完整章节与更多双指针技巧，见<a href="https://goya4140.github.io/JLU_CS_Course/#/2_1数据结构/02_线性表栈与队列/02_0_章节导览">本站线性表、栈与队列笔记</a>。</p>
+
+  <!-- ── 提问提示：固定写法，别删 ── -->
+
+  <div class="lesson-ask">
+    <b>没看懂？随时问</b>
+    把看不懂的段落（或报错）原样复制回会话，说一句哪里不懂就行，我只解释这一段，不打断你的进度。
+  </div>
+
+  <!-- ── 上/下节课指针由渲染器按 curriculum.yaml 的 nodes 顺序算（第一课无 --prev、最后一课无 --next） ── -->
+
+  <nav class="lesson-nav" aria-label="上一课 / 下一课">
+    <a class="lesson-nav__link lesson-nav__link--next" href="0002-graph.dijkstra.html">
+      <span class="lesson-nav__dir">下节课</span>
+      <span class="lesson-nav__title">Dijkstra 最短路径</span>
+    </a>
+  </nav>
+
+  <footer class="lesson-footer">
+    StudyMate · 0001 单链表与哨位结点 · 本地学习工作区
+  </footer>
+
+</article>
+
+<script src="../../../assets/sayo/sayo.js"></script>
+<link rel="stylesheet" href="../../../assets/katex/katex.min.css">
+<script src="../../../assets/katex/katex.min.js" defer></script>
+<script src="../../../assets/lesson-math.js" defer></script>
+<script src="../assets/quiz.js" defer></script>
+<script src="../assets/lesson-toc.js" defer></script>
+<script>LearnTheme.wire(document.getElementById('lesson-theme-checkbox'));</script>
+</body>
+</html>

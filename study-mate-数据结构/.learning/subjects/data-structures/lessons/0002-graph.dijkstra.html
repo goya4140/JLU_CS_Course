@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dijkstra 最短路径 · 数据结构 · StudyMate 样例</title>
+
+<!-- 共享层在 .learning/assets/，课件在 .learning/subjects/<slug>/lessons/ 下，所以是 ../../../assets/ -->
+<link rel="stylesheet" href="../../../assets/sayo/sayo.css">
+<link rel="stylesheet" href="../../../assets/learn-theme.css">
+<link rel="stylesheet" href="../assets/style.css">
+
+<!-- 主题要在首帧前应用，避免闪白/闪黑 -->
+<script src="../../../assets/learn-theme.js"></script>
+<script>LearnTheme.apply();</script>
+</head>
+
+<body class="lesson-body">
+
+<nav class="lesson-bar">
+  <a href="../index.html">← 返回课程</a>
+  <span>数据结构 · StudyMate 样例</span>
+  <span class="lesson-bar__no">0002</span>
+  <!-- 课件页自带主题开关：学生从文件管理器直接打开课件时也能切暗色 -->
+  <label class="syo-toggle syo-toggle--theme lesson-bar__toggle" title="切换深浅主题" aria-label="切换深浅主题">
+    <input type="checkbox" id="lesson-theme-checkbox" checked>
+    <span class="syo-toggle-track"></span>
+    <span class="syo-toggle-knob">
+      <svg class="syo-toggle-sun" viewBox="0 0 20 20" fill="none" aria-hidden="true"><circle cx="10" cy="10" r="3.5" stroke="#f57c00" stroke-width="1.5"/><path d="M10 2v2.5M10 15.5V18M2 10h2.5M15.5 10H18M4.34 4.34l1.77 1.77M13.89 13.89l1.77 1.77M4.34 15.66l1.77-1.77M13.89 6.11l1.77-1.77" stroke="#f57c00" stroke-width="1.2" stroke-linecap="round"/></svg>
+      <svg class="syo-toggle-moon" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M16.5 12.5A6 6 0 019 4.5a6 6 0 007.5 8z" stroke="#5c6bc0" stroke-width="1.5" stroke-linejoin="round"/></svg>
+    </span>
+  </label>
+</nav>
+
+<article class="lesson">
+
+  <header class="lesson-header">
+    <span class="lesson-header__eyebrow">0002 · Dijkstra 最短路径</span>
+    <h1>Dijkstra 最短路径</h1>
+    <p class="lesson-goal"><b>本节目标：</b>能手算非负权图的距离更新，并解释算法为什么不能直接用于负权图。</p>
+  </header>
+
+  <!-- ── 正文：渲染器按内容文件（lessons/<序号>-<节点id>.md）产出，块词汇见 docs/规范/课件内容格式.md ── -->
+
+  <h2>地图上“最近”是什么意思</h2>
+
+  <p>从宿舍 <code>A</code> 去实验楼 <code>D</code>，路口之间的数字表示分钟。选“眼前最短的一条边”未必得到整条最短路：<code>A → B</code> 只需 2 分钟，但之后还可能绕远。Dijkstra 维护的是从起点到每个顶点的<b>已知最佳总距离</b>，每轮选其中最小的一个作为下一位确定顶点，再尝试通过它改善邻点。</p>
+
+  <p>考虑四条路：<code>A—B:2</code>，<code>A—C:5</code>，<code>B—C:1</code>，<code>B—D:4</code>，<code>C—D:2</code>。从 <code>A</code> 出发，先暂记 <code>B=2</code>、<code>C=5</code>；确定 <code>B</code> 后，经过 <code>B</code> 到 <code>C</code> 只需 <span class="math-inline">2+1=3</span>，比原来的 5 短，于是把 <code>C</code> 改成 3。这一步叫<b>松弛</b>。</p>
+
+  <h2>手算每一轮</h2>
+
+  <table>
+    <thead>
+      <tr><th>本轮确定</th><th>B 的暂定距离</th><th>C 的暂定距离</th><th>D 的暂定距离</th><th>更新原因</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>A</td><td>2</td><td>5</td><td>∞</td><td>从 A 直接到达 B、C</td></tr>
+      <tr><td>B</td><td>2</td><td>3</td><td>6</td><td>经 B 到 C 为 3，到 D 为 6</td></tr>
+      <tr><td>C</td><td>2</td><td>3</td><td>5</td><td>经 C 到 D 为 5，比 6 短</td></tr>
+      <tr><td>D</td><td>2</td><td>3</td><td>5</td><td>全部确定</td></tr>
+    </tbody>
+  </table>
+
+  <p>最终从 <code>A</code> 到 <code>D</code> 的最短路是 <code>A → B → C → D</code>，长度 <span class="math-inline">2+1+2=5</span>。要恢复路径，除了距离还应为每个被改善的顶点记录前驱，例如更新 <code>D=5</code> 时把 <code>D</code> 的前驱改成 <code>C</code>。</p>
+
+  <div class="quiz" data-quiz='[
+  {
+    "q": "从 A 到 B 的当前最佳距离是 2，B 到 C 的边权为 1，而 C 的当前距离是 5。松弛 B—C 后，C 的距离是多少？",
+    "opts": [
+      "1",
+      "2",
+      "3",
+      "5"
+    ],
+    "ans": 2,
+    "why": "经 B 到 C 的总长度为 2+1=3，比原先的 5 更短。"
+  },
+  {
+    "q": "为何 Dijkstra 一般不能直接用于含负权边的图？请给出一个具体的三点反例。",
+    "answer": "A→B 为 2，A→C 为 5，C→B 为 -4。算法先确定 B 的距离 2，但经 C 到 B 实为 1，已确定距离被推翻。",
+    "criteria": "说明负边可能使已确定顶点以后被改进，并给出数值明确的反例。"
+  }
+]'></div>
+
+  <h2>为什么选出最小者后可以放心</h2>
+
+  <p>关键条件是<b>所有边权非负</b>。设当前未确定顶点中 <code>v</code> 的暂定距离最小；任何绕过其他未确定顶点再到 <code>v</code> 的路径，只会在当前距离上增加零或正的边权，因此不能把 <code>v</code> 的距离改得更小。于是可以把 <code>v</code> 放入已确定集合。</p>
+
+  <p>如果有负权边，这个理由就失效。比如 <code>A → B</code> 权重 2、<code>A → C</code> 权重 5、<code>C → B</code> 权重 -4。算法先确定 <code>B=2</code>，但经 <code>C</code> 到 <code>B</code> 实际只有 <span class="math-inline">5-4=1</span>。遇到负权图应换用能处理负边的算法，并检查是否存在可达负环。</p>
+
+  <div class="lesson-warn">
+    <b>不要给所有边加常数来“修好”负权</b>
+    <p>给每条边都加同一个常数，会让边数更多的路径增加更多，总路径之间的大小关系可能反转。把权重全变正并不保证原最短路仍然最短。</p>
+  </div>
+
+  <h2>实现时还要做什么</h2>
+
+  <p>用邻接矩阵和线性扫描找最小暂定距离，复杂度通常为 <span class="math-inline">O(V^2)</span>；稀疏图可用邻接表加优先队列，通常为 <span class="math-inline">O((V+E)\log V)</span>。优先队列版本可能同时保存同一顶点的旧距离与新距离，取出时若不是当前最佳距离就跳过。不可达顶点保持无穷大，不能拿“无穷大 + 边权”做可能溢出的整数加法。</p>
+
+  <div class="lesson-practice">
+    <div class="lesson-practice__head">
+      <span class="lesson-practice__level">手算</span>
+      <span class="lesson-practice__title">换一个起点</span>
+    </div>
+
+      <p>仍用上面的四点图，从 <code>C</code> 出发（边视为无向）。写出每轮确定的顶点、距离数组及其前驱。再把 <code>C—D</code> 权重从 2 改成 8，判断到 <code>D</code> 的最短路如何改变。先画图手算，再用代码核对。</p>
+  </div>
+
+  <p>对应的完整章节含 BFS、Floyd 与更多图算法，见<a href="https://goya4140.github.io/JLU_CS_Course/#/2_1数据结构/05_图/05_0_章节导览">本站图笔记</a>。</p>
+
+  <!-- ── 提问提示：固定写法，别删 ── -->
+
+  <div class="lesson-ask">
+    <b>没看懂？随时问</b>
+    把看不懂的段落（或报错）原样复制回会话，说一句哪里不懂就行，我只解释这一段，不打断你的进度。
+  </div>
+
+  <!-- ── 上/下节课指针由渲染器按 curriculum.yaml 的 nodes 顺序算（第一课无 --prev、最后一课无 --next） ── -->
+
+  <nav class="lesson-nav" aria-label="上一课 / 下一课">
+    <a class="lesson-nav__link lesson-nav__link--prev" href="0001-list.link.html">
+      <span class="lesson-nav__dir">上节课</span>
+      <span class="lesson-nav__title">单链表与哨位结点</span>
+    </a>
+    <a class="lesson-nav__link lesson-nav__link--next" href="0003-sort.quick.html">
+      <span class="lesson-nav__dir">下节课</span>
+      <span class="lesson-nav__title">快速排序与分划</span>
+    </a>
+  </nav>
+
+  <footer class="lesson-footer">
+    StudyMate · 0002 Dijkstra 最短路径 · 本地学习工作区
+  </footer>
+
+</article>
+
+<script src="../../../assets/sayo/sayo.js"></script>
+<link rel="stylesheet" href="../../../assets/katex/katex.min.css">
+<script src="../../../assets/katex/katex.min.js" defer></script>
+<script src="../../../assets/lesson-math.js" defer></script>
+<script src="../assets/quiz.js" defer></script>
+<script src="../assets/lesson-toc.js" defer></script>
+<script>LearnTheme.wire(document.getElementById('lesson-theme-checkbox'));</script>
+</body>
+</html>

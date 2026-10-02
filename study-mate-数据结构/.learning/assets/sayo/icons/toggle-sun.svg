@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="none">
+  <!-- Theme toggle: sun with rays
+       Color: orange #f57c00 for the warm sun feel -->
+  <circle cx="10" cy="10" r="3.5" stroke="currentColor" stroke-width="1.5"/>
+  <path d="M10 2v2.5M10 15.5V18M2 10h2.5M15.5 10H18M4.34 4.34l1.77 1.77M13.89 13.89l1.77 1.77M4.34 15.66l1.77-1.77M13.89 6.11l1.77-1.77" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+</svg>

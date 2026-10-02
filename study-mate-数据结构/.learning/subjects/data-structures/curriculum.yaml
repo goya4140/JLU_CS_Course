@@ -1,0 +1,38 @@
+nodes:
+  - id: list.link
+    title: 单链表与哨位结点
+    kind: 概念
+    objective: 能画出插入和删除时指针的变化，并说清哨位结点的作用
+    problem: 在表头删除和在表中删除，为什么一份代码经常要写两套分支？
+    prerequisites: []
+    concepts: [单链表, 哨位结点, 前驱结点, 指针重接]
+    practice: 用纸笔走一遍表头插入、删除，再实现带哨位结点的删除操作。
+    pitfalls: [把哨位结点计入表长, 先改前驱指针导致后继丢失, 忽略寻找前驱的耗时]
+    realworld: 实现可频繁在已知位置插入和删除的动态序列。
+    status: 未开始
+    mastery: 0
+  - id: graph.dijkstra
+    title: Dijkstra 最短路径
+    kind: 概念
+    objective: 能手算非负权图的最短距离，并解释为什么负权边会破坏贪心选择
+    problem: 地图上每条路耗时不同，怎样从起点找出到所有地点的最短路？
+    prerequisites: []
+    concepts: [松弛, 暂定距离, 已确定集合, 非负权]
+    practice: 手算四点图，记录每轮选点与距离更新。
+    pitfalls: [把暂定距离当最终答案, 在负权图上直接使用 Dijkstra, 只记距离不记前驱]
+    realworld: 道路导航与网络路由的基础模型。
+    status: 未开始
+    mastery: 0
+  - id: sort.quick
+    title: 快速排序与分划
+    kind: 概念
+    objective: 能跟踪一轮分划，并解释平均与最坏复杂度的来源
+    problem: 怎样每次把一个元素放到最终位置，再把大问题拆成两个小问题？
+    prerequisites: []
+    concepts: [主元, 分划, 分治, 递归深度]
+    practice: 手算数组分划，比较平衡与极端分划的递归树。
+    pitfalls: [把一轮分划当成整体有序, 认为任何输入都为 O(n log n), 忽略重复元素导致的失衡]
+    realworld: 通用内存排序中的分治思想。
+    status: 未开始
+    mastery: 0
+edges: []

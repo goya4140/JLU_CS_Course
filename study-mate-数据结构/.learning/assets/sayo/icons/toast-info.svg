@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="none">
+  <!-- Toast: info "i"
+       Color: --syo-blue (#58a6ff) -->
+  <circle cx="10" cy="10" r="8" stroke="currentColor" stroke-width="1.5"/>
+  <path d="M10 9v5M10 6.5v0" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+</svg>

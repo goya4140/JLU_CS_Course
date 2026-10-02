@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="StudyMate 课程总览：多科目学习进度、路线图与课件入口。">
+<title>我的课程 · StudyMate</title>
+
+<!-- Sayo UI（vendored，MIT）+ 本项目共享主题层。
+     两者都由 gen_home.py 拷进学习工作区的 .learning/assets/；
+     本模板只声明引用，不改样式来源 -->
+<link rel="stylesheet" href=".learning/assets/sayo/sayo.css">
+<link rel="stylesheet" href=".learning/assets/learn-theme.css">
+
+<!-- 主题：首帧前应用已保存的主题（共享逻辑在 assets/learn-theme.js，
+     暗色是默认（Sayo 的 Primer 暗色），亮色=我们的暖色系；URL 加 ?theme=light 可临时预览） -->
+<script src=".learning/assets/learn-theme.js"></script>
+<script>LearnTheme.apply();</script>
+
+<style>
+/* ═══════════════════════════════════════════════════════════════
+   根主页（课程总览）· 页面专属样式
+   组件来自 Sayo（nav / stat / card / tag / btn / toggle / grid），
+   主题令牌在 learn-theme.css：亮色=暖纸白+深绿，暗色=Sayo 暗色。
+   本页样式全部内联：主页是生成产物，生成器只替换 LEARN 数据占位符注释行，
+   其余内容原样保留。
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ── 导航栏 ── */
+.learn-nav-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--syo-space-2);
+}
+.learn-nav-logo { width: 18px; height: 18px; color: var(--syo-accent); }
+
+.learn-nav-date {
+  font-family: var(--syo-font-mono);
+  font-size: .75rem;
+  color: var(--syo-fg-muted);
+  margin-right: var(--syo-space-2);
+}
+
+/* ── 抬头区 ── */
+.learn-hero {
+  position: relative;
+  overflow: hidden;
+  padding: clamp(44px, 7vw, 76px) 0 clamp(30px, 4vw, 44px);
+}
+
+/* 亮色抬头：网格层已从本页撤掉（背景层那套现在只剩星云在暗色下用），
+   改成一层极淡的冷色洗（--learn-soft-blue，调色板里的柔和蓝，不新造色值）——
+   否则冷色的看板娘压在暖纸白上像"贴上去的" */
+html[data-theme="light"] .learn-hero {
+  background: linear-gradient(180deg, var(--learn-soft-blue) 0%, transparent 62%);
+}
+
+.learn-hero__inner { position: relative; z-index: 1; }
+
+/* 抬头主视觉：透明底看板娘（左）+ 发光字（右）。本页不再有星空层——
+   角色图接替它当抬头视觉，星云微光保留（否则角色是浮在纯色上的）。
+   看板娘是共享资源 learn-mascot.png，由生成流程拷进 .learning/assets/ */
+.learn-hero__brand-row {
+  display: flex;
+  align-items: center;
+  gap: clamp(14px, 2.2vw, 26px);
+}
+
+.learn-hero__mascot {
+  flex: none;
+  width: clamp(124px, 16vw, 224px);
+  height: auto;
+}
+/* 看板娘**不带外发光**：暗色下那圈蓝晕会在深底上糊成一团光斑，人物反而脏；
+   亮色原来还要垫白晕压网格，网格撤掉之后白晕也没有存在理由了 */
+html[data-theme="light"] .learn-hero__mascot {
+  filter: none;
+}
+
+/* 品牌字：**真意大利体衬线 + 镂空描边**——字身透明，靠一圈 --brand-ink 描边 + 光晕成形。
+   字体栈是有意写长的：C059（Century Schoolbook 开源同族）→ Charter → Noto Serif → Georgia，
+   全是各平台自带的**真意大利体**衬线，哪台机器上都是"斜体衬线"这个设计意图，不会退化成无衬线。
+   墨色只有一个来源 --brand-ink：暗色 = Sayo 紫强调（--syo-accent），
+   亮色在下面的覆盖里换成主题的黑（--syo-fg-default）——描边与两层光晕都跟着它走，
+   所以"换颜色"永远只改一个变量。
+   - 不用 background-clip:text 填充：那个写法的渐变背景盒就是元素盒，line-height 一压紧，
+     "y" 的下伸部就落到盒外拿不到颜色 → 看着像被截断。描边画在字形上，不受盒子限制。
+   - 光晕走 filter: drop-shadow：镂空字的"形状"就是那圈描边，drop-shadow 跟着描边走，
+     正好是霓虹灯管的效果；text-shadow 会从透明的字身里透出来，把镂空糊死。
+   - 刷新时的入场动效见下面的 learn-brand-in。 */
+.learn-hero__brand {
+  --brand-ink: var(--syo-accent);
+  margin: 0;
+  font-family: "C059", "Century Schoolbook L", "Bitstream Charter", "Noto Serif", Georgia, serif;
+  font-style: italic;
+  font-size: clamp(2.1rem, 6.8vw, 5.2rem);
+  font-weight: 700;
+  letter-spacing: -.005em;
+  line-height: 1.16;
+  color: transparent;
+  -webkit-text-stroke: .034em var(--brand-ink);
+  filter: drop-shadow(0 0 8px color-mix(in srgb, var(--brand-ink) 52%, transparent))
+          drop-shadow(0 0 26px color-mix(in srgb, var(--brand-ink) 28%, transparent));
+  animation: learn-brand-in 900ms var(--syo-ease-out) 60ms backwards;
+}
+/* 亮色：**同样是镂空描边**——字形两个主题一致，只换墨色与光晕强度。
+   上一版在亮色改实心，是因为当时网格还在：镂空会让网格从笔画里透出来。
+   网格整层撤掉之后，纸白底上的镂空就是干净的"钢印"，没有理由再换字形。
+   墨色取 --syo-secondary（调色板里的蓝，与看板娘同一个色系）；光晕比暗色收细——
+   暖纸白上的大光晕只会糊成一团雾。 */
+html[data-theme="light"] .learn-hero__brand {
+  --brand-ink: var(--syo-secondary);
+  filter: drop-shadow(0 0 7px color-mix(in srgb, var(--brand-ink) 22%, transparent))
+          drop-shadow(0 0 18px color-mix(in srgb, var(--brand-ink) 12%, transparent));
+}
+
+/* 刷新时的 logo 动效：光晕由弱到强"点亮"，同时字距从松收到紧、整体轻微上浮。
+   起点必须是**看得见**的状态——本仓库的规矩是入场动效不许从 opacity:0 或
+   "描边宽度 0"起手（卡片入场也只动 transform），否则动画一旦没跑起来，
+   抬头就是一片空白。属性只挑不动可见性的：letter-spacing / transform / filter。
+   prefers-reduced-motion 下由 Sayo 的全局规则把时长压成 0，直接落到终态。 */
+@keyframes learn-brand-in {
+  0% {
+    letter-spacing: .085em;
+    transform: translateY(8px);
+    filter: drop-shadow(0 0 3px color-mix(in srgb, var(--brand-ink) 20%, transparent))
+            drop-shadow(0 0 10px color-mix(in srgb, var(--brand-ink) 10%, transparent));
+  }
+  55% { letter-spacing: -.026em; }
+  100% { letter-spacing: -.005em; }
+}
+/* 看板娘与品牌字同一条入场节奏（错开 60ms 起手），只动 transform */
+@keyframes learn-mascot-in {
+  from { transform: translateY(10px); }
+  to   { transform: none; }
+}
+.learn-hero__mascot { animation: learn-mascot-in 900ms var(--syo-ease-out) backwards; }
+
+/* 抬头里不再有可见的页面标题与副标题：字面的"我的课程"是 h1.syo-sr-only 里的，
+   屏幕上由品牌字承担（页签 <title> 里也有"我的课程 · StudyMate"） */
+
+/* ── 主体 ── */
+.learn-main { padding-top: 0; }
+
+.learn-stats { margin-bottom: var(--syo-space-2); }
+
+/* ── 卡片入场：只动 transform，不动 opacity。
+       opacity:0 起手的入场动画一旦没跑起来（动画被禁用/极慢设备/打印），
+       整页主要内容就是隐形的；只位移不透明，最坏情况也只是错位 8px。
+       backwards 填充：动画结束不保留 transform，Sayo 卡片自带的 hover 弹性立即可用 ── */
+@keyframes learn-card-in {
+  from { transform: translateY(8px); }
+  to   { transform: none; }
+}
+.learn-subject-card { animation: learn-card-in .4s var(--syo-ease-elastic) backwards; }
+.learn-subject-card:nth-child(2) { animation-delay: .04s; }
+.learn-subject-card:nth-child(3) { animation-delay: .08s; }
+.learn-subject-card:nth-child(4) { animation-delay: .12s; }
+.learn-subject-card:nth-child(5) { animation-delay: .16s; }
+.learn-subject-card:nth-child(n+6) { animation-delay: .20s; }
+
+/* 入场动画只在首帧播放：播放完摘掉动画，避免筛选切换时重播 */
+body.is-ready .learn-subject-card { animation: none; }
+
+/* ── 窄屏补充（网格与导航的响应式由 Sayo 自己处理） ── */
+@media (max-width: 768px) {
+  /* Sayo 在窄屏把 grid-4 压成一列，4 个统计块会占满一屏；两列更合用 */
+  .learn-stats { grid-template-columns: 1fr 1fr; }
+}
+
+@media (max-width: 640px) {
+  .learn-nav-date { display: none; }
+  /* 看板娘缩一号：560px 以下字号已经吃到下限，再占 120px 会把标题挤成两行 */
+  .learn-hero__mascot { width: 104px; }
+}
+</style>
+</head>
+
+<body>
+<a class="learn-skip" href="#learn-content">跳到课程列表</a>
+
+<nav class="syo-nav">
+  <span class="syo-nav-brand learn-nav-brand">
+    <!-- 品牌标识：三个知识点节点连成的迷你路线图 -->
+    <svg class="learn-nav-logo" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M10 7.2 4.7 12.6M10 7.2l5.3 5.4"/>
+      <circle cx="10" cy="5.2" r="2"/>
+      <circle cx="4.5" cy="14.5" r="2"/>
+      <circle cx="15.5" cy="14.5" r="2"/>
+    </svg>
+    StudyMate
+  </span>
+
+  <div class="syo-nav-links">
+    <span class="learn-nav-date" id="learn-today"></span>
+    <label class="syo-toggle syo-toggle--theme" id="learn-theme-toggle" title="切换深浅主题" aria-label="切换深浅主题">
+      <input type="checkbox" id="learn-theme-checkbox" checked>
+      <span class="syo-toggle-track"></span>
+      <span class="syo-toggle-knob">
+        <svg class="syo-toggle-sun" viewBox="0 0 20 20" fill="none" aria-hidden="true"><circle cx="10" cy="10" r="3.5" stroke="#f57c00" stroke-width="1.5"/><path d="M10 2v2.5M10 15.5V18M2 10h2.5M15.5 10H18M4.34 4.34l1.77 1.77M13.89 13.89l1.77 1.77M4.34 15.66l1.77-1.77M13.89 6.11l1.77-1.77" stroke="#f57c00" stroke-width="1.2" stroke-linecap="round"/></svg>
+        <svg class="syo-toggle-moon" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M16.5 12.5A6 6 0 019 4.5a6 6 0 007.5 8z" stroke="#5c6bc0" stroke-width="1.5" stroke-linejoin="round"/></svg>
+      </span>
+    </label>
+  </div>
+</nav>
+
+<header class="learn-hero">
+  <!-- 抬头背景：只剩星云微光（暗色下生效）。星点层与蓝图网格层都已从本页撤掉——
+       抬头视觉换成看板娘 + 品牌字，见 .learn-hero__mascot / .learn-hero__brand -->
+  <span class="learn-hero__nebula" aria-hidden="true"></span>
+  <div class="syo-container learn-hero__inner">
+    <!-- 页面标题只留在语义里（视觉隐藏）：抬头改成「看板娘 + 品牌字」后，
+         屏幕上不再重复一遍"我的课程"——页签 <title> 里也有 -->
+    <h1 class="syo-sr-only">我的课程</h1>
+    <div class="learn-hero__brand-row">
+      <img class="learn-hero__mascot" src=".learning/assets/learn-mascot.png" alt="" aria-hidden="true">
+      <p class="learn-hero__brand">StudyMate</p>
+    </div>
+  </div>
+</header>
+
+<main class="syo-container learn-main" id="learn-content">
+
+  <!-- 统计概览：数值由页面脚本从卡片的数据属性实时算出，生成器无需为此准备占位符。
+       初始值写“–”而不是 0：脚本未运行时不显示一个错误的数字 -->
+  <section class="syo-grid-4 learn-stats" id="learn-stats" aria-label="学习概览">
+    <div class="syo-stat"><span class="syo-stat-value" id="learn-stat-total">–</span><span class="syo-stat-label">科目</span></div>
+    <div class="syo-stat"><span class="syo-stat-value" id="learn-stat-active">–</span><span class="syo-stat-label">进行中</span></div>
+    <div class="syo-stat"><span class="syo-stat-value" id="learn-stat-done">–</span><span class="syo-stat-label">已完成</span></div>
+    <div class="syo-stat"><span class="syo-stat-value" id="learn-stat-mastery">–</span><span class="syo-stat-label">平均掌握度</span></div>
+  </section>
+
+  <!-- 状态筛选：按 subject.yaml 的 status 过滤卡片；计数由脚本填充 -->
+  <div class="learn-filter" id="learn-filter" role="group" aria-label="按状态筛选科目">
+    <button class="syo-btn syo-btn--ghost syo-btn--sm learn-filter__btn is-active" type="button" data-filter="全部" aria-pressed="true">全部<span class="learn-filter__count" data-count="all"></span></button>
+    <button class="syo-btn syo-btn--ghost syo-btn--sm learn-filter__btn" type="button" data-filter="进行中" aria-pressed="false">进行中<span class="learn-filter__count" data-count="active"></span></button>
+    <button class="syo-btn syo-btn--ghost syo-btn--sm learn-filter__btn" type="button" data-filter="暂停" aria-pressed="false">暂停<span class="learn-filter__count" data-count="paused"></span></button>
+    <button class="syo-btn syo-btn--ghost syo-btn--sm learn-filter__btn" type="button" data-filter="已完成" aria-pressed="false">已完成<span class="learn-filter__count" data-count="done"></span></button>
+  </div>
+
+  <section class="learn-cards" aria-label="科目列表">
+
+    <!--
+      ============================================================
+      生成器渲染规范（gen_home.py 按此结构替换下方占位符整行）
+      ============================================================
+      · 占位符整行替换为 <div class="learn-subject-list">…卡片…</div>；
+        无科目时也输出空列表 <div class="learn-subject-list"></div>
+        （空状态由页面脚本检测到 0 张卡片后显示，不在这里写死）。
+      · 每张卡片一个 <article>，字段来自 subject.yaml + progress.yaml
+        （下面的 data-* 数值只是格式示例，真实值由生成器计算）：
+
+      <article class="syo-card learn-subject-card" data-status="进行中" data-progress="0.375" data-mastery="0.62">
+        <a class="learn-subject-card__link" href=".learning/subjects/<slug>/index.html">
+          <div class="learn-subject-card__head">
+            <h3 class="learn-subject-card__name">科目名</h3>
+            <span class="syo-tag learn-subject-card__status learn-status--active">进行中<span class="syo-tag-dot syo-tag-dot--blue"></span></span>
+          </div>
+          <p class="learn-subject-card__current">
+            <span class="learn-subject-card__label">当前节点</span>
+            <span class="learn-subject-card__value">节点标题</span>
+          </p>
+          <p class="learn-subject-card__meta">上次学习 <time>YYYY-MM-DD</time></p>
+          <div class="learn-progress">
+            <div class="learn-progress__track"><div class="learn-progress__bar" style="width:37.5%"></div></div>
+            <div class="learn-progress__meta">
+              <span>已完成节点/总节点 节点 · 掌握度 NN%</span>
+              <span class="learn-subject-card__go" aria-hidden="true">→</span>
+            </div>
+          </div>
+        </a>
+      </article>
+
+      · 状态徽章：class learn-status--active 进行中 / --paused 暂停 / --done 已完成
+        （徽章文本写 subject.yaml 的原值；色点：进行中 syo-tag-dot--blue、
+          暂停 syo-tag-dot--yellow、已完成 syo-tag-dot--green）
+      · data-status 写 status 原值（供筛选脚本比对）；
+        data-progress = 完成节点数 ÷ 总节点数（完成 = 状态达“能独立应用”及以上）；
+        data-mastery = progress.yaml 中各节点 mastery 的平均值（0–1）
+      · 进度条内联 style="width:NN%" 用 data-progress 换算，保证无 JS 时也能看到进度
+      · 当前节点 = progress.yaml / curriculum.yaml 中状态为“学习中”的节点标题；
+        没有正在学的节点时写“还没开始”
+      · 上次学习日期 = progress.yaml 的 updated_at 取日期部分（YYYY-MM-DD）
+      · 卡片链接指向该科目主页：.learning/subjects/<slug>/index.html
+      ============================================================
+    -->
+    <div class="learn-subject-list">
+<article class="syo-card learn-subject-card" data-status="进行中" data-progress="0" data-mastery="0">
+  <a class="learn-subject-card__link" href=".learning/subjects/data-structures/index.html">
+    <div class="learn-subject-card__head">
+      <h3 class="learn-subject-card__name">数据结构 · StudyMate 样例</h3>
+      <span class="syo-tag learn-subject-card__status learn-status--active">进行中<span class="syo-tag-dot syo-tag-dot--blue"></span></span>
+    </div>
+    <p class="learn-subject-card__current">
+      <span class="learn-subject-card__label">当前节点</span>
+      <span class="learn-subject-card__value">还没开始</span>
+    </p>
+    <p class="learn-subject-card__meta">上次学习 <time>2026-10-02</time></p>
+    <div class="learn-progress">
+      <div class="learn-progress__track"><div class="learn-progress__bar" style="width:0%"></div></div>
+      <div class="learn-progress__meta">
+        <span>0/3 节点 · 掌握度 0%</span>
+        <span class="learn-subject-card__go" aria-hidden="true">→</span>
+      </div>
+    </div>
+  </a>
+</article>
+</div>
+
+    <p class="learn-filter-empty" id="learn-filter-empty" hidden>这个状态下还没有科目。</p>
+  </section>
+
+  <!-- 空状态：工作区还没有任何科目时显示（脚本切换） -->
+  <section class="learn-empty" id="learn-empty" hidden>
+    <span class="learn-empty__glyph" aria-hidden="true">
+      <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M10 7.2 4.7 12.6M10 7.2l5.3 5.4"/>
+        <circle cx="10" cy="5.2" r="2"/>
+        <circle cx="4.5" cy="14.5" r="2"/>
+        <circle cx="15.5" cy="14.5" r="2"/>
+      </svg>
+    </span>
+    <h2 class="learn-empty__title">还没有课程</h2>
+    <p class="learn-empty__text">告诉 agent 你想学什么，它会先和你聊聊目标与配合的项目，再建好课程路线图。之后每学完一个知识点，这里都会更新进度。</p>
+    <p class="learn-empty__hint">例如：想学 TypeScript，能独立做一个 Web API 项目</p>
+  </section>
+
+</main>
+
+<footer class="learn-footer syo-container">StudyMate · 本地学习工作区</footer>
+
+<script src=".learning/assets/sayo/sayo.js"></script>
+<script>
+(function () {
+  'use strict';
+
+  var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* 抬头不再有视差层：星空被看板娘接替（见 .learn-hero__mascot），
+     本页因此也没有 data-syo-parallax——主题切换只剩主题本身要切 */
+
+  /* ---------- 主题开关（主题本身已在 <head> 里应用） ---------- */
+  var themeCheckbox = document.getElementById('learn-theme-checkbox');
+  LearnTheme.wire(themeCheckbox);
+
+  /* ---------- 今天日期（导航栏右上角） ---------- */
+  var dateText = '';
+  try {
+    dateText = new Date().toLocaleDateString('zh-CN', { year: 'numeric', month: 'long', day: 'numeric' });
+  } catch (e) {
+    dateText = new Date().toISOString().slice(0, 10);
+  }
+  var todayNav = document.getElementById('learn-today');
+  if (todayNav) todayNav.textContent = dateText;
+
+  /* ---------- 卡片数据 ---------- */
+  var cards = Array.prototype.slice.call(document.querySelectorAll('.learn-subject-card'));
+  var statsEl = document.getElementById('learn-stats');
+  var filterEl = document.getElementById('learn-filter');
+  var filterEmptyEl = document.getElementById('learn-filter-empty');
+  var emptyEl = document.getElementById('learn-empty');
+
+  /* 没有任何科目：隐藏统计与筛选，显示引导空状态 */
+  if (cards.length === 0) {
+    if (statsEl) statsEl.hidden = true;
+    if (filterEl) filterEl.hidden = true;
+    if (emptyEl) emptyEl.hidden = false;
+    document.body.classList.add('is-ready');
+    return;
+  }
+  if (emptyEl) emptyEl.hidden = true;
+
+  /* ---------- 统计概览 ---------- */
+  var STATUS_ACTIVE = '进行中';
+  var STATUS_DONE = '已完成';
+
+  var total = cards.length;
+  var activeCount = cards.filter(function (c) { return c.dataset.status === STATUS_ACTIVE; }).length;
+  var doneCount = cards.filter(function (c) { return c.dataset.status === STATUS_DONE; }).length;
+  var mastery = Math.round(
+    cards.reduce(function (sum, c) { return sum + (parseFloat(c.dataset.mastery) || 0); }, 0) / total * 100
+  );
+
+  function countUp(el, target, suffix) {
+    if (!el) return;
+    suffix = suffix || '';
+    if (reduced) { el.textContent = target + suffix; return; }
+    var duration = 520;
+    var start = null;
+    var settled = false;
+    /* 兜底：无论 rAF 是否被浏览器节流，最终都必须落到真实数值，
+       否则标签页在后台加载时会一直显示动画中途的错误数字 */
+    function settle() {
+      if (settled) return;
+      settled = true;
+      el.textContent = target + suffix;
+    }
+    function step(ts) {
+      if (settled) return;
+      if (start === null) start = ts;
+      var p = Math.min((ts - start) / duration, 1);
+      var eased = 1 - Math.pow(1 - p, 3);
+      el.textContent = Math.round(target * eased) + suffix;
+      if (p < 1) requestAnimationFrame(step);
+      else settle();
+    }
+    requestAnimationFrame(step);
+    window.setTimeout(settle, duration + 150);
+  }
+
+  countUp(document.getElementById('learn-stat-total'), total);
+  countUp(document.getElementById('learn-stat-active'), activeCount);
+  countUp(document.getElementById('learn-stat-done'), doneCount);
+  countUp(document.getElementById('learn-stat-mastery'), mastery, '%');
+
+  /* ---------- 筛选计数 ---------- */
+  var pausedCount = cards.filter(function (c) { return c.dataset.status === '暂停'; }).length;
+  var counts = { all: total, active: activeCount, paused: pausedCount, done: doneCount };
+  Object.keys(counts).forEach(function (key) {
+    var el = document.querySelector('.learn-filter__count[data-count="' + key + '"]');
+    if (el) el.textContent = counts[key];
+  });
+
+  /* ---------- 筛选 ---------- */
+  var FILTER_KEY = 'le-filter';
+  var FILTER_MAP = { '进行中': 'active', '暂停': 'paused', '已完成': 'done' };
+  var currentFilter = '全部';
+  try {
+    var savedFilter = localStorage.getItem(FILTER_KEY);
+    if (savedFilter) currentFilter = savedFilter;
+  } catch (e) {}
+
+  function applyFilter(name) {
+    var visible = 0;
+    cards.forEach(function (card) {
+      var show = (name === '全部') || (card.dataset.status === name);
+      card.hidden = !show;
+      if (show) visible++;
+    });
+    if (filterEmptyEl) filterEmptyEl.hidden = visible > 0;
+    if (filterEl) {
+      Array.prototype.forEach.call(filterEl.querySelectorAll('.learn-filter__btn'), function (btn) {
+        var on = btn.dataset.filter === name;
+        btn.classList.toggle('is-active', on);
+        btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+      });
+    }
+  }
+
+  if (filterEl) {
+    filterEl.addEventListener('click', function (event) {
+      var btn = event.target.closest('.learn-filter__btn');
+      if (!btn) return;
+      currentFilter = btn.dataset.filter;
+      applyFilter(currentFilter);
+      try { localStorage.setItem(FILTER_KEY, currentFilter); } catch (e) {}
+    });
+  }
+
+  /* 保存的筛选值可能已失效（如“暂停”科目已删除），回落到“全部” */
+  if (currentFilter !== '全部' && !counts[FILTER_MAP[currentFilter]]) currentFilter = '全部';
+  applyFilter(currentFilter);
+
+  /* ---------- 进度条展开动画 ----------
+     宽度的真值写在卡片的内联 style 里（无 JS 也正确）；
+     这里先归零再回到真值来播放展开，rAF 被节流时由定时器兜底落到真值。 */
+  cards.forEach(function (card) {
+    var bar = card.querySelector('.learn-progress__bar');
+    if (!bar) return;
+    var target = Math.round((parseFloat(card.dataset.progress) || 0) * 100) + '%';
+    if (reduced) { bar.style.width = target; return; }
+    bar.style.width = '0%';
+    requestAnimationFrame(function () {
+      requestAnimationFrame(function () { bar.style.width = target; });
+    });
+    window.setTimeout(function () { bar.style.width = target; }, 160);
+  });
+
+  /* ---------- 首次入场动画播放完就停用，避免筛选切换时重播 ---------- */
+  window.setTimeout(function () { document.body.classList.add('is-ready'); }, 900);
+})();
+</script>
+</body>
+</html>

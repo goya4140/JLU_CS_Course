@@ -1,0 +1,486 @@
+/* ═══════════════════════════════════════════════════════════════
+   StudyMate · 共享主题层（自研文件，不属于 Sayo 上游）
+   ═══════════════════════════════════════════════════════════════
+   加载顺序：sayo/sayo.css → learn-theme.css → 各页面内联样式
+
+   这一层做三件事：
+   1. 亮色主题：把 Sayo 的 --syo-* 令牌映射成我们的暖纸白 + 深绿
+      （暗色不覆盖：暗色直接用 Sayo 自己的 Primer 暗色 + 紫强调）
+   2. 修正 Sayo 组件里为暗色硬编码的阴影/紫色光晕（亮色下会显脏）
+   3. 本项目跨页面复用的组件：科目卡片网格、进度条、状态徽标、
+      筛选按钮、空状态、跳转链接
+
+   主页模板与科目主页模板都链接本文件；课件（lessons）同样链接，
+   保证整站一套主题。改色只改这里与各自模板，不要改 sayo/sayo.css。
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ── 1. 字体：两个主题统一，中文走系统字体栈（离线可用、无网络字体） ── */
+:root {
+  --syo-font-sans: "PingFang SC", "Microsoft YaHei", "Noto Sans CJK SC", "Source Han Sans SC", system-ui, -apple-system, sans-serif;
+  --syo-font-mono: ui-monospace, "SF Mono", "Cascadia Mono", "JetBrains Mono", Consolas, "Liberation Mono", monospace;
+}
+
+/* 内容宽度：Sayo 默认 860px 偏窄（适合长文），主页/科目页当仪表盘用 1080px。
+   窄屏交给 Sayo 自己的 @media (max-width: 768px) 规则，这里不抢。 */
+@media (min-width: 769px) {
+  :root { --syo-container: 1080px; }
+}
+
+/* ── 2. 学习状态语义色（跨页面共用：科目状态、大纲节点状态） ── */
+:root {
+  /* 暗色（Sayo / Primer 暗色底） */
+  --learn-todo:     #6e7681;
+  --learn-learning: #58a6ff;
+  --learn-done:     #3fb950;
+  --learn-review:   #d29922;
+  --learn-verified: #2ea043;
+
+  --learn-track:       rgba(255, 255, 255, .09);
+  --learn-soft-accent: rgba(188, 140, 255, .12);
+  --learn-line-accent: rgba(188, 140, 255, .38);
+
+  --learn-soft-blue:   rgba(88, 166, 255, .12);
+  --learn-line-blue:   rgba(88, 166, 255, .38);
+  --learn-soft-green:  rgba(63, 185, 80, .12);
+  --learn-line-green:  rgba(63, 185, 80, .38);
+  --learn-soft-red:    rgba(248, 81, 73, .12);
+  --learn-soft-yellow: rgba(210, 153, 34, .14);
+
+  --learn-glow:        rgba(188, 140, 255, .28);
+
+  /* 卡片阴影（本项目的全局阴影令牌）：暗色用纯黑，与 Sayo 卡片同一族；
+     亮色由 html[data-theme="light"] 换成暖色版——阴影是**分主题**的，
+     写死在通用规则里必然有一边失效（暖褐阴影叠暗底等于没有）。 */
+  --learn-shadow-card: 0 1px 2px rgba(0, 0, 0, .3), 0 6px 16px rgba(0, 0, 0, .25);
+
+  /* 配图底纸：位图自己不带主题信息，深色页面上给一块接近白纸的底
+    （像贴上去的印刷图），白底图不刺眼、浅色线条图也看得见。内联 SVG 不用它。 */
+  --learn-figure-paper: #f7f5f0;
+}
+
+html[data-theme="light"] {
+  /* 亮色（暖纸白 + 深学习绿） */
+  --learn-todo:     #b3ac9d;
+  --learn-learning: #3a7ca5;
+  --learn-done:     #2f7d5f;
+  --learn-review:   #c08a2d;
+  --learn-verified: #1c5a40;
+
+  --learn-track:       #eceade;
+  --learn-soft-accent: rgba(47, 125, 95, .10);
+  --learn-line-accent: rgba(47, 125, 95, .35);
+
+  --learn-soft-blue:   rgba(58, 124, 165, .10);
+  --learn-line-blue:   rgba(58, 124, 165, .35);
+  --learn-soft-green:  rgba(47, 125, 95, .10);
+  --learn-line-green:  rgba(47, 125, 95, .35);
+  --learn-soft-red:    rgba(179, 64, 47, .10);
+  --learn-soft-yellow: rgba(192, 138, 45, .16);
+
+  --learn-glow:        rgba(47, 125, 95, .22);
+
+  /* 卡片阴影：暖褐，且比暗色更淡（亮底上淡阴影就够，重了发脏） */
+  --learn-shadow-card: 0 1px 2px rgba(38, 36, 31, .05), 0 6px 16px rgba(38, 36, 31, .05);
+
+  /* 配图底纸：亮色下就是最干净的白（页面底色是暖纸白，图像底再暖会发脏） */
+  --learn-figure-paper: #ffffff;
+}
+
+/* ── 3. 亮色主题：Sayo 令牌 → 我们的暖色系 ── */
+html[data-theme="light"] {
+  /* 背景 */
+  --syo-bg-base:      #f7f5f0;
+  --syo-bg-surface:   #ffffff;
+  --syo-bg-elevated:  #ffffff;
+  --syo-bg-selection: rgba(47, 125, 95, .18);
+
+  /* 边框 */
+  --syo-border:       #ded9cb;
+  --syo-border-muted: #e8e4d8;
+
+  /* 前景 */
+  --syo-fg-default: #26241f;
+  --syo-fg-body:    #3b382f;
+  --syo-fg-muted:   #6b665c;
+
+  /* 功能色（暖化，保证亮底对比度；每个值都按「文字色」标定 ≥4.5:1，
+     对的是它实际出现的那层底：yellow/green/blue 常压在自己的 --learn-soft-* 上，
+     所以标定背景比纯白更严） */
+  --syo-red:    #b3402f;
+  --syo-orange: #b06a1f;
+  --syo-yellow: #80601b;   /* 误区卡标签：对 --learn-soft-yellow 合成底 4.6:1（原 #9a7420 只有 3.4） */
+  --syo-green:  #2b7357;   /* 提示卡标签 / 已完成徽章：对 --learn-soft-green 合成底 4.6:1（原 #2f7d5f 只有 4.0） */
+  --syo-teal:   #1f7a6b;
+  --syo-cyan:   #2c6f8f;
+  --syo-blue:   #336c90;   /* 进行中徽章：对 --learn-soft-blue 合成底 4.6:1（原 #3a7ca5 只有 3.7） */
+  --syo-purple: #6b5b8a;
+  --syo-pink:   #a05070;
+
+  /* 语义角色：亮色强调色是深学习绿，不是 Sayo 默认的紫。
+     取值与 --syo-green 一致，且要同时满足「当文字用」的场合：强调色会压在
+     --learn-soft-accent 上（侧栏当前项、筛选按钮选中态），那里比纯白更严。 */
+  --syo-accent:    #2b7357;
+  --syo-secondary: #3a7ca5;
+  --syo-special:   #b06a1f;
+  --syo-subtle:    #1f7a6b;
+
+  /* 语法高亮（暖化，仍保持可辨识度）：每个值都按代码块底色 #ffffff 标定 ≥4.5:1。
+     注释原是 #8a8478（3.72:1，全套里唯一明显偏淡的），压到 #7a7469。 */
+  --syo-syn-comment:  #7a7469;
+  --syo-syn-keyword:  #a4462f;
+  --syo-syn-string:   #2f6b4f;
+  --syo-syn-func:     #6b5b8a;
+  --syo-syn-type:     #8a5a1f;
+  --syo-syn-macro:    #946f1f;
+  --syo-syn-operator: #2c6f8f;
+  --syo-syn-number:   #2c6f8f;
+}
+
+/* ── 4. 亮色下修正 Sayo 为暗色硬编码的阴影与光晕 ── */
+html[data-theme="light"] .syo-card {
+  box-shadow: 0 1px 2px rgba(38, 32, 20, .06), 0 2px 10px rgba(38, 32, 20, .06);
+}
+html[data-theme="light"] .syo-card:hover {
+  box-shadow: 0 2px 6px rgba(38, 32, 20, .08), 0 14px 30px rgba(38, 32, 20, .12);
+}
+html[data-theme="light"] .syo-toggle input:checked ~ .syo-toggle-track {
+  box-shadow: 0 0 12px var(--learn-glow);
+}
+html[data-theme="light"] .syo-toggle input:checked ~ .syo-toggle-knob {
+  box-shadow: 0 1px 4px rgba(38, 32, 20, .18), 0 0 10px var(--learn-glow);
+}
+html[data-theme="light"] .syo-tooltip::after {
+  background: radial-gradient(ellipse at 50% 130%, var(--learn-soft-accent) 0%, transparent 65%), var(--syo-bg-elevated);
+  box-shadow: 0 4px 24px rgba(38, 32, 20, .16), 0 0 18px var(--learn-glow), inset 0 1px 0 rgba(255, 255, 255, .6);
+}
+html[data-theme="light"] .syo-tooltip::before {
+  box-shadow: 0 0 8px var(--learn-glow);
+}
+html[data-theme="light"] .syo-tab:hover,
+html[data-theme="light"] .syo-tab:focus-visible {
+  background: var(--learn-soft-accent);
+}
+html[data-theme="light"] .syo-tabs input:checked + .syo-tab {
+  background: linear-gradient(to top, var(--learn-soft-accent) 0%, transparent 100%);
+}
+html[data-theme="light"] .syo-tabs input:checked + .syo-tab::after {
+  box-shadow: 0 0 12px var(--learn-glow), 0 0 4px var(--learn-glow);
+}
+
+/* ── 5. 共享组件 ─────────────────────────────────────────────── */
+
+/* hidden 属性兜底：Sayo 的 .syo-grid-4 / .learn-filter 等设了 display，
+   会压过浏览器对 [hidden] 的默认 display:none——没有这条，脚本隐藏区块会失效 */
+[hidden] { display: none !important; }
+
+/* 跳到主内容（键盘可达） */
+.learn-skip {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  z-index: 200;
+  padding: 10px 16px;
+  background: var(--syo-bg-elevated);
+  color: var(--syo-fg-default);
+  border: 1px solid var(--syo-border);
+  border-radius: var(--syo-radius-md);
+}
+.learn-skip:focus { left: 16px; top: 16px; }
+
+/* 科目卡片网格（列数自适应科目数量，1–N 门都不破版） */
+.learn-subject-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: var(--syo-space-3);
+}
+
+/* 卡片：内容整体可点击 → 内边距交给链接，卡片本体去掉内边距 */
+.learn-subject-card { padding: 0; }
+.learn-subject-card__link {
+  display: block;
+  padding: var(--syo-space-5);
+  color: inherit;
+  text-decoration: none;
+}
+.learn-subject-card__link:focus-visible {
+  outline: 2px solid var(--syo-accent);
+  outline-offset: -2px;
+  border-radius: var(--syo-radius-md);
+}
+
+.learn-subject-card__head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--syo-space-3);
+  margin-bottom: var(--syo-space-3);
+}
+
+.learn-subject-card__name {
+  margin: 0;
+  font-size: .9375rem;
+  font-weight: 600;
+  line-height: 1.45;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.learn-subject-card__status { flex: none; cursor: default; }
+
+.learn-subject-card__current { margin: 0; }
+
+.learn-subject-card__label {
+  display: block;
+  font-family: var(--syo-font-mono);
+  font-size: .6875rem;
+  letter-spacing: .04em;
+  color: var(--syo-fg-muted);
+}
+
+.learn-subject-card__value {
+  display: block;
+  margin-top: 2px;
+  font-size: .875rem;
+  color: var(--syo-fg-body);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.learn-subject-card__meta {
+  display: flex;
+  align-items: center;
+  gap: var(--syo-space-3);
+  margin-top: var(--syo-space-3);
+  font-family: var(--syo-font-mono);
+  font-size: .75rem;
+  color: var(--syo-fg-muted);
+}
+
+/* 进度条：宽度真值写在内联 style，JS 只负责展开动画 */
+.learn-progress { margin-top: var(--syo-space-3); }
+
+.learn-progress__track {
+  height: 6px;
+  background: var(--learn-track);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.learn-progress__bar {
+  width: 0;
+  height: 100%;
+  background: var(--syo-accent);
+  border-radius: 999px;
+  transition: width .65s var(--syo-ease-out);
+}
+
+.learn-progress__meta {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--syo-space-2);
+  margin-top: 6px;
+  font-family: var(--syo-font-mono);
+  font-size: .75rem;
+  color: var(--syo-fg-muted);
+}
+
+.learn-subject-card__go {
+  color: var(--syo-accent);
+  opacity: 0;
+  transform: translateX(-3px);
+  transition: opacity 180ms var(--syo-ease-out), transform 180ms var(--syo-ease-out);
+}
+.learn-subject-card:hover .learn-subject-card__go { opacity: 1; transform: translateX(0); }
+
+/* 状态徽标（科目状态：进行中 / 暂停 / 已完成）
+   语义：进行中=蓝（正在推进）· 暂停=灰（中性）· 已完成=绿（达成） */
+.learn-status--active {
+  color: var(--syo-blue);
+  background: var(--learn-soft-blue);
+  border-color: var(--learn-line-blue);
+}
+.learn-status--paused { color: var(--syo-fg-muted); }
+.learn-status--done {
+  color: var(--syo-green);
+  background: var(--learn-soft-green);
+  border-color: var(--learn-line-green);
+}
+
+/* 状态筛选 */
+.learn-filter {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--syo-space-2);
+  margin: var(--syo-space-6) 0 var(--syo-space-3);
+}
+
+.learn-filter__btn { font-family: var(--syo-font-sans); }
+
+.learn-filter__btn.is-active {
+  color: var(--syo-accent);
+  border-color: var(--syo-accent);
+  background: var(--learn-soft-accent);
+}
+
+.learn-filter__count {
+  font-family: var(--syo-font-mono);
+  font-size: .6875rem;
+  opacity: .75;
+}
+/* 选中按钮里的数字要读得清：底色已经是柔和强调色，再叠 .75 透明就掉到 3:1 上下 */
+.learn-filter__btn.is-active .learn-filter__count { opacity: 1; }
+
+.learn-filter-empty {
+  margin: 0;
+  padding: var(--syo-space-6) var(--syo-space-1);
+  font-size: .875rem;
+  color: var(--syo-fg-muted);
+}
+
+/* 空状态（工作区还没有任何科目） */
+.learn-empty {
+  margin-top: var(--syo-space-6);
+  padding: clamp(40px, 8vw, 72px) var(--syo-space-6);
+  text-align: center;
+  border: 1px dashed var(--syo-border);
+  border-radius: var(--syo-radius-lg);
+}
+
+.learn-empty__glyph {
+  width: 64px;
+  height: 64px;
+  margin: 0 auto;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--learn-soft-accent);
+  color: var(--syo-accent);
+}
+.learn-empty__glyph svg { width: 30px; height: 30px; }
+
+.learn-empty__title {
+  margin: var(--syo-space-4) 0 0;
+  font-size: 1.125rem;
+  font-weight: 600;
+}
+
+.learn-empty__text {
+  max-width: 46ch;
+  margin: var(--syo-space-2) auto 0;
+  font-size: .875rem;
+  line-height: 1.8;
+  color: var(--syo-fg-muted);
+}
+
+.learn-empty__hint {
+  display: inline-block;
+  margin-top: var(--syo-space-4);
+  padding: 6px var(--syo-space-4);
+  font-size: .8125rem;
+  color: var(--syo-fg-muted);
+  border: 1px dashed var(--syo-border);
+  border-radius: 999px;
+}
+
+/* 页脚 */
+.learn-footer {
+  margin-top: var(--syo-space-12);
+  padding-top: var(--syo-space-4);
+  padding-bottom: var(--syo-space-10);
+  border-top: 1px solid var(--syo-border);
+  font-family: var(--syo-font-mono);
+  font-size: .75rem;
+  color: var(--syo-fg-muted);
+  text-align: center;
+}
+
+
+/* ── 6. 抬头背景图案（**现在只剩科目主页用**） ───────────────────
+   暗色 = 星空 + 星云微光；亮色 = 蓝图网格。纯 CSS 渐变平铺，无图片。
+   两个星点层可挂 data-syo-parallax（不同位移量 → 纵深）；不挂就是静态的。
+   版式（尺寸、位置）由各页面的 .learn-hero 决定，这里只管图案本身。
+   注意：**根主页三层都不用**——它的抬头主视觉换成了看板娘
+   （templates/assets/learn-mascot.png）：星点层撤掉、蓝图网格撤掉（改用一层极淡冷色洗），
+   只保留星云微光。所以本节的四条规则（far/near/nebula/grid）现在服务于
+   templates/subject-index.html（挂 far/near 两层 + 6px/12px 视差）。 */
+/* ── 抬头背景：暗色 = 星空 + 星云微光；亮色 = 星尘斑点 ──
+   纯 CSS 渐变平铺，无图片、零依赖。两个星点层分别挂 6px / 12px 视差 → 有纵深；
+   近层 7 秒一呼一吸。文字与 logo 完全静止。
+   （图案层做成真实元素而非伪元素：Sayo 的视差只作用于真实元素） */
+:root {
+  --star-ink:     rgba(230, 237, 243, .88);
+  --star-ink-dim: rgba(230, 237, 243, .42);
+  --nebula-a:     rgba(188, 140, 255, .13);
+  --nebula-b:     rgba(88, 166, 255, .10);
+}
+
+.learn-hero__stars,
+.learn-hero__nebula,
+.learn-hero__grid {
+  position: absolute;
+  inset: -14px;
+  z-index: 0;
+  pointer-events: none;
+  -webkit-mask-image: linear-gradient(to bottom, #000 0%, transparent 92%);
+  mask-image: linear-gradient(to bottom, #000 0%, transparent 92%);
+}
+
+/* 远层：细密小星，tile 180×152，视差 6px */
+.learn-hero__stars--far {
+  background-image:
+    radial-gradient(1px 1px at 18px 22px, var(--star-ink-dim) 50%, transparent 51%),
+    radial-gradient(1.2px 1.2px at 74px 58px, var(--star-ink) 50%, transparent 51%),
+    radial-gradient(1px 1px at 132px 30px, var(--star-ink-dim) 50%, transparent 51%),
+    radial-gradient(1.3px 1.3px at 46px 96px, var(--star-ink) 50%, transparent 51%),
+    radial-gradient(1px 1px at 108px 118px, var(--star-ink-dim) 50%, transparent 51%),
+    radial-gradient(1.1px 1.1px at 160px 84px, var(--star-ink) 50%, transparent 51%),
+    radial-gradient(1px 1px at 92px 74px, var(--star-ink-dim) 50%, transparent 51%),
+    radial-gradient(1.2px 1.2px at 26px 132px, var(--star-ink) 50%, transparent 51%);
+  background-size: 180px 152px;
+  opacity: .85;
+}
+
+/* 近层：更大更亮的星，tile 290×190，视差 12px，缓慢闪烁 */
+.learn-hero__stars--near {
+  background-image:
+    radial-gradient(1.9px 1.9px at 62px 34px, var(--star-ink) 50%, transparent 51%),
+    radial-gradient(1.3px 1.3px at 148px 88px, var(--star-ink) 50%, transparent 51%),
+    radial-gradient(2.3px 2.3px at 210px 46px, var(--star-ink) 50%, transparent 51%),
+    radial-gradient(1.4px 1.4px at 96px 128px, var(--star-ink-dim) 50%, transparent 51%),
+    radial-gradient(1.7px 1.7px at 176px 140px, var(--star-ink) 50%, transparent 51%),
+    radial-gradient(1.2px 1.2px at 248px 112px, var(--star-ink-dim) 50%, transparent 51%),
+    radial-gradient(2px 2px at 24px 100px, var(--star-ink) 50%, transparent 51%);
+  background-size: 290px 190px;
+  opacity: .9;
+  animation: learn-twinkle 7s ease-in-out infinite;
+}
+
+@keyframes learn-twinkle {
+  0%, 100% { opacity: .85; }
+  50%      { opacity: .30; }
+}
+
+/* 星云微光：极淡的两团（紫 / 蓝），只做氛围，不抢标题 */
+.learn-hero__nebula {
+  background:
+    radial-gradient(58% 82% at 28% 0%, var(--nebula-a), transparent 72%),
+    radial-gradient(46% 68% at 78% 6%, var(--nebula-b), transparent 70%);
+}
+
+/* 亮色主题的抬头背景：28px 蓝图网格（不用星空——暖纸白底上星点读不出来）。
+   这一层不挂 data-syo-parallax：亮色主题不开视差 */
+.learn-hero__grid {
+  background-image:
+    linear-gradient(var(--syo-border) 1px, transparent 1px),
+    linear-gradient(90deg, var(--syo-border) 1px, transparent 1px);
+  background-size: 28px 28px;
+}
+
+/* 按主题显隐：暗色=星空三层，亮色=网格 */
+html[data-theme="light"] .learn-hero__stars,
+html[data-theme="light"] .learn-hero__nebula { display: none; }
+html[data-theme="dark"] .learn-hero__grid { display: none; }

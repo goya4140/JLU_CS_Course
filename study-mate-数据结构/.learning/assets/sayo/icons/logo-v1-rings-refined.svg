@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none">
+  <!-- v1 同心圆·精炼
+       Refined version of the original 3-ring logo.
+       Thinner stroke, tighter rhythm. The centre dot anchors the composition.
+       Metaphor: osu! approach circle → hit circle → precise strike. -->
+  <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.4"/>
+  <circle cx="12" cy="12" r="4.5" stroke="currentColor" stroke-width="1.4"/>
+  <circle cx="12" cy="12" r="1.5" fill="currentColor"/>
+</svg>

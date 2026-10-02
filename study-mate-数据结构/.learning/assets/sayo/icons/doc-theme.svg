@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="none">
+  <!-- Sidebar: Theme — circle half-filled
+       Metaphor: day/night, light/dark mode -->
+  <circle cx="10" cy="10" r="8" stroke="currentColor" stroke-width="1.5"/>
+  <path d="M10 2a8 8 0 010 16V2z" fill="currentColor" opacity="0.3"/>
+</svg>
