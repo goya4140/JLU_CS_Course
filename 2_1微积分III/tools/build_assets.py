@@ -9,7 +9,6 @@ def arrow(x,y,X,Y):return f'<path d="M{x},{y} L{X},{Y}" class="line" marker-end=
 def box(x,y,w,h,title,lines):
  return f'<rect x="{x}" y="{y}" width="{w}" height="{h}" rx="12" fill="white" stroke="#bcd4da"/>'+txt(x+18,y+34,title)+''.join(txt(x+18,y+68+28*i,l,'small') for i,l in enumerate(lines))
 for name,title,branches in [
- ('map4','第4章 · 第一型积分知识地图',[('曲线积分',['密度 × 弧长 ds','参数化 → 一元定积分','圆弧 / 折线 / 空间曲线']),('曲面积分',['密度 × 面积 dS','投影 / 参数化 → 二重积分','图形面 / 球面 / 柱面']),('性质与技巧',['线性、分段、估值','对称性：域与函数一起看','面积、长度与平均值']),('物理应用',['质量 → 质心','距离平方 → 转动惯量','距离向量 → 引力'])]),
  ('map5','第5章 · 第二型积分知识地图',[('第二型曲线积分',['力 · 位移：Pdx + Qdy + Rdz','参数方向决定上下限','全微分 → 终点减起点']),('Green 与路径无关',['平面闭曲线 → 二重积分','补线、挖洞、面积','单连通域与偏导相等']),('第二型曲面积分',['通量：向量场 · 法向量','上侧 / 下侧 / 内侧 / 外侧','向量面积元保留符号']),('Gauss 与 Stokes',['封闭面 → 散度的体积分','空间闭曲线 → 旋度的通量','补面、右手方向、奇点'])])]:
  b=box(350,105,300,82,'积累的对象决定微元',['先认清几何对象，再选择方法'])
  for i in range(4):
@@ -19,6 +18,8 @@ for name,title,branches in [
  for i,(t,ls) in enumerate(branches):
   x=35+(i%2)*500;y=250+(i//2)*180;b+=box(x,y,430,155,t,ls)
  svg(name,title,'从几何意义出发，把概念、计算与题型连起来。',b,635)
+from build_chapter4_map import build as build_chapter4_map
+build_chapter4_map(A/'map4.svg')
 svg('theorems','三个公式的关系：边界与内部','先辨认积分对象，再检查封闭性、方向和光滑条件。',
  box(40,145,290,220,'Green · 平面',['边界：平面闭曲线','内部：平面区域','微分：Qₓ - Pᵧ','结果：二重积分'])+box(355,145,290,220,'Gauss · 通量',['边界：封闭曲面','内部：三维立体','微分：散度 div F','结果：三重积分'])+box(670,145,290,220,'Stokes · 环流',['边界：空间闭曲线','内部：所张曲面','微分：旋度 curl F','结果：第二型曲面积分']),415)
 urls={'marked.js':'https://cdn.jsdelivr.net/npm/marked@15.0.12/marked.min.js','katex.js':'https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/katex.min.js','katex.css':'https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/katex.min.css'}

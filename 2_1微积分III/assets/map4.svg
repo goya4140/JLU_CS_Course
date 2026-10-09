@@ -1,1 +1,67 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="635" viewBox="0 0 1000 635" role="img"><title>第4章 · 第一型积分知识地图</title><defs><marker id="a" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6" fill="#187c87"/></marker></defs><rect width="1000" height="635" rx="18" fill="#f5fafb"/><style>text{font-family:"PingFang SC","Microsoft YaHei",sans-serif;fill:#213d49}.line{fill:none;stroke:#187c87;stroke-width:3}.small{font-size:19px}.label{font-size:22px}</style><text x="38" y="47" font-size="28" font-weight="bold">第4章 · 第一型积分知识地图</text><text x="38" y="78" class="small">从几何意义出发，把概念、计算与题型连起来。</text><rect x="350" y="105" width="300" height="82" rx="12" fill="white" stroke="#bcd4da"/><text x="368" y="139" class="label">积累的对象决定微元</text><text x="368" y="173" class="small">先认清几何对象，再选择方法</text><path d="M500,187 L250,250" class="line" marker-end="url(#a)"/><path d="M500,187 L750,250" class="line" marker-end="url(#a)"/><path d="M500,187 L500,418 L250,418 L250,430" class="line" marker-end="url(#a)"/><path d="M500,187 L500,418 L750,418 L750,430" class="line" marker-end="url(#a)"/><rect x="35" y="250" width="430" height="155" rx="12" fill="white" stroke="#bcd4da"/><text x="53" y="284" class="label">曲线积分</text><text x="53" y="318" class="small">密度 × 弧长 ds</text><text x="53" y="346" class="small">参数化 → 一元定积分</text><text x="53" y="374" class="small">圆弧 / 折线 / 空间曲线</text><rect x="535" y="250" width="430" height="155" rx="12" fill="white" stroke="#bcd4da"/><text x="553" y="284" class="label">曲面积分</text><text x="553" y="318" class="small">密度 × 面积 dS</text><text x="553" y="346" class="small">投影 / 参数化 → 二重积分</text><text x="553" y="374" class="small">图形面 / 球面 / 柱面</text><rect x="35" y="430" width="430" height="155" rx="12" fill="white" stroke="#bcd4da"/><text x="53" y="464" class="label">性质与技巧</text><text x="53" y="498" class="small">线性、分段、估值</text><text x="53" y="526" class="small">对称性：域与函数一起看</text><text x="53" y="554" class="small">面积、长度与平均值</text><rect x="535" y="430" width="430" height="155" rx="12" fill="white" stroke="#bcd4da"/><text x="553" y="464" class="label">物理应用</text><text x="553" y="498" class="small">质量 → 质心</text><text x="553" y="526" class="small">距离平方 → 转动惯量</text><text x="553" y="554" class="small">距离向量 → 引力</text></svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="730" viewBox="0 0 1120 730" role="img" aria-labelledby="map-title map-desc">
+<title id="map-title">第4章：第一型积分学习地图</title>
+<desc id="map-desc">中央是函数值乘几何微元的累加思想，四个分支为曲线积分、曲面积分、性质与技巧、物理应用。下方给出从模型到计算的阅读顺序。</desc>
+<style>text{font-family:"PingFang SC","Microsoft YaHei","Noto Sans CJK SC",sans-serif;fill:#243747}.muted{fill:#657789}.heading{font-size:25px;font-weight:600}.body{font-size:19px}.section{font-size:15px}</style>
+<rect width="1120" height="730" rx="20" fill="#FAFBFD"/>
+<text x="40" y="43" font-size="13" letter-spacing="2" class="muted">CHAPTER 04 · 学习地图</text>
+<text x="40" y="85" font-size="34" font-weight="600">第一型积分</text>
+<text x="40" y="117" font-size="18" class="muted">先理解累加的对象，再选择微元与计算方法。</text>
+
+<path d="M410 335 C390.0 335 390.0 260 370 260" fill="none" stroke="#168A88" stroke-opacity=".55" stroke-width="2.5"/>
+<circle cx="370" cy="260" r="4" fill="#168A88"/>
+<path d="M710 335 C730.0 335 730.0 260 750 260" fill="none" stroke="#4777B5" stroke-opacity=".55" stroke-width="2.5"/>
+<circle cx="750" cy="260" r="4" fill="#4777B5"/>
+<path d="M410 405 C390.0 405 390.0 525 370 525" fill="none" stroke="#8263A9" stroke-opacity=".55" stroke-width="2.5"/>
+<circle cx="370" cy="525" r="4" fill="#8263A9"/>
+<path d="M710 405 C730.0 405 730.0 525 750 525" fill="none" stroke="#BD784B" stroke-opacity=".55" stroke-width="2.5"/>
+<circle cx="750" cy="525" r="4" fill="#BD784B"/>
+<rect x="410" y="285" width="300" height="175" rx="22" fill="#203E50"/>
+<text x="560" y="318" text-anchor="middle" font-size="13" letter-spacing="2" style="fill:#B8D6DF">全章的共同思想</text>
+<text x="560" y="358" text-anchor="middle" font-size="26" font-weight="600" style="fill:#FFFFFF">函数值 × 几何微元</text>
+<path d="M452 377 H668" stroke="#5B7887" stroke-width="1"/>
+<text x="560" y="407" text-anchor="middle" font-size="19" style="fill:#DFEDF1">沿曲线 / 曲面累加</text>
+<text x="560" y="436" text-anchor="middle" font-size="15" style="fill:#B8D6DF">曲线取 ds · 曲面取 dS</text>
+<rect x="40" y="160" width="330" height="205" rx="16" fill="white" stroke="#E0E7EE"/>
+<rect x="60" y="180" width="35" height="30" rx="9" fill="#E9F5F3"/>
+<text x="77.5" y="201" text-anchor="middle" font-size="14" font-weight="600" style="fill:#168A88">01</text>
+<text x="107" y="204" class="heading">曲线积分</text>
+<text x="62" y="243" class="body">沿一条线，累加每一小段</text>
+<text x="62" y="273" class="body">函数值 × 弧长 ds</text>
+<text x="62" y="303" class="body">参数化 → 一元定积分</text>
+<path d="M62 322 H348" stroke="#EDF0F4"/>
+<text x="62" y="346" class="section" style="fill:#168A88">§1—§4 · 圆弧 / 折线 / 空间曲线</text>
+<rect x="750" y="160" width="330" height="205" rx="16" fill="white" stroke="#E0E7EE"/>
+<rect x="770" y="180" width="35" height="30" rx="9" fill="#EDF2FA"/>
+<text x="787.5" y="201" text-anchor="middle" font-size="14" font-weight="600" style="fill:#4777B5">02</text>
+<text x="817" y="204" class="heading">曲面积分</text>
+<text x="772" y="243" class="body">沿一片面，累加每一小块</text>
+<text x="772" y="273" class="body">函数值 × 面积 dS</text>
+<text x="772" y="303" class="body">投影 / 参数化 → 二重积分</text>
+<path d="M772 322 H1058" stroke="#EDF0F4"/>
+<text x="772" y="346" class="section" style="fill:#4777B5">§5—§7 · 斜面 / 球面 / 柱面</text>
+<rect x="40" y="425" width="330" height="205" rx="16" fill="white" stroke="#E0E7EE"/>
+<rect x="60" y="445" width="35" height="30" rx="9" fill="#F2EDF8"/>
+<text x="77.5" y="466" text-anchor="middle" font-size="14" font-weight="600" style="fill:#8263A9">03</text>
+<text x="107" y="469" class="heading">性质与技巧</text>
+<text x="62" y="508" class="body">线性、分段、估值</text>
+<text x="62" y="538" class="body">先检查积分域，再使用对称性</text>
+<text x="62" y="568" class="body">用积分求长度、面积与平均值</text>
+<path d="M62 587 H348" stroke="#EDF0F4"/>
+<text x="62" y="611" class="section" style="fill:#8263A9">贯穿全章 · §4、§7 重点讲解</text>
+<rect x="750" y="425" width="330" height="205" rx="16" fill="white" stroke="#E0E7EE"/>
+<rect x="770" y="445" width="35" height="30" rx="9" fill="#FAF0E8"/>
+<text x="787.5" y="466" text-anchor="middle" font-size="14" font-weight="600" style="fill:#BD784B">04</text>
+<text x="817" y="469" class="heading">物理应用</text>
+<text x="772" y="508" class="body">质量 → 坐标加权 → 质心</text>
+<text x="772" y="538" class="body">到轴的距离平方 → 转动惯量</text>
+<text x="772" y="568" class="body">距离与方向 → 引力</text>
+<path d="M772 587 H1058" stroke="#EDF0F4"/>
+<text x="772" y="611" class="section" style="fill:#BD784B">§8 · 先写质量元 dm，再加权</text>
+<path d="M40 666 H1080" stroke="#DFE6EE"/>
+<text x="40" y="702" font-size="16" class="muted">建议阅读顺序</text>
+<text x="220" y="702" font-size="18">具体模型</text><text x="330" y="702" font-size="18" class="muted">→</text>
+<text x="374" y="702" font-size="18">选微元</text><text x="465" y="702" font-size="18" class="muted">→</text>
+<text x="509" y="702" font-size="18">建立积分式</text><text x="641" y="702" font-size="18" class="muted">→</text>
+<text x="685" y="702" font-size="18">完成计算</text><text x="794" y="702" font-size="18" class="muted">→</text>
+<text x="838" y="702" font-size="18">检查结果</text>
+</svg>
