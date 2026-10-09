@@ -141,6 +141,19 @@ def build_sidebar() -> str:
 
 
 def append_directory(lines: list[str], directory: Path, level: int) -> None:
+    if directory.name == "2_1微积分III":
+        indent = "  " * level
+        for filename, title in (
+            ("README.md", "课程导览"),
+            ("04_第一型积分_教程.md", "第4章 第一型积分"),
+            ("05_第二型积分_教程.md", "第5章 第二型积分"),
+            ("06_期末题型与复习路线.md", "期末题型与复习路线"),
+            ("资料依据与覆盖对照.md", "资料依据与覆盖对照"),
+        ):
+            lines.append(f"{indent}- [{title}]({link_for(directory / filename)})")
+        reading = "https://goya4140.github.io/JLU_CS_Course/" + quote((directory / "index.html").relative_to(ROOT).as_posix(), safe="/")
+        lines.append(f"{indent}- [图文阅读版]({reading} ':ignore')")
+        return
     if directory.name == MICRO_COURSE_DIR:
         append_microcomputer_directory(lines, directory, level)
         return

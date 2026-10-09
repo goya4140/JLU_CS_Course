@@ -8,7 +8,7 @@
 
 ## 在线阅读
 
-- [课程资料阅读站](https://goya4140.github.io/JLU_Course_2024/)
+- [课程资料阅读站](https://goya4140.github.io/JLU_CS_Course/)
 - [GitHub 仓库](https://github.com/goya4140/JLU_CS_Course)
 - [吉林大学个人培养方案查询](https://iedu.jlu.edu.cn/jwapp/sys/xsfacx/*default/index.do?EMAP_LANG=zh#/ckgrpyfa)（需登录统一身份认证）
 
@@ -55,6 +55,11 @@
 
 - [离散数学 I](1_2离散数学I/)：集合、关系、映射、图论、数理逻辑，以及证明与计算题专项。
 - [面向对象程序设计](1_2面向对象程序设计/)：提供第 2–19 章的讲解版、考前速记版与模拟题解析，适合系统学习和期末冲刺。
+
+### 大二上
+
+- [数据结构](2_1数据结构/README.md)：完整自学笔记、C++ 参考实现与交互演示。
+- [微积分 III](2_1微积分III/README.md)：第一型与第二型积分的图文教程，包含知识地图、完整例题、自测解答与期末真题推导；[图文阅读版](https://goya4140.github.io/JLU_CS_Course/2_1%E5%BE%AE%E7%A7%AF%E5%88%86III/index.html ':ignore')。
 
 ### 大二下
 

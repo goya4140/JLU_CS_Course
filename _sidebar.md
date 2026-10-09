@@ -31,6 +31,13 @@
       - [5 3 合同一次同余式](/1_2%E7%A6%BB%E6%95%A3%E6%95%B0%E5%AD%A6I/%E7%AC%AC5%E7%AB%A0_%E6%95%B0%E7%90%86%E9%80%BB%E8%BE%91/5_3_%E5%90%88%E5%90%8C%E4%B8%80%E6%AC%A1%E5%90%8C%E4%BD%99%E5%BC%8F.md)
 
 - **大二上**
+  - **微积分III**
+    - [课程导览](/2_1%E5%BE%AE%E7%A7%AF%E5%88%86III/README.md)
+    - [第4章 第一型积分](/2_1%E5%BE%AE%E7%A7%AF%E5%88%86III/04_%E7%AC%AC%E4%B8%80%E5%9E%8B%E7%A7%AF%E5%88%86_%E6%95%99%E7%A8%8B.md)
+    - [第5章 第二型积分](/2_1%E5%BE%AE%E7%A7%AF%E5%88%86III/05_%E7%AC%AC%E4%BA%8C%E5%9E%8B%E7%A7%AF%E5%88%86_%E6%95%99%E7%A8%8B.md)
+    - [期末题型与复习路线](/2_1%E5%BE%AE%E7%A7%AF%E5%88%86III/06_%E6%9C%9F%E6%9C%AB%E9%A2%98%E5%9E%8B%E4%B8%8E%E5%A4%8D%E4%B9%A0%E8%B7%AF%E7%BA%BF.md)
+    - [资料依据与覆盖对照](/2_1%E5%BE%AE%E7%A7%AF%E5%88%86III/%E8%B5%84%E6%96%99%E4%BE%9D%E6%8D%AE%E4%B8%8E%E8%A6%86%E7%9B%96%E5%AF%B9%E7%85%A7.md)
+    - [图文阅读版](https://goya4140.github.io/JLU_CS_Course/2_1%E5%BE%AE%E7%A7%AF%E5%88%86III/index.html ':ignore')
   - **数据结构**
     - [数据结构 课程入口](/2_1数据结构/README.md)
     - [StudyMate 版试读：3 节课](https://goya4140.github.io/JLU_CS_Course/study-mate-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/index.html)
