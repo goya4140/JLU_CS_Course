@@ -53,6 +53,6 @@ import re
 css=(A/'vendor/katex.css').read_text();fonts=set(re.findall(r'url\((fonts/[^)]+)\)',css));(A/'vendor/fonts').mkdir(exist_ok=True)
 with concurrent.futures.ThreadPoolExecutor(max_workers=8) as ex:list(ex.map(lambda f:None if (A/'vendor'/f).exists() else urllib.request.urlretrieve('https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/'+f,A/'vendor'/f),fonts))
 for pkg in ['katex@0.16.22','marked@15.0.12']:
- try:urllib.request.urlretrieve('https://cdn.jsdelivr.net/npm/'+pkg+'/LICENSE',A/'vendor'/(pkg.split('@')[0]+'-LICENSE'))
+ try:urllib.request.urlretrieve('https://cdn.jsdelivr.net/npm/'+pkg+('/LICENSE.md' if pkg.startswith('marked@') else '/LICENSE'),A/'vendor'/(pkg.split('@')[0]+'-LICENSE'))
  except Exception:pass
 print('Created',len(list(A.glob('*.svg'))),'figures;',len(fonts),'font resources')
