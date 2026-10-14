@@ -182,6 +182,16 @@ def append_directory(lines: list[str], directory: Path, level: int) -> None:
     for file_path in files:
         lines.append(f"{indent}- [{title_for(file_path)}]({link_for(file_path)})")
 
+    if directory.name == "3_1数据库系统":
+        html_files = sorted(directory.glob("0[1-7]_*.html"), key=sort_key)
+        if html_files:
+            lines.append(f"{indent}- **图解学习版（HTML）**")
+            for html_file in html_files:
+                title = display_name(html_file.stem)
+                relative = quote(html_file.relative_to(ROOT).as_posix(), safe="/")
+                reading = "https://goya4140.github.io/JLU_CS_Course/" + relative
+                lines.append(f"{indent}  - [{title}]({reading} ':ignore')")
+
     for child_dir in child_dirs:
         lines.append(f"{indent}- **{display_name(child_dir.name)}**")
         append_directory(lines, child_dir, level + 1)

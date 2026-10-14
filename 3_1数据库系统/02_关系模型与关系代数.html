@@ -1,0 +1,2835 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="source-sha256" content="9676dcf6fe43ddefcaeca3e5fe15ea765a36da5bcf944c30a9717ae33f1c7ff9"><title>第2单元 关系模型与关系代数 · 图解学习版</title><style>:root{--paper:#fbfaf7;--surface:#fff;--ink:#253341;--muted:#5c6b75;--line:#d5dfdd;--teal:#156b62;--soft:#edf6f1;--font:17px;--scroll-offset:90px}*{box-sizing:border-box}html{scroll-behavior:auto;scroll-padding-top:var(--scroll-offset)}body{margin:0;background:var(--paper);color:var(--ink);font-family:'Microsoft YaHei','PingFang SC',system-ui,sans-serif;font-size:var(--font);line-height:1.85}a{color:var(--teal);text-underline-offset:3px}a:hover{color:#173f75}button,select{font:inherit}button{cursor:pointer}button,select{border:1px solid #b9cbc5;border-radius:7px;padding:7px 11px;background:#fff;color:var(--ink)}button:hover{background:var(--soft)}button:focus-visible,select:focus-visible,a:focus-visible{outline:3px solid #81cbb8;outline-offset:3px}.skip{position:absolute;top:-80px;left:12px;z-index:50;background:#fff;padding:8px}.skip:focus{top:8px}.sidebar{position:fixed;inset:0 auto 0 0;width:270px;padding:23px 18px;background:#f0f4f0;border-right:1px solid var(--line);overflow:auto;z-index:30;overscroll-behavior:contain}.brand{font-size:21px;font-weight:700}.brand small{display:block;font-size:12px;font-weight:400;color:var(--muted)}.sidebar nav a{display:block;color:var(--ink);text-decoration:none;padding:8px 10px;margin:3px 0;border-radius:6px;font-size:14px;line-height:1.6}.sidebar nav a:hover{background:#dcebe3}.sidebar nav a.active,.sidebar nav a.active:hover{background:var(--teal);color:white}.sidebar select{width:100%;font-size:13px}.nav-tip{font-size:12px;color:var(--muted);margin:14px 0}.shell{margin-left:270px;overflow-anchor:none}.topbar{position:sticky;top:0;background:rgba(251,250,247,.98);padding:12px 26px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:12px;z-index:20}.topbar-title{font-size:13px;color:var(--muted)}.toolbar{display:flex;gap:7px;flex-wrap:wrap}.toolbar button{font-size:13px}.menu{display:none}main{max-width:1120px;margin:auto;padding:30px 44px 80px;min-width:0}h1{font-size:32px;line-height:1.5;margin:14px 0 25px}h2{font-size:25px;line-height:1.5;padding:0 0 11px;border-bottom:1px solid var(--line);margin:44px 0 23px}h3{font-size:21px;line-height:1.55;margin:29px 0 16px}h4{font-size:18px;line-height:1.6;margin:22px 0 13px}p{margin:14px 0}li{margin:7px 0}ul,ol{padding-left:1.6em}blockquote{margin:20px 0;padding:5px 18px;border-left:3px solid #a8c6bb;background:#f0f3ef;color:#53655e;font-size:14px}blockquote p{margin:8px 0}hr{border:0;border-top:1px solid var(--line);margin:32px 0}code{font-family:Consolas,'Cascadia Code',monospace;font-size:.9em;background:#eef1ed;padding:2px 5px;border-radius:4px;overflow-wrap:anywhere}pre{background:#18313d;color:#e8f0f0;border-radius:9px;padding:19px;line-height:1.65;overflow-x:auto;max-width:100%;font-size:14px}pre code{background:none;padding:0;color:inherit;white-space:pre;overflow-wrap:normal}table{border-collapse:collapse;width:100%;font-size:15px}th{background:#eaf3ee;text-align:left}td,th{padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:top}tbody tr:nth-child(even){background:#f6f9f6}.table-scroll{overflow-x:auto;border:1px solid var(--line);border-radius:8px;margin:17px 0;max-width:100%}.table-scroll td{min-width:80px}.source-note{font-size:13px;color:var(--muted)}.learning-figure{padding:23px;border:1px solid #b4cfc2;border-radius:12px;background:var(--soft);margin:25px 0}.learning-figure h4{margin:0 0 8px;font-size:20px}.fig-intro{font-size:14px;color:var(--muted)}.learning-figure label{display:block;margin-top:15px;font-size:14px;font-weight:700}.learning-figure select{margin-top:7px;width:100%;min-height:44px;font-size:15px}.fig-output{margin-top:16px}.flow{display:flex;gap:10px;align-items:stretch;flex-wrap:wrap}.flow-node{flex:1 1 150px;border:1px solid #bfd2c9;border-radius:8px;background:#fff;padding:13px;min-width:0}.flow-node strong{display:block;color:var(--teal)}.flow-node p{font-size:14px;margin:8px 0}.flow-arrow{align-self:center;color:var(--teal);font-size:24px}.fig-note{padding:10px 14px;border-left:3px solid var(--teal);background:#fff;font-size:14px;margin:15px 0 0}.svg-scroll{overflow-x:auto;max-width:100%}.svg-scroll svg{display:block;max-width:100%;height:auto}.ref-area{min-height:calc(100vh - var(--scroll-offset));margin-top:24px}.ref-picker{padding:22px;border-radius:12px;background:var(--soft);border:1px solid #b4cfc2}.ref-picker label{display:block;font-weight:700;margin-bottom:10px}.ref-picker select{width:100%;font-size:15px;min-height:46px}.ref-panel{margin-top:18px;background:#fff;border:1px solid var(--line);padding:20px;border-radius:9px}.ref-panel[hidden]{display:none}.ref-panel h3{margin:0;font-size:24px}.ref-panel h4{font-size:16px;margin:18px 0 8px}.ref-kind{font-size:13px;color:var(--teal)}.result{padding:10px 15px;border-left:3px solid var(--teal);background:var(--soft)}.copy{display:block;margin:5px 0 0 auto;font-size:12px;padding:4px 8px}.code-wrap{margin:20px 0}.code-wrap pre{margin-bottom:0}.foot{font-size:13px;color:var(--muted);border-top:1px solid var(--line);padding-top:23px;margin-top:30px}details{border:1px solid var(--line);padding:12px;border-radius:8px;margin:15px 0}summary{cursor:pointer;font-weight:700}@media(max-width:900px){.sidebar{transform:translateX(-100%)}body.nav-open .sidebar{transform:translateX(0);top:60px}.shell{margin-left:0}.menu{display:inline-block}.topbar-title{display:none}.topbar{padding:10px 14px}main{padding:23px 18px 65px}h1{font-size:27px}h2{font-size:23px}.learning-figure,.ref-picker{padding:16px}.flow{flex-direction:column}.flow-arrow{transform:rotate(90deg)}.ref-panel{padding:15px}}@media print{.sidebar,.topbar,.toolbar,.copy,.skip{display:none!important}.shell{margin:0}main{padding:0;max-width:none}body{background:#fff;font-size:11pt}.ref-area{min-height:0}.ref-picker select{display:none}pre{white-space:pre-wrap;background:#f3f5f4;color:#111}.learning-figure{break-inside:avoid}.table-scroll{overflow:visible}a{color:inherit}}@media print{.svg-scroll{overflow:visible}.svg-scroll svg{min-width:0!important;width:100%!important;height:auto!important}}.sidebar{width:266px;background:#f1f4f1;padding:27px 19px;overflow-y:auto}.brand{font-size:21px;font-weight:700;letter-spacing:.03em;margin-bottom:5px}.brand small{font-size:12px;font-weight:400;color:var(--muted);letter-spacing:.1em}.sidebar .sub{font-size:13px;color:var(--muted);margin:5px 0 21px}.sidebar nav a{font-size:14px;line-height:1.5;padding:9px 11px;margin:3px 0;border-radius:6px}.sidebar nav a:hover{background:#e0ece6;color:#174d43}.sidebar nav a.active,.sidebar nav a.active:hover{background:var(--teal);color:#fff}.nav-group{font-size:12px;color:var(--muted);margin:18px 11px 6px;letter-spacing:.08em}.sidebar-footer{margin-top:24px;font-size:12px;color:var(--muted)}.shell{margin-left:266px}@media(max-width:900px){.shell{margin-left:0}}</style></head><body><a class="skip" href="#article">跳到正文</a><aside class="sidebar" aria-label="章节目录"><div class="brand"><small>DATABASE / UNIT 02</small>关系模型与关系代数</div><p class="sub">完整正文 · 图解学习版</p><nav><a href="#ch02-navigation">学习导航</a><div class="nav-group">准备 · 表与规则</div><a href="#ch02-s004" data-chapter="01">1. 从学生选课业务认识关系模型</a><a href="#ch02-s011" data-chapter="02">2. 域、原子性与空值</a><a href="#ch02-s015" data-chapter="03">3. 为什么需要码</a><a href="#ch02-s021" data-chapter="04">4. 查询语言与公式的读法</a><div class="nav-group">运算 · 筛选与组合</div><a href="#ch02-s024" data-chapter="05">5. 六种基本关系代数运算</a><a href="#ch02-s041" data-chapter="06">6. 附加关系代数运算</a><a href="#ch02-s057" data-chapter="07">7. 扩展关系代数运算</a><div class="nav-group">表达 · 从题意到条件</div><a href="#ch02-s072" data-chapter="08">8. 怎样把一句题意写成表达式</a><a href="#ch02-s076" data-chapter="09">9. 元组关系演算</a><a href="#ch02-s080" data-chapter="10">10. 域关系演算与安全表达式</a><div class="nav-group">练习与复习</div><a href="#ch02-s083" data-chapter="11">11. 常见易错点：用具体原因自查</a><a href="#ch02-s084" data-chapter="12">12. 本单元模拟题：从读题到结果</a><a href="#ch02-s097" data-chapter="13">13. 自拟自测题（非模拟 PPT 原题）</a><a href="#ch02-s102" data-chapter="14">14. 复习清单与思维导图</a><a href="#ch02-relations" data-chapter="15">15. 表运算、条件和连接名称怎样分层理解</a><a href="#ch02-reference" data-chapter="16">16. 本章概念与方法速查</a><a href="#ch02-verification">整理与核对说明</a></nav><div class="sidebar-footer">单文件 · 离线阅读<br>图表使用正文教学数据</div></aside><div class="shell"><header class="topbar"><span class="topbar-title">第2单元 关系模型与关系代数</span><div class="toolbar"><button id="menu" class="menu" aria-label="打开或收起目录" aria-expanded="false">目录</button><button data-font="-1" aria-label="减小正文字号">字号 −</button><button data-font="1" aria-label="增大正文字号">字号 ＋</button><button id="print">打印 / 保存 PDF</button></div></header><main><article id="article"><h1>第2单元 关系模型与关系代数</h1>
+<blockquote>
+<p>课件来源：<code>数据库课程ppt/ch2.pdf</code>、<code>数据库课程ppt/ch6.pdf</code>。<br>课程定位：课程总结 PPT 中的“第2、6章：关系代数表达式”。基本运算、附加运算和扩展运算均为课程重点。<br>阅读对象：第一次学习数据库、尚不熟悉专业术语和数学符号的读者。</p>
+</blockquote>
+<h2 id="ch02-navigation">学习导航</h2>
+<p>先认识表、约束和公式，再学筛选与组合运算，随后把题意写成完整表达式，最后用综合题和速查检查理解。</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>学习阶段</th>
+<th>要解决的问题</th>
+<th>对应内容</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>准备 · 表与规则</td>
+<td>表里记录什么，怎样辨认一行及读懂表达式？</td>
+<td><a href="#ch02-s004">1. 从学生选课业务认识关系模型</a>、<a href="#ch02-s011">2. 域、原子性与空值</a>、<a href="#ch02-s015">3. 为什么需要码</a>、<a href="#ch02-s021">4. 查询语言与公式的读法</a></td>
+</tr>
+<tr>
+<td>运算 · 筛选与组合</td>
+<td>怎样从已有表得到所需的行、列和统计结果？</td>
+<td><a href="#ch02-s024">5. 六种基本关系代数运算</a>、<a href="#ch02-s041">6. 附加关系代数运算</a>、<a href="#ch02-s057">7. 扩展关系代数运算</a></td>
+</tr>
+<tr>
+<td>表达 · 从题意到条件</td>
+<td>怎样组合运算，或用条件说明所需答案？</td>
+<td><a href="#ch02-s072">8. 怎样把一句题意写成表达式</a>、<a href="#ch02-s076">9. 元组关系演算</a>、<a href="#ch02-s080">10. 域关系演算与安全表达式</a></td>
+</tr>
+<tr>
+<td>练习与复习</td>
+<td>能否给出完整结果，辨析相似运算并说明理由？</td>
+<td><a href="#ch02-s083">11. 常见易错点：用具体原因自查</a>、<a href="#ch02-s084">12. 本单元模拟题：从读题到结果</a>、<a href="#ch02-s097">13. 自拟自测题（非模拟 PPT 原题）</a>、<a href="#ch02-s102">14. 复习清单与思维导图</a>、<a href="#ch02-relations">15. 表运算、条件和连接名称怎样分层理解</a>、<a href="#ch02-reference">16. 本章概念与方法速查</a></td>
+</tr>
+</tbody></table></div>
+<p>需要回查某个知识点时，可直接点击表中的对应章节；先尝试解释例子的结果，再对照正文。</p>
+<h2 id="ch02-s001">怎样阅读本章</h2>
+<p>本章要解决一个实际问题：<strong>已经把数据放进几张表以后，怎样从中找出自己想要的信息？</strong> 例如，学校想查“计算机系有哪些学生”“谁同时选了数据库和程序设计”“谁选完了计算机系的全部课程”。</p>
+<p>你会先看到业务背景和具体数据，再看到手工处理过程，最后才把过程写成公式。公式中的符号会在使用时解释。暂时记不住符号没有关系，先能说清“输入是什么、做了什么、结果是什么”。</p>
+<p>“关系模型”是用有明确规则的表组织数据的方法；“关系代数”是对这些表进行筛选、组合和计算的一套形式化写法。这里的“代数”不要求你先学高等数学，可以先把它理解为写给数据表的操作说明书。</p>
+<h2 id="ch02-s002">重点标记说明</h2>
+<ul>
+<li><strong>【课程总结PPT重点知识点】</strong> ：总结 PPT 明确列出的关系代数表达式、基本运算、附加运算和扩展运算，需要理解并能独立做题。</li>
+<li><strong>【课程PPT补充知识点】</strong> ：关系模型术语和关系演算等基础或扩展内容。虽然总结 PPT 没有单独点名，本章仍逐步解释，方便初学者阅读。</li>
+<li><strong>【教学用示例】</strong> ：为解释概念而编写的场景、数据和练习，不是原模拟题的数据。</li>
+<li><strong>原模拟题</strong>保留在第 12 节，并区分 PPT 原答案和本章补充的分析。</li>
+</ul>
+<h2 id="ch02-s003">学习目标与路线</h2>
+<p>建议顺着“认识表 → 理解标识和约束 → 学会单个运算 → 组合运算 → 完成综合题”的顺序学习。</p>
+<ol>
+<li>能用一张实际数据表解释关系、属性、元组、域、模式与实例。</li>
+<li>能说明为什么需要码，并区分超码、候选码、主码和外码。</li>
+<li>能逐项读懂关系代数公式，解释每一步产生的表。</li>
+<li>能用选择、投影、集合运算、连接、除法及扩展运算完成查询。</li>
+<li>能理解关系演算怎样用条件描述答案。</li>
+<li>能独立分析本章银行综合题，并检查自己的结果。</li>
+</ol>
+<h2 id="ch02-s004">1. 【课程PPT补充知识点】从学生选课业务认识关系模型</h2>
+<h3 id="ch02-s005">1.1 先交代背景：学校需要保存哪些事情</h3>
+<p>假设学校在安排一个学期的课程，需要保存三类信息：</p>
+<ul>
+<li>学生是谁，属于哪个系；</li>
+<li>开设了哪些课程，每门课由哪个系开设，有多少学分；</li>
+<li>哪个学生选了哪门课，成绩是多少。</li>
+</ul>
+<p>我们用三张表分别记录这三类事情：<code>student</code> 是学生表，<code>course</code> 是课程表，<code>takes</code> 是选课表。英文表名只是给表取的名字；知道它们的中文含义，就能理解后面的计算。</p>
+<p><strong>以下均为教学用数据。</strong> 为了只讨论本章的运算，约定：一名学生在这组数据中对同一门课程至多有一条选课记录，暂不考虑跨学期重修；学号不重复，课程号不重复。表中所有成绩都已确定。</p>
+<h3 id="ch02-s006">1.2 学生表：每一行代表一个学生</h3>
+<p><code>student</code> 的三个字段如下。“字段”在这里就是一列数据。</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>字段名</th>
+<th>中文含义</th>
+<th>本例中的用法</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>SID</td>
+<td>学号</td>
+<td>S1、S2 等是用于区分学生的编号</td>
+</tr>
+<tr>
+<td>name</td>
+<td>姓名</td>
+<td>记录学生的名字</td>
+</tr>
+<tr>
+<td>dept</td>
+<td>所在系</td>
+<td>记录学生属于哪个系</td>
+</tr>
+</tbody></table></div>
+<p>学生表的全部数据：</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>SID</th>
+<th>name</th>
+<th>dept</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>S1</td>
+<td>小林</td>
+<td>计算机</td>
+</tr>
+<tr>
+<td>S2</td>
+<td>小周</td>
+<td>数学</td>
+</tr>
+<tr>
+<td>S3</td>
+<td>小陈</td>
+<td>计算机</td>
+</tr>
+<tr>
+<td>S4</td>
+<td>小吴</td>
+<td>数学</td>
+</tr>
+</tbody></table></div>
+<p>例如第一行表达一个完整事实：“学号 S1 的学生叫小林，属于计算机系。”</p>
+<h3 id="ch02-s007">1.3 课程表：每一行代表一门课程</h3>
+<p><code>course</code> 的字段含义如下：</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>字段名</th>
+<th>中文含义</th>
+<th>本例中的用法</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>CID</td>
+<td>课程号</td>
+<td>C1、C2 等是用于区分课程的编号</td>
+</tr>
+<tr>
+<td>title</td>
+<td>课程名称</td>
+<td>如数据库、程序设计</td>
+</tr>
+<tr>
+<td>dept</td>
+<td>开课系</td>
+<td>说明哪个系开设这门课</td>
+</tr>
+<tr>
+<td>credits</td>
+<td>学分</td>
+<td>用数字表示课程学分</td>
+</tr>
+</tbody></table></div>
+<p>课程表的全部数据：</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>CID</th>
+<th>title</th>
+<th>dept</th>
+<th>credits</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>C1</td>
+<td>数据库</td>
+<td>计算机</td>
+<td>3</td>
+</tr>
+<tr>
+<td>C2</td>
+<td>程序设计</td>
+<td>计算机</td>
+<td>4</td>
+</tr>
+<tr>
+<td>C3</td>
+<td>高数</td>
+<td>数学</td>
+<td>5</td>
+</tr>
+</tbody></table></div>
+<p>注意，学生表和课程表都使用了 <code>dept</code> 这个字段名。前者表示“学生属于哪个系”，后者表示“课程由哪个系开设”。学生可以跨系选课，因此这两个系不一定相同。后面学习连接时，这个区别十分重要。</p>
+<h3 id="ch02-s008">1.4 选课表：每一行代表一次选课</h3>
+<p><code>takes</code> 的字段含义如下：</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>字段名</th>
+<th>中文含义</th>
+<th>本例中的用法</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>SID</td>
+<td>学号</td>
+<td>表示谁选了这门课，对应学生表中的 SID</td>
+</tr>
+<tr>
+<td>CID</td>
+<td>课程号</td>
+<td>表示选的是哪门课，对应课程表中的 CID</td>
+</tr>
+<tr>
+<td>score</td>
+<td>成绩</td>
+<td>本例使用 0 至 100 的分数</td>
+</tr>
+</tbody></table></div>
+<p>选课表的全部数据：</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>SID</th>
+<th>CID</th>
+<th>score</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>S1</td>
+<td>C1</td>
+<td>80</td>
+</tr>
+<tr>
+<td>S1</td>
+<td>C2</td>
+<td>90</td>
+</tr>
+<tr>
+<td>S2</td>
+<td>C1</td>
+<td>70</td>
+</tr>
+<tr>
+<td>S3</td>
+<td>C2</td>
+<td>60</td>
+</tr>
+</tbody></table></div>
+<p>逐行读一遍：小林选了数据库，成绩 80；小林还选了程序设计，成绩 90；小周选了数据库，成绩 70；小陈选了程序设计，成绩 60。</p>
+<p>小吴 S4 没有出现在选课表中，表示他在本例中没有选课；高数 C3 没有出现在选课表中，表示这门课还没有人选。<strong>没有选课记录</strong>与<strong>选了课但成绩尚未确定</strong>是两种不同情况。</p>
+<blockquote>
+<p><strong>全章的数据约定</strong>：除非明确说“另设一个独立场景”，学校例子都使用上面三张表。每个例子独立从这些原始数据出发，不会继承上一个例子假想的修改。教学表为了便于阅读有排列顺序，但结果的行顺序不影响关系代数答案。</p>
+</blockquote>
+<h3 id="ch02-s009">1.5 把熟悉的“表、行、列”换成专业术语</h3>
+<p>现在再介绍术语，它们都能在刚才的表中找到对应物。</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>术语</th>
+<th>通俗解释</th>
+<th>对应本例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>属性 attribute</td>
+<td>表中的一列，用来描述某一种信息</td>
+<td><code>SID</code>、<code>name</code>、<code>dept</code></td>
+</tr>
+<tr>
+<td>元组 tuple</td>
+<td>表中的一行，按各列顺序放好的一组值</td>
+<td><code>(S1, 小林, 计算机)</code></td>
+</tr>
+<tr>
+<td>域 domain</td>
+<td>某一列允许采用的值的范围或集合</td>
+<td><code>score</code> 允许 0 至 100 的分数</td>
+</tr>
+<tr>
+<td>关系 relation</td>
+<td>在关系模型中，符合规则的一张数据表</td>
+<td>当前学生表中的四行数据组成一个关系</td>
+</tr>
+</tbody></table></div>
+<p>“集合”可以先理解为一批不同的元素组成的整体。例如学号集合 <code>{S1,S2}</code> 包含 S1、S2 两个元素；写成 <code>{S2,S1}</code> 不改变集合，重复写一次 S1 也不会多出一个新元素。</p>
+<p>关系把<strong>完整的一行</strong>当作集合中的一个元素，因此纯关系模型具有这些特点：</p>
+<ul>
+<li><strong>同一关系不能有完全相同的重复行。</strong> 但两行可以在某几列上相同，例如小林和小陈的所在系相同。</li>
+<li><strong>行没有固定的先后意义。</strong> 把小周放在第一行，不会改变“有哪些学生”。</li>
+<li><strong>一行中的每个值必须对应正确的属性。</strong> 不能把姓名填到学号列。书写一行时按表头给出的列顺序读取。</li>
+<li>后面介绍的纯关系代数沿用这种集合规则。SQL 是下一章使用的数据库语言，它的查询结果默认可以保留重复行，不能直接照搬这里的去重结论。</li>
+</ul>
+<h3 id="ch02-s010">1.6 关系模式与关系实例：表的结构和表里的数据</h3>
+<p>学校增加一个新生时，需要在学生表中增加一行，但表头仍然是学号、姓名、所在系。这说明“表的结构”和“当前有哪些数据”是两件事。</p>
+<p><strong>关系模式</strong>描述一张表叫什么、有哪些属性，并配有类型和约束等结构信息。常见简写是：</p>
+<pre><code class="language-text">student(SID, name, dept)
+</code></pre>
+<p>逐项读：<code>student</code> 是关系名；括号中依次列出三个属性。这个简写没有列出具体学生，也没有完整列出所有约束。</p>
+<p>教材也会抽象写成 <code>R(A1,A2,...,An)</code>：R 代表任意关系名，A1 至 An 代表它的各个属性，省略号表示中间还可以有其他属性。它是一种通用模板。</p>
+<p><strong>关系实例</strong>是某一时刻表中实际存放的数据。第 1.2 节的四行就是一个学生关系实例；新生入学后，实例改变了，模式可以不变。如果学校新增“联系电话”一列，模式也改变了。</p>
+<p>把学生、课程、选课这几张表的结构及相互约束放在一起，就是<strong>关系数据库模式</strong>；把这些表在某一时刻的全部实际数据放在一起，就是<strong>关系数据库实例</strong>。</p>
+<h2 id="ch02-s011">2. 【课程PPT补充知识点】域、原子性与空值</h2>
+<p>认识列名还不够：成绩能填什么、一个格子能否放多个课程号、分数未知时怎么表示，都会影响查询的含义。本节先明确输入数据的约定，再进入运算，避免让公式在未经说明的空值或多值数据上工作。</p>
+<h3 id="ch02-s012">2.1 域：不是随便什么值都能填进一列</h3>
+<p>学校规定成绩使用 0 至 100 的整数。于是 80 是合法成绩，150 超出范围，“计算机”也不是一个成绩。这里允许填写的全部值，就构成成绩列的域。</p>
+<p>域比“存的是数字还是文字”更具体：数字类型说明值的表示方式，业务规则还可以进一步限制范围。设计表时说明域，是为了避免把不合理的数据当成正常数据保存。</p>
+<h3 id="ch02-s013">2.2 原子性：一个格子中保存一个可作为整体使用的值</h3>
+<p>假设有人把小林所选课程全部塞进学生表的一个格子，写成“C1,C2”。以后查“谁选了 C2”时，就得先拆开这个字符串；给一门课记录成绩也不方便。</p>
+<p>本章的做法是用选课表保存两行：</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>SID</th>
+<th>CID</th>
+<th>score</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>S1</td>
+<td>C1</td>
+<td>80</td>
+</tr>
+<tr>
+<td>S1</td>
+<td>C2</td>
+<td>90</td>
+</tr>
+</tbody></table></div>
+<p>一个格子保存一个课程号，一行表达一次选课。关系模型把这种在当前模型中当作一个整体使用的值称为<strong>原子值</strong>。在通常的入门关系模型中，每个格子都存原子值，是满足<strong>第一范式</strong>的基本要求。范式可以先理解为“检查表结构是否符合某些规则的标准”；第一范式简称 <strong>1NF</strong>，详细设计理论见第 5 单元。</p>
+<p>这里的“不可再分”取决于模型怎样使用这个值，不是说文字在物理上不能拆成字符。例如姓名“小林”虽然有两个字，系统仍可把它当一个姓名值。若要分别管理多个电话号码，通常应将号码逐个保存，而不是把多个号码拼在一个格子里。</p>
+<p>不要把这里的“属性值原子性”与第 6 单元的“事务原子性”混淆：前者讨论一个格子存什么，后者讨论一组业务操作是否全部成功或全部撤销。</p>
+<h3 id="ch02-s014">2.3 NULL：目前没有一个可用的普通值</h3>
+<p><strong>另设一个独立场景</strong>：学校正在公布一次考试成绩，小周确实得了 0 分，小陈的试卷还没批完。这里用临时成绩表 <code>grade_notice(SID,score)</code> 表示公布情况；它不是对本章选课表的修改。</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>SID</th>
+<th>score</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>S1</td>
+<td>80</td>
+</tr>
+<tr>
+<td>S2</td>
+<td>0</td>
+</tr>
+<tr>
+<td>S3</td>
+<td>NULL</td>
+</tr>
+</tbody></table></div>
+<p><code>NULL</code> 是一个空值标记。在这张表里，它表示“小陈的分数目前未知”。它与 0 不同：0 是已经确定的分数，NULL 表示还不知道分数是多少。它也与空字符串不同：空字符串是长度为零的一段文字，不能自动表示“未知”。</p>
+<p>空值在其他业务中还可能表示“没有这个值”或“此项不适用”。例如一个人没有中间名，与名字尚未登记，是不同原因；如果都用 NULL 表示，阅读数据的人需要结合业务背景判断。</p>
+<p>如果问“小陈是否及格，即 <code>score &gt;= 60</code>”，目前既不能说真，也不能说假，只能说<strong>未知</strong>，记为 <code>UNKNOWN</code>。这就引出了<strong>三值逻辑</strong>：条件的结果除了真 <code>TRUE</code>、假 <code>FALSE</code>，还可能是未知 <code>UNKNOWN</code>。</p>
+<p>本章前面的普通选择等运算先按没有空值的数据理解；第 7 节再说明带空值的扩展规则。下一章 SQL 中判断空值要用 <code>IS NULL</code>，不能用普通的 <code>= NULL</code> 比较。</p>
+<h2 id="ch02-s015">3. 【课程PPT补充知识点，但属于解题基础】为什么需要码</h2>
+<p>查询和修改都需要知道“哪一行代表同一个对象”。姓名在当前样本里不同，不代表未来不会重名。因此码来自业务上的识别规则，而不是从几行现有数据猜出来的规律。下面按“能否识别”和“是否有多余属性”分两步判断。</p>
+<h3 id="ch02-s016">3.1 从“怎样找到同一个学生”开始</h3>
+<p>教务员要修改某个学生的资料时，必须知道自己改的是谁。如果只凭姓名，遇到同名学生就可能认错人。因此学校给每名学生分配不重复的学号。</p>
+<p><strong>唯一标识</strong>的意思是：拿到这个值或这组值，至多对应一个对象。在本例的业务规则中，学号可以唯一标识学生；姓名虽然在当前四行里没有重复，学校却没有保证以后永不重名，因此不能据此把姓名认定为唯一标识。</p>
+<p>数据库把用于唯一标识一行的一组属性称为<strong>码</strong>，也常称为“键”。</p>
+<h3 id="ch02-s017">3.2 超码：这组属性足以区分行</h3>
+<p>看学生表：</p>
+<ul>
+<li>只给出 <code>SID=S1</code>，就能确定是小林这一行，所以属性集合 <code>{SID}</code> 是一个<strong>超码</strong>。</li>
+<li>同时给出 <code>SID=S1</code>、<code>name=小林</code>，也能确定这一行，所以 <code>{SID,name}</code> 也是超码。</li>
+</ul>
+<p>花括号这里表示“一个属性集合”，不是一行实际数据。超码只要求能区分行，允许其中带着多余属性。</p>
+<h3 id="ch02-s018">3.3 候选码：足以区分，而且没有多余属性</h3>
+<p><code>{SID,name}</code> 中的姓名可以去掉，剩下 SID 仍能区分行。因此它不是最精简的识别方式。</p>
+<p><strong>候选码是没有多余属性的超码。</strong> 正式定义中的“最小”是指：删去其中任何一个属性，就不能保证唯一标识。它不是在所有候选码之间比赛谁的属性数最少。</p>
+<p>如果集合 B 中的每个元素都在集合 A 中，就说 B 是 A 的<strong>子集</strong>；B 还比 A 少一些元素时，叫<strong>真子集</strong>。例如 <code>{SID}</code> 是 <code>{SID,name}</code> 的真子集。因此“候选码的任何真子集都不是超码”，就是“再删属性就不够用了”。</p>
+<p>在本例的规则下，<code>{SID}</code> 是学生表的候选码；<code>{SID,name}</code> 不是候选码。</p>
+<h3 id="ch02-s019">3.4 主码与复合码</h3>
+<p>一张表可能存在不止一种没有冗余的唯一标识方法。这些方法都可以是候选码；设计者从中选一个作为主要标识，称为<strong>主码</strong>或<strong>主键</strong>。</p>
+<p>主码可以由多个属性组成，这种码叫<strong>复合码</strong>。为什么有时必须用多个属性？看选课表：</p>
+<ul>
+<li>学号 S1 出现两次，因为小林选了两门课，所以 SID 单独不能区分选课记录。</li>
+<li>课程号 C1 出现两次，因为不止一个学生选了数据库，所以 CID 单独也不行。</li>
+<li>两列放在一起，<code>(S1,C1)</code> 表示“小林选数据库”这一条记录，<code>(S1,C2)</code> 表示另一条。</li>
+</ul>
+<p>按本章“一名学生对同一门课至多一条选课记录”的约定，<code>{SID,CID}</code> 是选课表的候选码，可以选为复合主码。若业务允许跨学期重修，同一组合就可能重复，届时必须重新设计码，不能照搬本例。</p>
+<h3 id="ch02-s020">3.5 外码与参照完整性：表之间怎样对上号</h3>
+<p>选课表的一行 <code>(S2,C1,70)</code> 没有再次写“小周”和“数据库”，而是使用 S2、C1 到其他表中查找对应对象。</p>
+<ul>
+<li><code>takes.SID</code> 中的值对应 <code>student.SID</code>，所以它是引用学生表的<strong>外码</strong>。</li>
+<li><code>takes.CID</code> 中的值对应 <code>course.CID</code>，所以它是引用课程表的外码。</li>
+</ul>
+<p>这里的点号表示“某张表的某一列”，例如 <code>takes.SID</code> 就是“选课表中的学号”，不是小数点。</p>
+<p>外码要求引用关系中非空的引用值能在被引用关系的相应键中找到。这种保证叫<strong>参照完整性</strong>。例如选课表若出现 S9，但学生表没有 S9，就会产生“一个不存在的学生选了课”的问题。</p>
+<p>外码在引用表中可以重复：S1 可以出现在多条选课记录中。外码与主码回答不同的问题：主码用来区分本表的行，外码用来把本表的记录关联到别的记录。实际 SQL 的外码声明和空值规则见第 3 单元。</p>
+<h2 id="ch02-s021">4. 【课程PPT补充知识点】查询语言与公式的读法</h2>
+<p>接下来会出现符号、条件和完整表达式。先分清它们的层次：一个运算符说明动作，下标说明动作参数，括号中的关系提供输入；把它们组合起来才构成一个完整查询表达。关系演算则从答案必须满足的条件出发描述同一类问题。</p>
+<h3 id="ch02-s022">4.1 “查询”是在问什么</h3>
+<p>查询就是从已经保存的数据中取得信息。例如“找出计算机系学生姓名”，输出应是小林、小陈，而不是直接改变学生表。</p>
+<p><strong>关系代数</strong>把处理过程写成若干表运算：先按所在系筛行，再留下姓名列。它是<strong>过程式</strong>的，指表达式说明了逻辑上的操作步骤；这不意味着数据库必须按这个顺序实际扫描磁盘。</p>
+<p><strong>关系演算</strong>直接描述答案满足的条件，例如“返回属于计算机系的学生姓名”，不先指定筛行和选列的操作序列。这样的表达方式叫<strong>声明式</strong>。SQL 更接近声明式语言。</p>
+<p>在只讨论本章经典查询运算，并将关系演算限制为后文介绍的安全表达式时，两者能表达相同的一类查询。“表达能力相同”不表示写法相同，也不包含后来所有聚集、递归等扩展功能。</p>
+<h3 id="ch02-s023">4.2 本章统一采用什么记号</h3>
+<p>后面每种运算都会单独解释。先记住几条书写约定：</p>
+<ul>
+<li>表名放在括号内时，表示把这张表交给外面的运算处理。</li>
+<li><code>运算符_{说明}(表名)</code> 中的 <code>_{说明}</code> 是纯文本中表示“下标”的方式，写在纸上时可以把说明写在符号下方。它不是要输入数据库的程序代码。</li>
+<li>两层括号表示先做里面的运算，再把结果交给外面的运算。</li>
+<li>一个运算的结果仍然是一张关系表，所以可以继续交给另一个运算使用。结果没有任何行时，仍然保留应有的列。</li>
+<li>除非明确引入扩展，公式采用集合规则，重复的完整行只保留一次。</li>
+<li>第 5 至第 7 节的教学公式只计算结果表，不会删除或修改本章的原始表。</li>
+</ul>
+<h2 id="ch02-s024">5. 【课程总结PPT重点知识点】六种基本关系代数运算</h2>
+<p>本节学习六种基础操作。可以把它们看成积木：先会用一块积木，之后才能读懂由多种运算组合出的表达式。</p><figure class="learning-figure" id="ch02-viz-operations"><h4>同一份数据：筛行、选列与连接产生什么</h4><p class="fig-intro">每种操作都从正文原始数据独立出发。先比较输出的一行代表谁，再看行列变化。</p><label for="ch02-viz-operations-select">选择要观察的情形</label><select id="ch02-viz-operations-select" aria-controls="ch02-viz-operations-output"><option value="0">选择：计算机系学生</option><option value="1">投影：有哪些不同的系</option><option value="2">内连接：姓名加选课</option><option value="3">左外连接：全部学生都要</option></select><div class="fig-output" id="ch02-viz-operations-output" aria-live="polite"></div></figure>
+<h3 id="ch02-s025">5.1 选择 σ：按条件留下整行</h3>
+<p>如果需要的数据已经在一张表里，第一步通常是判断哪些记录符合要求。这里的“选择”只回答保留哪些行，条件里的等号、并且等只是判断方法，不能把它们当成另一种表运算。</p>
+<h4 id="ch02-s026">先看学校要查什么</h4>
+<p>教务员想找出所有计算机系学生，保留他们的学号、姓名和所在系。输入是第 1.2 节的学生表：</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>SID</th>
+<th>name</th>
+<th>dept</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>S1</td>
+<td>小林</td>
+<td>计算机</td>
+</tr>
+<tr>
+<td>S2</td>
+<td>小周</td>
+<td>数学</td>
+</tr>
+<tr>
+<td>S3</td>
+<td>小陈</td>
+<td>计算机</td>
+</tr>
+<tr>
+<td>S4</td>
+<td>小吴</td>
+<td>数学</td>
+</tr>
+</tbody></table></div>
+<p>手工检查：小林、小陈的所在系符合条件，保留；小周、小吴属于数学系，排除。这里每次保留或排除的是整行。</p>
+<h4 id="ch02-s027">把这个动作写成公式</h4>
+<pre><code class="language-text">σ_{dept=&#39;计算机&#39;}(student)
+</code></pre>
+<ul>
+<li><code>σ</code> 读作“西格玛”，表示<strong>选择</strong>，也就是按条件筛行。</li>
+<li><code>dept=&#39;计算机&#39;</code> 是条件。等号要求这一列的值与“计算机”相同；单引号表示里面是文字值。</li>
+<li>下标部分写明条件，括号内的 <code>student</code> 写明输入表。</li>
+</ul>
+<p>结果为：</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>SID</th>
+<th>name</th>
+<th>dept</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>S1</td>
+<td>小林</td>
+<td>计算机</td>
+</tr>
+<tr>
+<td>S3</td>
+<td>小陈</td>
+<td>计算机</td>
+</tr>
+</tbody></table></div>
+<p>结果仍有三列。选择改变哪些行被返回，不负责决定只显示哪些列，也不会把不符合条件的人从原表删除。</p>
+<h4 id="ch02-s028">条件不止一个时怎样读</h4>
+<p>学校还可能问“找出选了数据库且成绩至少 75 分的选课记录”。数据库的课程号是 C1，所以条件有两个：CID 是 C1，score 至少为 75。</p>
+<pre><code class="language-text">σ_{CID=&#39;C1&#39; ∧ score&gt;=75}(takes)
+</code></pre>
+<p>这里 <code>&gt;=</code> 表示“大于或等于”；<code>∧</code> 表示“并且”，要求两项都成立。选课表里 S1 的 C1 成绩为 80，符合；S2 的 C1 成绩为 70，不符合；两条 C2 记录的课程不符合。因此结果只有：</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>SID</th>
+<th>CID</th>
+<th>score</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>S1</td>
+<td>C1</td>
+<td>80</td>
+</tr>
+</tbody></table></div>
+<p>以后还会遇到 <code>∨</code>，读作“或者”，至少一个条件成立即可；<code>¬</code> 读作“非”，把一个条件否定。例如 <code>¬(CID=&#39;C1&#39;)</code> 表示课程号不是 C1。复杂条件应用括号明确范围。</p>
+<h3 id="ch02-s029">5.2 投影 π：只保留需要的列</h3>
+<p>筛选完后，名单往往不需要全部字段。投影只留下要显示的列，并按保留下来的完整行去重。这一步可能让两名同系学生变成一个系名，因此必须先确定结果的一行究竟代表学生，还是一个系。</p>
+<h4 id="ch02-s030">为什么还需要另一种操作</h4>
+<p>现在教务员只想看学生所在系的名单，不需要学号和姓名。手工做法是取出每一行的 dept 值：</p>
+<pre><code class="language-text">计算机、数学、计算机、数学
+</code></pre>
+<p>如果问的是“有哪些不同的系”，同一个系只应列一次。关系代数把<strong>保留指定列，并按完整结果行去重</strong>的操作叫作投影。</p>
+<pre><code class="language-text">π_{dept}(student)
+</code></pre>
+<p><code>π</code> 读作“派”，表示投影；下标 dept 表示保留所在系这一列；输入仍是 student。</p>
+<p>结果为：</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>dept</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>计算机</td>
+</tr>
+<tr>
+<td>数学</td>
+</tr>
+</tbody></table></div>
+<p>去重发生在保留列之后，因为删除学号和姓名后，两个“计算机”成为完全相同的结果行。</p>
+<h4 id="ch02-s031">要多列时，去重比较的是整行</h4>
+<p>如果保留学号和所在系：</p>
+<pre><code class="language-text">π_{SID,dept}(student)
+</code></pre>
+<p>逗号分隔要保留的属性，结果为：</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>SID</th>
+<th>dept</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>S1</td>
+<td>计算机</td>
+</tr>
+<tr>
+<td>S2</td>
+<td>数学</td>
+</tr>
+<tr>
+<td>S3</td>
+<td>计算机</td>
+</tr>
+<tr>
+<td>S4</td>
+<td>数学</td>
+</tr>
+</tbody></table></div>
+<p>S1 和 S3 的系相同，但整行不同，因此都保留。投影不是“每一列分别去重”。</p>
+<h4 id="ch02-s032">把选择和投影接起来</h4>
+<p>题目变成“只列出计算机系学生的姓名”。手工顺序是先筛出计算机系学生，再取姓名列：</p>
+<pre><code class="language-text">π_{name}(σ_{dept=&#39;计算机&#39;}(student))
+</code></pre>
+<p>从最内层读：student 提供原始表；选择得到第 5.1 节的两行；外层投影取出姓名。</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>name</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>小林</td>
+</tr>
+<tr>
+<td>小陈</td>
+</tr>
+</tbody></table></div>
+<p>若先执行 <code>π_{name}(student)</code>，中间结果已经没有 dept 列，后面就无法再根据 dept 筛选。因此写长表达式时，需要检查下一步要用的列是否仍然存在。</p>
+<h3 id="ch02-s033">5.3 并 ∪：出现在任一名单中就保留</h3>
+<h4 id="ch02-s034">先把两份名单做出来</h4>
+<p>学校想找“选过数据库或者程序设计的学生学号”。数据库是 C1，程序设计是 C2。</p>
+<p>先筛出 C1 的选课记录，再投影学号，得到第一份名单。本节把它简称为 R：</p>
+<pre><code class="language-text">π_{SID}(σ_{CID=&#39;C1&#39;}(takes))
+</code></pre>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>R 的 SID</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>S1</td>
+</tr>
+<tr>
+<td>S2</td>
+</tr>
+</tbody></table></div>
+<p>按相同步骤筛 C2，得到第二份名单，简称 S：</p>
+<pre><code class="language-text">π_{SID}(σ_{CID=&#39;C2&#39;}(takes))
+</code></pre>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>S 的 SID</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>S1</td>
+</tr>
+<tr>
+<td>S3</td>
+</tr>
+</tbody></table></div>
+<p>R、S 只是本节给中间结果取的短名字；S 这个表名与 S1 这个学号不要混淆。</p>
+<p>把两份名单合起来，S1 虽在两边都有，也只列一次：</p>
+<pre><code class="language-text">R ∪ S
+</code></pre>
+<p><code>∪</code> 表示并，读作“R 与 S 的并集”。结果为：</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>SID</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>S1</td>
+</tr>
+<tr>
+<td>S2</td>
+</tr>
+<tr>
+<td>S3</td>
+</tr>
+</tbody></table></div>
+<p>完整表达式是：</p>
+<pre><code class="language-text">π_{SID}(σ_{CID=&#39;C1&#39;}(takes))
+∪
+π_{SID}(σ_{CID=&#39;C2&#39;}(takes))
+</code></pre>
+<p>上下排版只为方便阅读，两边仍分别是一个完整的输入。</p>
+<h4 id="ch02-s035">什么叫并相容</h4>
+<p>并运算是在合并同一种结构的记录，要求两边<strong>并相容</strong>：</p>
+<ol>
+<li>列数相同；</li>
+<li>对应位置的列取值类型或域相容，能作为同一种属性比较。</li>
+</ol>
+<p>采用按属性名识别列的记法时，还应让对应列名一致，必要时用第 5.6 节的更名。</p>
+<p>本例两边都是“学号”这一列，满足要求。若左边是“学号、姓名”两列，右边只有“学号”一列，就不能直接并。即使学号和课程号都用字符串表示、形式上可能可比较，把它们并成一份“编号”名单也通常不符合题意：<strong>形式合法与业务有意义需要分别检查。</strong></p>
+<h3 id="ch02-s036">5.4 集合差 −：在第一份名单中，但不在第二份中</h3>
+<p>沿用刚才两份名单：R 是选 C1 的 S1、S2，S 是选 C2 的 S1、S3。学校现在想找“选了数据库，但没选程序设计的学生”。</p>
+<p>从 R 出发：S1 在 S 中出现，排除；S2 不在 S 中，保留。</p>
+<pre><code class="language-text">R − S
+</code></pre>
+<p><code>−</code> 在这里是两个关系的集合差，不是对学号做数值减法。结果为：</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>SID</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>S2</td>
+</tr>
+</tbody></table></div>
+<p>展开后是：</p>
+<pre><code class="language-text">π_{SID}(σ_{CID=&#39;C1&#39;}(takes))
+−
+π_{SID}(σ_{CID=&#39;C2&#39;}(takes))
+</code></pre>
+<p>差运算也要求并相容，否则无法判断两边是不是“同一条记录”。它还具有方向：<code>S − R</code> 会得到 S3，表示选 C2 但未选 C1 的学生，与原题不同。</p>
+<h3 id="ch02-s037">5.5 笛卡尔积 ×：列出所有可能配对</h3>
+<h4 id="ch02-s038">为什么要先列“可能配对”</h4>
+<p>学校想检查选了数据库的学生是否也选了另一门指定课程。检查前，可以先列出“每名待检查学生，与每门待检查课程”的所有组合。</p>
+<p>待检查学生是上一节的 R：</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>SID</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>S1</td>
+</tr>
+<tr>
+<td>S2</td>
+</tr>
+</tbody></table></div>
+<p>待检查课程在这个例子中指定为 C1、C2，用 Q 表示这份课程号名单：</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>CID</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>C1</td>
+</tr>
+<tr>
+<td>C2</td>
+</tr>
+</tbody></table></div>
+<p>将 R 的每一行与 Q 的每一行拼接，得到：</p>
+<pre><code class="language-text">R × Q
+</code></pre>
+<p><code>×</code> 读作“笛卡尔积”，结果为：</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>SID</th>
+<th>CID</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>S1</td>
+<td>C1</td>
+</tr>
+<tr>
+<td>S1</td>
+<td>C2</td>
+</tr>
+<tr>
+<td>S2</td>
+<td>C1</td>
+</tr>
+<tr>
+<td>S2</td>
+<td>C2</td>
+</tr>
+</tbody></table></div>
+<p>R 有 2 行，Q 有 2 行，所以有 <code>2×2=4</code> 种组合。这里公式中的乘号作用于表，计算行数时的乘号才是普通乘法。</p>
+<p><strong>这张结果表表示可能配对，不自动表示实际选课。</strong> 原选课表没有 S2 选 C2 的记录，但笛卡尔积仍会产生这个组合。后面学习连接和除法时，会继续判断哪些组合应该保留。</p>
+<p>若两张输入表有同名列，应先更名，或用表名限定来区分。本例一边只有 SID、一边只有 CID，没有重名问题。</p>
+<h3 id="ch02-s039">5.6 更名 ρ：给中间结果或列换一个名字</h3>
+<h4 id="ch02-s040">名字为什么会影响读题</h4>
+<p>某份名单的学号列叫 SID，另一份叫 student_no。两列都表示学号，但如果要统一比较，就需要先让名字对齐。另一个常见需求是让同一张表在公式中出现两次，并给两份副本不同的名字，以便说明“谁与谁比较”。</p>
+<p>更名用 <code>ρ</code> 表示，读作“柔”（rho）。它改变名称，不改变实际值。</p>
+<p>仍使用 R 中的 S1、S2，现在把关系名改为 eligible，把列名改为 student_no：</p>
+<pre><code class="language-text">ρ_{eligible(student_no)}(R)
+</code></pre>
+<p>逐项读：输入是 R；新关系名为 eligible，意思是“符合条件的名单”；括号内的 student_no 是新的列名。结果为：</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>student_no</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>S1</td>
+</tr>
+<tr>
+<td>S2</td>
+</tr>
+</tbody></table></div>
+<p>若有多列，按原表的列顺序列出对应的新名字，不能漏列或把含义对应错。</p>
+<p>只需要给关系换名时，可写 <code>ρ_{A}(student)</code>，表示将学生表的这一份输入称为 A。这样的名字只在表达式中用于区分和引用，不会去修改存储中的原表。将同一张表的两份副本进行连接，称为<strong>自连接</strong>；“自”指数据来自同一张表，不表示把每行机械地与自己配对。</p>
+<h2 id="ch02-s041">6. 【课程总结PPT重点知识点】附加关系代数运算</h2>
+<p>“附加”表示这些操作可以用基本运算表达，但单独命名后更容易读。它们同样属于课程重点。</p>
+<h3 id="ch02-s042">6.1 交 ∩：两份名单中都出现</h3>
+<p>学校想找“数据库和程序设计两门都选了”的学生。仍使用第 5.3 节的两份学号名单：</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>R：选 C1</th>
+<th>S：选 C2</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>S1</td>
+<td>S1</td>
+</tr>
+<tr>
+<td>S2</td>
+<td>S3</td>
+</tr>
+</tbody></table></div>
+<p>上表的两列是两份独立名单的并排展示，不表示同行学生之间另有联系。</p>
+<p>逐个检查：S1 在两边都有；S2 只在 R；S3 只在 S。因此：</p>
+<pre><code class="language-text">R ∩ S
+</code></pre>
+<p><code>∩</code> 表示交集，结果只有：</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>SID</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>S1</td>
+</tr>
+</tbody></table></div>
+<p>交也要求并相容，因为要判断两边的完整记录是否相同。</p>
+<p>教材写成基本运算时，常给出：</p>
+<pre><code class="language-text">R ∩ S = R − (R − S)
+</code></pre>
+<p>等号表示两边得到相同结果。先算括号内的 <code>R−S</code>，得到“只选 C1 的 S2”；再从 R 中去掉 S2，留下 S1。这样就用两次差运算实现了交。</p>
+<h3 id="ch02-s043">6.2 θ 连接与等值连接：配对之后按条件留下正确组合</h3>
+<p>姓名和成绩分在不同的表中，不能直接并排摆放就认定对应。连接要先规定哪些两行表示同一项业务事实，再把这些行的列组合到一起。θ 连接说的是配对条件；“等值”进一步说明条件只采用相等比较。</p>
+<h4 id="ch02-s044">先说明要查什么</h4>
+<p>教务员想让每条选课记录同时显示学生姓名。姓名在 student，选课和成绩在 takes，因此需要把两张表关联起来。</p>
+<p>两表关联的业务依据是学号：选课记录中的 SID，与学生表的 SID 相等时，才表示同一个学生。S2 的成绩不能拼到 S1 的姓名旁边。</p>
+<h4 id="ch02-s045">手工怎样配对</h4>
+<p>学生表有 4 行，选课表有 4 行，全部可能组合有 16 个。用下表逐一标出是否保留；列标题中的“学号/课程号”只是标识对应的选课行：</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>学生行</th>
+<th>takes 中 S1/C1</th>
+<th>takes 中 S1/C2</th>
+<th>takes 中 S2/C1</th>
+<th>takes 中 S3/C2</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>S1 小林</td>
+<td>保留</td>
+<td>保留</td>
+<td>排除</td>
+<td>排除</td>
+</tr>
+<tr>
+<td>S2 小周</td>
+<td>排除</td>
+<td>排除</td>
+<td>保留</td>
+<td>排除</td>
+</tr>
+<tr>
+<td>S3 小陈</td>
+<td>排除</td>
+<td>排除</td>
+<td>排除</td>
+<td>保留</td>
+</tr>
+<tr>
+<td>S4 小吴</td>
+<td>排除</td>
+<td>排除</td>
+<td>排除</td>
+<td>排除</td>
+</tr>
+</tbody></table></div>
+<p>只留下两边学号相同的 4 个组合。</p>
+<h4 id="ch02-s046">公式怎样写</h4>
+<pre><code class="language-text">student ⋈_{student.SID=takes.SID} takes
+</code></pre>
+<p><code>⋈</code> 是连接符号；下标中的条件说明什么样的两行可以拼在一起。点号用于区分两张表中同名的 SID。</p>
+<p>这种“按一个条件连接”的操作一般称为 <strong>θ 连接</strong>。<code>θ</code> 读作“西塔”，是“连接条件”的占位记号，不是表中真实存在的一列。对于本例，θ 就是 <code>student.SID=takes.SID</code>。</p>
+<p>用基本运算表示为：</p>
+<pre><code class="language-text">r ⋈_{θ} s = σ_{θ}(r × s)
+</code></pre>
+<p>r、s 表示任意两张输入关系；右边先列所有配对，再按 θ 筛选。这是在解释连接的逻辑含义，不要求真实数据库必须先生成巨大中间表。</p>
+<p>因为本例的条件使用等号，所以它也是<strong>等值连接</strong>。结果暂时保留两边的 SID，用限定名区分：</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>student.SID</th>
+<th>name</th>
+<th>dept</th>
+<th>takes.SID</th>
+<th>CID</th>
+<th>score</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>S1</td>
+<td>小林</td>
+<td>计算机</td>
+<td>S1</td>
+<td>C1</td>
+<td>80</td>
+</tr>
+<tr>
+<td>S1</td>
+<td>小林</td>
+<td>计算机</td>
+<td>S1</td>
+<td>C2</td>
+<td>90</td>
+</tr>
+<tr>
+<td>S2</td>
+<td>小周</td>
+<td>数学</td>
+<td>S2</td>
+<td>C1</td>
+<td>70</td>
+</tr>
+<tr>
+<td>S3</td>
+<td>小陈</td>
+<td>计算机</td>
+<td>S3</td>
+<td>C2</td>
+<td>60</td>
+</tr>
+</tbody></table></div>
+<p>S1 有两行，因为他选了两门课；S4 没有行，因为没有选课记录与他匹配。</p>
+<p>若题目进一步要求成绩至少 80，可把 θ 写成 <code>student.SID=takes.SID ∧ score&gt;=80</code>。此时既比较学号，又比较成绩，结果只保留上表的前两行。θ 连接允许这样的条件；只使用相等条件的情况才称为等值连接。</p>
+<h3 id="ch02-s047">6.3 自然连接：同名列自动对齐，只留一份</h3>
+<h4 id="ch02-s048">为什么还要介绍一种连接</h4>
+<p>前一节两边的 SID 明明表示同一个学号，结果却显示了两列。自然连接把常见的“按同名列相等进行匹配，并合并重复的同名列”写得更简洁。</p>
+<pre><code class="language-text">student ⋈ takes
+</code></pre>
+<p>没有写下标条件时，这里表示<strong>自然连接</strong>。两表共同的属性名只有 SID，因此自动要求两边 SID 相等，输出中只留一个 SID：</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>SID</th>
+<th>name</th>
+<th>dept</th>
+<th>CID</th>
+<th>score</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>S1</td>
+<td>小林</td>
+<td>计算机</td>
+<td>C1</td>
+<td>80</td>
+</tr>
+<tr>
+<td>S1</td>
+<td>小林</td>
+<td>计算机</td>
+<td>C2</td>
+<td>90</td>
+</tr>
+<tr>
+<td>S2</td>
+<td>小周</td>
+<td>数学</td>
+<td>C1</td>
+<td>70</td>
+</tr>
+<tr>
+<td>S3</td>
+<td>小陈</td>
+<td>计算机</td>
+<td>C2</td>
+<td>60</td>
+</tr>
+</tbody></table></div>
+<p>这张表与前面的等值连接表达相同的配对关系，只是同名连接列合并了。自然连接要检查的是<strong>所有同名属性</strong>，不是自动判断哪一列是主码。</p>
+<h4 id="ch02-s049">一个容易查错的例子</h4>
+<p>如果直接写 <code>student ⋈ course</code>，两表的共同属性名是 dept，于是匹配条件变成“学生所在系等于课程开课系”。结果为：</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>SID</th>
+<th>name</th>
+<th>dept</th>
+<th>CID</th>
+<th>title</th>
+<th>credits</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>S1</td>
+<td>小林</td>
+<td>计算机</td>
+<td>C1</td>
+<td>数据库</td>
+<td>3</td>
+</tr>
+<tr>
+<td>S1</td>
+<td>小林</td>
+<td>计算机</td>
+<td>C2</td>
+<td>程序设计</td>
+<td>4</td>
+</tr>
+<tr>
+<td>S2</td>
+<td>小周</td>
+<td>数学</td>
+<td>C3</td>
+<td>高数</td>
+<td>5</td>
+</tr>
+<tr>
+<td>S3</td>
+<td>小陈</td>
+<td>计算机</td>
+<td>C1</td>
+<td>数据库</td>
+<td>3</td>
+</tr>
+<tr>
+<td>S3</td>
+<td>小陈</td>
+<td>计算机</td>
+<td>C2</td>
+<td>程序设计</td>
+<td>4</td>
+</tr>
+<tr>
+<td>S4</td>
+<td>小吴</td>
+<td>数学</td>
+<td>C3</td>
+<td>高数</td>
+<td>5</td>
+</tr>
+</tbody></table></div>
+<p>这可以回答“每名学生所在系开设了哪些课程”，却不能回答“学生实际选了哪些课”。例如小吴没有选课，仍会与数学系的高数配对；小周跨系选的数据库反而不在结果中。</p>
+<p>自然连接只认列名和相等条件，不理解业务。写它之前，先列出共同列名，再确认这些相等要求是否都是题目需要的。若没有共同属性，自然连接会退化为所有行的配对，即笛卡尔积。</p>
+<h3 id="ch02-s050">6.4 除 ÷：检查是否覆盖要求中的每一项</h3>
+<p>找到一条匹配只能说明“某一项满足”，不能说明全部课程都满足。除运算把要求名单作为独立输入，再逐项检查某个学生是否缺课。它的输出是合格对象的名单，不是给每条选课做数值除法。</p><figure class="learning-figure" id="ch02-viz-division"><h4>“全部选过”逐步改成“没有缺课”</h4><p class="fig-intro">此图采用标准除法候选 S1/S2/S3，要求名单为 C1/C2；小吴没有出现在左侧配对中。</p><label for="ch02-viz-division-select">选择要观察的情形</label><select id="ch02-viz-division-select" aria-controls="ch02-viz-division-output"><option value="0">1. 列出应有组合</option><option value="1">2. 减去实际配对，找到缺项</option><option value="2">3. 去掉有缺项的候选者</option><option value="3">4. 要求名单为空：检查候选范围</option></select><div class="fig-output" id="ch02-viz-division-output" aria-live="polite"></div></figure>
+<h4 id="ch02-s051">业务背景：怎样判断“全部选过”</h4>
+<p>计算机系开了数据库 C1、程序设计 C2。学校想找出“这两门课全部选过”的学生。只选其中一门不够，选课记录里出现过一次也不够。</p>
+<p>先从 course 中筛计算机系课程，再只保留课程号，得到必须覆盖的课程名单：</p>
+<pre><code class="language-text">π_{CID}(σ_{dept=&#39;计算机&#39;}(course))
+</code></pre>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>CID</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>C1</td>
+</tr>
+<tr>
+<td>C2</td>
+</tr>
+</tbody></table></div>
+<p>再从 takes 中只保留学号和课程号。成绩与“是否选过”无关，可以去掉：</p>
+<pre><code class="language-text">π_{SID,CID}(takes)
+</code></pre>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>SID</th>
+<th>CID</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>S1</td>
+<td>C1</td>
+</tr>
+<tr>
+<td>S1</td>
+<td>C2</td>
+</tr>
+<tr>
+<td>S2</td>
+<td>C1</td>
+</tr>
+<tr>
+<td>S3</td>
+<td>C2</td>
+</tr>
+</tbody></table></div>
+<h4 id="ch02-s052">先不写公式，逐个检查</h4>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>学生</th>
+<th>是否有 C1</th>
+<th>是否有 C2</th>
+<th>是否全部满足</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>S1 小林</td>
+<td>有</td>
+<td>有</td>
+<td>是</td>
+</tr>
+<tr>
+<td>S2 小周</td>
+<td>有</td>
+<td>无</td>
+<td>否，缺 C2</td>
+</tr>
+<tr>
+<td>S3 小陈</td>
+<td>无</td>
+<td>有</td>
+<td>否，缺 C1</td>
+</tr>
+<tr>
+<td>S4 小吴</td>
+<td>无</td>
+<td>无</td>
+<td>否，两门都缺</td>
+</tr>
+</tbody></table></div>
+<p>所以答案是 S1。</p>
+<p>关系代数用<strong>除运算</strong>表达这种“一个对象必须与要求名单中的每一项都有对应记录”的查询：</p>
+<pre><code class="language-text">π_{SID,CID}(takes)
+÷
+π_{CID}(σ_{dept=&#39;计算机&#39;}(course))
+</code></pre>
+<p>左边提供“谁选了什么”的配对，右边提供“必须选哪些”的名单。<code>÷</code> 在这里不计算分数，不是把两张表的行数相除；它筛出完整覆盖右侧名单的左侧对象。</p>
+<p>输出只保留学号：</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>SID</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>S1</td>
+</tr>
+</tbody></table></div>
+<p>若还要姓名，需要用 S1 回到 student 中找到小林；第 8 节会把这一步写进完整表达式。</p>
+<h4 id="ch02-s053">读懂通用写法 r(X,Y) ÷ s(Y)</h4>
+<ul>
+<li>r 是保存配对的关系，X 表示结果要保留的属性，Y 表示需要逐项检查的属性。</li>
+<li>s 是要求名单，包含的属性正好是 Y，并与 r 中对应属性相容。</li>
+<li>X、Y 都可以代表一组属性，不一定只是一列。</li>
+<li>在本例中 X 是 SID，Y 是 CID，结果回答“哪些 SID 与 s 中每一个 CID 都在 r 中配对出现”。</li>
+</ul>
+<p>候选的 X 值取自 r 中已经出现的 X。这个范围在右侧名单为空时尤其重要，后面会单独说明。</p>
+<h4 id="ch02-s054">为什么除可以用基本运算实现</h4>
+<p>把“全部满足”换成“没有缺少的项”更容易理解。对本例，先列出配对表中出现过的候选学生 S1、S2、S3，再让每人都与 C1、C2 配一次，得到“如果全部选齐，应该有的组合”：</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>SID</th>
+<th>CID</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>S1</td>
+<td>C1</td>
+</tr>
+<tr>
+<td>S1</td>
+<td>C2</td>
+</tr>
+<tr>
+<td>S2</td>
+<td>C1</td>
+</tr>
+<tr>
+<td>S2</td>
+<td>C2</td>
+</tr>
+<tr>
+<td>S3</td>
+<td>C1</td>
+</tr>
+<tr>
+<td>S3</td>
+<td>C2</td>
+</tr>
+</tbody></table></div>
+<p>从这张“应该有”的表减去真实配对表，剩下缺少的组合：</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>SID</th>
+<th>CID</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>S2</td>
+<td>C2</td>
+</tr>
+<tr>
+<td>S3</td>
+<td>C1</td>
+</tr>
+</tbody></table></div>
+<p>投影学号，得到不合格名单 S2、S3；再从候选名单 S1、S2、S3 中减去它们，得到 S1。</p>
+<p>以上过程对应通用公式：</p>
+<pre><code class="language-text">r ÷ s = π_X(r) − π_X((π_X(r) × s) − r)
+</code></pre>
+<p>从内向外逐项读：</p>
+<ol>
+<li><code>π_X(r)</code> 列出候选对象。</li>
+<li><code>π_X(r) × s</code> 列出每个候选对象应有的全部配对。</li>
+<li>再减去 r，找出缺失的配对。</li>
+<li>对缺失配对投影 X，找出至少缺一项的对象。</li>
+<li>从全部候选对象中减去这些对象，剩下全部满足者。</li>
+</ol>
+<h4 id="ch02-s055">如果要求名单为空，答案范围是什么</h4>
+<p>假设某个系这一学期没有开任何课，那么“找出一门该系课程是这个学生没选的”就找不到反例。因此按数学上的全称条件，所有候选对象都满足要求。</p>
+<p>但是标准除运算的候选对象来自左侧配对表：本例的 takes 只出现 S1、S2、S3，所以空除数时返回这三人，不会自动带上从未选课的 S4。若题目要求以<strong>所有注册学生</strong>为候选者，应从 student 取候选名单，再用前面的“排除缺失者”思路计算。这不是符号细节，而是题目要求的对象范围不同。</p>
+<h3 id="ch02-s056">6.5 赋值 ←：给中间结果取名</h3>
+<p>除法公式已经比较长。为了避免反复抄写，我们可以给每一步的结果取一个名字：</p>
+<pre><code class="language-text">required_courses ← π_{CID}(σ_{dept=&#39;计算机&#39;}(course))
+enrolled_pairs ← π_{SID,CID}(takes)
+qualified_students ← enrolled_pairs ÷ required_courses
+</code></pre>
+<p><code>←</code> 读作“将右侧结果记为左侧名字”。这里三个名字分别表示必选课程、实际选课配对、全部满足要求的学生。</p>
+<p>因此 required_courses 有 C1、C2 两行，enrolled_pairs 有本节展示的四条配对，qualified_students 只有 S1。后面可以直接使用这些名字，而不必重新写长公式。</p>
+<p>赋值在这里是给结果命名，类似在草稿纸上把一个算式结果记为 A。它不是 SQL 的数据更新命令，不会把原始 course 或 takes 改掉。</p>
+<h2 id="ch02-s057">7. 【课程总结PPT重点知识点】扩展关系代数运算</h2>
+<p>前面的运算擅长筛行、选列和组合数据。实际查询还可能需要“计算新值”“统计每组数据”“保留没有匹配项的人”。本节介绍相应扩展，并说明空值出现后需要增加的规则。</p>
+<h3 id="ch02-s058">7.1 广义投影：输出列可以是算出来的</h3>
+<h4 id="ch02-s059">学校现在需要什么结果</h4>
+<p>假设教师想查看“每条选课记录的成绩加 5 分后是多少”，用来比较一种假想的加分方案。这只是教学用计算，不实际修改已保存的成绩；本例原成绩最高为 90，加 5 后也没有超过 100。</p>
+<p>普通投影只能保留已有列。<strong>广义投影</strong>允许输出一个由已有列计算出的值：</p>
+<pre><code class="language-text">π_{SID,CID,(score+5)→adjusted_score}(takes)
+</code></pre>
+<ul>
+<li>SID、CID 说明这条成绩属于谁和哪门课。</li>
+<li><code>score+5</code> 表示读取这一行的原成绩再加 5。</li>
+<li><code>→adjusted_score</code> 表示把算出的这一列命名为 adjusted_score，中文可读为“调整后成绩”。</li>
+<li>这里的右箭头给结果列命名，与上一节给整张中间表取名的左箭头 <code>←</code> 不同。</li>
+</ul>
+<p>逐行算出结果：</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>SID</th>
+<th>CID</th>
+<th>adjusted_score</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>S1</td>
+<td>C1</td>
+<td>85</td>
+</tr>
+<tr>
+<td>S1</td>
+<td>C2</td>
+<td>95</td>
+</tr>
+<tr>
+<td>S2</td>
+<td>C1</td>
+<td>75</td>
+</tr>
+<tr>
+<td>S3</td>
+<td>C2</td>
+<td>65</td>
+</tr>
+</tbody></table></div>
+<p>例如第一行从 80 算出 85，第二行从 90 算出 95。输出没有 score 列，是因为公式没有要求保留它；若想同时显示原成绩，也应把 score 列写进投影列表。计算结果仍是一张查询结果表，原选课表中的 80、90、70、60 没有改变。</p>
+<h3 id="ch02-s060">7.2 聚集与分组 γ：先分堆，再对每堆算一个结果</h3>
+<h4 id="ch02-s061">为什么单纯筛行不能回答统计问题</h4>
+<p>学校想知道“每个系开了几门课，平均每门课多少学分”。输入是课程表：</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>CID</th>
+<th>title</th>
+<th>dept</th>
+<th>credits</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>C1</td>
+<td>数据库</td>
+<td>计算机</td>
+<td>3</td>
+</tr>
+<tr>
+<td>C2</td>
+<td>程序设计</td>
+<td>计算机</td>
+<td>4</td>
+</tr>
+<tr>
+<td>C3</td>
+<td>高数</td>
+<td>数学</td>
+<td>5</td>
+</tr>
+</tbody></table></div>
+<p>我们先按照开课系把行分堆：计算机系一堆，包含 C1、C2；数学系一堆，只有 C3。这样的过程叫<strong>分组</strong>。</p>
+<p>再对每堆的多条数据计算一个统计值，这叫<strong>聚集</strong>：</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>组</th>
+<th>包含的课程</th>
+<th>课程数</th>
+<th>平均学分的计算</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>计算机</td>
+<td>C1、C2</td>
+<td>2</td>
+<td>(3+4)÷2=3.5</td>
+</tr>
+<tr>
+<td>数学</td>
+<td>C3</td>
+<td>1</td>
+<td>5÷1=5</td>
+</tr>
+</tbody></table></div>
+<p>聚集运算用 <code>γ</code> 表示，读作“伽马”。本章统一采用下面这种下标写法：</p>
+<pre><code class="language-text">γ_{dept; count(CID)→course_count, avg(credits)→avg_credits}(course)
+</code></pre>
+<p>逐项读：</p>
+<ul>
+<li>括号中的 course 是输入表。</li>
+<li>分号前的 dept 是分组依据：dept 相同的行放到同一组。</li>
+<li>分号后列出每组要计算什么。</li>
+<li><code>count(CID)</code> 表示统计该组课程号的数量；course_count 是结果列名。</li>
+<li><code>avg(credits)</code> 表示计算该组学分的平均数；avg_credits 是结果列名。</li>
+<li>逗号分开两项统计计算；箭头仍表示给算出的列命名。</li>
+</ul>
+<p>结果为：</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>dept</th>
+<th>course_count</th>
+<th>avg_credits</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>计算机</td>
+<td>2</td>
+<td>3.5</td>
+</tr>
+<tr>
+<td>数学</td>
+<td>1</td>
+<td>5</td>
+</tr>
+</tbody></table></div>
+<p>每一行现在代表一个系的统计结果，不再代表一门课程。因此结果没有某一门课的 title，也不能把课程明细列随意塞进来。</p>
+<p>课件有时把分组属性写在 γ 左侧，例如 <code>dept γ_{avg(credits)→avg_credits}(course)</code>。它与本章 <code>γ_{dept;avg(credits)→avg_credits}(course)</code> 表达同一种分组思路；读题时先找到分组属性和统计表达式。</p>
+<h4 id="ch02-s062">常用聚集函数各在算什么</h4>
+<p>“函数”在这里就是一种命名好的计算规则。以计算机系的两个学分 3、4 为输入：</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>写法</th>
+<th>中文意思</th>
+<th>本例计算</th>
+<th>结果</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>sum(credits)</td>
+<td>求和</td>
+<td>3+4</td>
+<td>7</td>
+</tr>
+<tr>
+<td>avg(credits)</td>
+<td>求平均值</td>
+<td>(3+4)÷2</td>
+<td>3.5</td>
+</tr>
+<tr>
+<td>count(CID)</td>
+<td>计数</td>
+<td>数一数 C1、C2</td>
+<td>2</td>
+</tr>
+<tr>
+<td>min(credits)</td>
+<td>求最小值</td>
+<td>比较 3、4</td>
+<td>3</td>
+</tr>
+<tr>
+<td>max(credits)</td>
+<td>求最大值</td>
+<td>比较 3、4</td>
+<td>4</td>
+</tr>
+</tbody></table></div>
+<p>平均值的分母是组内参与计算的数值个数，不是全表的行数。重复出现的数值也会按其所在行参与统计，例如两个不同课程各为 3 学分，求和是 6；不要先把数值去重再求和。</p>
+<h4 id="ch02-s063">不分组时会怎样</h4>
+<p>若学校想求所有选课成绩的平均数，就把 takes 整张表作为一组：</p>
+<pre><code class="language-text">γ_{avg(score)→avg_score}(takes)
+</code></pre>
+<p>平均分为 <code>(80+90+70+60)÷4=75</code>，结果是一行一列：</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>avg_score</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>75</td>
+</tr>
+</tbody></table></div>
+<p>没有写分组属性，表示统计整个输入。这里按四条选课记录计算，小林的两门课各参与一次；它不是“先求每名学生平均分，再对学生求平均”。</p>
+<h4 id="ch02-s064">统计后还要筛选怎么办</h4>
+<p>如果只要“至少开了两门课的系”，先把完整统计表记为 dept_stats，再筛其 course_count：</p>
+<pre><code class="language-text">dept_stats ← γ_{dept;count(CID)→course_count,avg(credits)→avg_credits}(course)
+σ_{course_count&gt;=2}(dept_stats)
+</code></pre>
+<p>结果为：</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>dept</th>
+<th>course_count</th>
+<th>avg_credits</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>计算机</td>
+<td>2</td>
+<td>3.5</td>
+</tr>
+</tbody></table></div>
+<p>course_count 是聚集之后才产生的列，不能在原 course 上直接用它做选择。这解释了为什么必须先统计、再筛统计结果。</p>
+<h3 id="ch02-s065">7.3 外连接：没有匹配项，也可以保留</h3>
+<h4 id="ch02-s066">背景：学校不想漏掉没选课的学生</h4>
+<p>前面的 <code>student ⋈ takes</code> 只有四行选课结果，小吴 S4 被排除了，因为他没有匹配的选课记录。这种只保留成功配对的连接，通常也叫<strong>内连接</strong>。</p>
+<p>现在学校需要“全部学生的选课情况，包括没选课的学生”。我们仍然按 SID 匹配，但找不到右侧选课记录时，也要给左侧学生保留一行。这样的操作叫<strong>左外连接</strong>：</p>
+<pre><code class="language-text">student ⟕ takes
+</code></pre>
+<p><code>⟕</code> 是左外连接符号。这里按自然连接的方式匹配同名 SID，并保留左侧 student 的全部学生。没有匹配的右侧列使用 NULL 补齐：</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>SID</th>
+<th>name</th>
+<th>dept</th>
+<th>CID</th>
+<th>score</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>S1</td>
+<td>小林</td>
+<td>计算机</td>
+<td>C1</td>
+<td>80</td>
+</tr>
+<tr>
+<td>S1</td>
+<td>小林</td>
+<td>计算机</td>
+<td>C2</td>
+<td>90</td>
+</tr>
+<tr>
+<td>S2</td>
+<td>小周</td>
+<td>数学</td>
+<td>C1</td>
+<td>70</td>
+</tr>
+<tr>
+<td>S3</td>
+<td>小陈</td>
+<td>计算机</td>
+<td>C2</td>
+<td>60</td>
+</tr>
+<tr>
+<td>S4</td>
+<td>小吴</td>
+<td>数学</td>
+<td>NULL</td>
+<td>NULL</td>
+</tr>
+</tbody></table></div>
+<p>S4 的学号、姓名和所在系来自左表，所以都有值；课程号与成绩需要来自右表，但没有相应选课行，因此补空。这里的 NULL 表示没有匹配选课信息，不表示小吴得了 0 分。</p>
+<p>“保留左表所有行”不等于结果行数一定与左表相同。S1 匹配了两条选课记录，仍会展开为两行；本例 4 名学生产生了 5 行结果。</p>
+<h4 id="ch02-s067">右外连接与全外连接</h4>
+<ul>
+<li><strong>右外连接 <code>⟖</code></strong>：保留右边关系的每一行；左边没有匹配时补 NULL。</li>
+<li><strong>全外连接 <code>⟗</code></strong>：两侧没有匹配的行都保留，缺失的一侧补 NULL。</li>
+</ul>
+<p>对于同一组输入，<code>student ⟖ takes</code> 保留每条选课记录。由于 takes 中每条记录都能找到已有学生，本例结果与内连接相同：</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>SID</th>
+<th>name</th>
+<th>dept</th>
+<th>CID</th>
+<th>score</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>S1</td>
+<td>小林</td>
+<td>计算机</td>
+<td>C1</td>
+<td>80</td>
+</tr>
+<tr>
+<td>S1</td>
+<td>小林</td>
+<td>计算机</td>
+<td>C2</td>
+<td>90</td>
+</tr>
+<tr>
+<td>S2</td>
+<td>小周</td>
+<td>数学</td>
+<td>C1</td>
+<td>70</td>
+</tr>
+<tr>
+<td>S3</td>
+<td>小陈</td>
+<td>计算机</td>
+<td>C2</td>
+<td>60</td>
+</tr>
+</tbody></table></div>
+<p><code>student ⟗ takes</code> 则与前面的五行左外连接结果相同：多出的未匹配行只有 S4，没有“找不到学生的选课记录”。</p>
+<p>这只是本组数据的结果，不表示右外连接总等于内连接，或全外连接总等于左外连接。区别取决于哪一侧存在未匹配行。</p>
+<h3 id="ch02-s068">7.4 空值扩展：筛选和统计要怎样理解</h3>
+<p>外连接可能产生原表没有的 NULL 占位值；成绩未公布也可能带来 NULL。此时只会普通真/假的规则不够：要区分“明确不符合”和“还不能判断”，再看筛选与统计各怎样处理。</p>
+<h4 id="ch02-s069">普通比较遇到未知值时不能硬作判断</h4>
+<p>左外连接的 S4 行中 score 为 NULL。如果接着选择 <code>score&gt;=60</code>，S4 的比较结果是 UNKNOWN。采用 SQL 风格的空值扩展时，选择只保留 TRUE 的行，因此 S4 不会被保留。</p>
+<p>这说明即使前一步使用左外连接，后一步的筛选仍可能排除补空行。如果目标是“保留及格者和没有选课的人”，需要明确写出两类条件；判空条件的具体符号可能随教材扩展记法不同，在 SQL 中使用 <code>IS NULL</code>。</p>
+<h4 id="ch02-s070">UNKNOWN 与 FALSE 为什么不一样</h4>
+<p>继续使用第 2 节“成绩还没公布”的独立场景。如果既不知道小陈是否及格，也就不能断言“小陈不及格”。因此否定 UNKNOWN 仍是 UNKNOWN。</p>
+<p>遇到组合条件，可用下面的小表理解关键规则：</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>条件组合</th>
+<th>结果</th>
+<th>原因</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>TRUE ∧ UNKNOWN</td>
+<td>UNKNOWN</td>
+<td>还不知道第二项，不能确认两项都真</td>
+</tr>
+<tr>
+<td>FALSE ∧ UNKNOWN</td>
+<td>FALSE</td>
+<td>已有一项为假，不可能两项都真</td>
+</tr>
+<tr>
+<td>TRUE ∨ UNKNOWN</td>
+<td>TRUE</td>
+<td>已有一项为真，足以满足“或者”</td>
+</tr>
+<tr>
+<td>FALSE ∨ UNKNOWN</td>
+<td>UNKNOWN</td>
+<td>能否成立仍取决于未知的那项</td>
+</tr>
+<tr>
+<td>¬UNKNOWN</td>
+<td>UNKNOWN</td>
+<td>不知道真伪，否定后仍不知道</td>
+</tr>
+</tbody></table></div>
+<p>本节是带空值的扩展语义，不能拿普通二值逻辑的直觉强行替代。</p>
+<h4 id="ch02-s071">空值参加统计时的约定</h4>
+<p>本章涉及 NULL 的聚集例子采用常见的 SQL 风格规则：</p>
+<ul>
+<li><code>count(*)</code> 中的星号表示统计行数，包括含 NULL 的行。</li>
+<li><code>count(score)</code> 只数 score 有非空值的行。</li>
+<li>sum、avg、min、max 忽略对应列中的 NULL。</li>
+<li>对没有可用数值的输入，count 返回 0，其他上述聚集通常返回 NULL；没有分组属性的整体聚集仍可返回一行统计结果，而分组聚集在完全没有输入行时没有实际组可输出。</li>
+</ul>
+<p>例如成绩为 80、0、NULL 时，行数是 3，非空成绩数是 2，平均分是 <code>(80+0)÷2=40</code>。不能把 NULL 当作 0 算成 <code>80÷3</code>。经典关系代数本身没有规定这些 SQL 扩展细节，考试应结合课程给定的语义。</p>
+<h2 id="ch02-s072">8. 【课程总结PPT重点知识点】怎样把一句题意写成表达式</h2>
+<h3 id="ch02-s073">8.1 完整示范：谁选完了计算机系的全部课程</h3>
+<p>题目要求输出学生学号和姓名。背景仍为第 1 节学校数据，计算机系有 C1、C2，学生可以跨系选课。这里要求的是“选了该系全部课程”，没有额外要求学生本人属于计算机系。</p>
+<p>先做四步：</p>
+<ol>
+<li>从 course 筛出计算机系课程，投影课程号。</li>
+<li>从 takes 保留学号与课程号，得到实际配对。</li>
+<li>用除法找出全部满足要求的学生学号。</li>
+<li>把合格学号与 student 按 SID 匹配，取出姓名。</li>
+</ol>
+<p>写成中间结果：</p>
+<pre><code class="language-text">required_courses ← π_{CID}(σ_{dept=&#39;计算机&#39;}(course))
+enrolled_pairs ← π_{SID,CID}(takes)
+qualified_students ← enrolled_pairs ÷ required_courses
+qualified_details ← qualified_students ⋈ student
+answer ← π_{SID,name}(qualified_details)
+</code></pre>
+<p>每一步的表结构及结果如下：</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>中间结果</th>
+<th>包含的列</th>
+<th>本例的全部行</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>required_courses</td>
+<td>CID</td>
+<td>C1；C2</td>
+</tr>
+<tr>
+<td>enrolled_pairs</td>
+<td>SID、CID</td>
+<td>(S1,C1)；(S1,C2)；(S2,C1)；(S3,C2)</td>
+</tr>
+<tr>
+<td>qualified_students</td>
+<td>SID</td>
+<td>S1</td>
+</tr>
+<tr>
+<td>qualified_details</td>
+<td>SID、name、dept</td>
+<td>(S1,小林,计算机)</td>
+</tr>
+<tr>
+<td>answer</td>
+<td>SID、name</td>
+<td>(S1,小林)</td>
+</tr>
+</tbody></table></div>
+<p>最后答案：</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>SID</th>
+<th>name</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>S1</td>
+<td>小林</td>
+</tr>
+</tbody></table></div>
+<p>每一步都能说清以后，再合并成长表达式：</p>
+<pre><code class="language-text">π_{SID,name}
+(
+  (π_{SID,CID}(takes) ÷ π_{CID}(σ_{dept=&#39;计算机&#39;}(course)))
+  ⋈ student
+)
+</code></pre>
+<p>换行不改变计算含义。先算最深层括号，再计算除法、连接，最后投影。做题时完全可以先写中间表版本，以减少漏条件或提前丢列。</p>
+<h3 id="ch02-s074">8.2 写公式前，先回答五个问题</h3>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>要问的问题</th>
+<th>为什么需要问</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>最终要返回哪些列？</td>
+<td>防止答成学号却忘记姓名，或多带无关信息</td>
+</tr>
+<tr>
+<td>这些列和条件分别在哪张表？</td>
+<td>决定需要哪些输入关系</td>
+</tr>
+<tr>
+<td>表之间靠什么关联？</td>
+<td>防止漏连接条件或误用同名列</td>
+</tr>
+<tr>
+<td>题目说“至少一个”“没有”还是“全部”？</td>
+<td>这三种要求对应不同逻辑</td>
+</tr>
+<tr>
+<td>每步之后还剩哪些列？</td>
+<td>防止后续条件引用已被投影掉的列</td>
+</tr>
+</tbody></table></div>
+<p>可以把题目关键词当提示，但不能机械套公式：</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>题意</th>
+<th>可以考虑的操作</th>
+<th>仍要检查什么</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>至少有一次符合的记录</td>
+<td>筛选、连接，再投影对象</td>
+<td>重复记录怎样去重</td>
+</tr>
+<tr>
+<td>同时属于两份名单</td>
+<td>交</td>
+<td>两边是否都是同一种对象</td>
+</tr>
+<tr>
+<td>有 A，但没有 B</td>
+<td>差</td>
+<td>左右方向是否写反</td>
+</tr>
+<tr>
+<td>满足要求名单中的每一项</td>
+<td>除或排除缺失者</td>
+<td>候选对象范围、要求名单是否为空</td>
+</tr>
+<tr>
+<td>每组平均值达到条件</td>
+<td>分组聚集后再选择</td>
+<td>分组依据与平均值分母</td>
+</tr>
+</tbody></table></div>
+<h3 id="ch02-s075">8.3 怎样用反例检查自己的答案</h3>
+<p>如果公式看起来正确，可以拿一个边界人物检查：小吴 S4 没选课，你的“没有选课学生”查询能否找出他？小周 S2 跨系选了数据库，你的“所有选课记录”查询有没有误把他排除？</p>
+<p>尤其不要随意把 <code>student ⋈ takes ⋈ course</code> 当作正确的三表选课查询。第一步已有学生所在系 dept，第二步又会匹配 course 的开课系 dept，导致跨系选课被排除。需要两种系都出现在结果时，应先把课程表的 dept 更名，例如：</p>
+<pre><code class="language-text">course_info ← ρ_{course_info(CID,title,course_dept,credits)}(course)
+student ⋈ takes ⋈ course_info
+</code></pre>
+<p>course_info 与原课程表的数值和列顺序相同，只把第三列名称改为 course_dept。于是两条连接分别依靠 SID 和 CID，不再额外要求两种系相同。完整结果为：</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>SID</th>
+<th>name</th>
+<th>dept</th>
+<th>CID</th>
+<th>score</th>
+<th>title</th>
+<th>course_dept</th>
+<th>credits</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>S1</td>
+<td>小林</td>
+<td>计算机</td>
+<td>C1</td>
+<td>80</td>
+<td>数据库</td>
+<td>计算机</td>
+<td>3</td>
+</tr>
+<tr>
+<td>S1</td>
+<td>小林</td>
+<td>计算机</td>
+<td>C2</td>
+<td>90</td>
+<td>程序设计</td>
+<td>计算机</td>
+<td>4</td>
+</tr>
+<tr>
+<td>S2</td>
+<td>小周</td>
+<td>数学</td>
+<td>C1</td>
+<td>70</td>
+<td>数据库</td>
+<td>计算机</td>
+<td>3</td>
+</tr>
+<tr>
+<td>S3</td>
+<td>小陈</td>
+<td>计算机</td>
+<td>C2</td>
+<td>60</td>
+<td>程序设计</td>
+<td>计算机</td>
+<td>4</td>
+</tr>
+</tbody></table></div>
+<p>这样小周的跨系选课也被正确保留。</p>
+<h2 id="ch02-s076">9. 【课程PPT补充知识点】元组关系演算</h2>
+<p>前面用一串运算说明怎样得到答案。现在换一个角度：能不能直接规定答案必须满足哪些条件？元组关系演算让变量代表一整行，再用条件约束它。这种改变的是表达方式，不是把同一批学生换成另一种数据。</p>
+<h3 id="ch02-s077">9.1 先说答案的条件，再学符号</h3>
+<p>还是查询“计算机系的全部学生记录”。用普通话说，答案应该包含这样的行：</p>
+<blockquote>
+<p>这行必须来自 student，而且这一行的 dept 必须是“计算机”。</p>
+</blockquote>
+<p><strong>元组关系演算</strong>用一个变量代表整行数据，再描述这行必须满足的条件。所谓“变量”，就是暂时代表某个对象的名字；这里用 t，t 可以依次代表学生表里的不同记录。</p>
+<pre><code class="language-text">{ t | t ∈ student ∧ t[dept]=&#39;计算机&#39; }
+</code></pre>
+<p>这次花括号是一种<strong>集合描述</strong>，含义是“收集所有满足后面条件的 t”。它与前面 <code>σ_{条件}</code> 中表示下标的花括号用途不同。</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>记号</th>
+<th>本例中的意思</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>t</td>
+<td>一个待检查的完整学生元组</td>
+</tr>
+<tr>
+<td>竖线 <code>|</code></td>
+<td>“使得”或“满足下面条件”</td>
+</tr>
+<tr>
+<td><code>t ∈ student</code></td>
+<td>t 必须是学生表中的一行；<code>∈</code> 读作“属于”</td>
+</tr>
+<tr>
+<td><code>t[dept]</code></td>
+<td>取 t 这一行的 dept 值</td>
+</tr>
+<tr>
+<td><code>∧</code></td>
+<td>两个条件都要成立</td>
+</tr>
+</tbody></table></div>
+<p>对四行学生逐一检查，只有 S1、S3 满足，所以结果为：</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>SID</th>
+<th>name</th>
+<th>dept</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>S1</td>
+<td>小林</td>
+<td>计算机</td>
+</tr>
+<tr>
+<td>S3</td>
+<td>小陈</td>
+<td>计算机</td>
+</tr>
+</tbody></table></div>
+<p>它与选择公式得到同一张结果表。两者的区别在表达方式：选择公式指定运算，演算公式列出结果必须满足的条件。</p>
+<p>教材写成 <code>{t | P(t)}</code> 时，<code>P(t)</code> 就是“关于 t 的判断条件”的通用名字，不是另一个需要查找的数据表。</p>
+<h3 id="ch02-s078">9.2 “存在一条记录”怎样写</h3>
+<p>学校想找出至少选了数据库 C1 的学生，并返回完整学生资料。普通话条件是：</p>
+<blockquote>
+<p>学生 t 属于 student，并且能在 takes 中找到某一行 u；u 的学号与 t 相同，课程号为 C1。</p>
+</blockquote>
+<p>“存在某一行”用 <code>∃</code> 表示：</p>
+<pre><code class="language-text">{ t |
+  t ∈ student
+  ∧ ∃u (
+      u ∈ takes
+      ∧ u[SID]=t[SID]
+      ∧ u[CID]=&#39;C1&#39;
+    )
+}
+</code></pre>
+<p><code>∃u</code> 读作“存在一个 u”。括号中的要求必须由<strong>同一条</strong>选课记录 u 同时满足：来自 takes、学号正确、课程正确。</p>
+<p>逐人检查：</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>学生</th>
+<th>能找到的 C1 选课记录</th>
+<th>是否返回</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>S1 小林</td>
+<td>(S1,C1,80)</td>
+<td>是</td>
+</tr>
+<tr>
+<td>S2 小周</td>
+<td>(S2,C1,70)</td>
+<td>是</td>
+</tr>
+<tr>
+<td>S3 小陈</td>
+<td>没有</td>
+<td>否</td>
+</tr>
+<tr>
+<td>S4 小吴</td>
+<td>没有</td>
+<td>否</td>
+</tr>
+</tbody></table></div>
+<p>最终结果：</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>SID</th>
+<th>name</th>
+<th>dept</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>S1</td>
+<td>小林</td>
+<td>计算机</td>
+</tr>
+<tr>
+<td>S2</td>
+<td>小周</td>
+<td>数学</td>
+</tr>
+</tbody></table></div>
+<p>t 决定返回哪一行，称为<strong>自由变量</strong>；u 被 <code>∃</code> 引入，只在相关条件中用于寻找证据，称为<strong>受约束变量</strong>。这里不返回 u 的选课行，而是返回对应的 t 学生行。</p>
+<h3 id="ch02-s079">9.3 “所有”与“不存在反例”</h3>
+<p>把要求说成“对每门计算机系课程，都存在这名学生的一条选课”，可写成下面的有界量词示意。量词后的 <code>c∈course</code>、<code>u∈takes</code> 说明候选记录来自哪里；<code>⇒</code> 表示仅在左侧条件成立时要求右侧成立。</p>
+<pre><code class="language-text">{ t | t∈student ∧ ∀c∈course (
+    c[dept]=&#39;计算机&#39; ⇒ ∃u∈takes (
+        u[SID]=t[SID] ∧ u[CID]=c[CID]
+    )
+) }
+</code></pre>
+<p>对 S1 检查 C1、C2 都能找到记录，所以保留。对 S2 检查 C2 找不到，所以排除。C3 属于数学系，左侧条件不成立，不会被误当作必选课。这里外层 t 来自全部 student；如果计算机系没有开课，四名学生都没有缺项，和候选范围来自 takes 的标准除运算要分别理解。</p>
+<p>另一个量词是 <code>∀</code>，读作“对每一个”或“所有”。如果要求选完 C1、C2，意思就是：对要求名单中的每门课程，都能找到这名学生的选课记录。</p>
+<p>也可以改说：“不存在一门要求课程，是这名学生没有选过的。”其中“不存在”可写作 <code>¬∃</code>，即“非”与“存在”的组合。第 6.4 节除法中“先找缺失配对，再排除缺失者”，正是在做同一件事。</p>
+<p>理解时要明确量词的范围：“全部课程”可能指 course 中的全部课程，也可能只指计算机系课程。范围不同，答案就可能不同，不能只看到“所有”两个字就跳过条件。</p>
+<h2 id="ch02-s080">10. 【课程PPT补充知识点】域关系演算与安全表达式</h2>
+<p>如果只想返回姓名，可以让变量分别代表学号、姓名、系，而不必每次用变量代表整行。这就是域关系演算的出发点。无论选哪种演算，还要把变量范围限制在与数据库有关的值中，避免产生无限、与业务无关的答案。</p>
+<h3 id="ch02-s081">10.1 每个变量只代表一个格子的值</h3>
+<p>元组关系演算用 t 代表整行。<strong>域关系演算</strong>改用多个变量，各自代表某个属性值。</p>
+<p>仍查询计算机系学生的全部资料。令 s 代表学号，n 代表姓名，d 代表所在系；这些小写字母是变量名，和前面某份名单 S 的名字没有关系。</p>
+<pre><code class="language-text">{ &lt;s,n,d&gt; | &lt;s,n,d&gt; ∈ student ∧ d=&#39;计算机&#39; }
+</code></pre>
+<ul>
+<li><code>&lt;s,n,d&gt;</code> 表示按学生表的三列顺序组成的一行；这里的尖括号是在包装一组值，不是比较大小。</li>
+<li><code>&lt;s,n,d&gt; ∈ student</code> 要求这三个值组成的行确实存在于 student。</li>
+<li><code>d=&#39;计算机&#39;</code> 限定第三个值是计算机。</li>
+<li>竖线左侧写要返回的值，右侧写这些值需要满足的条件。</li>
+</ul>
+<p>结果仍为：</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>SID</th>
+<th>name</th>
+<th>dept</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>S1</td>
+<td>小林</td>
+<td>计算机</td>
+</tr>
+<tr>
+<td>S3</td>
+<td>小陈</td>
+<td>计算机</td>
+</tr>
+</tbody></table></div>
+<p>如果只要姓名，把左侧改为 <code>&lt;n&gt;</code> 还不够，需要说明其余变量从哪里来：</p>
+<pre><code class="language-text">{ &lt;n&gt; | ∃s ∃d (&lt;s,n,d&gt; ∈ student ∧ d=&#39;计算机&#39;) }
+</code></pre>
+<p>这表示“收集姓名 n，只要能找到学号 s 和所在系 d，让三者组成一条计算机系学生记录”。s、d 被存在量词约束，不作为答案返回。结果为：</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>name</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>小林</td>
+</tr>
+<tr>
+<td>小陈</td>
+</tr>
+</tbody></table></div>
+<h3 id="ch02-s082">10.2 为什么要限制为安全表达式</h3>
+<p>假设有人写：</p>
+<pre><code class="language-text">{ &lt;x&gt; | x ≠ &#39;S1&#39; }
+</code></pre>
+<p><code>≠</code> 表示“不等于”。这条式子要求返回所有不等于 S1 的 x，却没有说 x 必须来自哪张表。如果允许 x 是任意字符串，那么 S2、苹果、无限多种其他文字都符合，结果可能无限大，也与学生业务无关。</p>
+<p>对数据库查询，我们需要答案能由数据库中有限的数据和表达式中的常量构成，而不是跑到无限的字符串世界中寻找。“结果受到这种有限范围约束”的要求，就是理解<strong>安全表达式</strong>的入口。</p>
+<p>若真正想找“学生表中除 S1 之外的学号”，可以写：</p>
+<pre><code class="language-text">{ &lt;s&gt; | ∃n ∃d (&lt;s,n,d&gt; ∈ student ∧ s ≠ &#39;S1&#39;) }
+</code></pre>
+<p>此时 s 必须来自某条 student 记录，候选范围是 S1、S2、S3、S4，结果为：</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>SID</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>S2</td>
+</tr>
+<tr>
+<td>S3</td>
+</tr>
+<tr>
+<td>S4</td>
+</tr>
+</tbody></table></div>
+<p>仅仅说“x 是字符串类型”并不能解决问题，因为字符串类型仍可能有无限多种值。初学时重点检查：输出变量是否有明确的数据来源，量词作用在哪些变量和条件上。复杂的安全性形式判定超出本节的入门要求。</p>
+<h2 id="ch02-s083">11. 常见易错点：用具体原因自查</h2>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>容易误解的地方</th>
+<th>应怎样检查</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>把选择当作选列</td>
+<td>选择按条件保留整行；投影才决定保留哪些列</td>
+</tr>
+<tr>
+<td>觉得每种运算都只减少行数</td>
+<td>笛卡尔积会组合行，连接也可能让同一对象出现多次</td>
+</tr>
+<tr>
+<td>认为自然连接自动知道主外码关系</td>
+<td>它检查全部同名列；先确认这些相等要求符合业务</td>
+</tr>
+<tr>
+<td>用一次普通连接表达“全部”</td>
+<td>普通连接能找到匹配记录，不能单独证明没有缺少的要求项</td>
+</tr>
+<tr>
+<td>把候选码的“最小”理解为列数最少</td>
+<td>应检查这组属性中是否有任意一个可以删掉</td>
+</tr>
+<tr>
+<td>把当前样本没有重复当作永久唯一</td>
+<td>唯一性来自业务约束，需要对以后合法数据也成立</td>
+</tr>
+<tr>
+<td>把 NULL 当作 0</td>
+<td>NULL 表示缺少普通值，比较和统计要按扩展规则处理</td>
+</tr>
+<tr>
+<td>先投影后才发现条件列不见了</td>
+<td>在每一步旁写出中间结果的列名</td>
+</tr>
+<tr>
+<td>把查询得到的新表当作原表已经被修改</td>
+<td>关系代数首先用于描述查询，真实更新需要另外执行数据库修改操作</td>
+</tr>
+<tr>
+<td>把所有 SQL 写法直接套到纯关系代数</td>
+<td>先确认集合去重、空值和聚集等具体约定</td>
+</tr>
+</tbody></table></div>
+<h2 id="ch02-s084">12. 本单元模拟题：从读题到结果</h2>
+<p>本节的题干和 PPT 参考答案来自 <code>试题模拟.pptx</code>。为帮助理解而增加的数据会明确标注为教学用数据；它们不是原题附带的数据，也不是银行的真实信息。</p>
+<h3 id="ch02-s085">12.1 题目一：主码设计</h3>
+<h4 id="ch02-s086">原题与 PPT 参考答案</h4>
+<blockquote>
+<p>在学生表中，将学号（ID）和姓名（name）的组合设计为该表的主键是否合理？为什么？</p>
+</blockquote>
+<p>PPT 参考答案：</p>
+<blockquote>
+<p>不合理。因为这种情况下，允许有多个姓名不同的学生对应相同学号的情况。</p>
+</blockquote>
+<h4 id="ch02-s087">先理解问题的背景</h4>
+<p>学校给学生分配学号，约定每个学生的学号唯一。题目中的 ID 就是本章学校示例里的 SID，只是换了字段名；name 仍表示姓名。</p>
+<p>现在有人提议：数据库不要只检查学号是否重复，而是检查“学号与姓名组合”是否重复。这会造成什么结果？</p>
+<p>假设尝试保存以下两条记录：</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>ID</th>
+<th>name</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1001</td>
+<td>张三</td>
+</tr>
+<tr>
+<td>1001</td>
+<td>李四</td>
+</tr>
+</tbody></table></div>
+<p>如果只检查两列组合，<code>(1001,张三)</code> 与 <code>(1001,李四)</code> 确实不同，因此单独的复合主键约束可能允许这两行同时存在。但学校要求学号本身唯一，1001 不应代表两名不同学生。</p>
+<h4 id="ch02-s088">从候选码定义再检查一次</h4>
+<p>若 ID 本身就被业务规定为唯一，<code>{ID}</code> 已经足以区分学生，是候选码。<code>{ID,name}</code> 也能区分，但去掉 name 后仍能区分，所以它是含多余属性的超码，不是最小超码。</p>
+<p>因此合理设计是把 ID 作为主码，name 作为普通姓名属性。若额外又为 ID 单独声明唯一约束，虽然可以阻止上述重复学号，复合主码仍然加入了无必要的姓名信息。题目考查的是业务唯一性与候选码的最小性，不是说 SQL 语法绝对禁止声明两列主键。</p>
+<h3 id="ch02-s089">12.2 题目二：银行数据库关系代数</h3>
+<h4 id="ch02-s090">原题</h4>
+<blockquote>
+<p>已知银行企业的数据库由以下表组成：<br>①分行表 <code>branch(branch-name, branch-city, assets)</code><br>②客户表 <code>customer(customer-name, customer-street, customer-city)</code><br>③贷款明细表 <code>loan(loan-number, branch-name, amount)</code><br>④客户贷款表 <code>borrower(customer-name, loan-number)</code><br>⑤存款明细表 <code>account(account-number, branch-name, balance)</code><br>⑥客户存款表 <code>depositor(customer-name, account-number)</code><br>注：带下划线的属性为主码，假设客户的名字不相同。<br>（1）用 SQL 语句创建表。<br>（2）使用关系代数和 SQL 语句找出在 Brighton 银行中有存款的所有客户的姓名、存款号和存款额。<br>（3）使用关系代数和 SQL 语句找出账户平均余额小于 5000 元的支行，显示支行名称及账户平均余额。<br>（4）使用关系代数和 SQL 语句找出所有在银行中有贷款但无账户的客户。<br>（5）使用关系代数和 SQL 语句对所有存款余额大于平均存款额的账户付 3% 的利息。</p>
+</blockquote>
+<p>本章分析（2）至（5）的关系代数部分。（1）的 SQL 建表和其他 SQL 答案在第 3 单元。原题用连字符连接字段名，下文统一改用下划线，例如 branch-name 写成 branch_name，以免与减号混淆。</p>
+<h4 id="ch02-s091">银行业务背景：为什么需要六张表</h4>
+<p>分行是银行在不同地点开展业务的单位。客户可以在某个分行开账户，也可以申请贷款。“客户是谁”“账户里多少钱”“哪位客户拥有哪个账户”是不同事实，所以分别记录。</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>关系模式</th>
+<th>每一行表示什么</th>
+<th>各属性含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>branch(branch_name,branch_city,assets)</td>
+<td>一个分行</td>
+<td>分行名称、所在城市、分行资产</td>
+</tr>
+<tr>
+<td>customer(customer_name,customer_street,customer_city)</td>
+<td>一名客户</td>
+<td>姓名、居住街道、居住城市</td>
+</tr>
+<tr>
+<td>loan(loan_number,branch_name,amount)</td>
+<td>一笔贷款</td>
+<td>贷款号、所属分行、贷款金额</td>
+</tr>
+<tr>
+<td>borrower(customer_name,loan_number)</td>
+<td>一名客户参与一笔贷款</td>
+<td>客户姓名、贷款号</td>
+</tr>
+<tr>
+<td>account(account_number,branch_name,balance)</td>
+<td>一个存款账户</td>
+<td>账户号、开户分行、账户余额</td>
+</tr>
+<tr>
+<td>depositor(customer_name,account_number)</td>
+<td>一名客户拥有一个账户</td>
+<td>客户姓名、账户号</td>
+</tr>
+</tbody></table></div>
+<p>borrower 连接客户与贷款，depositor 连接客户与账户。一个客户可以拥有多个账户，一个账户也可以由多人共同持有，因此不能只在客户表中放一个账户号。题目假定姓名互不相同，所以此处用姓名识别客户；这只是题目约定。</p>
+<h4 id="ch02-s092">教学用数据：先知道每张表里有什么</h4>
+<p>以下六张小表共同构成一个合法的教学实例。金额单位均为元，余额都不是 NULL。银行题各问都从这份原始数据出发。</p>
+<p>分行表 branch：</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>branch_name</th>
+<th>branch_city</th>
+<th>assets</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Brighton</td>
+<td>海城</td>
+<td>1000000</td>
+</tr>
+<tr>
+<td>Riverside</td>
+<td>河城</td>
+<td>2000000</td>
+</tr>
+</tbody></table></div>
+<p>客户表 customer：</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>customer_name</th>
+<th>customer_street</th>
+<th>customer_city</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>张三</td>
+<td>松林路</td>
+<td>海城</td>
+</tr>
+<tr>
+<td>李四</td>
+<td>校园路</td>
+<td>海城</td>
+</tr>
+<tr>
+<td>王五</td>
+<td>河滨路</td>
+<td>河城</td>
+</tr>
+<tr>
+<td>赵六</td>
+<td>花园路</td>
+<td>河城</td>
+</tr>
+</tbody></table></div>
+<p>贷款表 loan：</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>loan_number</th>
+<th>branch_name</th>
+<th>amount</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>L1</td>
+<td>Brighton</td>
+<td>2000</td>
+</tr>
+<tr>
+<td>L2</td>
+<td>Riverside</td>
+<td>5000</td>
+</tr>
+</tbody></table></div>
+<p>客户贷款表 borrower：</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>customer_name</th>
+<th>loan_number</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>张三</td>
+<td>L1</td>
+</tr>
+<tr>
+<td>王五</td>
+<td>L2</td>
+</tr>
+<tr>
+<td>赵六</td>
+<td>L2</td>
+</tr>
+</tbody></table></div>
+<p>王五、赵六共同参与 L2，因此贷款表只记录一次 L2 的金额，参与关系在 borrower 中记录两行。</p>
+<p>账户表 account：</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>account_number</th>
+<th>branch_name</th>
+<th>balance</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>A1</td>
+<td>Brighton</td>
+<td>1000</td>
+</tr>
+<tr>
+<td>A2</td>
+<td>Brighton</td>
+<td>3000</td>
+</tr>
+<tr>
+<td>A3</td>
+<td>Riverside</td>
+<td>8000</td>
+</tr>
+</tbody></table></div>
+<p>客户存款表 depositor：</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>customer_name</th>
+<th>account_number</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>张三</td>
+<td>A1</td>
+</tr>
+<tr>
+<td>李四</td>
+<td>A2</td>
+</tr>
+<tr>
+<td>张三</td>
+<td>A3</td>
+</tr>
+<tr>
+<td>李四</td>
+<td>A3</td>
+</tr>
+</tbody></table></div>
+<p>A3 是张三、李四共同持有的账户，余额 8000 只在 account 中记录一次。depositor 中的两行不会把它变成两个账户，也不会把余额变成 16000。</p>
+<h4 id="ch02-s093">（2）找出 Brighton 分行存款客户的姓名、账户号和余额</h4>
+<p><strong>PPT 情况</strong>：PPT 给出 SQL，没有给关系代数答案。下文是按题意补充的关系代数分析。</p>
+<p>题目中的“存款号”对应 account_number，“存款额”在本题查询中对应账户余额 balance。Brighton 在表中是分行名称，不是客户姓名或城市。</p>
+<p>第一步，在 account 中按分行筛选：</p>
+<pre><code class="language-text">brighton_accounts ← σ_{branch_name=&#39;Brighton&#39;}(account)
+</code></pre>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>account_number</th>
+<th>branch_name</th>
+<th>balance</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>A1</td>
+<td>Brighton</td>
+<td>1000</td>
+</tr>
+<tr>
+<td>A2</td>
+<td>Brighton</td>
+<td>3000</td>
+</tr>
+</tbody></table></div>
+<p>第二步，要知道这些账户由谁持有，按共同的 account_number 与 depositor 自然连接：</p>
+<pre><code class="language-text">brighton_owners ← depositor ⋈ brighton_accounts
+</code></pre>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>customer_name</th>
+<th>account_number</th>
+<th>branch_name</th>
+<th>balance</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>张三</td>
+<td>A1</td>
+<td>Brighton</td>
+<td>1000</td>
+</tr>
+<tr>
+<td>李四</td>
+<td>A2</td>
+<td>Brighton</td>
+<td>3000</td>
+</tr>
+</tbody></table></div>
+<p>第三步，只保留题目要求的三列：</p>
+<pre><code class="language-text">π_{customer_name,account_number,balance}(brighton_owners)
+</code></pre>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>customer_name</th>
+<th>account_number</th>
+<th>balance</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>张三</td>
+<td>A1</td>
+<td>1000</td>
+</tr>
+<tr>
+<td>李四</td>
+<td>A2</td>
+<td>3000</td>
+</tr>
+</tbody></table></div>
+<p>完整表达式：</p>
+<pre><code class="language-text">π_{customer_name,account_number,balance}
+(
+  depositor ⋈ σ_{branch_name=&#39;Brighton&#39;}(account)
+)
+</code></pre>
+<p>为什么不必再连接 customer？因为题目只要姓名，而 depositor 已有姓名；只有还要住址等信息时才需要 customer。若某个 Brighton 账户由两人共同持有，应返回两条“客户—账户”记录，不能为了账户号不重复而丢掉一名持有人。</p>
+<h4 id="ch02-s094">（3）找出账户平均余额小于 5000 元的支行</h4>
+<p>题目要比较的是<strong>每个分行内部的账户平均余额</strong>。同一个账户有几位持有人，不应该影响它在平均值中的权重，因此从 account 直接统计。</p>
+<p>第一步，按 branch_name 分组：</p>
+<ul>
+<li>Brighton 组的账户是 A1、A2，平均值为 <code>(1000+3000)÷2=2000</code>。</li>
+<li>Riverside 组只有 A3，平均值为 <code>8000÷1=8000</code>。</li>
+</ul>
+<p>公式与中间结果：</p>
+<pre><code class="language-text">branch_avg ← γ_{branch_name;avg(balance)→avg_balance}(account)
+</code></pre>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>branch_name</th>
+<th>avg_balance</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Brighton</td>
+<td>2000</td>
+</tr>
+<tr>
+<td>Riverside</td>
+<td>8000</td>
+</tr>
+</tbody></table></div>
+<p>第二步，筛选平均值严格小于 5000 的组：</p>
+<pre><code class="language-text">σ_{avg_balance&lt;5000}(branch_avg)
+</code></pre>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>branch_name</th>
+<th>avg_balance</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Brighton</td>
+<td>2000</td>
+</tr>
+</tbody></table></div>
+<p>如需显式列出输出列，完整答案可写成：</p>
+<pre><code class="language-text">branch_avg ← γ_{branch_name;avg(balance)→avg_balance}(account)
+π_{branch_name,avg_balance}(σ_{avg_balance&lt;5000}(branch_avg))
+</code></pre>
+<p>不能先筛 <code>balance&lt;5000</code> 再求平均，因为那会先丢掉高余额账户，计算出不同的问题。也不能先连接 depositor 后直接求平均，否则共同持有的账户可能被重复计入。</p>
+<p>如果某分行没有账户，它不会在 account 的分组中形成一组。本题没有要求显示零账户分行；若题意改变，需要以 branch 为起点补足，并说明无账户时的平均值含义。</p>
+<h4 id="ch02-s095">（4）找出有贷款但无账户的客户</h4>
+<p>先把题意拆成两份客户名单：“有贷款的人”和“有账户的人”，再从第一份减去第二份。</p>
+<p>第一步，只从 borrower 取客户姓名：</p>
+<pre><code class="language-text">loan_customers ← π_{customer_name}(borrower)
+</code></pre>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>customer_name</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>张三</td>
+</tr>
+<tr>
+<td>王五</td>
+</tr>
+<tr>
+<td>赵六</td>
+</tr>
+</tbody></table></div>
+<p>第二步，只从 depositor 取客户姓名：</p>
+<pre><code class="language-text">account_customers ← π_{customer_name}(depositor)
+</code></pre>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>customer_name</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>张三</td>
+</tr>
+<tr>
+<td>李四</td>
+</tr>
+</tbody></table></div>
+<p>张三、李四各有多个持有关系，但投影后相同姓名只出现一次。</p>
+<p>第三步，作差：</p>
+<pre><code class="language-text">loan_customers − account_customers
+</code></pre>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>customer_name</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>王五</td>
+</tr>
+<tr>
+<td>赵六</td>
+</tr>
+</tbody></table></div>
+<p>张三虽然有贷款，但也有账户，应排除；李四本来就不在贷款名单里；王五、赵六都只出现在贷款名单中，所以保留。</p>
+<p>完整表达式：</p>
+<pre><code class="language-text">π_{customer_name}(borrower) − π_{customer_name}(depositor)
+</code></pre>
+<p>两边都是同一种客户姓名列，满足并相容。直接连接两张表会找到同时有贷款和账户的人，与“有贷款但无账户”相反。</p>
+<h4 id="ch02-s096">（5）给余额高于平均余额的账户增加 3% 利息</h4>
+<p><strong>PPT 情况</strong>：PPT 给出 SQL UPDATE。经典关系代数是查询表达方式，下面使用扩展运算<strong>构造更新后应得到的结果表</strong>；把这张结果真正写回数据库，需要 SQL 更新等数据修改机制。</p>
+<p>题目中的平均值是<strong>所有账户更新前余额的平均值</strong>，不是各分行平均值。先计算一次，再据此决定哪些账户加息。</p>
+<p>第一步，算全体账户平均值：</p>
+<pre><code class="language-text">A ← γ_{avg(balance)→avg_balance}(account)
+</code></pre>
+<p><code>A</code> 是本题临时给平均值结果取的表名，不是账户 A1。计算为 <code>(1000+3000+8000)÷3=4000</code>：</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>avg_balance</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>4000</td>
+</tr>
+</tbody></table></div>
+<p>第二步，为每个账户附上同一个平均值。A 只有一行，因此 account 与 A 的笛卡尔积仍是三行：</p>
+<pre><code class="language-text">account × A
+</code></pre>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>account_number</th>
+<th>branch_name</th>
+<th>balance</th>
+<th>avg_balance</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>A1</td>
+<td>Brighton</td>
+<td>1000</td>
+<td>4000</td>
+</tr>
+<tr>
+<td>A2</td>
+<td>Brighton</td>
+<td>3000</td>
+<td>4000</td>
+</tr>
+<tr>
+<td>A3</td>
+<td>Riverside</td>
+<td>8000</td>
+<td>4000</td>
+</tr>
+</tbody></table></div>
+<p>第三步，把账户分成两组。H 表示高于平均值、需要加息的账户，L 表示其余账户：</p>
+<pre><code class="language-text">H ← σ_{balance&gt;avg_balance}(account × A)
+L ← σ_{balance&lt;=avg_balance}(account × A)
+</code></pre>
+<p>H 的全部内容：</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>account_number</th>
+<th>branch_name</th>
+<th>balance</th>
+<th>avg_balance</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>A3</td>
+<td>Riverside</td>
+<td>8000</td>
+<td>4000</td>
+</tr>
+</tbody></table></div>
+<p>L 的全部内容：</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>account_number</th>
+<th>branch_name</th>
+<th>balance</th>
+<th>avg_balance</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>A1</td>
+<td>Brighton</td>
+<td>1000</td>
+<td>4000</td>
+</tr>
+<tr>
+<td>A2</td>
+<td>Brighton</td>
+<td>3000</td>
+<td>4000</td>
+</tr>
+</tbody></table></div>
+<p>“高于”是严格大于，因此恰好等于平均值的账户应放入 L。这里假定 balance 非空，所以 <code>&gt;</code> 与 <code>&lt;=</code> 能覆盖所有账户。</p>
+<p>第四步，用广义投影给 H 加息。增加 3% 表示原余额加原余额的 0.03 倍，即乘以 1.03。A3 得到 <code>8000×1.03=8240</code>：</p>
+<pre><code class="language-text">changed ← π_{account_number,branch_name,(balance*1.03)→balance}(H)
+unchanged ← π_{account_number,branch_name,balance}(L)
+</code></pre>
+<p>changed 只有 <code>(A3,Riverside,8240)</code>，unchanged 有 <code>(A1,Brighton,1000)</code>、<code>(A2,Brighton,3000)</code>。两边都恢复为原 account 的三列；avg_balance 已完成比较任务，不再需要。</p>
+<p>第五步，把两组结果合并：</p>
+<pre><code class="language-text">account_new ← unchanged ∪ changed
+</code></pre>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>account_number</th>
+<th>branch_name</th>
+<th>balance</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>A1</td>
+<td>Brighton</td>
+<td>1000</td>
+</tr>
+<tr>
+<td>A2</td>
+<td>Brighton</td>
+<td>3000</td>
+</tr>
+<tr>
+<td>A3</td>
+<td>Riverside</td>
+<td>8240</td>
+</tr>
+</tbody></table></div>
+<p>整套表达式可整理为：</p>
+<pre><code class="language-text">A ← γ_{avg(balance)→avg_balance}(account)
+H ← σ_{balance&gt;avg_balance}(account × A)
+L ← σ_{balance&lt;=avg_balance}(account × A)
+
+account_new ←
+  π_{account_number,branch_name,balance}(L)
+  ∪
+  π_{account_number,branch_name,(balance*1.03)→balance}(H)
+</code></pre>
+<p>account_new 是构造出的结果，不表示原 account 已实际被改写。平均值也不随每一行的加息反复重算；否则不同处理顺序可能改变哪些账户符合条件。若题目允许空余额，还必须明确未知余额的保留规则，不能直接套用上面的两组划分。</p>
+<h2 id="ch02-s097">13. 自拟自测题（非模拟 PPT 原题）</h2>
+<p>以下练习回到第 1 节的学校选课背景，使用原始 student、course、takes 数据。建议先遮住解析，口头说出处理步骤，再写公式。</p>
+<h3 id="ch02-s098">13.1 自测一：计算机系学生的学号和姓名</h3>
+<p><strong>题目</strong>：教务员要制作计算机系学生名单，只显示学号与姓名。怎样写关系代数？</p>
+<p><strong>分析</strong>：学生所在系在 student.dept；学号和姓名也都在 student，所以不需要连接其他表。先筛计算机系，再保留 SID、name。</p>
+<p><strong>第一步的完整结果</strong>：</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>SID</th>
+<th>name</th>
+<th>dept</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>S1</td>
+<td>小林</td>
+<td>计算机</td>
+</tr>
+<tr>
+<td>S3</td>
+<td>小陈</td>
+<td>计算机</td>
+</tr>
+</tbody></table></div>
+<p><strong>公式与最终结果</strong>：</p>
+<pre><code class="language-text">π_{SID,name}(σ_{dept=&#39;计算机&#39;}(student))
+</code></pre>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>SID</th>
+<th>name</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>S1</td>
+<td>小林</td>
+</tr>
+<tr>
+<td>S3</td>
+<td>小陈</td>
+</tr>
+</tbody></table></div>
+<p>易错点是先把 dept 投影掉。判分时不只看最终两个人是否碰巧对了，还要看每一步引用的列是否存在。</p>
+<h3 id="ch02-s099">13.2 自测二：两门课程都选了的学生</h3>
+<p><strong>题目</strong>：数据库 C1 与程序设计 C2 都选了的学生有哪些？输出学号。</p>
+<p><strong>分析</strong>：先分别查两份选课名单，再求交。C1 名单为 S1、S2；C2 名单为 S1、S3；共同出现的只有 S1。</p>
+<pre><code class="language-text">π_{SID}(σ_{CID=&#39;C1&#39;}(takes))
+∩
+π_{SID}(σ_{CID=&#39;C2&#39;}(takes))
+</code></pre>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>SID</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>S1</td>
+</tr>
+</tbody></table></div>
+<p>若写成同一行上的 <code>CID=&#39;C1&#39; ∧ CID=&#39;C2&#39;</code>，就要求一条选课记录的课程号同时等于两个不同值，结果会为空。题目要求的是同一学生拥有两条相应记录，不是一条记录同时属于两门课。</p>
+<h3 id="ch02-s100">13.3 自测三：显示每门课选课人数，包括零人课程</h3>
+<p><strong>题目</strong>：学校想统计每门课程有几名学生选修，即使没人选也要显示。输出课程号、课程名、人数。</p>
+<p><strong>分析</strong>：要保留全部课程，因此 course 放在左外连接的左边，按共同的 CID 与 takes 匹配。与本题统计相关的中间列如下：</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>CID</th>
+<th>title</th>
+<th>SID</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>C1</td>
+<td>数据库</td>
+<td>S1</td>
+</tr>
+<tr>
+<td>C1</td>
+<td>数据库</td>
+<td>S2</td>
+</tr>
+<tr>
+<td>C2</td>
+<td>程序设计</td>
+<td>S1</td>
+</tr>
+<tr>
+<td>C2</td>
+<td>程序设计</td>
+<td>S3</td>
+</tr>
+<tr>
+<td>C3</td>
+<td>高数</td>
+<td>NULL</td>
+</tr>
+</tbody></table></div>
+<p>C3 的一行是外连接补出来的占位记录，不代表有一名学号为空的学生。按 CID、title 分组，统计非空 SID：</p>
+<pre><code class="language-text">γ_{CID,title;count(SID)→student_count}(course ⟕ takes)
+</code></pre>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>CID</th>
+<th>title</th>
+<th>student_count</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>C1</td>
+<td>数据库</td>
+<td>2</td>
+</tr>
+<tr>
+<td>C2</td>
+<td>程序设计</td>
+<td>2</td>
+</tr>
+<tr>
+<td>C3</td>
+<td>高数</td>
+<td>0</td>
+</tr>
+</tbody></table></div>
+<p>本题沿用第 7.4 节的空值扩展规则。若用 count(*)，C3 的占位行也会被计为一行，得到 1；使用 count(SID) 才能不计这个 NULL。又因为本章约定同一学生对同一课程只有一条记录，所以记录数正好等于人数。</p>
+<h3 id="ch02-s101">13.4 自测四：选完计算机系所有课程的学生姓名</h3>
+<p><strong>题目</strong>：学校为选完计算机系全部课程的学生制作名单，只返回姓名，不限制学生本人属于哪个系。</p>
+<p><strong>分析</strong>：先从课程表列出要求的 C1、C2；再从选课表提取四条学号—课程号配对；除法结果只有 S1；最后将这个学号与 student 连接，取姓名。</p>
+<pre><code class="language-text">required_courses ← π_{CID}(σ_{dept=&#39;计算机&#39;}(course))
+enrolled_pairs ← π_{SID,CID}(takes)
+qualified ← enrolled_pairs ÷ required_courses
+π_{name}(qualified ⋈ student)
+</code></pre>
+<p>中间的 qualified：</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>SID</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>S1</td>
+</tr>
+</tbody></table></div>
+<p>连接后找到 <code>(S1,小林,计算机)</code>，最终结果为：</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>name</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>小林</td>
+</tr>
+</tbody></table></div>
+<p>S2 缺 C2，S3 缺 C1，S4 两门都没选，所以不符合本题。若直接用一次连接寻找选课记录，只能说明“找到了某条匹配记录”，还不能说明“要求名单中的每门都有”。</p>
+<h2 id="ch02-s102">14. 复习清单与思维导图</h2>
+<p>读完以后，再用这张导图回想各概念之间的关系。图中的名词均已在正文解释。</p>
+<pre><code class="language-text">关系模型与关系代数
+├─ 先认识数据
+│  ├─ 属性、元组、域、关系
+│  ├─ 关系模式与关系实例
+│  ├─ 原子值、第一范式、NULL
+│  └─ 超码、候选码、主码、复合码、外码
+├─ 基本运算
+│  ├─ 选择：按条件筛行
+│  ├─ 投影：保留列并按完整行去重
+│  ├─ 并、差：处理两份同结构名单
+│  ├─ 笛卡尔积：列全部可能配对
+│  └─ 更名：对齐或区分名称
+├─ 附加运算
+│  ├─ 交：两份名单都出现
+│  ├─ θ连接、等值连接、自然连接
+│  ├─ 除：每个要求项都有对应记录
+│  └─ 赋值：命名中间结果
+├─ 扩展运算
+│  ├─ 广义投影：计算输出值
+│  ├─ 分组与聚集：分堆后统计
+│  ├─ 外连接：保留未匹配记录
+│  └─ 空值扩展：处理未知条件与缺失值
+└─ 关系演算
+   ├─ 元组变量代表整行
+   ├─ 域变量代表单个属性值
+   ├─ 存在、全称与不存在反例
+   └─ 安全表达式限制结果的数据来源
+</code></pre>
+<ul>
+<li><input disabled="" type="checkbox"> 看见一张表，能说出表名、每列含义和一行代表的事实。</li>
+<li><input disabled="" type="checkbox"> 能说明为什么业务规则比“样本中恰好不重复”更能决定码。</li>
+<li><input disabled="" type="checkbox"> 能逐项解释公式中的符号、条件、括号、输入和输出。</li>
+<li><input disabled="" type="checkbox"> 能写出选择和投影的中间结果，说明为什么有时不能交换顺序。</li>
+<li><input disabled="" type="checkbox"> 能检查并、交、差两边的结构，并区分差的左右方向。</li>
+<li><input disabled="" type="checkbox"> 能说明笛卡尔积为何会产生原业务中未发生的组合。</li>
+<li><input disabled="" type="checkbox"> 能解释连接的匹配条件，以及自然连接同名列带来的风险。</li>
+<li><input disabled="" type="checkbox"> 能用“排除缺失项”解释除法，并说明空要求名单时的候选范围。</li>
+<li><input disabled="" type="checkbox"> 能先按业务分组，再算统计值，并解释平均值的分母。</li>
+<li><input disabled="" type="checkbox"> 能说明外连接补空行、count(*) 与 count(列) 的差异。</li>
+<li><input disabled="" type="checkbox"> 能用普通话读懂简单的元组关系演算和域关系演算。</li>
+<li><input disabled="" type="checkbox"> 能先解释银行六张表的含义，再独立完成四道关系代数小题。</li>
+</ul>
+<hr>
+<h2 id="ch02-relations">15. 表运算、条件和连接名称怎样分层理解</h2>
+<p>表达式 <code>π_{name}(σ_{dept=&#39;计算机&#39;}(student))</code> 有完整结构，不能把每个符号都当成一条独立查询。</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>层次</th>
+<th>当前例子</th>
+<th>负责什么</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>完整查询表达式</td>
+<td>最外层投影包住选择</td>
+<td>回答“哪些计算机系学生的姓名”</td>
+</tr>
+<tr>
+<td>表运算</td>
+<td>π、σ</td>
+<td>分别输出列、筛选行</td>
+</tr>
+<tr>
+<td>运算的参数</td>
+<td>name、dept=计算机</td>
+<td>指定留下哪列或采用哪个条件</td>
+</tr>
+<tr>
+<td>条件中的判断</td>
+<td>=、∧、∨、¬</td>
+<td>比较和组合判断结果</td>
+</tr>
+<tr>
+<td>输入关系</td>
+<td>student，或某个内层结果</td>
+<td>为这一层提供行和列</td>
+</tr>
+</tbody></table></div>
+<p>连接名称也不是都在同一个角度分类：</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>要回答的问题</th>
+<th>名称或写法</th>
+<th>可以怎样组合</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>怎样确定配对</td>
+<td>θ 条件、等值条件、自然的同名列条件</td>
+<td>自然连接同时涉及同名列合并</td>
+</tr>
+<tr>
+<td>未配对者是否留下</td>
+<td>内连接、左/右/全外连接</td>
+<td>外连接可以采用显式条件，也可以采用自然匹配</td>
+</tr>
+<tr>
+<td>两个输入是否来自同一表</td>
+<td>自连接、不同表连接</td>
+<td>自连接也可使用内连接或外连接</td>
+</tr>
+</tbody></table></div>
+<p>运算先后是否可换，要检查结果所需信息。先取姓名会丢掉 dept，因而不能再按系筛选；如果先投影保留 name 和 dept，仍有条件列，就可以继续筛选，最后再只输出姓名。不是“选择和投影永远不能交换”，而是不能提前丢掉之后还需要的属性。</p>
+<p>还要分清集合语义和多重集语义：本章经典代数对完整行去重；某些 SQL/扩展代数允许同一行出现多次。把“选课记录数”和“不同学生数”混成同一个数，往往是没有先问清对象与重复处理规则。</p>
+<hr>
+<h2 id="ch02-reference">16. 本章概念与方法速查</h2>
+<div class="ref-area"><div class="ref-picker"><label for="ref-select">选择要查的概念或方法</label><select id="ref-select" aria-controls="ref-panel"><option value="">请选择一个条目</option><option value="关系、属性、元组">关系、属性、元组</option><option value="域、原子值、NULL">域、原子值、NULL</option><option value="超码、候选码、主码">超码、候选码、主码</option><option value="外码与参照完整性">外码与参照完整性</option><option value="选择 σ">选择 σ</option><option value="投影 π">投影 π</option><option value="并、交、差">并、交、差</option><option value="笛卡尔积 ×">笛卡尔积 ×</option><option value="更名 ρ 与赋值 ←">更名 ρ 与赋值 ←</option><option value="θ 连接与等值连接">θ 连接与等值连接</option><option value="自然连接">自然连接</option><option value="除 ÷">除 ÷</option><option value="广义投影">广义投影</option><option value="分组聚集 γ">分组聚集 γ</option><option value="外连接">外连接</option><option value="NULL 的比较与统计">NULL 的比较与统计</option><option value="元组与域关系演算">元组与域关系演算</option><option value="存在、全称与安全范围">存在、全称与安全范围</option></select><p class="source-note">选中后显示用途、读法、例子、结果和注意点。完整总结表保存在 Markdown 版。</p><div id="ref-panel" class="ref-panel" aria-live="polite" hidden></div><noscript><p>请启用 JavaScript 使用选择菜单，或查看 Markdown 版的速查表。</p></noscript></div></div>
+
+<h2 id="ch02-verification">整理与核对说明</h2>
+<p>本轮依据项目现有学习资料、<span title="来源课件未随在线学习资料上传">课件 ch2.pdf（未上传）</span>、<span title="来源课件未随在线学习资料上传">课件 ch6.pdf（未上传）</span>，并对照<span title="来源课件未随在线学习资料上传">课程总结（未上传）</span>和<span title="来源课件未随在线学习资料上传">试题模拟（未上传）</span>中与本单元相关的文本。原有主要知识点、模拟题和自测题均保留，补充问题铺垫、概念关系、结果解释与速查；图解使用正文的教学前提。</p>
+<p>重点标记沿用所提供课程总结的范围，不把总结中的上位主题误称为逐小节明确列出的考试重点。教学例子和增加的数据不冒充原题数据。对 PDF 的核对包含相关定义与规则，并对关键图示页作视觉检查；不声称对每一页所有图形逐项复核。</p>
+<p>验证分别记录结构与链接检查、例子的手工推导、适用的计算核对，以及 HTML 中的目录、速查和图解切换检查。资料中的 SQL 或系统协议示例用于学习，不代表已在某款真实 DBMS 中执行；实现细节、恢复策略和并发结果仍须按本文给出的前提理解。</p>
+</article><footer class="foot">对应 Markdown：<a href="https://goya4140.github.io/JLU_CS_Course/#/3_1%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F/02_%E5%85%B3%E7%B3%BB%E6%A8%A1%E5%9E%8B%E4%B8%8E%E5%85%B3%E7%B3%BB%E4%BB%A3%E6%95%B0.md">02_关系模型与关系代数.md</a>。图解用于对照正文学习，不在网页中执行数据库操作。外部文献需联网，正文和交互可以离线阅读。</footer><footer class="foot"><a href="https://goya4140.github.io/JLU_CS_Course/#/3_1%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F/00_%E5%AD%A6%E4%B9%A0%E5%AF%BC%E8%88%AA.md">返回数据库系统学习导航</a></footer></main></div><script id="guide-data" type="application/json">{"figures":[{"id":"ch02-viz-operations","after":"ch02-s024","title":"同一份数据：筛行、选列与连接产生什么","intro":"每种操作都从正文原始数据独立出发。先比较输出的一行代表谁，再看行列变化。","type":"choices","options":[{"label":"选择：计算机系学生","meaning":"按系筛选，原三列保留。","headers":["SID","name","dept"],"rows":[["S1","小林","计算机"],["S3","小陈","计算机"]],"note":"两行分别是两位学生，不是删除其他学生。"},{"label":"投影：有哪些不同的系","meaning":"只留下系，重复结果合并。","headers":["dept"],"rows":[["计算机"],["数学"]],"note":"两行分别是两个系，不再对应原来的四位学生。"},{"label":"内连接：姓名加选课","meaning":"按学号配对，只留下成功配对。","headers":["SID","name","CID","score"],"rows":[["S1","小林","C1",80],["S1","小林","C2",90],["S2","小周","C1",70],["S3","小陈","C2",60]],"note":"一行是一次选课，小林两行，小吴没有匹配行。"},{"label":"左外连接：全部学生都要","meaning":"按学号配对，同时保留零选课者。","headers":["SID","name","CID","score"],"rows":[["S1","小林","C1",80],["S1","小林","C2",90],["S2","小周","C1",70],["S3","小陈","C2",60],["S4","小吴",null,null]],"note":"小吴的 NULL 表示没有匹配选课，不表示成绩为零。"}]},{"id":"ch02-viz-division","after":"ch02-s050","title":"“全部选过”逐步改成“没有缺课”","intro":"此图采用标准除法候选 S1/S2/S3，要求名单为 C1/C2；小吴没有出现在左侧配对中。","type":"choices","options":[{"label":"1. 列出应有组合","meaning":"每位候选者都与每门必选课配对。","headers":["SID","CID"],"rows":[["S1","C1"],["S1","C2"],["S2","C1"],["S2","C2"],["S3","C1"],["S3","C2"]],"note":"这是应有配对，不代表已经选过。"},{"label":"2. 减去实际配对，找到缺项","meaning":"真实存在的四对从应有的六对中去掉。","headers":["SID","缺少的 CID"],"rows":[["S2","C2"],["S3","C1"]],"note":"没有出现在这张缺项表中的 S1 才全选齐。"},{"label":"3. 去掉有缺项的候选者","meaning":"从 S1/S2/S3 中减掉 S2/S3。","headers":["SID"],"rows":[["S1"]],"note":"结果只有学号；需要姓名还要回学生表配对。"},{"label":"4. 要求名单为空：检查候选范围","meaning":"没有必选课，就没有缺课证据。","headers":["标准除法结果","以全部 student 为候选的结果"],"rows":[["S1、S2、S3","S1、S2、S3、S4"]],"note":"两种结果不同不是空名单规则矛盾，而是候选者来源不同。"}]}],"references":[{"name":"关系、属性、元组","kind":"数据对象层次","meaning":"关系是一批完整记录，属性描述一列，元组是一行。","usage":"先说一行代表什么，再读每列的值。","example":"student 的 S1、小林、计算机是一行学生记录。","result":"关系是记录集合，当前四位学生没有固定行序。","note":"纯关系模型不允许完整重复行，SQL 默认可能保留重复。","anchor":"ch02-s009"},{"name":"域、原子值、NULL","kind":"输入数据的规则","meaning":"域限制可用值，原子值按整体使用，NULL 表示缺少普通值。","usage":"检查允许填什么、是否把多项塞一格、缺值是什么意思。","example":"课程号 C1/C2 应各占一条选课，不塞进同一个课程号格。","result":"查询前提要与数据表达一致。","note":"属性原子性不等于事务原子性。","anchor":"ch02-s011"},{"name":"超码、候选码、主码","kind":"识别记录的规则","meaning":"先判断能否识别，再去除多余属性，再指定主要识别方式。","usage":"唯一性 → 无多余属性 → 从候选码选择主码。","example":"SID 是学生候选码；SID/name 有多余姓名。","result":"业务保证学号唯一，不靠当前样本猜唯一。","note":"最小指删属性后不再足够，不是所有候选码列数最少。","anchor":"ch02-s015"},{"name":"外码与参照完整性","kind":"跨表对应规则","meaning":"引用值必须找到合法对应，查询需另外写配对过程。","usage":"takes.SID → student.SID；takes.CID → course.CID。","example":"S2/C1/70 指向学生小周和数据库课程。","result":"不能登记不存在的 S9；同一学号可以被多条选课引用。","note":"外码不是自动连接，也不是引用列必须唯一。","anchor":"ch02-s020"},{"name":"选择 σ","kind":"一元表运算","meaning":"按条件筛行，保留原输入列。","usage":"σ_{条件}(关系)。","example":"σ_{dept=计算机}(student)。","result":"两名计算机系学生，仍有 SID/name/dept 三列。","note":"条件比较与表运算不是同一层次；不删除原表行。","anchor":"ch02-s025"},{"name":"投影 π","kind":"一元表运算","meaning":"留下所需列，并按输出完整行去重。","usage":"π_{列列表}(关系)。","example":"π_{dept}(student)。","result":"输出计算机、数学两行，不能再当成四位学生。","note":"投影可能丢掉后续筛选或连接需要的列。","anchor":"ch02-s029"},{"name":"并、交、差","kind":"两份同结构名单的运算","meaning":"分别找任一份有、两份都有、只在左份的人。","usage":"R∪S；R∩S；R−S。","example":"C1 为 S1/S2，C2 为 S1/S3。","result":"并为三人；交为 S1；左差为 S2。","note":"要求结构相容；差有方向，不是把编号相减。","anchor":"ch02-s033"},{"name":"笛卡尔积 ×","kind":"全部组合运算","meaning":"列出两边每行所有可能配对。","usage":"R×Q，行数为两边行数相乘。","example":"两名学生与两门课组成四对。","result":"组合 S2/C2 也会产生，即使 S2 实际没选 C2。","note":"可能配对不等于业务事实；同名列需明确区分。","anchor":"ch02-s037"},{"name":"更名 ρ 与赋值 ←","kind":"名称组织写法","meaning":"更名对齐或区分关系/列名，赋值命名中间结果。","usage":"ρ_{新关系名(新列名)}(r)；名字←表达式。","example":"把 course.dept 改称 course_dept 再与 student 连接。","result":"避免把学生系与课程系错误要求相等。","note":"只为当前表达式组织名称，不永久修改原表。","anchor":"ch02-s039"},{"name":"θ 连接与等值连接","kind":"按条件配对的表运算","meaning":"先定义怎样配对，再把符合条件的行组合起来。","usage":"r⋈_θs = σ_θ(r×s)。","example":"student.SID=takes.SID。","result":"四条选课各有姓名，小林对应两行。","note":"公式解释逻辑含义，不要求物理先生成全部组合。","anchor":"ch02-s043"},{"name":"自然连接","kind":"自动同名列匹配的连接","meaning":"所有同名属性相等，并合并对应同名列。","usage":"r⋈s，先列共同属性。","example":"student⋈course 会按 dept 匹配。","result":"得到本系可开课程配对，不能当成实际选课。","note":"不会自动识别主外码关系；无同名属性时是笛卡尔积。","anchor":"ch02-s047"},{"name":"除 ÷","kind":"全部要求覆盖查询","meaning":"每个候选者必须有要求名单中的每一项配对。","usage":"r(X,Y)÷s(Y)。","example":"takes 的 SID/CID 配对除以 C1/C2 名单。","result":"只有 S1 全部覆盖。","note":"候选 X 来自 r；空除数时不自动加入从未出现在 r 的 S4。","anchor":"ch02-s050"},{"name":"广义投影","kind":"计算输出值的扩展","meaning":"输出已有属性或用它们算出的值。","usage":"π_{SID,CID,(score+5)→adjusted_score}(takes)。","example":"80/90/70/60 各加 5。","result":"结果为 85/95/75/65，原成绩不变。","note":"列命名箭头和函数依赖箭头需要按所在语境区分。","anchor":"ch02-s058"},{"name":"分组聚集 γ","kind":"汇总运算","meaning":"按组分别计算数量、均值等。","usage":"γ_{分组列;计算→结果名}(关系)。","example":"course 按系算门数和平均学分。","result":"计算机 2 门/3.5，数学 1 门/5。","note":"结果的一行是统计组，不能随意附上组内某门课的名称。","anchor":"ch02-s060"},{"name":"外连接","kind":"保留未匹配者的连接","meaning":"成功配对正常输出，未匹配一侧用 NULL 补齐。","usage":"左 ⟕、右 ⟖、全 ⟗；同时明确配对规则。","example":"student 左外连接 takes。","result":"五行：四条选课加小吴的补空行。","note":"后续筛选仍可能去掉补空行；保留左表不等于行数不增加。","anchor":"ch02-s065"},{"name":"NULL 的比较与统计","kind":"扩展约定","meaning":"比较可能未知，列统计忽略缺值而不忽略零。","usage":"选择只留真；count(*) 数行，count(score) 数非空值。","example":"成绩通知 80、0、NULL。","result":"三行、两条已知成绩，均分 40。","note":"需说明采用 SQL 风格空值语义，不能冒充经典代数自带规则。","anchor":"ch02-s068"},{"name":"元组与域关系演算","kind":"两种声明式表达","meaning":"元组变量代表整行，域变量分别代表格子里的值。","usage":"{t | P(t)}；{\u003cs,n,d> | P(s,n,d)}。","example":"t 来自 student 且 t[dept]=计算机。","result":"与选择查询一样找到 S1/S3。","note":"变量从哪里来、哪个被返回、哪个被量词约束都要说明。","anchor":"ch02-s076"},{"name":"存在、全称与安全范围","kind":"条件及候选范围","meaning":"至少一个有证据、每个都满足，以及答案值有数据库来源。","usage":"∃：存在证据；∀：逐项要求；限定变量来自有限关系。","example":"t 为当前学生；每门计算机系课都要有匹配选课。","result":"只有小林通过；计算机系没课时，student 中全部学生没有缺项。","note":"不是看到所有就机械套除法；空名单时先确定候选者来自哪里。","anchor":"ch02-s079"}]}</script><script>(()=>{'use strict';const payload=JSON.parse(document.getElementById('guide-data').textContent);const byId=id=>document.getElementById(id);const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));const rows=(headers,data)=>'<div class="table-scroll"><table><thead><tr>'+headers.map(x=>'<th scope="col">'+esc(x)+'</th>').join('')+'</tr></thead><tbody>'+data.map(row=>'<tr>'+row.map(x=>'<td>'+esc(x===null?'NULL':x)+'</td>').join('')+'</tr>').join('')+'</tbody></table></div>';const flow=steps=>'<div class="flow">'+steps.map((s,i)=>(i?'<div class="flow-arrow" aria-hidden="true">→</div>':'')+'<div class="flow-node"><strong>'+esc(s[0])+'</strong><p>'+esc(s[1])+'</p></div>').join('')+'</div>';for(const fig of payload.figures){if(fig.type==='choices'){const select=byId(fig.id+'-select');const draw=()=>{const option=fig.options[Number(select.value)];byId(fig.id+'-output').innerHTML='<p>'+esc(option.meaning)+'</p>'+(option.flow?flow(option.flow):'')+(option.svg||'')+(option.headers?rows(option.headers,option.rows):'')+(option.note?'<p class="fig-note">'+esc(option.note)+'</p>':'');};select.addEventListener('change',draw);draw();}}const refSelect=byId('ref-select');const refPanel=byId('ref-panel');const drawRef=()=>{const item=payload.references.find(x=>x.name===refSelect.value);if(!item){refPanel.hidden=true;refPanel.replaceChildren();return;}refPanel.innerHTML='<h3>'+esc(item.name)+'</h3><p class="ref-kind">'+esc(item.kind)+'</p><h4>解决什么问题</h4><p>'+esc(item.meaning)+'</p><h4>怎样理解或使用</h4><p>'+esc(item.usage)+'</p><h4>学习例子</h4><p>'+esc(item.example)+'</p><h4>结果与理由</h4><p class="result">'+esc(item.result)+'</p><h4>注意点</h4><p>'+esc(item.note)+'</p><a href="#'+esc(item.anchor)+'">回到正文看完整解释</a>';refPanel.hidden=false;};refSelect.addEventListener('change',drawRef);drawRef();const entries=[...document.querySelectorAll('.sidebar nav a')].map(link=>({link,target:document.getElementById(link.hash.slice(1))})).filter(e=>e.target);const offset=()=>{const n=Math.ceil(document.querySelector('.topbar').getBoundingClientRect().height)+18;document.documentElement.style.setProperty('--scroll-offset',n+'px');return n;};const close=()=>{document.body.classList.remove('nav-open');byId('menu').setAttribute('aria-expanded','false');};const activate=e=>entries.forEach(x=>{const on=x===e;x.link.classList.toggle('active',on);if(on)x.link.setAttribute('aria-current','location');else x.link.removeAttribute('aria-current');});const current=()=>{const boundary=offset()+3;let active=entries[0];for(const entry of entries){if(entry.target.getBoundingClientRect().top<=boundary)active=entry;else break;}if(entries.length&&innerHeight+scrollY>=document.documentElement.scrollHeight-2&&entries[entries.length-1].target.getBoundingClientRect().top<innerHeight)active=entries[entries.length-1];if(active)activate(active);};const jump=(target,hash)=>{close();window.scrollTo({top:Math.max(0,target.getBoundingClientRect().top+scrollY-offset()),behavior:'auto'});if(location.hash!==hash)history.pushState(null,'',hash);current();};document.addEventListener('click',event=>{const link=event.target.closest('a[href^="#"]');if(!link||event.button!==0||event.ctrlKey||event.metaKey||event.shiftKey||event.altKey)return;const target=document.getElementById(link.hash.slice(1));if(target){event.preventDefault();jump(target,link.hash);}});byId('menu').addEventListener('click',()=>{const on=document.body.classList.toggle('nav-open');byId('menu').setAttribute('aria-expanded',String(on));});document.addEventListener('keydown',e=>{if(e.key==='Escape')close();});let pending=false;const schedule=()=>{if(!pending){pending=true;requestAnimationFrame(()=>{current();pending=false;});}};window.addEventListener('scroll',schedule,{passive:true});window.addEventListener('resize',schedule);window.addEventListener('hashchange',schedule);window.addEventListener('popstate',schedule);if(typeof ResizeObserver!=='undefined')new ResizeObserver(schedule).observe(document.querySelector('.topbar'));let font=17;document.querySelectorAll('[data-font]').forEach(b=>b.addEventListener('click',()=>{font=Math.max(15,Math.min(21,font+Number(b.dataset.font)));document.documentElement.style.setProperty('--font',font+'px');schedule();}));byId('print').addEventListener('click',()=>window.print());document.querySelectorAll('article pre code').forEach(code=>{const pre=code.parentElement;const wrap=document.createElement('div');wrap.className='code-wrap';pre.parentNode.insertBefore(wrap,pre);wrap.append(pre);const button=document.createElement('button');button.type='button';button.className='copy';button.textContent='复制';button.setAttribute('aria-label','复制本段示例');button.addEventListener('click',async()=>{try{await navigator.clipboard.writeText(code.textContent);button.textContent='已复制';}catch{const range=document.createRange();range.selectNodeContents(code);const selection=window.getSelection();selection.removeAllRanges();selection.addRange(range);button.textContent='已选中';}setTimeout(()=>button.textContent='复制',1500);});wrap.append(button);});current();})();</script></body></html>

@@ -1,0 +1,937 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="source-sha256" content="26e239d37394a8f78050ff17e91b97be23600deed06c0e1a72896d0003f92b4b"><title>第4单元 ER模型与关系模式转换 · 图解学习版</title><style>:root{--paper:#fbfaf7;--surface:#fff;--ink:#253341;--muted:#5c6b75;--line:#d5dfdd;--teal:#156b62;--soft:#edf6f1;--font:17px;--scroll-offset:90px}*{box-sizing:border-box}html{scroll-behavior:auto;scroll-padding-top:var(--scroll-offset)}body{margin:0;background:var(--paper);color:var(--ink);font-family:'Microsoft YaHei','PingFang SC',system-ui,sans-serif;font-size:var(--font);line-height:1.85}a{color:var(--teal);text-underline-offset:3px}a:hover{color:#173f75}button,select{font:inherit}button{cursor:pointer}button,select{border:1px solid #b9cbc5;border-radius:7px;padding:7px 11px;background:#fff;color:var(--ink)}button:hover{background:var(--soft)}button:focus-visible,select:focus-visible,a:focus-visible{outline:3px solid #81cbb8;outline-offset:3px}.skip{position:absolute;top:-80px;left:12px;z-index:50;background:#fff;padding:8px}.skip:focus{top:8px}.sidebar{position:fixed;inset:0 auto 0 0;width:270px;padding:23px 18px;background:#f0f4f0;border-right:1px solid var(--line);overflow:auto;z-index:30;overscroll-behavior:contain}.brand{font-size:21px;font-weight:700}.brand small{display:block;font-size:12px;font-weight:400;color:var(--muted)}.sidebar nav a{display:block;color:var(--ink);text-decoration:none;padding:8px 10px;margin:3px 0;border-radius:6px;font-size:14px;line-height:1.6}.sidebar nav a:hover{background:#dcebe3}.sidebar nav a.active,.sidebar nav a.active:hover{background:var(--teal);color:white}.sidebar select{width:100%;font-size:13px}.nav-tip{font-size:12px;color:var(--muted);margin:14px 0}.shell{margin-left:270px;overflow-anchor:none}.topbar{position:sticky;top:0;background:rgba(251,250,247,.98);padding:12px 26px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:12px;z-index:20}.topbar-title{font-size:13px;color:var(--muted)}.toolbar{display:flex;gap:7px;flex-wrap:wrap}.toolbar button{font-size:13px}.menu{display:none}main{max-width:1120px;margin:auto;padding:30px 44px 80px;min-width:0}h1{font-size:32px;line-height:1.5;margin:14px 0 25px}h2{font-size:25px;line-height:1.5;padding:0 0 11px;border-bottom:1px solid var(--line);margin:44px 0 23px}h3{font-size:21px;line-height:1.55;margin:29px 0 16px}h4{font-size:18px;line-height:1.6;margin:22px 0 13px}p{margin:14px 0}li{margin:7px 0}ul,ol{padding-left:1.6em}blockquote{margin:20px 0;padding:5px 18px;border-left:3px solid #a8c6bb;background:#f0f3ef;color:#53655e;font-size:14px}blockquote p{margin:8px 0}hr{border:0;border-top:1px solid var(--line);margin:32px 0}code{font-family:Consolas,'Cascadia Code',monospace;font-size:.9em;background:#eef1ed;padding:2px 5px;border-radius:4px;overflow-wrap:anywhere}pre{background:#18313d;color:#e8f0f0;border-radius:9px;padding:19px;line-height:1.65;overflow-x:auto;max-width:100%;font-size:14px}pre code{background:none;padding:0;color:inherit;white-space:pre;overflow-wrap:normal}table{border-collapse:collapse;width:100%;font-size:15px}th{background:#eaf3ee;text-align:left}td,th{padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:top}tbody tr:nth-child(even){background:#f6f9f6}.table-scroll{overflow-x:auto;border:1px solid var(--line);border-radius:8px;margin:17px 0;max-width:100%}.table-scroll td{min-width:80px}.source-note{font-size:13px;color:var(--muted)}.learning-figure{padding:23px;border:1px solid #b4cfc2;border-radius:12px;background:var(--soft);margin:25px 0}.learning-figure h4{margin:0 0 8px;font-size:20px}.fig-intro{font-size:14px;color:var(--muted)}.learning-figure label{display:block;margin-top:15px;font-size:14px;font-weight:700}.learning-figure select{margin-top:7px;width:100%;min-height:44px;font-size:15px}.fig-output{margin-top:16px}.flow{display:flex;gap:10px;align-items:stretch;flex-wrap:wrap}.flow-node{flex:1 1 150px;border:1px solid #bfd2c9;border-radius:8px;background:#fff;padding:13px;min-width:0}.flow-node strong{display:block;color:var(--teal)}.flow-node p{font-size:14px;margin:8px 0}.flow-arrow{align-self:center;color:var(--teal);font-size:24px}.fig-note{padding:10px 14px;border-left:3px solid var(--teal);background:#fff;font-size:14px;margin:15px 0 0}.svg-scroll{overflow-x:auto;max-width:100%}.svg-scroll svg{display:block;max-width:100%;height:auto}.ref-area{min-height:calc(100vh - var(--scroll-offset));margin-top:24px}.ref-picker{padding:22px;border-radius:12px;background:var(--soft);border:1px solid #b4cfc2}.ref-picker label{display:block;font-weight:700;margin-bottom:10px}.ref-picker select{width:100%;font-size:15px;min-height:46px}.ref-panel{margin-top:18px;background:#fff;border:1px solid var(--line);padding:20px;border-radius:9px}.ref-panel[hidden]{display:none}.ref-panel h3{margin:0;font-size:24px}.ref-panel h4{font-size:16px;margin:18px 0 8px}.ref-kind{font-size:13px;color:var(--teal)}.result{padding:10px 15px;border-left:3px solid var(--teal);background:var(--soft)}.copy{display:block;margin:5px 0 0 auto;font-size:12px;padding:4px 8px}.code-wrap{margin:20px 0}.code-wrap pre{margin-bottom:0}.foot{font-size:13px;color:var(--muted);border-top:1px solid var(--line);padding-top:23px;margin-top:30px}details{border:1px solid var(--line);padding:12px;border-radius:8px;margin:15px 0}summary{cursor:pointer;font-weight:700}@media(max-width:900px){.sidebar{transform:translateX(-100%)}body.nav-open .sidebar{transform:translateX(0);top:60px}.shell{margin-left:0}.menu{display:inline-block}.topbar-title{display:none}.topbar{padding:10px 14px}main{padding:23px 18px 65px}h1{font-size:27px}h2{font-size:23px}.learning-figure,.ref-picker{padding:16px}.flow{flex-direction:column}.flow-arrow{transform:rotate(90deg)}.ref-panel{padding:15px}}@media print{.sidebar,.topbar,.toolbar,.copy,.skip{display:none!important}.shell{margin:0}main{padding:0;max-width:none}body{background:#fff;font-size:11pt}.ref-area{min-height:0}.ref-picker select{display:none}pre{white-space:pre-wrap;background:#f3f5f4;color:#111}.learning-figure{break-inside:avoid}.table-scroll{overflow:visible}a{color:inherit}}@media print{.svg-scroll{overflow:visible}.svg-scroll svg{min-width:0!important;width:100%!important;height:auto!important}}.sidebar{width:266px;background:#f1f4f1;padding:27px 19px;overflow-y:auto}.brand{font-size:21px;font-weight:700;letter-spacing:.03em;margin-bottom:5px}.brand small{font-size:12px;font-weight:400;color:var(--muted);letter-spacing:.1em}.sidebar .sub{font-size:13px;color:var(--muted);margin:5px 0 21px}.sidebar nav a{font-size:14px;line-height:1.5;padding:9px 11px;margin:3px 0;border-radius:6px}.sidebar nav a:hover{background:#e0ece6;color:#174d43}.sidebar nav a.active,.sidebar nav a.active:hover{background:var(--teal);color:#fff}.nav-group{font-size:12px;color:var(--muted);margin:18px 11px 6px;letter-spacing:.08em}.sidebar-footer{margin-top:24px;font-size:12px;color:var(--muted)}.shell{margin-left:266px}@media(max-width:900px){.shell{margin-left:0}}</style></head><body><a class="skip" href="#article">跳到正文</a><aside class="sidebar" aria-label="章节目录"><div class="brand"><small>DATABASE / UNIT 04</small>ER 模型与模式转换</div><p class="sub">完整正文 · 图解学习版</p><nav><a href="#ch04-navigation">学习导航</a><div class="nav-group">准备 · 对象与联系</div><a href="#ch04-s002" data-chapter="01">1. 先从一句需求开始</a><a href="#ch04-s006" data-chapter="02">2. 实体、实体集与属性</a><a href="#ch04-s011" data-chapter="03">3. 联系、联系集、角色与联系属性</a><div class="nav-group">约束 · 数量与身份</div><a href="#ch04-s015" data-chapter="04">4. 基数：最多能对应几个</a><a href="#ch04-s018" data-chapter="05">5. 参与约束：至少需要几个</a><a href="#ch04-s022" data-chapter="06">6. 弱实体与识别联系</a><div class="nav-group">建模 · 组织与选择</div><a href="#ch04-s025" data-chapter="07">7. 特化、概化、继承与聚集</a><a href="#ch04-s029" data-chapter="08">8. 建模选择与常见陷阱</a><div class="nav-group">转换 · 从模型到表</div><a href="#ch04-s033" data-chapter="09">9. 逐步转换成关系模式</a><a href="#ch04-s042" data-chapter="10">10. 完整 ER 模型怎样核对</a><a href="#ch04-s043" data-chapter="11">11. UML 记法</a><div class="nav-group">练习与复习</div><a href="#ch04-s044" data-chapter="12">12. 常见误解</a><a href="#ch04-s045" data-chapter="13">13. 本单元模拟题：汽车保险管理系统</a><a href="#ch04-s058" data-chapter="14">14. 自拟自测题与逐步答案</a><a href="#ch04-s063" data-chapter="15">15. 复习清单</a><a href="#ch04-levels" data-chapter="16">16. 从业务规则到数据库效果，分四层核对</a><a href="#ch04-reference" data-chapter="17">17. 本章概念与方法速查</a><a href="#ch04-verification">整理与核对说明</a></nav><div class="sidebar-footer">单文件 · 离线阅读<br>图表使用正文教学数据</div></aside><div class="shell"><header class="topbar"><span class="topbar-title">第4单元 ER模型与关系模式转换</span><div class="toolbar"><button id="menu" class="menu" aria-label="打开或收起目录" aria-expanded="false">目录</button><button data-font="-1" aria-label="减小正文字号">字号 −</button><button data-font="1" aria-label="增大正文字号">字号 ＋</button><button id="print">打印 / 保存 PDF</button></div></header><main><article id="article"><h1>第4单元 ER模型与关系模式转换</h1>
+<blockquote>
+<p>课件来源：<code>数据库课程ppt/ch7.pdf</code>；重点依据：<code>课程总结.pptx</code>；原模拟题来源：<code>试题模拟.pptx</code>。本章新增记录均为教学用。</p>
+</blockquote>
+<h2 id="ch04-navigation">学习导航</h2>
+<p>先把业务需求表达为对象和联系，再检查数量与参与限制，随后转换并核对表结构，最后完成建模练习。</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>学习阶段</th>
+<th>要解决的问题</th>
+<th>对应内容</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>准备 · 对象与联系</td>
+<td>怎样从业务描述找出实体、属性和联系？</td>
+<td><a href="#ch04-s002">1. 先从一句需求开始</a>、<a href="#ch04-s006">2. 实体、实体集与属性</a>、<a href="#ch04-s011">3. 联系、联系集、角色与联系属性</a></td>
+</tr>
+<tr>
+<td>约束 · 数量与身份</td>
+<td>对象可以对应几个，哪些对象必须参与或依赖他人？</td>
+<td><a href="#ch04-s015">4. 基数：最多能对应几个</a>、<a href="#ch04-s018">5. 参与约束：至少需要几个</a>、<a href="#ch04-s022">6. 弱实体与识别联系</a></td>
+</tr>
+<tr>
+<td>建模 · 组织与选择</td>
+<td>复杂业务怎样表达，哪些建模选择容易出错？</td>
+<td><a href="#ch04-s025">7. 特化、概化、继承与聚集</a>、<a href="#ch04-s029">8. 建模选择与常见陷阱</a></td>
+</tr>
+<tr>
+<td>转换 · 从模型到表</td>
+<td>怎样转成关系模式，并检查图与规则是否一致？</td>
+<td><a href="#ch04-s033">9. 逐步转换成关系模式</a>、<a href="#ch04-s042">10. 完整 ER 模型怎样核对</a>、<a href="#ch04-s043">11. UML 记法</a></td>
+</tr>
+<tr>
+<td>练习与复习</td>
+<td>能否完整建模、解释转换结果并核对实现条件？</td>
+<td><a href="#ch04-s044">12. 常见误解</a>、<a href="#ch04-s045">13. 本单元模拟题：汽车保险管理系统</a>、<a href="#ch04-s058">14. 自拟自测题与逐步答案</a>、<a href="#ch04-s063">15. 复习清单</a>、<a href="#ch04-levels">16. 从业务规则到数据库效果，分四层核对</a>、<a href="#ch04-reference">17. 本章概念与方法速查</a></td>
+</tr>
+</tbody></table></div>
+<p>需要回查某个知识点时，可直接点击表中的对应章节；先尝试解释例子的结果，再对照正文。</p>
+<h2 id="ch04-s001">怎样阅读本章</h2>
+<blockquote>
+<p><strong>重点中的重点：ER 图必须画完整。</strong> “完整”不仅指实体和连线，还包括属性、主键、映射基数、参与约束、弱实体的标识联系，以及必要的联系属性。</p>
+</blockquote>
+<p>你已经知道表、列和行。本章先解决更早的问题：“现实业务应该画成什么对象和联系，又应该变成哪些表？”<strong>ER</strong>是 Entity–Relationship，即实体—联系。先从业务句子推导，再画图、转表。</p>
+<p><strong>【课程总结PPT重点知识点】</strong> 覆盖实体、属性、联系、约束和转换；其中“完整 ER 模型”是总结强调的范围。<strong>【课程PPT补充知识点】</strong> 用于课件延伸内容。图形符号不是业务规则本身，画完图还要用文字核对。</p>
+<h2 id="ch04-s002">1. 【课程PPT补充知识点】先从一句需求开始</h2>
+<h3 id="ch04-s003">1.1 学生选课业务</h3>
+<p>学校说：“每名学生有学号、姓名和所属系；每门课有课程号、名称和学分；学生可以选多门课，课程可以被多名学生选；每次选课记一个成绩。”</p>
+<p>教学假设：学号、课程号各自唯一；一个学生对一门课程最多一条选课记录；学生可以暂未选课，课程可以暂时没人选；允许跨系选课。</p>
+<p>把这段话分为三类：</p>
+<ol>
+<li>需要区分的对象：学生、课程。</li>
+<li>描述对象的信息：学号、姓名、系；课程号、名称、学分。</li>
+<li>对象之间发生的事：选课，以及这一次选课的成绩。</li>
+</ol>
+<p>不能只看到名词就建表。“成绩”不是独立学生或课程；它描述某位学生对某门课的这次选课。</p>
+<h3 id="ch04-s004">1.2 贯穿本章的小数据</h3>
+<p><code>student(SID,name,dept)</code>是学生资料。括号内为列名：SID 学号、name 姓名、dept 学生所在系；一行一个学生。</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>SID</th>
+<th>name</th>
+<th>dept</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>S1</td>
+<td>小林</td>
+<td>计算机</td>
+</tr>
+<tr>
+<td>S2</td>
+<td>小周</td>
+<td>数学</td>
+</tr>
+<tr>
+<td>S3</td>
+<td>小陈</td>
+<td>计算机</td>
+</tr>
+<tr>
+<td>S4</td>
+<td>小吴</td>
+<td>数学</td>
+</tr>
+</tbody></table></div>
+<p><code>course(CID,title,dept,credits)</code>记录课程：CID 课程号、title 名称、dept 开课系、credits 学分；一行一门课。</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>CID</th>
+<th>title</th>
+<th>dept</th>
+<th>credits</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>C1</td>
+<td>数据库</td>
+<td>计算机</td>
+<td>3</td>
+</tr>
+<tr>
+<td>C2</td>
+<td>程序设计</td>
+<td>计算机</td>
+<td>4</td>
+</tr>
+<tr>
+<td>C3</td>
+<td>高数</td>
+<td>数学</td>
+<td>5</td>
+</tr>
+</tbody></table></div>
+<p>选课事实如下，score 为成绩；一行是一位学生与一门课程的一次对应。</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>SID</th>
+<th>CID</th>
+<th>score</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>S1</td>
+<td>C1</td>
+<td>80</td>
+</tr>
+<tr>
+<td>S1</td>
+<td>C2</td>
+<td>90</td>
+</tr>
+<tr>
+<td>S2</td>
+<td>C1</td>
+<td>70</td>
+</tr>
+<tr>
+<td>S3</td>
+<td>C2</td>
+<td>60</td>
+</tr>
+</tbody></table></div>
+<p>这些事实能检验图是否容纳当前数据，但当前四条记录不能证明所有未来业务规则。规则来自需求确认。</p>
+<h3 id="ch04-s005">1.3 从需求到实现的顺序</h3>
+<p>先做<strong>需求分析</strong>，确认对象、操作和规则；再做<strong>概念设计</strong>，用 ER 表达业务；然后做<strong>逻辑设计</strong>，把 ER 转为关系模式并检查重复；最后做<strong>物理设计</strong>，决定索引和存储方案。“概念”关注业务含义，“逻辑”关注表结构，“物理”关注实际存放与访问。不能未问清是否重修就认定 SID、CID 永远足以标识选课。</p>
+<h2 id="ch04-s006">2. 【课程总结PPT重点知识点】实体、实体集与属性</h2>
+<p>需求中的“学生”“姓名”“选课”不是同一种东西。先区分可以识别的业务对象、同类对象的整体，以及描述对象的信息，后面才知道图中该画实体、属性还是联系。</p>
+<h3 id="ch04-s007">2.1 实体不是“表里的任意一格”</h3>
+<p><strong>实体</strong>是业务中可区分的一个对象，例如学号 S1 的学生。<strong>实体集</strong>是同一类实体的集合，例如全部学生。这里“集合”表示把同类对象作为一个整体讨论；两个不同学生即使同名也仍是两个实体。</p>
+<p>画 ER 图时，矩形“学生”通常表示学生实体集，而不是仅表示小林。实现时它常转成 student 表，每名学生成为一行。</p>
+<h3 id="ch04-s008">2.2 属性与码</h3>
+<p><strong>属性</strong>描述实体的某方面，例如姓名、系。<strong>码</strong>是能唯一识别实体的一组属性；“唯一”意味着不能有两个不同实体持有完全相同的识别值。姓名可能重复，所以本业务用 SID 区分学生。</p>
+<p><strong>候选码</strong>是能唯一识别、且去掉任何组成属性都不能继续唯一识别的组合；“最小”指没有多余属性，不是字符串最短。选择一个候选码作为<strong>主码</strong>。复合码由多列共同组成，选课的 SID 与 CID 就是一例。详细码分类见第 02 章。</p>
+<h3 id="ch04-s009">2.3 简单、复合、单值与多值属性</h3>
+<p>这是两个不同分类角度。</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>类别</th>
+<th>白话解释</th>
+<th>独立业务例子</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>简单属性</td>
+<td>在当前用途下不再拆分</td>
+<td>学号</td>
+</tr>
+<tr>
+<td>复合属性</td>
+<td>需要分别使用组成部分</td>
+<td>地址拆为省、市、街道</td>
+</tr>
+<tr>
+<td>单值属性</td>
+<td>每个实体在该属性上至多一个值</td>
+<td>本业务每学生一个所属系</td>
+</tr>
+<tr>
+<td>多值属性</td>
+<td>同一实体可有多个值</td>
+<td>学生可登记多个联系电话</td>
+</tr>
+</tbody></table></div>
+<p>“地址能否拆分”由用途决定，不是在争论文字在物理上能否切开。电话号码多值场景另有教学记录：S1 有 13800000001、13800000002，S2 有 13900000001。不要把两号码塞进一个逗号分隔的字段冒充规范的单值列；后面拆成独立表。</p>
+<h3 id="ch04-s010">2.4 派生属性与空值</h3>
+<p><strong>派生属性</strong>是根据其他数据计算出来的信息。以年龄为例，同一出生日期在不同查询日期可能对应不同年龄；存的是出生日期，计算的是当前年龄。如果另外保存年龄，就要说明何时更新这份结果，不能认为它会天然随时间改变。本例只是独立生日场景，不给主例学生表临时加入未说明的生日记录。</p>
+<p><strong>空值 NULL</strong>表示未知、缺失或不适用等未给出普通值的状态。未登记电话号码不等于号码是“0”。在图里说明一个属性可缺值，还需在转表后落实相应规则。</p>
+<h2 id="ch04-s011">3. 【课程总结PPT重点知识点】联系、联系集、角色与联系属性</h2>
+<p>知道有哪些对象后，还要记录对象之间发生了什么。小林选数据库是一项两方共同的事实，成绩也属于这次对应。因此本节先说明“联系里一次发生的事”，再说明联系集、角色和联系属性。</p>
+<h3 id="ch04-s012">3.1 先说一次对应，再说同类对应</h3>
+<p>“小林选了数据库课”是一条<strong>联系</strong>；全部学生与课程的选课对应构成<strong>联系集</strong>。图中菱形“选课”通常表示联系集。</p>
+<p>成绩 80 取决于“小林—数据库”这对对象，属于<strong>联系属性</strong>。若把它挂到学生上，小林选两门课就不知该存哪个成绩；挂到课程上，也无法区分不同学生。</p>
+<h3 id="ch04-s013">3.2 联系的度数与递归角色</h3>
+<p><strong>度数</strong>是在一类联系中参与的实体角色数量：</p>
+<ul>
+<li><strong>二元联系</strong>有两方，例如学生—选课—课程。</li>
+<li><strong>三元联系</strong>有三方，例如教师在某学期教授某课程。</li>
+<li><strong>递归联系</strong>是同一实体集参与不同角色，例如职工指导职工。</li>
+</ul>
+<p>独立指导例：<code>staff(EID,name)</code>中 E1 为老王，E2 为小李；E1 指导 E2。<code>EID</code>是职工编号。若两边都只写“职工”，容易看不出谁指导谁；应写<strong>指导者</strong>与<strong>被指导者</strong>两个角色。角色是同类对象在联系中的不同身份，不必新建两类职工。</p>
+<h3 id="ch04-s014">3.3 三元联系不能随便拆成三个二元联系</h3>
+<p><strong>独立背景</strong>：教师 T1 在秋季教 C1，T1 在春季教 C2；教师 T2 在春季教 C1。记录 <code>teaching(TID,CID,term)</code>，列分别教师号、课程号、学期。</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>TID</th>
+<th>CID</th>
+<th>term</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>T1</td>
+<td>C1</td>
+<td>秋</td>
+</tr>
+<tr>
+<td>T1</td>
+<td>C2</td>
+<td>春</td>
+</tr>
+<tr>
+<td>T2</td>
+<td>C1</td>
+<td>春</td>
+</tr>
+</tbody></table></div>
+<p>若只分别保存三份两方名单，会丢掉“三者在同一次授课中共同出现”的信息。三份投影分别是：</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>教师—课程</th>
+<th>教师—学期</th>
+<th>课程—学期</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>T1/C1</td>
+<td>T1/秋</td>
+<td>C1/秋</td>
+</tr>
+<tr>
+<td>T1/C2</td>
+<td>T1/春</td>
+<td>C1/春</td>
+</tr>
+<tr>
+<td>T2/C1</td>
+<td>T2/春</td>
+<td>C2/春</td>
+</tr>
+</tbody></table></div>
+<p>三份名单的行只为并排展示，不代表横向一一配对。按同名项重新组合时，T1/C1、T1/春、C1/春都找得到，于是会产生下面第四条授课：</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>TID</th>
+<th>CID</th>
+<th>term</th>
+<th>原三元记录中是否存在</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>T1</td>
+<td>C1</td>
+<td>秋</td>
+<td>是</td>
+</tr>
+<tr>
+<td>T1</td>
+<td>C2</td>
+<td>春</td>
+<td>是</td>
+</tr>
+<tr>
+<td>T2</td>
+<td>C1</td>
+<td>春</td>
+<td>是</td>
+</tr>
+<tr>
+<td>T1</td>
+<td>C1</td>
+<td>春</td>
+<td>否，重新组合多出的记录</td>
+</tr>
+</tbody></table></div>
+<p>因此，这三个二元投影不能直接代替原三元联系。只有额外业务规则能够保证组合唯一且完整时，才可能采用这种拆法；不能为了少画一个三方联系而改变事实。</p>
+<h2 id="ch04-s015">4. 【课程总结PPT重点知识点】基数：最多能对应几个</h2>
+<p>把学生和课程连上线，只说明有联系，还没有说明一个对象可以对应几个对象。基数先解决“至多几个”的问题，两个方向必须分别检查；下一节再加上“至少几个”。</p><figure class="learning-figure" id="ch04-viz-counts"><h4>两个方向，分别问“至少”和“至多”</h4><p class="fig-intro">切换业务假设。每行固定一个对象，再问它能对应另一侧几个对象。</p><label for="ch04-viz-counts-select">选择要观察的情形</label><select id="ch04-viz-counts-select" aria-controls="ch04-viz-counts-output"><option value="0">学生—选课—课程：双方允许零次</option><option value="1">学生—属于—系：每学生必须一系</option><option value="2">学生—持有—校园证：每学生必须一证</option></select><div class="fig-output" id="ch04-viz-counts-output" aria-live="polite"></div></figure>
+<blockquote>
+<p><strong>本节为课程总结PPT明确列出的重点知识点：映射基数。</strong></p>
+</blockquote>
+<h3 id="ch04-s016">4.1 两个方向都要问</h3>
+<p><strong>映射基数</strong>描述一方对象最多对应另一方多少对象。“1”表示最多一个，“N”或“M”表示可以多个，并非指定确切数量。</p>
+<p>判断选课，必须分别问：一个学生最多选几门课？一门课最多由几人选？两边都可多个，故是 <code>M:N</code>，多对多。</p>
+<h3 id="ch04-s017">4.2 三种常见关系</h3>
+<p>下列行政规则是为教学另设，不是主例中的额外事实。</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>联系</th>
+<th>业务假设</th>
+<th>类型</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>人员—证件</td>
+<td>一人至多一证，一证至多属一人</td>
+<td>1:1，一对一</td>
+</tr>
+<tr>
+<td>系—学生</td>
+<td>一系可有多名学生，一学生至多属一系</td>
+<td>1:N，一对多</td>
+</tr>
+<tr>
+<td>学生—课程</td>
+<td>两边都可多次对应不同对象</td>
+<td>M:N，多对多</td>
+</tr>
+</tbody></table></div>
+<p><code>1:N</code>的方向必须说清：系在 1 侧、学生在 N 侧。它不表示一个系恰好一个学生，也不说明学生必须有系；“必须”是下一节的最少数量问题。</p>
+<h2 id="ch04-s018">5. 【课程总结PPT重点知识点】参与约束：至少需要几个</h2>
+<p>允许一个学生选多门课，并不能推出他至少要选一门。如果不把“可以为零”和“必须出现”分开，图可能容纳 S4，也可能错误地把 S4 当成非法数据。参与约束补的是最少数量，不是在重复最大基数。</p>
+<blockquote>
+<p><strong>本节为课程总结PPT明确列出的重点知识点：参与约束与主键。</strong></p>
+</blockquote>
+<h3 id="ch04-s019">5.1 最大数量与最小数量分别决定</h3>
+<p><strong>全部参与</strong>表示某实体集的每个实体都必须参加至少一次该联系。<strong>部分参与</strong>允许某些实体一次也不参加。</p>
+<p>在主例，S4 没有选课、C3 没有人选，双方都是部分参与。若学校规定每名正式在读学生必须选至少一课，学生端变成全部参与；现有 S4 会不符合新规则。</p>
+<h3 id="ch04-s020">5.2 最小—最大表示法</h3>
+<p><code>(min,max)</code>记一个对象在该联系中最少、最多能参与多少次。min 是最小数，max 是最大数，N 表示没有在模型中给出有限固定上限。</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>主例实体一侧</th>
+<th>约束</th>
+<th>普通语言</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>学生</td>
+<td>(0,N)</td>
+<td>可不选，也可选多门</td>
+</tr>
+<tr>
+<td>课程</td>
+<td>(0,N)</td>
+<td>可没人选，也可多人选</td>
+</tr>
+</tbody></table></div>
+<p>独立“每学生必须属于一个系”的假设中，学生端是 <code>(1,1)</code>，系端可为 <code>(0,N)</code>。联系的<strong>码约束</strong>表达“至多一个”的限制，例如学生确定所属系；与实体本身的学号主码要区分。</p>
+<h3 id="ch04-s021">5.3 图上符号必须与文字配套</h3>
+<p>传统 ER 图常用矩形表示实体集、椭圆表示属性、菱形表示联系，下划线标出码，双线表示全部参与，双矩形／双菱形表示弱实体与识别联系。不同记法的箭头和端点含义不同；作答先声明记法，再写“一名学生……，一门课程……”，避免把端点方向看反。</p>
+<h2 id="ch04-s022">6. 【课程总结PPT重点知识点】弱实体与识别联系</h2>
+<p>有些记录的局部编号只在所属对象内唯一，例如每张订单都有第 1 行。单凭行号不能说明是哪条明细，因此要借助所属订单的编号构成完整身份。这是弱实体的识别问题，而不只是“表里有一列外码”。</p>
+<blockquote>
+<p><strong>本节为课程总结PPT明确列出的重点知识点：弱实体集。</strong></p>
+</blockquote>
+<h3 id="ch04-s023">6.1 订单的第 1 行不是全公司唯一</h3>
+<p><strong>独立业务</strong>：商店每张订单内有行号 1、2、3，但不同订单都可以有第 1 行。<code>orders(OID,date)</code>记录订单号和日期；<code>order_line(OID,line_no,item,quantity)</code>记录订单号、行号、商品名称、数量。</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>OID</th>
+<th>line_no</th>
+<th>item</th>
+<th>quantity</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>O1</td>
+<td>1</td>
+<td>铅笔</td>
+<td>2</td>
+</tr>
+<tr>
+<td>O1</td>
+<td>2</td>
+<td>本子</td>
+<td>1</td>
+</tr>
+<tr>
+<td>O2</td>
+<td>1</td>
+<td>橡皮</td>
+<td>3</td>
+</tr>
+</tbody></table></div>
+<p>行号 1 不能区分两张订单的明细；<code>(OID,line_no)</code>才唯一。<strong>弱实体</strong>不能只用自身局部属性在所有同类对象中唯一识别，需要结合所属<strong>拥有者实体</strong>的码。这里订单明细是弱实体，订单是拥有者。</p>
+<h3 id="ch04-s024">6.2 部分码与存在依赖</h3>
+<p>line_no 叫<strong>部分码</strong>：只在同一张订单内部识别明细。在 O1 内，行号 1 和 2 不同；放到所有订单中，O1/1 与 O2/1 需要订单号才能区分。订单—明细是<strong>识别联系</strong>，因为订单的码参与了明细的完整身份。</p>
+<p>每条明细必须有所属订单，属于对识别联系的全部参与；是否允许没有明细的订单，则是另一端的最少数量问题，不能只从“明细属于订单”反推。</p>
+<p>每条明细必须属于一个订单，对识别联系全部参与；它还<strong>存在依赖</strong>于订单，意思是本业务不允许明细脱离订单独立存在。实现时可以通过外码及适当删除规则维护；删除行为需由业务确认。</p>
+<p>不要把“有外码”都叫弱实体：若每条明细另有全局唯一明细号，并能据此独立识别，身份模型就可能改变。</p>
+<h2 id="ch04-s025">7. 【课程总结PPT重点知识点】特化、概化、继承与聚集</h2>
+<p>现实对象可能有共同身份和不同细节，例如同一个人既是学生又是职工；也可能需要把一次业务联系作为另一次联系的对象。特化与聚集分别处理这些不同需求，不能因为都让图更复杂就把它们当成同一种操作。</p>
+<blockquote>
+<p><strong>本节包含课程总结PPT明确列出的重点知识点：聚集。</strong> 特化、概化和继承为课程课件中的扩展内容。</p>
+</blockquote>
+<h3 id="ch04-s026">7.1 特化和概化是两个观察方向</h3>
+<p><strong>独立背景</strong>：学校的人包括学生与职工。<code>person(PID,name)</code>记录人员号和姓名；学生额外有专业，职工额外有工资。PID 是全校人员标识。</p>
+<p>从“人员”向下分出“学生”“职工”叫<strong>特化</strong>；从学生与职工中提取共有姓名、人员号形成“人员”叫<strong>概化</strong>。<strong>继承</strong>表示子类沿用父类属性和联系，例如人员若参与“持有校园证”的联系，学生也继承这种参与资格；学生也有 PID、name，不必在概念上重新发明一套身份。</p>
+<h3 id="ch04-s027">7.2 两组约束必须分别说明</h3>
+<ul>
+<li><strong>不相交</strong>：一人不能同时属两个子类；<strong>重叠</strong>：允许同时属于，例如在职读研者既是职工又是学生。</li>
+<li><strong>全部特化</strong>：每个人员都至少属一个子类；<strong>部分特化</strong>：可有只属于人员、尚未列入这些子类的人。</li>
+</ul>
+<p>是否重叠与是否覆盖全部人员是两个独立问题，不能从“学生、职工”这两个名字推断规则。</p>
+<h3 id="ch04-s028">7.3 聚集：让一项联系整体参与另一项联系</h3>
+<p><strong>独立背景</strong>：教师 T1 被安排给 C1 授课，负责人 M1 审核这一次安排。审核的对象是“T1 给 C1 授课”这个整体，不是单独教师或单独课程。</p>
+<p><strong>聚集</strong>把“教师—授课—课程”视为高一级对象，使它能与负责人建立审核联系。这里与 SQL 的 COUNT、AVG“聚集函数”不同，ER 聚集是建模手段，不是在求平均。</p>
+<p>若只建“负责人审核教师”和“负责人审核课程”，会丢失审核的是哪次教师课程安排。转表时可用 <code>review(TID,CID,MID)</code>，TID 教师号、CID 课程号、MID 负责人号；其码还取决于每次安排可有几位审核人及安排是否含学期。</p>
+<h2 id="ch04-s029">8. 【课程PPT补充知识点】建模选择与常见陷阱</h2>
+<p>同一句业务话可以有不同画法，但不同画法是否保留了同样的信息和限制，需要检查。判断“画成属性还是实体、联系还是独立对象”时，先问是否需要单独识别、管理其他信息，或保留独立历史。</p>
+<h3 id="ch04-s030">8.1 系名是属性还是系实体</h3>
+<p>若只需记一段所属系文字，可以用学生属性 dept。若还要记录系办公地点、电话、负责人，应考虑系实体，因为系本身成为需要管理的对象。判断依据是业务需要，而不是名字像名词就一定建实体。</p>
+<h3 id="ch04-s031">8.2 选课是联系还是实体</h3>
+<p>只要描述某学生与某课程的对应及成绩，可作有属性的联系。若一次选课有全局选课号、缴费、撤销历史等独立生命周期，也可设计选课实体再与学生、课程关联。两种表达都必须完整保留业务规则。</p>
+<h3 id="ch04-s032">8.3 避免重复和错误的联系</h3>
+<p>若学生所属系已经确定，不能在每次选课里又独立存一份可随意不同的学生系；否则两个地方可能矛盾。也不能要求学生系等于开课系，因为业务允许跨系选课。</p>
+<h2 id="ch04-s033">9. 【课程总结PPT重点知识点】逐步转换成关系模式</h2>
+<p>ER 图说清业务之后，下一步才是决定表、列和键。转换不是看到一个线就机械增加一张表：要同时保留对象的身份、双方数量规则和联系自己的属性。下面每种方案都说明新表中的一行代表什么。</p><figure class="learning-figure" id="ch04-viz-convert"><h4>联系怎样落到表中：对应列放在哪里</h4><p class="fig-intro">三种独立业务方案不能同时当作同一张学生表的既有事实。切换后看身份、引用和剩余检查。</p><label for="ch04-viz-convert-select">选择要观察的情形</label><select id="ch04-viz-convert-select" aria-controls="ch04-viz-convert-output"><option value="0">M:N 选课：另建 takes</option><option value="1">1:N 所属系：外码放学生侧</option><option value="2">1:1 校园证：引用加唯一</option></select><div class="fig-output" id="ch04-viz-convert-output" aria-live="polite"></div></figure>
+<blockquote>
+<p><strong>本节为课程总结PPT明确列出的重点知识点：关系模式转换。</strong></p>
+</blockquote>
+<h3 id="ch04-s034">9.1 先解释转换记号</h3>
+<p><strong>关系模式</strong>是表结构的正式描述。<code>R(a,b)</code>表示表 R 有列 a、b；<strong>PK</strong>是 Primary Key，主码；<strong>FK</strong>是 Foreign Key，外码。箭头 <code>→</code>在此表示“引用到哪张表哪列”，不是第 05 章函数依赖的箭头；语境不同要读不同含义。</p>
+<h3 id="ch04-s035">9.2 强实体：先各建一张表</h3>
+<p>能用自身码独立识别的实体通常称<strong>强实体</strong>。主例学生、课程各建表：</p>
+<pre><code class="language-text">student(SID PK, name, dept)
+course(CID PK, title, dept, credits)
+</code></pre>
+<p>结果就是第 1 节的两张完整表，不需要把全部选课挤进 student 的一格。</p>
+<p>复合属性若各部分需要单独使用，转换时拆成列，例如 <code>address_province,address_city,address_street</code>；三个列名分别省、市、街道。</p>
+<h3 id="ch04-s036">9.3 多值属性：另建对应表</h3>
+<p>第 2 节的电话号码转换成 <code>student_phone(SID,phone)</code>，phone 为一个号码：</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>SID</th>
+<th>phone</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>S1</td>
+<td>13800000001</td>
+</tr>
+<tr>
+<td>S1</td>
+<td>13800000002</td>
+</tr>
+<tr>
+<td>S2</td>
+<td>13900000001</td>
+</tr>
+</tbody></table></div>
+<p>PK=(SID,phone)，SID 是指向 student.SID 的 FK。这个组合在“同一学生不重复登记同一号码”的假设下唯一；若允许多个学生共用电话，就不能单把 phone 当主码。</p>
+<h3 id="ch04-s037">9.4 弱实体：拥有者码加部分码</h3>
+<p>第 6 节转成 <code>order_line(OID,line_no,item,quantity)</code>。PK=(OID,line_no)，FK OID 引用 orders.OID。O1 的 1 行与 O2 的 1 行不冲突，说明组合身份正是业务需要。拥有者—明细的识别联系通常不用再单独建重复对应表。</p>
+<h3 id="ch04-s038">9.5 M:N：建联系表并带上联系属性</h3>
+<p>学生选课转成 <code>takes(SID,CID,score)</code>：</p>
+<ul>
+<li>PK=(SID,CID)，由“一对学生课程最多一条选课”推出；</li>
+<li>SID 引用 student.SID；CID 引用 course.CID；</li>
+<li>score 保存在这张联系表，描述该配对。</li>
+</ul>
+<p>完整数据是第 1 节的四条选课。若用 student 表加一个 CID 列，S1 的 C1、C2 无法在同一学生行里同时表达；如果重复学生行，又重复姓名与系。独立联系表避免这个问题。</p>
+<h3 id="ch04-s039">9.6 1:N：外码通常放在 N 侧</h3>
+<p><strong>独立行政业务</strong>：每学生必须属一个系，一系可有多个学生。系表 <code>department(DID,dname)</code>：DID 系号，dname 系名；教学数据 D1 计算机、D2 数学。学生表另增加 DID。</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>SID</th>
+<th>name</th>
+<th>DID</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>S1</td>
+<td>小林</td>
+<td>D1</td>
+</tr>
+<tr>
+<td>S2</td>
+<td>小周</td>
+<td>D2</td>
+</tr>
+<tr>
+<td>S3</td>
+<td>小陈</td>
+<td>D1</td>
+</tr>
+<tr>
+<td>S4</td>
+<td>小吴</td>
+<td>D2</td>
+</tr>
+</tbody></table></div>
+<p>DID 在学生表是 FK；不加 UNIQUE，因为多个学生可以同系。要表达每个学生必须有系，加 NOT NULL。反过来在 department 放一个 SID，只能记一个学生，违反“一系多人”。</p>
+<h3 id="ch04-s040">9.7 1:1：外码加唯一性，并考虑哪侧必参与</h3>
+<p>如果外码只要求“能够找到学生”，多个证件行仍可能指向同一个学生。要保证学生至多一证，还要限制引用值不重复；要保证每位学生至少一证，却需要从学生一侧检查是否存在证件。三个要求不能只用一个 FK 名称带过。</p>
+<p><strong>独立业务</strong>：每学生必须有一张校园证，证件只属于一个学生。<code>card(CardID,SID)</code>列为证件号、学生号。CardID 作主码，SID 作外码且 UNIQUE、NOT NULL，保证每张证有学生，且学生至多一证。</p>
+<p>但仅这几个约束不能保证“每位学生至少有证”，因为可以单独插入一个没有任何 card 行的学生。若双方身份生命周期一致，可考虑合并；否则需要额外检查机制。不能把 FK 自动当成“被引用者至少有一条子记录”。</p>
+<h3 id="ch04-s041">9.8 特化与概化的三种常见转换</h3>
+<p>仍用第 7 节人员场景。对教学对象 P1 小林（学生，专业计算机）与 P2 老王（职工，工资 6000），可以：</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>方案</th>
+<th>表结构</th>
+<th>代价和条件</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>父表加子表</td>
+<td>person(PID,name)、student_type(PID,major)、staff_type(PID,salary)</td>
+<td>共享身份清晰；看完整子类信息需连接</td>
+</tr>
+<tr>
+<td>每子类一张完整表</td>
+<td>student_type(PID,name,major)、staff_type(PID,name,salary)</td>
+<td>全部覆盖时可表达所有人员；重叠人员共有属性会重复</td>
+</tr>
+<tr>
+<td>单表加类型和可空列</td>
+<td>person_all(PID,name,is_student,is_staff,major,salary)</td>
+<td>用两个标记容纳重叠；不适用列需允许空</td>
+</tr>
+</tbody></table></div>
+<p><code>major</code>是专业，<code>salary</code>是工资，<code>is_student/is_staff</code>是是否属于对应子类的标记。若只用一个类型列写“学生或职工”，就无法直接表达两种身份同时存在。哪种方案正确取决于覆盖、重叠、空值及约束需求，不是唯一固定模板。</p>
+<h2 id="ch04-s042">10. 【课程总结PPT重点中的重点】完整 ER 模型怎样核对</h2>
+<p>先逐句核对需求，再对每项问：</p>
+<ol>
+<li>对象是否都有身份？例如学生能否用学号区分。</li>
+<li>属性挂在哪个对象或配对上？例如成绩是否在选课。</li>
+<li>联系两个方向的最大数量是多少？</li>
+<li>每个方向允许零次吗？</li>
+<li>弱实体的拥有者与部分码是否写明？</li>
+<li>子类的重叠／不相交、全部／部分是否写明？</li>
+<li>转表后哪些规则由 PK、FK、UNIQUE、NOT NULL 保证，哪些还需要额外机制？</li>
+</ol>
+<p><strong>业务最少数量</strong>往往不能只靠普通外码保证。例如“每张保单至少有一次赔付”需要检查它是否有子记录，不能认为 payment.policy_id 的 FK 已保证此事。</p>
+<h2 id="ch04-s043">11. 【课程PPT补充知识点】UML 记法</h2>
+<p>UML 是统一建模语言，常用于软件设计，也可描述对象、属性和关联。类框中写对象类别与属性，关联端写多重性。</p>
+<p><code>0..*</code>表示零到任意多个，<code>1..*</code>表示至少一个，<code>0..1</code>表示零或一个，<code>1</code>表示恰好一个。点点表示范围，星号表示这里不设有限固定上限。例如学生—课程主例两端均为 0..*。UML 与传统 ER 图形不同，业务含义应一致。</p>
+<h2 id="ch04-s044">12. 常见误解</h2>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>错误</th>
+<th>用主例检查</th>
+<th>修正</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>名词都必须变实体</td>
+<td>成绩描述一次选课</td>
+<td>先问是否独立识别与管理</td>
+</tr>
+<tr>
+<td>1:N 只需看一个方向</td>
+<td>系可多人，学生只一系</td>
+<td>两个方向分别问</td>
+</tr>
+<tr>
+<td>多对多在某侧加一列外码即可</td>
+<td>S1 有 C1、C2</td>
+<td>建联系表</td>
+</tr>
+<tr>
+<td>只要有外码就是弱实体</td>
+<td>是否需要拥有者码参与身份</td>
+<td>区分引用与识别依赖</td>
+</tr>
+<tr>
+<td>FK 保证父实体一定有子实体</td>
+<td>S4 可没有选课</td>
+<td>“至少一个”需另落实</td>
+</tr>
+</tbody></table></div>
+<h2 id="ch04-s045">13. 本单元模拟题：汽车保险管理系统</h2>
+<h3 id="ch04-s046">原题</h3>
+<blockquote>
+<p>某汽车保险公司欲开发一套管理系统，其需要记录的数据如下：<br>顾客：顾客ID、名字、家庭住址；<br>汽车：汽车编号、类型、所有顾客ID；<br>事故：事故编号、日期、位置；<br>保险赔付：赔付ID、截止日期、金额、实际赔付日期；<br>保险单：保险单号、保险赔付ID。<br>其中，每位顾客可以有1辆或多辆汽车；每辆汽车可以关联0个或者多个事故，每个事故可以关联1到多辆车；1个保险单可以覆盖1辆或多辆汽车，1辆车可以关联1到多个保险单；保险单可关联一个或多个保险赔付。<br>（1）设计 E-R 图；（2）转换为关系模式；（3）指出每个关系模式的主码。</p>
+</blockquote>
+<h3 id="ch04-s047">13.1 汽车保险题：从题面逐步推导到记录</h3>
+<h4 id="ch04-s048">第一步：先声明采用的业务解释</h4>
+<p>保险公司要记顾客、汽车、事故、保单和赔付。以下新增数据都是<strong>教学用</strong>，用来检验下文的参考转换，不是题目原给数据。</p>
+<p>题面已说明一顾客可多车；我们依照“所有顾客ID”解释为每车恰属一位顾客。题面没有明说一笔赔付能否属于多张保单，以下采用“一笔赔付属于一张保单”的常用假设，与 PPT 参考表 payment 中单个 policy_id 一致。若教师要求赔付可跨保单，应改成多对多联系表，不能沿用此答案。</p>
+<p>原题保单属性与一对多叙述矛盾，采用叙述；不增添题面未给出的保险金额。赔付日期可在尚未实际支付时为空，这是教学数据的补充假设。</p>
+<h4 id="ch04-s049">第二步：解释每张表并填入小记录</h4>
+<p>customer_id 为顾客编号，name 姓名，address 家庭住址；一行一顾客。</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>customer_id</th>
+<th>name</th>
+<th>address</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>U1</td>
+<td>小林</td>
+<td>松林路</td>
+</tr>
+<tr>
+<td>U2</td>
+<td>小周</td>
+<td>校园路</td>
+</tr>
+</tbody></table></div>
+<p>car_no 为汽车编号，model 为类型，customer_id 为所有者；一行一汽车。</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>car_no</th>
+<th>model</th>
+<th>customer_id</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>V1</td>
+<td>轿车</td>
+<td>U1</td>
+</tr>
+<tr>
+<td>V2</td>
+<td>SUV</td>
+<td>U1</td>
+</tr>
+<tr>
+<td>V3</td>
+<td>轿车</td>
+<td>U2</td>
+</tr>
+</tbody></table></div>
+<p>accident_id 为事故号，accident_date 日期，place 位置；一行一事故。</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>accident_id</th>
+<th>accident_date</th>
+<th>place</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>A1</td>
+<td>2026-09-01</td>
+<td>路口</td>
+</tr>
+</tbody></table></div>
+<p>policy_no 为保单号；一行一保单。它不直接保存某一个赔付号。</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>policy_no</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>P1</td>
+</tr>
+<tr>
+<td>P2</td>
+</tr>
+</tbody></table></div>
+<p>参与事故表：一行表示一车参加一事故。</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>car_no</th>
+<th>accident_id</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>V1</td>
+<td>A1</td>
+</tr>
+<tr>
+<td>V3</td>
+<td>A1</td>
+</tr>
+</tbody></table></div>
+<p>覆盖表：一行表示一保单覆盖一汽车。</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>car_no</th>
+<th>policy_no</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>V1</td>
+<td>P1</td>
+</tr>
+<tr>
+<td>V2</td>
+<td>P1</td>
+</tr>
+<tr>
+<td>V3</td>
+<td>P2</td>
+</tr>
+</tbody></table></div>
+<p>payment_id 为赔付号，due_date 截止日期，amount 金额，received_date 实际赔付日期，policy_no 所属保单；一行一笔赔付。</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>payment_id</th>
+<th>due_date</th>
+<th>amount</th>
+<th>received_date</th>
+<th>policy_no</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>M1</td>
+<td>2026-10-01</td>
+<td>1000</td>
+<td>2026-09-20</td>
+<td>P1</td>
+</tr>
+<tr>
+<td>M2</td>
+<td>2026-11-01</td>
+<td>500</td>
+<td>NULL</td>
+<td>P1</td>
+</tr>
+<tr>
+<td>M3</td>
+<td>2026-10-15</td>
+<td>800</td>
+<td>2026-10-02</td>
+<td>P2</td>
+</tr>
+</tbody></table></div>
+<h4 id="ch04-s050">第三步：用这些记录核对两端数量</h4>
+<p>U1 两辆车、U2 一辆车，且每车一位主人，符合顾客—汽车 1:N。V2 无事故，V1、V3 各一次；A1 有两车，符合汽车可零事故、事故至少一车。</p>
+<p>P1 覆盖两车，P2 一车；每车至少一保单，符合题意。此小数据虽未让某车有两保单，模型仍必须允许未来出现多保单，而不能从三条样本误推成“一车只能一保单”。</p>
+<p>P1 两笔赔付、P2 一笔，解释了为什么 payment 保存 policy_no，而不是 policy 只放一个 payment_id。</p>
+<h4 id="ch04-s051">第四步：解释主码与外码的选择</h4>
+<p>五个对象表分别以顾客号、车号、事故号、保单号、赔付号作主码。两个多对多对应表采用组合主码：</p>
+<ul>
+<li>PARTICIPATION 的 (car_no,accident_id)，同一车对同一事故不重复登记。</li>
+<li>COVERAGE 的 (car_no,policy_no)，同一车对同一保单不重复登记。</li>
+</ul>
+<p>CAR.customer_id、PAYMENT.policy_no 和两个对应表的两列分别是外码。仅声明这些 PK／FK，还不能保证每位顾客至少一辆车、每保单至少一赔付；这些最少数量要由额外约束机制或业务事务检查落实。</p>
+<p>图中 <code>string</code>意为文字类型，<code>date</code>日期类型，<code>decimal</code>精确小数类型；<code>PK</code>主码。Mermaid 的 <code>||</code>表示恰好一个，<code>o{</code>表示零到多个，<code>|{</code>表示一个到多个。线上靠某端的符号表示“对另一端的一个对象，这端允许几个对象”，因此要反向读端点。即使渲染器不显示图，文字数量说明和这七张表仍给出了完整答案。</p>
+<h3 id="ch04-s052">PPT 参考答案</h3>
+<p>PPT 文本页给出以下关系：</p>
+<pre><code class="language-text">customer(customer_id, name, address)
+car(car_no, model, customer_id)
+policy(policy_id, 保险金额)
+accident(accident_id, date, place)
+participat(car_no, accident_id)
+cover(car_no, policy_id)
+payment(pay_id, due_date, amount, received_date, policy_id)
+</code></pre>
+<h3 id="ch04-s053">题面与参考答案的不一致</h3>
+<ol>
+<li>题面把“保险赔付ID”列为保险单属性，同时又说明一张保险单关联一个或多个赔付。这两种描述冲突。若为一对多，应由赔付记录保存保险单号。</li>
+<li>PPT 答案中的“保险金额”没有出现在题面保险单属性列表中。</li>
+<li><code>participat</code> 疑为 <code>participate</code> 的拼写简化，不影响关系含义。</li>
+</ol>
+<p>以下答案以业务叙述中的联系约束为准，不凭空加入保险金额。</p>
+<h3 id="ch04-s054">规范 ER 图</h3>
+<figure class="learning-figure" id="ch04-insurance-er"><h4>汽车保险题：完整对象、属性与数量</h4><p class="fig-intro">采用属性写入实体框的 ER 记法。下划线/PK 标识实体主码；某端的数量表示另一端的一个对象可对应本端几个对象。上下连线和左右连线采用同一读法。</p><div class="svg-scroll"><svg class="er-diagram" style="width:100%;min-width:780px;height:auto;max-width:none" width="1240" height="980" viewBox="0 0 1240 980" role="img" aria-labelledby="insurance-er-title"><title id="insurance-er-title">汽车保险完整 ER 图：实体属性、主码和两端数量约束</title><defs><style>.er-box{fill:#fff;stroke:#23695e;stroke-width:2}.er-diamond{fill:#e6f2ed;stroke:#23695e;stroke-width:2}.er-line{fill:none;stroke:#23695e;stroke-width:2}.er-text{font-family:Microsoft YaHei,system-ui,sans-serif;font-size:21px;fill:#253341}.er-head{font-weight:700;font-size:22px}.er-count{font-size:19px;font-weight:700;fill:#156b62}</style></defs><rect class="er-box" x="20" y="45" width="240" height="190" rx="8"/><line class="er-line" x1="20" y1="98" x2="260" y2="98"/><text class="er-text er-head" x="34" y="80">顾客 CUSTOMER</text><text class="er-text" x="34" y="130" text-decoration="underline">customer_id · PK</text><text class="er-text" x="34" y="165">name</text><text class="er-text" x="34" y="200">address</text><rect class="er-box" x="480" y="45" width="240" height="190" rx="8"/><line class="er-line" x1="480" y1="98" x2="720" y2="98"/><text class="er-text er-head" x="494" y="80">汽车 CAR</text><text class="er-text" x="494" y="130" text-decoration="underline">car_no · PK</text><text class="er-text" x="494" y="165">model</text><rect class="er-box" x="940" y="45" width="240" height="190" rx="8"/><line class="er-line" x1="940" y1="98" x2="1180" y2="98"/><text class="er-text er-head" x="954" y="80">事故 ACCIDENT</text><text class="er-text" x="954" y="130" text-decoration="underline">accident_id · PK</text><text class="er-text" x="954" y="165">accident_date</text><text class="er-text" x="954" y="200">place</text><rect class="er-box" x="480" y="420" width="240" height="115" rx="8"/><line class="er-line" x1="480" y1="473" x2="720" y2="473"/><text class="er-text er-head" x="494" y="455">保单 POLICY</text><text class="er-text" x="494" y="505" text-decoration="underline">policy_no · PK</text><rect class="er-box" x="480" y="715" width="240" height="215" rx="8"/><line class="er-line" x1="480" y1="768" x2="720" y2="768"/><text class="er-text er-head" x="494" y="750">赔付 PAYMENT</text><text class="er-text" x="494" y="800" text-decoration="underline">payment_id · PK</text><text class="er-text" x="494" y="835">due_date</text><text class="er-text" x="494" y="870">amount</text><text class="er-text" x="494" y="905">received_date</text><path class="er-line" d="M260 140 H315 M425 140 H480 M720 140 H775 M885 140 H940 M600 235 V283 M600 357 V420 M600 535 V583 M600 657 V715"/><polygon class="er-diamond" points="370,103 425,140 370,177 315,140"/><text class="er-text" text-anchor="middle" x="370" y="147">拥有</text><polygon class="er-diamond" points="830,103 885,140 830,177 775,140"/><text class="er-text" text-anchor="middle" x="830" y="147">参与</text><polygon class="er-diamond" points="600,283 655,320 600,357 545,320"/><text class="er-text" text-anchor="middle" x="600" y="327">覆盖</text><polygon class="er-diamond" points="600,583 655,620 600,657 545,620"/><text class="er-text" text-anchor="middle" x="600" y="627">赔付</text><text class="er-count" x="285" y="123">1</text><text class="er-count" x="445" y="123">1..N</text><text class="er-count" x="735" y="123">1..N</text><text class="er-count" x="888" y="123">0..N</text><text class="er-count" x="625" y="268">1..N</text><text class="er-count" x="625" y="394">1..N</text><text class="er-count" x="625" y="568">1</text><text class="er-count" x="625" y="696">1..N</text></svg></div><p class="fig-note">拥有：每车恰好一顾客，每顾客至少一车；参与：每车可零到多事故，每事故至少一车；覆盖：车与保单两端至少一次；赔付：每笔赔付恰属一保单，每保单至少一笔。保单—赔付归属采用正文声明的假设，不增加题面未给的保险金额。</p></figure><details><summary>查看同一模型的 Mermaid 源码</summary><pre><code class="language-mermaid">erDiagram
+    CUSTOMER ||--|{ CAR : owns
+    CAR |{--o{ ACCIDENT : participates_in
+    CAR |{--|{ POLICY : covered_by
+    POLICY ||--|{ PAYMENT : has
+
+    CUSTOMER {
+        string customer_id PK
+        string name
+        string address
+    }
+    CAR {
+        string car_no PK
+        string model
+    }
+    ACCIDENT {
+        string accident_id PK
+        date accident_date
+        string place
+    }
+    POLICY {
+        string policy_no PK
+    }
+    PAYMENT {
+        string payment_id PK
+        date due_date
+        decimal amount
+        date received_date
+    }
+</code></pre></details>
+<h3 id="ch04-s055">文字化约束说明</h3>
+<ul>
+<li>顾客与汽车为 <code>1:N</code>。每位顾客至少拥有一辆汽车，每辆汽车按题意属于一位顾客。</li>
+<li>汽车与事故为 <code>M:N</code>。汽车可不发生事故，也可关联多次事故；每次事故至少关联一辆汽车。</li>
+<li>汽车与保险单为 <code>M:N</code>，两侧按题意都至少参与一次。</li>
+<li>保险单与保险赔付为 <code>1:N</code>。每张保险单至少有一条赔付记录，每条赔付记录归属于一张保险单。</li>
+</ul>
+<p>Mermaid 连线端的符号表示<strong>该端实体对另一端一个实体的可参与数</strong>。例如汽车—事故线上，靠汽车端的 <code>|{</code> 表示每次事故至少有一辆车，靠事故端的 <code>o{</code> 表示一辆车可以没有事故。它与下面的文字约束互相校验。</p>
+<h3 id="ch04-s056">转换后的关系模式</h3>
+<pre><code class="language-text">CUSTOMER(
+    customer_id PK,
+    name,
+    address
+)
+
+CAR(
+    car_no PK,
+    model,
+    customer_id FK → CUSTOMER.customer_id
+)
+
+ACCIDENT(
+    accident_id PK,
+    accident_date,
+    place
+)
+
+POLICY(
+    policy_no PK
+)
+
+PARTICIPATION(
+    car_no FK → CAR.car_no,
+    accident_id FK → ACCIDENT.accident_id,
+    PK(car_no, accident_id)
+)
+
+COVERAGE(
+    car_no FK → CAR.car_no,
+    policy_no FK → POLICY.policy_no,
+    PK(car_no, policy_no)
+)
+
+PAYMENT(
+    payment_id PK,
+    due_date,
+    amount,
+    received_date,
+    policy_no FK → POLICY.policy_no
+)
+</code></pre>
+<h3 id="ch04-s057">完整解析</h3>
+<ol>
+<li><code>CUSTOMER</code>、<code>CAR</code>、<code>ACCIDENT</code>、<code>POLICY</code>、<code>PAYMENT</code> 都有独立标识和属性，因此建为实体。</li>
+<li>顾客到汽车是 <code>1:N</code>，把顾客主码放入 <code>CAR</code> 即可，不需要单独的拥有关系表。</li>
+<li>汽车到事故是 <code>M:N</code>，必须建立 <code>PARTICIPATION</code>，复合主码防止同一汽车和事故组合重复。</li>
+<li>汽车到保险单也是 <code>M:N</code>，建立 <code>COVERAGE</code>。</li>
+<li>保险单到赔付是 <code>1:N</code>，把 <code>policy_no</code> 放入 <code>PAYMENT</code>。</li>
+<li>关系模式中的外码能表达最大基数的一部分，但“每位顾客至少一辆车”“每张保险单至少覆盖一辆车”等全局最小参与约束，通常还需要事务逻辑、延迟约束或触发器配合检查。</li>
+</ol>
+<p><strong>题面假设的边界</strong>：题面同时写了“保险单含保险赔付ID”和“一张保险单关联多个赔付”，两者不能直接当作同一种 1:N 存储方式。这里以联系叙述为准，让 <code>PAYMENT.policy_no</code> 指向保险单；若教师希望按属性列表作答，应先要求澄清赔付和保险单究竟谁从属于谁。图中汽车与顾客、保险单与赔付的“至少一条”属于跨行存在性约束，单靠列级 <code>NOT NULL</code> 也不能保证。</p>
+<h2 id="ch04-s058">14. 自拟自测题与逐步答案</h2>
+<p>以下四题为自拟题。</p>
+<h3 id="ch04-s059">14.1 图书有多个作者，作者可写多本书</h3>
+<p><strong>背景</strong>：书有唯一书号，作者有唯一作者号，署名顺序属于一本书与一位作者的配对。问怎样转表？</p>
+<p><strong>推导</strong>：两边都可多个，是 M:N；署名顺序不属于作者自身，否则同一作者在不同书中顺序不能不同。建 book(BookID,title)、author(AuthorID,name)、authorship(BookID,AuthorID,position)。BookID 书号，title 书名，AuthorID 作者号，name 姓名，position 署名顺序。</p>
+<p><strong>结论</strong>：前两表各用编号作主码；联系表用 (BookID,AuthorID) 作主码、两编号作外码，并按业务另检查同书署名顺序是否唯一。</p>
+<h3 id="ch04-s060">14.2 所有订单都必须至少有一条明细，外码足够吗？</h3>
+<p><strong>背景</strong>：采用第 6 节 orders 与 order_line，明细 OID 非空且引用订单。问题是能否保证没有空订单。</p>
+<p><strong>推导</strong>：外码检查每条明细能找到订单，不检查每张订单能找到明细。可插入 O3 而不插任何明细，现有外码不会因此失败。</p>
+<p><strong>结论</strong>：不够；需额外检查“至少一条”，并考虑订单创建过程是否允许暂时为空、什么时候必须检查。</p>
+<h3 id="ch04-s061">14.3 学生电话号码为什么不直接作为主码？</h3>
+<p><strong>背景</strong>：学生可以登记多个电话，家庭共用一个号码也允许。表 student_phone(SID,phone) 如第 9 节。</p>
+<p><strong>推导</strong>：phone 可能对应两名学生，单独不唯一；SID 可能对应两号码，也单独不唯一。同学生不重复登记同号码，组合唯一。</p>
+<p><strong>结论</strong>：以 (SID,phone) 为主码；SID 是引用学生的外码。</p>
+<h3 id="ch04-s062">14.4 在职学生该怎样表示？</h3>
+<p><strong>背景</strong>：一人可以同时是学生与职工，可能还有未归入这两类的人员。</p>
+<p><strong>推导</strong>：允许同时属于两类，所以是重叠；允许人员没有这两个身份，所以是部分特化。父表 person 保存共有身份，两个子表可各自含同一 PID。</p>
+<p><strong>结论</strong>：重叠、部分特化；可用父表加子表，不能未经说明只设一个二选一类型值。</p>
+<h2 id="ch04-s063">15. 复习清单</h2>
+<ul>
+<li><input disabled="" type="checkbox"> 每个例子先能说清对象、属性与一次联系。</li>
+<li><input disabled="" type="checkbox"> 能分别回答两端最多几次、至少几次。</li>
+<li><input disabled="" type="checkbox"> 能解释弱实体为什么要组合身份。</li>
+<li><input disabled="" type="checkbox"> 能把各种实体与联系逐步转成表，说明每个 PK／FK。</li>
+<li><input disabled="" type="checkbox"> 能指出普通键约束尚不能保证的最少数量。</li>
+<li><input disabled="" type="checkbox"> 能说明保险题的原材料矛盾与采用假设。</li>
+</ul>
+<p>下一章<a href="https://goya4140.github.io/JLU_CS_Course/3_1%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F/05_%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E8%A7%84%E8%8C%83%E5%8C%96.html">关系数据库规范化</a>进一步检验这些表是否重复保存同一事实。</p>
+<hr>
+<h2 id="ch04-levels">16. 从业务规则到数据库效果，分四层核对</h2>
+<p>以“每个学生必须属于一个系，一个系可以没有学生，也可以有多个学生”为独立行政业务。业务规则、图、关系模式和实际记录各表达不同层次的内容。</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>层次</th>
+<th>当前要说清什么</th>
+<th>本例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>业务需求</td>
+<td>两个方向最少/最多是多少</td>
+<td>每学生恰好一系，每系零到多学生</td>
+</tr>
+<tr>
+<td>概念图</td>
+<td>对象与联系，以及数量限制</td>
+<td>学生—属于—系，学生 (1,1)，系 (0,N)</td>
+</tr>
+<tr>
+<td>关系模式</td>
+<td>表、列和引用在哪里</td>
+<td>department(DID,dname)，student(SID,name,DID)</td>
+</tr>
+<tr>
+<td>约束与数据检查</td>
+<td>哪些录入允许、哪些拒绝</td>
+<td>学生 DID 非空且能找到系；多个学生可填同一 DID</td>
+</tr>
+</tbody></table></div>
+<p>把 DID 放在学生表，只让每个学生行有一个所属系值；FK 检查这个系存在；NOT NULL 要求必须填；不加 UNIQUE 才允许多个学生同系。每个规则都来自一个明确需求，而不是“1:N”三个字符自动替你决定所有约束。</p>
+<p>再把条件改成“每个系至少一个学生”：上面的学生外码仍不能阻止新建一个空系。应当另行规定检查时机和实现办法，例如在一组业务操作结束时核对。定义这样的图和表，并不等于已经插入任何学生；已有结果截图也不证明所有未来合法记录都满足规则。</p>
+<hr>
+<h2 id="ch04-reference">17. 本章概念与方法速查</h2>
+<div class="ref-area"><div class="ref-picker"><label for="ref-select">选择要查的概念或方法</label><select id="ref-select" aria-controls="ref-panel"><option value="">请选择一个条目</option><option value="实体、实体集、属性">实体、实体集、属性</option><option value="简单/复合与单值/多值">简单/复合与单值/多值</option><option value="派生属性">派生属性</option><option value="联系与联系属性">联系与联系属性</option><option value="度数与递归角色">度数与递归角色</option><option value="三元联系与二元投影">三元联系与二元投影</option><option value="映射基数">映射基数</option><option value="参与约束与 min/max">参与约束与 min/max</option><option value="弱实体、部分码、识别联系">弱实体、部分码、识别联系</option><option value="特化、概化与继承">特化、概化与继承</option><option value="重叠/不相交与全部/部分">重叠/不相交与全部/部分</option><option value="ER 聚集">ER 聚集</option><option value="强实体与多值属性转表">强实体与多值属性转表</option><option value="M:N 联系转表">M:N 联系转表</option><option value="1:N 联系转表">1:N 联系转表</option><option value="1:1 联系转表">1:1 联系转表</option><option value="子类转表的方案">子类转表的方案</option><option value="完整 ER 与关系约束核对">完整 ER 与关系约束核对</option><option value="UML 多重性">UML 多重性</option></select><p class="source-note">选中后显示用途、读法、例子、结果和注意点。完整总结表保存在 Markdown 版。</p><div id="ref-panel" class="ref-panel" aria-live="polite" hidden></div><noscript><p>请启用 JavaScript 使用选择菜单，或查看 Markdown 版的速查表。</p></noscript></div></div>
+
+<h2 id="ch04-verification">整理与核对说明</h2>
+<p>本轮依据项目现有学习资料、<span title="来源课件未随在线学习资料上传">课件 ch7.pdf（未上传）</span>，并对照<span title="来源课件未随在线学习资料上传">课程总结（未上传）</span>和<span title="来源课件未随在线学习资料上传">试题模拟（未上传）</span>中与本单元相关的文本。原有主要知识点、模拟题和自测题均保留，补充问题铺垫、概念关系、结果解释与速查；图解使用正文的教学前提。</p>
+<p>重点标记沿用所提供课程总结的范围，不把总结中的上位主题误称为逐小节明确列出的考试重点。教学例子和增加的数据不冒充原题数据。对 PDF 的核对包含相关定义与规则，并对关键图示页作视觉检查；不声称对每一页所有图形逐项复核。</p>
+<p>验证分别记录结构与链接检查、例子的手工推导、适用的计算核对，以及 HTML 中的目录、速查和图解切换检查。资料中的 SQL 或系统协议示例用于学习，不代表已在某款真实 DBMS 中执行；实现细节、恢复策略和并发结果仍须按本文给出的前提理解。</p>
+</article><footer class="foot">对应 Markdown：<a href="https://goya4140.github.io/JLU_CS_Course/#/3_1%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F/04_ER%E6%A8%A1%E5%9E%8B%E4%B8%8E%E5%85%B3%E7%B3%BB%E6%A8%A1%E5%BC%8F%E8%BD%AC%E6%8D%A2.md">04_ER模型与关系模式转换.md</a>。图解用于对照正文学习，不在网页中执行数据库操作。外部文献需联网，正文和交互可以离线阅读。</footer><footer class="foot"><a href="https://goya4140.github.io/JLU_CS_Course/#/3_1%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F/00_%E5%AD%A6%E4%B9%A0%E5%AF%BC%E8%88%AA.md">返回数据库系统学习导航</a></footer></main></div><script id="guide-data" type="application/json">{"figures":[{"id":"ch04-viz-counts","after":"ch04-s015","title":"两个方向，分别问“至少”和“至多”","intro":"切换业务假设。每行固定一个对象，再问它能对应另一侧几个对象。","type":"choices","options":[{"label":"学生—选课—课程：双方允许零次","meaning":"主例允许学生暂未选课，课程暂时无人选。","headers":["固定哪一方的一个对象","最少对应另一方几个","最多对应另一方几个"],"rows":[["一名学生",0,"N 门课程"],["一门课程",0,"N 名学生"]],"note":"是 M:N 且双方部分参与；S4 和 C3 都可以没有选课记录。"},{"label":"学生—属于—系：每学生必须一系","meaning":"独立行政假设：学生恰有一系，一系可零到多学生。","headers":["固定哪一方的一个对象","最少","最多"],"rows":[["一名学生",1,"1 个系"],["一个系",0,"N 名学生"]],"note":"学生侧 (1,1)，系侧 (0,N)；数量限制是业务规则，不从当前样本猜。"},{"label":"学生—持有—校园证：每学生必须一证","meaning":"独立证件假设：每学生一证，每证恰属于一学生。","headers":["固定哪一方的一个对象","最少","最多"],"rows":[["一名学生",1,"1 张证"],["一张证",1,"1 名学生"]],"note":"两端都 (1,1)。只在 card 中声明非空外码，仍不能单独保证所有学生有 card 行。"}]},{"id":"ch04-viz-convert","after":"ch04-s033","title":"联系怎样落到表中：对应列放在哪里","intro":"三种独立业务方案不能同时当作同一张学生表的既有事实。切换后看身份、引用和剩余检查。","type":"choices","options":[{"label":"M:N 选课：另建 takes","meaning":"一个学生多课，一门课多人；成绩属于这次配对。","flow":[["student","SID 主码"],["takes","SID/CID 组合主码；score 记录联系属性"],["course","CID 主码"]],"headers":["takes.SID","takes.CID","score"],"rows":[["S1","C1",80],["S1","C2",90],["S2","C1",70],["S3","C2",60]],"note":"两条外码分别指向学生和课程；它们不保证学生至少有选课。"},{"label":"1:N 所属系：外码放学生侧","meaning":"每学生一个系，可有多名学生引用同一个系。","headers":["SID","name","DID"],"rows":[["S1","小林","D1"],["S2","小周","D2"],["S3","小陈","D1"]],"note":"DID 外码且非空；不加 UNIQUE，才能容许 S1/S3 同属 D1。"},{"label":"1:1 校园证：引用加唯一","meaning":"一张证只能属于一学生，一个学生至多一证。","headers":["规则","检查什么"],"rows":[["CardID 主码","区分证件"],["SID 外码","学生存在"],["SID NOT NULL","每张证必须写学生"],["SID UNIQUE","同学生不能有两张证"]],"note":"还需另查“每位学生至少一证”；这些规则的检查方向不能反过来读。"}]}],"references":[{"name":"实体、实体集、属性","kind":"建模对象与描述","meaning":"区分一位对象、同类对象整体，以及对象的信息。","usage":"先问对象能否识别，再问信息描述谁。","example":"小林是实体，学生是实体集，姓名是属性。","result":"图里的学生框描述一类对象，不是只画小林一人。","note":"不能看到一个名词就把它建成实体。","anchor":"ch04-s006"},{"name":"简单/复合与单值/多值","kind":"两种属性分类角度","meaning":"分别判断是否需拆组成部分，以及同一对象可有几个值。","usage":"能否分为子项；是否允许多个值。","example":"地址可按省市拆；一个学生可有多个电话。","result":"地址是否复合与是否多值不是同一问题。","note":"分类取决于业务使用方式。","anchor":"ch04-s009"},{"name":"派生属性","kind":"计算信息的表达","meaning":"用已知数据计算另一项信息。","usage":"已知值 + 计算条件 → 派生值。","example":"出生日期与当前日期计算年龄。","result":"查询时年龄可变化，出生日期不因此改变。","note":"若保存派生结果，须维护更新一致性。","anchor":"ch04-s010"},{"name":"联系与联系属性","kind":"共同业务事实","meaning":"描述对象之间一次对应，属性描述这次对应。","usage":"确定参与者，再决定属性依赖哪个配对。","example":"S1 选 C1 得 80，S1 选 C2 得 90。","result":"成绩属于选课，不能只挂到学生或课程上。","note":"联系集是全部同类对应，不只一条记录。","anchor":"ch04-s012"},{"name":"度数与递归角色","kind":"联系结构","meaning":"度数说明参与角色数；递归联系让同一类对象扮不同角色。","usage":"两方、三方；同一 staff 分指导者和被指导者。","example":"E1 指导 E2，两人都来自 staff。","result":"不是新建两类职工，也不是自己一定指导自己。","note":"实体集数量和参与角色数量要分清。","anchor":"ch04-s013"},{"name":"三元联系与二元投影","kind":"共同信息能否拆分","meaning":"三者共同出现的事实不一定能由两方名单恢复。","usage":"分别投影后再连接，检查有无多余组合。","example":"T1/C1/秋、T1/C2/春、T2/C1/春。","result":"三份二方名单可能拼出假的 T1/C1/春。","note":"额外约束可能改变是否可拆，不能一概说所有三元联系都不能拆。","anchor":"ch04-s014"},{"name":"映射基数","kind":"最多数量限制","meaning":"每个对象最多对应另一方多少对象。","usage":"1:1、1:N、M:N，两个方向分别问。","example":"每学生可选多课，每课可被多人选。","result":"选课是 M:N，不意味着恰好 M 次或 N 次。","note":"最多与至少不同，不能从基数推断必须参加。","anchor":"ch04-s015"},{"name":"参与约束与 min/max","kind":"最少/最多数量限制","meaning":"说明对象可否完全不参加，以及参与上限。","usage":"(0,N) 可为零；(1,1) 必须恰好一个。","example":"学生 S4 没选课，主例学生侧可为 (0,N)。","result":"若改成至少一课，S4 就不符合新规则。","note":"读图须声明端点记法，配套写自然语言。","anchor":"ch04-s018"},{"name":"弱实体、部分码、识别联系","kind":"身份依赖","meaning":"局部编号要结合拥有者身份才能识别。","usage":"拥有者码 + 部分码 → 完整主码。","example":"O1 第1行与 O2 第1行。","result":"(OID,line_no) 才区分全部明细。","note":"单纯有外码或存在依赖，不足以判定标识意义上的弱实体。","anchor":"ch04-s022"},{"name":"特化、概化与继承","kind":"共享身份的建模","meaning":"从一般到具体、从具体提取一般，以及沿用共有属性联系。","usage":"人员向下分学生/职工；或向上抽取 person。","example":"人员 PID/name，学生有专业，职工有工资。","result":"子类仍使用共享人员身份。","note":"不是把一个对象复制成没有关联的多个人。","anchor":"ch04-s026"},{"name":"重叠/不相交与全部/部分","kind":"两组子类约束","meaning":"分别检查能否同时属于多类，以及父类是否全部被覆盖。","usage":"两个问题分别作答，不作二选一大分类。","example":"在职学生可以属于两类；另有人未归入两类。","result":"这是重叠且部分特化。","note":"不能从子类名称直接猜约束。","anchor":"ch04-s027"},{"name":"ER 聚集","kind":"联系作为更高层对象","meaning":"让一项完整联系参与另一项联系。","usage":"教师—授课—课程整体接受负责人审核。","example":"M1 审核 T1 给 C1 的授课安排。","result":"只审核教师或课程，会遗漏审核的是哪次安排。","note":"不是 SQL 求平均的聚集函数。","anchor":"ch04-s028"},{"name":"强实体与多值属性转表","kind":"对象和重复属性的转换","meaning":"实体建表，多值属性另存一行一个值的对应表。","usage":"student(SID,...)；student_phone(SID,phone)。","example":"S1 的两个电话保存两行。","result":"姓名不为每个电话重复存；同号可按业务被多人使用。","note":"phone 单列未必唯一，组合码来自业务规则。","anchor":"ch04-s035"},{"name":"M:N 联系转表","kind":"多对多转换","meaning":"单独建立对应表，并保存联系属性。","usage":"takes(SID,CID,score)，组合主码 SID/CID。","example":"四条选课配对各保存一个成绩。","result":"学生、课程不重复描述，每个配对仍可识别。","note":"若允许重修，要增加学期或其他识别信息。","anchor":"ch04-s038"},{"name":"1:N 联系转表","kind":"一对多转换","meaning":"把 1 侧身份作为 N 侧的外码。","usage":"学生 DID 引用 department.DID。","example":"S1/S3 同属 D1。","result":"DID 不加 UNIQUE 才容许同一系多学生。","note":"父方至少一名子对象不是这个外码自动保证。","anchor":"ch04-s039"},{"name":"1:1 联系转表","kind":"一对一转换","meaning":"引用列加唯一性，再分别落实必参与要求。","usage":"card.SID：FK、UNIQUE、NOT NULL。","example":"每证件指一个学生，每学生至多一证。","result":"学生能否没有证件仍需从学生端检查。","note":"先确定哪侧必参与，可能合并，但不是固定只有一种转法。","anchor":"ch04-s040"},{"name":"子类转表的方案","kind":"特化转换","meaning":"父表+子表、每子类全表、单表带标志有不同前提代价。","usage":"按共享身份、是否覆盖、重叠和查询需求选方案。","example":"person 加 student_type/staff_type，允许同 PID 同时在两个子表。","result":"在职学生可完整表达，不被强行二选一。","note":"不是所有方案都自动维护全部子类约束。","anchor":"ch04-s041"},{"name":"完整 ER 与关系约束核对","kind":"建模检查方法","meaning":"核对身份、属性、两端数量、弱实体与转换后的可实施约束。","usage":"逐句需求 → 图 → 表 → 录入/删除反例。","example":"保险题中保单多赔付，在 payment 保存保单号。","result":"PK/FK 实现部分规则，至少一条通常还需额外机制。","note":"题面冲突先声明采用假设，不凭空加字段。","anchor":"ch04-s042"},{"name":"UML 多重性","kind":"另一种图形记法","meaning":"在关联端说明最少和最多数量。","usage":"0..*，1..*，0..1，1。","example":"学生—课程两端允许 0..*。","result":"和正文的 (0,N) 描述同一数量规则。","note":"图形记法不同，业务规则不应因此改变。","anchor":"ch04-s043"}]}</script><script>(()=>{'use strict';const payload=JSON.parse(document.getElementById('guide-data').textContent);const byId=id=>document.getElementById(id);const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));const rows=(headers,data)=>'<div class="table-scroll"><table><thead><tr>'+headers.map(x=>'<th scope="col">'+esc(x)+'</th>').join('')+'</tr></thead><tbody>'+data.map(row=>'<tr>'+row.map(x=>'<td>'+esc(x===null?'NULL':x)+'</td>').join('')+'</tr>').join('')+'</tbody></table></div>';const flow=steps=>'<div class="flow">'+steps.map((s,i)=>(i?'<div class="flow-arrow" aria-hidden="true">→</div>':'')+'<div class="flow-node"><strong>'+esc(s[0])+'</strong><p>'+esc(s[1])+'</p></div>').join('')+'</div>';for(const fig of payload.figures){if(fig.type==='choices'){const select=byId(fig.id+'-select');const draw=()=>{const option=fig.options[Number(select.value)];byId(fig.id+'-output').innerHTML='<p>'+esc(option.meaning)+'</p>'+(option.flow?flow(option.flow):'')+(option.svg||'')+(option.headers?rows(option.headers,option.rows):'')+(option.note?'<p class="fig-note">'+esc(option.note)+'</p>':'');};select.addEventListener('change',draw);draw();}}const refSelect=byId('ref-select');const refPanel=byId('ref-panel');const drawRef=()=>{const item=payload.references.find(x=>x.name===refSelect.value);if(!item){refPanel.hidden=true;refPanel.replaceChildren();return;}refPanel.innerHTML='<h3>'+esc(item.name)+'</h3><p class="ref-kind">'+esc(item.kind)+'</p><h4>解决什么问题</h4><p>'+esc(item.meaning)+'</p><h4>怎样理解或使用</h4><p>'+esc(item.usage)+'</p><h4>学习例子</h4><p>'+esc(item.example)+'</p><h4>结果与理由</h4><p class="result">'+esc(item.result)+'</p><h4>注意点</h4><p>'+esc(item.note)+'</p><a href="#'+esc(item.anchor)+'">回到正文看完整解释</a>';refPanel.hidden=false;};refSelect.addEventListener('change',drawRef);drawRef();const entries=[...document.querySelectorAll('.sidebar nav a')].map(link=>({link,target:document.getElementById(link.hash.slice(1))})).filter(e=>e.target);const offset=()=>{const n=Math.ceil(document.querySelector('.topbar').getBoundingClientRect().height)+18;document.documentElement.style.setProperty('--scroll-offset',n+'px');return n;};const close=()=>{document.body.classList.remove('nav-open');byId('menu').setAttribute('aria-expanded','false');};const activate=e=>entries.forEach(x=>{const on=x===e;x.link.classList.toggle('active',on);if(on)x.link.setAttribute('aria-current','location');else x.link.removeAttribute('aria-current');});const current=()=>{const boundary=offset()+3;let active=entries[0];for(const entry of entries){if(entry.target.getBoundingClientRect().top<=boundary)active=entry;else break;}if(entries.length&&innerHeight+scrollY>=document.documentElement.scrollHeight-2&&entries[entries.length-1].target.getBoundingClientRect().top<innerHeight)active=entries[entries.length-1];if(active)activate(active);};const jump=(target,hash)=>{close();window.scrollTo({top:Math.max(0,target.getBoundingClientRect().top+scrollY-offset()),behavior:'auto'});if(location.hash!==hash)history.pushState(null,'',hash);current();};document.addEventListener('click',event=>{const link=event.target.closest('a[href^="#"]');if(!link||event.button!==0||event.ctrlKey||event.metaKey||event.shiftKey||event.altKey)return;const target=document.getElementById(link.hash.slice(1));if(target){event.preventDefault();jump(target,link.hash);}});byId('menu').addEventListener('click',()=>{const on=document.body.classList.toggle('nav-open');byId('menu').setAttribute('aria-expanded',String(on));});document.addEventListener('keydown',e=>{if(e.key==='Escape')close();});let pending=false;const schedule=()=>{if(!pending){pending=true;requestAnimationFrame(()=>{current();pending=false;});}};window.addEventListener('scroll',schedule,{passive:true});window.addEventListener('resize',schedule);window.addEventListener('hashchange',schedule);window.addEventListener('popstate',schedule);if(typeof ResizeObserver!=='undefined')new ResizeObserver(schedule).observe(document.querySelector('.topbar'));let font=17;document.querySelectorAll('[data-font]').forEach(b=>b.addEventListener('click',()=>{font=Math.max(15,Math.min(21,font+Number(b.dataset.font)));document.documentElement.style.setProperty('--font',font+'px');schedule();}));byId('print').addEventListener('click',()=>window.print());document.querySelectorAll('article pre code').forEach(code=>{const pre=code.parentElement;const wrap=document.createElement('div');wrap.className='code-wrap';pre.parentNode.insertBefore(wrap,pre);wrap.append(pre);const button=document.createElement('button');button.type='button';button.className='copy';button.textContent='复制';button.setAttribute('aria-label','复制本段示例');button.addEventListener('click',async()=>{try{await navigator.clipboard.writeText(code.textContent);button.textContent='已复制';}catch{const range=document.createRange();range.selectNodeContents(code);const selection=window.getSelection();selection.removeAllRanges();selection.addRange(range);button.textContent='已选中';}setTimeout(()=>button.textContent='复制',1500);});wrap.append(button);});current();})();</script></body></html>
