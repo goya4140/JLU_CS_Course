@@ -1,0 +1,1050 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="source-sha256" content="20b0641c87527f733062d8eb649967ad503de829ae9ec7c30d0bc913f439951b"><title>第5章 语义分析和符号表 · 学习资料</title><style>:root{--paper:#fbfaf7;--surface:#fff;--ink:#253341;--muted:#5c6b75;--line:#d5dfdd;--teal:#156b62;--soft:#edf6f1;--font:17px;--scroll-offset:90px}*{box-sizing:border-box}html{scroll-behavior:auto;scroll-padding-top:var(--scroll-offset)}body{margin:0;background:var(--paper);color:var(--ink);font-family:'Microsoft YaHei','PingFang SC',system-ui,sans-serif;font-size:var(--font);line-height:1.85}a{color:var(--teal);text-underline-offset:3px}a:hover{color:#173f75}button,select{font:inherit}button{cursor:pointer}button,select{border:1px solid #b9cbc5;border-radius:7px;padding:7px 11px;background:#fff;color:var(--ink)}button:hover{background:var(--soft)}button:focus-visible,select:focus-visible,a:focus-visible{outline:3px solid #81cbb8;outline-offset:3px}.skip{position:absolute;top:-80px;left:12px;z-index:50;background:#fff;padding:8px}.skip:focus{top:8px}.sidebar{position:fixed;inset:0 auto 0 0;width:270px;padding:23px 18px;background:#f0f4f0;border-right:1px solid var(--line);overflow:auto;z-index:30;overscroll-behavior:contain}.brand{font-size:21px;font-weight:700}.brand small{display:block;font-size:12px;font-weight:400;color:var(--muted)}.sidebar nav a{display:block;color:var(--ink);text-decoration:none;padding:8px 10px;margin:3px 0;border-radius:6px;font-size:14px;line-height:1.6}.sidebar nav a:hover{background:#dcebe3}.sidebar nav a.active,.sidebar nav a.active:hover{background:var(--teal);color:white}.sidebar select{width:100%;font-size:13px}.nav-tip{font-size:12px;color:var(--muted);margin:14px 0}.shell{margin-left:270px;overflow-anchor:none}.topbar{position:sticky;top:0;background:rgba(251,250,247,.98);padding:12px 26px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:12px;z-index:20}.topbar-title{font-size:13px;color:var(--muted)}.toolbar{display:flex;gap:7px;flex-wrap:wrap}.toolbar button{font-size:13px}.menu{display:none}main{max-width:1120px;margin:auto;padding:30px 44px 80px;min-width:0}h1{font-size:32px;line-height:1.5;margin:14px 0 25px}h2{font-size:25px;line-height:1.5;padding:0 0 11px;border-bottom:1px solid var(--line);margin:44px 0 23px}h3{font-size:21px;line-height:1.55;margin:29px 0 16px}h4{font-size:18px;line-height:1.6;margin:22px 0 13px}p{margin:14px 0}li{margin:7px 0}ul,ol{padding-left:1.6em}blockquote{margin:20px 0;padding:5px 18px;border-left:3px solid #a8c6bb;background:#f0f3ef;color:#53655e;font-size:14px}blockquote p{margin:8px 0}hr{border:0;border-top:1px solid var(--line);margin:32px 0}code{font-family:Consolas,'Cascadia Code',monospace;font-size:.9em;background:#eef1ed;padding:2px 5px;border-radius:4px;overflow-wrap:anywhere}pre{background:#18313d;color:#e8f0f0;border-radius:9px;padding:19px;line-height:1.65;overflow-x:auto;max-width:100%;font-size:14px}pre code{background:none;padding:0;color:inherit;white-space:pre;overflow-wrap:normal}table{border-collapse:collapse;width:100%;font-size:15px}th{background:#eaf3ee;text-align:left}td,th{padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:top}tbody tr:nth-child(even){background:#f6f9f6}.table-scroll{overflow-x:auto;border:1px solid var(--line);border-radius:8px;margin:17px 0;max-width:100%}.table-scroll td{min-width:80px}.source-note{font-size:13px;color:var(--muted)}.learning-figure{padding:23px;border:1px solid #b4cfc2;border-radius:12px;background:var(--soft);margin:25px 0}.learning-figure h4{margin:0 0 8px;font-size:20px}.fig-intro{font-size:14px;color:var(--muted)}.learning-figure label{display:block;margin-top:15px;font-size:14px;font-weight:700}.learning-figure select{margin-top:7px;width:100%;min-height:44px;font-size:15px}.fig-output{margin-top:16px}.flow{display:flex;gap:10px;align-items:stretch;flex-wrap:wrap}.flow-node{flex:1 1 150px;border:1px solid #bfd2c9;border-radius:8px;background:#fff;padding:13px;min-width:0}.flow-node strong{display:block;color:var(--teal)}.flow-node p{font-size:14px;margin:8px 0}.flow-arrow{align-self:center;color:var(--teal);font-size:24px}.fig-note{padding:10px 14px;border-left:3px solid var(--teal);background:#fff;font-size:14px;margin:15px 0 0}.svg-scroll{overflow-x:auto;max-width:100%}.svg-scroll svg{display:block;max-width:100%;height:auto}.ref-area{min-height:calc(100vh - var(--scroll-offset));margin-top:24px}.ref-picker{padding:22px;border-radius:12px;background:var(--soft);border:1px solid #b4cfc2}.ref-picker label{display:block;font-weight:700;margin-bottom:10px}.ref-picker select{width:100%;font-size:15px;min-height:46px}.ref-panel{margin-top:18px;background:#fff;border:1px solid var(--line);padding:20px;border-radius:9px}.ref-panel[hidden]{display:none}.ref-panel h3{margin:0;font-size:24px}.ref-panel h4{font-size:16px;margin:18px 0 8px}.ref-kind{font-size:13px;color:var(--teal)}.result{padding:10px 15px;border-left:3px solid var(--teal);background:var(--soft)}.copy{display:block;margin:5px 0 0 auto;font-size:12px;padding:4px 8px}.code-wrap{margin:20px 0}.code-wrap pre{margin-bottom:0}.foot{font-size:13px;color:var(--muted);border-top:1px solid var(--line);padding-top:23px;margin-top:30px}details{border:1px solid var(--line);padding:12px;border-radius:8px;margin:15px 0}summary{cursor:pointer;font-weight:700}@media(max-width:900px){.sidebar{transform:translateX(-100%)}body.nav-open .sidebar{transform:translateX(0);top:60px}.shell{margin-left:0}.menu{display:inline-block}.topbar-title{display:none}.topbar{padding:10px 14px}main{padding:23px 18px 65px}h1{font-size:27px}h2{font-size:23px}.learning-figure,.ref-picker{padding:16px}.flow{flex-direction:column}.flow-arrow{transform:rotate(90deg)}.ref-panel{padding:15px}}@media print{.sidebar,.topbar,.toolbar,.copy,.skip{display:none!important}.shell{margin:0}main{padding:0;max-width:none}body{background:#fff;font-size:11pt}.ref-area{min-height:0}.ref-picker select{display:none}pre{white-space:pre-wrap;background:#f3f5f4;color:#111}.learning-figure{break-inside:avoid}.table-scroll{overflow:visible}a{color:inherit}}@media print{.svg-scroll{overflow:visible}.svg-scroll svg{min-width:0!important;width:100%!important;height:auto!important}}.sidebar{width:266px;background:#f1f4f1;padding:27px 19px;overflow-y:auto}.brand{font-size:21px;font-weight:700;letter-spacing:.03em;margin-bottom:5px}.brand small{font-size:12px;font-weight:400;color:var(--muted);letter-spacing:.1em}.sidebar .sub{font-size:13px;color:var(--muted);margin:5px 0 21px}.sidebar nav a{font-size:14px;line-height:1.5;padding:9px 11px;margin:3px 0;border-radius:6px}.sidebar nav a:hover{background:#e0ece6;color:#174d43}.sidebar nav a.active,.sidebar nav a.active:hover{background:var(--teal);color:#fff}.nav-group{font-size:12px;color:var(--muted);margin:18px 11px 6px;letter-spacing:.08em}.sidebar-footer{margin-top:24px;font-size:12px;color:var(--muted)}.shell{margin-left:266px}@media(max-width:900px){.shell{margin-left:0}}
+h2,h3,h4,[id]{scroll-margin-top:0}.stepper{background:#edf6f1;border:1px solid #b4cfc2;border-radius:12px;padding:22px;margin:24px 0}.stepper h3{margin:0 0 12px}.step-tools{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:15px 0}.step-tools input{width:200px;min-height:40px}.step-card{background:white;padding:18px;border-radius:8px;border:1px solid var(--line)}.step-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}.step-field{border:1px solid #d6e5dd;padding:12px;border-radius:7px;overflow-wrap:anywhere}.step-field strong{display:block;font-size:13px;color:var(--teal)}.step-field p{margin:7px 0 0}.progress-track{display:flex;gap:4px;margin:10px 0}.progress-track span{height:5px;flex:1;border-radius:3px;background:#c8d8d0}.progress-track span.done{background:var(--teal)}.step-count{font-variant-numeric:tabular-nums}.chapter-links{display:flex;gap:15px;justify-content:space-between;border-top:1px solid var(--line);padding-top:25px;margin-top:35px}.ref-area{min-height:0}.ref-panel h4{margin:12px 0 4px}.reading-meta{font-size:13px;color:var(--muted)}summary:focus-visible,input:focus-visible{outline:3px solid #81cbb8;outline-offset:3px}button:disabled{opacity:.5;cursor:default}.quick-select{width:100%}.overview-card{border:1px solid var(--line);background:white;border-radius:9px;padding:18px;margin:14px 0}.overview-card h3{margin-top:0}.sidebar nav a.external{background:#e4eee7}.nav-shade{display:none}@media(max-width:900px){body.nav-open .nav-shade{display:block;position:fixed;inset:60px 0 0 266px;background:#25334155;z-index:25}.stepper{padding:15px}.step-tools input{width:150px}.step-grid{grid-template-columns:1fr}.sidebar{max-width:85vw}.step-field{padding:10px}}@media print{.step-tools,.progress-track,.chapter-links{display:none}.step-card{break-inside:avoid}body.nav-open .nav-shade{display:none}}main{overflow-x:clip}article{min-width:0;max-width:100%}.table-scroll,pre{contain:inline-size}p,li,h1,h2,h3,h4{overflow-wrap:anywhere}</style></head><body><a class="skip" href="#article">跳到正文</a><aside class="sidebar" aria-label="章节目录"><div class="brand"><small>COMPILER / CHAPTER 05</small>第5章 语义分析和符号表</div><p class="sub">完整讲解 · 分步推导 · 离线阅读</p><nav><a href="#navigation">学习导航</a><div class="nav-group">准备 · 声明与使用</div><a href="#ch05-s01">1. 语义分析要解决什么问题</a><a href="#ch05-s02">2. 术语与记号入门</a><a href="#ch05-s03">3. 声明、使用与名字分类</a><div class="nav-group">基础 · 属性与抽象地址</div><a href="#ch05-s04">4. 标识符的内部表示</a><a href="#ch05-s05">5. 类型的内部表示</a><a href="#ch05-s06">6. 抽象地址与空间分配</a><div class="nav-group">应用 · 作用域与管理</div><a href="#ch05-s07">7. 作用域与局部化单位</a><a href="#ch05-s08">8. 符号表的组织与管理</a><a href="#ch05-s09">9. 课件实例的完整查表过程</a><div class="nav-group">综合应用 · 推导与同类检查</div><a href="#ch05-s10">10. 综合应用：历年快速排序片段的驻留符号表</a><a href="#ch05-s11">11. 静态错误练习：把已知事实与诊断能力分开</a><div class="nav-group">练习与复习 · 回查、自测和速查</div><a href="#ch05-s12">12. 课件例题回查与知识路线</a><a href="#ch05-s13">13. 自测与答案</a><a href="#ch05-s14">14. 排错与复习</a><a href="#ch05-s15">15. 末尾速查表</a><div class="nav-group">来源与核对</div><a href="#verification">整理与核对说明</a><a class="external" href="00_学习导航.html">全课程学习导航</a></nav><div class="sidebar-footer">阶段分组 · 章节直接链接<br>原题、补充与未核实范围分别标注</div></aside><div class="nav-shade"></div><div class="shell"><header class="topbar"><span class="topbar-title">第5章 语义分析和符号表</span><div class="toolbar"><button id="menu" class="menu" aria-label="打开或收起目录" aria-expanded="false">目录</button><button data-font="-1" aria-label="减小正文字号">字号 −</button><button data-font="1" aria-label="增大正文字号">字号 ＋</button><button id="print">打印 / 保存 PDF</button></div></header><main><article id="article"><h1>第5章 语义分析和符号表：理解规则、推导过程与实际结果</h1>
+<blockquote>
+<p>整理依据：项目现存课件及讲者备注、旧版资料，并结合对应作业解析与历年题重新核对和整合。各类来源和未核实内容分别说明。</p>
+<p>适合读者：具备基础程序阅读能力；本章先解释新增术语，不默认已经掌握后续章的算法。</p>
+<p>范围说明：课件为主要依据。理解补充、自拟题、重建例图和独立计算均注明性质。课程教学机、单位与源语言规则有专门约定，不等同真实平台；未取得教师标准答案和最新考试范围。</p>
+</blockquote>
+<p>资料沿本章的问题主线推进：先认清输入、对象和条件，再理解规则如何组合，最后完整推导并独立自测。与后续章连接时，可回到<a href="00_%E5%AD%A6%E4%B9%A0%E5%AF%BC%E8%88%AA.html">全课程学习导航</a>。本章各例除明确标注连续推导外，均从各自所列初始条件开始，不能沿用上一例已改写的变量值。</p>
+<blockquote>
+<p>本章依据课件 13《语义表示基础》与 14《抽象地址和符号表》重新编写，覆盖静态语义检查、名字与类型的内部表示、抽象地址、作用域及符号表管理。课件 14 封面写“第六章”，本资料按课程目录归入第五章。</p>
+<p>阅读路线是“结构合法还缺什么 → 如何保存声明的属性 → 类型如何决定检查和空间 → 如何找到有效声明”。采用课件的教学存储单位：int/bool/char 为 1，real 为 2，地址为 1；并非真实 C 的字节大小。作用域层次与过程地址层数分别解释，避免混用。</p>
+</blockquote>
+<p><a id="navigation"></a></p>
+<h2>学习导航</h2>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>学习阶段</th>
+<th>要解决的问题</th>
+<th>对应内容</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>准备 · 声明与使用</td>
+<td>理解语义分析要解决什么问题，连接本阶段各方法的输入与输出。</td>
+<td><a href="#ch05-s01">1. 语义分析要解决什么问题</a>、<a href="#ch05-s02">2. 术语与记号入门</a>、<a href="#ch05-s03">3. 声明、使用与名字分类</a></td>
+</tr>
+<tr>
+<td>基础 · 属性与抽象地址</td>
+<td>理解标识符的内部表示，连接本阶段各方法的输入与输出。</td>
+<td><a href="#ch05-s04">4. 标识符的内部表示</a>、<a href="#ch05-s05">5. 类型的内部表示</a>、<a href="#ch05-s06">6. 抽象地址与空间分配</a></td>
+</tr>
+<tr>
+<td>应用 · 作用域与管理</td>
+<td>理解作用域与局部化单位，连接本阶段各方法的输入与输出。</td>
+<td><a href="#ch05-s07">7. 作用域与局部化单位</a>、<a href="#ch05-s08">8. 符号表的组织与管理</a>、<a href="#ch05-s09">9. 课件实例的完整查表过程</a></td>
+</tr>
+<tr>
+<td>综合应用 · 推导与同类检查</td>
+<td>理解综合应用：历年快速排序片段的驻留符号表，连接本阶段各方法的输入与输出。</td>
+<td><a href="#ch05-s10">10. 综合应用：历年快速排序片段的驻留符号表</a>、<a href="#ch05-s11">11. 静态错误练习：把已知事实与诊断能力分开</a></td>
+</tr>
+<tr>
+<td>练习与复习 · 回查、自测和速查</td>
+<td>理解课件例题回查与知识路线，连接本阶段各方法的输入与输出。</td>
+<td><a href="#ch05-s12">12. 课件例题回查与知识路线</a>、<a href="#ch05-s13">13. 自测与答案</a>、<a href="#ch05-s14">14. 排错与复习</a>、<a href="#ch05-s15">15. 末尾速查表</a></td>
+</tr>
+</tbody></table></div>
+<details><summary>任务信息、来源与整理约定</summary>
+
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>项目</th>
+<th>本次采用的内容</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>资料名称</td>
+<td>第5章 语义分析和符号表</td>
+</tr>
+<tr>
+<td>整理范围</td>
+<td>本章课件正文、必要备注、原例题及相关学习资料</td>
+</tr>
+<tr>
+<td>原始来源</td>
+<td><span title="来源文件保留在本地，未随学习资料上传">13.语义分析_语义表示基础.pptx（本地来源，未上传）</span>、<span title="来源文件保留在本地，未随学习资料上传">14.语义分析_抽象地址和符号表.pptx（本地来源，未上传）</span>；辅助来源：<span title="来源文件保留在本地，未随学习资料上传">本章旧版资料（本地来源，未上传）</span></td>
+</tr>
+<tr>
+<td>读者基础</td>
+<td>默认能读变量、表达式和条件语句；集合、文法、寄存器等新术语在正文解释</td>
+</tr>
+<tr>
+<td>学习目标</td>
+<td>解释各方法用途、准确区分类别，手算中间步骤并独立判断结果与边界</td>
+</tr>
+<tr>
+<td>用户补充</td>
+<td>要求多章节均按模板完整整理；未提供逐章新问答，不补造反馈</td>
+</tr>
+<tr>
+<td>输出形式</td>
+<td>Markdown与HTML，正文和结论一致</td>
+</tr>
+<tr>
+<td>导航版式</td>
+<td>参照数据库01资料的阶段分组左栏；Markdown使用阶段导航表</td>
+</tr>
+<tr>
+<td>文件处理方式</td>
+<td>在新文件夹生成文件，原课件、旧资料和作业解析保留</td>
+</tr>
+<tr>
+<td>需要保留的内容</td>
+<td>主要知识、适用条件、课件例题、作业难点和原资料的纠错说明</td>
+</tr>
+<tr>
+<td>范围限制</td>
+<td>教学模型；未确认的图边、判分答案和本学期安排不写成事实</td>
+</tr>
+</tbody></table></div>
+</details>
+<a id="ch05-s01"></a>
+<a id="一语义分析要解决什么问题"></a>
+<a id="语义分析要解决什么问题"></a>
+<a id="ref-语义"></a>
+
+<h2>1. 语义分析要解决什么问题</h2>
+<h3>1.1 结构正确不保证使用正确</h3>
+<p>词法规定字符怎样组成单词，语法规定单词怎样组成结构，<strong>语义</strong>规定这些结构表达什么含义、哪些使用被允许。<code>x()</code> 有函数调用外形，但 x 如果是整数变量，调用就不合法。<code>x+y</code> 结构完整，也不能保证操作数类型允许加法。</p>
+<p><strong>语义分析</strong>把名字的使用与声明联系起来，检查类别与类型，为中间代码和地址分配准备属性。<strong>符号表</strong>是编译器保存名字及相关信息的数据结构；一项可能记录它属于变量还是函数、类型、作用域、存储属性等。</p>
+<h3>1.2 课件 C 片段逐项判断</h3>
+<p>课件有全局 <code>int x=10</code>，main 中 <code>x()</code>、<code>f=x</code>，之后的函数 f 中先 <code>int x=20,y</code> 再 <code>float x</code>。</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>出现</th>
+<th>问题或结论</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>全局 x 与 f 内局部 x</td>
+<td>不同作用域，可按遮蔽规则共存</td>
+</tr>
+<tr>
+<td>x()</td>
+<td>x 绑定整数变量，不具备被调用类别</td>
+</tr>
+<tr>
+<td>f=x</td>
+<td>若此时没有 f 的声明，先有未声明问题；即使绑定到函数，也不能按普通可赋值变量赋值</td>
+</tr>
+<tr>
+<td>f 内的 int x 与 float x</td>
+<td>同一局部作用域重复声明，类型不同不使它们合法</td>
+</tr>
+<tr>
+<td>x+x</td>
+<td>若绑定允许加法的类型，类型层面可成立</td>
+</tr>
+</tbody></table></div>
+<p>这只是说明语义检查的片段，不是可直接编译的完整 C 源程序；还缺头文件及一些完整语句约定。不能因为函数体后面出现 f，就自动认为使用位置已经有合法声明。</p>
+<h3>1.3 静态与动态</h3>
+<p><strong>静态语义</strong>在编译期检查，如未声明、类别错误、参数数量、类型不兼容。<strong>动态语义</strong>涉及运行状态，如依赖输入的下标越界、除数是否为零。</p>
+<p>课件“编译程序只能做静态检查”用于区分阶段：一般不能只凭类型知道任意输入会使除数为零。但若表达式明显是 <code>10/0</code>，编译器可能提前诊断；也可生成运行时检查。已知常数可检查的情形不能一律拖到运行期。</p>
+<h3>1.4 检查范围与实现安排</h3>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>检查对象</th>
+<th>必须确认</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>条件</td>
+<td>教学语言是否要求 boolean；C 则可用规定的标量条件</td>
+</tr>
+<tr>
+<td>运算</td>
+<td>操作符允许哪些类型，是否需要转换</td>
+</tr>
+<tr>
+<td>赋值</td>
+<td>左部可写，双方类型兼容</td>
+</tr>
+<tr>
+<td>调用</td>
+<td>被调对象是过程/函数，数量、类别、方式、类型匹配</td>
+</tr>
+<tr>
+<td>数组 V[E]</td>
+<td>V 的类型支持下标，E 是允许的序数类型，维数正确</td>
+</tr>
+<tr>
+<td>字段 V.id</td>
+<td>V 是记录/结构，该类型确有字段 id</td>
+</tr>
+<tr>
+<td>解引用</td>
+<td>操作对象是允许解引用的指针或课件相应文件类型</td>
+</tr>
+<tr>
+<td>返回值</td>
+<td>与函数声明的结果类型相容</td>
+</tr>
+</tbody></table></div>
+<p>声明时查本层重复并填表，使用时从内到外查绑定；表达式类型检查可随语法分析或中间代码生成进行，也可独立遍历语法树。<strong>语法制导</strong>是按识别到的语法结构执行相应处理，不必要求语义阶段独占一遍。</p>
+<p><a id="ch05-s02"></a>
+<a id="二术语与记号入门"></a>
+<a id="术语与记号入门"></a></p>
+<h2>2. 术语与记号入门</h2>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>名称</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Kind / Type</td>
+<td>标识符类别 / 数据类型，前者与后者不能互代</td>
+</tr>
+<tr>
+<td>Ptr / NULL</td>
+<td>指向一个描述结构的引用 / 没有引用</td>
+</tr>
+<tr>
+<td>Size</td>
+<td>该类型或活动记录需要的存储单位数</td>
+</tr>
+<tr>
+<td>Level / Off</td>
+<td>层数 / 相对于所属活动记录首地址的偏移</td>
+</tr>
+<tr>
+<td>dir / indir</td>
+<td>直接访问 / 通过槽中保存的地址间接访问</td>
+</tr>
+<tr>
+<td>AR</td>
+<td>过程活动记录，一次调用所需的运行时空间</td>
+</tr>
+<tr>
+<td>SP</td>
+<td>本课程中当前活动记录的首地址</td>
+</tr>
+<tr>
+<td>Scope 栈</td>
+<td>保存当前有效局部化单位的标识或表起点</td>
+</tr>
+<tr>
+<td>s、ℓ</td>
+<td>最新表项位置、作用域管理的当前深度</td>
+</tr>
+<tr>
+<td>Low、Up、ElemType</td>
+<td>数组下界、上界、元素类型</td>
+</tr>
+<tr>
+<td>actual / formal</td>
+<td>有自身代码体的实在过函 / 作为形参接收的过函</td>
+</tr>
+<tr>
+<td>Mem[a]</td>
+<td>地址 a 中保存的内容，区别于地址 a 本身</td>
+</tr>
+</tbody></table></div>
+<p><strong>种类</strong>与<strong>类型</strong>的例子：一个整数常量、一个整数变量、一个返回整数的函数都与 int 有关，但允许的使用不同。只保存 int 无法判断能否赋值或能否调用。</p>
+<p><a id="ch05-s03"></a>
+<a id="三声明使用与名字分类"></a>
+<a id="声明使用与名字分类"></a></p>
+<h2>3. 声明、使用与名字分类</h2>
+<h3>3.1 两类出现与绑定</h3>
+<p><strong>声明性出现</strong>引入名字或说明属性，如 <code>int x</code>、参数声明和函数头；<strong>使用性出现</strong>引用已声明对象，如 <code>x=x+1</code> 中左、右两处 x。赋值左边仍是使用某个声明，并不是重新声明变量。</p>
+<p><strong>绑定（理解补充）</strong>是把某次名字使用连到其对应声明。先根据作用域选择声明，再依据该项属性检查语义。不同名字可以类型相同，同名也可以在不同作用域指不同对象。</p>
+<p>后面优化中的“定义”常指给变量赋新值，如 <code>x=1</code>，与此处引入标识符的声明不同。术语要在所属阶段下解释。</p>
+<h3>3.2 五类名字</h3>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>类别</th>
+<th>例子</th>
+<th>独有信息</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>常量标识符</td>
+<td><code>const n=100</code></td>
+<td>类型与值，不是普通可改变量</td>
+</tr>
+<tr>
+<td>类型标识符</td>
+<td><code>typedef int T</code></td>
+<td>引用一个类型描述</td>
+</tr>
+<tr>
+<td>变量标识符</td>
+<td>普通变量、值形参、地址形参</td>
+<td>类型、访问方式、地址与可选初值</td>
+</tr>
+<tr>
+<td>过程/函数标识符</td>
+<td>f、有形参的回调 g</td>
+<td>签名、实在/形式、入口或槽位置</td>
+</tr>
+<tr>
+<td>域名标识符</td>
+<td><code>s.age</code> 中 age</td>
+<td>所属记录的字段类型和内部偏移</td>
+</tr>
+</tbody></table></div>
+<p>值形参接收实参值的一份拷贝；<strong>变参/地址形参</strong>接收对象地址，通过地址修改对象。课件 Pascal <code>var y</code> 是这一模式。C 的 <code>int* y</code> 本身仍按值传递一个指针，用 *y 修改调用者对象；不能因此称 C 原生具有 Pascal var 参数语法。</p>
+<p><strong>实在函数</strong>有自己的函数体；<strong>形式函数</strong>是接收函数作为参数的名字，签名用于检查，将来由实参提供入口和环境。形式函数没有一份独立的固定函数体。</p>
+<p><a id="ch05-s04"></a>
+<a id="四标识符的内部表示"></a>
+<a id="标识符的内部表示"></a>
+<a id="ref-表示"></a></p>
+<h2>4. 标识符的内部表示</h2>
+<h3>4.1 常量与类型名</h3>
+<p>常量项可为 <code>(Name,Kind=constKind,Type,Value)</code>。Type 指向类型描述，Value 指向或直接保存常量值。课件 pai=3.14、count=100 对应 real/int 及具体值。</p>
+<p>课件用 <code>#define</code> 作例，但真实 C 宏先做预处理文本替换，并非语义阶段天然保留同样的常量符号表项。这里用它解释“名字代表值”，不把宏与 const 变量混为一类。</p>
+<p>类型名项为 <code>(Name,Kind=typeKind,Type)</code>。<code>typedef int t1</code> 指向 int 描述；<code>typedef int t2[10]</code> 指向下界 0、上界 9、元素 int、大小 10 的数组描述。类型名不是运行时普通数据变量，不为每次引用分配变量槽。</p>
+<h3>4.2 变量项与访问方式</h3>
+<p>变量项为 <code>(Name,Kind=varKind,Type,Access,Level,Off,Value)</code>。Value 若存在表示声明时初值，不是编译器实时追踪运行值的通用字段。</p>
+<p>直接变量槽位置 <code>slot=base+Off</code>，其值是 <code>Mem[slot]</code>。间接变量先读 <code>addr=Mem[slot]</code>，其对象值是 <code>Mem[addr]</code>。它们访问层数相差一次读地址。</p>
+<p>课件 <code>int x=10; float y; float* z;</code> 从 off 起，不加对齐时 x 在 off，y 在 off+1，z 的指针槽在 off+3，下一空位 off+4。real 占 2、地址占 1，所以不是每次都加 1。</p>
+<p>课件将指针相关变量记为 indir 是其对象访问模型。实际语义中必须区分“z 指针本身”与“*z 所指对象”：读写 z 的槽是一层访问，读写 *z 还需读地址。Type 是 pointer(real)，不能把 z 自身的类型误写成 real。</p>
+<h3>4.3 过程/函数的字段逐项解释</h3>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>字段</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Name、Kind</td>
+<td>名字；routKind 表示过程/函数</td>
+</tr>
+<tr>
+<td>Type</td>
+<td>函数返回类型；无返回值过程可为空</td>
+</tr>
+<tr>
+<td>Level</td>
+<td>课件给过函的定义层数</td>
+</tr>
+<tr>
+<td>Off</td>
+<td>形式过函在所属记录内的参数槽偏移；实在过函通常不用此字段</td>
+</tr>
+<tr>
+<td>Param</td>
+<td>有序形参表，记录类型、类别与传递方式</td>
+</tr>
+<tr>
+<td>Class</td>
+<td>actual / formal</td>
+</tr>
+<tr>
+<td>Code</td>
+<td>实在过函的入口地址，未生成时可待回填</td>
+</tr>
+<tr>
+<td>Size</td>
+<td>实在过函一次调用所需活动记录大小</td>
+</tr>
+<tr>
+<td>Forward</td>
+<td>是否是等待后续实体的超前声明</td>
+</tr>
+</tbody></table></div>
+<p><strong>超前声明</strong>先提供签名，后提供体，使使用位置能够检查调用，也便于互相递归。实体出现时须核对与已有签名一致，不能另建不相关同名函数。</p>
+<p>参数信息即使局部符号表退出，仍需留给后面的调用检查，因此删除式表组织须保存独立、持久的签名。Code 与 Size 应在信息齐全时回填；具体哪一阶段可确定依实现而定，不能在未生成代码时编造入口。</p>
+<h3>4.4 带形式函数的课件例</h3>
+<pre><code class="language-text">function f(x:integer; var y:real;
+           function inc(a:integer):integer):integer
+</code></pre>
+<p>f 的三项形参是值参 x、地址参 y、形式函数 inc。a 是 inc 的参数，属于 inc 的签名，不是 f 的第四个实参。若参数区起点 d，x 占 1 在 d，y 地址占 1 在 d+1，inc 的入口/环境占 2 在 d+2、d+3，下一空位 d+4。</p>
+<p>调用 f 时，对应第三实参必须是签名兼容的函数；不是任意一个整数或零参数函数。类型与 Param 描述共同提供这些检查信息。</p>
+<p><a id="ch05-s05"></a>
+<a id="五类型的内部表示"></a>
+<a id="类型的内部表示"></a>
+<a id="ref-类型"></a></p>
+<h2>5. 类型的内部表示</h2>
+<h3>5.1 类型描述的两种用途</h3>
+<p><strong>类型描述符</strong>保存类型结构，用于合法性与兼容性检查，也用于计算空间和访问操作。课件按标准类型、子界/枚举、数组/记录/联合、指针分类。</p>
+<p>基本类型有 Kind 与 Size：int/bool/char 为 1，real 为 2。此单位是教学抽象，不是 C sizeof 的固定字节结论。真实类型布局还需目标机对齐等约定。</p>
+<h3>5.2 子界与序数类型</h3>
+<p><strong>子界类型</strong>限定某个有序离散基本类型的连续区间，如整数 1..10、字符 &#39;a&#39;..&#39;z&#39;。可以保存 BaseType、Low、Up、Size。<strong>序数类型</strong>能按离散先后次序对应序号，适合数组索引；任意实数并不适合作这种离散索引。</p>
+<p>备注中形如 <code>a[-3..3]</code> 的区间须有明确分隔，不应误读成小数 -3.3。数组下标类型与一个独立子界类型是相关但不同的描述字段。</p>
+<h3>5.3 数组与多维数组</h3>
+<p>数组描述 <code>(Kind=ArrayTy,Low,Up,ElemType,Size)</code>，大小：</p>
+<pre><code class="language-text">Size=(Up-Low+1)×sizeof(ElemType)
+</code></pre>
+<p>端点都包含，元素个数要加 1。若 Up&lt;Low，是否允许空数组需另按语言规则，不能无条件套负长度。</p>
+<p><code>int A[10]</code> 描述为 Low=0、Up=9、元素 int、Size=10。<code>char B[5][10]</code> 是“5 个每项含 10 个 char 的数组”：内层大小 10，外层元素大小 10，外层总大小 50。不能只保存两维数字而漏元素类型，否则中间代码阶段不知道每次下标后还有什么类型。</p>
+<h3>5.4 结构体与联合体</h3>
+<p>记录/结构类型保存 Size、Kind 与 RecBody/FieldList。字段项含 Name、Type、Off、link，link 指下一字段。字段偏移相对本结构对象首地址，不是相对某函数的 AR。</p>
+<p>忽略对齐时，<code>Date{int year,month,day}</code> 大小 3，字段偏移 0、1、2。<code>s.month</code> 地址应是 s 的对象首地址+1。</p>
+<p>联合体多个字段共享存储，<code>union{char ch;int i;real f}</code> 在教学规则下大小 max(1,1,2)=2，所有字段偏移 0。写一个字段可能改变其他解释下的内容，不能当作三份独立空间。</p>
+<p>真实结构体可能有填充，真实联合体还受对齐影响。课件数值在不考虑对齐的模型中成立。</p>
+<h3>5.5 指针与枚举</h3>
+<p>指针描述 <code>(Kind=pointTy,Size=地址长度,BaseType)</code>。int* 与 real* 可同占 1 个地址单位，但所指对象大小和允许操作不同；指针槽大小不等于对象大小。</p>
+<p>枚举描述保存 enumTy、Size、ElemList。每枚举常量记录 Name、Value。课件 <code>color{red,yellow,blue}</code> 得 0、1、2；<code>red=10,yellow=red+2,blue</code> 得 10、12、13。blue 续接前一值，不会重新从 0 编号。枚举变量大小与元素个数不是一回事，课件用 1 个教学单位。</p>
+<p><a id="ch05-s06"></a>
+<a id="六抽象地址与空间分配"></a>
+<a id="抽象地址与空间分配"></a>
+<a id="ref-地址"></a></p>
+<h2>6. 抽象地址与空间分配</h2>
+<h3>6.1 为什么编译时不能给每次调用同一真实地址</h3>
+<p><strong>静态分配</strong>预先安排固定的数据位置；<strong>动态分配</strong>在运行中按调用或申请取得空间。递归中同一局部变量声明同时有多次活动实例，如果它们共用一槽，内层就会覆盖外层值。</p>
+<p>编译可以知道 x 在函数空间内偏移为 3，却不知道第几次调用最终位于哪个实际地址。所以保存<strong>抽象地址</strong> <code>(Level,Off)</code>：层数帮助定位所属记录，偏移确定记录内槽。它不是把一个整数真实地址换个名字，而是保留以后计算地址的结构。</p>
+<p>指针槽可静态或栈分配，所指对象可固定或堆分配。课件“指针不支持静态分配”应限于需要动态申请的对象，不能推广成所有指针变量必在堆上。</p>
+<h3>6.2 活动记录的四个区域</h3>
+<p><strong>活动记录 AR</strong>保存一次函数/过程调用需要的信息，课件结构为管理区、形参区、局部变量区、临时变量区。管理区含返回地址、链接和现场等；后三区按参数、声明、生成临时结果的顺序分配。</p>
+<p>局部 direct 对象地址为所属 AR 首地址+Off；外层对象要先找到外层记录首地址，不能都用当前 SP。具体寻找方法在第六章展开。</p>
+<h3>6.3 两套层数必须分别记</h3>
+<p>Pascal 教学约定主程序层 0，直接定义的 P 层 1，P 内 Q/S 层 2，Q 内 R 层 3。<strong>变量登记层数</strong>为所在过程层+1：</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>对象</th>
+<th>课件层数</th>
+<th>所属记录的过程层</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>主程序 ep</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr>
+<td>P</td>
+<td>1</td>
+<td>P 层 1</td>
+</tr>
+<tr>
+<td>P 的 i/j/k</td>
+<td>2</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Q、S</td>
+<td>2</td>
+<td>2</td>
+</tr>
+<tr>
+<td>Q 的 real a/b</td>
+<td>3</td>
+<td>2</td>
+</tr>
+<tr>
+<td>R</td>
+<td>3</td>
+<td>3</td>
+</tr>
+<tr>
+<td>R 的 bool a/b</td>
+<td>4</td>
+<td>3</td>
+</tr>
+<tr>
+<td>S 的 char c/e</td>
+<td>3</td>
+<td>2</td>
+</tr>
+</tbody></table></div>
+<p>过函的 Level 与其变量的 Level 不同：后续若 Display 按过程层下标，变量 Level=Lv 对应 <code>Display[Lv-1]</code>。如果另一本教材直接把变量记为所属过程层，其公式就不减 1；计算前必须统一。</p>
+<p>C 教学模型中全局对象与函数层 0，参数和局部变量层 1。C 的嵌套花括号会增加作用域深度，但仍在同一函数活动记录中，所以不会把这些对象的地址层数改成 2、3。</p>
+<h3>6.4 分配原则与课件修正</h3>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>对象</th>
+<th>占用大小</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>普通局部变量、值形参</td>
+<td>类型 Size</td>
+</tr>
+<tr>
+<td>地址形参</td>
+<td>一个地址单位</td>
+</tr>
+<tr>
+<td>形式过函</td>
+<td>入口与环境共两个单位</td>
+</tr>
+<tr>
+<td>临时变量</td>
+<td>课件假设 1，真实情况依类型及目标</td>
+</tr>
+</tbody></table></div>
+<p>设 S 的形参为 <code>x:int,var y:int,function f():int</code>，局部 c/e:char，起点 d，则 x=d，y=d+1，f=d+2（占两槽），c=d+4，e=d+5，下一位 d+6。课件 14 第 10 页写 f=d+3、c=d+5、e=d+6，未说明额外对齐或槽，因此不能由其分配规则推出；这里不假造那个额外单元的用途。</p>
+<p>C 的 <code>a:int,b/d:real</code> 从 d 开始，应 a=d、b=d+1、d变量=d+3，下一空位 d+5。课件第 11 页偏移按实数 1 写，与 real=2 规则冲突。</p>
+<h3>6.5 嵌套块槽是否复用</h3>
+<p>课件 C 多块例按不复用分配：</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>块</th>
+<th>声明</th>
+<th>偏移（从 0）</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>a:int,b:real,d:real</td>
+<td>0、1、3</td>
+</tr>
+<tr>
+<td>2</td>
+<td>c:int,a:real</td>
+<td>5、6</td>
+</tr>
+<tr>
+<td>3</td>
+<td>d:int,c:real</td>
+<td>8、9</td>
+</tr>
+<tr>
+<td>4（位于3内）</td>
+<td>d:real</td>
+<td>11</td>
+</tr>
+<tr>
+<td>5（与3同级、在3退出后）</td>
+<td>d:char</td>
+<td>13；若安全复用退出块空间，可为 8</td>
+</tr>
+</tbody></table></div>
+<p>同时活动的块不能随意共用仍有用的槽。块 3 退出后，块 5 可以复用相应空间的前提是生命周期和访问关系允许。作用域是否结束、空间如何复用、符号表是否保留，是三个不同问题。</p>
+<p><a id="ch05-s07"></a>
+<a id="七作用域与局部化单位"></a>
+<a id="作用域与局部化单位"></a></p>
+<h2>7. 作用域与局部化单位</h2>
+<h3>7.1 可见范围与生存期</h3>
+<p><strong>作用域</strong>规定源码某位置能引用哪个声明；<strong>生存期</strong>规定运行时对象何时存在。前者是源码组织关系，后者是动态执行关系。静态局部对象可以在函数返回后仍存在，但名字仍只在局部可见；堆对象也可超出创建它的函数生存。</p>
+<p><strong>局部化单位</strong>是允许声明并形成局部范围的结构，如主程序、函数、过程或 C 语句块。范围可以嵌套或并列，不交叉；因此用栈管理当前有效范围方便。</p>
+<h3>7.2 遮蔽与由内到外查找</h3>
+<p>内层声明与外层同名时，内层名字<strong>遮蔽</strong>外层名字，不是改写外层声明。退出内层，外层恢复可见。是否从声明位置起可见、是否允许超前引用，依具体语言规定；本章多数例采用先声明后使用。</p>
+<p>课件 <code>P: x/y int，Q: x/z real</code>：Q 内 x 是 Q 的 real，z 是 Q 的 real，y 从 P 找到 int；P 体内 x/y 是 P 的变量，Q 的 z 不可见。</p>
+<h3>7.3 P/Q/R/S 的可见性</h3>
+<p>定义树为 ep→P，P→Q、S，Q→R。R 内 bool a/b 遮蔽 Q 的 real a/b；R 的 i 从 P 找到。Q 内 a/b 是自己的 real，i 也来自 P。S 内 c/e 是自身 char，可见 P 的 i/j/k，但不能因 Q 与它同层就引用 Q 的局部 a/b。</p>
+<p>P 体也不能访问子过程 Q/R 的局部变量。名字 Q、S 的可见性与它们体内数据可见性不同：在所属声明区及允许范围内可以调用过程，却不能因此任意读取其局部对象。课件 S 体示意 a/b 未在可见链中声明时，应报告未声明，不能取正在运行的 Q 的变量补上。</p>
+<p><a id="ch05-s08"></a>
+<a id="八符号表的组织与管理"></a>
+<a id="符号表的组织与管理"></a>
+<a id="ref-管理"></a></p>
+<h2>8. 符号表的组织与管理</h2>
+<h3>8.1 三个组织维度</h3>
+<p>课件讨论总体单表/多表、表项线性/有序/散列、局部化全局式/局部式。它们可组合，不是互斥的三选一。</p>
+<p>单表可统一保存不同 Kind 的记录；多表可把共有名字索引与不同属性描述分开。线性表便于顺序追加和逆查；有序表利于查找但新增维护有成本；散列表按名字散列查找，仍须处理冲突和作用域。</p>
+<p><strong>全局式符号表</strong>表示整个编译过程用一张集中表，里面也有局部变量；不等于只装全局变量。<strong>局部式</strong>是每个局部化单位一张表。</p>
+<h3>8.2 四项基本操作</h3>
+<p>进入范围：记本层起点或建立局部表；遇声明：只查本层，重复则报错，允许时填属性；遇使用：从本层向外查，找到最近有效声明；退出：使本层表项不再参加名字查找。</p>
+<p>声明重复检查不能查到任意外层同名便报错，否则会禁止合法遮蔽。使用查找不能只查当前层，否则会漏掉合法外层引用。Scope 管的是当前编译位置的有效范围，不是目标程序此刻的函数调用栈。</p>
+<h3>8.3 全局线性表的真删除法</h3>
+<p>用 Scope 栈记各范围起点，s 记末项。进入范围把 <code>s+1</code> 压栈；填项追加，使用从 s 逆向找最近同名；退出把有效末项改为 <code>Scope.top-1</code>，弹 Scope。</p>
+<p>这里的“删除”是符号数据管理操作，可以缩短有效数组长度，并不涉及删除电脑文件。实体函数名放在父范围，参数和局部在函数范围，所以退出函数只作废其局部项，仍保留父层函数项和持久签名。</p>
+<h3>8.4 驻留法与跳转项</h3>
+<p><strong>驻留法</strong>保留历史表项，但让查找跳过无效范围。课件退出时追加 <code>(#,Scope.top-1)</code>，其中 # 表示特殊跳转项，指针指向刚退出范围之前的最后项。</p>
+<p>逆查读到跳转项就直接跳向保存位置，不逐项查看已退出块。例如退出 Q，追加指向 Q 起点前一项的跳转，P 中后续查找不会找到 Q 的 a/b。</p>
+<p>重复声明检查也须跳过已失效内层项，不能仅从当前起点扫描所有曾出现的文字。每项显式作用域标记是另一种可行实现；核心要求是只有当前有效声明参加判断。</p>
+<h3>8.5 局部表与表栈</h3>
+<p>每进入范围建立表并压 Scope；声明只查顶表，使用由顶向底查；退出弹表。为了调试、后续分析或签名引用，表实体可以保留，但从有效查找栈移除即可。</p>
+<p>课件“局部表只有删除法”是其讲授方案，不是禁止持久保留局部表的理论定理。逻辑有效性、物理对象是否保留必须分开解释。</p>
+<p><a id="ch05-s09"></a>
+<a id="九课件实例的完整查表过程"></a>
+<a id="课件实例的完整查表过程"></a></p>
+<h2>9. 课件实例的完整查表过程</h2>
+<h3>9.1 f、g、main 按编译顺序管理</h3>
+<p>课件全局 x/y，f 有参数 z，g 有 u/v，main 使用 <code>g(x,f(2))</code>：</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>编译位置</th>
+<th>有效范围栈</th>
+<th>关键变化</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>全局声明 x/y</td>
+<td>[全局]</td>
+<td>两项可见</td>
+</tr>
+<tr>
+<td>声明 f、进入 f</td>
+<td>[全局,f]</td>
+<td>f 的名字在全局，z 在 f</td>
+</tr>
+<tr>
+<td>f 中 x=x+1</td>
+<td>[全局,f]</td>
+<td>x 在 f 未找到，再找到全局 x</td>
+</tr>
+<tr>
+<td>退出 f</td>
+<td>[全局]</td>
+<td>z 失效，f 签名保留</td>
+</tr>
+<tr>
+<td>进入/退出 g</td>
+<td>[全局,g]→[全局]</td>
+<td>u/v 只在 g 有效</td>
+</tr>
+<tr>
+<td>进入 main</td>
+<td>[全局,main]</td>
+<td>x、g、f 均由全局查到，z/u/v 不可见</td>
+</tr>
+</tbody></table></div>
+<p>这张表描述编译器处理源码，不是运行 <code>g(x,f(2))</code> 时的实际调用先后。运行时会调用函数，编译期会进入声明范围，两者不应混用同一个 Scope 栈。</p>
+<h3>9.2 C 嵌套块输出</h3>
+<pre><code class="language-text">块1：a=1,b=1
+    块2：b=2
+        块3：a=3 → 输出 a=3,b=2
+    块4：b=4 → 输出 a=1,b=4
+块1末尾：输出 a=1,b=1
+</code></pre>
+<p>块3 的 a 来自自身，b 来自块2；块4 已不在块2 中，a 来自块1，b 来自自身；全部内块退出后恢复块1。退出不把内层的 2、3、4 复制给外层对象。</p>
+<h3>9.3 swap 的参数槽与所指对象</h3>
+<p>课件 <code>swap(int* a,int* b)</code> 中 <code>tmp=*a; *a=*b; *b=tmp</code>，main 传 <code>&amp;x,&amp;y</code>。全局 x/y 在层 0，地址参数 a/b 与 tmp 在层 1。起点 d，则 a=d、b=d+1、tmp=d+2。</p>
+<p>调用时把 x、y 的地址写进 a/b 槽。执行 <code>tmp=*a</code> 先取 a 槽的地址，再读 x 值；<code>*a=*b</code> 先读 b 指向的 y 值，再写 a 指向的 x；最后把 tmp 写到 y。交换的是对象值，不是将两个参数槽中的地址换位。</p>
+<p>值参传指针与地址引用对象有相似用途，但 C 的参数 a 本身是一份指针值拷贝。给 a 重新赋指针不会自动改调用者的指针变量。</p>
+<h3>9.4 后续阶段怎样继续使用属性</h3>
+<p>中间代码可引用持久符号描述或复制 Kind、Type、Level、Off、Access 等必要属性。若使用会被作废或覆盖的局部表项地址，后续阶段可能读到错误名字。</p>
+<p>因此选“真删除法”时必须同时设计持久签名与 IR 属性保存方式。保留信息的生命周期应覆盖所有使用阶段，不能仅为当前查表方便就丢弃后端仍需的内容。</p>
+<p><a id="ch05-s10"></a>
+<a id="综合应用历年快速排序片段的驻留符号表"></a>
+<a id="ref-综合"></a></p>
+<h2>10. 综合应用：历年快速排序片段的驻留符号表</h2><div class="stepper" aria-label="分步图解"><h3>驻留表的存在与可见性</h3><p class="fig-intro">采用正文快速排序符号表编号。#为跳转项，记录保留却不继续参加当前查找。</p><div class="progress-track" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span></div><div class="step-tools"><button id="step-prev">上一步</button><label for="step-range">推导步骤</label><input id="step-range" type="range" min="0" max="5" value="0"><button id="step-next">下一步</button><span id="step-count" class="step-count"></span></div><div id="step-panel" class="step-card" aria-live="polite"></div><details><summary>完整轨迹（适合打印与连续核对）</summary><div class="table-scroll"><table><thead><tr><th>编译位置</th><th>当前有效范围</th><th>查找对象</th><th>结果</th></tr></thead><tbody><tr><td>swap体内</td><td>全局→swap</td><td>a</td><td>绑定1项，偏移off0</td></tr><tr><td>swap退出</td><td>全局</td><td>a</td><td>从#4跳0，a不可见，swap函数仍可见</td></tr><tr><td>partition的for内</td><td>全局→partition→for</td><td>j</td><td>绑定11项，Level=1，偏移off0+5</td></tr><tr><td>for退出</td><td>全局→partition</td><td>j</td><td>从#12跳10，j被跳过，查不到</td></tr><tr><td>partition体内</td><td>全局→partition</td><td>i</td><td>找到10项，仍可用</td></tr><tr><td>partition退出</td><td>全局</td><td>i</td><td>从#13跳5，局部i被跳过；partition签名仍可用</td></tr></tbody></table></div></details></div>
+<p><strong>来源：</strong>期末题第二大题第1问，第2页。要求变量写名字、种类、类型、层数、偏移，函数写名字、种类、类型、层数，采用全局符号表驻留。局部偏移从off0开始，int占1个教学单元。</p>
+<p>原题只给int宽度，未显式写指针宽度。以下沿用课件“地址占1个单元、无对齐填充”的模型；如果教师另规定指针宽度，应重算a、b、arr后续偏移。C数组形参<code>int arr[]</code>在函数签名中按指针处理，不能按一个未知长数组分配整个值副本。</p>
+<h3>10.1 分配游标与每个范围的独立性</h3>
+<p>swap的参数a、b各占一个地址槽，t占一个整数槽，下一偏移off0+3。退出swap后不把这3个槽累计到partition；另一个函数重新从off0开始。partition形参arr、low、high后依次声明pivot、i、for块的j；采用不复用局部槽方案。</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>顺序</th>
+<th>名字</th>
+<th>种类</th>
+<th>类型</th>
+<th>地址层数</th>
+<th>偏移</th>
+<th>所在范围/作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>0</td>
+<td>swap</td>
+<td>函数</td>
+<td>void，参数(int*,int*)</td>
+<td>0</td>
+<td>不适用</td>
+<td>全局可调用</td>
+</tr>
+<tr>
+<td>1</td>
+<td>a</td>
+<td>变量/形参</td>
+<td>pointer(int)</td>
+<td>1</td>
+<td>off0</td>
+<td>swap中保存对象地址</td>
+</tr>
+<tr>
+<td>2</td>
+<td>b</td>
+<td>变量/形参</td>
+<td>pointer(int)</td>
+<td>1</td>
+<td>off0+1</td>
+<td>swap中保存对象地址</td>
+</tr>
+<tr>
+<td>3</td>
+<td>t</td>
+<td>局部变量</td>
+<td>int</td>
+<td>1</td>
+<td>off0+2</td>
+<td>swap临时保存元素值</td>
+</tr>
+<tr>
+<td>4</td>
+<td>#</td>
+<td>退出跳转项</td>
+<td>指向0项</td>
+<td>不适用</td>
+<td>不适用</td>
+<td>跳过1—3，swap本身仍有效</td>
+</tr>
+<tr>
+<td>5</td>
+<td>partition</td>
+<td>函数</td>
+<td>int，参数(int*,int,int)</td>
+<td>0</td>
+<td>不适用</td>
+<td>全局可调用</td>
+</tr>
+<tr>
+<td>6</td>
+<td>arr</td>
+<td>变量/形参</td>
+<td>pointer(int)</td>
+<td>1</td>
+<td>off0</td>
+<td>数组形参指针</td>
+</tr>
+<tr>
+<td>7</td>
+<td>low</td>
+<td>变量/形参</td>
+<td>int</td>
+<td>1</td>
+<td>off0+1</td>
+<td>分区下界</td>
+</tr>
+<tr>
+<td>8</td>
+<td>high</td>
+<td>变量/形参</td>
+<td>int</td>
+<td>1</td>
+<td>off0+2</td>
+<td>分区上界</td>
+</tr>
+<tr>
+<td>9</td>
+<td>pivot</td>
+<td>局部变量</td>
+<td>int</td>
+<td>1</td>
+<td>off0+3</td>
+<td>接收arr[high]当前值</td>
+</tr>
+<tr>
+<td>10</td>
+<td>i</td>
+<td>局部变量</td>
+<td>int</td>
+<td>1</td>
+<td>off0+4</td>
+<td>已处理小元素区尾部</td>
+</tr>
+<tr>
+<td>11</td>
+<td>j</td>
+<td>for块局部变量</td>
+<td>int</td>
+<td>1</td>
+<td>off0+5</td>
+<td>仅在for语句范围可见</td>
+</tr>
+<tr>
+<td>12</td>
+<td>#</td>
+<td>退出跳转项</td>
+<td>指向10项</td>
+<td>不适用</td>
+<td>不适用</td>
+<td>for块退出后跳过j</td>
+</tr>
+<tr>
+<td>13</td>
+<td>#</td>
+<td>退出跳转项</td>
+<td>指向5项</td>
+<td>不适用</td>
+<td>不适用</td>
+<td>partition退出后跳过6—12</td>
+</tr>
+</tbody></table></div>
+<p>表号只是本资料的0起始表项编号，不是内存地址。#跳转項属于符号表管理数据，不占目标程序普通变量槽；它也不是输入结束Token。</p>
+<h3>10.2 用两次查找核对驻留是否正确</h3>
+<p>在for体内，j绑定11项，i绑定10项，swap先从局部逆查，最后到全局0项。for结束后查j，从12项跳10，越过11，不应查到j；i仍能查到10项。partition结束后从13项直接跳5项，arr/low/high/pivot/i/j都退出有效查找。原表内容保留，作用域可见性已经改变。</p>
+<p>这份表保留函数签名。未来调用partition时需要参数类型，不能因为局部范围退出就把整个函数信息当无效。若采用逐层表保存，也须让IR引用的必要属性持续存在。</p>
+<p><a id="ch05-s11"></a>
+<a id="静态错误练习把已知事实与诊断能力分开"></a></p>
+<h2>11. 静态错误练习：把已知事实与诊断能力分开</h2>
+<p><strong>来源：</strong>期末题第二大题第2问，第2—3页。以下按题意分析，不执行原错误片段；C具体版本和编译器未指定，故“能证明”与“所有编译器必须报错”分别列出。</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>原片段</th>
+<th>主要问题</th>
+<th>可在哪发现</th>
+<th>判断前提与理由</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>int i=0; float b; b=2/i+8;</code></td>
+<td>整数除零</td>
+<td>可由常量/数据流分析提前发现；一般运行数据则动态判断</td>
+<td>这里没有中间改写i，可以证明0；但源程序类型结构本身成立，不能断言基本语法检查必然报错。b是float不会让2/i自动变成浮点除法</td>
+</tr>
+<tr>
+<td><code>int a; int b=a(3);</code></td>
+<td>普通整数被调用</td>
+<td>静态语义</td>
+<td>查a的Kind/Type，不是可调用对象</td>
+</tr>
+<tr>
+<td>已声明二参数<code>x_pos</code>却调用<code>x_pos(3,4,5)</code></td>
+<td>实参数量不匹配</td>
+<td>静态语义</td>
+<td>已有函数签名，期望2项而实际3项</td>
+</tr>
+<tr>
+<td><code>int a[50]; a[30]]=8;</code></td>
+<td>多一个右方括号</td>
+<td>语法</td>
+<td>下标结构完成后不能再接该<code>]</code>；30本身未越界</td>
+</tr>
+<tr>
+<td><code>const i=10; i=5;</code></td>
+<td>常量对象被赋值；声明本身还有版本问题</td>
+<td>按题意主要静态语义，按某些C版本声明也需诊断</td>
+<td>为比较赋值问题，可明确改写成<code>const int i=10; i=5;</code>。原题少类型不能静默当作所有版本合法</td>
+</tr>
+</tbody></table></div>
+<p>具体工具是否诊断第一项、诊断严重级别如何，需在选定工具和选项下测试；本资料没有这项实机编译结论。其他明确类别或结构问题有对应规则依据。题意改写和原文差异已经列出，学生不会把改写误当原题。</p>
+<p><a id="ch05-s12"></a>
+<a id="课件例题回查与知识路线"></a></p>
+<h2>12. 课件例题回查与知识路线</h2>
+<h3>12.1 知识路线与计算步骤</h3>
+<pre><code class="language-text">语义检查 → 声明绑定 → Kind/Type/专有属性
+  → 类型描述 Size → AR 中分槽 → Level/Off 抽象地址
+  → 作用域规则 → 有效表项组织 → 中间代码与目标访问
+</code></pre>
+<p>偏移题先确定单位与对齐假设，再分对象类别；从起点累加 Size，地址参加地址长度，形式过函按入口/环境大小加；进入不同函数重新建立其分配游标，不能把嵌套函数的局部算进外层变量区。</p>
+<h3>12.2 自检与参考解释</h3>
+<p><strong>1. 同样 Type=int 就能相同使用吗？</strong> 不能，Kind 区分常量、变量、函数等，决定可赋值与可调用性。</p>
+<p><strong>2. 赋值左边出现 x 是声明吗？</strong> 不是，是对已有对象的使用；优化中值定义是另一术语。</p>
+<p><strong>3. 内层 x 是否修改外层 x 的属性？</strong> 不会，是另一个声明遮蔽外层。</p>
+<p><strong>4. 数组 [5][10] 为什么不是大小 15？</strong> 是 5 个长度 10 的数组，总 50 个 char。</p>
+<p><strong>5. 指针 Size 为何不随元素大小变化？</strong> 槽保存地址，大小由地址表示决定；BaseType 记录对象类型。</p>
+<p><strong>6. C 花括号多一层，Level 一定加 1 吗？</strong> 本章地址模型不加，Scope 深度增加；它们不是同一层次。</p>
+<p><strong>7. Pascal Level=3 的变量属于几层过程？</strong> 按课件变量层=过程层+1，属于过程层 2。</p>
+<p><strong>8. 形式函数 inc 的参数 a 是外层 f 的参数吗？</strong> 是 inc 签名内部参数，不是 f 的第四项。</p>
+<p><strong>9. 驻留就是所有旧名字仍可见吗？</strong> 不是，物理保留但查找必须跳过无效项。</p>
+<p><strong>10. 全局式表是否只能存全局变量？</strong> 不是，全程序各范围集中存，作用域由辅助信息区分。</p>
+<p><strong>11. sizeof(real)=2 是否是 C 标准规定？</strong> 不是，仅本课存储单位假设。</p>
+<p><strong>12. 动态语义错误都不能预先发现吗？</strong> 已知常数或可证明情形能提前诊断；一般运行数据还需运行期判断。</p>
+<h3>12.3 课件覆盖索引</h3>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>课件页码</th>
+<th>内容</th>
+<th>本资料</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>13：2—11</td>
+<td>语法语义、错误、静动态、功能与实现</td>
+<td>第 1 节</td>
+</tr>
+<tr>
+<td>13：12—15</td>
+<td>声明使用、种类、属性</td>
+<td>第 2—3 节</td>
+</tr>
+<tr>
+<td>13：16—25</td>
+<td>常量、类型、变量、过函内部表示与例子</td>
+<td>第 4 节</td>
+</tr>
+<tr>
+<td>13：26—37及备注</td>
+<td>类型用途、标准、子界、数组、结构、联合、指针、枚举</td>
+<td>第 5 节</td>
+</tr>
+<tr>
+<td>14：3—11</td>
+<td>静动态空间、AR、层数、抽象地址与分配例</td>
+<td>第 6 节</td>
+</tr>
+<tr>
+<td>14：12—13</td>
+<td>符号表用途与三种组织维度</td>
+<td>8.1、9.4</td>
+</tr>
+<tr>
+<td>14：15—22</td>
+<td>作用域、局部化、检查与退出方案</td>
+<td>第 7 节、8.2—8.4</td>
+</tr>
+<tr>
+<td>14：23—31</td>
+<td>f/g/main、全局真删除/驻留、局部表</td>
+<td>第 8 节、9.1</td>
+</tr>
+<tr>
+<td>14：32—35</td>
+<td>Pascal 定义树与表组织</td>
+<td>7.2—7.3、8.3—8.5</td>
+</tr>
+<tr>
+<td>14：36—40</td>
+<td>C 并列函数、swap、分块与输出</td>
+<td>6.5、9.2—9.3</td>
+</tr>
+<tr>
+<td>14：41—46</td>
+<td>C/Pascal 比较与完整管理规则</td>
+<td>6.3、第 8、10 节</td>
+</tr>
+</tbody></table></div>
+<h3>12.4 澄清与补充范围</h3>
+<p>Type 与 Kind、编译作用域与运行生存期、C 指针值传递与 Pascal 变参均分别解释。课件 14 两处偏移不一致按其教学 Size 重算，未给出额外槽或对齐的原始依据，不能认定课件原值另有隐藏布局；若教师提供额外布局，需相应重算。</p>
+<p>结构无填充、地址长度 1、过函环境 1 等是本课程抽象，并非实际平台规定。子界类型主要依据备注展开；表实体持久保存、作用域绑定与保存 IR 属性的说明属于理解补充。</p>
+<p>课件：<span title="来源文件保留在本地，未随学习资料上传">13：语义表示基础（本地来源，未上传）</span>；<span title="来源文件保留在本地，未随学习资料上传">14：抽象地址和符号表（本地来源，未上传）</span>。</p>
+<p><a id="ch05-s13"></a>
+<a id="自测与答案"></a></p>
+<h2>13. 自测与答案</h2>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>题号</th>
+<th>学习任务</th>
+<th>检查能力</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>教学模型下依次声明int x、real y、int* p，起点d，各偏移与下一空位是什么？</td>
+<td>按类型大小分配</td>
+</tr>
+<tr>
+<td>2</td>
+<td>一个内块声明同名x，退出后查x会找到谁？是否把外层x的值自动改成内层值？</td>
+<td>区分遮蔽与修改</td>
+</tr>
+<tr>
+<td>3</td>
+<td>退出for后驻留表中仍有j项，为什么不能再引用？</td>
+<td>区分存在与有效</td>
+</tr>
+<tr>
+<td>4</td>
+<td>C函数内多一层花括号，Scope层数和地址Level分别如何变化？</td>
+<td>区分两套层次</td>
+</tr>
+</tbody></table></div>
+<h3>13.1 答案与理由</h3>
+<ol>
+<li>x=d，占1；y=d+1，占2；p=d+3，占地址1；下一空位d+4。p所指对象大小不决定p槽大小，真实平台还要另算对齐。</li>
+<li>内块中绑定内层声明，退出后恢复外层声明。两个对象独立，退出只改变可见性，不复制值，也不修改外层声明属性。</li>
+<li>查找遇退出跳转项越过j；记录被保留供复查，不表示现在有效。判断依据是当前有效范围链。</li>
+<li>Scope反映块嵌套，进入内块加深；本课程C地址模型的局部Level仍为1，因为仍属于同一函数AR。若函数递归，新AR首址改变，Level和Off仍可不变。</li>
+</ol>
+<p><a id="ch05-s14"></a>
+<a id="排错与复习"></a></p>
+<h2>14. 排错与复习</h2>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>现象或疑问</th>
+<th>可能原因</th>
+<th>怎样核对</th>
+<th>正确理解</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>两个不同作用域x被判重复</td>
+<td>声明时查全表</td>
+<td>限定查当前有效本层</td>
+<td>遮蔽一般可合法</td>
+</tr>
+<tr>
+<td>同一层x漏判重复</td>
+<td>驻留表跳转或起点错误</td>
+<td>标出本层起点及有效范围</td>
+<td>声明查本层，使用查内到外</td>
+</tr>
+<tr>
+<td>偏移统一每项加1</td>
+<td>忘记Type.Size</td>
+<td>逐项写大小与下一游标</td>
+<td>real、数组、形式函数不同</td>
+</tr>
+<tr>
+<td>后端读到已覆盖符号项</td>
+<td>IR保存生命周期不足的引用</td>
+<td>检查退出和后续使用时间</td>
+<td>复制必要属性或保留持久项</td>
+</tr>
+</tbody></table></div>
+<ul>
+<li><input disabled="" type="checkbox"> 能分开Kind与Type，并解释函数签名包含什么。</li>
+<li><input disabled="" type="checkbox"> 能手工管理进入、声明、使用、退出四项操作。</li>
+<li><input disabled="" type="checkbox"> 能区分作用域、生存期、Scope深度和地址层数。</li>
+<li><input disabled="" type="checkbox"> 能按给定教学单位算数组、记录、联合和参数大小。</li>
+</ul>
+<p><a id="ch05-s15"></a>
+<a id="末尾速查表"></a></p>
+<h2>15. 末尾速查表</h2>
+<div class="ref-picker"><label for="quick-select">选择一个概念或方法，查看含义、形式、例子、结果和前提</label><select id="quick-select" class="quick-select"><option value="0">静态语义</option><option value="1">Kind/Type</option><option value="2">类型描述</option><option value="3">抽象地址</option><option value="4">Scope</option><option value="5">驻留法</option></select><div id="quick-panel" class="ref-panel" aria-live="polite"></div></div>
+<p><a id="verification"></a></p>
+<h2>整理与核对说明</h2>
+<p>本章重新读取现存课件提取文字与PPTX讲者备注，对照旧版讲解，保留详细定义、条件和原例题，按问题主线重排，新增综合推导、自测答案、排错和分类速查，修复旧来源路径。旧版末尾的课件页码对应保留供回查；正文新增的自拟题及理解补充不自动成为考试范围。</p>
+<p>主要课件：<span title="来源文件保留在本地，未随学习资料上传">13.语义分析_语义表示基础.pptx（本地来源，未上传）</span>、<span title="来源文件保留在本地，未随学习资料上传">14.语义分析_抽象地址和符号表.pptx（本地来源，未上传）</span></p>
+<p>相关作业解析：本章没有单独的现存作业解析文件；练习依据课件与本次自拟题。</p>
+<p>相关历年题：<span title="来源文件保留在本地，未随学习资料上传">2022级期末题（本地来源，未上传）</span>。PDF实际题头为2024—2025学年第一学期、考试日2024-12-07，“22级”指学生年级，不能误说考试发生在2022年。</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>内容</th>
+<th>已核实的事实</th>
+<th>不确定或可能出错的部分</th>
+<th>原因</th>
+<th>进一步核实方法</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>课件覆盖</td>
+<td>对照本项目本章课件提取正文/备注的主题与旧版索引，源文件路径存在</td>
+<td>纯图中个别未明确边、布局与原图美观不在文字核验范围</td>
+<td>PowerPoint COM启动失败；二进制PPT图形关系不由文本顺序完整保留</td>
+<td>对照原课件图页；未确认处在正文保留限定，不凭空补边</td>
+</tr>
+<tr>
+<td>推导与计算</td>
+<td>本章给出前提、规则、步骤和结果；程序检查的具体对象另列于<a href="10_%E6%9D%A5%E6%BA%90%E8%A6%86%E7%9B%96%E4%B8%8E%E6%A0%B8%E5%AF%B9%E6%8A%A5%E5%91%8A.html">总核对报告</a></td>
+<td>其他教学伪代码未在真实编译器/ABI中运行</td>
+<td>源语言和目标机为课程抽象</td>
+<td>选定真实实现后核对语法、布局与运行行为</td>
+</tr>
+<tr>
+<td>历年/作业解答</td>
+<td>已核对题意和相关理论规则，本次解答标明补充、改写与假设</td>
+<td>未取得教师标准答案与歧义题判分口径</td>
+<td>项目只提供题目和已有学习解析</td>
+<td>请教师确认歧义与标准答案，必要时重算</td>
+</tr>
+<tr>
+<td>考试范围/课程安排</td>
+<td>只转述课件记载</td>
+<td>本学期是否更改、补充算法是否考查</td>
+<td>未提供最新通知</td>
+<td>按教师最新课程通知确认</td>
+</tr>
+<tr>
+<td>两种格式</td>
+<td>HTML由当前Markdown正文生成，离线分组目录、图解、速查一致</td>
+<td>浏览器以外的软件排版可能不同</td>
+<td>阅读器实现与字号设置不同</td>
+<td>优先用本章HTML或常规Markdown阅读器</td>
+</tr>
+</tbody></table></div>
+<p>更详细的来源覆盖矩阵、可复算的检查记录与交付限制见<a href="10_%E6%9D%A5%E6%BA%90%E8%A6%86%E7%9B%96%E4%B8%8E%E6%A0%B8%E5%AF%B9%E6%8A%A5%E5%91%8A.html">来源覆盖与核对报告</a>。</p>
+</article><div class="chapter-links"><a href="04_语法分析_自底向上方法.html">← 第4章 语法分析：自底向上分析方法</a><a href="06_运行时存储空间管理.html">第6章 运行时存储空间的组织与管理 →</a></div><p class="foot">编译原理学习资料 · 整理于2026-10-13 · 请结合正文条件使用结论</p></main></div><script type="application/json" id="diagram-data">{"title":"驻留表的存在与可见性","premise":"采用正文快速排序符号表编号。#为跳转项，记录保留却不继续参加当前查找。","fields":["编译位置","当前有效范围","查找对象","结果"],"rows":[["swap体内","全局→swap","a","绑定1项，偏移off0"],["swap退出","全局","a","从#4跳0，a不可见，swap函数仍可见"],["partition的for内","全局→partition→for","j","绑定11项，Level=1，偏移off0+5"],["for退出","全局→partition","j","从#12跳10，j被跳过，查不到"],["partition体内","全局→partition","i","找到10项，仍可用"],["partition退出","全局","i","从#13跳5，局部i被跳过；partition签名仍可用"]]}</script><script type="application/json" id="quick-data">[{"name":"静态语义","kind":"语言规则类别","meaning":"编译时检查使用是否允许","form":"查声明、类别、类型和签名","notice":"不等于任何运行错误都不可预判；","example":"a(3)里a为int","link":"\u003ca href=\"#ref-%E8%AF%AD%E4%B9%89\">语义任务\u003c/a>"},{"name":"Kind/Type","kind":"符号属性","meaning":"区分对象用途与数据结构","form":"Kind=var/rout，Type=int/pointer","notice":"int变量与int函数用途不同","example":"用法：Kind=var/rout，Type=int/pointer。int变量与int函数用途不同","link":"\u003ca href=\"#ref-%E8%A1%A8%E7%A4%BA\">内部表示\u003c/a>"},{"name":"类型描述","kind":"类型结构数据","meaning":"检查操作及计算空间","form":"数组(Low,Up,ElemType,Size)","notice":"教学大小并非ABI；","example":"char[5][10]为50","link":"\u003ca href=\"#ref-%E7%B1%BB%E5%9E%8B\">类型\u003c/a>"},{"name":"抽象地址","kind":"编译期定位信息","meaning":"延后确定每次调用的基址","form":"(Level,Off)＋Access","notice":"先求所属AR再加偏移；","example":"real占两个单位","link":"\u003ca href=\"#ref-%E5%9C%B0%E5%9D%80\">抽象地址\u003c/a>"},{"name":"Scope","kind":"有效范围辅助栈","meaning":"决定当前查哪些声明","form":"进入压起点，退出弹范围","notice":"不与目标程序调用栈混同","example":"用法：进入压起点，退出弹范围。不与目标程序调用栈混同","link":"\u003ca href=\"#ref-%E7%AE%A1%E7%90%86\">符号表管理\u003c/a>"},{"name":"驻留法","kind":"全局表局部化实现","meaning":"保存历史项并跳过失效项","form":"退出加(#,范围前项)","notice":"保留不等于可见；","example":"for退出跳过j","link":"\u003ca href=\"#ref-%E7%BB%BC%E5%90%88\">驻留符号表综合\u003c/a>"}]</script><script>
+const links=[...document.querySelectorAll('nav a[href^="#"]')];
+const headings=links.map(a=>document.getElementById(a.hash.slice(1))).filter(Boolean);
+let scheduled=false;
+function markNavigation(){scheduled=false;let id=headings[0]?.id;const offset=Math.max(document.querySelector('.topbar').getBoundingClientRect().height+15,parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--scroll-offset'))||90)+4;for(const el of headings){if(el.getBoundingClientRect().top<=offset)id=el.id;}if(window.innerHeight+window.scrollY>=document.documentElement.scrollHeight-3)id=headings.at(-1)?.id;links.forEach(a=>{const on=a.hash==='#'+id;a.classList.toggle('active',on);if(on)a.setAttribute('aria-current','location');else a.removeAttribute('aria-current');});}
+window.addEventListener('scroll',()=>{if(!scheduled){scheduled=true;requestAnimationFrame(markNavigation)}},{passive:true});window.addEventListener('resize',markNavigation);
+const menu=document.getElementById('menu');function closeMenu(){document.body.classList.remove('nav-open');menu.setAttribute('aria-expanded','false');}menu.addEventListener('click',()=>{const open=document.body.classList.toggle('nav-open');menu.setAttribute('aria-expanded',String(open));});document.querySelector('.nav-shade').addEventListener('click',closeMenu);document.addEventListener('keydown',e=>{if(e.key==='Escape')closeMenu();});links.forEach(a=>a.addEventListener('click',()=>{closeMenu();setTimeout(markNavigation,0);}));
+document.querySelectorAll('[data-font]').forEach(b=>b.addEventListener('click',()=>{const root=document.documentElement;let n=parseFloat(getComputedStyle(root).getPropertyValue('--font'))||17;n=Math.max(14,Math.min(24,n+Number(b.dataset.font)));root.style.setProperty('--font',n+'px');markNavigation();}));document.getElementById('print').addEventListener('click',()=>window.print());
+const diagram=JSON.parse(document.getElementById('diagram-data').textContent);let step=0;
+function showStep(){if(!diagram)return;const row=diagram.rows[step];const panel=document.getElementById('step-panel');panel.replaceChildren();const grid=document.createElement('div');grid.className='step-grid';diagram.fields.forEach((field,i)=>{const cell=document.createElement('div');cell.className='step-field';const strong=document.createElement('strong');strong.textContent=field;const p=document.createElement('p');p.textContent=row[i];cell.append(strong,p);grid.append(cell);});panel.append(grid);document.getElementById('step-count').textContent=(step+1)+' / '+diagram.rows.length;document.getElementById('step-range').value=step;document.getElementById('step-prev').disabled=step===0;document.getElementById('step-next').disabled=step===diagram.rows.length-1;document.querySelectorAll('.progress-track span').forEach((s,i)=>s.classList.toggle('done',i<=step));}
+if(diagram){document.getElementById('step-prev').addEventListener('click',()=>{step=Math.max(0,step-1);showStep();});document.getElementById('step-next').addEventListener('click',()=>{step=Math.min(diagram.rows.length-1,step+1);showStep();});document.getElementById('step-range').addEventListener('input',e=>{step=Number(e.target.value);showStep();});showStep();}
+const quick=document.getElementById('quick-select');if(quick){const items=JSON.parse(document.getElementById('quick-data').textContent);function showQuick(){const r=items[Number(quick.value)];const panel=document.getElementById('quick-panel');panel.innerHTML='<h3>'+r.name+'</h3><p class="ref-kind">'+r.kind+'</p><h4>含义与用途</h4><p>'+r.meaning+'</p><h4>基本形式</h4><p>'+r.form+'</p><h4>学习例子与结果</h4><p class="result">'+r.example+'</p><h4>注意点与前提</h4><p>'+r.notice+'</p><p>'+r.link+'</p>';}quick.addEventListener('change',showQuick);showQuick();}markNavigation();
+</script></body></html>

@@ -1,0 +1,999 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="source-sha256" content="ad4ff449feba33c24c17391b2a581b0b9db78a1d275fcd07d4556889e1ae5d2c"><title>第6章 运行时存储空间的组织与管理 · 学习资料</title><style>:root{--paper:#fbfaf7;--surface:#fff;--ink:#253341;--muted:#5c6b75;--line:#d5dfdd;--teal:#156b62;--soft:#edf6f1;--font:17px;--scroll-offset:90px}*{box-sizing:border-box}html{scroll-behavior:auto;scroll-padding-top:var(--scroll-offset)}body{margin:0;background:var(--paper);color:var(--ink);font-family:'Microsoft YaHei','PingFang SC',system-ui,sans-serif;font-size:var(--font);line-height:1.85}a{color:var(--teal);text-underline-offset:3px}a:hover{color:#173f75}button,select{font:inherit}button{cursor:pointer}button,select{border:1px solid #b9cbc5;border-radius:7px;padding:7px 11px;background:#fff;color:var(--ink)}button:hover{background:var(--soft)}button:focus-visible,select:focus-visible,a:focus-visible{outline:3px solid #81cbb8;outline-offset:3px}.skip{position:absolute;top:-80px;left:12px;z-index:50;background:#fff;padding:8px}.skip:focus{top:8px}.sidebar{position:fixed;inset:0 auto 0 0;width:270px;padding:23px 18px;background:#f0f4f0;border-right:1px solid var(--line);overflow:auto;z-index:30;overscroll-behavior:contain}.brand{font-size:21px;font-weight:700}.brand small{display:block;font-size:12px;font-weight:400;color:var(--muted)}.sidebar nav a{display:block;color:var(--ink);text-decoration:none;padding:8px 10px;margin:3px 0;border-radius:6px;font-size:14px;line-height:1.6}.sidebar nav a:hover{background:#dcebe3}.sidebar nav a.active,.sidebar nav a.active:hover{background:var(--teal);color:white}.sidebar select{width:100%;font-size:13px}.nav-tip{font-size:12px;color:var(--muted);margin:14px 0}.shell{margin-left:270px;overflow-anchor:none}.topbar{position:sticky;top:0;background:rgba(251,250,247,.98);padding:12px 26px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:12px;z-index:20}.topbar-title{font-size:13px;color:var(--muted)}.toolbar{display:flex;gap:7px;flex-wrap:wrap}.toolbar button{font-size:13px}.menu{display:none}main{max-width:1120px;margin:auto;padding:30px 44px 80px;min-width:0}h1{font-size:32px;line-height:1.5;margin:14px 0 25px}h2{font-size:25px;line-height:1.5;padding:0 0 11px;border-bottom:1px solid var(--line);margin:44px 0 23px}h3{font-size:21px;line-height:1.55;margin:29px 0 16px}h4{font-size:18px;line-height:1.6;margin:22px 0 13px}p{margin:14px 0}li{margin:7px 0}ul,ol{padding-left:1.6em}blockquote{margin:20px 0;padding:5px 18px;border-left:3px solid #a8c6bb;background:#f0f3ef;color:#53655e;font-size:14px}blockquote p{margin:8px 0}hr{border:0;border-top:1px solid var(--line);margin:32px 0}code{font-family:Consolas,'Cascadia Code',monospace;font-size:.9em;background:#eef1ed;padding:2px 5px;border-radius:4px;overflow-wrap:anywhere}pre{background:#18313d;color:#e8f0f0;border-radius:9px;padding:19px;line-height:1.65;overflow-x:auto;max-width:100%;font-size:14px}pre code{background:none;padding:0;color:inherit;white-space:pre;overflow-wrap:normal}table{border-collapse:collapse;width:100%;font-size:15px}th{background:#eaf3ee;text-align:left}td,th{padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:top}tbody tr:nth-child(even){background:#f6f9f6}.table-scroll{overflow-x:auto;border:1px solid var(--line);border-radius:8px;margin:17px 0;max-width:100%}.table-scroll td{min-width:80px}.source-note{font-size:13px;color:var(--muted)}.learning-figure{padding:23px;border:1px solid #b4cfc2;border-radius:12px;background:var(--soft);margin:25px 0}.learning-figure h4{margin:0 0 8px;font-size:20px}.fig-intro{font-size:14px;color:var(--muted)}.learning-figure label{display:block;margin-top:15px;font-size:14px;font-weight:700}.learning-figure select{margin-top:7px;width:100%;min-height:44px;font-size:15px}.fig-output{margin-top:16px}.flow{display:flex;gap:10px;align-items:stretch;flex-wrap:wrap}.flow-node{flex:1 1 150px;border:1px solid #bfd2c9;border-radius:8px;background:#fff;padding:13px;min-width:0}.flow-node strong{display:block;color:var(--teal)}.flow-node p{font-size:14px;margin:8px 0}.flow-arrow{align-self:center;color:var(--teal);font-size:24px}.fig-note{padding:10px 14px;border-left:3px solid var(--teal);background:#fff;font-size:14px;margin:15px 0 0}.svg-scroll{overflow-x:auto;max-width:100%}.svg-scroll svg{display:block;max-width:100%;height:auto}.ref-area{min-height:calc(100vh - var(--scroll-offset));margin-top:24px}.ref-picker{padding:22px;border-radius:12px;background:var(--soft);border:1px solid #b4cfc2}.ref-picker label{display:block;font-weight:700;margin-bottom:10px}.ref-picker select{width:100%;font-size:15px;min-height:46px}.ref-panel{margin-top:18px;background:#fff;border:1px solid var(--line);padding:20px;border-radius:9px}.ref-panel[hidden]{display:none}.ref-panel h3{margin:0;font-size:24px}.ref-panel h4{font-size:16px;margin:18px 0 8px}.ref-kind{font-size:13px;color:var(--teal)}.result{padding:10px 15px;border-left:3px solid var(--teal);background:var(--soft)}.copy{display:block;margin:5px 0 0 auto;font-size:12px;padding:4px 8px}.code-wrap{margin:20px 0}.code-wrap pre{margin-bottom:0}.foot{font-size:13px;color:var(--muted);border-top:1px solid var(--line);padding-top:23px;margin-top:30px}details{border:1px solid var(--line);padding:12px;border-radius:8px;margin:15px 0}summary{cursor:pointer;font-weight:700}@media(max-width:900px){.sidebar{transform:translateX(-100%)}body.nav-open .sidebar{transform:translateX(0);top:60px}.shell{margin-left:0}.menu{display:inline-block}.topbar-title{display:none}.topbar{padding:10px 14px}main{padding:23px 18px 65px}h1{font-size:27px}h2{font-size:23px}.learning-figure,.ref-picker{padding:16px}.flow{flex-direction:column}.flow-arrow{transform:rotate(90deg)}.ref-panel{padding:15px}}@media print{.sidebar,.topbar,.toolbar,.copy,.skip{display:none!important}.shell{margin:0}main{padding:0;max-width:none}body{background:#fff;font-size:11pt}.ref-area{min-height:0}.ref-picker select{display:none}pre{white-space:pre-wrap;background:#f3f5f4;color:#111}.learning-figure{break-inside:avoid}.table-scroll{overflow:visible}a{color:inherit}}@media print{.svg-scroll{overflow:visible}.svg-scroll svg{min-width:0!important;width:100%!important;height:auto!important}}.sidebar{width:266px;background:#f1f4f1;padding:27px 19px;overflow-y:auto}.brand{font-size:21px;font-weight:700;letter-spacing:.03em;margin-bottom:5px}.brand small{font-size:12px;font-weight:400;color:var(--muted);letter-spacing:.1em}.sidebar .sub{font-size:13px;color:var(--muted);margin:5px 0 21px}.sidebar nav a{font-size:14px;line-height:1.5;padding:9px 11px;margin:3px 0;border-radius:6px}.sidebar nav a:hover{background:#e0ece6;color:#174d43}.sidebar nav a.active,.sidebar nav a.active:hover{background:var(--teal);color:#fff}.nav-group{font-size:12px;color:var(--muted);margin:18px 11px 6px;letter-spacing:.08em}.sidebar-footer{margin-top:24px;font-size:12px;color:var(--muted)}.shell{margin-left:266px}@media(max-width:900px){.shell{margin-left:0}}
+h2,h3,h4,[id]{scroll-margin-top:0}.stepper{background:#edf6f1;border:1px solid #b4cfc2;border-radius:12px;padding:22px;margin:24px 0}.stepper h3{margin:0 0 12px}.step-tools{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:15px 0}.step-tools input{width:200px;min-height:40px}.step-card{background:white;padding:18px;border-radius:8px;border:1px solid var(--line)}.step-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}.step-field{border:1px solid #d6e5dd;padding:12px;border-radius:7px;overflow-wrap:anywhere}.step-field strong{display:block;font-size:13px;color:var(--teal)}.step-field p{margin:7px 0 0}.progress-track{display:flex;gap:4px;margin:10px 0}.progress-track span{height:5px;flex:1;border-radius:3px;background:#c8d8d0}.progress-track span.done{background:var(--teal)}.step-count{font-variant-numeric:tabular-nums}.chapter-links{display:flex;gap:15px;justify-content:space-between;border-top:1px solid var(--line);padding-top:25px;margin-top:35px}.ref-area{min-height:0}.ref-panel h4{margin:12px 0 4px}.reading-meta{font-size:13px;color:var(--muted)}summary:focus-visible,input:focus-visible{outline:3px solid #81cbb8;outline-offset:3px}button:disabled{opacity:.5;cursor:default}.quick-select{width:100%}.overview-card{border:1px solid var(--line);background:white;border-radius:9px;padding:18px;margin:14px 0}.overview-card h3{margin-top:0}.sidebar nav a.external{background:#e4eee7}.nav-shade{display:none}@media(max-width:900px){body.nav-open .nav-shade{display:block;position:fixed;inset:60px 0 0 266px;background:#25334155;z-index:25}.stepper{padding:15px}.step-tools input{width:150px}.step-grid{grid-template-columns:1fr}.sidebar{max-width:85vw}.step-field{padding:10px}}@media print{.step-tools,.progress-track,.chapter-links{display:none}.step-card{break-inside:avoid}body.nav-open .nav-shade{display:none}}main{overflow-x:clip}article{min-width:0;max-width:100%}.table-scroll,pre{contain:inline-size}p,li,h1,h2,h3,h4{overflow-wrap:anywhere}</style></head><body><a class="skip" href="#article">跳到正文</a><aside class="sidebar" aria-label="章节目录"><div class="brand"><small>COMPILER / CHAPTER 06</small>第6章 运行时存储空间的组织与管理</div><p class="sub">完整讲解 · 分步推导 · 离线阅读</p><nav><a href="#navigation">学习导航</a><div class="nav-group">准备 · 对象与存储</div><a href="#ch06-s01">1. 运行时管理要解决什么问题</a><a href="#ch06-s02">2. 内存区域与三种分配策略</a><a href="#ch06-s03">3. 符号与活动记录结构</a><div class="nav-group">基础 · 调用与环境</div><a href="#ch06-s04">4. 调用与返回的完整过程</a><a href="#ch06-s05">5. 抽象地址怎样分配</a><a href="#ch06-s06">6. 调用链、声明链与变量访问环境</a><div class="nav-group">应用 · 非局部访问</div><a href="#ch06-s07">7. 局部 Display 表</a><a href="#ch06-s08">8. 全局 Display 表</a><a href="#ch06-s09">9. 静态链</a><a href="#ch06-s10">10. 直接、间接访问与过函参数</a><div class="nav-group">综合应用 · 推导与同类检查</div><a href="#ch06-s11">11. 综合应用：历年题第二次调用 g 时，哪些对象已经改变</a><a href="#ch06-s12">12. 三种非局部访问方法在同一数字例中的结果</a><div class="nav-group">练习与复习 · 回查、自测和速查</div><a href="#ch06-s13">13. 课件例题回查与知识路线</a><a href="#ch06-s14">14. 自测与答案</a><a href="#ch06-s15">15. 排错与复习</a><a href="#ch06-s16">16. 末尾速查表</a><div class="nav-group">来源与核对</div><a href="#verification">整理与核对说明</a><a class="external" href="00_学习导航.html">全课程学习导航</a></nav><div class="sidebar-footer">阶段分组 · 章节直接链接<br>原题、补充与未核实范围分别标注</div></aside><div class="nav-shade"></div><div class="shell"><header class="topbar"><span class="topbar-title">第6章 运行时存储空间的组织与管理</span><div class="toolbar"><button id="menu" class="menu" aria-label="打开或收起目录" aria-expanded="false">目录</button><button data-font="-1" aria-label="减小正文字号">字号 −</button><button data-font="1" aria-label="增大正文字号">字号 ＋</button><button id="print">打印 / 保存 PDF</button></div></header><main><article id="article"><h1>第6章 运行时存储空间的组织与管理：理解规则、推导过程与实际结果</h1>
+<blockquote>
+<p>整理依据：项目现存课件及讲者备注、旧版资料，并结合对应作业解析与历年题重新核对和整合。各类来源和未核实内容分别说明。</p>
+<p>适合读者：具备基础程序阅读能力；本章先解释新增术语，不默认已经掌握后续章的算法。</p>
+<p>范围说明：课件为主要依据。理解补充、自拟题、重建例图和独立计算均注明性质。课程教学机、单位与源语言规则有专门约定，不等同真实平台；未取得教师标准答案和最新考试范围。</p>
+</blockquote>
+<p>资料沿本章的问题主线推进：先认清输入、对象和条件，再理解规则如何组合，最后完整推导并独立自测。与后续章连接时，可回到<a href="00_%E5%AD%A6%E4%B9%A0%E5%AF%BC%E8%88%AA.html">全课程学习导航</a>。本章各例除明确标注连续推导外，均从各自所列初始条件开始，不能沿用上一例已改写的变量值。</p>
+<blockquote>
+<p>本章依据课件 20、21《运行时空间管理》重新编写，覆盖内存区域、静态/栈/堆分配、活动记录、调用返回、抽象地址分配、变量访问环境、局部与全局 Display、静态链。课件封面写“第七章”，本资料按课程目录编号为第六章。</p>
+<p>建议分两条线读：第一条看一次调用怎样取得和释放空间，第二条看一个变量使用怎样找到正确的空间。本章保持课件约定：SP 指当前 AR 首地址，TOP 指下一空闲位置；示例栈向地址增大方向生长。真实机器同名寄存器可能采用不同定义。</p>
+</blockquote>
+<p><a id="navigation"></a></p>
+<h2>学习导航</h2>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>学习阶段</th>
+<th>要解决的问题</th>
+<th>对应内容</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>准备 · 对象与存储</td>
+<td>理解运行时管理要解决什么问题，连接本阶段各方法的输入与输出。</td>
+<td><a href="#ch06-s01">1. 运行时管理要解决什么问题</a>、<a href="#ch06-s02">2. 内存区域与三种分配策略</a>、<a href="#ch06-s03">3. 符号与活动记录结构</a></td>
+</tr>
+<tr>
+<td>基础 · 调用与环境</td>
+<td>理解调用与返回的完整过程，连接本阶段各方法的输入与输出。</td>
+<td><a href="#ch06-s04">4. 调用与返回的完整过程</a>、<a href="#ch06-s05">5. 抽象地址怎样分配</a>、<a href="#ch06-s06">6. 调用链、声明链与变量访问环境</a></td>
+</tr>
+<tr>
+<td>应用 · 非局部访问</td>
+<td>理解局部 Display 表，连接本阶段各方法的输入与输出。</td>
+<td><a href="#ch06-s07">7. 局部 Display 表</a>、<a href="#ch06-s08">8. 全局 Display 表</a>、<a href="#ch06-s09">9. 静态链</a>、<a href="#ch06-s10">10. 直接、间接访问与过函参数</a></td>
+</tr>
+<tr>
+<td>综合应用 · 推导与同类检查</td>
+<td>理解综合应用：历年题第二次调用 g 时，哪些对象已经改变，连接本阶段各方法的输入与输出。</td>
+<td><a href="#ch06-s11">11. 综合应用：历年题第二次调用 g 时，哪些对象已经改变</a>、<a href="#ch06-s12">12. 三种非局部访问方法在同一数字例中的结果</a></td>
+</tr>
+<tr>
+<td>练习与复习 · 回查、自测和速查</td>
+<td>理解课件例题回查与知识路线，连接本阶段各方法的输入与输出。</td>
+<td><a href="#ch06-s13">13. 课件例题回查与知识路线</a>、<a href="#ch06-s14">14. 自测与答案</a>、<a href="#ch06-s15">15. 排错与复习</a>、<a href="#ch06-s16">16. 末尾速查表</a></td>
+</tr>
+</tbody></table></div>
+<details><summary>任务信息、来源与整理约定</summary>
+
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>项目</th>
+<th>本次采用的内容</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>资料名称</td>
+<td>第6章 运行时存储空间的组织与管理</td>
+</tr>
+<tr>
+<td>整理范围</td>
+<td>本章课件正文、必要备注、原例题及相关学习资料</td>
+</tr>
+<tr>
+<td>原始来源</td>
+<td><span title="来源文件保留在本地，未随学习资料上传">20.运行时空间管理(1).pptx（本地来源，未上传）</span>、<span title="来源文件保留在本地，未随学习资料上传">21.运行时空间管理(2).pptx（本地来源，未上传）</span>；辅助来源：<span title="来源文件保留在本地，未随学习资料上传">本章旧版资料（本地来源，未上传）</span></td>
+</tr>
+<tr>
+<td>读者基础</td>
+<td>默认能读变量、表达式和条件语句；集合、文法、寄存器等新术语在正文解释</td>
+</tr>
+<tr>
+<td>学习目标</td>
+<td>解释各方法用途、准确区分类别，手算中间步骤并独立判断结果与边界</td>
+</tr>
+<tr>
+<td>用户补充</td>
+<td>要求多章节均按模板完整整理；未提供逐章新问答，不补造反馈</td>
+</tr>
+<tr>
+<td>输出形式</td>
+<td>Markdown与HTML，正文和结论一致</td>
+</tr>
+<tr>
+<td>导航版式</td>
+<td>参照数据库01资料的阶段分组左栏；Markdown使用阶段导航表</td>
+</tr>
+<tr>
+<td>文件处理方式</td>
+<td>在新文件夹生成文件，原课件、旧资料和作业解析保留</td>
+</tr>
+<tr>
+<td>需要保留的内容</td>
+<td>主要知识、适用条件、课件例题、作业难点和原资料的纠错说明</td>
+</tr>
+<tr>
+<td>范围限制</td>
+<td>教学模型；未确认的图边、判分答案和本学期安排不写成事实</td>
+</tr>
+</tbody></table></div>
+</details>
+<a id="ch06-s01"></a>
+<a id="一运行时管理要解决什么问题"></a>
+<a id="运行时管理要解决什么问题"></a>
+
+<h2>1. 运行时管理要解决什么问题</h2>
+<h3>1.1 抽象位置与具体调用实例</h3>
+<p>编译时可确定 x 在函数记录内偏移 5，但递归调用会让同一声明对应多个实际对象。函数 f 的第 1 次调用 x 在地址 105，第 2 次调用可能在 117；一份函数代码要正确访问各自的 x。</p>
+<p><strong>运行时存储管理</strong>安排对象在哪里、存在多久，以及代码怎样从抽象地址找到当前应访问的对象。核心是“所属记录首地址＋偏移”，首地址随调用实例变化，偏移通常由编译确定。</p>
+<h3>1.2 决策依据是语言规则</h3>
+<p>课件列七项影响因素：是否递归；返回后局部值是否保留；是否访问非局部数据；参数如何传递；过函是否可作为结果；是否能动态申请；是否要求显式释放。</p>
+<p>这些因素解释为什么不能给所有对象统一一种存储方式。递归参数适合随调用建立；返回后仍存在的对象不能随着当前栈帧一起消失；嵌套函数还需要正确保存词法环境。</p>
+<p><a id="ch06-s02"></a>
+<a id="二内存区域与三种分配策略"></a>
+<a id="内存区域与三种分配策略"></a>
+<a id="ref-策略"></a></p>
+<h2>2. 内存区域与三种分配策略</h2>
+<h3>2.1 课件划分的五个区域</h3>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>区域</th>
+<th>用途</th>
+<th>时间与边界</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>库代码区</td>
+<td>标准库等被调用程序代码</td>
+<td>需链接或运行环境支持</td>
+</tr>
+<tr>
+<td>目标代码区</td>
+<td>编译后的用户程序指令</td>
+<td>代码布局经链接/装载进一步确定</td>
+</tr>
+<tr>
+<td>静态区</td>
+<td>全局、static 对象、需保留的常量等</td>
+<td>布局可预定，生命周期通常长</td>
+</tr>
+<tr>
+<td>栈区</td>
+<td>当前未返回调用的活动记录</td>
+<td>调用建立、返回回收</td>
+</tr>
+<tr>
+<td>堆区</td>
+<td>按运行需求申请的数据对象</td>
+<td>生命周期不必与调用嵌套一致</td>
+</tr>
+</tbody></table></div>
+<p>图是逻辑模型，并非所有平台的实际连续地址布局。代码与只读数据的保护、共享库、虚拟地址、栈增长方向均由实现规定。#include 通常引入声明等源码内容，库函数机器代码通过链接/装载安排，不能说 #include 本身就把库机器码复制进代码区。</p>
+<h3>2.2 静态分配</h3>
+<p><strong>静态分配</strong>在编译/链接等运行前阶段确定数据布局，执行中不随普通调用增减。完全采用这一路线要求对象长度和数量可预定，不允许需要多份并存记录的普通递归，也不能自由创建任意数量的动态对象。</p>
+<p>课件 square 例：全局 sum、square 的参数 i/局部 j/临时 t1、main 的局部 j/临时 t2/t3，都可各放固定槽，因为示意程序不递归，square 调用不会重入。但例中的 n 未声明，必须补充合法输入或声明才能作为完整程序执行。</p>
+<p>现代混合实现仍把全局和 static 对象放静态区。指针可以指向静态对象，指针本身也可以静态分配；课件“不能有指针”的表述应限于需要动态创建的对象，不是所有指针都强制堆分配。</p>
+<h3>2.3 栈式动态分配</h3>
+<p><strong>栈式分配</strong>遵守后进先出：调用取得一帧，内部调用先返回，最后当前帧回收。递归每次取得独立 AR，因此参数与局部不会互相覆盖；不同时间的调用又可复用栈区空间。</p>
+<p>课件采用每种函数帧大小静态确定的模型，这使 TOP 加 Size 即可分配。由此不支持其模型中未知大小的局部区域；但真实栈并非理论上绝不能支持变长数组或动态调整，只是须增加相应记录与回收机制。</p>
+<p>普通自动局部在返回时失去有效存储，不能把它的地址当作长期有效结果。static 局部是例外，因为其对象放在静态区，局部作用域不等于栈生存期。</p>
+<h3>2.4 堆式动态分配</h3>
+<p><strong>堆式分配</strong>支持申请与释放不必按嵌套顺序。例如先申请 A、再申请 B，也可以先释放 A而保留 B。分配器需记录空闲区域及对象大小，可能合并空闲块，因此通常比简单栈顶加减复杂。</p>
+<p><code>int* p</code> 的指针槽可在栈，malloc 得到的 int 对象在堆。离开函数只回收 p 槽，不自动推出其对象也已释放；对象如何释放按语言/运行时规则，显式 free 与垃圾回收是不同方案。</p>
+<p>课件倡导满足正确性前提下尽量使用较简单的分配。不能为了减少堆成本，把需要逃出函数的对象移进会被回收的普通栈帧；生存规则优先于省时。</p>
+<p><a id="ch06-s03"></a>
+<a id="三符号与活动记录结构"></a>
+<a id="符号与活动记录结构"></a>
+<a id="ref-AR"></a></p>
+<h2>3. 符号与活动记录结构</h2>
+<h3>3.1 本章记号</h3>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>记号</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>AR(Pi)</td>
+<td>P 第 i 次活动的一帧</td>
+</tr>
+<tr>
+<td>SP、TOP</td>
+<td>当前帧首址、下一空闲地址</td>
+</tr>
+<tr>
+<td>Size、d</td>
+<td>帧大小、参数区开始前控制信息大小</td>
+</tr>
+<tr>
+<td>Mem[a]</td>
+<td>地址 a 的内容，而不是 a 本身</td>
+</tr>
+<tr>
+<td>Lv、L</td>
+<td>变量登记层数、所属过程层；Pascal 约定 L=Lv-1</td>
+</tr>
+<tr>
+<td>Off</td>
+<td>相对所属 AR 首地址的偏移</td>
+</tr>
+<tr>
+<td>DL、SL</td>
+<td>动态链、静态链指针</td>
+</tr>
+<tr>
+<td>RA</td>
+<td>返回地址，即调用后继续执行的位置</td>
+</tr>
+<tr>
+<td>Display[L]</td>
+<td>保存过程层 L 对应词法环境帧首址</td>
+</tr>
+<tr>
+<td>prefixN(E)</td>
+<td>E 的前 N 项，下标 0…N-1</td>
+</tr>
+<tr>
+<td>E⊕AR(Q)</td>
+<td>在 E 后追加新帧 Q</td>
+</tr>
+<tr>
+<td>Indir(SP,k)</td>
+<td>沿静态链走 k 次；零次就是 SP</td>
+</tr>
+</tbody></table></div>
+<h3>3.2 各字段的作用</h3>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>区域/字段</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>动态链指针</td>
+<td>指向调用者帧，返回时恢复 SP</td>
+</tr>
+<tr>
+<td>返回地址</td>
+<td>控制回到调用后的下一条指令</td>
+</tr>
+<tr>
+<td>返回结果或结果地址</td>
+<td>交付函数值，具体布局须约定</td>
+</tr>
+<tr>
+<td>保存寄存器</td>
+<td>调用可能破坏的现场</td>
+</tr>
+<tr>
+<td>过程层数、帧大小</td>
+<td>支持环境与栈位置管理</td>
+</tr>
+<tr>
+<td>变量访问环境</td>
+<td>定位词法外层数据</td>
+</tr>
+<tr>
+<td>形参</td>
+<td>保存传来的值、地址或过函信息</td>
+</tr>
+<tr>
+<td>局部变量</td>
+<td>当前这一次调用的局部数据</td>
+</tr>
+<tr>
+<td>临时变量</td>
+<td>表达式中间结果等</td>
+</tr>
+</tbody></table></div>
+<p>非局部数据本体不都在当前帧，堆对象也不必在帧内；当前帧保存可用于找到它们的信息。</p>
+<p>课件 20 说返回字段存“结果存放地址”，课件 22 又示意固定结果槽。两种布局都可实现，但返回时操作不同。本章先讨论共同流程，在 4.3 分别解释；不得把一个字段同时当地址和结果值使用。</p>
+<p><a id="ch06-s04"></a>
+<a id="四调用与返回的完整过程"></a>
+<a id="调用与返回的完整过程"></a>
+<a id="ref-调用"></a></p>
+<h2>4. 调用与返回的完整过程</h2>
+<h3>4.1 分配时必须先保存旧 SP</h3>
+<p>设调用前 SP=p、TOP=t，被调函数大小 s。新帧首址 new=t。保存旧现场和必要信息，设置新帧 DL=p、RA=返回位置，安排参数和访问环境，再令 <code>SP=new、TOP=new+s</code>，转到函数入口。</p>
+<p>若先覆盖 SP 再写 DL，可能把新帧自身地址当调用者，返回无法找到旧帧。新 TOP 表示已占区域末尾之后的第一空位，不是最后已用单元。</p>
+<h3>4.2 带数字的申请与回收</h3>
+<p>主帧从 100 开始，大小 10，初始 SP=100、TOP=110。调用 f，Size=7：新 f 在 110，DL=100，SP=110、TOP=117。f 再调用 g，Size=5：g 在 117，DL=110，SP=117、TOP=122。</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>执行点</th>
+<th>SP</th>
+<th>TOP</th>
+<th>当前帧</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>主程序</td>
+<td>100</td>
+<td>110</td>
+<td>主</td>
+</tr>
+<tr>
+<td>f 内</td>
+<td>110</td>
+<td>117</td>
+<td>f</td>
+</tr>
+<tr>
+<td>g 内</td>
+<td>117</td>
+<td>122</td>
+<td>g</td>
+</tr>
+<tr>
+<td>g 返回 f</td>
+<td>110</td>
+<td>117</td>
+<td>f</td>
+</tr>
+<tr>
+<td>f 返回主</td>
+<td>100</td>
+<td>110</td>
+<td>主</td>
+</tr>
+</tbody></table></div>
+<p>g 返回时先保存其 RA/DL，读取/交付结果及恢复必要环境，再 <code>TOP=旧SP(117)、SP=DL(110)</code>，跳 RA。回收改变有效范围，内存字节未必立刻清零；后来帧可以覆盖这段，所以旧局部地址不能继续有效使用。</p>
+<h3>4.3 函数值与共同退出</h3>
+<p>若结果字段存调用者提供的目的地址，return 通过该地址写值；若规定固定结果槽，调用者返回后读取槽，且必须在复用该空间前读出。调用协议要与参数、字段顺序和生成代码一致。</p>
+<p>return 与函数末尾都是可能的退出位置。可以让 return 跳统一退出段，也可以在各退出点生成恢复流程，但一次退出只能回收一帧。不能执行 return 回收后又落到 ENDFUNC 再回收一次。</p>
+<h3>4.4 课件 P/S/Q/R 的调用链</h3>
+<p>P 为主程序，P 内 Q/S，Q 内 R，R 可以递归。示意调用：<code>P→S→Q→R1→R2</code>，帧链为 <code>[AR(P),AR(S),AR(Q),AR(R1),AR(R2)]</code>。R2 的动态链指向 R1，R1 指向 Q，Q 指向 S。</p>
+<p>R2 返回只释放 R2，R1 仍存在并继续执行；再逐次返回到 Q、S、P。每次 R 有独立 u/v/c/d 槽。课件体中的 c/d 初值未给，不能据该片段推算具体算术结果；这里核对的是结构与调用管理。</p>
+<p><a id="ch06-s05"></a>
+<a id="五抽象地址怎样分配"></a>
+<a id="抽象地址怎样分配"></a></p>
+<h2>5. 抽象地址怎样分配</h2>
+<h3>5.1 分配游标的含义</h3>
+<p><code>(ℓ,off)</code> 表示当前可用地址层次与下一空偏移。普通变量 T 从 off 开始，随后 <code>off+=Size(T)</code>；值参同样按类型大小；地址参加 1；过函形参加 2。</p>
+<p>标签、常量名、类型名的声明不增加普通变量区偏移。实在过函的体有自己的 AR，因此完整处理它后恢复外层游标。进入函数头保存外层 <code>(ℓ,off)</code>，切换到 <code>(ℓ+1,d)</code>；不能把内部参数算进外层变量区。</p>
+<h3>5.2 课件完整游标例</h3>
+<p>开始 <code>(ℓ,10)</code>，声明 Label 100/200、Const pai、Type arr[1..10]int 后仍为 <code>(ℓ,10)</code>。声明 x:int 后为 <code>(ℓ,11)</code>，a:[1..5]int 后为 <code>(ℓ,16)</code>。进入函数 f 切到 <code>(ℓ+1,d)</code>。</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>f 的参数</th>
+<th>当前偏移</th>
+<th>大小</th>
+<th>下一偏移</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>var x:real</td>
+<td>d</td>
+<td>1 个地址</td>
+<td>d+1</td>
+</tr>
+<tr>
+<td>a:arr，值参</td>
+<td>d+1</td>
+<td>10</td>
+<td>d+11</td>
+</tr>
+<tr>
+<td>var c:arr</td>
+<td>d+11</td>
+<td>1 个地址</td>
+<td>d+12</td>
+</tr>
+<tr>
+<td>Procedure G</td>
+<td>d+12</td>
+<td>入口/环境 2</td>
+<td>d+14</td>
+</tr>
+<tr>
+<td>Function F():real</td>
+<td>d+14</td>
+<td>入口/环境 2</td>
+<td>d+16</td>
+</tr>
+</tbody></table></div>
+<p>实在 f 的结果 real 不因此成为父层普通变量；返回值按管理协议安排。体处理完后回到外层 <code>(ℓ,16)</code>。大写 G/F 用于课件标记形式过函，不是所有语言都靠大小写决定类别。</p>
+<h3>5.3 并列式语言的地址映射</h3>
+<p>C 教学模型全局 Level=0，用静态基址 SP0；函数内 Level=1，用当前 SP。直接对象槽为 <code>SP0+Off</code> 或 <code>SP+Off</code>。嵌套块增加 Scope 深度但不增加地址层。</p>
+<p>嵌套式语言则要区分静态外层记录，下面三种方法解决同一定位问题。</p>
+<p><a id="ch06-s06"></a>
+<a id="六调用链声明链与变量访问环境"></a>
+<a id="调用链声明链与变量访问环境"></a>
+<a id="ref-关系"></a></p>
+<h2>6. 调用链、声明链与变量访问环境</h2>
+<h3>6.1 动态与静态两种关系</h3>
+<p><strong>调用链</strong>记录运行中谁调用谁，例如 <code>(M,G,H,R,S)</code>；对应每次调用的 AR 组成<strong>动态链</strong>。<strong>声明链</strong>记录源码中谁定义在谁内部，由词法嵌套确定。</p>
+<p>动态链用于返回；声明链用于决定非局部名字来自哪个范围。S 由 R 调用，不代表 S 可以访问 R 的局部。若 S 与 R 同在 H 内，它们是词法同级。</p>
+<h3>6.2 LAR 与课件递归例</h3>
+<p>课件 <strong>LAR（活跃活动记录）</strong>在其直接调用模型中取某过函尚未返回实例中的最新一帧。调用链 <code>(M,P1,P2,Q1,R1,R2,R3)</code>，声明链 <code>(M,P,Q,R)</code>，当前环境为 <code>[AR(M),AR(P2),AR(Q1),AR(R3)]</code>。</p>
+<p>P1/R1/R2 仍在栈中，不能说它们已销毁。这里只是当前 R3 的词法访问环境选取 P2/Q1/R3；返回后之前实例继续执行。</p>
+<p>理解补充：若支持带捕获环境的过函参数或闭包，具体环境应来自其保存的词法实例，不能全局按“某过程最新帧”猜。课件 LAR 简写须与直接调用假设一起使用。</p>
+<h3>6.3 四种调用情况的统一前缀规则</h3>
+<p>对可按当前词法可见关系直接调用的 Q，若其过程层 N，调用者环境 E 中前 N 项是 Q 所需外层，则：</p>
+<pre><code class="language-text">Env(Q)=prefixN(E)⊕AR(Q)
+</code></pre>
+<p>前 N 项是过程层 0…N-1，追加自身 N，结果长度 N+1。</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>情况</th>
+<th>新环境</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>递归，同层 N</td>
+<td>保留外层前 N 项，把本层旧帧换成新帧</td>
+</tr>
+<tr>
+<td>同共同外层的同级调用</td>
+<td>保留共同外层，追加被调同级新帧</td>
+</tr>
+<tr>
+<td>调用直接内层 N</td>
+<td>保留调用者全部外层与自身，再加子帧</td>
+</tr>
+<tr>
+<td>内层调用外层过程</td>
+<td>截到被调者的静态外层，再加被调者新帧</td>
+</tr>
+</tbody></table></div>
+<p>例如 E=[M,P,Q,R1]，R1 递归 R2 得 [M,P,Q,R2]；R1 调用其外层 Q 的新实例 Q2 得 [M,P,Q2]，不是把 R1 保留为 Q2 的外层。此规则不替代间接调用时显式传来的捕获环境。</p>
+<p><a id="ch06-s07"></a>
+<a id="七局部-display-表"></a>
+<a id="局部-display-表"></a>
+<a id="ref-Display"></a></p>
+<h2>7. 局部 Display 表</h2>
+<h3>7.1 每帧保存自己的外层地址表</h3>
+<p><strong>Display</strong> 是按过程层数排列的记录首地址表。局部 Display 保存在各自 AR 内。例如过程层 2 的 S，词法外层为 M、R，表为 <code>[arM,arR,arS]</code>。虽然调用链可能含 Q，但 Q 若不是 S 的词法外层就不进入其表。</p>
+<p>新 Q 过程层 N 时，复制当前环境表前 N 项，再在第 N 项写新 SP。返回以后调用者帧中的旧表仍在，恢复 SP 就能重新使用，无需逐项把被调者表改回去。</p>
+<h3>7.2 地址公式为什么有一次取内容</h3>
+<p>变量登记层 Lv，对应过程层 L=Lv-1。槽地址：</p>
+<pre><code class="language-text">slot(X)=SP+Off                    自身局部
+slot(X)=CurrentAR.Display[L]+Off  外层对象
+</code></pre>
+<p>若 Display 从 AR 内偏移 D 起，每项占一个地址单位，则完整第二式为：</p>
+<pre><code class="language-text">slot(X)=Mem[SP+D+(Lv-1)]+Off
+</code></pre>
+<p>SP+D+L 是<strong>表项本身的地址</strong>，Mem 读出其中保存的外层 AR 首地址，再加变量偏移。课件 21 第 19 页少这一次取内容，不能直接写成 <code>SP+D+L+Off</code>。</p>
+<h3>7.3 课件 M/Q/R/S 的数字展开</h3>
+<p>M 层 0，Q/R 层 1，S 层 2，S 是 R 内过程。调用 M→Q→R→S。设帧首址 M=100、Q=200、R=300、S=400，Display 偏移 D=6，则 S 的表项在 406/407/408，分别保存 100/300/400。</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>变量</th>
+<th>登记层与偏移</th>
+<th>槽地址</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>X，S 的局部</td>
+<td>(3,16)</td>
+<td>400+16=416</td>
+</tr>
+<tr>
+<td>Y，R 的局部</td>
+<td>(2,10)</td>
+<td>Mem[400+6+1]+10=300+10=310</td>
+</tr>
+<tr>
+<td>Z，M 的局部</td>
+<td>(1,12)</td>
+<td>Mem[400+6+0]+12=100+12=112</td>
+</tr>
+</tbody></table></div>
+<p>实际布局中变量区须避开控制与 Display 区；这里 X 的偏移 16 位于表项之后。数字用于说明先读表再加偏移，不指定真实平台布局。</p>
+<h3>7.4 空间与时间</h3>
+<p>每次调用复制一段表、每帧占若干地址单位，空间与嵌套深度相关；变量访问则可直接按已知下标取基址。返回不需恢复全局表内容，但仍需恢复 SP、现场与控制信息。</p>
+<p><a id="ch06-s08"></a>
+<a id="全局-display-表"></a>
+<a id="八全局-display-表"></a></p>
+<h2>8. 全局 Display 表</h2>
+<h3>8.1 一个共享表加保存项</h3>
+<p><strong>全局 Display</strong> 为程序设置 D[0…maxLevel]。调用过程层 j 的 Q 时：新 AR.Resume 保存旧 D[j]，再把 D[j] 设为新 Q 首址；返回时把保存值还给 D[j]。</p>
+<p>只改当前被调层对应项。更深层可能留有旧值，但当前词法范围不会把它们当可见对象使用；访问只能按正确声明链选择合法层。</p>
+<p>槽地址 <code>D[Lv-1]+Off</code>。全局表保存的是帧首址，不是对象值。递归必须每帧各自保存旧 D[j]，否则内层返回后找不到上一实例。</p>
+<h3>8.2 P/Q/R/S/T 的更新与恢复</h3>
+<p>课件 P 层 1，Q/R 层 2，S/T 层 3；Q 与 R 同属 P，S/T 同属 R；调用 P→Q→R→S→T。</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>当前过程</th>
+<th>D[1]</th>
+<th>D[2]</th>
+<th>D[3]</th>
+<th>新帧保存的原项</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>P</td>
+<td>arP</td>
+<td>旧值</td>
+<td>旧值</td>
+<td>旧 D[1]</td>
+</tr>
+<tr>
+<td>Q</td>
+<td>arP</td>
+<td>arQ</td>
+<td>旧值</td>
+<td>旧 D[2]</td>
+</tr>
+<tr>
+<td>R</td>
+<td>arP</td>
+<td>arR</td>
+<td>旧值</td>
+<td>arQ</td>
+</tr>
+<tr>
+<td>S</td>
+<td>arP</td>
+<td>arR</td>
+<td>arS</td>
+<td>旧 D[3]</td>
+</tr>
+<tr>
+<td>T</td>
+<td>arP</td>
+<td>arR</td>
+<td>arT</td>
+<td>arS</td>
+</tr>
+</tbody></table></div>
+<p>T 内 X(Lv=2) 在 P，Y(Lv=3) 在 R，Z(Lv=4) 在 T。返回 T 时 D[3] 还原 arS；返回 S 还原先前 D[3]；返回 R 时 D[2] 还原 arQ。</p>
+<p>这说明“同过程层有多个帧在栈中”不矛盾：D 选择当前词法环境的一份，其他记录尚未回收，旧表值保存在各帧 Resume 中。</p>
+<h3>8.3 与局部表比较</h3>
+<p>共享表减少每帧重复的整段 Display 空间，但每次调用/返回要保存改写项。非局部读取仍可按层号直接取得基址。局部表复制成本与深度相关，全局表每层恢复有固定操作；具体选择还要考虑寄存器、间接访问和间接调用环境支持。</p>
+<p><a id="ch06-s09"></a>
+<a id="九静态链"></a>
+<a id="静态链"></a>
+<a id="ref-SL"></a></p>
+<h2>9. 静态链</h2>
+<h3>9.1 一帧只保存直接词法父帧</h3>
+<p><strong>静态链 SL</strong> 指向当前过程的直接词法外层活动记录。沿它连续走可到更外层。动态链 DL 指向调用者，两者用途不同，值也可能不同。</p>
+<p>M→G→H→R→S 中层数 0、1、2、3、3，R/S 同在 H 内。S 的 DL 指 R，而 SL 指 H；静态链路径 S→H→G→M，动态链路径 S→R→H→G→M。</p>
+<p>因此不能仅凭 DL 找非局部变量，不能让一个指针单元无条件同时承担两种不同链接。课件称 SL 放在原 DL 位置，是字段布局讨论；若两功能都需要，须另有保存调用者的字段或机制。</p>
+<h3>9.2 调用时怎样设置 SL</h3>
+<p>调用者过程层 m，被调者层 n；要找到 n-1 层的词法父帧。直接调用且词法环境一致时：</p>
+<pre><code class="language-text">k=m-n+1
+newAR.SL=Indir(SP,k)
+</code></pre>
+<p>子过程 n=m+1，k=0，SL 直接指当前 SP；同级 n=m，k=1，SL 指当前静态父帧；内层调用外层，k 更大，沿链到被调者父帧。</p>
+<p>这里 Indir 指沿<strong>静态链字段</strong>，不是任意读 Mem[SP]；字段偏移必须按布局使用。过函参数带环境时应从保存环境取得父帧，不能机械从当前调用者层数算。</p>
+<h3>9.3 使用变量时怎样走链</h3>
+<p>当前层 m，变量登记层 Lv，所属层 L=Lv-1：</p>
+<pre><code class="language-text">k=m-L
+slot(X)=Indir(SP,k)+Off
+</code></pre>
+<p>自身 L=m 时 k=0，变成 SP+Off。每走一次 SL 从一层到其词法父层，因此只需按层差走到所属环境。</p>
+<h3>9.4 课件 G/H/R/S 寻址例</h3>
+<p>设 M=100、G=200、H=300、R=400、S=500，当前层 m=3，S 的 SL 为 H=300，H 的 SL 为 G=200，G 的 SL 为 M=100。</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>变量</th>
+<th>登记层 Lv</th>
+<th>所属层 L</th>
+<th>走链次数</th>
+<th>槽地址</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Z，S 局部</td>
+<td>4</td>
+<td>3</td>
+<td>0</td>
+<td>500+OffZ</td>
+</tr>
+<tr>
+<td>Y，H 局部</td>
+<td>3</td>
+<td>2</td>
+<td>1</td>
+<td>300+OffY</td>
+</tr>
+<tr>
+<td>X，G 局部</td>
+<td>2</td>
+<td>1</td>
+<td>2</td>
+<td>200+OffX</td>
+</tr>
+</tbody></table></div>
+<p>若错误沿 DL 找 Y，第一步到 R=400，就会访问另一个记录。类型和偏移可能都对，基址错误仍导致整个值错误。</p>
+<h3>9.5 三种方法的取舍</h3>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>方法</th>
+<th>每帧环境信息</th>
+<th>调用/返回</th>
+<th>非局部访问</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>局部 Display</td>
+<td>一段基址表</td>
+<td>复制前缀；返回使用旧帧表</td>
+<td>直接下标取基址</td>
+</tr>
+<tr>
+<td>全局 Display</td>
+<td>旧同层项保存等</td>
+<td>改共享项；返回恢复</td>
+<td>直接下标取基址</td>
+</tr>
+<tr>
+<td>静态链</td>
+<td>一个父帧指针</td>
+<td>定位父帧；返回无需修链</td>
+<td>按词法层差逐级走</td>
+</tr>
+</tbody></table></div>
+<p>Display 用空间或共享表维护换直接定位；SL 省整段表但远外层访问可能多次读。课件的机器条件建议是设计取舍，不能不测具体工作负载就给出绝对性能排序。</p>
+<p><a id="ch06-s10"></a>
+<a id="十直接间接访问与过函参数"></a>
+<a id="直接间接访问与过函参数"></a>
+<a id="ref-过函"></a></p>
+<h2>10. 直接、间接访问与过函参数</h2>
+<h3>10.1 找到槽以后还要看 Access</h3>
+<p>上述公式先取得变量槽地址。direct 的对象就位于槽，值为 Mem[slot]；indir 的槽保存真正对象地址，对象地址为 Mem[slot]，值为 Mem[Mem[slot]]。</p>
+<p>例如地址形参 y 在当前帧偏移 8，SP=500，Mem[508]=212，Mem[212]=7。y 的对象值是 7；对 y 赋 9 要写 Mem[212]，不能把 Mem[508] 的地址覆盖成 9。</p>
+<p>形式过函、指针及数组地址临时结果也须区分“地址值”与“地址指向的普通值”。地址加法处理基址数值，不应把基址先当对象值读出。</p>
+<h3>10.2 为什么过函形参占两个单位</h3>
+<p>嵌套函数代码相同，在不同外层调用实例中捕获的数据可能不同。因此传入实在函数时，只有入口地址不足，还须传相应词法环境，如先行 Display 或外层帧引用；形式函数调用利用这对信息建立自己的环境。</p>
+<p>这一对信息可视为教学形式的<strong>闭包</strong>：代码入口与所需环境。若它作为结果离开创建它的函数，而环境只在已回收栈帧里，便会失效。支持这种行为的实现需要延长环境生存期，例如堆保存；课件没有展开完整逃逸闭包算法，不能把两槽模型直接当成所有返回函数情形都已解决。</p>
+<p><a id="ch06-s11"></a>
+<a id="综合应用历年题第二次调用-g-时哪些对象已经改变"></a></p>
+<h2>11. 综合应用：历年题第二次调用 g 时，哪些对象已经改变</h2><div class="stepper" aria-label="分步图解"><h3>第二次调用g的时间线</h3><p class="fig-intro">全局x初值2、f的static x初值3、main.x初值2；f先调用g再减static x。</p><div class="progress-track" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span></div><div class="step-tools"><button id="step-prev">上一步</button><label for="step-range">推导步骤</label><input id="step-range" type="range" min="0" max="5" value="0"><button id="step-next">下一步</button><span id="step-count" class="step-count"></span></div><div id="step-panel" class="step-card" aria-live="polite"></div><details><summary>完整轨迹（适合打印与连续核对）</summary><div class="table-scroll"><table><thead><tr><th>执行动作</th><th>调用链</th><th>静态区</th><th>当前数据</th></tr></thead><tbody><tr><td>main调用g(2)</td><td>main→g₁</td><td>全局x=2；f.static x=3</td><td>main.x=2；g₁.m=2</td></tr><tr><td>g₁初始化y</td><td>main→g₁</td><td>全局x=2；f.static x=3</td><td>g₁.y=1</td></tr><tr><td>g₁执行x--</td><td>main→g₁</td><td>全局x=1；f.static x=3</td><td>g₁中的x绑定全局</td></tr><tr><td>g₁调用f(1)</td><td>main→g₁→f₁</td><td>全局x=1；f.static x=3</td><td>f₁.n=1</td></tr><tr><td>f₁调用第二次g</td><td>main→g₁→f₁→g₂</td><td>全局x=1；f.static x=3</td><td>g₂.m=1；y尚未初始化</td></tr><tr><td>g₂完成初始化</td><td>main→g₁→f₁→g₂</td><td>全局x=1；f.static x=3</td><td>g₂.y=0；DL分别指向调用者；f的x--尚未执行</td></tr></tbody></table></div></details></div>
+<p><strong>来源：</strong>期末题一.3，第1—2页。全局 <code>int x=2</code>；f(n)内部有<code>static int x=3</code>，依次执行<code>g(n);x--;</code>；g(m)有局部<code>y=m-1</code>，若y&gt;0则执行<code>x--;f(y);g(y);</code>；main有局部<code>x=2</code>，执行<code>g(x)</code>。</p>
+<p>这里有三个不同x。只用“当前x=几”记录，会让本来互不影响的对象混在一起。首先按词法范围绑定：main内x属于main；f内x属于f的static对象；g内没有局部x，其使用绑定全局x。然后才按调用次序计算值。</p>
+<h3>11.1 时间点必须说清楚</h3>
+<p>题目“第2次调用函数g时”没有明确是在入口还是执行<code>y=m-1</code>后。以下先给入口情况，再给局部初始化后的情况，保证不把未初始化对象写成已知0。两者栈结构相同，只有新g帧中y是否已有值不同。</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>步骤</th>
+<th>正在执行的动作</th>
+<th>调用链</th>
+<th>全局x</th>
+<th>f的static x</th>
+<th>参数/局部变化</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>main局部x=2，调用g(x)</td>
+<td>main→g₁</td>
+<td>2</td>
+<td>3</td>
+<td>main.x=2，g₁.m=2</td>
+</tr>
+<tr>
+<td>2</td>
+<td>g₁计算y=m-1</td>
+<td>main→g₁</td>
+<td>2</td>
+<td>3</td>
+<td>g₁.y=1</td>
+</tr>
+<tr>
+<td>3</td>
+<td>y&gt;0，执行g₁中的x--</td>
+<td>main→g₁</td>
+<td>1</td>
+<td>3</td>
+<td>此x绑定全局</td>
+</tr>
+<tr>
+<td>4</td>
+<td>g₁调用f(y)</td>
+<td>main→g₁→f₁</td>
+<td>1</td>
+<td>3</td>
+<td>f₁.n=1</td>
+</tr>
+<tr>
+<td>5</td>
+<td>f₁执行g(n)，进入第二次g</td>
+<td>main→g₁→f₁→g₂</td>
+<td>1</td>
+<td>3</td>
+<td>g₂.m=1；y尚未初始化</td>
+</tr>
+<tr>
+<td>6</td>
+<td>g₂执行y=m-1</td>
+<td>main→g₁→f₁→g₂</td>
+<td>1</td>
+<td>3</td>
+<td>g₂.y=0</td>
+</tr>
+</tbody></table></div>
+<p>此时f₁中的x--还没有执行，因为它必须等g₂返回；g₁中后面的g(y)也还没执行。按源码文本顺序把所有x--先算完会提前改变值。</p>
+<h3>11.2 静态区和栈区的文字图</h3>
+<pre><code class="language-text">静态区：全局x=1；f内部static x=3（名字局部可见，对象仍在静态区）
+
+栈顶  AR(g₂)：m=1，y=0（仅在完成初始化后）；DL→AR(f₁)
+      AR(f₁)：n=1；DL→AR(g₁)；static x没有每调用一份的新槽
+      AR(g₁)：m=2，y=1；DL→AR(main)
+栈底  AR(main)：局部x=2；DL→外部启动环境/无前驱（题目简化时记NULL）
+</code></pre>
+<p>这些调用均为并列定义的C函数，本题只要求动态链。不能把DL当作C变量查找链，让g₂去找f₁的static x。两个g帧参数和y彼此独立；static x共用一份对象，且当前还没有减值。</p>
+<p>g₂的y=0使if体不执行，随后返回f₁；f₁才将自己的static x从3减到2，再返回g₁；g₁之后调用第三次g(1)。这个后续是核对顺序的补充，不能画到“第二次g尚未返回”的当前栈里。</p>
+<p><a id="ch06-s12"></a>
+<a id="三种非局部访问方法在同一数字例中的结果"></a></p>
+<h2>12. 三种非局部访问方法在同一数字例中的结果</h2>
+<p>采用前文嵌套过程M(0)→G(1)→H(2)，H内同级R/S(3)，运行调用M→G→H→R→S。帧基址M=100、G=200、H=300、R=400、S=500；变量Y属于H，Off=10。</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>方法</th>
+<th>当前保存的环境信息</th>
+<th>访问Y的具体过程</th>
+<th>得到的槽地址</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>局部Display</td>
+<td>S的表为[100,200,300,500]</td>
+<td>取下标2基址300，再加10</td>
+<td>310</td>
+</tr>
+<tr>
+<td>全局Display</td>
+<td>当前D[2]=300</td>
+<td>直接读D[2]再加10</td>
+<td>310</td>
+</tr>
+<tr>
+<td>静态链</td>
+<td>S.SL=300</td>
+<td>从S走一次静态链到H，再加10</td>
+<td>310</td>
+</tr>
+<tr>
+<td>错用动态链</td>
+<td>S.DL=400</td>
+<td>走到调用者R再加10</td>
+<td>410，属于错误记录</td>
+</tr>
+</tbody></table></div>
+<p>三种正确方法解决同一问题，输出均是槽地址；如果Y是地址形参，该槽保存另一个对象地址，还要再按Access取地址或取值。静态链与Display都是定位词法环境的实现，动态链则帮助返回调用者，不在这个位置作为同层备选。</p>
+<p><a id="ch06-s13"></a>
+<a id="课件例题回查与知识路线"></a></p>
+<h2>13. 课件例题回查与知识路线</h2>
+<h3>13.1 做题顺序</h3>
+<p>先画声明树并标过程层，再画当前调用实例链；区分 SP/TOP、DL/SL，按当前词法链建立 Display 或 SL。变量登记层减 1 得所属过程层，先求槽，再按 Access 决定是否读地址。调用返回题先保存旧信息，再更新指针，返回前读取结果与控制信息。</p>
+<h3>13.2 自检与参考解释</h3>
+<p><strong>1. 同名变量为何有多份地址？</strong> 多次同时活动的调用各有一帧，声明同一份但对象实例不同。</p>
+<p><strong>2. SP 与 TOP 是否总相同？</strong> 不同，SP 是当前帧首址，TOP 是帧末后下一空位。</p>
+<p><strong>3. 返回把栈内容清零吗？</strong> 不必，关键是回收其有效空间；旧地址不能继续合法使用。</p>
+<p><strong>4. 谁调用 S，就用谁的变量吗？</strong> 非局部访问按词法声明链，而返回按调用链。</p>
+<p><strong>5. 变量 Level=3，Display 下标是多少？</strong> Pascal 课件约定是 2；C 的两层模型另按其约定。</p>
+<p><strong>6. <code>SP+D+L</code> 等于外层帧地址吗？</strong> 是 Display 表项的地址，必须先读 Mem 得到基址。</p>
+<p><strong>7. 同级调用的 SL 指调用者吗？</strong> 通常指共同静态外层，DL 才指调用者。</p>
+<p><strong>8. 全局 Display 递归返回如何恢复？</strong> 每帧 Resume 保存旧同层项，返回按该帧还原。</p>
+<p><strong>9. 地址参数的大小等于对象大小吗？</strong> 不等于，保存地址的槽按地址长度分。</p>
+<p><strong>10. 函数作为参数为何不能只传入口？</strong> 嵌套函数还需要其对应词法环境。</p>
+<p><strong>11. 普通栈能保留返回后的局部对象吗？</strong> 通常不能；需静态或堆等满足生命周期的策略。</p>
+<p><strong>12. 帧 Size 已知是否意味所有数据静态分配？</strong> 不是，Size 可编译确定，帧数量和具体首址仍在调用时动态变化。</p>
+<h3>13.3 课件覆盖索引</h3>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>课件页码</th>
+<th>内容</th>
+<th>对应正文</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>20：2—10</td>
+<td>管理问题、区域、语言特征、策略</td>
+<td>第 1—2 节</td>
+</tr>
+<tr>
+<td>20：11—14</td>
+<td>square、静态限制、栈与堆</td>
+<td>2.2—2.4</td>
+</tr>
+<tr>
+<td>20：15—20</td>
+<td>SP/TOP、完整 AR 字段</td>
+<td>第 3 节</td>
+</tr>
+<tr>
+<td>20：21—27</td>
+<td>申请释放、调用链、P/S/Q/R</td>
+<td>第 4 节</td>
+</tr>
+<tr>
+<td>20：28—32</td>
+<td>分配原则、游标变化、完整参数例</td>
+<td>第 5 节</td>
+</tr>
+<tr>
+<td>20：33—34</td>
+<td>并列/嵌套地址映射</td>
+<td>5.3、第 7—9 节</td>
+</tr>
+<tr>
+<td>21：3—8</td>
+<td>调用动态链、LAR、声明链与环境</td>
+<td>6.1—6.2</td>
+</tr>
+<tr>
+<td>21：9—13</td>
+<td>四种调用、前缀环境规则</td>
+<td>6.3</td>
+</tr>
+<tr>
+<td>21：14—19</td>
+<td>局部 Display 与 X/Y/Z</td>
+<td>第 7 节</td>
+</tr>
+<tr>
+<td>21：20—23</td>
+<td>全局 Display、保存与恢复例</td>
+<td>第 8 节</td>
+</tr>
+<tr>
+<td>21：24—28</td>
+<td>SL、设置公式与 G/H/R/S</td>
+<td>9.1—9.4</td>
+</tr>
+<tr>
+<td>21：29—30</td>
+<td>方法取舍</td>
+<td>7.4、8.3、9.5</td>
+</tr>
+<tr>
+<td>两课件参数与访问说明</td>
+<td>direct/indir、入口与环境</td>
+<td>第 10 节</td>
+</tr>
+</tbody></table></div>
+<h3>13.4 澄清与补充范围</h3>
+<p>课件 21 的 Display 寻址补足取表项内容；DL/SL 分别保存，返回结果字段的两种协议明确分开。固定帧大小是课程模型，不把变长栈或指针一律排除。课件 LAR 与前缀环境规则按直接调用语境解释，过函参数使用保存的环境。</p>
+<p>数值例、闭包生存期说明及完整调用次序属于理解补充。课件未给具体真实 ABI、精确控制区大小和变量初值，正文保留 Size、d 等符号，不能从这些信息推断某平台真实布局。</p>
+<p>课件：<span title="来源文件保留在本地，未随学习资料上传">20：运行时空间管理(1)（本地来源，未上传）</span>；<span title="来源文件保留在本地，未随学习资料上传">21：运行时空间管理(2)（本地来源，未上传）</span>。</p>
+<p><a id="ch06-s14"></a>
+<a id="自测与答案"></a></p>
+<h2>14. 自测与答案</h2>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>题号</th>
+<th>学习任务</th>
+<th>检查能力</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>上述第二次g入口时，两个g的y可否都写为1？</td>
+<td>区分实例与初始化时点</td>
+</tr>
+<tr>
+<td>2</td>
+<td>设SP=110、TOP=117，调用大小5的g；它返回时SP/TOP如何变？</td>
+<td>申请与回收流程</td>
+</tr>
+<tr>
+<td>3</td>
+<td>当前过程层3调用同级过程层3，静态链应走几次？指向谁？</td>
+<td>独立计算词法父帧</td>
+</tr>
+<tr>
+<td>4</td>
+<td>一个函数返回自己的自动局部地址，函数返回后该地址通常还能作为有效对象访问吗？</td>
+<td>生存期约束</td>
+</tr>
+</tbody></table></div>
+<h3>14.1 答案与理由</h3>
+<ol>
+<li>不可。g₁.y已是1；g₂入口的y尚未初始化，完成初始化后为0。相同声明的两份运行实例不能混写同一个值，也不能把未初始化写成0。</li>
+<li>新帧首址117，DL=110；调用后SP=117、TOP=122。返回先读取所需控制/结果信息，再TOP=117、SP=110，恢复调用者。回收不要求把117—121的所有字节清零。</li>
+<li>k=3-3+1=1，沿当前SL到共同词法外层，作为新帧SL。新帧DL仍指调用者；二者可能不同。</li>
+<li>普通自动对象随返回失去有效存储，旧字节暂未覆盖也不等于对象仍活着。若语言允许保留环境，应采用能延长生存期的静态/堆或其他机制；课件普通栈模型本身不解决这个问题。</li>
+</ol>
+<p><a id="ch06-s15"></a>
+<a id="排错与复习"></a></p>
+<h2>15. 排错与复习</h2>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>现象或疑问</th>
+<th>可能原因</th>
+<th>怎样核对</th>
+<th>正确理解</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>递归返回后外层变量丢了</td>
+<td>多次调用共用一帧</td>
+<td>给每次活动加实例编号</td>
+<td>相同声明、不同AR</td>
+</tr>
+<tr>
+<td>非局部变量地址算到调用者</td>
+<td>沿DL代替声明链</td>
+<td>同时画调用链与声明树</td>
+<td>按词法外层定位</td>
+</tr>
+<tr>
+<td>Display返回后仍指内层递归</td>
+<td>未保存或恢复同层旧项</td>
+<td>跟踪每帧Resume</td>
+<td>先保存、调用改写、返回恢复</td>
+</tr>
+<tr>
+<td>表项地址被当外层基址</td>
+<td>少一次Mem读取</td>
+<td>先写表项位置，再写内容</td>
+<td>外层首址存于表项中</td>
+</tr>
+</tbody></table></div>
+<ul>
+<li><input disabled="" type="checkbox"> 能画当前未返回调用的栈，并标参数、局部、动态链。</li>
+<li><input disabled="" type="checkbox"> 能区分同名对象、递归实例和static对象。</li>
+<li><input disabled="" type="checkbox"> 能分别用Display和SL计算同一个非局部槽地址。</li>
+<li><input disabled="" type="checkbox"> 能说明返回前哪些信息必须读取，以及何时空间可复用。</li>
+</ul>
+<p><a id="ch06-s16"></a>
+<a id="末尾速查表"></a></p>
+<h2>16. 末尾速查表</h2>
+<div class="ref-picker"><label for="quick-select">选择一个概念或方法，查看含义、形式、例子、结果和前提</label><select id="quick-select" class="quick-select"><option value="0">静态/栈/堆</option><option value="1">AR</option><option value="2">SP/TOP</option><option value="3">动态链DL</option><option value="4">Display</option><option value="5">静态链SL</option><option value="6">入口＋环境</option></select><div id="quick-panel" class="ref-panel" aria-live="polite"></div></div>
+<p><a id="verification"></a></p>
+<h2>整理与核对说明</h2>
+<p>本章重新读取现存课件提取文字与PPTX讲者备注，对照旧版讲解，保留详细定义、条件和原例题，按问题主线重排，新增综合推导、自测答案、排错和分类速查，修复旧来源路径。旧版末尾的课件页码对应保留供回查；正文新增的自拟题及理解补充不自动成为考试范围。</p>
+<p>主要课件：<span title="来源文件保留在本地，未随学习资料上传">20.运行时空间管理(1).pptx（本地来源，未上传）</span>、<span title="来源文件保留在本地，未随学习资料上传">21.运行时空间管理(2).pptx（本地来源，未上传）</span></p>
+<p>相关作业解析：本章没有单独的现存作业解析文件；练习依据课件与本次自拟题。</p>
+<p>相关历年题：<span title="来源文件保留在本地，未随学习资料上传">2022级期末题（本地来源，未上传）</span>。PDF实际题头为2024—2025学年第一学期、考试日2024-12-07，“22级”指学生年级，不能误说考试发生在2022年。</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>内容</th>
+<th>已核实的事实</th>
+<th>不确定或可能出错的部分</th>
+<th>原因</th>
+<th>进一步核实方法</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>课件覆盖</td>
+<td>对照本项目本章课件提取正文/备注的主题与旧版索引，源文件路径存在</td>
+<td>纯图中个别未明确边、布局与原图美观不在文字核验范围</td>
+<td>PowerPoint COM启动失败；二进制PPT图形关系不由文本顺序完整保留</td>
+<td>对照原课件图页；未确认处在正文保留限定，不凭空补边</td>
+</tr>
+<tr>
+<td>推导与计算</td>
+<td>本章给出前提、规则、步骤和结果；程序检查的具体对象另列于<a href="10_%E6%9D%A5%E6%BA%90%E8%A6%86%E7%9B%96%E4%B8%8E%E6%A0%B8%E5%AF%B9%E6%8A%A5%E5%91%8A.html">总核对报告</a></td>
+<td>其他教学伪代码未在真实编译器/ABI中运行</td>
+<td>源语言和目标机为课程抽象</td>
+<td>选定真实实现后核对语法、布局与运行行为</td>
+</tr>
+<tr>
+<td>历年/作业解答</td>
+<td>已核对题意和相关理论规则，本次解答标明补充、改写与假设</td>
+<td>未取得教师标准答案与歧义题判分口径</td>
+<td>项目只提供题目和已有学习解析</td>
+<td>请教师确认歧义与标准答案，必要时重算</td>
+</tr>
+<tr>
+<td>考试范围/课程安排</td>
+<td>只转述课件记载</td>
+<td>本学期是否更改、补充算法是否考查</td>
+<td>未提供最新通知</td>
+<td>按教师最新课程通知确认</td>
+</tr>
+<tr>
+<td>两种格式</td>
+<td>HTML由当前Markdown正文生成，离线分组目录、图解、速查一致</td>
+<td>浏览器以外的软件排版可能不同</td>
+<td>阅读器实现与字号设置不同</td>
+<td>优先用本章HTML或常规Markdown阅读器</td>
+</tr>
+</tbody></table></div>
+<p>更详细的来源覆盖矩阵、可复算的检查记录与交付限制见<a href="10_%E6%9D%A5%E6%BA%90%E8%A6%86%E7%9B%96%E4%B8%8E%E6%A0%B8%E5%AF%B9%E6%8A%A5%E5%91%8A.html">来源覆盖与核对报告</a>。</p>
+</article><div class="chapter-links"><a href="05_语义分析与符号表.html">← 第5章 语义分析和符号表</a><a href="07_中间代码生成.html">第7章 中间代码生成 →</a></div><p class="foot">编译原理学习资料 · 整理于2026-10-13 · 请结合正文条件使用结论</p></main></div><script type="application/json" id="diagram-data">{"title":"第二次调用g的时间线","premise":"全局x初值2、f的static x初值3、main.x初值2；f先调用g再减static x。","fields":["执行动作","调用链","静态区","当前数据"],"rows":[["main调用g(2)","main→g₁","全局x=2；f.static x=3","main.x=2；g₁.m=2"],["g₁初始化y","main→g₁","全局x=2；f.static x=3","g₁.y=1"],["g₁执行x--","main→g₁","全局x=1；f.static x=3","g₁中的x绑定全局"],["g₁调用f(1)","main→g₁→f₁","全局x=1；f.static x=3","f₁.n=1"],["f₁调用第二次g","main→g₁→f₁→g₂","全局x=1；f.static x=3","g₂.m=1；y尚未初始化"],["g₂完成初始化","main→g₁→f₁→g₂","全局x=1；f.static x=3","g₂.y=0；DL分别指向调用者；f的x--尚未执行"]]}</script><script type="application/json" id="quick-data">[{"name":"静态/栈/堆","kind":"分配策略","meaning":"匹配对象生存规律","form":"固定布局／调用入栈／独立申请","notice":"可混用；","example":"f的static x在静态区，n在栈","link":"\u003ca href=\"#ref-%E7%AD%96%E7%95%A5\">三种策略\u003c/a>"},{"name":"AR","kind":"一次调用的运行记录","meaning":"保存参数、局部、管理、临时","form":"base＋Off定位槽","notice":"同声明可有多份；","example":"g₁与g₂各有y","link":"\u003ca href=\"#ref-AR\">活动记录\u003c/a>"},{"name":"SP/TOP","kind":"栈管理指针","meaning":"定位当前帧与新帧起点","form":"new=TOP，TOP=new+Size","notice":"本课程SP为帧首址；","example":"117帧占5单位到122","link":"\u003ca href=\"#ref-%E8%B0%83%E7%94%A8\">调用返回\u003c/a>"},{"name":"动态链DL","kind":"调用关系指针","meaning":"返回调用者","form":"new.DL=old.SP","notice":"不据此查词法非局部；","example":"g₂.DL指f₁","link":"\u003ca href=\"#ref-%E5%85%B3%E7%B3%BB\">两种链\u003c/a>"},{"name":"Display","kind":"词法环境地址表","meaning":"直接按层定位外层帧","form":"slot=D[L]+Off","notice":"变量层Lv按课件需减1；","example":"D[2]=300，Y槽310","link":"\u003ca href=\"#ref-Display\">Display\u003c/a>"},{"name":"静态链SL","kind":"词法父帧指针","meaning":"逐层访问非局部","form":"当前层m到所属层L走m-L次","notice":"设置新SL走m-n+1次；","example":"S到H走1次","link":"\u003ca href=\"#ref-SL\">静态链\u003c/a>"},{"name":"入口＋环境","kind":"过函参数信息","meaning":"调用正确代码并找到捕获对象","form":"两个教学地址单元","notice":"环境生存期另需保证；","example":"嵌套函数传入口还要外层帧","link":"\u003ca href=\"#ref-%E8%BF%87%E5%87%BD\">过函与间接访问\u003c/a>"}]</script><script>
+const links=[...document.querySelectorAll('nav a[href^="#"]')];
+const headings=links.map(a=>document.getElementById(a.hash.slice(1))).filter(Boolean);
+let scheduled=false;
+function markNavigation(){scheduled=false;let id=headings[0]?.id;const offset=Math.max(document.querySelector('.topbar').getBoundingClientRect().height+15,parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--scroll-offset'))||90)+4;for(const el of headings){if(el.getBoundingClientRect().top<=offset)id=el.id;}if(window.innerHeight+window.scrollY>=document.documentElement.scrollHeight-3)id=headings.at(-1)?.id;links.forEach(a=>{const on=a.hash==='#'+id;a.classList.toggle('active',on);if(on)a.setAttribute('aria-current','location');else a.removeAttribute('aria-current');});}
+window.addEventListener('scroll',()=>{if(!scheduled){scheduled=true;requestAnimationFrame(markNavigation)}},{passive:true});window.addEventListener('resize',markNavigation);
+const menu=document.getElementById('menu');function closeMenu(){document.body.classList.remove('nav-open');menu.setAttribute('aria-expanded','false');}menu.addEventListener('click',()=>{const open=document.body.classList.toggle('nav-open');menu.setAttribute('aria-expanded',String(open));});document.querySelector('.nav-shade').addEventListener('click',closeMenu);document.addEventListener('keydown',e=>{if(e.key==='Escape')closeMenu();});links.forEach(a=>a.addEventListener('click',()=>{closeMenu();setTimeout(markNavigation,0);}));
+document.querySelectorAll('[data-font]').forEach(b=>b.addEventListener('click',()=>{const root=document.documentElement;let n=parseFloat(getComputedStyle(root).getPropertyValue('--font'))||17;n=Math.max(14,Math.min(24,n+Number(b.dataset.font)));root.style.setProperty('--font',n+'px');markNavigation();}));document.getElementById('print').addEventListener('click',()=>window.print());
+const diagram=JSON.parse(document.getElementById('diagram-data').textContent);let step=0;
+function showStep(){if(!diagram)return;const row=diagram.rows[step];const panel=document.getElementById('step-panel');panel.replaceChildren();const grid=document.createElement('div');grid.className='step-grid';diagram.fields.forEach((field,i)=>{const cell=document.createElement('div');cell.className='step-field';const strong=document.createElement('strong');strong.textContent=field;const p=document.createElement('p');p.textContent=row[i];cell.append(strong,p);grid.append(cell);});panel.append(grid);document.getElementById('step-count').textContent=(step+1)+' / '+diagram.rows.length;document.getElementById('step-range').value=step;document.getElementById('step-prev').disabled=step===0;document.getElementById('step-next').disabled=step===diagram.rows.length-1;document.querySelectorAll('.progress-track span').forEach((s,i)=>s.classList.toggle('done',i<=step));}
+if(diagram){document.getElementById('step-prev').addEventListener('click',()=>{step=Math.max(0,step-1);showStep();});document.getElementById('step-next').addEventListener('click',()=>{step=Math.min(diagram.rows.length-1,step+1);showStep();});document.getElementById('step-range').addEventListener('input',e=>{step=Number(e.target.value);showStep();});showStep();}
+const quick=document.getElementById('quick-select');if(quick){const items=JSON.parse(document.getElementById('quick-data').textContent);function showQuick(){const r=items[Number(quick.value)];const panel=document.getElementById('quick-panel');panel.innerHTML='<h3>'+r.name+'</h3><p class="ref-kind">'+r.kind+'</p><h4>含义与用途</h4><p>'+r.meaning+'</p><h4>基本形式</h4><p>'+r.form+'</p><h4>学习例子与结果</h4><p class="result">'+r.example+'</p><h4>注意点与前提</h4><p>'+r.notice+'</p><p>'+r.link+'</p>';}quick.addEventListener('change',showQuick);showQuick();}markNavigation();
+</script></body></html>
