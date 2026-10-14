@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="source-sha256" content="46644be15970d9e42d5394c2a19e57e4c0b4ed606e8365cecccd69d72d596064"><title>第6单元 事务 · 图解学习版</title><style>:root{--paper:#fbfaf7;--surface:#fff;--ink:#253341;--muted:#5c6b75;--line:#d5dfdd;--teal:#156b62;--soft:#edf6f1;--font:17px;--scroll-offset:90px}*{box-sizing:border-box}html{scroll-behavior:auto;scroll-padding-top:var(--scroll-offset)}body{margin:0;background:var(--paper);color:var(--ink);font-family:'Microsoft YaHei','PingFang SC',system-ui,sans-serif;font-size:var(--font);line-height:1.85}a{color:var(--teal);text-underline-offset:3px}a:hover{color:#173f75}button,select{font:inherit}button{cursor:pointer}button,select{border:1px solid #b9cbc5;border-radius:7px;padding:7px 11px;background:#fff;color:var(--ink)}button:hover{background:var(--soft)}button:focus-visible,select:focus-visible,a:focus-visible{outline:3px solid #81cbb8;outline-offset:3px}.skip{position:absolute;top:-80px;left:12px;z-index:50;background:#fff;padding:8px}.skip:focus{top:8px}.sidebar{position:fixed;inset:0 auto 0 0;width:270px;padding:23px 18px;background:#f0f4f0;border-right:1px solid var(--line);overflow:auto;z-index:30;overscroll-behavior:contain}.brand{font-size:21px;font-weight:700}.brand small{display:block;font-size:12px;font-weight:400;color:var(--muted)}.sidebar nav a{display:block;color:var(--ink);text-decoration:none;padding:8px 10px;margin:3px 0;border-radius:6px;font-size:14px;line-height:1.6}.sidebar nav a:hover{background:#dcebe3}.sidebar nav a.active,.sidebar nav a.active:hover{background:var(--teal);color:white}.sidebar select{width:100%;font-size:13px}.nav-tip{font-size:12px;color:var(--muted);margin:14px 0}.shell{margin-left:270px;overflow-anchor:none}.topbar{position:sticky;top:0;background:rgba(251,250,247,.98);padding:12px 26px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:12px;z-index:20}.topbar-title{font-size:13px;color:var(--muted)}.toolbar{display:flex;gap:7px;flex-wrap:wrap}.toolbar button{font-size:13px}.menu{display:none}main{max-width:1120px;margin:auto;padding:30px 44px 80px;min-width:0}h1{font-size:32px;line-height:1.5;margin:14px 0 25px}h2{font-size:25px;line-height:1.5;padding:0 0 11px;border-bottom:1px solid var(--line);margin:44px 0 23px}h3{font-size:21px;line-height:1.55;margin:29px 0 16px}h4{font-size:18px;line-height:1.6;margin:22px 0 13px}p{margin:14px 0}li{margin:7px 0}ul,ol{padding-left:1.6em}blockquote{margin:20px 0;padding:5px 18px;border-left:3px solid #a8c6bb;background:#f0f3ef;color:#53655e;font-size:14px}blockquote p{margin:8px 0}hr{border:0;border-top:1px solid var(--line);margin:32px 0}code{font-family:Consolas,'Cascadia Code',monospace;font-size:.9em;background:#eef1ed;padding:2px 5px;border-radius:4px;overflow-wrap:anywhere}pre{background:#18313d;color:#e8f0f0;border-radius:9px;padding:19px;line-height:1.65;overflow-x:auto;max-width:100%;font-size:14px}pre code{background:none;padding:0;color:inherit;white-space:pre;overflow-wrap:normal}table{border-collapse:collapse;width:100%;font-size:15px}th{background:#eaf3ee;text-align:left}td,th{padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:top}tbody tr:nth-child(even){background:#f6f9f6}.table-scroll{overflow-x:auto;border:1px solid var(--line);border-radius:8px;margin:17px 0;max-width:100%}.table-scroll td{min-width:80px}.source-note{font-size:13px;color:var(--muted)}.learning-figure{padding:23px;border:1px solid #b4cfc2;border-radius:12px;background:var(--soft);margin:25px 0}.learning-figure h4{margin:0 0 8px;font-size:20px}.fig-intro{font-size:14px;color:var(--muted)}.learning-figure label{display:block;margin-top:15px;font-size:14px;font-weight:700}.learning-figure select{margin-top:7px;width:100%;min-height:44px;font-size:15px}.fig-output{margin-top:16px}.flow{display:flex;gap:10px;align-items:stretch;flex-wrap:wrap}.flow-node{flex:1 1 150px;border:1px solid #bfd2c9;border-radius:8px;background:#fff;padding:13px;min-width:0}.flow-node strong{display:block;color:var(--teal)}.flow-node p{font-size:14px;margin:8px 0}.flow-arrow{align-self:center;color:var(--teal);font-size:24px}.fig-note{padding:10px 14px;border-left:3px solid var(--teal);background:#fff;font-size:14px;margin:15px 0 0}.svg-scroll{overflow-x:auto;max-width:100%}.svg-scroll svg{display:block;max-width:100%;height:auto}.ref-area{min-height:calc(100vh - var(--scroll-offset));margin-top:24px}.ref-picker{padding:22px;border-radius:12px;background:var(--soft);border:1px solid #b4cfc2}.ref-picker label{display:block;font-weight:700;margin-bottom:10px}.ref-picker select{width:100%;font-size:15px;min-height:46px}.ref-panel{margin-top:18px;background:#fff;border:1px solid var(--line);padding:20px;border-radius:9px}.ref-panel[hidden]{display:none}.ref-panel h3{margin:0;font-size:24px}.ref-panel h4{font-size:16px;margin:18px 0 8px}.ref-kind{font-size:13px;color:var(--teal)}.result{padding:10px 15px;border-left:3px solid var(--teal);background:var(--soft)}.copy{display:block;margin:5px 0 0 auto;font-size:12px;padding:4px 8px}.code-wrap{margin:20px 0}.code-wrap pre{margin-bottom:0}.foot{font-size:13px;color:var(--muted);border-top:1px solid var(--line);padding-top:23px;margin-top:30px}details{border:1px solid var(--line);padding:12px;border-radius:8px;margin:15px 0}summary{cursor:pointer;font-weight:700}@media(max-width:900px){.sidebar{transform:translateX(-100%)}body.nav-open .sidebar{transform:translateX(0);top:60px}.shell{margin-left:0}.menu{display:inline-block}.topbar-title{display:none}.topbar{padding:10px 14px}main{padding:23px 18px 65px}h1{font-size:27px}h2{font-size:23px}.learning-figure,.ref-picker{padding:16px}.flow{flex-direction:column}.flow-arrow{transform:rotate(90deg)}.ref-panel{padding:15px}}@media print{.sidebar,.topbar,.toolbar,.copy,.skip{display:none!important}.shell{margin:0}main{padding:0;max-width:none}body{background:#fff;font-size:11pt}.ref-area{min-height:0}.ref-picker select{display:none}pre{white-space:pre-wrap;background:#f3f5f4;color:#111}.learning-figure{break-inside:avoid}.table-scroll{overflow:visible}a{color:inherit}}@media print{.svg-scroll{overflow:visible}.svg-scroll svg{min-width:0!important;width:100%!important;height:auto!important}}.sidebar{width:266px;background:#f1f4f1;padding:27px 19px;overflow-y:auto}.brand{font-size:21px;font-weight:700;letter-spacing:.03em;margin-bottom:5px}.brand small{font-size:12px;font-weight:400;color:var(--muted);letter-spacing:.1em}.sidebar .sub{font-size:13px;color:var(--muted);margin:5px 0 21px}.sidebar nav a{font-size:14px;line-height:1.5;padding:9px 11px;margin:3px 0;border-radius:6px}.sidebar nav a:hover{background:#e0ece6;color:#174d43}.sidebar nav a.active,.sidebar nav a.active:hover{background:var(--teal);color:#fff}.nav-group{font-size:12px;color:var(--muted);margin:18px 11px 6px;letter-spacing:.08em}.sidebar-footer{margin-top:24px;font-size:12px;color:var(--muted)}.shell{margin-left:266px}@media(max-width:900px){.shell{margin-left:0}}</style></head><body><a class="skip" href="#article">跳到正文</a><aside class="sidebar" aria-label="章节目录"><div class="brand"><small>DATABASE / UNIT 06</small>事务</div><p class="sub">完整正文 · 图解学习版</p><nav><a href="#ch06-navigation">学习导航</a><div class="nav-group">准备 · 业务与事务</div><a href="#ch06-s002" data-chapter="01">1. 从一笔转账理解事务与读写</a><a href="#ch06-s005" data-chapter="02">2. ACID 四个要求逐一解释</a><a href="#ch06-s010" data-chapter="03">3. 事务状态与失败</a><div class="nav-group">并发 · 冲突与串行化</div><a href="#ch06-s011" data-chapter="04">4. 为什么并发会出现异常</a><a href="#ch06-s017" data-chapter="05">5. 调度：把操作按实际次序排起来</a><a href="#ch06-s020" data-chapter="06">6. 哪些操作冲突</a><a href="#ch06-s023" data-chapter="07">7. 冲突等价与交换操作</a><a href="#ch06-s026" data-chapter="08">8. 优先图与冲突可串行化</a><a href="#ch06-s030" data-chapter="09">9. 视图等价与盲写</a><div class="nav-group">恢复 · 读取与提交</div><a href="#ch06-s033" data-chapter="10">10. 可恢复调度：不要先提交依赖未确定的结果</a><a href="#ch06-s036" data-chapter="11">11. 无级联调度：读取前来源先提交</a><a href="#ch06-s039" data-chapter="12">12. 严格调度：未提交的写也不能被覆盖</a><div class="nav-group">实现 · 协议与日志</div><a href="#ch06-s042" data-chapter="13">13. 怎样实现隔离与可串行化</a><a href="#ch06-s043" data-chapter="14">14. 日志怎样帮助原子性与持久性</a><a href="#ch06-s047" data-chapter="15">15. SQL 事务怎样体现上述边界</a><div class="nav-group">练习与复习</div><a href="#ch06-s048" data-chapter="16">16. 一份调度的判别顺序</a><a href="#ch06-s049" data-chapter="17">17. 本单元模拟题</a><a href="#ch06-s053" data-chapter="18">18. 自拟自测题与逐步答案</a><a href="#ch06-s058" data-chapter="19">19. 复习清单</a><a href="#ch06-boundaries" data-chapter="20">20. 把事务、调度、性质和协议放回各自的位置</a><a href="#ch06-reference" data-chapter="21">21. 本章概念与方法速查</a><a href="#ch06-verification">整理与核对说明</a></nav><div class="sidebar-footer">单文件 · 离线阅读<br>图表使用正文教学数据</div></aside><div class="shell"><header class="topbar"><span class="topbar-title">第6单元 事务</span><div class="toolbar"><button id="menu" class="menu" aria-label="打开或收起目录" aria-expanded="false">目录</button><button data-font="-1" aria-label="减小正文字号">字号 −</button><button data-font="1" aria-label="增大正文字号">字号 ＋</button><button id="print">打印 / 保存 PDF</button></div></header><main><article id="article"><h1>第6单元 事务</h1>
+<blockquote>
+<p>课件来源：<code>数据库课程ppt/ch14.pdf</code>；重点依据：<code>课程总结.pptx</code>；原模拟题来源：<code>试题模拟.pptx</code>。小余额与操作序列均为教学用。</p>
+</blockquote>
+<h2 id="ch06-navigation">学习导航</h2>
+<p>先用转账理解事务要求，再分析并发交错与可串行化，随后检查失败处理条件，最后结合日志、SQL 和练习理解实现边界。</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>学习阶段</th>
+<th>要解决的问题</th>
+<th>对应内容</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>准备 · 业务与事务</td>
+<td>哪些操作应整体完成，成功和失败各有什么要求？</td>
+<td><a href="#ch06-s002">1. 从一笔转账理解事务与读写</a>、<a href="#ch06-s005">2. ACID 四个要求逐一解释</a>、<a href="#ch06-s010">3. 事务状态与失败</a></td>
+</tr>
+<tr>
+<td>并发 · 冲突与串行化</td>
+<td>交错会怎样出错，如何判断能否等价于串行执行？</td>
+<td><a href="#ch06-s011">4. 为什么并发会出现异常</a>、<a href="#ch06-s017">5. 调度：把操作按实际次序排起来</a>、<a href="#ch06-s020">6. 哪些操作冲突</a>、<a href="#ch06-s023">7. 冲突等价与交换操作</a>、<a href="#ch06-s026">8. 优先图与冲突可串行化</a>、<a href="#ch06-s030">9. 视图等价与盲写</a></td>
+</tr>
+<tr>
+<td>恢复 · 读取与提交</td>
+<td>读取依赖和提交先后怎样影响失败处理？</td>
+<td><a href="#ch06-s033">10. 可恢复调度：不要先提交依赖未确定的结果</a>、<a href="#ch06-s036">11. 无级联调度：读取前来源先提交</a>、<a href="#ch06-s039">12. 严格调度：未提交的写也不能被覆盖</a></td>
+</tr>
+<tr>
+<td>实现 · 协议与日志</td>
+<td>数据库怎样限制交错并撤销或保留事务结果？</td>
+<td><a href="#ch06-s042">13. 怎样实现隔离与可串行化</a>、<a href="#ch06-s043">14. 日志怎样帮助原子性与持久性</a>、<a href="#ch06-s047">15. SQL 事务怎样体现上述边界</a></td>
+</tr>
+<tr>
+<td>练习与复习</td>
+<td>能否按顺序检查各项性质，并说明判断依据？</td>
+<td><a href="#ch06-s048">16. 一份调度的判别顺序</a>、<a href="#ch06-s049">17. 本单元模拟题</a>、<a href="#ch06-s053">18. 自拟自测题与逐步答案</a>、<a href="#ch06-s058">19. 复习清单</a>、<a href="#ch06-boundaries">20. 把事务、调度、性质和协议放回各自的位置</a>、<a href="#ch06-reference">21. 本章概念与方法速查</a></td>
+</tr>
+</tbody></table></div>
+<p>需要回查某个知识点时，可直接点击表中的对应章节；先尝试解释例子的结果，再对照正文。</p>
+<h2 id="ch06-s001">怎样阅读本章</h2>
+<blockquote>
+<p><strong>课程重点：事务概念与 ACID、可串行化、隔离性与原子性、可恢复调度和无级联调度。</strong><br><strong>重点中的重点：冲突、冲突等价、冲突可串行化及优先图判别。</strong></p>
+</blockquote>
+<p>事务要解决两类问题：一件业务只做了一半怎么办，多件业务交错做会不会出错。本章先看金额变化，再引入操作记号和图。<strong>【课程总结PPT重点知识点】</strong> 涵盖 ACID、冲突与可串行化、可恢复和无级联调度；操作冲突是总结强调的范围。<strong>【课程PPT补充知识点】</strong> 用于课件中的其他内容。</p>
+<h2 id="ch06-s002">1. 【课程总结PPT重点知识点】从一笔转账理解事务与读写</h2>
+<p>转账包含两次修改。如果把它们分别当成已经完成的业务，中途失败就可能只扣款、不入账。本节先区分“程序算出了新余额”“数据库接受了修改”和“整笔业务提交成功”，再看事务怎样把这些步骤作为一个整体。</p><figure class="learning-figure" id="ch06-transfer-figure"><h4>转账的中间状态与最终结果</h4><p class="fig-intro">每个选项都是同一笔转账的一个观察时刻；余额是逻辑状态，未提交值能否被其他事务读取，还取决于隔离规则。</p><label for="ch06-transfer-figure-select">选择要观察的情形</label><select id="ch06-transfer-figure-select" aria-controls="ch06-transfer-figure-output"><option value="0">开始：尚未执行</option><option value="1">读 A 并计算 a=300</option><option value="2">只写回 A：业务做了一半</option><option value="3">写回 B，但尚未提交</option><option value="4">提交成功</option><option value="5">扣款后失败，撤销完成</option></select><div class="fig-output" id="ch06-transfer-figure-output" aria-live="polite"></div></figure>
+<blockquote>
+<p><strong>本节为课程总结PPT明确列出的重点知识点：事务概念与模型。</strong></p>
+</blockquote>
+<h3 id="ch06-s003">1.1 先把业务与数据说清楚</h3>
+<p>银行甲账户 A 有 500 元，乙账户 B 有 300 元，甲向乙转账 200 元，不收手续费。教学表 <code>account(account_id,owner,balance)</code>每行一个账户；account_id 账户号，owner 所有者，balance 余额。</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>account_id</th>
+<th>owner</th>
+<th>balance</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>A</td>
+<td>甲</td>
+<td>500</td>
+</tr>
+<tr>
+<td>B</td>
+<td>乙</td>
+<td>300</td>
+</tr>
+</tbody></table></div>
+<p>这两个账户总额为 800，转账后应仍为 800。这里 A、B 是数据项代号，不是第 05 章属性集合。</p>
+<p><strong>事务</strong>是作为整体处理的一组操作。给这笔转账起名 T1，T 表示事务，1 是编号。为了理解，假设它按下列时间线执行：</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>步骤</th>
+<th>做什么</th>
+<th>程序暂存值</th>
+<th>数据库中 A、B</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>read(A)，读甲余额</td>
+<td>a=500</td>
+<td>500、300</td>
+</tr>
+<tr>
+<td>2</td>
+<td>a=a−200</td>
+<td>a=300</td>
+<td>500、300</td>
+</tr>
+<tr>
+<td>3</td>
+<td>write(A)，写回甲余额</td>
+<td>a=300</td>
+<td>300、300</td>
+</tr>
+<tr>
+<td>4</td>
+<td>read(B)，读乙余额</td>
+<td>b=300</td>
+<td>300、300</td>
+</tr>
+<tr>
+<td>5</td>
+<td>b=b+200</td>
+<td>b=500</td>
+<td>300、300</td>
+</tr>
+<tr>
+<td>6</td>
+<td>write(B)，写回乙余额</td>
+<td>b=500</td>
+<td>300、500</td>
+</tr>
+<tr>
+<td>7</td>
+<td>commit，提交</td>
+<td>事务成功结束</td>
+<td>300、500</td>
+</tr>
+</tbody></table></div>
+<p><code>read</code>读取数据项到程序，<code>write</code>把程序计算的新值写成数据库修改；a、b 是程序暂存变量，不是新增账户。纯计算暂存值并不直接改数据库。为手算，表中“数据库中”是逻辑上的写入状态，不表示该时刻所有数据已写到磁盘。</p>
+<h3 id="ch06-s004">1.2 提交和回滚的含义</h3>
+<p><strong>提交</strong> <code>commit</code>表示事务成功结束，结果应持久保留。<strong>回滚</strong> <code>rollback</code>撤销事务修改，例如在步骤 3 后失败，应恢复甲余额为 500，乙仍 300，而不能把少了 200 的中间状态当成最终完成。</p>
+<p>实际 DBMS 可能先保留旧版本、缓冲修改或记录日志；抽象 read/write 不承诺某个产品内部具体实现。应用仍需检查账户存在、余额规则、转账身份和修改行数。</p>
+<h2 id="ch06-s005">2. 【课程总结PPT重点知识点】ACID 四个要求逐一解释</h2>
+<p>把一组操作放在一起还不够：我们还要知道失败能否撤销、业务规则能否保持、同时执行是否互相干扰、成功结果能否保留。ACID 分别回答这四个问题，四项要求不能互相代替。</p>
+<blockquote>
+<p><strong>本节为课程总结PPT明确列出的重点知识点：ACID。</strong></p>
+</blockquote>
+<p>ACID 是 Atomicity、Consistency、Isolation、Durability 四个词的首字母，中文为原子性、一致性、隔离性、持久性。</p>
+<h3 id="ch06-s006">2.1 原子性：一件业务作为整体</h3>
+<p>扣 A 款与加 B 款应全做，或整体撤销。原子性不表示“只执行一条 SQL”，多条 SQL 也可组成一个事务；也不表示程序中途不会失败，而是失败后的已做修改得到正确处理。</p>
+<h3 id="ch06-s007">2.2 一致性：保持声明的规则和业务不变量</h3>
+<p><strong>业务不变量</strong>是正确操作前后应保持的条件，例如本次转账 A+B=800；不变量不一定是某一格恒定不变。</p>
+<p>转账后 300+500=800，保持规则；只扣款后 300+300=600，违背规则。数据库检查约束，应用提供正确操作，二者共同维护一致性。输入错误收款人也可能保持总额，但仍违反业务意图，不能说 DBMS 会自动识别。</p>
+<h3 id="ch06-s008">2.3 隔离性：控制别人看到什么与怎样交错</h3>
+<p>若另一事务 T2 查总额，它不应把 T1 半途的 600 当成合法完成结果。<strong>隔离性</strong>规定并发影响的可见范围与限制，理想的强隔离可使结果等价于某个逐件完成的次序。具体隔离级别可以较弱，详见第 07 章。</p>
+<p>隔离不等于事务绝对不能同时推进；允许正确的交错可以提高吞吐量，即单位时间完成的事务数量。</p>
+<h3 id="ch06-s009">2.4 持久性：已经确认成功不能因普通故障丢失</h3>
+<p>若 T1 已提交并向甲返回成功，系统重启后还应保留 300、500。持久性不等于每次 write 都已经独立持久化，也不保证一份存储在所有物理灾难中永远存在；数据库依赖其配置的持久存储与恢复机制，备份等解决更广泛故障。</p>
+<h2 id="ch06-s010">3. 【课程PPT补充知识点】事务状态与失败</h2>
+<p>程序执行完最后一次修改时，数据库可能还在完成提交保障。因此，判断故障后该撤销还是保留，必须先分清事务处在哪个状态。下面的状态描述一笔事务的进展，不是账户余额的不同取值。</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>状态</th>
+<th>白话解释</th>
+<th>转账中的位置</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>活动 active</td>
+<td>仍在执行</td>
+<td>读取、计算、写入</td>
+</tr>
+<tr>
+<td>部分提交 partially committed</td>
+<td>最后一条业务操作完成，提交保障尚未完成</td>
+<td>已写 B，正处理提交</td>
+</tr>
+<tr>
+<td>提交 committed</td>
+<td>成功提交已完成</td>
+<td>可以确认业务成功</td>
+</tr>
+<tr>
+<td>失败 failed</td>
+<td>出现错误，无法正常继续</td>
+<td>断电、规则检查失败等</td>
+</tr>
+<tr>
+<td>中止 aborted</td>
+<td>撤销结束</td>
+<td>恢复原余额</td>
+</tr>
+<tr>
+<td>结束 terminated</td>
+<td>清理后退出</td>
+<td>无后续工作</td>
+</tr>
+</tbody></table></div>
+<p>通常活动→部分提交→提交→结束；活动或部分提交可失败，失败→中止，中止后可结束或重新开始事务。这里 <code>→</code>只表示状态转移，不是函数依赖。</p>
+<p>“最后一条 UPDATE 成功”不能自动等同于“已提交”。重试也不能把原事务的一半简单补做，需要确认状态并防止重复业务。</p>
+<h2 id="ch06-s011">4. 【课程PPT补充知识点，但属于隔离性基础】为什么并发会出现异常</h2>
+<p>并发的问题往往出在“读到什么值”和“后来覆盖了什么值”。下面各例从各自初值开始：先逐步追踪读写，再与正常业务结果比较，不能只看最后是否报错。</p>
+<p>各小例独立从明确初值开始，不接续上一例。</p>
+<h3 id="ch06-s012">4.1 丢失更新：后来写入覆盖了别人的修改</h3>
+<p>A 初始 500；T1 存入 100，T2 取出 50，正确最终应为 550。</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>时刻</th>
+<th>操作</th>
+<th>暂存值或数据库结果</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>T1 读 A</td>
+<td>T1 得 500</td>
+</tr>
+<tr>
+<td>2</td>
+<td>T2 读 A</td>
+<td>T2 也得 500</td>
+</tr>
+<tr>
+<td>3</td>
+<td>T1 按旧值加 100 写 A</td>
+<td>A=600</td>
+</tr>
+<tr>
+<td>4</td>
+<td>T2 按自己的旧值减 50 写 A</td>
+<td>A=450</td>
+</tr>
+</tbody></table></div>
+<p>最终 450，T1 的存款效果丢失，叫<strong>丢失更新</strong>。这不表示操作文本消失，而是结果被覆盖。锁、版本校验或适当的原子更新方式可防止这类错误，具体见第 07 章。</p>
+<h3 id="ch06-s013">4.2 脏读：读了可能被撤销的值</h3>
+<p>A 初始 500。T1 写 A=300，未提交；T2 读到 300；T1 回滚使 A 恢复 500。T2 使用的是一次失败业务的中间值，叫<strong>脏读</strong>。“脏”不表示数字格式坏了，而是来源未提交。</p>
+<h3 id="ch06-s014">4.3 不可重复读：同一事务两次看到不同已提交值</h3>
+<p>A 初始 500。T1 先读 500；T2 把 A 改为 400 并提交；T1 再读 A 得 400。两次读取同一数据项不同，叫<strong>不可重复读</strong>。这与脏读不同，第二个值已提交。</p>
+<h3 id="ch06-s015">4.4 幻读：相同条件的记录集合变了</h3>
+<p>独立选课表 <code>enrollment(SID,CID)</code>初始仅 S1 C1。T1 查“CID=C1 的所有选课”得到一人；T2 插入 S2 C1 并提交；T1 用同一条件再查，得到两人。</p>
+<p><strong>幻读</strong>关注满足条件的记录集合增加、减少或成员改变，不仅是已有某一行的值变化。第 07 章解释范围锁和快照。</p>
+<h3 id="ch06-s016">4.5 不一致分析：把不同时间的状态拼在一起</h3>
+<p>回到 A=500、B=300 的转账。T1 是统计者，T2 把 A 转 200 到 B。</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>顺序</th>
+<th>动作</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>T1 读 A=500</td>
+</tr>
+<tr>
+<td>2</td>
+<td>T2 完成转账并提交，A=300、B=500</td>
+</tr>
+<tr>
+<td>3</td>
+<td>T1 读 B=500</td>
+</tr>
+<tr>
+<td>4</td>
+<td>T1 相加得 1000</td>
+</tr>
+</tbody></table></div>
+<p>1000 既不是转账前总額也不是转账后总额，两者都为 800。它来自不同时点拼接，叫不一致分析。保护单个写操作并不足以保证跨多行读取的一致观察。</p>
+<h2 id="ch06-s017">5. 【课程总结PPT重点基础】调度：把操作按实际次序排起来</h2>
+<p>真实程序包含计算、判断和数据库访问。为了集中分析事务之间的交错，调度只把需要观察的读、写、提交和中止排成一条时间线；每个事务内部的先后次序仍要保留。</p>
+<h3 id="ch06-s018">5.1 操作记号先读清楚</h3>
+<p><strong>调度</strong>是多个事务操作的时间顺序表，每个事务内部仍按自身程序次序执行。</p>
+<p><code>r1(A)</code>表示 T1 读 A，r 为 read；<code>w1(A)</code>表示 T1 写 A，w 为 write；<code>c1</code>表示 T1 提交，c 为 commit；<code>a1</code>表示 T1 中止，a 为 abort。下标／编号识别事务，括号里的字母识别数据项。一行逗号分隔的操作串按从左到右的顺序执行，不表示同时发生。</p>
+<h3 id="ch06-s019">5.2 串行与非串行</h3>
+<p><strong>串行调度</strong>让一个事务完全结束后下一个才执行，例如 <code>r1(A),w1(A),c1,r2(A),w2(A),c2</code>。</p>
+<p><strong>非串行调度</strong>把事务交错，例如 <code>r1(A),r2(B),w1(A),w2(B),c1,c2</code>。A、B 是独立数据项，T1 只改 A，T2 只改 B，这种交错可以正确。不能把“交错”直接等同于“错误”。</p>
+<p><strong>可串行化</strong>要求交错效果按规定的等价标准相当于某个串行次序，不要求现实执行已经串行。接下来区分冲突等价和视图等价。</p>
+<h2 id="ch06-s020">6. 【课程总结PPT重点中的重点】哪些操作冲突</h2>
+<p>两次操作前后交换，有时不影响结果，有时会改变读到的值或最后写入的值。“冲突”用来找出不能随意换顺序的操作对；它不表示数据库已经报错，也不表示两个事务一定要回滚。</p>
+<h3 id="ch06-s021">6.1 三个条件缺一不可</h3>
+<p>两操作<strong>冲突</strong>须满足：属于不同事务；访问同一数据项；至少一个是写。</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>操作对</th>
+<th>是否冲突</th>
+<th>原因</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>r1(A)、r2(A)</td>
+<td>否</td>
+<td>都只读</td>
+</tr>
+<tr>
+<td>r1(A)、w2(A)</td>
+<td>是</td>
+<td>同项，含写</td>
+</tr>
+<tr>
+<td>w1(A)、r2(A)</td>
+<td>是</td>
+<td>同项，含写</td>
+</tr>
+<tr>
+<td>w1(A)、w2(A)</td>
+<td>是</td>
+<td>同项，两写</td>
+</tr>
+<tr>
+<td>w1(A)、w2(B)</td>
+<td>否</td>
+<td>数据项不同</td>
+</tr>
+<tr>
+<td>r1(A)、w1(A)</td>
+<td>不算事务间冲突对</td>
+<td>同一个事务，内部顺序仍须保留</td>
+</tr>
+</tbody></table></div>
+<h3 id="ch06-s022">6.2 为什么顺序会影响含义</h3>
+<p>A 初始 500，T2 写 A=300。先 r1(A) 再 w2(A)，T1 读 500；先写再读，T1 读 300。因此两操作不能随意交换。</p>
+<p>两个写也不能随意换序：T1 写 600、T2 写 450，最后由谁写决定最终值。即使某个例子恰好两者写相同值，定义上仍是冲突；判定考虑操作结构，不能凭一次数值巧合忽略。</p>
+<h2 id="ch06-s023">7. 【课程总结PPT重点中的重点】冲突等价与交换操作</h2>
+<p>并发可以交错执行，但我们希望它与某个逐件完成的顺序具有相同的关键先后关系。冲突等价比较的是两份调度中每一对冲突操作的顺序；随后才问是否存在符合这些顺序的串行调度。</p>
+<h3 id="ch06-s024">7.1 等价检查的对象是什么</h3>
+<p>两个调度包含相同事务及操作，且所有冲突操作对的先后关系一致，叫<strong>冲突等价</strong>。可以通过不断交换相邻、不冲突的操作来理解这种等价；不得交换同事务必须保留的程序顺序。</p>
+<h3 id="ch06-s025">7.2 一个能一步步整理成串行的例子</h3>
+<p>独立事务 T1 先读写 A，再读写 B；T2 只读写 B。给定：</p>
+<pre><code class="language-text">r1(A), w1(A), r2(B), w2(B), r1(B), w1(B)
+</code></pre>
+<p>T2 的 B 操作与 T1 的 A 操作不冲突。把 r2(B) 向前移过 w1(A)、r1(A)，再把 w2(B) 移过这些 A 操作，得到：</p>
+<pre><code class="language-text">r2(B), w2(B), r1(A), w1(A), r1(B), w1(B)
+</code></pre>
+<p>这是 T2→T1 的串行次序。B 上 T2 原来就在 T1 之前，整理过程中未改变这一冲突顺序，所以原调度<strong>冲突可串行化</strong>。</p>
+<p>提交操作在这节示例中省略，只研究读写次序；是否能安全恢复还需另看提交与依赖，不能混为一谈。</p>
+<h2 id="ch06-s026">8. 【课程总结PPT重点中的重点】优先图与冲突可串行化</h2>
+<p>逐对交换操作不方便，事务越多越难看清。优先图把“某事务必须排在另一事务前面”的要求画成箭头：没有环，就能排出串行次序；形成环，就无法同时满足这些要求。</p><figure class="learning-figure" id="ch06-priority-figure"><h4>优先图：箭头来自哪一对操作</h4><p class="fig-intro">箭头表示已发生的冲突操作要求的先后顺序，不表示锁请求正在等待。</p><label for="ch06-priority-figure-select">选择要观察的情形</label><select id="ch06-priority-figure-select" aria-controls="ch06-priority-figure-output"><option value="0">无环：T1 在两个数据项上都在前</option><option value="1">有环：A 与 B 要求相反顺序</option><option value="2">盲写：冲突有环，视图仍可串行化</option></select><div class="fig-output" id="ch06-priority-figure-output" aria-live="polite"></div></figure>
+<h3 id="ch06-s027">8.1 图里的点与箭头</h3>
+<p><strong>优先图</strong>也称前驱图：每个事务一个<strong>节点</strong>；若 Ti 的操作先于 Tj 的冲突操作，画 <code>Ti→Tj</code>。箭头表示必须串行排在前面，不表示某事务现在正在等待。</p>
+<p><strong>环</strong>是沿箭头走最后回到起点，例如 T1→T2→T1；<strong>无环</strong>表示不存在这种循环。调度冲突可串行化当且仅当优先图无环。</p>
+<p><strong>拓扑排序</strong>是在无环图中把事务排成一个次序，使每条箭头的起点在终点之前；就是允许的串行次序。</p>
+<h3 id="ch06-s028">8.2 无环例：逐对找边</h3>
+<p>两个事务都读写 A，再读写 B。给定时间线：</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>顺序</th>
+<th>操作</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>r1(A)</td>
+</tr>
+<tr>
+<td>2</td>
+<td>w1(A)</td>
+</tr>
+<tr>
+<td>3</td>
+<td>r2(A)</td>
+</tr>
+<tr>
+<td>4</td>
+<td>w2(A)</td>
+</tr>
+<tr>
+<td>5</td>
+<td>r1(B)</td>
+</tr>
+<tr>
+<td>6</td>
+<td>w1(B)</td>
+</tr>
+<tr>
+<td>7</td>
+<td>r2(B)</td>
+</tr>
+<tr>
+<td>8</td>
+<td>w2(B)</td>
+</tr>
+</tbody></table></div>
+<p>A 上 r1 在 w2 前、w1 在 r2 前、w1 在 w2 前，都产生 T1→T2；B 同样只产生 T1→T2。重复边只画一次。图是两个节点一条边，无环，所以可串行化为 T1 后 T2，尽管 T2 的 A 操作在 T1 的 B 操作之前执行。</p>
+<h3 id="ch06-s029">8.3 有环例：矛盾来自两个数据项</h3>
+<pre><code class="language-text">r1(A),w1(A),r2(A),w2(A),r2(B),w2(B),r1(B),w1(B)
+</code></pre>
+<p>A 上 T1 的写在 T2 读写之前，给 T1→T2；B 上 T2 的写在 T1 读写之前，给 T2→T1。</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>边</th>
+<th>对应证据</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>T1→T2</td>
+<td>w1(A) 在 r2(A)／w2(A) 前</td>
+</tr>
+<tr>
+<td>T2→T1</td>
+<td>w2(B) 在 r1(B)／w1(B) 前</td>
+</tr>
+</tbody></table></div>
+<p>形成环，无法同时让 T1 在 T2 前、T2 又在 T1 前，因此不冲突可串行化。不能因为每个事务内部顺序正确就判断整体正确。</p>
+<h2 id="ch06-s030">9. 【课程总结PPT重点知识点】视图等价与盲写</h2>
+<p>冲突分析是一种方便的判别办法，但有些盲写会让它显得过于严格。视图等价直接核对谁读了谁的值、谁最后写入，帮助我们理解“冲突不可串行化”与“完全没有等价串行结果”之间的区别。</p>
+<blockquote>
+<p><strong>本节为课程总结PPT明确列出的重点知识点：视图可串行化。</strong></p>
+</blockquote>
+<h3 id="ch06-s031">9.1 关注读取来源和最终写者</h3>
+<p><strong>视图等价</strong>不是 SQL 视图可更新性。对同样事务的两个调度，要求：</p>
+<ol>
+<li>原来读初始值的读取，在另一个调度仍读初始值；</li>
+<li>原来从某事务某次写取得值的读取，仍从同一写取得值；</li>
+<li>每个数据项的最终写操作由同一事务执行。</li>
+</ol>
+<p><strong>视图可串行化</strong>是与某个串行调度视图等价。冲突可串行化一定视图可串行化，反过来可能不成立。</p>
+<h3 id="ch06-s032">9.2 盲写例子为什么冲突有环却视图可串行化</h3>
+<p><strong>盲写</strong>是在未先读该数据项的情况下直接写值。独立场景中 T1 连续计划两次写 X，T2 写一次 X：</p>
+<pre><code class="language-text">w1(X),w2(X),w1(X)
+</code></pre>
+<p>第一个 w1 在 w2 前，产生 T1→T2；w2 在第二个 w1 前，产生 T2→T1，冲突有环。</p>
+<p>这里没有任何读，前两项视图条件不用匹配读取；最终写者都是 T1。串行次序 T2 后 T1，也由 T1 最后写。因此原调度视图可串行化。</p>
+<p>不能据此只用“最终值看起来一样”判断任意调度；存在读时必须核对读来源，最终写者只是三项之一。</p>
+<h2 id="ch06-s033">10. 【课程总结PPT重点知识点】可恢复调度：不要先提交依赖未确定的结果</h2>
+<p>即使交错顺序可以串行化，失败处理仍可能有问题：一个事务如果把别人尚未确定的结果当成依据，就不能抢先对外确认成功。本节只检查读取来源与提交先后，不用优先图代替这项检查。</p><figure class="learning-figure" id="ch06-properties-figure"><h4>同一份调度，分别检查四种性质</h4><p class="fig-intro">选择一份完整序列，分别观察冲突图、提交先后、读取时刻和盖写行为。</p><label for="ch06-properties-figure-select">选择要观察的情形</label><select id="ch06-properties-figure-select" aria-controls="ch06-properties-figure-output"><option value="0">可恢复，但有脏读</option><option value="1">来源先提交再读取</option><option value="2">没有读取依赖，但发生脏写</option><option value="3">初值读取，却不能冲突串行化</option><option value="4">依赖者抢先提交，来源后来失败</option></select><div class="fig-output" id="ch06-properties-figure-output" aria-live="polite"></div></figure>
+<blockquote>
+<p><strong>本节为课程总结PPT明确列出的重点知识点：可恢复调度。</strong></p>
+</blockquote>
+<h3 id="ch06-s034">10.1 明确什么是读取依赖</h3>
+<p>若 T2 读到 T1 写出的值，就说 T2 对这次读取<strong>依赖</strong> T1，无论读取时 T1 是否已经提交。若来源尚未提交，这次读取还是脏读。<strong>可恢复调度</strong>要求：只要 T2 读了 T1 写出的值，并且 T2 要提交，那么 T1 必须先成功提交，才能提交 T2。</p>
+<p>下面是独立 A 场景，初始 X=500；T1 写 X=300，T2 读取它。w1(X)后最新写者是 T1，因此读取来源明确。</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>顺序</th>
+<th>可恢复但有脏读</th>
+<th>原因</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>w1(X)</td>
+<td>T1 尚未提交</td>
+</tr>
+<tr>
+<td>2</td>
+<td>r2(X)</td>
+<td>T2 读自 T1</td>
+</tr>
+<tr>
+<td>3</td>
+<td>c1</td>
+<td>来源事务成功</td>
+</tr>
+<tr>
+<td>4</td>
+<td>c2</td>
+<td>依赖者后来提交</td>
+</tr>
+</tbody></table></div>
+<p>串行化检查与恢复检查不同；这个顺序允许脏读，只保证提交先后适当。</p>
+<h3 id="ch06-s035">10.2 不可恢复例：已经提交的结果依赖失败业务</h3>
+<pre><code class="language-text">w1(X),r2(X),c2,a1
+</code></pre>
+<p>T2 先提交，T1 后中止。T2 依赖的值被撤销，但 T2 已对外确认成功，普通未提交事务回滚机制不能把已提交结果随意当作未提交撤掉。这是不可恢复调度。</p>
+<p>“可恢复”是给定调度的依赖与提交关系性质，不等于系统具备备份或某个恢复软件就能把任意交错变合法。</p>
+<h2 id="ch06-s036">11. 【课程总结PPT重点知识点】无级联调度：读取前来源先提交</h2>
+<p>可恢复允许先读未提交的结果、以后再按正确顺序提交，但来源失败时，读取者也可能需要撤销。无级联把检查提前到读取之前，从源头避免这种连带回滚。</p>
+<blockquote>
+<p><strong>本节为课程总结PPT明确列出的重点知识点：无级联调度。</strong></p>
+</blockquote>
+<h3 id="ch06-s037">11.1 什么叫级联回滚</h3>
+<p>独立时间线 <code>w1(X),r2(X),w2(Y),r3(Y),a1</code>。Y 是另一个数据项，T2 用读到的 X 结果计算 Y，T3 又读取 Y。T1 失败时，T2 读了失效值，需回滚；T3 又依赖 T2，可能接着回滚，叫<strong>级联回滚</strong>。</p>
+<h3 id="ch06-s038">11.2 避免级联的条件</h3>
+<p><strong>无级联调度</strong>要求读取一个由其他事务写的值之前，该写者已经提交。例如：</p>
+<pre><code class="language-text">w1(X),c1,r2(X),c2
+</code></pre>
+<p>T2 不读 T1 未提交值，因此不需要随 T1 的失败撤销。</p>
+<p>与可恢复的差别：可恢复要求“依赖者提交前，来源已提交”；无级联更早要求“依赖者读取前，来源已提交”。因此无级联一定可恢复，但可恢复不一定无级联。</p>
+<h2 id="ch06-s039">12. 【课程PPT补充知识点，但有助于恢复理解】严格调度：未提交的写也不能被覆盖</h2>
+<p>禁止脏读后，还剩下一个问题：别人能不能覆盖尚未提交的修改？严格调度把读和写都挡在来源事务结束之后，让撤销时不必处理他人已经盖写的情况。</p>
+<h3 id="ch06-s040">12.1 对读和写同时加限制</h3>
+<p><strong>严格调度</strong>要求：某事务写了 X 后，在它提交或中止之前，其他事务既不能读 X，也不能写 X。读限制避免脏读，写限制避免<strong>脏写</strong>，即覆盖尚未提交的修改。</p>
+<p><code>w1(X),c1,w2(X),c2</code>可以严格；<code>w1(X),w2(X),c1,c2</code>不严格，因为 w2 覆盖未提交 w1。</p>
+<p>后一例没有任何读，恢复与无级联的“读依赖”条件没有被违反，所以可以可恢复、无级联，却不严格。无级联只管未提交来源的读取，并不自动禁止覆盖。</p>
+<h3 id="ch06-s041">12.2 为什么严格性有利于撤销</h3>
+<p>X 初始 500，T1 写 300，T2 写 600；T1 后来中止。若简单把旧值 500 写回，会覆盖 T2 的 600。正确恢复必须避免这种冲突或复杂地处理它。严格调度让来源未结束前别人不能盖写，撤销更直接。</p>
+<p>关系链：</p>
+<pre><code class="language-text">严格 ⇒ 无级联 ⇒ 可恢复
+</code></pre>
+<p><code>⇒</code>表示左边保证右边。反向不保证。此链独立于冲突可串行化，一个性质不能代替另一个性质。</p>
+<h2 id="ch06-s042">13. 【课程总结PPT重点知识点】怎样实现隔离与可串行化</h2>
+<p>前面是在事后判断一份操作序列是否合格。实际系统需要在操作发生前按规则允许、等待或拒绝访问，这些执行规则称为协议。“调度满足某性质”和“系统采用某协议”分别是结果要求与实现办法。</p>
+<p><strong>并发控制协议</strong>是各事务访问数据必须遵守的规则。课件介绍的方向包括：</p>
+<ul>
+<li><strong>锁</strong>：先取得读／写许可，不兼容时等待；</li>
+<li><strong>时间戳排序</strong>：为事务排逻辑先后，违反顺序时撤销；</li>
+<li><strong>验证</strong>：先尝试执行，提交前检查是否冲突；</li>
+<li><strong>多版本</strong>：保留多个历史值，让读取按规则选择版本。</li>
+</ul>
+<p>这里只认清方法的目标；完整加锁、等待、回滚、版本例子在第 07 章。不是所有能可串行化的协议都自动保证严格或无级联，需要分别看规则。</p>
+<h2 id="ch06-s043">14. 【课程总结PPT重点知识点】日志怎样帮助原子性与持久性</h2>
+<p>事务可能在内存里改好了数据，却还没把所有数据页可靠保存。故障后需要知道哪些结果应撤销、哪些应补回；日志提供判断与重做的依据，不能只凭磁盘上现存的余额猜测事务是否成功。</p>
+<h3 id="ch06-s044">14.1 日志不是只有“转账成功”四个字</h3>
+<p><strong>日志</strong>是恢复所需的持久记录，通常记录事务标识、修改对象和恢复信息。转账教学日志可解释为：</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>日志内容</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>T1 开始</td>
+<td>知道事务已启动</td>
+</tr>
+<tr>
+<td>T1，A，旧值 500，新值 300</td>
+<td>可撤销或重做甲的修改</td>
+</tr>
+<tr>
+<td>T1，B，旧值 300，新值 500</td>
+<td>可撤销或重做乙的修改</td>
+</tr>
+<tr>
+<td>T1 提交</td>
+<td>判断事务完成</td>
+</tr>
+</tbody></table></div>
+<p>这是一种便于理解的简化格式，真实系统不一定每条都直接存完整旧值新值。</p>
+<h3 id="ch06-s045">14.2 UNDO、REDO 与先写日志</h3>
+<p><strong>UNDO</strong>是撤销未完成修改；<strong>REDO</strong>是重做已确认提交、但数据页可能还没保存完整的修改。</p>
+<p><strong>WAL</strong>是 Write-Ahead Logging，先写日志原则：相关恢复日志要在对应修改的数据页持久化前先持久化；提交成功所需的日志也要按协议可靠保存。这样故障后不至于只剩修改却找不到恢复依据。</p>
+<p>例：T1 扣 A 后未提交就失败，按旧值撤回至 A=500；若提交已可靠记录但 B 数据页仍停留 300，重做使 B=500。读写入缓冲区不等于全部数据页已落盘，日志让这二者可以分工。</p>
+<h3 id="ch06-s046">14.3 检查点与恢复算法范围</h3>
+<p><strong>检查点</strong>保存恢复进度信息，帮助系统减少故障后需要重新检查的范围；它不一定意味着所有活动事务已提交。ARIES 是一种经典日志恢复算法名称，涉及日志序号、分析、重做、撤销等步骤。完整恢复算法在课程第 16 章，本章只说明这些名称的作用，不用一句“利用日志”冒充完整算法证明。</p>
+<h2 id="ch06-s047">15. 【课程PPT补充知识点】SQL 事务怎样体现上述边界</h2>
+<p>抽象的 read、write 有助于分析交错，实际应用则需要明确划出事务开始和结束的位置。下面把转账写成 SQL，观察修改语句、提交语句与出错处理分别负责哪一步。</p>
+<pre><code class="language-sql">START TRANSACTION;
+UPDATE account SET balance=balance-200 WHERE account_id=&#39;A&#39;;
+UPDATE account SET balance=balance+200 WHERE account_id=&#39;B&#39;;
+COMMIT;
+</code></pre>
+<p><code>START TRANSACTION</code>开始，<code>UPDATE</code>修改表，<code>SET</code>写新值，<code>WHERE</code>指定账户，<code>COMMIT</code>整体提交；出现错误时使用 <code>ROLLBACK</code>。单引号表示文字账户号，分号结束语句。</p>
+<p>在本例成功完成后全表两行为 A 甲 300、B 乙 500；回滚后 A 甲 500、B 乙 300。实际代码还需处理扣款条件不满足、某条更新影响零行等情况，决定提交或回滚。自动提交设置与开始事务的具体语法按 DBMS 核实。</p>
+<h2 id="ch06-s048">16. 一份调度的判别顺序</h2>
+<ol>
+<li>列出事务、数据项、每次操作和来源。</li>
+<li>只对“不同事务、同项、至少一写”画优先图边。</li>
+<li>查环，给冲突可串行化结论和串行次序。</li>
+<li>对每个读，找它读的是哪个写者的值。</li>
+<li>看来源提交是否早于依赖者提交，判断可恢复。</li>
+<li>看来源提交是否早于该读，判断无级联。</li>
+<li>看未结束的写是否被别人读或覆盖，判断严格。</li>
+</ol>
+<p>不要把优先图当成等待图；优先图依据已经发生的冲突顺序，等待图依据被阻塞的锁请求，下一章会区分。</p>
+<h2 id="ch06-s049">17. 本单元模拟题</h2>
+<h3 id="ch06-s050">题目一：事务的四种特性</h3>
+<p><strong>原题</strong></p>
+<blockquote>
+<p>事务的四种特性指的是什么？</p>
+</blockquote>
+<p><strong>PPT 参考答案</strong></p>
+<blockquote>
+<p>原子性，一致性，隔离性，持久性。</p>
+</blockquote>
+<p><strong>规范答案与解析</strong></p>
+<ul>
+<li>原子性：事务全部完成或全部撤销。</li>
+<li>一致性：正确事务保持数据库约束和业务不变量。</li>
+<li>隔离性：并发事务之间的影响受控，理想结果等价于允许的串行次序。</li>
+<li>持久性：提交后的结果在故障后仍然保留。</li>
+</ul>
+<p>只列四个名词适合简答题的最短答案；若题目分值较高，应补充定义和转账例子。</p>
+<h3 id="ch06-s051">题目二：转账中途故障</h3>
+<p><strong>原题</strong></p>
+<blockquote>
+<p>张三通过汇款转给李四 200 元。张三的账户已经减掉 200 元后系统发生故障，并没有在李四账户中增加 200 元。数据库出现了什么状态？应怎样解决？数据库通过什么手段实现？</p>
+</blockquote>
+<h3 id="ch06-s052">17.1 原转账题的金额与恢复过程</h3>
+<p>源 PPT 在同一题里混用了“200元”和“200美元”，以下按同一币种的 200 处理，不引入汇率换算。原题没有给张三、李四的初始余额。为了看清“不一致”，另外设<strong>教学初值</strong>张三 500、李四 300，不收手续费，owner 列此时用张三、李四表示所有者。题中的 200 元来自原题，其他初值是为说明而补充。</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>时刻</th>
+<th>张三</th>
+<th>李四</th>
+<th>总额</th>
+<th>如何解释</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>开始</td>
+<td>500</td>
+<td>300</td>
+<td>800</td>
+<td>正常</td>
+</tr>
+<tr>
+<td>扣款后故障</td>
+<td>300</td>
+<td>300</td>
+<td>600</td>
+<td>未完成，减少 200</td>
+</tr>
+<tr>
+<td>未提交事务撤销后</td>
+<td>500</td>
+<td>300</td>
+<td>800</td>
+<td>恢复原状态</td>
+</tr>
+<tr>
+<td>若事务完整成功</td>
+<td>300</td>
+<td>500</td>
+<td>800</td>
+<td>正确转账结果</td>
+</tr>
+</tbody></table></div>
+<p>题面没有直接说明日志和提交时刻。采用参考答案的“未完成、应回滚”解释，属于未提交失败事务；此时日志中的旧值或撤销信息支持撤回扣款。</p>
+<p>若实际情况是“提交记录已可靠保存，但数据页没写完整”，应走已提交事务恢复路径，而不是一概撤回。原题参考答案隐含前一种状态，不能从“系统故障”四字推断所有现实故障都用相同处理。</p>
+<p><strong>PPT 参考答案</strong></p>
+<blockquote>
+<p>数据库处于不一致状态。应该进行事务回滚，即将张三账户中减掉的 200 元再加回来。利用日志实现。</p>
+</blockquote>
+<p><strong>规范答案与完整解析</strong></p>
+<p>数据库处于违反转账业务不变量的<strong>不一致状态</strong>，因为总金额减少了 200 元。根本原因是转账的两个步骤没有作为一个原子事务完整完成。</p>
+<p>若故障发生时事务尚未提交，恢复系统应撤销张三账户的扣款，使两个账户恢复到事务开始前的状态。数据库通常利用日志记录旧值或可撤销信息，并在重启恢复时对未提交事务执行 <code>UNDO</code>。</p>
+<p>正确程序还应把扣款和入账放在同一事务中：</p>
+<pre><code class="language-sql">START TRANSACTION;
+UPDATE account SET balance = balance - 200 WHERE owner = &#39;张三&#39;;
+UPDATE account SET balance = balance + 200 WHERE owner = &#39;李四&#39;;
+COMMIT;
+</code></pre>
+<p>发生错误时执行 <code>ROLLBACK</code>。若事务已经成功提交但数据页尚未全部落盘，恢复系统还可能利用日志 <code>REDO</code> 已提交修改，以满足持久性。</p>
+<p>实际转账程序还应检查两个账户是否存在、扣款是否符合余额规则、两条 <code>UPDATE</code> 是否影响预期行数，并在同一事务中据此决定提交或回滚。DBMS 提供原子提交机制，却不能替应用判断“收款账户写错了”这类业务错误。</p>
+<p><strong>易错点</strong></p>
+<ul>
+<li>不能只补执行李四入账而不核对事务状态，否则重试可能重复入账。</li>
+<li>“日志”是恢复依据，不等于只保存一条普通业务文本。</li>
+<li>完整日志恢复算法属于第 16 章，本题只需说明回滚和日志作用。</li>
+</ul>
+<h2 id="ch06-s053">18. 自拟自测题与逐步答案</h2>
+<p>以下四题为自拟题。X、Y 是数据项代号；r、w、c、a 分别读、写、提交、中止。</p>
+<h3 id="ch06-s054">18.1 一个非串行调度能否冲突可串行化？</h3>
+<p><strong>给定</strong>：<code>r1(X),w1(X),r2(X),w2(X),r1(Y),w1(Y),c1,c2</code>。T1 先改 X 再改 Y，T2 只改 X。</p>
+<p><strong>步骤</strong>：X 上所有跨事务冲突均由 T1 在前、T2 在后，得 T1→T2。Y 只有 T1，不产生跨事务边。无环。</p>
+<p><strong>结论</strong>：冲突可串行化，可等价为 T1 后 T2。T2 可能读 T1 未提交 X；因此 c1 在 c2 前时可恢复，但因 r2 早于 c1，不无级联、不严格。必须把串行化与恢复结论分开写。</p>
+<h3 id="ch06-s055">18.2 三种恢复性质逐一判断</h3>
+<p><strong>给定</strong>：<code>w1(X),r2(X),c1,c2</code>，r2 读自 w1。</p>
+<p><strong>步骤</strong>：c1 在 c2 前，可恢复；r2 在 c1 前，读到未提交值，不无级联；严格性也因该读取失败。</p>
+<p><strong>结论</strong>：可恢复，但有脏读、非无级联、非严格。要无级联，可改为 w1(X),c1,r2(X),c2。</p>
+<h3 id="ch06-s056">18.3 不读脏数据就一定严格吗？</h3>
+<p><strong>给定</strong>：<code>w1(X),w2(X),c1,c2</code>，两事务直接盲写。</p>
+<p><strong>步骤</strong>：没有读，因此没有违规的读取依赖，可恢复、无级联；但 w2 在 c1 前覆盖 T1 未提交写，违反严格。两个写只形成 T1→T2，没有环。</p>
+<p><strong>结论</strong>：本调度冲突可串行化且无级联，但不严格。严格性还禁止脏写。</p>
+<h3 id="ch06-s057">18.4 统计总额为什么会多出钱？</h3>
+<p><strong>背景</strong>：A=500、B=300。T1 先读 A；T2 转 200 从 A 到 B 并提交；T1 再读 B。</p>
+<p><strong>步骤</strong>：T1 两读分别得到 500、500，合计 1000；转前、转后均为 800。多出的 200 是读了两种状态，不是银行真的生成了钱。</p>
+<p><strong>结论</strong>：不一致分析；需要合适隔离，使这项统计采用一致观察或受正确的串行化控制。只验证每条余额非负不够。</p>
+<h2 id="ch06-s058">19. 复习清单</h2>
+<ul>
+<li><input disabled="" type="checkbox"> 能区分程序暂存计算、数据库 write 与提交。</li>
+<li><input disabled="" type="checkbox"> 能用转账逐项解释 ACID。</li>
+<li><input disabled="" type="checkbox"> 能识别冲突，逐边画优先图并查环。</li>
+<li><input disabled="" type="checkbox"> 能按读来源、提交时点分别判断三种恢复性质。</li>
+<li><input disabled="" type="checkbox"> 能说明盲写、视图等价和最终写者。</li>
+<li><input disabled="" type="checkbox"> 能解释日志撤销与重做依赖的事务状态。</li>
+</ul>
+<p>继续读<a href="https://goya4140.github.io/JLU_CS_Course/3_1%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F/07_%E5%B9%B6%E5%8F%91%E6%8E%A7%E5%88%B6.html">第 07 章并发控制</a>，学习系统如何主动限制不正确的交错。</p>
+<hr>
+<h2 id="ch06-boundaries">20. 把事务、调度、性质和协议放回各自的位置</h2>
+<p>同一笔业务可以有多条语句；多个事务交错后形成一份调度；我们检查调度是否具有所需性质；数据库用协议限制允许出现的调度。这四层相关，却不是同一个对象。</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>层次</th>
+<th>要回答的问题</th>
+<th>转账例子</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>事务</td>
+<td>哪些操作作为一件业务一起完成？</td>
+<td>T1 扣 A、加 B、提交</td>
+</tr>
+<tr>
+<td>调度</td>
+<td>多件业务实际怎样交错？</td>
+<td>T1 写 A 后，T2 读 A，再由 T1 继续</td>
+</tr>
+<tr>
+<td>调度性质</td>
+<td>这个交错顺序满足什么要求？</td>
+<td>冲突能否排成串行次序？未提交值能否被读取？</td>
+</tr>
+<tr>
+<td>并发控制协议</td>
+<td>在执行时怎样阻止不合格的交错？</td>
+<td>先申请锁；不兼容就等待</td>
+</tr>
+<tr>
+<td>恢复机制</td>
+<td>失败后怎样落实撤销或保留？</td>
+<td>查日志，撤销未提交修改或补做已提交修改</td>
+</tr>
+</tbody></table></div>
+<p><strong>检查时分两条线。</strong> 可串行化关注并发交错是否等价于逐件执行；可恢复、无级联和严格关注读取依赖、提交先后以及未结束写入的访问。这两条线必须分别给结论。</p>
+<p>例如 r1(X),r2(X),w1(X),w2(X),c1,c2：r1 在 w2 前要求 T1→T2，r2 在 w1 前要求 T2→T1，所以冲突不可串行化；两次读却都发生在写入前，读的是初值，因此没有脏读，可恢复且无级联；w2 覆盖尚未提交的 w1，所以不严格。</p>
+<p>再如 w1(X),r2(X),c1,c2：只有 T1→T2，可冲突串行化，也可恢复；但 r2 读取未提交的 w1，因此不是无级联，也不严格。不能看到一个性质成立，就省略其余检查。</p>
+<p><strong>执行、提交、落盘也要分开。</strong> 执行 write 表示逻辑修改已经产生；提交表示事务已成功完成并应保留结果；具体数据页何时落盘由缓冲与日志协议协调。页面里显示了新余额，不能单凭这一点推出提交已经完成。</p>
+<hr>
+<h2 id="ch06-reference">21. 本章概念与方法速查</h2>
+<div class="ref-area"><div class="ref-picker"><label for="ref-select">选择要查的概念或方法</label><select id="ref-select" aria-controls="ref-panel"><option value="">请选择一个条目</option><option value="事务">事务</option><option value="read / write">read / write</option><option value="COMMIT / ROLLBACK">COMMIT / ROLLBACK</option><option value="ACID">ACID</option><option value="事务状态">事务状态</option><option value="并发异常">并发异常</option><option value="调度">调度</option><option value="冲突">冲突</option><option value="冲突等价">冲突等价</option><option value="优先图">优先图</option><option value="视图等价">视图等价</option><option value="可恢复">可恢复</option><option value="无级联">无级联</option><option value="严格调度">严格调度</option><option value="并发控制协议">并发控制协议</option><option value="UNDO / REDO">UNDO / REDO</option><option value="WAL">WAL</option><option value="检查点">检查点</option></select><p class="source-note">选中后显示用途、读法、例子、结果和注意点。完整总结表保存在 Markdown 版。</p><div id="ref-panel" class="ref-panel" aria-live="polite" hidden></div><noscript><p>请启用 JavaScript 使用选择菜单，或查看 Markdown 版的速查表。</p></noscript></div></div>
+
+<h2 id="ch06-verification">整理与核对说明</h2>
+<p>本轮依据项目现有学习资料、<span title="来源课件未随在线学习资料上传">课件 ch14.pdf（未上传）</span>、<span title="来源课件未随在线学习资料上传">课件 ch16.pdf（未上传）</span>，并对照<span title="来源课件未随在线学习资料上传">课程总结（未上传）</span>和<span title="来源课件未随在线学习资料上传">试题模拟（未上传）</span>中与本单元相关的文本。原有主要知识点、模拟题和自测题均保留，补充问题铺垫、概念关系、结果解释与速查；图解使用正文的教学前提。</p>
+<p>重点标记沿用所提供课程总结的范围，不把总结中的上位主题误称为逐小节明确列出的考试重点。教学例子和增加的数据不冒充原题数据。对 PDF 的核对包含相关定义与规则，并对关键图示页作视觉检查；不声称对每一页所有图形逐项复核。</p>
+<p>验证分别记录结构与链接检查、例子的手工推导、适用的计算核对，以及 HTML 中的目录、速查和图解切换检查。资料中的 SQL 或系统协议示例用于学习，不代表已在某款真实 DBMS 中执行；实现细节、恢复策略和并发结果仍须按本文给出的前提理解。</p>
+</article><footer class="foot">对应 Markdown：<a href="https://goya4140.github.io/JLU_CS_Course/#/3_1%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F/06_%E4%BA%8B%E5%8A%A1.md">06_事务.md</a>。图解用于对照正文学习，不在网页中执行数据库操作。外部文献需联网，正文和交互可以离线阅读。</footer><footer class="foot"><a href="https://goya4140.github.io/JLU_CS_Course/#/3_1%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F/00_%E5%AD%A6%E4%B9%A0%E5%AF%BC%E8%88%AA.md">返回数据库系统学习导航</a></footer></main></div><script id="guide-data" type="application/json">{"figures":[{"id":"ch06-transfer-figure","after":"ch06-s002","title":"转账的中间状态与最终结果","intro":"每个选项都是同一笔转账的一个观察时刻；余额是逻辑状态，未提交值能否被其他事务读取，还取决于隔离规则。","type":"choices","options":[{"label":"开始：尚未执行","meaning":"A=500，B=300；总额 800。","headers":["数据库 A","数据库 B","程序暂存值","业务状态"],"rows":[["500","300","尚未读取","未开始扣款"]]},{"label":"读 A 并计算 a=300","meaning":"程序算出了新余额，数据库余额尚未改变。","headers":["数据库 A","数据库 B","程序 a","总额"],"rows":[["500","300","300","800"]]},{"label":"只写回 A：业务做了一半","meaning":"A 已扣款，B 尚未入账。这是事务执行中的中间状态。","headers":["数据库 A","数据库 B","总额","完成了吗"],"rows":[["300","300","600","没有；还不能确认转账成功"]]},{"label":"写回 B，但尚未提交","meaning":"两次逻辑修改都完成了，但仍要等待提交成功。","headers":["数据库 A","数据库 B","总额","状态"],"rows":[["300","500","800","部分提交之前或正在完成提交保障"]]},{"label":"提交成功","meaning":"整体业务成功，结果应可靠保留。","headers":["数据库 A","数据库 B","总额","恢复方向"],"rows":[["300","500","800","已提交修改需要保留；必要时重做"]]},{"label":"扣款后失败，撤销完成","meaning":"假定事务未提交，撤销已经做过的修改。","headers":["数据库 A","数据库 B","总额","状态"],"rows":[["500","300","800","中止；原状态已恢复"]]}]},{"id":"ch06-priority-figure","after":"ch06-s026","title":"优先图：箭头来自哪一对操作","intro":"箭头表示已发生的冲突操作要求的先后顺序，不表示锁请求正在等待。","type":"choices","options":[{"label":"无环：T1 在两个数据项上都在前","meaning":"r1(A),w1(A),r2(A),w2(A),r1(B),w1(B),r2(B),w2(B)","svg":"\u003csvg viewBox=\"0 0 700 220\" role=\"img\" aria-label=\"T1指向T2，无环\">\u003cdefs>\u003cmarker id=\"ch06-dag-arrow\" markerWidth=\"10\" markerHeight=\"8\" refX=\"9\" refY=\"4\" orient=\"auto\">\u003cpath d=\"M0,0 L10,4 L0,8\" fill=\"#286b70\"/>\u003c/marker>\u003c/defs>\u003ccircle cx=\"130\" cy=\"110\" r=\"46\" fill=\"#edf5f2\" stroke=\"#286b70\"/>\u003ccircle cx=\"550\" cy=\"110\" r=\"46\" fill=\"#edf5f2\" stroke=\"#286b70\"/>\u003ctext x=\"130\" y=\"118\" text-anchor=\"middle\" font-size=\"25\">T1\u003c/text>\u003ctext x=\"550\" y=\"118\" text-anchor=\"middle\" font-size=\"25\">T2\u003c/text>\u003cpath d=\"M176,94 Q340,20 504,94\" fill=\"none\" stroke=\"#286b70\" stroke-width=\"3\" marker-end=\"url(#ch06-dag-arrow)\"/>\u003ctext x=\"340\" y=\"42\" text-anchor=\"middle\" font-size=\"20\">T1 必须在 T2 前\u003c/text>\u003ctext x=\"340\" y=\"180\" text-anchor=\"middle\" font-size=\"20\">可排成 T1 → T2\u003c/text>\u003c/svg>","headers":["方向","一组依据","结论"],"rows":[["T1→T2","w1(A) 在 r2(A) 前；w1(B) 在 r2(B) 前","只有一个方向，可冲突串行化"]]},{"label":"有环：A 与 B 要求相反顺序","meaning":"r1(A),w1(A),r2(A),w2(A),r2(B),w2(B),r1(B),w1(B)","svg":"\u003csvg viewBox=\"0 0 700 220\" role=\"img\" aria-label=\"T1和T2相互指向，有环\">\u003cdefs>\u003cmarker id=\"ch06-cycle-arrow\" markerWidth=\"10\" markerHeight=\"8\" refX=\"9\" refY=\"4\" orient=\"auto\">\u003cpath d=\"M0,0 L10,4 L0,8\" fill=\"#286b70\"/>\u003c/marker>\u003c/defs>\u003ccircle cx=\"130\" cy=\"110\" r=\"46\" fill=\"#edf5f2\" stroke=\"#286b70\"/>\u003ccircle cx=\"550\" cy=\"110\" r=\"46\" fill=\"#edf5f2\" stroke=\"#286b70\"/>\u003ctext x=\"130\" y=\"118\" text-anchor=\"middle\" font-size=\"25\">T1\u003c/text>\u003ctext x=\"550\" y=\"118\" text-anchor=\"middle\" font-size=\"25\">T2\u003c/text>\u003cpath d=\"M176,94 Q340,20 504,94\" fill=\"none\" stroke=\"#286b70\" stroke-width=\"3\" marker-end=\"url(#ch06-cycle-arrow)\"/>\u003ctext x=\"340\" y=\"42\" text-anchor=\"middle\" font-size=\"20\">T1 必须在 T2 前\u003c/text>\u003cpath d=\"M504,126 Q340,200 176,126\" fill=\"none\" stroke=\"#a34b39\" stroke-width=\"3\" marker-end=\"url(#ch06-cycle-arrow)\"/>\u003ctext x=\"340\" y=\"200\" text-anchor=\"middle\" font-size=\"20\">T2 又必须在 T1 前\u003c/text>\u003c/svg>","headers":["方向","依据"],"rows":[["T1→T2","w1(A) 在 r2(A) 前"],["T2→T1","w2(B) 在 r1(B) 前"]],"note":"无法既让 T1 在前、又让 T2 在前；冲突不可串行化。"},{"label":"盲写：冲突有环，视图仍可串行化","meaning":"w1(X),w2(X),w1(X)","svg":"\u003csvg viewBox=\"0 0 700 220\" role=\"img\" aria-label=\"T1和T2相互指向，有环\">\u003cdefs>\u003cmarker id=\"ch06-blind-arrow\" markerWidth=\"10\" markerHeight=\"8\" refX=\"9\" refY=\"4\" orient=\"auto\">\u003cpath d=\"M0,0 L10,4 L0,8\" fill=\"#286b70\"/>\u003c/marker>\u003c/defs>\u003ccircle cx=\"130\" cy=\"110\" r=\"46\" fill=\"#edf5f2\" stroke=\"#286b70\"/>\u003ccircle cx=\"550\" cy=\"110\" r=\"46\" fill=\"#edf5f2\" stroke=\"#286b70\"/>\u003ctext x=\"130\" y=\"118\" text-anchor=\"middle\" font-size=\"25\">T1\u003c/text>\u003ctext x=\"550\" y=\"118\" text-anchor=\"middle\" font-size=\"25\">T2\u003c/text>\u003cpath d=\"M176,94 Q340,20 504,94\" fill=\"none\" stroke=\"#286b70\" stroke-width=\"3\" marker-end=\"url(#ch06-blind-arrow)\"/>\u003ctext x=\"340\" y=\"42\" text-anchor=\"middle\" font-size=\"20\">T1 必须在 T2 前\u003c/text>\u003cpath d=\"M504,126 Q340,200 176,126\" fill=\"none\" stroke=\"#a34b39\" stroke-width=\"3\" marker-end=\"url(#ch06-blind-arrow)\"/>\u003ctext x=\"340\" y=\"200\" text-anchor=\"middle\" font-size=\"20\">T2 又必须在 T1 前\u003c/text>\u003c/svg>","headers":["检查项目","结果"],"rows":[["冲突图","两对写顺序产生相反箭头，有环"],["读来源","没有读，无需匹配读取"],["最终写者","T1；与串行 T2 后 T1 相同"]],"note":"此结论基于完整视图条件，不能只凭最终值推广到其他调度。"}]},{"id":"ch06-properties-figure","after":"ch06-s033","title":"同一份调度，分别检查四种性质","intro":"选择一份完整序列，分别观察冲突图、提交先后、读取时刻和盖写行为。","type":"choices","options":[{"label":"可恢复，但有脏读","meaning":"w1(X),r2(X),c1,c2","headers":["性质","结论","检查理由"],"rows":[["冲突可串行化","是","无环；可排成 T1 → T2"],["可恢复","是","每个已提交读取者的来源都先提交；或没有此类依赖"],["无级联","否","读取时来源尚未提交"],["严格","否","其他事务访问了尚未结束的写入"]],"note":"四项独立检查；严格 ⇒ 无级联 ⇒ 可恢复。冲突可串行化不在这条蕴含链中。"},{"label":"来源先提交再读取","meaning":"w1(X),c1,r2(X),c2","headers":["性质","结论","检查理由"],"rows":[["冲突可串行化","是","无环；可排成 T1 → T2"],["可恢复","是","每个已提交读取者的来源都先提交；或没有此类依赖"],["无级联","是","未读取其他事务尚未提交的写入"],["严格","是","未结束的写没有被其他事务读取或覆盖"]],"note":"四项独立检查；严格 ⇒ 无级联 ⇒ 可恢复。冲突可串行化不在这条蕴含链中。"},{"label":"没有读取依赖，但发生脏写","meaning":"w1(X),w2(X),c1,c2","headers":["性质","结论","检查理由"],"rows":[["冲突可串行化","是","无环；可排成 T1 → T2"],["可恢复","是","每个已提交读取者的来源都先提交；或没有此类依赖"],["无级联","是","未读取其他事务尚未提交的写入"],["严格","否","其他事务访问了尚未结束的写入"]],"note":"四项独立检查；严格 ⇒ 无级联 ⇒ 可恢复。冲突可串行化不在这条蕴含链中。"},{"label":"初值读取，却不能冲突串行化","meaning":"r1(X),r2(X),w1(X),w2(X),c1,c2","headers":["性质","结论","检查理由"],"rows":[["冲突可串行化","否","冲突要求形成环"],["可恢复","是","每个已提交读取者的来源都先提交；或没有此类依赖"],["无级联","是","未读取其他事务尚未提交的写入"],["严格","否","其他事务访问了尚未结束的写入"]],"note":"四项独立检查；严格 ⇒ 无级联 ⇒ 可恢复。冲突可串行化不在这条蕴含链中。"},{"label":"依赖者抢先提交，来源后来失败","meaning":"w1(X),r2(X),c2,a1","headers":["性质","结论","检查理由"],"rows":[["冲突可串行化","是","无环；可排成 T1 → T2"],["可恢复","否","读取者已经提交，但来源尚未成功提交"],["无级联","否","读取时来源尚未提交"],["严格","否","其他事务访问了尚未结束的写入"]],"note":"四项独立检查；严格 ⇒ 无级联 ⇒ 可恢复。冲突可串行化不在这条蕴含链中。"}]}],"references":[{"name":"事务","kind":"业务整体","meaning":"把相关操作作为整体完成或撤销","usage":"开始事务 → 业务读写 → 提交；失败时回滚","example":"从 A=500、B=300 转账 200","result":"提交后 A=300、B=500；失败撤销后仍为 500、300","note":"应用仍负责账户与余额规则","anchor":"ch06-s002"},{"name":"read / write","kind":"抽象操作","meaning":"区分读入程序与写回数据库","usage":"r1(X) 表示 T1 读 X；w1(X) 表示 T1 写 X","example":"a=500；a=a−200；write(A)","result":"计算 a 只改变暂存值；write 才形成数据库修改","note":"逻辑写入不等于数据页已持久化","anchor":"ch06-s003"},{"name":"COMMIT / ROLLBACK","kind":"事务命令","meaning":"确认整体成功或撤销未提交修改","usage":"COMMIT；出错时 ROLLBACK","example":"扣 A 后失败，尚未提交","result":"回滚恢复 A=500、B=300","note":"已提交结果的业务补偿不是简单未提交回滚","anchor":"ch06-s004"},{"name":"ACID","kind":"事务要求","meaning":"分别约束整体性、规则、并发影响和成功结果","usage":"逐项用业务例子说明，不能只列缩写","example":"转账中途失败或其他事务同时查询","result":"原子性处理整体失败；隔离性限制中间状态被使用","note":"一致性也依赖正确业务代码","anchor":"ch06-s005"},{"name":"事务状态","kind":"执行进展","meaning":"区分操作结束与提交完成","usage":"活动 → 部分提交 → 提交 → 结束","example":"最后一条 UPDATE 已执行","result":"可能仍处于部分提交，不能提前当成已提交","note":"失败与中止分别表示不能继续与撤销完成","anchor":"ch06-s010"},{"name":"并发异常","kind":"结果检查","meaning":"识别覆盖、未提交读取和重复读取变化","usage":"按每步的读值、写值和提交状态追踪","example":"T1、T2 都读 500，再分别写 600、450","result":"最终 450 丢失 T1 的增加，正确结果应为 550","note":"各例初值独立；不要串接","anchor":"ch06-s011"},{"name":"调度","kind":"操作序列","meaning":"表示多个事务的实际交错","usage":"保持每个事务内部操作顺序","example":"r1(A),r2(B),w1(A),w2(B)","result":"可以交错而不串行","note":"非串行不等于不可串行化","anchor":"ch06-s017"},{"name":"冲突","kind":"操作对关系","meaning":"标出不能自由交换的关键操作","usage":"不同事务、同一数据项、至少一个写","example":"r1(X) 与 w2(X)","result":"冲突；r1(X) 与 r2(X) 不冲突","note":"同事务两操作不用于跨事务优先图边","anchor":"ch06-s020"},{"name":"冲突等价","kind":"两份调度的关系","meaning":"保留全部冲突对的先后次序","usage":"比较同一组操作中的冲突对","example":"交换不同项上的操作","result":"可能得到冲突等价的另一调度","note":"只比较最终值不足以证明","anchor":"ch06-s023"},{"name":"优先图","kind":"串行化判别","meaning":"把冲突顺序转成事务先后要求","usage":"较早操作所属事务 → 较晚冲突操作所属事务","example":"在 X 上 T1→T2，在 Y 上 T2→T1","result":"形成环，冲突不可串行化","note":"无环时用拓扑次序给出等价串行顺序","anchor":"ch06-s026"},{"name":"视图等价","kind":"调度关系","meaning":"核对初值读取、写入来源和最终写者","usage":"三个条件逐项检查","example":"w1(X),w2(X),w1(X)","result":"冲突有环，但视图等价于 T2 后 T1","note":"盲写例子不能推广为只看最终写者","anchor":"ch06-s030"},{"name":"可恢复","kind":"提交顺序性质","meaning":"避免依赖者先确认来源未确定的结果","usage":"T2 读自 T1 且 T2 提交 ⇒ c1 在 c2 前","example":"w1(X),r2(X),c1,c2","result":"可恢复，但有脏读","note":"读取依赖也可来自已经提交的写者","anchor":"ch06-s033"},{"name":"无级联","kind":"读取限制性质","meaning":"避免读取未提交结果导致连带撤销","usage":"读取其他事务写出的值前，来源已提交","example":"w1(X),c1,r2(X),c2","result":"无级联，且可恢复","note":"不自动禁止脏写","anchor":"ch06-s036"},{"name":"严格调度","kind":"读写限制性质","meaning":"保护尚未结束的写入","usage":"写 X 后，其他事务读写 X 要等写者提交或中止","example":"w1(X),w2(X),c1,c2","result":"不严格；没有读取依赖时仍可无级联","note":"严格 ⇒ 无级联 ⇒ 可恢复，反向不保证","anchor":"ch06-s039"},{"name":"并发控制协议","kind":"执行规则","meaning":"在操作发生前控制允许的交错","usage":"锁、时间戳、验证、多版本各按自己的规则","example":"X 锁不兼容时等待","result":"阻止当前请求直接执行","note":"按各协议规则核对其保证的性质","anchor":"ch06-s042"},{"name":"UNDO / REDO","kind":"恢复动作","meaning":"撤销未提交结果或补回已提交结果","usage":"先核实提交记录，再确定处理方向","example":"提交记录可靠，但 B 页仍是 300","result":"重做已提交修改使 B=500","note":"故障并不总是只需 UNDO","anchor":"ch06-s045"},{"name":"WAL","kind":"日志顺序原则","meaning":"避免数据已修改而恢复依据未保存","usage":"相关日志先于对应数据页持久化","example":"数据页准备写入持久存储","result":"先可靠保存该修改需要的恢复日志","note":"提交可靠性也需按日志协议保障","anchor":"ch06-s045"},{"name":"检查点","kind":"恢复进度信息","meaning":"缩小故障后重新检查的范围","usage":"结合日志与活动事务信息恢复","example":"系统从已记录的进度继续分析","result":"减少重复扫描或恢复工作","note":"检查点不表示所有活动事务已提交","anchor":"ch06-s046"}]}</script><script>(()=>{'use strict';const payload=JSON.parse(document.getElementById('guide-data').textContent);const byId=id=>document.getElementById(id);const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));const rows=(headers,data)=>'<div class="table-scroll"><table><thead><tr>'+headers.map(x=>'<th scope="col">'+esc(x)+'</th>').join('')+'</tr></thead><tbody>'+data.map(row=>'<tr>'+row.map(x=>'<td>'+esc(x===null?'NULL':x)+'</td>').join('')+'</tr>').join('')+'</tbody></table></div>';const flow=steps=>'<div class="flow">'+steps.map((s,i)=>(i?'<div class="flow-arrow" aria-hidden="true">→</div>':'')+'<div class="flow-node"><strong>'+esc(s[0])+'</strong><p>'+esc(s[1])+'</p></div>').join('')+'</div>';for(const fig of payload.figures){if(fig.type==='choices'){const select=byId(fig.id+'-select');const draw=()=>{const option=fig.options[Number(select.value)];byId(fig.id+'-output').innerHTML='<p>'+esc(option.meaning)+'</p>'+(option.flow?flow(option.flow):'')+(option.svg||'')+(option.headers?rows(option.headers,option.rows):'')+(option.note?'<p class="fig-note">'+esc(option.note)+'</p>':'');};select.addEventListener('change',draw);draw();}}const refSelect=byId('ref-select');const refPanel=byId('ref-panel');const drawRef=()=>{const item=payload.references.find(x=>x.name===refSelect.value);if(!item){refPanel.hidden=true;refPanel.replaceChildren();return;}refPanel.innerHTML='<h3>'+esc(item.name)+'</h3><p class="ref-kind">'+esc(item.kind)+'</p><h4>解决什么问题</h4><p>'+esc(item.meaning)+'</p><h4>怎样理解或使用</h4><p>'+esc(item.usage)+'</p><h4>学习例子</h4><p>'+esc(item.example)+'</p><h4>结果与理由</h4><p class="result">'+esc(item.result)+'</p><h4>注意点</h4><p>'+esc(item.note)+'</p><a href="#'+esc(item.anchor)+'">回到正文看完整解释</a>';refPanel.hidden=false;};refSelect.addEventListener('change',drawRef);drawRef();const entries=[...document.querySelectorAll('.sidebar nav a')].map(link=>({link,target:document.getElementById(link.hash.slice(1))})).filter(e=>e.target);const offset=()=>{const n=Math.ceil(document.querySelector('.topbar').getBoundingClientRect().height)+18;document.documentElement.style.setProperty('--scroll-offset',n+'px');return n;};const close=()=>{document.body.classList.remove('nav-open');byId('menu').setAttribute('aria-expanded','false');};const activate=e=>entries.forEach(x=>{const on=x===e;x.link.classList.toggle('active',on);if(on)x.link.setAttribute('aria-current','location');else x.link.removeAttribute('aria-current');});const current=()=>{const boundary=offset()+3;let active=entries[0];for(const entry of entries){if(entry.target.getBoundingClientRect().top<=boundary)active=entry;else break;}if(entries.length&&innerHeight+scrollY>=document.documentElement.scrollHeight-2&&entries[entries.length-1].target.getBoundingClientRect().top<innerHeight)active=entries[entries.length-1];if(active)activate(active);};const jump=(target,hash)=>{close();window.scrollTo({top:Math.max(0,target.getBoundingClientRect().top+scrollY-offset()),behavior:'auto'});if(location.hash!==hash)history.pushState(null,'',hash);current();};document.addEventListener('click',event=>{const link=event.target.closest('a[href^="#"]');if(!link||event.button!==0||event.ctrlKey||event.metaKey||event.shiftKey||event.altKey)return;const target=document.getElementById(link.hash.slice(1));if(target){event.preventDefault();jump(target,link.hash);}});byId('menu').addEventListener('click',()=>{const on=document.body.classList.toggle('nav-open');byId('menu').setAttribute('aria-expanded',String(on));});document.addEventListener('keydown',e=>{if(e.key==='Escape')close();});let pending=false;const schedule=()=>{if(!pending){pending=true;requestAnimationFrame(()=>{current();pending=false;});}};window.addEventListener('scroll',schedule,{passive:true});window.addEventListener('resize',schedule);window.addEventListener('hashchange',schedule);window.addEventListener('popstate',schedule);if(typeof ResizeObserver!=='undefined')new ResizeObserver(schedule).observe(document.querySelector('.topbar'));let font=17;document.querySelectorAll('[data-font]').forEach(b=>b.addEventListener('click',()=>{font=Math.max(15,Math.min(21,font+Number(b.dataset.font)));document.documentElement.style.setProperty('--font',font+'px');schedule();}));byId('print').addEventListener('click',()=>window.print());document.querySelectorAll('article pre code').forEach(code=>{const pre=code.parentElement;const wrap=document.createElement('div');wrap.className='code-wrap';pre.parentNode.insertBefore(wrap,pre);wrap.append(pre);const button=document.createElement('button');button.type='button';button.className='copy';button.textContent='复制';button.setAttribute('aria-label','复制本段示例');button.addEventListener('click',async()=>{try{await navigator.clipboard.writeText(code.textContent);button.textContent='已复制';}catch{const range=document.createRange();range.selectNodeContents(code);const selection=window.getSelection();selection.removeAllRanges();selection.addRange(range);button.textContent='已选中';}setTimeout(()=>button.textContent='复制',1500);});wrap.append(button);});current();})();</script></body></html>

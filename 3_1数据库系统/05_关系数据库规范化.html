@@ -1,0 +1,994 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="source-sha256" content="16eb473b4d73dac7ef0625e2b916d47b5ea1c25a40e6a27904a10e0f710d9869"><title>第5单元 关系数据库规范化 · 图解学习版</title><style>:root{--paper:#fbfaf7;--surface:#fff;--ink:#253341;--muted:#5c6b75;--line:#d5dfdd;--teal:#156b62;--soft:#edf6f1;--font:17px;--scroll-offset:90px}*{box-sizing:border-box}html{scroll-behavior:auto;scroll-padding-top:var(--scroll-offset)}body{margin:0;background:var(--paper);color:var(--ink);font-family:'Microsoft YaHei','PingFang SC',system-ui,sans-serif;font-size:var(--font);line-height:1.85}a{color:var(--teal);text-underline-offset:3px}a:hover{color:#173f75}button,select{font:inherit}button{cursor:pointer}button,select{border:1px solid #b9cbc5;border-radius:7px;padding:7px 11px;background:#fff;color:var(--ink)}button:hover{background:var(--soft)}button:focus-visible,select:focus-visible,a:focus-visible{outline:3px solid #81cbb8;outline-offset:3px}.skip{position:absolute;top:-80px;left:12px;z-index:50;background:#fff;padding:8px}.skip:focus{top:8px}.sidebar{position:fixed;inset:0 auto 0 0;width:270px;padding:23px 18px;background:#f0f4f0;border-right:1px solid var(--line);overflow:auto;z-index:30;overscroll-behavior:contain}.brand{font-size:21px;font-weight:700}.brand small{display:block;font-size:12px;font-weight:400;color:var(--muted)}.sidebar nav a{display:block;color:var(--ink);text-decoration:none;padding:8px 10px;margin:3px 0;border-radius:6px;font-size:14px;line-height:1.6}.sidebar nav a:hover{background:#dcebe3}.sidebar nav a.active,.sidebar nav a.active:hover{background:var(--teal);color:white}.sidebar select{width:100%;font-size:13px}.nav-tip{font-size:12px;color:var(--muted);margin:14px 0}.shell{margin-left:270px;overflow-anchor:none}.topbar{position:sticky;top:0;background:rgba(251,250,247,.98);padding:12px 26px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:12px;z-index:20}.topbar-title{font-size:13px;color:var(--muted)}.toolbar{display:flex;gap:7px;flex-wrap:wrap}.toolbar button{font-size:13px}.menu{display:none}main{max-width:1120px;margin:auto;padding:30px 44px 80px;min-width:0}h1{font-size:32px;line-height:1.5;margin:14px 0 25px}h2{font-size:25px;line-height:1.5;padding:0 0 11px;border-bottom:1px solid var(--line);margin:44px 0 23px}h3{font-size:21px;line-height:1.55;margin:29px 0 16px}h4{font-size:18px;line-height:1.6;margin:22px 0 13px}p{margin:14px 0}li{margin:7px 0}ul,ol{padding-left:1.6em}blockquote{margin:20px 0;padding:5px 18px;border-left:3px solid #a8c6bb;background:#f0f3ef;color:#53655e;font-size:14px}blockquote p{margin:8px 0}hr{border:0;border-top:1px solid var(--line);margin:32px 0}code{font-family:Consolas,'Cascadia Code',monospace;font-size:.9em;background:#eef1ed;padding:2px 5px;border-radius:4px;overflow-wrap:anywhere}pre{background:#18313d;color:#e8f0f0;border-radius:9px;padding:19px;line-height:1.65;overflow-x:auto;max-width:100%;font-size:14px}pre code{background:none;padding:0;color:inherit;white-space:pre;overflow-wrap:normal}table{border-collapse:collapse;width:100%;font-size:15px}th{background:#eaf3ee;text-align:left}td,th{padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:top}tbody tr:nth-child(even){background:#f6f9f6}.table-scroll{overflow-x:auto;border:1px solid var(--line);border-radius:8px;margin:17px 0;max-width:100%}.table-scroll td{min-width:80px}.source-note{font-size:13px;color:var(--muted)}.learning-figure{padding:23px;border:1px solid #b4cfc2;border-radius:12px;background:var(--soft);margin:25px 0}.learning-figure h4{margin:0 0 8px;font-size:20px}.fig-intro{font-size:14px;color:var(--muted)}.learning-figure label{display:block;margin-top:15px;font-size:14px;font-weight:700}.learning-figure select{margin-top:7px;width:100%;min-height:44px;font-size:15px}.fig-output{margin-top:16px}.flow{display:flex;gap:10px;align-items:stretch;flex-wrap:wrap}.flow-node{flex:1 1 150px;border:1px solid #bfd2c9;border-radius:8px;background:#fff;padding:13px;min-width:0}.flow-node strong{display:block;color:var(--teal)}.flow-node p{font-size:14px;margin:8px 0}.flow-arrow{align-self:center;color:var(--teal);font-size:24px}.fig-note{padding:10px 14px;border-left:3px solid var(--teal);background:#fff;font-size:14px;margin:15px 0 0}.svg-scroll{overflow-x:auto;max-width:100%}.svg-scroll svg{display:block;max-width:100%;height:auto}.ref-area{min-height:calc(100vh - var(--scroll-offset));margin-top:24px}.ref-picker{padding:22px;border-radius:12px;background:var(--soft);border:1px solid #b4cfc2}.ref-picker label{display:block;font-weight:700;margin-bottom:10px}.ref-picker select{width:100%;font-size:15px;min-height:46px}.ref-panel{margin-top:18px;background:#fff;border:1px solid var(--line);padding:20px;border-radius:9px}.ref-panel[hidden]{display:none}.ref-panel h3{margin:0;font-size:24px}.ref-panel h4{font-size:16px;margin:18px 0 8px}.ref-kind{font-size:13px;color:var(--teal)}.result{padding:10px 15px;border-left:3px solid var(--teal);background:var(--soft)}.copy{display:block;margin:5px 0 0 auto;font-size:12px;padding:4px 8px}.code-wrap{margin:20px 0}.code-wrap pre{margin-bottom:0}.foot{font-size:13px;color:var(--muted);border-top:1px solid var(--line);padding-top:23px;margin-top:30px}details{border:1px solid var(--line);padding:12px;border-radius:8px;margin:15px 0}summary{cursor:pointer;font-weight:700}@media(max-width:900px){.sidebar{transform:translateX(-100%)}body.nav-open .sidebar{transform:translateX(0);top:60px}.shell{margin-left:0}.menu{display:inline-block}.topbar-title{display:none}.topbar{padding:10px 14px}main{padding:23px 18px 65px}h1{font-size:27px}h2{font-size:23px}.learning-figure,.ref-picker{padding:16px}.flow{flex-direction:column}.flow-arrow{transform:rotate(90deg)}.ref-panel{padding:15px}}@media print{.sidebar,.topbar,.toolbar,.copy,.skip{display:none!important}.shell{margin:0}main{padding:0;max-width:none}body{background:#fff;font-size:11pt}.ref-area{min-height:0}.ref-picker select{display:none}pre{white-space:pre-wrap;background:#f3f5f4;color:#111}.learning-figure{break-inside:avoid}.table-scroll{overflow:visible}a{color:inherit}}@media print{.svg-scroll{overflow:visible}.svg-scroll svg{min-width:0!important;width:100%!important;height:auto!important}}.sidebar{width:266px;background:#f1f4f1;padding:27px 19px;overflow-y:auto}.brand{font-size:21px;font-weight:700;letter-spacing:.03em;margin-bottom:5px}.brand small{font-size:12px;font-weight:400;color:var(--muted);letter-spacing:.1em}.sidebar .sub{font-size:13px;color:var(--muted);margin:5px 0 21px}.sidebar nav a{font-size:14px;line-height:1.5;padding:9px 11px;margin:3px 0;border-radius:6px}.sidebar nav a:hover{background:#e0ece6;color:#174d43}.sidebar nav a.active,.sidebar nav a.active:hover{background:var(--teal);color:#fff}.nav-group{font-size:12px;color:var(--muted);margin:18px 11px 6px;letter-spacing:.08em}.sidebar-footer{margin-top:24px;font-size:12px;color:var(--muted)}.shell{margin-left:266px}@media(max-width:900px){.shell{margin-left:0}}</style></head><body><a class="skip" href="#article">跳到正文</a><aside class="sidebar" aria-label="章节目录"><div class="brand"><small>DATABASE / UNIT 05</small>关系数据库规范化</div><p class="sub">完整正文 · 图解学习版</p><nav><a href="#ch05-navigation">学习导航</a><div class="nav-group">准备 · 重复与依赖</div><a href="#ch05-s002" data-chapter="01">1. 从选课汇总表发现重复与异常</a><a href="#ch05-s005" data-chapter="02">2. 1NF 与 2NF：先搭入门桥梁</a><a href="#ch05-s008" data-chapter="03">3. 函数依赖与码</a><div class="nav-group">推导 · 闭包与规则</div><a href="#ch05-s013" data-chapter="04">4. Armstrong 公理：怎样推出更多依赖</a><a href="#ch05-s016" data-chapter="05">5. 属性闭包与候选码</a><a href="#ch05-s020" data-chapter="06">6. F⁺ 与依赖蕴含</a><a href="#ch05-s021" data-chapter="07">7. 正则覆盖：把规则写得精简且等价</a><div class="nav-group">分解 · 范式与保证</div><a href="#ch05-s024" data-chapter="08">8. BCNF：每个非平凡决定因素都应是超码</a><a href="#ch05-s029" data-chapter="09">9. 3NF：允许右边是主属性的特定情况</a><a href="#ch05-s033" data-chapter="10">10. 无损连接：拆开再拼不会造假记录</a><a href="#ch05-s038" data-chapter="11">11. 依赖保持：拆后规则能否分别检查</a><div class="nav-group">进阶 · 条件与取舍</div><a href="#ch05-s041" data-chapter="12">12. 多值依赖与 4NF</a><a href="#ch05-s044" data-chapter="13">13. 设计取舍与时间数据</a><a href="#ch05-s047" data-chapter="14">14. “NP问题”与算法难度</a><div class="nav-group">练习与复习</div><a href="#ch05-s051" data-chapter="15">15. 常见误解</a><a href="#ch05-s052" data-chapter="16">16. 本单元模拟题</a><a href="#ch05-s066" data-chapter="17">17. 自拟自测题与逐步答案</a><a href="#ch05-s071" data-chapter="18">18. 复习路线</a><a href="#ch05-check-order" data-chapter="19">19. 用同一张检查表，分清四种结论</a><a href="#ch05-reference" data-chapter="20">20. 本章概念与方法速查</a><a href="#ch05-verification">整理与核对说明</a></nav><div class="sidebar-footer">单文件 · 离线阅读<br>图表使用正文教学数据</div></aside><div class="shell"><header class="topbar"><span class="topbar-title">第5单元 关系数据库规范化</span><div class="toolbar"><button id="menu" class="menu" aria-label="打开或收起目录" aria-expanded="false">目录</button><button data-font="-1" aria-label="减小正文字号">字号 −</button><button data-font="1" aria-label="增大正文字号">字号 ＋</button><button id="print">打印 / 保存 PDF</button></div></header><main><article id="article"><h1>第5单元 关系数据库规范化</h1>
+<blockquote>
+<p>课件来源：<code>数据库课程ppt/ch8.pdf</code>；重点依据：<code>课程总结.pptx</code>；原模拟题来源：<code>试题模拟.pptx</code>。本章教学数据不代表真实学校记录。</p>
+</blockquote>
+<h2 id="ch05-navigation">学习导航</h2>
+<p>先发现重复和修改异常，再掌握依赖与码的推导，随后分别检查范式、无损和依赖保持，最后用例题练习设计取舍。</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>学习阶段</th>
+<th>要解决的问题</th>
+<th>对应内容</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>准备 · 重复与依赖</td>
+<td>表为什么需要调整，依赖与码表达什么规则？</td>
+<td><a href="#ch05-s002">1. 从选课汇总表发现重复与异常</a>、<a href="#ch05-s005">2. 1NF 与 2NF：先搭入门桥梁</a>、<a href="#ch05-s008">3. 函数依赖与码</a></td>
+</tr>
+<tr>
+<td>推导 · 闭包与规则</td>
+<td>怎样推出依赖、寻找候选码并精简规则？</td>
+<td><a href="#ch05-s013">4. Armstrong 公理：怎样推出更多依赖</a>、<a href="#ch05-s016">5. 属性闭包与候选码</a>、<a href="#ch05-s020">6. F⁺ 与依赖蕴含</a>、<a href="#ch05-s021">7. 正则覆盖：把规则写得精简且等价</a></td>
+</tr>
+<tr>
+<td>分解 · 范式与保证</td>
+<td>怎样判断范式，拆表后是否无损并保持依赖？</td>
+<td><a href="#ch05-s024">8. BCNF：每个非平凡决定因素都应是超码</a>、<a href="#ch05-s029">9. 3NF：允许右边是主属性的特定情况</a>、<a href="#ch05-s033">10. 无损连接：拆开再拼不会造假记录</a>、<a href="#ch05-s038">11. 依赖保持：拆后规则能否分别检查</a></td>
+</tr>
+<tr>
+<td>进阶 · 条件与取舍</td>
+<td>更多依赖、时间数据和算法难度怎样影响设计？</td>
+<td><a href="#ch05-s041">12. 多值依赖与 4NF</a>、<a href="#ch05-s044">13. 设计取舍与时间数据</a>、<a href="#ch05-s047">14. “NP问题”与算法难度</a></td>
+</tr>
+<tr>
+<td>练习与复习</td>
+<td>能否分别证明各项结论，避免把它们混为一谈？</td>
+<td><a href="#ch05-s051">15. 常见误解</a>、<a href="#ch05-s052">16. 本单元模拟题</a>、<a href="#ch05-s066">17. 自拟自测题与逐步答案</a>、<a href="#ch05-s071">18. 复习路线</a>、<a href="#ch05-check-order">19. 用同一张检查表，分清四种结论</a>、<a href="#ch05-reference">20. 本章概念与方法速查</a></td>
+</tr>
+</tbody></table></div>
+<p>需要回查某个知识点时，可直接点击表中的对应章节；先尝试解释例子的结果，再对照正文。</p>
+<h2 id="ch05-s001">怎样阅读本章</h2>
+<blockquote>
+<p><strong>课程重点：函数依赖、属性闭包、正则覆盖、3NF/BCNF 的判定与分解、无损连接和依赖保持证明。</strong></p>
+</blockquote>
+<p>规范化不是先背一串缩写，而是回答：“哪些事实不该反复存？拆表以后，信息和规则还在吗？”本章先看重复造成的麻烦，再定义函数依赖与码，最后检查分解。</p>
+<p><strong>【课程总结PPT重点知识点】</strong> ：函数依赖、闭包、正则覆盖、3NF、BCNF、无损连接、依赖保持。<strong>【课程PPT补充知识点】</strong> ：相关延伸。2NF 是为零基础增加的衔接内容。所有结论都相对于明确给定的业务依赖，不能仅从几行样本猜出永久规则。</p>
+<h2 id="ch05-s002">1. 【课程PPT补充知识点，但属于规范化动机】从选课汇总表发现重复与异常</h2>
+<h3 id="ch05-s003">1.1 背景、字段与业务规则</h3>
+<p>学校把选课登记在一张汇总表 <code>ENROLL(S,C,SName,CName,Grade)</code>。S 学号，C 课程号，SName 学生姓名，CName 课程名，Grade 成绩。一行是一名学生对一门课程的选课；每学生每课程最多一次，不考虑学期重修。教学数据：</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>S</th>
+<th>C</th>
+<th>SName</th>
+<th>CName</th>
+<th>Grade</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>S1</td>
+<td>C1</td>
+<td>小林</td>
+<td>数据库</td>
+<td>80</td>
+</tr>
+<tr>
+<td>S1</td>
+<td>C2</td>
+<td>小林</td>
+<td>程序设计</td>
+<td>90</td>
+</tr>
+<tr>
+<td>S2</td>
+<td>C1</td>
+<td>小周</td>
+<td>数据库</td>
+<td>70</td>
+</tr>
+<tr>
+<td>S3</td>
+<td>C2</td>
+<td>小陈</td>
+<td>程序设计</td>
+<td>60</td>
+</tr>
+</tbody></table></div>
+<p>业务保证：同一学号对应一个姓名，同一课程号对应一个课程名，同一学生课程组合对应一个成绩。姓名与课程名并不假定唯一。编号、姓名、成绩是三类不同事实，不能从样本恰好不同就推断姓名也能决定学号。</p>
+<h3 id="ch05-s004">1.2 三种异常分别是什么</h3>
+<p><strong>冗余</strong>是同一事实重复保存：S1 叫小林写了两次，C1 叫数据库也写了两次。</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>问题</th>
+<th>业务动作</th>
+<th>一张汇总表的困难</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>更新异常</td>
+<td>C1 改名为“数据库基础”</td>
+<td>两行都要改，漏一行便矛盾</td>
+</tr>
+<tr>
+<td>插入异常</td>
+<td>新学生 S4 小吴尚未选课</td>
+<td>没有完整选课事实就难按此结构登记</td>
+</tr>
+<tr>
+<td>删除异常</td>
+<td>取消 S2 的唯一选课</td>
+<td>删除选课时连小周姓名信息也没处保留</td>
+</tr>
+</tbody></table></div>
+<p>这里“异常”是结构造成的不便或风险，不一定是软件弹出错误。规范化要把学生身份、课程身份、选课事实分开存，且证明能正确拼回来。</p>
+<h2 id="ch05-s005">2. 【课程PPT补充知识点，模拟题相关】1NF 与 2NF：先搭入门桥梁</h2>
+<h3 id="ch05-s006">2.1 1NF 要求当前字段里存单个值</h3>
+<p><strong>第一范式</strong>简称 1NF，NF 是 Normal Form，范式，即结构应满足的规则。1NF 要求属性值在当前模型中是原子的：每格保存一个值，不把一组值当成一个普通格。</p>
+<p>若一行写 S1 的课程为“C1,C2”、成绩为“80,90”，就把两组事实塞进一格，不符合本教学关系模型的表达。第 1 节四行分别表达选课，符合 1NF；但它仍有冗余，所以 1NF 不是充分的好设计保证。</p>
+<h3 id="ch05-s007">2.2 暂时用识别记录的方式理解 2NF</h3>
+<p>学号 S 单独不能区分一次选课，因为 S1 有两门；课程号 C 单独也不能，因为 C1 有两人。两者一起 <code>(S,C)</code>才区分一行。</p>
+<p>姓名只依赖 S，不需要整个 S、C；课程名只依赖 C。它们是“由组合身份的一部分就能确定”的事实。<strong>第二范式</strong> 2NF 的正式定义要用下一节的候选码与非主属性：在 1NF 基础上，每个非主属性都应完全依赖每个候选码，不存在对候选码真子集的部分依赖。</p>
+<p>“每个”不能只检查已选主码；单属性候选码没有非空的更小组成部分，通常不存在这种部分依赖。课件核心是 3NF／BCNF，2NF 在此用于解释为什么这张汇总表首先需要拆开。</p>
+<h2 id="ch05-s008">3. 【课程总结PPT重点知识点】函数依赖与码</h2>
+<p>拆表不能只凭“某列重复了”。先要确认哪些值相同会必然让另一些值相同，例如同学号总是同姓名。函数依赖把这种业务保证写成箭头，再用它区分能识别整行的属性和只描述一部分事实的属性。</p>
+<blockquote>
+<p><strong>本节为课程总结PPT明确列出的重点知识点：函数依赖。</strong></p>
+</blockquote>
+<h3 id="ch05-s009">3.1 从普通语言到箭头</h3>
+<p>学校保证“知道学号，就唯一知道该学生姓名”，记作：</p>
+<pre><code class="language-text">S → SName
+C → CName
+SC → Grade
+</code></pre>
+<p><code>→</code>读“函数决定”。左边叫<strong>决定因素</strong>，右边是被决定的属性。<code>SC</code>是集合 <code>{S,C}</code>的简写，不是把两个编号相乘或拼接成某个字符串。函数依赖说的是“同样的左边值，不能有不同的右边值”，不是一个需要编程计算的数学函数。</p>
+<p>正式写 <code>X→Y</code>：X、Y 是属性集合。对任意两行，只要 X 上每个值都相同，Y 上每个值就必须相同。检查同 S1 的两行，姓名都小林，符合；若其中一行写小陈，则违背 S→SName。两行 S 不同，姓名相同不违背该依赖。</p>
+<p>本章 <code>F</code>表示给定的函数依赖集合，即一组业务规则；<code>R</code>表示待讨论表的属性集合。集合表示不考虑排列与重复；<code>∈</code>表示“是其中一个成员”，<code>⊆</code>表示“是子集”。</p>
+<h3 id="ch05-s010">3.2 子集、真子集、平凡与非平凡</h3>
+<p><strong>子集</strong>指一个集合的全部成员都在另一集合内；集合自己也是自己的子集。<strong>真子集</strong>还要求不能相等，例如 {S} 是 {S,C} 的真子集。</p>
+<p><code>SC→S</code>是<strong>平凡依赖</strong>，因为右边已经在左边里面：知道学号课程组合当然知道学号。<code>S→SName</code>是<strong>非平凡依赖</strong>，右边不全在左边内。规范化主要检查这些增加了新信息的依赖。</p>
+<h3 id="ch05-s011">3.3 超码、候选码、主码、主属性</h3>
+<p><strong>超码</strong>是一组能决定表中全部属性的列。SC 决定 Grade，再由 S、C 分别得到两个名称，因此决定全部五列，是超码；SC 加 SName 仍是超码，但名称多余。</p>
+<p><strong>候选码</strong>是没有多余属性的超码；“最小”是不能再去掉属性，不要求它在所有候选码里列数最少。选择一个候选码作<strong>主码</strong>。<strong>主属性</strong>是出现在至少一个候选码中的属性；其他是<strong>非主属性</strong>。</p>
+<p>本例候选码只有 SC，所以 S、C 是主属性，两个名称和成绩是非主属性。稍后用闭包证明，不只凭“看起来像编号”。</p>
+<h3 id="ch05-s012">3.4 部分依赖、完全依赖与传递依赖</h3>
+<p><strong>部分依赖</strong>：候选码的真子集已能决定某非主属性；本例 S→SName、C→CName。<strong>完全依赖</strong>：整个决定因素能决定，去掉任一必要组成部分后不能；本业务 SC→Grade 是完全依赖，S 与 C 单独都不足。</p>
+<p><strong>传递依赖</strong>直观上是经过中间属性才能决定。独立学生行政表 <code>STUDENT_DEPT(S,Dept,Office)</code>，Dept 为所属系、Office 为系办公室；业务规定每学生一个系、每系一个办公室，则 S→Dept、Dept→Office，因此 S→Office。办公室在每个同系学生行中重复。这张表可没有组合码上的部分依赖，仍可能需要按 3NF 继续拆。</p>
+<h2 id="ch05-s013">4. 【课程总结PPT重点知识点】Armstrong 公理：怎样推出更多依赖</h2>
+<p>题目只给了少量业务规则，但判断码和范式需要知道它们还保证哪些结论。公理用于从已有规则推出新规则，每一步都要能说明依据；它不会替我们添加题目没给的业务事实。</p>
+<blockquote>
+<p><strong>本节用于推导课程总结PPT重点中的闭包、正则覆盖和范式判定。</strong></p>
+</blockquote>
+<h3 id="ch05-s014">4.1 三条基础规则先用普通语言理解</h3>
+<p>希腊字母 <code>α</code>、<code>β</code>、<code>γ</code>读阿尔法、贝塔、伽马，在此都代表属性集合；并排 <code>αβ</code>表示并集，也就是把两组属性合在一起且不重复。</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>公理</th>
+<th>写法</th>
+<th>为什么成立</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>自反律</td>
+<td>若 β⊆α，则 α→β</td>
+<td>知道一组值当然知道其中一部分</td>
+</tr>
+<tr>
+<td>增广律</td>
+<td>α→β 则 αγ→βγ</td>
+<td>两行原先的 α 相同可确定 β；再同时要求 γ 相同，结果仍确定</td>
+</tr>
+<tr>
+<td>传递律</td>
+<td>α→β、β→γ 则 α→γ</td>
+<td>先由 α 定 β，再由 β 定 γ</td>
+</tr>
+</tbody></table></div>
+<p>公理是无需额外业务假设即可使用的推理规则。它们是<strong>可靠</strong>的，即推出来的依赖不会超出前提允许；也是<strong>完备</strong>的，即所有被前提逻辑保证的函数依赖均能用它们推出。学习时重点是每一步能指出依据。</p>
+<h3 id="ch05-s015">4.2 合并、分解与伪传递</h3>
+<p><strong>合并律</strong>：α→β 且 α→γ，则 α→βγ。证明：</p>
+<ol>
+<li>对 α→β，两边增加 α，得 α→αβ。</li>
+<li>对 α→γ，两边增加 β，得 αβ→βγ。</li>
+<li>传递，得 α→βγ。</li>
+</ol>
+<p><strong>分解律</strong>：α→βγ，则 α→β 与 α→γ。因为 βγ→β、βγ→γ 都由自反律得到，再用传递。</p>
+<p><strong>伪传递律</strong>：α→β、βγ→δ，则 αγ→δ。这里 δ 读德尔塔，也是属性集合。先增广得 αγ→βγ，再传递。它用来处理第二条依赖还需要额外信息 γ 的情况，而不是把这项额外信息丢掉。</p>
+<p>在主例，由 S→SName 和 SC→S（自反），传递得 SC→SName；再合并 SC→Grade 等，可知 SC 决定全部列。</p>
+<h2 id="ch05-s016">5. 【课程总结PPT重点知识点】属性闭包与候选码</h2>
+<p>要判断学号课程组合能否识别整行，就要看看“仅知道这些列时，沿规则还能知道哪些列”。属性闭包把这个过程变成可以逐轮检查的步骤，比直接猜主码更可靠。</p><figure class="learning-figure" id="ch05-viz-closure"><h4>属性闭包：每次只加入规则保证的新信息</h4><p class="fig-intro">三个主例起点使用 ENROLL 的同一组依赖；五属性题是另一个独立依赖集。</p><label for="ch05-viz-closure-select">选择要观察的情形</label><select id="ch05-viz-closure-select" aria-controls="ch05-viz-closure-output"><option value="0">从学号 S出发</option><option value="1">从课程号 C出发</option><option value="2">从学号与课程号 SC出发</option><option value="3">五属性模拟题：从 BC 出发</option></select><div class="fig-output" id="ch05-viz-closure-output" aria-live="polite"></div></figure>
+<blockquote>
+<p><strong>本节为课程总结PPT明确列出的重点知识点：属性闭包。</strong></p>
+</blockquote>
+<h3 id="ch05-s017">5.1 闭包就是“凭手上信息最终能知道什么”</h3>
+<p>给定 F，<code>X⁺</code>读“X 的闭包”，表示从属性集 X 出发，按 F 能确定的所有属性。上标 <code>+</code>不是数值加一，是推理结果的标记。<strong>算法</strong>就是一套明确可重复执行的步骤。</p>
+<p>计算方法：先把 X 放进已知集合；逐条看依赖，左边全部已知就把右边加入；反复检查，直到没有新属性。</p>
+<h3 id="ch05-s018">5.2 对主例逐轮计算</h3>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>轮次</th>
+<th>当前已知属性</th>
+<th>可以使用的规则</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>开始</td>
+<td>S、C</td>
+<td>已知组合</td>
+</tr>
+<tr>
+<td>第一次扩展</td>
+<td>S、C、SName</td>
+<td>S→SName</td>
+</tr>
+<tr>
+<td>第二次扩展</td>
+<td>S、C、SName、CName</td>
+<td>C→CName</td>
+</tr>
+<tr>
+<td>第三次扩展</td>
+<td>全部五列</td>
+<td>SC→Grade</td>
+</tr>
+<tr>
+<td>再检查</td>
+<td>无新增</td>
+<td>停止</td>
+</tr>
+</tbody></table></div>
+<p>所以 (SC)⁺=R，SC 是超码。S⁺={S,SName}，C⁺={C,CName}，都不完整，去掉任一列就不是超码，因此 SC 是候选码。</p>
+<p>S、C 都未出现在 F 的任何右边，无法由别的属性推出，任何候选码必须包含它们；而 SC 已是候选码，它的任何更大集合不最小。因此候选码只有 SC。这个结论相对于已声明的 F，不来自样本里的巧合。</p>
+<h3 id="ch05-s019">5.3 找候选码不能找到一个就停止</h3>
+<p>候选码需要同时满足“闭包覆盖全部属性”和“删去任一组成属性后不再覆盖”。找到一组后，还要检查其他可能的组合，避免漏码。可以按以下步骤进行。</p>
+<p>对于未出现在任何依赖右部的属性，没有规则能从其他属性补出它，因此在本章普通有限属性集与给定依赖模型中，每个候选码都要含它。右部出现过的属性则不意味着一定能省略，还要计算。</p>
+<ol>
+<li>找不在任何依赖右边的属性，它们通常必须加入每个码。</li>
+<li>从这些属性出发，补充可能需要的属性并算闭包。</li>
+<li>闭包完整时检查每个组成属性能否去掉。</li>
+<li>继续寻找不同组合；已有候选码的超集无须再作为候选码。</li>
+</ol>
+<p>“通常必须”在这里考虑普通函数依赖规则；若包含空集决定常量等特殊依赖，要在算法中明确处理。对只有五个属性的模拟题可以枚举所有子集，大模式不能把小题穷举误当作总是高效的办法。</p>
+<h2 id="ch05-s020">6. 【课程总结PPT重点知识点】F⁺ 与依赖蕴含</h2>
+<p>“X 能得到哪些属性”和“整组规则能推出哪些依赖”不是同一个问题。两者都叫闭包，但一个结果是属性集合，另一个结果是规则集合。分清输入与输出后，才不会把 X⁺与 F⁺当成相同对象。</p>
+<p><code>F⁺</code>是 F 的<strong>依赖闭包</strong>，即由 F 能推出的全部函数依赖；与 X⁺不同，一个是“规则的集合”，一个是“属性的集合”。</p>
+<p><strong>蕴含</strong>表示前提必然保证结论。判断 F 是否蕴含 X→Y，只需计算 X⁺，看 Y 是否全部包含在 X⁺中：</p>
+<pre><code class="language-text">F 蕴含 X→Y  ⇔  Y⊆X⁺
+</code></pre>
+<p><code>⇔</code>表示“当且仅当”，左右两个条件相互等价。本例 SC⁺含 SName，因此 F 蕴含 SC→SName；S⁺不含 Grade，因此不能推出 S→Grade。</p>
+<p>说“不能推出”不等于所有数据实例都会违反它；某些小样本可能偶然符合。设计依据要保证所有合法实例。</p>
+<h2 id="ch05-s021">7. 【课程总结PPT重点知识点】正则覆盖：把规则写得精简且等价</h2>
+<p>同一个业务保证可以重复写，也可以写成可由其他规则推出的形式。正则覆盖要把表达简化，同时保持原来的全部推理能力。每次删掉的不是“看起来多余的字”，而是已经证明能够被剩余规则替代的部分。</p>
+<blockquote>
+<p><strong>本节为课程总结PPT明确列出的重点知识点：正则覆盖。</strong></p>
+</blockquote>
+<h3 id="ch05-s022">7.1 覆盖不是少写一条就更好</h3>
+<p><strong>正则覆盖</strong>记 <code>Fc</code>，是与 F 能推出相同规则、又去掉冗余表达的依赖集。<code>Fc⁺=F⁺</code>表示推理能力相同。“冗余”是某条或某个属性可由其他规则替代。</p>
+<p>课件正则覆盖允许合并同左部依赖；很多“最小覆盖”算法习惯保持右部单属性。两种表示形式要按课程约定区分，不能只按条数判断对错。</p>
+<h3 id="ch05-s023">7.2 一个完整算例：逐项去掉多余部分</h3>
+<p>这是独立的三属性模式 R(A,B,C)，A、B、C 是列名代号；给定业务 F={A→BC，B→C，AB→C}，不假定这些列具体是学号。目标是简化规则而不改变结论。</p>
+<p>先把 A→BC 拆为 A→B、A→C，便于检查：</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>步骤</th>
+<th>当前规则</th>
+<th>为什么能改</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>初始拆开</td>
+<td>A→B；A→C；B→C；AB→C</td>
+<td>合并／分解等价</td>
+</tr>
+<tr>
+<td>精简 AB→C 左边</td>
+<td>将它换成 B→C</td>
+<td>即使不要求 A，B 已能决定 C，A 多余</td>
+</tr>
+<tr>
+<td>去掉重复</td>
+<td>A→B；A→C；B→C</td>
+<td>同一条 B→C 不需写两遍</td>
+</tr>
+<tr>
+<td>检查 A→C</td>
+<td>暂时移除后 A⁺仍含 A、B、C</td>
+<td>A→B 再 B→C，所以该条冗余</td>
+</tr>
+<tr>
+<td>最终</td>
+<td>A→B；B→C</td>
+<td>两条分别移除都会失去对应推理能力</td>
+</tr>
+</tbody></table></div>
+<p>这里的<strong>左部多余属性</strong>是去掉后依赖仍由当前集合保证；<strong>右部多余属性</strong>是从该规则右边去掉后，仍能用调整后的整个集合推出它。初始合并写法中，A→BC 的右侧 C 可由 A→B、B→C 补回。</p>
+<p>检查右部时不能留下原规则再说“当然能推出”，那会循环自证。每次改变后用当前集合重新计算。最终 A⁺=ABC、B⁺=BC、C⁺=C，与原 F 相同，因此 Fc={A→B,B→C} 等价。</p>
+<h2 id="ch05-s024">8. 【课程总结PPT重点知识点】BCNF：每个非平凡决定因素都应是超码</h2>
+<p>当某个非唯一编号只能决定一项名称，这个名称往往要在多条记录里重复。BCNF 针对这种由局部决定因素带来的重复，但判断与分解必须相对于依赖规则，不能只数某列重复几次。拆完还要分别证明能拼回、原规则能否局部检查。</p>
+<blockquote>
+<p><strong>本节为课程总结PPT明确列出的重点知识点：BCNF 判定与分解。</strong></p>
+</blockquote>
+<h3 id="ch05-s025">8.1 白话与正式条件</h3>
+<p>BCNF 是 Boyce–Codd Normal Form，博伊斯—科德范式。它要求一条非平凡函数依赖的左侧能确定整个关系，而不是只能确定一小部分、却让这个局部事实在很多行里重复。</p>
+<p>正式条件：对 F⁺中每条 X→Y，如果 Y 不全包含在 X 内，X 就必须能决定 R 的全部属性。以 S→SName 为例，知道 S 只能得到姓名，不能知道这个学生选哪门课、成绩如何，因此 S 不是 ENROLL 的超码，这条非平凡依赖违反 BCNF。不要把“能确定右边”误当成“能确定整行”。</p>
+<h3 id="ch05-s026">8.2 按一条违反规则的依赖拆</h3>
+<p>若 X→Y 违反 BCNF，可以分成：</p>
+<pre><code class="language-text">R1 = X∪Y
+R2 = R−(Y−X)
+</code></pre>
+<p><code>∪</code>表示集合合并；<code>−</code>表示去掉集合中的成员；这里操作的是属性集合，不是在删本电脑文件。先把决定因素与被决定属性放一起；剩下的表保留 X 用作拼回的对应列。</p>
+<p>对 S→SName：</p>
+<ul>
+<li>R1(S,SName)，存学生姓名事实；</li>
+<li>R2(S,C,CName,Grade)，去掉姓名但保留 S。</li>
+</ul>
+<p>再对 R2 的 C→CName 拆：</p>
+<ul>
+<li>COURSE(C,CName)；</li>
+<li>TAKES(S,C,Grade)。</li>
+</ul>
+<h3 id="ch05-s027">8.3 展示最终三张完整表</h3>
+<p>STUDENT：</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>S</th>
+<th>SName</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>S1</td>
+<td>小林</td>
+</tr>
+<tr>
+<td>S2</td>
+<td>小周</td>
+</tr>
+<tr>
+<td>S3</td>
+<td>小陈</td>
+</tr>
+</tbody></table></div>
+<p>COURSE：</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>C</th>
+<th>CName</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>C1</td>
+<td>数据库</td>
+</tr>
+<tr>
+<td>C2</td>
+<td>程序设计</td>
+</tr>
+</tbody></table></div>
+<p>TAKES：</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>S</th>
+<th>C</th>
+<th>Grade</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>S1</td>
+<td>C1</td>
+<td>80</td>
+</tr>
+<tr>
+<td>S1</td>
+<td>C2</td>
+<td>90</td>
+</tr>
+<tr>
+<td>S2</td>
+<td>C1</td>
+<td>70</td>
+</tr>
+<tr>
+<td>S3</td>
+<td>C2</td>
+<td>60</td>
+</tr>
+</tbody></table></div>
+<p>STUDENT 的 S 是码，COURSE 的 C 是码，TAKES 的 SC 是码。在各自投影依赖下均满足 BCNF。规范化分解从原表投影得到这些记录；真实设计此后可以独立新增尚未选课的 S4 或无人选的 C3，这不是声称原表已含那些事实。</p>
+<h3 id="ch05-s028">8.4 分解算法与两个后续问题</h3>
+<p>投影依赖不只来自原规则中原样留下的条目。举一个课件式独立小例：R(A,B,C,D,E)，F={A→B，BC→D}，子表 R2(A,C,D,E) 虽然没有 B，却仍有 AC→D，因为 A 先得到 B，再与 C 一起得到 D。AC 不能得到 E，所以在 R2 内不是超码；R2 仍违反 BCNF。检查子表时要继承可推导的规则，不能因为原 F 没有完全落在 R2 的一条就宣告无依赖。</p>
+<p><strong>分解</strong>把原模式拆为若干子模式；每个子模式继承在其属性上成立的<strong>投影依赖</strong>，即 F⁺中左右都在该子模式内的依赖。不是机械保留原 F 中“看起来没跨表”的几条就够。</p>
+<p>逐表寻找违反 BCNF 的依赖并拆，直到所有子表满足。每次上述二表拆法可以证明无损，但 BCNF 不保证全部原依赖都能在单表内检查；第 10、11 节分别证明这两项性质。</p>
+<h2 id="ch05-s029">9. 【课程总结PPT重点知识点】3NF：允许右边是主属性的特定情况</h2>
+<p>强行达到 BCNF 有时会把必须一起检查的属性拆开。3NF 放宽一类特定依赖，帮助在减少重复与保留约束检查能力之间作取舍。这不是允许任意冗余，而是用“左部是否超码、右部是否主属性”给出明确条件。</p>
+<blockquote>
+<p><strong>本节为课程总结PPT明确列出的重点知识点：3NF 判定与分解。</strong></p>
+</blockquote>
+<h3 id="ch05-s030">9.1 正式条件逐项读</h3>
+<p><strong>第三范式</strong> 3NF 的正式条件是在 F⁺中检查 X→A 这样的单属性右部依赖；只要符合下面三种情况之一就允许。这里 X 是决定因素，A 是一个被决定的属性，不是任意整组右部。</p>
+<ol>
+<li>A 在 X 内，是平凡依赖；</li>
+<li>X 是超码；</li>
+<li>A 是主属性，即出现在某个候选码中。</li>
+</ol>
+<p>这里右部用单属性 A，若原规则右边多列，先拆开检查。BCNF 只接受前两种，因此 BCNF 一定满足 3NF，反过来不一定。第 2 节 ENROLL 的非主名称由 S 或 C 局部确定，也不满足 3NF。</p>
+<h3 id="ch05-s031">9.2 一个 3NF 但非 BCNF 的完整例子</h3>
+<p>独立模式 R(A,B,C)，规则 F={AB→C，C→B}。A、B、C 是三列代号，不与上一节独立算例共用依赖。</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>起点</th>
+<th>闭包</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>A</td>
+<td>A</td>
+<td>非超码</td>
+</tr>
+<tr>
+<td>B</td>
+<td>B</td>
+<td>非超码</td>
+</tr>
+<tr>
+<td>C</td>
+<td>BC</td>
+<td>非超码</td>
+</tr>
+<tr>
+<td>AB</td>
+<td>ABC</td>
+<td>最小超码</td>
+</tr>
+<tr>
+<td>AC</td>
+<td>ABC</td>
+<td>最小超码</td>
+</tr>
+</tbody></table></div>
+<p>候选码 AB、AC，三列都属于至少一个码，因此全是主属性。AB→C 左侧是码；C→B 左侧不是码，但 B 为主属性，符合 3NF；后者仍违反 BCNF。</p>
+<p>合法教学数据可为 (a1,b1,c1)、(a2,b1,c1)：同 C 都为 b1，同 AB 对应单个 C，符合规则。样本不替代上面的闭包证明。</p>
+<h3 id="ch05-s032">9.3 3NF 综合法：围绕精简规则建表</h3>
+<p><strong>综合</strong>表示把需要一起维护的属性组合成子模式。课程常用步骤：</p>
+<ol>
+<li>求正则／最小覆盖，确保依赖等价。</li>
+<li>每个 X→Y 建含 X∪Y 的子模式，同左部可合并。</li>
+<li>若没有任何子模式包含原模式的一个候选码，再加一个候选码模式。</li>
+<li>删除被别的子模式完全包含的冗余子模式；注意这里只是算法描述，不执行本电脑文件删除。</li>
+</ol>
+<p>主例 Fc={S→SName,C→CName,SC→Grade}得到与第 8 节相同三表。TAKES 已包含 SC，不需另加码表。</p>
+<p>独立 R(A,B,C)，F={A→B}中，候选码 AC。只建 AB 会漏 C；因此建 AB、AC，A→B 可局部检查，且分解无损。合法数据 (a1,b1,c1)、(a1,b1,c2)投影并连接仍是原两行，说明保留 C 和关联列的重要性。</p>
+<p>对第 9.2 节，AB→C 直接生成 ABC，C→B 生成 CB，后者被 ABC 包含，可以保留整个 ABC 作为 3NF 结果；为了强行达到 BCNF 而拆，会引出依赖保持问题。</p>
+<h2 id="ch05-s033">10. 【课程总结PPT重点知识点】无损连接：拆开再拼不会造假记录</h2>
+<p>表拆开后，不能只检查每张子表是否保存了原来的值；还要检查拼回时会不会把本来不相关的值错误配在一起。无损连接比较的是原合法关系与重建结果是否恰好相同，既不能少事实，也不能多假事实。</p><figure class="learning-figure" id="ch05-viz-lossless"><h4>同一份原数据，拆法不同就可能出现伪元组</h4><p class="fig-intro">独立 R(A,B,C)，依赖 A→B；原数据只有 a1/b1/c1、a2/b1/c2 两行。</p><label for="ch05-viz-lossless-select">选择要观察的情形</label><select id="ch05-viz-lossless-select" aria-controls="ch05-viz-lossless-output"><option value="0">AB + BC：按 B 拼回</option><option value="1">AB + AC：按 A 拼回</option></select><div class="fig-output" id="ch05-viz-lossless-output" aria-live="polite"></div></figure>
+<blockquote>
+<p><strong>本节为课程总结PPT明确列出的重点知识点：无损连接及其证明。</strong></p>
+</blockquote>
+<h3 id="ch05-s034">10.1 “无损”不仅是没有丢原来的行</h3>
+<p><strong>无损连接分解</strong>要求任一满足 F 的原关系，投影到子表后再自然连接，恰好得到原关系。投影是取指定列并按关系集合约定去重；自然连接按所有同名列匹配。见第 02 章。</p>
+<p><strong>有损分解</strong>常见问题是拼回时产生原来没有的组合，称<strong>伪元组</strong>。并非只看字面理解成行数减少。</p>
+<h3 id="ch05-s035">10.2 一个会多出两行的反例</h3>
+<p>独立 R(A,B,C)教学数据：</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>A</th>
+<th>B</th>
+<th>C</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>a1</td>
+<td>b1</td>
+<td>c1</td>
+</tr>
+<tr>
+<td>a2</td>
+<td>b1</td>
+<td>c2</td>
+</tr>
+</tbody></table></div>
+<p>拆 AB 与 BC，分别为 (a1,b1),(a2,b1)与(b1,c1),(b1,c2)。因为共同 B 都是 b1，拼回所有四种：</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>A</th>
+<th>B</th>
+<th>C</th>
+<th>是否原有</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>a1</td>
+<td>b1</td>
+<td>c1</td>
+<td>是</td>
+</tr>
+<tr>
+<td>a1</td>
+<td>b1</td>
+<td>c2</td>
+<td>否</td>
+</tr>
+<tr>
+<td>a2</td>
+<td>b1</td>
+<td>c1</td>
+<td>否</td>
+</tr>
+<tr>
+<td>a2</td>
+<td>b1</td>
+<td>c2</td>
+<td>是</td>
+</tr>
+</tbody></table></div>
+<p>如果没有 B→A 或 B→C 等保证对应唯一的规则，这个二表分解不能认定无损。</p>
+<h3 id="ch05-s036">10.3 二表判据与主例证明</h3>
+<p>为什么看交集？自然连接就是靠共同列配对。如果同一个共同值在两边都能对应多个彼此独立的剩余值，就可能把它们交叉组合成原表没有的行。共同列决定至少一侧全部属性，才限制住这种不受保证的配对。下面给出的是相对于函数依赖的二表判据，不是任意多表的万能公式。</p>
+<p>当 R1∪R2=R 时，相对于函数依赖 F，二表分解无损当且仅当：</p>
+<pre><code class="language-text">(R1∩R2) → R1  或  (R1∩R2) → R2
+</code></pre>
+<p><code>∩</code>是交集，即共同属性。箭头仍是函数决定；右边 R1 表示决定它全部属性。白话是“用共同列匹配时，至少一边不会在同一个匹配值下提供互相矛盾的多种身份事实”。</p>
+<p>主例第一次交集 S，S→SName，因此 S 决定 STUDENT 全部列，无损。第二次交集 C，C→CName，因此 C 决定 COURSE 全部列，也无损。逐步的无损分解合起来仍能正确恢复 ENROLL 四条完整记录。</p>
+<p>只能在“两个子模式覆盖原模式”等条件下直接用此判据；多表不能仅逐对试几个交集就声称证明完毕。</p>
+<h3 id="ch05-s037">10.4 多表检验中的 chase 是什么</h3>
+<p><strong>Chase</strong>常译“追赶法”，用规则不断合并必须相同的符号，检验多表连接会不会产生不受原规则保证的组合。这不是追踪程序执行。</p>
+<p>以主例最终 STUDENT、COURSE、TAKES 为例，建立符号表。aS 等“a”符号代表该列的目标值；u、v、w 等代表暂未知的值，每个未知格起初不同。</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>子表行</th>
+<th>S</th>
+<th>C</th>
+<th>SName</th>
+<th>CName</th>
+<th>Grade</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>STUDENT</td>
+<td>aS</td>
+<td>u1</td>
+<td>aSN</td>
+<td>u2</td>
+<td>u3</td>
+</tr>
+<tr>
+<td>COURSE</td>
+<td>v1</td>
+<td>aC</td>
+<td>v2</td>
+<td>aCN</td>
+<td>v3</td>
+</tr>
+<tr>
+<td>TAKES</td>
+<td>aS</td>
+<td>aC</td>
+<td>w1</td>
+<td>w2</td>
+<td>aG</td>
+</tr>
+</tbody></table></div>
+<p>由 S→SName，第一行与第三行 S 相同，故第三行 w1 必须等于 aSN；由 C→CName，第二行与第三行 C 相同，第三行 w2 必须等于 aCN。于是 TAKES 行变成 aS、aC、aSN、aCN、aG，全为目标 a 符号，这表明按这些依赖该分解无损。</p>
+<p>一般算法需对任意相同左部的行反复统一右部符号；出现全 a 行是这个函数依赖 chase 检验的成功条件。本例展示原理，二表题仍优先用第 10.3 节判据。</p>
+<h2 id="ch05-s038">11. 【课程总结PPT重点知识点】依赖保持：拆后规则能否分别检查</h2>
+<p>即使拆开再拼能得到原信息，以后各表独立插入的新记录仍可能违背原规则。依赖保持关心的是“只检查各表内部条件够不够”，和无损的“能不能还原原合法数据”是两个问题。</p><figure class="learning-figure" id="ch05-viz-preserve"><h4>无损、BCNF 与依赖保持需要分别给证据</h4><p class="fig-intro">使用正文 ABC、F={AB→C，C→B} 的独立例子。</p><label for="ch05-viz-preserve-select">选择要观察的情形</label><select id="ch05-viz-preserve-select" aria-controls="ch05-viz-preserve-output"><option value="0">原 ABC：3NF，但非 BCNF</option><option value="1">拆 CB 与 AC：无损且达 BCNF</option><option value="2">局部都合法，却漏掉 AB→C</option></select><div class="fig-output" id="ch05-viz-preserve-output" aria-live="polite"></div></figure>
+<blockquote>
+<p><strong>本节为课程总结PPT明确列出的重点知识点：依赖保持及其证明。</strong></p>
+</blockquote>
+<h3 id="ch05-s039">11.1 把信息正确与规则好检查分开</h3>
+<p><strong>依赖保持</strong>要求各子表上能检查的投影依赖合起来，仍能推出原 F。形式上，若 Fi 是第 i 个子表的投影依赖，应有：</p>
+<pre><code class="language-text">(F1∪F2∪…∪Fn)⁺ = F⁺
+</code></pre>
+<p>i、n 是编号与子表数量，省略号表示中间所有子表。白话是“只维护各表内部规则，也不会漏掉原有业务规则”。</p>
+<p>主例 S→SName 在 STUDENT，C→CName 在 COURSE，SC→Grade 在 TAKES，原三条都能局部检查，因此保持依赖；第 10 节的无损证明不能替代这项证明。</p>
+<h3 id="ch05-s040">11.2 无损却不保持依赖的具体反例</h3>
+<p>对第 9.2 节 R(A,B,C)，按 C→B 拆成 CB 与 AC。交集 C 能决定 CB，所以无损；两表也满足 BCNF。但 AB→C 横跨，不能仅凭两个表分别合法来保证它。</p>
+<p>子表可分别取：</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>C</th>
+<th>B</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>c1</td>
+<td>b1</td>
+</tr>
+<tr>
+<td>c2</td>
+<td>b1</td>
+</tr>
+</tbody></table></div>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>A</th>
+<th>C</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>a1</td>
+<td>c1</td>
+</tr>
+<tr>
+<td>a1</td>
+<td>c2</td>
+</tr>
+</tbody></table></div>
+<p>CB 满足 C→B，AC 没有需要额外限制的非平凡投影依赖。拼回是 (a1,b1,c1)、(a1,b1,c2)，同 AB 对应两 C，违反 AB→C。这证明各表局部检查不足，因而不保持依赖。</p>
+<p>这不推翻“无损”：无损说的是从一个<strong>原本合法的原表</strong>出发拆并拼能恢复；这里是独立维护子表时加入了不符合原整体规则的数据。</p>
+<h2 id="ch05-s041">12. 【课程PPT补充知识点】多值依赖与 4NF</h2>
+<p>有些重复不是“一个值决定另一个值”，而是两组独立的多值信息被展开成所有组合。此时每个学生确实可以有多种爱好、多种语言，不能硬写成学号决定单一爱好；需要多值依赖描述组合独立性。</p>
+<h3 id="ch05-s042">12.1 函数依赖不能概括所有独立重复</h3>
+<p><strong>独立业务</strong>：学生的爱好与会用的语言彼此独立，希望记下任意组合。表 <code>SKILL(S,H,L)</code>，S 学号、H 爱好、L 语言。S1 有游泳、绘画两爱好，中文、英语两语言。</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>S</th>
+<th>H</th>
+<th>L</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>S1</td>
+<td>游泳</td>
+<td>中文</td>
+</tr>
+<tr>
+<td>S1</td>
+<td>游泳</td>
+<td>英语</td>
+</tr>
+<tr>
+<td>S1</td>
+<td>绘画</td>
+<td>中文</td>
+</tr>
+<tr>
+<td>S1</td>
+<td>绘画</td>
+<td>英语</td>
+</tr>
+</tbody></table></div>
+<p>S 不能函数决定单个 H，因为一个学生有多爱好。<strong>多值依赖</strong> <code>S↠H</code>表示，对给定 S，它的 H 集合与其余 L 的选择独立，需要能自由组合。<code>↠</code>是双箭头，不能按普通 S→H 理解。</p>
+<p>同 S 的两行若为 (S1,游泳,中文)、(S1,绘画,英语)，独立性要求另外两种交叉组合也应存在。若业务是“用某语言参加某爱好”，两者不独立，就不能假设这种多值依赖。</p>
+<h3 id="ch05-s043">12.2 4NF 规则与拆分结果</h3>
+<p><strong>第四范式</strong> 4NF 要求每个非平凡多值依赖的决定因素是超码。多值依赖 X↠Y 平凡的常见情况是 Y⊆X，或 X∪Y 已覆盖全部属性；此时没有额外独立部分需要表达。</p>
+<p>SKILL 的 S 不是超码，却存在非平凡 S↠H，因此拆：</p>
+<ul>
+<li>STUDENT_HOBBY(S,H)：S1 游泳；S1 绘画。</li>
+<li>STUDENT_LANGUAGE(S,L)：S1 中文；S1 英语。</li>
+</ul>
+<p>按 S 连接恢复原四种组合，无损，且不再为每种语言重复爱好。4NF 比 BCNF 还处理多值独立性，不能拿两者条件互换。</p>
+<h2 id="ch05-s044">13. 【课程PPT补充知识点】设计取舍与时间数据</h2>
+<h3 id="ch05-s045">13.1 正确设计不等于拆得越多越好</h3>
+<p>拆表减少重复，也增加连接成本。<strong>反规范化</strong>是为明确性能目的有控制地保存一些重复信息；前提是知道要维护哪些一致性规则，不能把方便写一张大表当成充分理由。</p>
+<p>键、外码、业务查询和更新频率都应一起考虑。范式保证某类结构性质，不保证索引最优、权限正确或所有业务语义都完整。</p>
+<h3 id="ch05-s046">13.2 有效时间与事务时间</h3>
+<p><strong>独立地址历史</strong>：小林实际在 9 月 1 日搬到校园路，学校到 9 月 5 日才收到并录入信息。</p>
+<ul>
+<li><strong>有效时间</strong>描述事实在现实中何时生效：9 月 1 日。</li>
+<li><strong>事务时间</strong>描述数据库何时记录或认为该版本有效：9 月 5 日起。</li>
+</ul>
+<p>这里“事务时间”是时态数据库术语，不是一次转账耗时。若只覆盖旧地址，无法回答“9 月 3 日他实际住哪”与“9 月 3 日数据库当时记在哪”这两个不同问题。可以保存生效区间与记录区间；区间端点、是否含结束时间等必须明确。</p>
+<h2 id="ch05-s047">14. 【课程总结PPT提示】“NP问题”与算法难度</h2>
+<h3 id="ch05-s048">14.1 先说明“规模变大”是什么意思</h3>
+<p>一题只有五列，手算所有属性组合尚可；若有 n 列，属性子集共有 2 的 n 次方个。n 是列数，<code>2ⁿ</code>表示 2 连乘 n 次；每列都有选或不选两种情况，所以得到这个数量。</p>
+<p><strong>多项式时间</strong>表示运行步骤可用输入规模的固定次幂控制，例如 n²；<strong>指数增长</strong>如 2ⁿ，规模增加时可能很快变得难以穷举。不能因手算某题麻烦，就直接判断它具有哪种理论复杂性。</p>
+<h3 id="ch05-s049">14.2 对照实际课件区分三个问题</h3>
+<p>已核对项目内 <code>ch8.pdf</code>：</p>
+<ul>
+<li>第 44 页：对给定原模式 R 和依赖集 F，检查 F 中各非平凡依赖的左部是否为超码，足以判断原模式 BCNF；不必展开全部 F⁺。分解后子模式却不能只检查原 F 中原样留下的规则，要考虑投影依赖。</li>
+<li>第 54 页：一般的 <strong>3NF 判定是 NP-hard</strong>；难点包括判定某属性是否属于某个候选码。NP-hard 常译“NP 难”，是一种严格的复杂性分类，不能简单理解为“绝对无法解”或“每个小例都很慢”。</li>
+<li>第 42 页：给定分解的依赖保持可用多项式算法检验，不必先显式列出全部 F⁺。</li>
+<li>第 54—55 页：3NF 综合分解有多项式算法；“判定给定模式是否 3NF”与“构造一个 3NF 分解”是不同问题。</li>
+</ul>
+<p>课程总结把“NP问题”标在 BCNF 判定与分解、3NF 判定附近，但未把所有问题的输入、目标和限制写完整。不能据此概括为“所有 BCNF 检查和分解都 NP-hard”。本资料采用上面可核实的课件结论；若要求另一个受限分解／优化问题的复杂性，需要明确问题定义。</p>
+<h3 id="ch05-s050">14.3 不展开 F⁺也能检查依赖保持</h3>
+<p>对一条待检查依赖 X→Y，先令 result=X，result 是当前可得到的属性集合。对每个子模式 Ri，计算：</p>
+<pre><code class="language-text">t = (result∩Ri)⁺∩Ri
+result = result∪t
+</code></pre>
+<p>Ri 是第 i 个子模式；t 是临时新增信息。先拿手上已知且在这个子表的属性，用原 F 算闭包，再只留下本子表能承载的结果；把这些信息加入 result。遍历并重复直到没有新增。若包含 Y，则该依赖被保持。对原 F 的每一条都检查。</p>
+<p>第 11.2 节 CB、AC，从 AB 出发：在 CB 内只有 B，可得的仍只有 B；在 AC 内只有 A，可得的仍只有 A。重复后仍 AB，得不到 C，故 AB→C 不保持。这与反例证明一致。</p>
+<h2 id="ch05-s051">15. 常见误解</h2>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>误解</th>
+<th>为什么不对</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>样本姓名不重复，姓名就是永久候选码</td>
+<td>样本巧合不等于业务保证</td>
+</tr>
+<tr>
+<td>AB→C 可以拆左边为 A→C、B→C</td>
+<td>分解律拆右边，不能随意拆决定因素</td>
+</tr>
+<tr>
+<td>去掉规则时还用被去掉的规则证明它</td>
+<td>循环论证，必须重算当前集合的闭包</td>
+</tr>
+<tr>
+<td>3NF 就一定 BCNF</td>
+<td>3NF 允许某些右部主属性例外</td>
+</tr>
+<tr>
+<td>无损就保持依赖</td>
+<td>信息恢复与局部规则检查不同</td>
+</tr>
+<tr>
+<td>BCNF 分解后只看原 F 中完全留在子表的规则</td>
+<td>必须考虑 F⁺的投影依赖</td>
+</tr>
+</tbody></table></div>
+<h2 id="ch05-s052">16. 本单元模拟题</h2>
+<h3 id="ch05-s053">题目一：第一范式</h3>
+<p><strong>原题</strong></p>
+<blockquote>
+<p>若关系 R 所有的属性都是不可再分的数据项，则该关系最低满足第几范式？</p>
+</blockquote>
+<p><strong>PPT 参考答案</strong></p>
+<blockquote>
+<p>第一范式。</p>
+</blockquote>
+<p><strong>解析</strong></p>
+<p>关系中每个属性值均为原子值，满足 1NF 的定义。题目没有提供函数依赖，无法进一步判断 2NF、3NF 或 BCNF，因此“最低满足 1NF”是正确答案。</p>
+<h3 id="ch05-s054">题目二：函数依赖推理</h3>
+<p><strong>原题</strong></p>
+<blockquote>
+<p><code>AB→C</code> 能蕴含 <code>A→C</code>、<code>B→C</code> 吗？</p>
+</blockquote>
+<p><strong>PPT 参考答案</strong></p>
+<blockquote>
+<p>不能。</p>
+</blockquote>
+<p><strong>完整解析</strong></p>
+<p>不能。<code>AB→C</code> 表示 A 与 B 的组合能决定 C，不能说明其中任何一个属性单独决定 C。</p>
+<p>反例：</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>A</th>
+<th>B</th>
+<th>C</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>1</td>
+<td>x</td>
+</tr>
+<tr>
+<td>1</td>
+<td>2</td>
+<td>y</td>
+</tr>
+<tr>
+<td>2</td>
+<td>1</td>
+<td>z</td>
+</tr>
+</tbody></table></div>
+<p>每个 <code>(A,B)</code> 组合唯一，因此可满足 <code>AB→C</code>；但相同 A 对应不同 C，相同 B 也对应不同 C，所以 <code>A→C</code>、<code>B→C</code> 都不成立。</p>
+<h3 id="ch05-s055">题目三：证明合并律</h3>
+<p><strong>原题</strong></p>
+<blockquote>
+<p>请用阿姆斯特朗三定律（分解律、增强律和传递律）证明合并律，写出每一步骤的依据。</p>
+</blockquote>
+<p><strong>PPT 情况</strong></p>
+<p>PPT 只列出题目，没有给出文字证明。</p>
+<p><strong>规范证明</strong></p>
+<p>已知 <code>α→β</code> 和 <code>α→γ</code>，证明 <code>α→βγ</code>：</p>
+<ol>
+<li>由 <code>α→β</code>，使用增广律在两侧增加 α，得 <code>α→αβ</code>。</li>
+<li>由 <code>α→γ</code>，使用增广律在两侧增加 β，得 <code>αβ→βγ</code>。</li>
+<li>对步骤 1、2 使用传递律，得 <code>α→βγ</code>。</li>
+</ol>
+<p>因此合并律成立。严格说，Armstrong 三公理通常指自反律、增广律和传递律；分解律是可由三公理推出的规则。题目采用的是课件表述，作答时按教师口径写出每步依据即可。</p>
+<h3 id="ch05-s056">题目四：3NF 与 BCNF 判断</h3>
+<p><strong>原题</strong></p>
+<blockquote>
+<p>设有属于 1NF 的关系模式 <code>R=(A,B,C,D,E)</code>，R 上的函数依赖集 <code>F={BC→AD，AD→EB，E→C}</code>。<br>（1）R 是否属于 3NF？为什么？<br>（2）R 是否属于 BCNF？为什么？</p>
+</blockquote>
+<p><strong>PPT 参考答案</strong></p>
+<blockquote>
+<p>候选码为 <code>BC</code>、<code>AD</code>、<code>BE</code>。函数依赖集 F 中所有右部属性都在某个候选码中，因此属于 3NF。<code>E→C</code> 是非平凡依赖，而 E 不是超码，因此不属于 BCNF。</p>
+</blockquote>
+<p><strong>完整推导</strong></p>
+<h4 id="ch05-s057">第一步：求候选码</h4>
+<pre><code class="language-text">(BC)⁺
+= BC
+⇒ BCAD        使用 BC→AD
+⇒ ABCDE       使用 AD→EB
+</code></pre>
+<p><code>B⁺</code>、<code>C⁺</code> 都不能得到全部属性，因此 <code>BC</code> 是候选码。</p>
+<pre><code class="language-text">(AD)⁺
+= AD
+⇒ ADEB        使用 AD→EB
+⇒ ABCDE       使用 E→C
+</code></pre>
+<p><code>A⁺</code>、<code>D⁺</code> 均不完整，因此 <code>AD</code> 是候选码。</p>
+<pre><code class="language-text">(BE)⁺
+= BE
+⇒ BEC         使用 E→C
+⇒ ABCDE       使用 BC→AD
+</code></pre>
+<p><code>B⁺</code>、<code>E⁺</code> 均不完整，因此 <code>BE</code> 是候选码。</p>
+<p>主属性集合为 <code>{A,B,C,D,E}</code>，即所有属性都是主属性。</p>
+<h4 id="ch05-s058">第二步：判断 3NF</h4>
+<p>把右部拆成单属性后检查。对每条非平凡依赖，虽然决定因素不一定都是超码，但右部属性全部为主属性，因此 R 满足 3NF。</p>
+<h4 id="ch05-s059">第三步：判断 BCNF</h4>
+<p><code>E⁺={E,C}</code>，不能得到 R 的全部属性，所以 E 不是超码。<code>E→C</code> 非平凡，违反 BCNF，故 R 不属于 BCNF。</p>
+<h4 id="ch05-s060">一种 BCNF 分解</h4>
+<p>按 <code>E→C</code> 分解：</p>
+<pre><code class="language-text">R1(E,C)
+R2(A,B,D,E)
+</code></pre>
+<ul>
+<li>交集为 <code>{E}</code>，且 <code>E→EC</code>，因此分解无损。</li>
+<li><code>R1</code> 中 E 是码，满足 BCNF。</li>
+<li><code>R2</code> 中投影依赖的决定因素可作为超码，满足 BCNF。</li>
+<li>原依赖 <code>BC→AD</code> 跨越两个子模式，不能仅靠分别检查 <code>R1</code>、<code>R2</code> 直接保证，因此该分解不保持全部依赖。</li>
+</ul>
+<h3 id="ch05-s061">16.1 对原模拟题补足背景与每步含义</h3>
+<h4 id="ch05-s062">原子值题：条件只保证到哪里</h4>
+<p>题目讨论一张关系表，不限定学生或银行业务。“所有属性不可再分”是在当前模型里每格一个值，因此直接对应 1NF。没有给函数依赖，无法知道有无部分依赖、传递依赖；不能根据 1NF 条件继续断言 3NF。</p>
+<h4 id="ch05-s063">AB→C 题：逐对检查反例</h4>
+<p>A、B、C 是三列的代号，反例中的 1、2、x、y、z 是教学值。前三行的 AB 分别 (1,1)、(1,2)、(2,1)，无相同 AB 对不同 C，因此满足 AB→C。</p>
+<p>第 1、2 行 A 都为 1，但 C 为 x、y，所以 A→C 失败；第 1、3 行 B 都为 1，但 C 为 x、z，所以 B→C 失败。这个反例足以说明“不能由组合依赖必然推出任一单列依赖”，不表示所有满足组合依赖的数据都必然违反单列依赖。</p>
+<h4 id="ch05-s064">合并律题：字母不是数值乘法</h4>
+<p>原证明中 αβ、βγ 是属性集合并集，例如 α={学号}、β={姓名}、γ={所属系}，合并律就是“学号分别确定姓名和系，因此同时确定姓名与系”。增广相同属性后重复成员只保留一次，所以 αα 写回 α。这解释了第一步为何从 α→β 得到 α→αβ，而不是出现两个不同 α。</p>
+<h4 id="ch05-s065">五属性题：不遗漏候选码，并证明分解的代价</h4>
+<p>原题仅提供 R、F，没有业务背景；A—E 是属性代号，不能擅自解释成学生或银行字段。目标纯粹是依赖推理，不需虚构数据含义。</p>
+<p>单属性闭包：A⁺={A}、B⁺={B}、C⁺={C}、D⁺={D}、E⁺={E,C}，都不是超码。十种两属性组合检查如下：</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>组合</th>
+<th>闭包</th>
+<th>是否候选码</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>AB</td>
+<td>AB</td>
+<td>否</td>
+</tr>
+<tr>
+<td>AC</td>
+<td>AC</td>
+<td>否</td>
+</tr>
+<tr>
+<td>AD</td>
+<td>ABCDE</td>
+<td>是</td>
+</tr>
+<tr>
+<td>AE</td>
+<td>ACE</td>
+<td>否</td>
+</tr>
+<tr>
+<td>BC</td>
+<td>ABCDE</td>
+<td>是</td>
+</tr>
+<tr>
+<td>BD</td>
+<td>BD</td>
+<td>否</td>
+</tr>
+<tr>
+<td>BE</td>
+<td>ABCDE</td>
+<td>是</td>
+</tr>
+<tr>
+<td>CD</td>
+<td>CD</td>
+<td>否</td>
+</tr>
+<tr>
+<td>CE</td>
+<td>CE</td>
+<td>否</td>
+</tr>
+<tr>
+<td>DE</td>
+<td>CDE</td>
+<td>否</td>
+</tr>
+</tbody></table></div>
+<p>未包含 AD、BC、BE 的三属性组合只需检查 ACE、CDE，闭包均不完整；所有四属性或五属性集合都包含某个已找到的码，不最小。因此全部候选码恰是 AD、BC、BE，原答案没有漏码。全部属性是主属性，故 3NF 条件的“右部主属性”能覆盖各非平凡依赖。</p>
+<p>分解 EC 与 ABDE 后，ABDE 内的重要投影依赖为：</p>
+<ul>
+<li>AD→BE，直接来自 AD→EB。</li>
+<li>BE→AD，因为 E→C 后结合 B 得 BC，再用 BC→AD。</li>
+</ul>
+<p>AD、BE 在 ABDE 上都是候选码。对 ABDE 所有属性子集的闭包检查可知，非超码子集不会推出本子模式内的新属性，所以它满足 BCNF；不能只以“看见两条左边像码”替代投影检查。</p>
+<p>为何不保持 BC→AD？合并局部依赖 E→C、AD→BE、BE→AD，从 BC 出发没有 E，也没有 AD 或 BE，闭包仍为 BC，得不到 AD。原 F 却明确规定 BC→AD，因此存在丢失的检查能力。与此同时，交集 E 决定 EC，所以二表分解无损。两项证明依据不同。</p>
+<h2 id="ch05-s066">17. 自拟自测题与逐步答案</h2>
+<p>以下四题为自拟题。</p>
+<h3 id="ch05-s067">17.1 求属性闭包与全部候选码</h3>
+<p><strong>条件</strong>：独立 R(A,B,C,D)，F={A→B,B→C}，A—D 为列名代号。问 A⁺及候选码。</p>
+<p><strong>步骤</strong>：A 开始可得 B，再得 C，无规则能得 D，所以 A⁺=ABC。A、D 未在任何右边出现，码必须包含它们。AD⁺开始 AD，加入 B、C 得 ABCD；去 A 只剩 D，去 D 只得 ABC。</p>
+<p><strong>结论</strong>：候选码只有 AD。A 并不是码，尽管它能确定三列。</p>
+<h3 id="ch05-s068">17.2 2NF 已经成立，为什么还要拆？</h3>
+<p><strong>条件</strong>：R(S,Dept,Office)，每学生一个系、每系一个办公室；F={S→Dept,Dept→Office}。S、Dept、Office 依次学号、系、办公室。</p>
+<p><strong>步骤</strong>：S⁺含全部，唯一候选码 S。码只有一个属性，没有本例所指的真子集部分依赖，满足 2NF。Dept 非超码，Office 非主属性，Dept→Office 违反 3NF。</p>
+<p><strong>分解</strong>：STUDENT_DEPT(S,Dept)与DEPT_OFFICE(Dept,Office)。交集 Dept 决定后表，故无损；两条原依赖各在一表，故保持依赖。<strong>结论</strong>：2NF 仍可能有传递造成的重复。</p>
+<h3 id="ch05-s069">17.3 判断 AB 与 BC 分解是否无损</h3>
+<p><strong>条件</strong>：R(A,B,C)，F={A→B}。拟拆 AB、BC。</p>
+<p><strong>步骤</strong>：交集 B。B⁺只有 B，既不能决定 AB，也不能决定 BC。二表判据失败。第 10.2 节两行反例满足 A→B，却拼出四行。</p>
+<p><strong>结论</strong>：该分解相对于 F 有损。改为 AB、AC，交集 A 决定 AB，才是无损；并且 A→B 在 AB 内能检查。</p>
+<h3 id="ch05-s070">17.4 一份正则覆盖是否等价？</h3>
+<p><strong>条件</strong>：R(A,B,C)，F={A→B,B→C,A→C}，有人建议只保留 A→C。</p>
+<p><strong>步骤</strong>：A→C 的确可由前两条推得，所以能去掉它；反过来仅 A→C 无法推出 A→B 或 B→C。分别算 A⁺=AC、B⁺=B 就看出差异。</p>
+<p><strong>结论</strong>：建议不等价；可采用 Fc={A→B,B→C}。简化规则要保留全部推理能力，不是条数越少越好。</p>
+<h2 id="ch05-s071">18. 复习路线</h2>
+<ul>
+<li><input disabled="" type="checkbox"> 能从业务规则写出依赖，不把样本巧合当规则。</li>
+<li><input disabled="" type="checkbox"> 能解释每个箭头、集合、闭包符号。</li>
+<li><input disabled="" type="checkbox"> 能计算全部候选码与主属性。</li>
+<li><input disabled="" type="checkbox"> 能逐步精简覆盖，说明删除冗余的推理依据。</li>
+<li><input disabled="" type="checkbox"> 能分别证明 3NF／BCNF、无损连接、依赖保持。</li>
+<li><input disabled="" type="checkbox"> 能解释多值独立性与时间数据的业务含义。</li>
+</ul>
+<p>结构设计之后还需保证多人操作和故障下的正确性，继续读<a href="https://goya4140.github.io/JLU_CS_Course/3_1%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F/06_%E4%BA%8B%E5%8A%A1.html">第 06 章事务</a>。</p>
+<hr>
+<h2 id="ch05-check-order">19. 用同一张检查表，分清四种结论</h2>
+<p>面对 R 和 F，以及一个准备采用的分解，按下面顺序记录结论，不能用其中一项代替其他项。</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>要判断的事</th>
+<th>输入是什么</th>
+<th>要证明什么</th>
+<th>主例 ENROLL 的结果</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>候选码</td>
+<td>R、F、一个属性组合</td>
+<td>决定全部属性且不能再删</td>
+<td>SC 是唯一候选码</td>
+</tr>
+<tr>
+<td>3NF/BCNF</td>
+<td>依赖与候选码/超码信息</td>
+<td>每项非平凡依赖符合相应条件</td>
+<td>原汇总表不符合，三张分表符合 BCNF</td>
+</tr>
+<tr>
+<td>无损连接</td>
+<td>分解和原依赖</td>
+<td>每个原合法实例拆后拼回恰好相等</td>
+<td>两次交集决定一侧，分解无损</td>
+</tr>
+<tr>
+<td>依赖保持</td>
+<td>各子表投影依赖</td>
+<td>局部规则联合仍推出原规则</td>
+<td>三条主例规则各在一张表中，可保持</td>
+</tr>
+</tbody></table></div>
+<p>“拆得更细”不是最终目标。第 9.2 节 ABC 满足 3NF 却不满足 BCNF，按 C→B 拆为 CB/AC 后可以无损且都达 BCNF，但 AB→C 不再能只靠两张表内部检查。这个例子同时满足某些性质、失去另一种性质，正是需要分开判断的原因。</p>
+<p>判定、构造和验证也是不同任务：判断一张已有表属于哪种范式，不等于构造一个分解；验证给定分解是否保持依赖，也不需要先把全部 F⁺列成巨大的清单。复杂性结论应带着具体任务和输入条件阅读。</p>
+<hr>
+<h2 id="ch05-reference">20. 本章概念与方法速查</h2>
+<div class="ref-area"><div class="ref-picker"><label for="ref-select">选择要查的概念或方法</label><select id="ref-select" aria-controls="ref-panel"><option value="">请选择一个条目</option><option value="更新/插入/删除异常">更新/插入/删除异常</option><option value="函数依赖 X→Y">函数依赖 X→Y</option><option value="平凡/非平凡与主/非主属性">平凡/非平凡与主/非主属性</option><option value="超码、候选码与主码">超码、候选码与主码</option><option value="属性闭包 X⁺">属性闭包 X⁺</option><option value="依赖闭包 F⁺与蕴含">依赖闭包 F⁺与蕴含</option><option value="Armstrong 公理">Armstrong 公理</option><option value="正则覆盖/最小覆盖">正则覆盖/最小覆盖</option><option value="1NF 与 2NF">1NF 与 2NF</option><option value="BCNF">BCNF</option><option value="3NF">3NF</option><option value="BCNF 分解与 3NF 综合">BCNF 分解与 3NF 综合</option><option value="无损连接">无损连接</option><option value="Chase">Chase</option><option value="依赖保持">依赖保持</option><option value="多值依赖与 4NF">多值依赖与 4NF</option><option value="有效时间与事务时间">有效时间与事务时间</option><option value="判定、构造与验证的复杂性">判定、构造与验证的复杂性</option></select><p class="source-note">选中后显示用途、读法、例子、结果和注意点。完整总结表保存在 Markdown 版。</p><div id="ref-panel" class="ref-panel" aria-live="polite" hidden></div><noscript><p>请启用 JavaScript 使用选择菜单，或查看 Markdown 版的速查表。</p></noscript></div></div>
+
+<h2 id="ch05-verification">整理与核对说明</h2>
+<p>本轮依据项目现有学习资料、<span title="来源课件未随在线学习资料上传">课件 ch8.pdf（未上传）</span>，并对照<span title="来源课件未随在线学习资料上传">课程总结（未上传）</span>和<span title="来源课件未随在线学习资料上传">试题模拟（未上传）</span>中与本单元相关的文本。原有主要知识点、模拟题和自测题均保留，补充问题铺垫、概念关系、结果解释与速查；图解使用正文的教学前提。</p>
+<p>重点标记沿用所提供课程总结的范围，不把总结中的上位主题误称为逐小节明确列出的考试重点。教学例子和增加的数据不冒充原题数据。对 PDF 的核对包含相关定义与规则，并对关键图示页作视觉检查；不声称对每一页所有图形逐项复核。</p>
+<p>验证分别记录结构与链接检查、例子的手工推导、适用的计算核对，以及 HTML 中的目录、速查和图解切换检查。资料中的 SQL 或系统协议示例用于学习，不代表已在某款真实 DBMS 中执行；实现细节、恢复策略和并发结果仍须按本文给出的前提理解。</p>
+</article><footer class="foot">对应 Markdown：<a href="https://goya4140.github.io/JLU_CS_Course/#/3_1%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F/05_%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E8%A7%84%E8%8C%83%E5%8C%96.md">05_关系数据库规范化.md</a>。图解用于对照正文学习，不在网页中执行数据库操作。外部文献需联网，正文和交互可以离线阅读。</footer><footer class="foot"><a href="https://goya4140.github.io/JLU_CS_Course/#/3_1%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F/00_%E5%AD%A6%E4%B9%A0%E5%AF%BC%E8%88%AA.md">返回数据库系统学习导航</a></footer></main></div><script id="guide-data" type="application/json">{"figures":[{"id":"ch05-viz-closure","after":"ch05-s016","title":"属性闭包：每次只加入规则保证的新信息","intro":"三个主例起点使用 ENROLL 的同一组依赖；五属性题是另一个独立依赖集。","type":"choices","options":[{"label":"从学号 S出发","meaning":"依赖为 S→SName、C→CName、SC→Grade；已知左部所有列才可以增加右部。","headers":["规则或阶段","目前已知属性","发生什么"],"rows":[["开始","S","先放入给定属性"],["S→SName","S、SName","新增 SName"],["再检查","S、SName","无新增，停止"]],"note":"没有覆盖全部五列，所以不是 ENROLL 的超码；不能仅因为它是编号就判定是码。"},{"label":"从课程号 C出发","meaning":"依赖为 S→SName、C→CName、SC→Grade；已知左部所有列才可以增加右部。","headers":["规则或阶段","目前已知属性","发生什么"],"rows":[["开始","C","先放入给定属性"],["C→CName","C、CName","新增 CName"],["再检查","C、CName","无新增，停止"]],"note":"没有覆盖全部五列，所以不是 ENROLL 的超码；不能仅因为它是编号就判定是码。"},{"label":"从学号与课程号 SC出发","meaning":"依赖为 S→SName、C→CName、SC→Grade；已知左部所有列才可以增加右部。","headers":["规则或阶段","目前已知属性","发生什么"],"rows":[["开始","S、C","先放入给定属性"],["S→SName","S、C、SName","新增 SName"],["C→CName","S、C、SName、CName","新增 CName"],["SC→Grade","S、C、SName、CName、Grade","新增 Grade"],["再检查","S、C、SName、CName、Grade","无新增，停止"]],"note":"覆盖全部五列，还需检查去掉 S 或 C 后不能覆盖，才能判定候选码。"},{"label":"五属性模拟题：从 BC 出发","meaning":"独立规则 BC→AD、AD→EB、E→C。","headers":["规则或阶段","目前已知属性","发生什么"],"rows":[["开始","B、C","先放入给定属性"],["BC→AD","B、C、A、D","新增 A、D"],["AD→EB","B、C、A、D、E","新增 E"],["再检查","B、C、A、D、E","无新增，停止"]],"note":"闭包完整；B⁺和 C⁺都不完整，说明 BC 最小。但还要继续找 AD、BE 等其他候选码。"}]},{"id":"ch05-viz-lossless","after":"ch05-s033","title":"同一份原数据，拆法不同就可能出现伪元组","intro":"独立 R(A,B,C)，依赖 A→B；原数据只有 a1/b1/c1、a2/b1/c2 两行。","type":"choices","options":[{"label":"AB + BC：按 B 拼回","meaning":"B=b1 在两边均对应两个剩余值，两两组合得到四行。","flow":[["原表","两条完整事实"],["投影 AB 与 BC","共同列 B"],["按 B 连接","原有两行加两行伪元组"]],"headers":["A","B","C","是否原有"],"rows":[["a1","b1","c1","是"],["a1","b1","c2","否，新增组合"],["a2","b1","c1","否，新增组合"],["a2","b1","c2","是"]],"note":"B⁺只有 B，不能决定 AB 或 BC，这个二表分解相对于给定 F 有损。"},{"label":"AB + AC：按 A 拼回","meaning":"共同 A 决定 AB，配对受到规则保证。","flow":[["原表","同样两条事实"],["投影 AB 与 AC","共同列 A"],["按 A 连接","恰好恢复原两行"]],"headers":["A","B","C","是否原有"],"rows":[["a1","b1","c1","是"],["a2","b1","c2","是"]],"note":"无损证明来自 A→B 及二表判据，不只因为这个样本碰巧能还原。"}]},{"id":"ch05-viz-preserve","after":"ch05-s038","title":"无损、BCNF 与依赖保持需要分别给证据","intro":"使用正文 ABC、F={AB→C，C→B} 的独立例子。","type":"choices","options":[{"label":"原 ABC：3NF，但非 BCNF","meaning":"候选码 AB/AC，所有列为主属性。","headers":["检查","结论","依据"],"rows":[["3NF","满足","C→B 右侧 B 是主属性"],["BCNF","不满足","C⁺=BC，C 不是超码"]],"note":"3NF 的右部例外并不让 C 自动变成超码。"},{"label":"拆 CB 与 AC：无损且达 BCNF","meaning":"共同 C 决定 CB，可按二表判据证明无损。","headers":["性质","结论","依据"],"rows":[["无损","是","C→CB"],["各子表 BCNF","是","子表中非平凡决定因素为超码"],["依赖保持","否","局部规则不能从 AB 推出 C"]],"note":"从原合法关系出发能拼回，不代表以后独立维护子表就自动遵守全部原规则。"},{"label":"局部都合法，却漏掉 AB→C","meaning":"CB 保存 c1/b1、c2/b1；AC 保存 a1/c1、a1/c2。","headers":["A","B","C"],"rows":[["a1","b1","c1"],["a1","b1","c2"]],"note":"同一个 AB 对两个 C，违反原规则 AB→C，但各子表内部仍合法。这是依赖不保持的反例，不是否定无损证明。"}]}],"references":[{"name":"更新/插入/删除异常","kind":"结构造成的风险","meaning":"同一类事实被重复或与另一类事实捆绑保存。","usage":"先看一行包含了几种不同事实。","example":"取消小周唯一选课，同时丢掉他的姓名信息。","result":"异常来自身份与选课事实绑在一表，不是一定报错。","note":"正常的受控重复与未维护的冗余要分清。","anchor":"ch05-s004"},{"name":"函数依赖 X→Y","kind":"业务保证","meaning":"两行的 X 相同时，Y 必须也相同。","usage":"同左值不能对应不同右值。","example":"S1 在两条选课中姓名必须一致。","result":"S→SName，但不因此 S→Grade。","note":"不是编程函数，也不是凭当前样本没冲突就成立。","anchor":"ch05-s009"},{"name":"平凡/非平凡与主/非主属性","kind":"两个不同分类角度","meaning":"依赖是否增加新属性，与属性是否出现在某候选码中。","usage":"Y⊆X 是平凡；候选码中的列是主属性。","example":"SC→S 平凡，S→SName 非平凡；S/C 是主属性。","result":"主属性的判定需要所有候选码信息。","note":"不要把“主属性”只理解为已选主码中的列。","anchor":"ch05-s010"},{"name":"超码、候选码与主码","kind":"识别属性集合","meaning":"超码覆盖全体，候选码无多余，主码从候选码选定。","usage":"计算闭包，再逐个删除检验最小性。","example":"SC⁺覆盖 ENROLL 五列，S⁺和 C⁺都不完整。","result":"SC 是主例唯一候选码。","note":"找到一组候选码不保证已经找全。","anchor":"ch05-s011"},{"name":"属性闭包 X⁺","kind":"属性推理结果","meaning":"从 X 沿依赖得到的全部属性。","usage":"先放 X，左部全已知时加右部，反复直到不增长。","example":"SC → 加姓名、课名 → 加成绩。","result":"能覆盖 R 才是超码。","note":"不是数值加一；还需最小性才能判候选码。","anchor":"ch05-s017"},{"name":"依赖闭包 F⁺与蕴含","kind":"规则推理结果","meaning":"F⁺是全部可推出规则；用 X⁺检查一条依赖是否被保证。","usage":"F 蕴含 X→Y，当且仅当 Y⊆X⁺。","example":"S⁺只有 S/SName，不含 Grade。","result":"不能从主例规则推出 S→Grade。","note":"属性集合和规则集合是不同结果；不能推出不代表所有样本都违反。","anchor":"ch05-s020"},{"name":"Armstrong 公理","kind":"推理规则","meaning":"自反、增广和传递推出可靠的依赖结论。","usage":"知道整体可知部分；双方加同属性；顺链传递。","example":"S→Dept、Dept→Office 推出 S→Office。","result":"每一步都来自给定规则，不额外发明业务事实。","note":"增广改变两边；分解律拆右边，不随意拆左边。","anchor":"ch05-s014"},{"name":"正则覆盖/最小覆盖","kind":"等价的规则精简","meaning":"去掉多余属性或依赖，保持全部推理能力。","usage":"先明确表示约定；每次调整后重算相应闭包。","example":"A→BC、B→C、AB→C 可精简为 A→B、B→C。","result":"去掉冗余 A→C 后仍能通过 B 得到 C。","note":"不能留下被删规则来证明它自己；同左部合并与单右部形式要按课程区分。","anchor":"ch05-s022"},{"name":"1NF 与 2NF","kind":"入门结构标准","meaning":"每格一个原子值，并避免非主属性只依赖候选码的一部分。","usage":"先检查值，再检查非主属性对每个候选码的依赖。","example":"ENROLL 的姓名只由 S 确定，不需要组合 SC。","result":"符合 1NF 仍可违反 2NF。","note":"2NF 不能只检查选定主码，也不能保证没有传递造成的重复。","anchor":"ch05-s005"},{"name":"BCNF","kind":"函数依赖范式","meaning":"每个非平凡决定因素都必须能识别本关系整行。","usage":"非平凡 X→Y 时，X⁺应包含本关系全部属性。","example":"ENROLL 的 S→SName 左侧不是超码。","result":"原表不满足 BCNF；拆学生/课程/选课可满足。","note":"子表要考虑投影依赖，不能只看原 F 中原样剩余的条目。","anchor":"ch05-s024"},{"name":"3NF","kind":"较宽松的函数依赖范式","meaning":"平凡、左部超码，或右部单属性为主属性，满足一项即可。","usage":"先确定所有候选码与主属性，再逐项判断。","example":"AB→C、C→B 的 ABC，候选码 AB/AC。","result":"B 是主属性，所以 C→B 被 3NF 允许，但违反 BCNF。","note":"BCNF 推出 3NF，反向不保证。","anchor":"ch05-s029"},{"name":"BCNF 分解与 3NF 综合","kind":"两种构造方法","meaning":"前者按违反依赖拆，后者围绕等价精简规则建子模式。","usage":"违反 X→Y 可拆 XY 与 R−(Y−X)；综合还检查候选码是否被包含。","example":"ENROLL 最终 Student、Course、Takes。","result":"这个主例既无损又保持依赖，不代表所有 BCNF 分解都如此。","note":"检查每次拆的性质，并给出依赖保持的单独证明。","anchor":"ch05-s026"},{"name":"无损连接","kind":"信息恢复性质","meaning":"从原合法关系投影再连接，恰好还原，不产生假组合。","usage":"二表覆盖 R 时，交集应决定至少一侧全部属性。","example":"AB/BC 共同 B=b1，两边各两行会拼出四行。","result":"多出的 a1/b1/c2 等是伪元组。","note":"二表判据不直接适用于随便的多表逐对比较。","anchor":"ch05-s033"},{"name":"Chase","kind":"多表无损检验方法","meaning":"用依赖合并必须相同的符号，找全目标符号行。","usage":"每子表一行，本表列用 a，其他格初始不同 b 符号，再反复统一。","example":"主例 TAKES 行因 S→SName、C→CName 补齐。","result":"出现全 a 行说明该函数依赖检验成功。","note":"这是符号检验，不是实际查询执行轨迹。","anchor":"ch05-s037"},{"name":"依赖保持","kind":"规则检查性质","meaning":"各表内部规则合起来仍能保证全部原业务依赖。","usage":"比较投影依赖联合的推理能力与 F。","example":"CB/AC 局部合法，可拼成同 AB 对两个 C。","result":"不能只靠局部检查保证 AB→C。","note":"无损不等于保持依赖，两项用不同证据证明。","anchor":"ch05-s038"},{"name":"多值依赖与 4NF","kind":"独立多值信息","meaning":"给定 X 时，Y 与剩余属性的选择能自由组合。","usage":"X↠Y；非平凡多值决定因素应为超码。","example":"学生两爱好、两语言在独立假设下有四种组合。","result":"拆为爱好与语言两表可还原四对，减少交叉重复。","note":"若某爱好依赖所用语言，就不能假设自由组合。","anchor":"ch05-s041"},{"name":"有效时间与事务时间","kind":"两种历史观察","meaning":"现实何时生效，以及数据库何时记录这个版本。","usage":"分别保存事实区间和记录区间。","example":"9月1日搬家，9月5日才登记。","result":"9月3日的实际住址与当时库中记录可能不同。","note":"事务时间不是业务操作耗时，区间边界要说明。","anchor":"ch05-s046"},{"name":"判定、构造与验证的复杂性","kind":"任务区分","meaning":"原模式范式判断、分解构造、给定分解性质验证是不同问题。","usage":"明确输入、输出与限制，再读 NP-hard 等结论。","example":"课件 8.54 说一般 3NF 判定 NP-hard，3NF 综合可多项式完成。","result":"不能概括成所有 BCNF/3NF 工作都同样困难。","note":"不展开 F⁺也可以用闭包步骤检查依赖保持。","anchor":"ch05-s049"}]}</script><script>(()=>{'use strict';const payload=JSON.parse(document.getElementById('guide-data').textContent);const byId=id=>document.getElementById(id);const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));const rows=(headers,data)=>'<div class="table-scroll"><table><thead><tr>'+headers.map(x=>'<th scope="col">'+esc(x)+'</th>').join('')+'</tr></thead><tbody>'+data.map(row=>'<tr>'+row.map(x=>'<td>'+esc(x===null?'NULL':x)+'</td>').join('')+'</tr>').join('')+'</tbody></table></div>';const flow=steps=>'<div class="flow">'+steps.map((s,i)=>(i?'<div class="flow-arrow" aria-hidden="true">→</div>':'')+'<div class="flow-node"><strong>'+esc(s[0])+'</strong><p>'+esc(s[1])+'</p></div>').join('')+'</div>';for(const fig of payload.figures){if(fig.type==='choices'){const select=byId(fig.id+'-select');const draw=()=>{const option=fig.options[Number(select.value)];byId(fig.id+'-output').innerHTML='<p>'+esc(option.meaning)+'</p>'+(option.flow?flow(option.flow):'')+(option.svg||'')+(option.headers?rows(option.headers,option.rows):'')+(option.note?'<p class="fig-note">'+esc(option.note)+'</p>':'');};select.addEventListener('change',draw);draw();}}const refSelect=byId('ref-select');const refPanel=byId('ref-panel');const drawRef=()=>{const item=payload.references.find(x=>x.name===refSelect.value);if(!item){refPanel.hidden=true;refPanel.replaceChildren();return;}refPanel.innerHTML='<h3>'+esc(item.name)+'</h3><p class="ref-kind">'+esc(item.kind)+'</p><h4>解决什么问题</h4><p>'+esc(item.meaning)+'</p><h4>怎样理解或使用</h4><p>'+esc(item.usage)+'</p><h4>学习例子</h4><p>'+esc(item.example)+'</p><h4>结果与理由</h4><p class="result">'+esc(item.result)+'</p><h4>注意点</h4><p>'+esc(item.note)+'</p><a href="#'+esc(item.anchor)+'">回到正文看完整解释</a>';refPanel.hidden=false;};refSelect.addEventListener('change',drawRef);drawRef();const entries=[...document.querySelectorAll('.sidebar nav a')].map(link=>({link,target:document.getElementById(link.hash.slice(1))})).filter(e=>e.target);const offset=()=>{const n=Math.ceil(document.querySelector('.topbar').getBoundingClientRect().height)+18;document.documentElement.style.setProperty('--scroll-offset',n+'px');return n;};const close=()=>{document.body.classList.remove('nav-open');byId('menu').setAttribute('aria-expanded','false');};const activate=e=>entries.forEach(x=>{const on=x===e;x.link.classList.toggle('active',on);if(on)x.link.setAttribute('aria-current','location');else x.link.removeAttribute('aria-current');});const current=()=>{const boundary=offset()+3;let active=entries[0];for(const entry of entries){if(entry.target.getBoundingClientRect().top<=boundary)active=entry;else break;}if(entries.length&&innerHeight+scrollY>=document.documentElement.scrollHeight-2&&entries[entries.length-1].target.getBoundingClientRect().top<innerHeight)active=entries[entries.length-1];if(active)activate(active);};const jump=(target,hash)=>{close();window.scrollTo({top:Math.max(0,target.getBoundingClientRect().top+scrollY-offset()),behavior:'auto'});if(location.hash!==hash)history.pushState(null,'',hash);current();};document.addEventListener('click',event=>{const link=event.target.closest('a[href^="#"]');if(!link||event.button!==0||event.ctrlKey||event.metaKey||event.shiftKey||event.altKey)return;const target=document.getElementById(link.hash.slice(1));if(target){event.preventDefault();jump(target,link.hash);}});byId('menu').addEventListener('click',()=>{const on=document.body.classList.toggle('nav-open');byId('menu').setAttribute('aria-expanded',String(on));});document.addEventListener('keydown',e=>{if(e.key==='Escape')close();});let pending=false;const schedule=()=>{if(!pending){pending=true;requestAnimationFrame(()=>{current();pending=false;});}};window.addEventListener('scroll',schedule,{passive:true});window.addEventListener('resize',schedule);window.addEventListener('hashchange',schedule);window.addEventListener('popstate',schedule);if(typeof ResizeObserver!=='undefined')new ResizeObserver(schedule).observe(document.querySelector('.topbar'));let font=17;document.querySelectorAll('[data-font]').forEach(b=>b.addEventListener('click',()=>{font=Math.max(15,Math.min(21,font+Number(b.dataset.font)));document.documentElement.style.setProperty('--font',font+'px');schedule();}));byId('print').addEventListener('click',()=>window.print());document.querySelectorAll('article pre code').forEach(code=>{const pre=code.parentElement;const wrap=document.createElement('div');wrap.className='code-wrap';pre.parentNode.insertBefore(wrap,pre);wrap.append(pre);const button=document.createElement('button');button.type='button';button.className='copy';button.textContent='复制';button.setAttribute('aria-label','复制本段示例');button.addEventListener('click',async()=>{try{await navigator.clipboard.writeText(code.textContent);button.textContent='已复制';}catch{const range=document.createRange();range.selectNodeContents(code);const selection=window.getSelection();selection.removeAllRanges();selection.addRange(range);button.textContent='已选中';}setTimeout(()=>button.textContent='复制',1500);});wrap.append(button);});current();})();</script></body></html>
