@@ -140,7 +140,25 @@ def build_sidebar() -> str:
     return "\n".join(lines).rstrip() + "\n"
 
 
+def append_compiler_directory(lines: list[str], directory: Path, level: int) -> None:
+    indent = "  " * level
+    lines.append(f"{indent}- **图文阅读版（HTML）**")
+    for path in sorted(directory.glob("[0-9][0-9]_*.html")):
+        url = "https://goya4140.github.io/JLU_CS_Course/" + quote(path.relative_to(ROOT).as_posix(), safe="/")
+        lines.append(f"{indent}  - [{display_name(path.stem)}]({url} ':ignore')")
+    lines.append(f"{indent}- **Markdown 学习资料**")
+    def chapter_order(path: Path) -> int:
+        match = re.match(r"^第(\d+)章", path.name)
+        return int(match.group(1)) if match else int(path.name[:2])
+    for path in sorted(directory.glob("*.md"), key=chapter_order):
+        title = title_for(path).replace(" 学习资料", "")
+        lines.append(f"{indent}  - [{title}]({link_for(path)})")
+
+
 def append_directory(lines: list[str], directory: Path, level: int) -> None:
+    if directory.name == "3_1编译原理":
+        append_compiler_directory(lines, directory, level)
+        return
     if directory.name == "2_1微积分III":
         indent = "  " * level
         for filename, title in (

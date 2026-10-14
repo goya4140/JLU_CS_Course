@@ -1,0 +1,1554 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>10_来源覆盖与核对报告</title><meta name="source-sha256" content="f492735253bd6bf4f1493660205789251097c9b35b75b50b22a6399610b08f66"><style>:root{--paper:#fbfaf7;--surface:#fff;--ink:#253341;--muted:#5c6b75;--line:#d5dfdd;--teal:#156b62;--soft:#edf6f1;--font:17px;--scroll-offset:90px}*{box-sizing:border-box}html{scroll-behavior:auto;scroll-padding-top:var(--scroll-offset)}body{margin:0;background:var(--paper);color:var(--ink);font-family:'Microsoft YaHei','PingFang SC',system-ui,sans-serif;font-size:var(--font);line-height:1.85}a{color:var(--teal);text-underline-offset:3px}a:hover{color:#173f75}button,select{font:inherit}button{cursor:pointer}button,select{border:1px solid #b9cbc5;border-radius:7px;padding:7px 11px;background:#fff;color:var(--ink)}button:hover{background:var(--soft)}button:focus-visible,select:focus-visible,a:focus-visible{outline:3px solid #81cbb8;outline-offset:3px}.skip{position:absolute;top:-80px;left:12px;z-index:50;background:#fff;padding:8px}.skip:focus{top:8px}.sidebar{position:fixed;inset:0 auto 0 0;width:270px;padding:23px 18px;background:#f0f4f0;border-right:1px solid var(--line);overflow:auto;z-index:30;overscroll-behavior:contain}.brand{font-size:21px;font-weight:700}.brand small{display:block;font-size:12px;font-weight:400;color:var(--muted)}.sidebar nav a{display:block;color:var(--ink);text-decoration:none;padding:8px 10px;margin:3px 0;border-radius:6px;font-size:14px;line-height:1.6}.sidebar nav a:hover{background:#dcebe3}.sidebar nav a.active,.sidebar nav a.active:hover{background:var(--teal);color:white}.sidebar select{width:100%;font-size:13px}.nav-tip{font-size:12px;color:var(--muted);margin:14px 0}.shell{margin-left:270px;overflow-anchor:none}.topbar{position:sticky;top:0;background:rgba(251,250,247,.98);padding:12px 26px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:12px;z-index:20}.topbar-title{font-size:13px;color:var(--muted)}.toolbar{display:flex;gap:7px;flex-wrap:wrap}.toolbar button{font-size:13px}.menu{display:none}main{max-width:1120px;margin:auto;padding:30px 44px 80px;min-width:0}h1{font-size:32px;line-height:1.5;margin:14px 0 25px}h2{font-size:25px;line-height:1.5;padding:0 0 11px;border-bottom:1px solid var(--line);margin:44px 0 23px}h3{font-size:21px;line-height:1.55;margin:29px 0 16px}h4{font-size:18px;line-height:1.6;margin:22px 0 13px}p{margin:14px 0}li{margin:7px 0}ul,ol{padding-left:1.6em}blockquote{margin:20px 0;padding:5px 18px;border-left:3px solid #a8c6bb;background:#f0f3ef;color:#53655e;font-size:14px}blockquote p{margin:8px 0}hr{border:0;border-top:1px solid var(--line);margin:32px 0}code{font-family:Consolas,'Cascadia Code',monospace;font-size:.9em;background:#eef1ed;padding:2px 5px;border-radius:4px;overflow-wrap:anywhere}pre{background:#18313d;color:#e8f0f0;border-radius:9px;padding:19px;line-height:1.65;overflow-x:auto;max-width:100%;font-size:14px}pre code{background:none;padding:0;color:inherit;white-space:pre;overflow-wrap:normal}table{border-collapse:collapse;width:100%;font-size:15px}th{background:#eaf3ee;text-align:left}td,th{padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:top}tbody tr:nth-child(even){background:#f6f9f6}.table-scroll{overflow-x:auto;border:1px solid var(--line);border-radius:8px;margin:17px 0;max-width:100%}.table-scroll td{min-width:80px}.source-note{font-size:13px;color:var(--muted)}.learning-figure{padding:23px;border:1px solid #b4cfc2;border-radius:12px;background:var(--soft);margin:25px 0}.learning-figure h4{margin:0 0 8px;font-size:20px}.fig-intro{font-size:14px;color:var(--muted)}.learning-figure label{display:block;margin-top:15px;font-size:14px;font-weight:700}.learning-figure select{margin-top:7px;width:100%;min-height:44px;font-size:15px}.fig-output{margin-top:16px}.flow{display:flex;gap:10px;align-items:stretch;flex-wrap:wrap}.flow-node{flex:1 1 150px;border:1px solid #bfd2c9;border-radius:8px;background:#fff;padding:13px;min-width:0}.flow-node strong{display:block;color:var(--teal)}.flow-node p{font-size:14px;margin:8px 0}.flow-arrow{align-self:center;color:var(--teal);font-size:24px}.fig-note{padding:10px 14px;border-left:3px solid var(--teal);background:#fff;font-size:14px;margin:15px 0 0}.svg-scroll{overflow-x:auto;max-width:100%}.svg-scroll svg{display:block;max-width:100%;height:auto}.ref-area{min-height:calc(100vh - var(--scroll-offset));margin-top:24px}.ref-picker{padding:22px;border-radius:12px;background:var(--soft);border:1px solid #b4cfc2}.ref-picker label{display:block;font-weight:700;margin-bottom:10px}.ref-picker select{width:100%;font-size:15px;min-height:46px}.ref-panel{margin-top:18px;background:#fff;border:1px solid var(--line);padding:20px;border-radius:9px}.ref-panel[hidden]{display:none}.ref-panel h3{margin:0;font-size:24px}.ref-panel h4{font-size:16px;margin:18px 0 8px}.ref-kind{font-size:13px;color:var(--teal)}.result{padding:10px 15px;border-left:3px solid var(--teal);background:var(--soft)}.copy{display:block;margin:5px 0 0 auto;font-size:12px;padding:4px 8px}.code-wrap{margin:20px 0}.code-wrap pre{margin-bottom:0}.foot{font-size:13px;color:var(--muted);border-top:1px solid var(--line);padding-top:23px;margin-top:30px}details{border:1px solid var(--line);padding:12px;border-radius:8px;margin:15px 0}summary{cursor:pointer;font-weight:700}@media(max-width:900px){.sidebar{transform:translateX(-100%)}body.nav-open .sidebar{transform:translateX(0);top:60px}.shell{margin-left:0}.menu{display:inline-block}.topbar-title{display:none}.topbar{padding:10px 14px}main{padding:23px 18px 65px}h1{font-size:27px}h2{font-size:23px}.learning-figure,.ref-picker{padding:16px}.flow{flex-direction:column}.flow-arrow{transform:rotate(90deg)}.ref-panel{padding:15px}}@media print{.sidebar,.topbar,.toolbar,.copy,.skip{display:none!important}.shell{margin:0}main{padding:0;max-width:none}body{background:#fff;font-size:11pt}.ref-area{min-height:0}.ref-picker select{display:none}pre{white-space:pre-wrap;background:#f3f5f4;color:#111}.learning-figure{break-inside:avoid}.table-scroll{overflow:visible}a{color:inherit}}@media print{.svg-scroll{overflow:visible}.svg-scroll svg{min-width:0!important;width:100%!important;height:auto!important}}.sidebar{width:266px;background:#f1f4f1;padding:27px 19px;overflow-y:auto}.brand{font-size:21px;font-weight:700;letter-spacing:.03em;margin-bottom:5px}.brand small{font-size:12px;font-weight:400;color:var(--muted);letter-spacing:.1em}.sidebar .sub{font-size:13px;color:var(--muted);margin:5px 0 21px}.sidebar nav a{font-size:14px;line-height:1.5;padding:9px 11px;margin:3px 0;border-radius:6px}.sidebar nav a:hover{background:#e0ece6;color:#174d43}.sidebar nav a.active,.sidebar nav a.active:hover{background:var(--teal);color:#fff}.nav-group{font-size:12px;color:var(--muted);margin:18px 11px 6px;letter-spacing:.08em}.sidebar-footer{margin-top:24px;font-size:12px;color:var(--muted)}.shell{margin-left:266px}@media(max-width:900px){.shell{margin-left:0}}
+h2,h3,h4,[id]{scroll-margin-top:0}.stepper{background:#edf6f1;border:1px solid #b4cfc2;border-radius:12px;padding:22px;margin:24px 0}.stepper h3{margin:0 0 12px}.step-tools{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:15px 0}.step-tools input{width:200px;min-height:40px}.step-card{background:white;padding:18px;border-radius:8px;border:1px solid var(--line)}.step-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}.step-field{border:1px solid #d6e5dd;padding:12px;border-radius:7px;overflow-wrap:anywhere}.step-field strong{display:block;font-size:13px;color:var(--teal)}.step-field p{margin:7px 0 0}.progress-track{display:flex;gap:4px;margin:10px 0}.progress-track span{height:5px;flex:1;border-radius:3px;background:#c8d8d0}.progress-track span.done{background:var(--teal)}.step-count{font-variant-numeric:tabular-nums}.chapter-links{display:flex;gap:15px;justify-content:space-between;border-top:1px solid var(--line);padding-top:25px;margin-top:35px}.ref-area{min-height:0}.ref-panel h4{margin:12px 0 4px}.reading-meta{font-size:13px;color:var(--muted)}summary:focus-visible,input:focus-visible{outline:3px solid #81cbb8;outline-offset:3px}button:disabled{opacity:.5;cursor:default}.quick-select{width:100%}.overview-card{border:1px solid var(--line);background:white;border-radius:9px;padding:18px;margin:14px 0}.overview-card h3{margin-top:0}.sidebar nav a.external{background:#e4eee7}.nav-shade{display:none}@media(max-width:900px){body.nav-open .nav-shade{display:block;position:fixed;inset:60px 0 0 266px;background:#25334155;z-index:25}.stepper{padding:15px}.step-tools input{width:150px}.step-grid{grid-template-columns:1fr}.sidebar{max-width:85vw}.step-field{padding:10px}}@media print{.step-tools,.progress-track,.chapter-links{display:none}.step-card{break-inside:avoid}body.nav-open .nav-shade{display:none}}main{overflow-x:clip}article{min-width:0;max-width:100%}.table-scroll,pre{contain:inline-size}p,li,h1,h2,h3,h4{overflow-wrap:anywhere}</style></head><body><a class="skip" href="#article">跳到正文</a><aside class="sidebar"><div class="brand"><small>COMPILER / LEARNING GUIDE</small>编译原理学习资料</div><p class="sub">九章完整资料 · 课件、作业与原题整合</p><nav><a href="00_学习导航.html">学习导航</a><div class="nav-group">准备与基础</div><a href="01_编译引论.html">第1章 编译引论</a><a href="02_词法分析.html">第2章 词法分析</a><div class="nav-group">程序结构与含义</div><a href="03_语法分析_自顶向下方法.html">第3章 语法分析：自顶向下分析方法</a><a href="04_语法分析_自底向上方法.html">第4章 语法分析：自底向上分析方法</a><a href="05_语义分析与符号表.html">第5章 语义分析和符号表</a><div class="nav-group">执行与生成</div><a href="06_运行时存储空间管理.html">第6章 运行时存储空间的组织与管理</a><a href="07_中间代码生成.html">第7章 中间代码生成</a><a href="08_中间代码优化.html">第8章 中间代码优化</a><a href="09_目标代码生成.html">第9章 目标代码生成</a><div class="nav-group">整理记录</div><a href="10_来源覆盖与核对报告.html">来源覆盖与核对报告</a></nav></aside><div class="nav-shade"></div><div class="shell"><header class="topbar"><span class="topbar-title">课程学习导航与核对记录</span><div class="toolbar"><button id="menu" class="menu" aria-expanded="false">目录</button><button data-font="-1">字号 −</button><button data-font="1">字号 ＋</button><button id="print">打印 / 保存 PDF</button></div></header><main><article id="article"><h1>来源覆盖与核对报告</h1>
+<blockquote>
+<p>整理日期：2026-10-13。依据用户指定的《通用学习资料整理模板》。任务是新建九章Markdown与HTML学习资料；原资料保留。本报告区分主题对照、手工推导、程序验证和页面操作验证，不将它们统称成“全部验证”。</p>
+</blockquote>
+<h2>1. 来源清点与版本</h2>
+<p>主要来源是本项目23份课件，提取共675页。PPTX读取正文文字和讲者备注，PPT读取文本记录；每个源文件的SHA-256保存于<code>_整理工具/来源清单.json</code>，原文件未修改。</p>
+<p>次级来源为九章旧版资料、四份作业解析和期末题PDF。旧版完整讲解经过本章主题对照后整合保留，新增综合例、误区检查、自测答案、排错与分类速查。没有把旧版的程序运行断言直接当作本次证据。HTML与当前Markdown共用正文，只把末尾速查长表改成选中一项的完整卡片，并增加同数据分步图解。</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>原始课件</th>
+<th>提取页数</th>
+<th>含备注页数</th>
+<th>新资料</th>
+<th>检查范围</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><span title="来源文件保留在本地，未随学习资料上传">01.绪论.pptx（本地来源，未上传）</span></td>
+<td>34</td>
+<td>16</td>
+<td><a href="01_%E7%BC%96%E8%AF%91%E5%BC%95%E8%AE%BA.html">第1章 编译引论</a></td>
+<td>提取文字/可读备注；主题结构对照。纯图不等于已视觉复核</td>
+</tr>
+<tr>
+<td><span title="来源文件保留在本地，未随学习资料上传">02.词法分析___正则表达式.pptx（本地来源，未上传）</span></td>
+<td>22</td>
+<td>10</td>
+<td><a href="02_%E8%AF%8D%E6%B3%95%E5%88%86%E6%9E%90.html">第2章 词法分析</a></td>
+<td>提取文字/可读备注；主题结构对照。纯图不等于已视觉复核</td>
+</tr>
+<tr>
+<td><span title="来源文件保留在本地，未随学习资料上传">03.词法分析__DFA.ppt（本地来源，未上传）</span></td>
+<td>26</td>
+<td>0</td>
+<td><a href="02_%E8%AF%8D%E6%B3%95%E5%88%86%E6%9E%90.html">第2章 词法分析</a></td>
+<td>提取文字/可读备注；主题结构对照。纯图不等于已视觉复核</td>
+</tr>
+<tr>
+<td><span title="来源文件保留在本地，未随学习资料上传">04.词法分析__NFA与最小化.ppt（本地来源，未上传）</span></td>
+<td>32</td>
+<td>0</td>
+<td><a href="02_%E8%AF%8D%E6%B3%95%E5%88%86%E6%9E%90.html">第2章 词法分析</a></td>
+<td>提取文字/可读备注；主题结构对照。纯图不等于已视觉复核</td>
+</tr>
+<tr>
+<td><span title="来源文件保留在本地，未随学习资料上传">05.词法分析器的设计.pptx（本地来源，未上传）</span></td>
+<td>36</td>
+<td>18</td>
+<td><a href="02_%E8%AF%8D%E6%B3%95%E5%88%86%E6%9E%90.html">第2章 词法分析</a></td>
+<td>提取文字/可读备注；主题结构对照。纯图不等于已视觉复核</td>
+</tr>
+<tr>
+<td><span title="来源文件保留在本地，未随学习资料上传">06.语法分析_形式语言基础-文法与语言、文法的分类、文法相关概念.pptx（本地来源，未上传）</span></td>
+<td>30</td>
+<td>19</td>
+<td><a href="03_%E8%AF%AD%E6%B3%95%E5%88%86%E6%9E%90_%E8%87%AA%E9%A1%B6%E5%90%91%E4%B8%8B%E6%96%B9%E6%B3%95.html">第3章 语法分析：自顶向下分析方法</a></td>
+<td>提取文字/可读备注；主题结构对照。纯图不等于已视觉复核</td>
+</tr>
+<tr>
+<td><span title="来源文件保留在本地，未随学习资料上传">07.语法分析_形式语言基础 - 语法树、二义文法、文法变换.pptx（本地来源，未上传）</span></td>
+<td>27</td>
+<td>19</td>
+<td><a href="03_%E8%AF%AD%E6%B3%95%E5%88%86%E6%9E%90_%E8%87%AA%E9%A1%B6%E5%90%91%E4%B8%8B%E6%96%B9%E6%B3%95.html">第3章 语法分析：自顶向下分析方法</a></td>
+<td>提取文字/可读备注；主题结构对照。纯图不等于已视觉复核</td>
+</tr>
+<tr>
+<td><span title="来源文件保留在本地，未随学习资料上传">08.语法分析_自顶向下语法分析概述.pptx（本地来源，未上传）</span></td>
+<td>24</td>
+<td>11</td>
+<td><a href="03_%E8%AF%AD%E6%B3%95%E5%88%86%E6%9E%90_%E8%87%AA%E9%A1%B6%E5%90%91%E4%B8%8B%E6%96%B9%E6%B3%95.html">第3章 语法分析：自顶向下分析方法</a></td>
+<td>提取文字/可读备注；主题结构对照。纯图不等于已视觉复核</td>
+</tr>
+<tr>
+<td><span title="来源文件保留在本地，未随学习资料上传">09.语法分析_LL(1)语法分析.ppt（本地来源，未上传）</span></td>
+<td>21</td>
+<td>0</td>
+<td><a href="03_%E8%AF%AD%E6%B3%95%E5%88%86%E6%9E%90_%E8%87%AA%E9%A1%B6%E5%90%91%E4%B8%8B%E6%96%B9%E6%B3%95.html">第3章 语法分析：自顶向下分析方法</a></td>
+<td>提取文字/可读备注；主题结构对照。纯图不等于已视觉复核</td>
+</tr>
+<tr>
+<td><span title="来源文件保留在本地，未随学习资料上传">10.语法分析_递归下降法.pptx（本地来源，未上传）</span></td>
+<td>21</td>
+<td>5</td>
+<td><a href="03_%E8%AF%AD%E6%B3%95%E5%88%86%E6%9E%90_%E8%87%AA%E9%A1%B6%E5%90%91%E4%B8%8B%E6%96%B9%E6%B3%95.html">第3章 语法分析：自顶向下分析方法</a></td>
+<td>提取文字/可读备注；主题结构对照。纯图不等于已视觉复核</td>
+</tr>
+<tr>
+<td><span title="来源文件保留在本地，未随学习资料上传">11.语法分析_自底向上分析概述_LR0.pptx（本地来源，未上传）</span></td>
+<td>34</td>
+<td>15</td>
+<td><a href="04_%E8%AF%AD%E6%B3%95%E5%88%86%E6%9E%90_%E8%87%AA%E5%BA%95%E5%90%91%E4%B8%8A%E6%96%B9%E6%B3%95.html">第4章 语法分析：自底向上分析方法</a></td>
+<td>提取文字/可读备注；主题结构对照。纯图不等于已视觉复核</td>
+</tr>
+<tr>
+<td><span title="来源文件保留在本地，未随学习资料上传">12-1.语法分析_SLR(1)_LR(1).pptx（本地来源，未上传）</span></td>
+<td>26</td>
+<td>5</td>
+<td><a href="04_%E8%AF%AD%E6%B3%95%E5%88%86%E6%9E%90_%E8%87%AA%E5%BA%95%E5%90%91%E4%B8%8A%E6%96%B9%E6%B3%95.html">第4章 语法分析：自底向上分析方法</a></td>
+<td>提取文字/可读备注；主题结构对照。纯图不等于已视觉复核</td>
+</tr>
+<tr>
+<td><span title="来源文件保留在本地，未随学习资料上传">12-2.语法分析_LALR(1)方法.ppt（本地来源，未上传）</span></td>
+<td>20</td>
+<td>0</td>
+<td><a href="04_%E8%AF%AD%E6%B3%95%E5%88%86%E6%9E%90_%E8%87%AA%E5%BA%95%E5%90%91%E4%B8%8A%E6%96%B9%E6%B3%95.html">第4章 语法分析：自底向上分析方法</a></td>
+<td>提取文字/可读备注；主题结构对照。纯图不等于已视觉复核</td>
+</tr>
+<tr>
+<td><span title="来源文件保留在本地，未随学习资料上传">13.语义分析_语义表示基础.pptx（本地来源，未上传）</span></td>
+<td>37</td>
+<td>18</td>
+<td><a href="05_%E8%AF%AD%E4%B9%89%E5%88%86%E6%9E%90%E4%B8%8E%E7%AC%A6%E5%8F%B7%E8%A1%A8.html">第5章 语义分析和符号表</a></td>
+<td>提取文字/可读备注；主题结构对照。纯图不等于已视觉复核</td>
+</tr>
+<tr>
+<td><span title="来源文件保留在本地，未随学习资料上传">14.语义分析_抽象地址和符号表.pptx（本地来源，未上传）</span></td>
+<td>46</td>
+<td>16</td>
+<td><a href="05_%E8%AF%AD%E4%B9%89%E5%88%86%E6%9E%90%E4%B8%8E%E7%AC%A6%E5%8F%B7%E8%A1%A8.html">第5章 语义分析和符号表</a></td>
+<td>提取文字/可读备注；主题结构对照。纯图不等于已视觉复核</td>
+</tr>
+<tr>
+<td><span title="来源文件保留在本地，未随学习资料上传">15.中间代码生成_表示形式、语法制导方法[1].pptx（本地来源，未上传）</span></td>
+<td>29</td>
+<td>6</td>
+<td><a href="07_%E4%B8%AD%E9%97%B4%E4%BB%A3%E7%A0%81%E7%94%9F%E6%88%90.html">第7章 中间代码生成</a></td>
+<td>提取文字/可读备注；主题结构对照。纯图不等于已视觉复核</td>
+</tr>
+<tr>
+<td><span title="来源文件保留在本地，未随学习资料上传">16.中间代码生成_[2].ppt（本地来源，未上传）</span></td>
+<td>34</td>
+<td>0</td>
+<td><a href="07_%E4%B8%AD%E9%97%B4%E4%BB%A3%E7%A0%81%E7%94%9F%E6%88%90.html">第7章 中间代码生成</a></td>
+<td>提取文字/可读备注；主题结构对照。纯图不等于已视觉复核</td>
+</tr>
+<tr>
+<td><span title="来源文件保留在本地，未随学习资料上传">17.中间代码生成_[3].pptx（本地来源，未上传）</span></td>
+<td>19</td>
+<td>2</td>
+<td><a href="07_%E4%B8%AD%E9%97%B4%E4%BB%A3%E7%A0%81%E7%94%9F%E6%88%90.html">第7章 中间代码生成</a></td>
+<td>提取文字/可读备注；主题结构对照。纯图不等于已视觉复核</td>
+</tr>
+<tr>
+<td><span title="来源文件保留在本地，未随学习资料上传">18.中间代码优化1.pptx（本地来源，未上传）</span></td>
+<td>29</td>
+<td>18</td>
+<td><a href="08_%E4%B8%AD%E9%97%B4%E4%BB%A3%E7%A0%81%E4%BC%98%E5%8C%96.html">第8章 中间代码优化</a></td>
+<td>提取文字/可读备注；主题结构对照。纯图不等于已视觉复核</td>
+</tr>
+<tr>
+<td><span title="来源文件保留在本地，未随学习资料上传">19.中间代码优化2.pptx（本地来源，未上传）</span></td>
+<td>35</td>
+<td>11</td>
+<td><a href="08_%E4%B8%AD%E9%97%B4%E4%BB%A3%E7%A0%81%E4%BC%98%E5%8C%96.html">第8章 中间代码优化</a></td>
+<td>提取文字/可读备注；主题结构对照。纯图不等于已视觉复核</td>
+</tr>
+<tr>
+<td><span title="来源文件保留在本地，未随学习资料上传">20.运行时空间管理(1).pptx（本地来源，未上传）</span></td>
+<td>34</td>
+<td>18</td>
+<td><a href="06_%E8%BF%90%E8%A1%8C%E6%97%B6%E5%AD%98%E5%82%A8%E7%A9%BA%E9%97%B4%E7%AE%A1%E7%90%86.html">第6章 运行时存储空间的组织与管理</a></td>
+<td>提取文字/可读备注；主题结构对照。纯图不等于已视觉复核</td>
+</tr>
+<tr>
+<td><span title="来源文件保留在本地，未随学习资料上传">21.运行时空间管理(2).pptx（本地来源，未上传）</span></td>
+<td>30</td>
+<td>1</td>
+<td><a href="06_%E8%BF%90%E8%A1%8C%E6%97%B6%E5%AD%98%E5%82%A8%E7%A9%BA%E9%97%B4%E7%AE%A1%E7%90%86.html">第6章 运行时存储空间的组织与管理</a></td>
+<td>提取文字/可读备注；主题结构对照。纯图不等于已视觉复核</td>
+</tr>
+<tr>
+<td><span title="来源文件保留在本地，未随学习资料上传">22.目标代码生成.pptx（本地来源，未上传）</span></td>
+<td>29</td>
+<td>22</td>
+<td><a href="09_%E7%9B%AE%E6%A0%87%E4%BB%A3%E7%A0%81%E7%94%9F%E6%88%90.html">第9章 目标代码生成</a></td>
+<td>提取文字/可读备注；主题结构对照。纯图不等于已视觉复核</td>
+</tr>
+</tbody></table></div>
+<h2>2. 每份课件的知识覆盖对应</h2>
+<p>下列细项来自旧版的来源索引，并与本次提取主题结构对照。新增综合例另列于第4节。数字/罗马节号指原主体同序的知识段；新版目录有直接链接，新增段之后的复习小节重新编号。原图边与未给布局条件保留限定。</p>
+<h3>第1章 编译引论</h3>
+<p><a href="01_%E7%BC%96%E8%AF%91%E5%BC%95%E8%AE%BA.html">第1章 编译引论</a>。处理方式为保留重要条件/例题、重排、补足解释和明确更正依据。</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>课件 01 页码</th>
+<th>主题</th>
+<th>对应正文</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1—4</td>
+<td>课程、考核、章节与本章纲要</td>
+<td>9.4、阅读导航</td>
+</tr>
+<tr>
+<td>5—7</td>
+<td>语言发展、翻译与实现</td>
+<td>第 1—3 节</td>
+</tr>
+<tr>
+<td>8—11</td>
+<td>编译、解释、比较与转换</td>
+<td>第 4 节</td>
+</tr>
+<tr>
+<td>12—14</td>
+<td>逻辑构成、分析与综合</td>
+<td>5.1</td>
+</tr>
+<tr>
+<td>15—19</td>
+<td>词法、语法、语义及类型例子</td>
+<td>5.2—5.4</td>
+</tr>
+<tr>
+<td>20—24</td>
+<td>中间代码、优化与目标代码例子</td>
+<td>5.5—5.7</td>
+</tr>
+<tr>
+<td>25</td>
+<td>错误处理与表格管理</td>
+<td>第 6 节</td>
+</tr>
+<tr>
+<td>26—27</td>
+<td>遍、分遍、前后端</td>
+<td>第 7 节</td>
+</tr>
+<tr>
+<td>28—31</td>
+<td>自展、移植、转换、工具与开发要求</td>
+<td>第 8 节</td>
+</tr>
+<tr>
+<td>32及讲者备注</td>
+<td>学习意义、应用、自主创新</td>
+<td>第 9 节</td>
+</tr>
+<tr>
+<td>33—34</td>
+<td>无新增正文知识</td>
+<td>无单列知识点</td>
+</tr>
+</tbody></table></div>
+<p>核对状态：原主题与学习版有对应；各例未给的语言/布局条件仍在正文说明。</p>
+<h3>第2章 词法分析</h3>
+<p><a href="02_%E8%AF%8D%E6%B3%95%E5%88%86%E6%9E%90.html">第2章 词法分析</a>。处理方式为保留重要条件/例题、重排、补足解释和明确更正依据。</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>课件页码/旧 PPT 记录</th>
+<th>内容</th>
+<th>本资料</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>02：3—10</td>
+<td>基本串、集合、方幂、闭包</td>
+<td>第 2 节</td>
+</tr>
+<tr>
+<td>02：11—14</td>
+<td>RE 定义、优先级、性质</td>
+<td>第 3 节</td>
+</tr>
+<tr>
+<td>02：15—20</td>
+<td>全部构造例题、练习、单词描述</td>
+<td>第 4 节</td>
+</tr>
+<tr>
+<td>02：21—22</td>
+<td>局限与应用</td>
+<td>3.4</td>
+</tr>
+<tr>
+<td>03：3—14</td>
+<td>DFA、表图、接受、语言例子</td>
+<td>第 5 节</td>
+</tr>
+<tr>
+<td>03：15—19</td>
+<td>咖啡机、整除、单词</td>
+<td>第 6 节</td>
+</tr>
+<tr>
+<td>03：20—26</td>
+<td>两种实现、程序例与比较</td>
+<td>第 7 节</td>
+</tr>
+<tr>
+<td>04：3—9</td>
+<td>NFA、差别、01 后缀、整数与等价</td>
+<td>第 8 节</td>
+</tr>
+<tr>
+<td>04：10—17</td>
+<td>闭包、转换、算法与九状态例</td>
+<td>9.1—9.3</td>
+</tr>
+<tr>
+<td>04：18—20</td>
+<td>七子集练习</td>
+<td>9.4</td>
+</tr>
+<tr>
+<td>04：21—32</td>
+<td>等价、无关、最简、分离法及两题</td>
+<td>第 10 节</td>
+</tr>
+<tr>
+<td>05：3—9</td>
+<td>RE→NFA 与省边错误</td>
+<td>11.1—11.3</td>
+</tr>
+<tr>
+<td>05：10—18</td>
+<td>NFA→RE、综合最简例</td>
+<td>11.4—11.5</td>
+</tr>
+<tr>
+<td>05：20—30</td>
+<td>功能、接口、分类、Token、流程</td>
+<td>第 1、12 节</td>
+</tr>
+<tr>
+<td>05：31—32</td>
+<td>实现注意点与小结</td>
+<td>第 13、15 节</td>
+</tr>
+<tr>
+<td>05：33—36</td>
+<td>综合练习全部步骤</td>
+<td>第 14 节</td>
+</tr>
+</tbody></table></div>
+<p>核对状态：原主题与学习版有对应；各例未给的语言/布局条件仍在正文说明。</p>
+<h3>第3章 语法分析：自顶向下分析方法</h3>
+<p><a href="03_%E8%AF%AD%E6%B3%95%E5%88%86%E6%9E%90_%E8%87%AA%E9%A1%B6%E5%90%91%E4%B8%8B%E6%96%B9%E6%B3%95.html">第3章 语法分析：自顶向下分析方法</a>。处理方式为保留重要条件/例题、重排、补足解释和明确更正依据。</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>课件</th>
+<th>页码或主题</th>
+<th>本资料对应内容</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>06</td>
+<td>2—5：文法、四元组、产生式与简写</td>
+<td>3.1—3.3</td>
+</tr>
+<tr>
+<td>06</td>
+<td>6—9：文法分类、语言层级与识别模型</td>
+<td>3.4—3.5</td>
+</tr>
+<tr>
+<td>06</td>
+<td>10—14：成对字符、数量关系、整数、标识符</td>
+<td>4.1—4.5，含思考题</td>
+</tr>
+<tr>
+<td>06</td>
+<td>15—22：推导、句型、句子、语言、规范推导与归约</td>
+<td>第 5 节</td>
+</tr>
+<tr>
+<td>06</td>
+<td>23—26：短语、简单短语、句柄与 cabdef</td>
+<td>6.2—6.3</td>
+</tr>
+<tr>
+<td>06</td>
+<td>27—30：奇数文法、表达式句型练习</td>
+<td>4.6、6.4</td>
+</tr>
+<tr>
+<td>07</td>
+<td>2—10：语法树定义、构造、短语关系与例题</td>
+<td>第 6 节</td>
+</tr>
+<tr>
+<td>07</td>
+<td>11—16：表达式与 if 二义性、判定和利用</td>
+<td>7.1—7.4</td>
+</tr>
+<tr>
+<td>07</td>
+<td>17—25：前缀、直接/间接左递归、拓广文法</td>
+<td>8.1—8.7</td>
+</tr>
+<tr>
+<td>07</td>
+<td>26—27：二义性与文法变换练习</td>
+<td>7.5、8.6</td>
+</tr>
+<tr>
+<td>08</td>
+<td>2—4：分析器功能、错误类别和四种恢复策略</td>
+<td>第 1 节</td>
+</tr>
+<tr>
+<td>08</td>
+<td>5—8：分析方向、回溯例子与确定分析</td>
+<td>第 9 节</td>
+</tr>
+<tr>
+<td>08</td>
+<td>9—19：三个集合定义、算法与表达式例题</td>
+<td>第 10 节</td>
+</tr>
+<tr>
+<td>08</td>
+<td>20—21：确定分析条件、前缀与左递归问题</td>
+<td>11.1—11.3</td>
+</tr>
+<tr>
+<td>08</td>
+<td>22—24：三道集合计算练习</td>
+<td>14.1—14.3</td>
+</tr>
+<tr>
+<td>09</td>
+<td>LL(1) 定义、名称、组成和四类动作</td>
+<td>第 11 节、12.1</td>
+</tr>
+<tr>
+<td>09</td>
+<td>ace/acb 例子、分析表定义与表达式表</td>
+<td>11.5—11.6、12.5</td>
+</tr>
+<tr>
+<td>09</td>
+<td>驱动程序、正确与错误表达式、限制和错误编号</td>
+<td>12.2—12.4、12.6</td>
+</tr>
+<tr>
+<td>09</td>
+<td>两份括号文法判定、构表练习</td>
+<td>14.4—14.5</td>
+</tr>
+<tr>
+<td>10</td>
+<td>2—9：递归下降原理、while 例子、构造模板、小文法</td>
+<td>13.1—13.4</td>
+</tr>
+<tr>
+<td>10</td>
+<td>10—16：五个表达式函数、成功和出错路径</td>
+<td>13.5—13.7</td>
+</tr>
+<tr>
+<td>10</td>
+<td>17：名称、能力与优缺点</td>
+<td>13.1、13.3、13.8</td>
+</tr>
+<tr>
+<td>10</td>
+<td>18—21：FIRST/FOLLOW/PREDICT 练习与冲突</td>
+<td>14.6</td>
+</tr>
+</tbody></table></div>
+<p>核对状态：原主题与学习版有对应；各例未给的语言/布局条件仍在正文说明。</p>
+<h3>第4章 语法分析：自底向上分析方法</h3>
+<p><a href="04_%E8%AF%AD%E6%B3%95%E5%88%86%E6%9E%90_%E8%87%AA%E5%BA%95%E5%90%91%E4%B8%8A%E6%96%B9%E6%B3%95.html">第4章 语法分析：自底向上分析方法</a>。处理方式为保留重要条件/例题、重排、补足解释和明确更正依据。</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>课件及页码/记录</th>
+<th>内容</th>
+<th>对应正文</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>11：2—5</td>
+<td>移入归约、表达式例、动作与 LR 名称</td>
+<td>第 1 节</td>
+</tr>
+<tr>
+<td>11：7—11</td>
+<td>规范句型/前缀、活前缀、派生定理、aAc</td>
+<td>第 2、4 节</td>
+</tr>
+<tr>
+<td>11：12—20</td>
+<td>项目、投影、闭包、GO、增广与构造</td>
+<td>第 3—4 节</td>
+</tr>
+<tr>
+<td>11：21—25</td>
+<td>项目类型、空规则、表达式与 aAbB 练习</td>
+<td>3.1、6.1—6.2</td>
+</tr>
+<tr>
+<td>11：26—31</td>
+<td>aAd、两栈、驱动、ACTION/GOTO</td>
+<td>第 5 节、6.3</td>
+</tr>
+<tr>
+<td>11：32—34</td>
+<td>冲突、乘法例、局限</td>
+<td>6.4</td>
+</tr>
+<tr>
+<td>12-1：2—10</td>
+<td>LR(0) 不足、SLR 条件/表/全过程</td>
+<td>7.1—7.3</td>
+</tr>
+<tr>
+<td>12-1：11—12及备注</td>
+<td>FOLLOW 精度问题、A/B 冲突扩展示例</td>
+<td>7.4、8.4</td>
+</tr>
+<tr>
+<td>12-1：13—21</td>
+<td>LR(1) 定义、运算、构造与构表</td>
+<td>第 8 节、9.3</td>
+</tr>
+<tr>
+<td>12-1：17—18、22—23</td>
+<td>BB 例的全部状态、表、abaab</td>
+<td>9.1</td>
+</tr>
+<tr>
+<td>12-1：24—26</td>
+<td>含 ε 文法构表与 abab</td>
+<td>9.2</td>
+</tr>
+<tr>
+<td>12-2：2—10</td>
+<td>bMb、同心、合并与分析</td>
+<td>10.1—10.3</td>
+</tr>
+<tr>
+<td>12-2：11—13</td>
+<td>合并冲突及 ae/be 反例</td>
+<td>10.4</td>
+</tr>
+<tr>
+<td>12-2：14—15</td>
+<td>驱动、方法及规模比较</td>
+<td>第 5 节、12.1</td>
+</tr>
+<tr>
+<td>12-2：16—20</td>
+<td>两道判定练习</td>
+<td>第 11 节</td>
+</tr>
+</tbody></table></div>
+<p>核对状态：原主题与学习版有对应；各例未给的语言/布局条件仍在正文说明。</p>
+<h3>第5章 语义分析和符号表</h3>
+<p><a href="05_%E8%AF%AD%E4%B9%89%E5%88%86%E6%9E%90%E4%B8%8E%E7%AC%A6%E5%8F%B7%E8%A1%A8.html">第5章 语义分析和符号表</a>。处理方式为保留重要条件/例题、重排、补足解释和明确更正依据。</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>课件页码</th>
+<th>内容</th>
+<th>本资料</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>13：2—11</td>
+<td>语法语义、错误、静动态、功能与实现</td>
+<td>第 1 节</td>
+</tr>
+<tr>
+<td>13：12—15</td>
+<td>声明使用、种类、属性</td>
+<td>第 2—3 节</td>
+</tr>
+<tr>
+<td>13：16—25</td>
+<td>常量、类型、变量、过函内部表示与例子</td>
+<td>第 4 节</td>
+</tr>
+<tr>
+<td>13：26—37及备注</td>
+<td>类型用途、标准、子界、数组、结构、联合、指针、枚举</td>
+<td>第 5 节</td>
+</tr>
+<tr>
+<td>14：3—11</td>
+<td>静动态空间、AR、层数、抽象地址与分配例</td>
+<td>第 6 节</td>
+</tr>
+<tr>
+<td>14：12—13</td>
+<td>符号表用途与三种组织维度</td>
+<td>8.1、9.4</td>
+</tr>
+<tr>
+<td>14：15—22</td>
+<td>作用域、局部化、检查与退出方案</td>
+<td>第 7 节、8.2—8.4</td>
+</tr>
+<tr>
+<td>14：23—31</td>
+<td>f/g/main、全局真删除/驻留、局部表</td>
+<td>第 8 节、9.1</td>
+</tr>
+<tr>
+<td>14：32—35</td>
+<td>Pascal 定义树与表组织</td>
+<td>7.2—7.3、8.3—8.5</td>
+</tr>
+<tr>
+<td>14：36—40</td>
+<td>C 并列函数、swap、分块与输出</td>
+<td>6.5、9.2—9.3</td>
+</tr>
+<tr>
+<td>14：41—46</td>
+<td>C/Pascal 比较与完整管理规则</td>
+<td>6.3、第 8、10 节</td>
+</tr>
+</tbody></table></div>
+<p>核对状态：原主题与学习版有对应；各例未给的语言/布局条件仍在正文说明。</p>
+<h3>第6章 运行时存储空间的组织与管理</h3>
+<p><a href="06_%E8%BF%90%E8%A1%8C%E6%97%B6%E5%AD%98%E5%82%A8%E7%A9%BA%E9%97%B4%E7%AE%A1%E7%90%86.html">第6章 运行时存储空间的组织与管理</a>。处理方式为保留重要条件/例题、重排、补足解释和明确更正依据。</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>课件页码</th>
+<th>内容</th>
+<th>对应正文</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>20：2—10</td>
+<td>管理问题、区域、语言特征、策略</td>
+<td>第 1—2 节</td>
+</tr>
+<tr>
+<td>20：11—14</td>
+<td>square、静态限制、栈与堆</td>
+<td>2.2—2.4</td>
+</tr>
+<tr>
+<td>20：15—20</td>
+<td>SP/TOP、完整 AR 字段</td>
+<td>第 3 节</td>
+</tr>
+<tr>
+<td>20：21—27</td>
+<td>申请释放、调用链、P/S/Q/R</td>
+<td>第 4 节</td>
+</tr>
+<tr>
+<td>20：28—32</td>
+<td>分配原则、游标变化、完整参数例</td>
+<td>第 5 节</td>
+</tr>
+<tr>
+<td>20：33—34</td>
+<td>并列/嵌套地址映射</td>
+<td>5.3、第 7—9 节</td>
+</tr>
+<tr>
+<td>21：3—8</td>
+<td>调用动态链、LAR、声明链与环境</td>
+<td>6.1—6.2</td>
+</tr>
+<tr>
+<td>21：9—13</td>
+<td>四种调用、前缀环境规则</td>
+<td>6.3</td>
+</tr>
+<tr>
+<td>21：14—19</td>
+<td>局部 Display 与 X/Y/Z</td>
+<td>第 7 节</td>
+</tr>
+<tr>
+<td>21：20—23</td>
+<td>全局 Display、保存与恢复例</td>
+<td>第 8 节</td>
+</tr>
+<tr>
+<td>21：24—28</td>
+<td>SL、设置公式与 G/H/R/S</td>
+<td>9.1—9.4</td>
+</tr>
+<tr>
+<td>21：29—30</td>
+<td>方法取舍</td>
+<td>7.4、8.3、9.5</td>
+</tr>
+<tr>
+<td>两课件参数与访问说明</td>
+<td>direct/indir、入口与环境</td>
+<td>第 10 节</td>
+</tr>
+</tbody></table></div>
+<p>核对状态：原主题与学习版有对应；各例未给的语言/布局条件仍在正文说明。</p>
+<h3>第7章 中间代码生成</h3>
+<p><a href="07_%E4%B8%AD%E9%97%B4%E4%BB%A3%E7%A0%81%E7%94%9F%E6%88%90.html">第7章 中间代码生成</a>。处理方式为保留重要条件/例题、重排、补足解释和明确更正依据。</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>课件</th>
+<th>知识内容</th>
+<th>本章位置</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>15：第 1—11 页</td>
+<td>中间表示、后缀、语法树、三元式、四元式及操作码</td>
+<td>一—三</td>
+</tr>
+<tr>
+<td>15：第 12—29 页</td>
+<td>语法制导、计数例、语义信息与表达式翻译</td>
+<td>四—六</td>
+</tr>
+<tr>
+<td>16：第 1—34 页</td>
+<td>表达式动作、数组跨度与寻址、带数组的文法及预测表</td>
+<td>六—九</td>
+</tr>
+<tr>
+<td>17：第 1—12 页</td>
+<td>赋值、if、while 及例题</td>
+<td>九—十</td>
+</tr>
+<tr>
+<td>17：第 13—18 页</td>
+<td>调用、参数、过程函数声明</td>
+<td>十一</td>
+</tr>
+<tr>
+<td>17：第 19 页</td>
+<td>二维数组综合练习</td>
+<td>十二</td>
+</tr>
+</tbody></table></div>
+<p>核对状态：原主题与学习版有对应；各例未给的语言/布局条件仍在正文说明。</p>
+<h3>第8章 中间代码优化</h3>
+<p><a href="08_%E4%B8%AD%E9%97%B4%E4%BB%A3%E7%A0%81%E4%BC%98%E5%8C%96.html">第8章 中间代码优化</a>。处理方式为保留重要条件/例题、重排、补足解释和明确更正依据。</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>课件页码</th>
+<th>内容</th>
+<th>本章位置</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>18：1—12</td>
+<td>优化意义、阶段、范围与全部种类</td>
+<td>一—二</td>
+</tr>
+<tr>
+<td>18：13—22</td>
+<td>基本块、四条划分规则、8 块例题及程序流图</td>
+<td>三</td>
+</tr>
+<tr>
+<td>18：23—29</td>
+<td>ConstDef 算法、常量例题与习题</td>
+<td>四</td>
+</tr>
+<tr>
+<td>19：2—10</td>
+<td>表达式等价、值编码、映象码、PAIR 与完整例题</td>
+<td>五—六</td>
+</tr>
+<tr>
+<td>19：11—18</td>
+<td>循环识别、LoopDef、两遍扫描及单循环例</td>
+<td>七</td>
+</tr>
+<tr>
+<td>19：19—23 与备注</td>
+<td>副作用、间接地址、非必经操作、除法、嵌套循环</td>
+<td>八—九</td>
+</tr>
+<tr>
+<td>19：24—28</td>
+<td>三维数组多层外提完整过程</td>
+<td>九</td>
+</tr>
+<tr>
+<td>19：29—34</td>
+<td>三种优化的综合练习</td>
+<td>十</td>
+</tr>
+<tr>
+<td>19：35</td>
+<td>数组条件分支中的可节省代码</td>
+<td>十一</td>
+</tr>
+</tbody></table></div>
+<p>核对状态：原主题与学习版有对应；各例未给的语言/布局条件仍在正文说明。</p>
+<h3>第9章 目标代码生成</h3>
+<p><a href="09_%E7%9B%AE%E6%A0%87%E4%BB%A3%E7%A0%81%E7%94%9F%E6%88%90.html">第9章 目标代码生成</a>。处理方式为保留重要条件/例题、重排、补足解释和明确更正依据。</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>课件 22 页码</th>
+<th>内容</th>
+<th>本章位置</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1—2 与备注</td>
+<td>后端任务、实际/虚拟目标形式</td>
+<td>一</td>
+</tr>
+<tr>
+<td>3—5 与备注</td>
+<td>指令系统、寻址、寄存器</td>
+<td>二—三</td>
+</tr>
+<tr>
+<td>6</td>
+<td>L1、L2 与回填</td>
+<td>五</td>
+</tr>
+<tr>
+<td>7—10</td>
+<td>运算、赋值、READ、WRITE</td>
+<td>四</td>
+</tr>
+<tr>
+<td>11—16</td>
+<td>THEN/ELSE/ENDIF、WHILE/DO/ENDWHILE</td>
+<td>六</td>
+</tr>
+<tr>
+<td>17—18</td>
+<td>嵌套控制的完整例题</td>
+<td>七</td>
+</tr>
+<tr>
+<td>19—20</td>
+<td>LABEL、JMP、ENTRY</td>
+<td>八</td>
+</tr>
+<tr>
+<td>21—25</td>
+<td>参数、调用、建帧、返回</td>
+<td>九—十</td>
+</tr>
+<tr>
+<td>26—28 与备注</td>
+<td>多寄存器、剥夺、访存评价、别名问题</td>
+<td>十一</td>
+</tr>
+<tr>
+<td>29</td>
+<td>整体生成问题及符号表作用</td>
+<td>十二</td>
+</tr>
+</tbody></table></div>
+<p>核对状态：原主题与学习版有对应；各例未给的语言/布局条件仍在正文说明。</p>
+<h2>3. 作业解析逐题回查</h2>
+<p>作业题不重复整篇堆入新章。原题及详细解析通过真实路径回查，知识和需要保留的歧义融入对应正文；重要计算例在新资料内独立展开。下表按题主题列出回查位置，不把原解析的推荐选项当作教师确认答案。</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>原解析</th>
+<th>原题/主题</th>
+<th>对应学习内容</th>
+<th>处理与核对状态</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><span title="来源文件保留在本地，未随学习资料上传">编译原理-第1章-引论+正则表达式作业解析.md（本地来源，未上传）</span></td>
+<td>第 1 题：高级语言程序是否必须先编译</td>
+<td><a href="01_%E7%BC%96%E8%AF%91%E5%BC%95%E8%AE%BA.html">第1章 编译引论</a>：实现流程、六阶段和贯穿支持</td>
+<td>主题与条件整合；原题选项保留在原解析回查，歧义按正文注明</td>
+</tr>
+<tr>
+<td><span title="来源文件保留在本地，未随学习资料上传">编译原理-第1章-引论+正则表达式作业解析.md（本地来源，未上传）</span></td>
+<td>第 2 题：编译程序必须完成哪些工作</td>
+<td><a href="01_%E7%BC%96%E8%AF%91%E5%BC%95%E8%AE%BA.html">第1章 编译引论</a>：实现流程、六阶段和贯穿支持</td>
+<td>主题与条件整合；原题选项保留在原解析回查，歧义按正文注明</td>
+</tr>
+<tr>
+<td><span title="来源文件保留在本地，未随学习资料上传">编译原理-第1章-引论+正则表达式作业解析.md（本地来源，未上传）</span></td>
+<td>第 3 题：关于解释方式的错误说法</td>
+<td><a href="01_%E7%BC%96%E8%AF%91%E5%BC%95%E8%AE%BA.html">第1章 编译引论</a>：实现流程、六阶段和贯穿支持</td>
+<td>主题与条件整合；原题选项保留在原解析回查，歧义按正文注明</td>
+</tr>
+<tr>
+<td><span title="来源文件保留在本地，未随学习资料上传">编译原理-第1章-引论+正则表达式作业解析.md（本地来源，未上传）</span></td>
+<td>第 4 题：字母表的星闭包</td>
+<td><a href="02_%E8%AF%8D%E6%B3%95%E5%88%86%E6%9E%90.html">第2章 词法分析</a>：正则规则、自动机、转换、扫描及作业难点</td>
+<td>主题与条件整合；原题选项保留在原解析回查，歧义按正文注明</td>
+</tr>
+<tr>
+<td><span title="来源文件保留在本地，未随学习资料上传">编译原理-第1章-引论+正则表达式作业解析.md（本地来源，未上传）</span></td>
+<td>第 5 题：正则集的元素个数</td>
+<td><a href="02_%E8%AF%8D%E6%B3%95%E5%88%86%E6%9E%90.html">第2章 词法分析</a>：正则规则、自动机、转换、扫描及作业难点</td>
+<td>主题与条件整合；原题选项保留在原解析回查，歧义按正文注明</td>
+</tr>
+<tr>
+<td><span title="来源文件保留在本地，未随学习资料上传">编译原理-第1章-引论+正则表达式作业解析.md（本地来源，未上传）</span></td>
+<td>第 6 题：识别不属于正则集的字符串</td>
+<td><a href="02_%E8%AF%8D%E6%B3%95%E5%88%86%E6%9E%90.html">第2章 词法分析</a>：正则规则、自动机、转换、扫描及作业难点</td>
+<td>主题与条件整合；原题选项保留在原解析回查，歧义按正文注明</td>
+</tr>
+<tr>
+<td><span title="来源文件保留在本地，未随学习资料上传">编译原理-第1章-引论+正则表达式作业解析.md（本地来源，未上传）</span></td>
+<td>第 7 题：连接对选择的分配律</td>
+<td><a href="02_%E8%AF%8D%E6%B3%95%E5%88%86%E6%9E%90.html">第2章 词法分析</a>：正则规则、自动机、转换、扫描及作业难点</td>
+<td>主题与条件整合；原题选项保留在原解析回查，歧义按正文注明</td>
+</tr>
+<tr>
+<td><span title="来源文件保留在本地，未随学习资料上传">编译原理-第1章-引论+正则表达式作业解析.md（本地来源，未上传）</span></td>
+<td>第 8 题：无穷正则集必含什么运算</td>
+<td><a href="02_%E8%AF%8D%E6%B3%95%E5%88%86%E6%9E%90.html">第2章 词法分析</a>：正则规则、自动机、转换、扫描及作业难点</td>
+<td>主题与条件整合；原题选项保留在原解析回查，歧义按正文注明</td>
+</tr>
+<tr>
+<td><span title="来源文件保留在本地，未随学习资料上传">编译原理-第1章-引论+正则表达式作业解析.md（本地来源，未上传）</span></td>
+<td>第 9 题：贯穿编译各阶段的工作</td>
+<td><a href="01_%E7%BC%96%E8%AF%91%E5%BC%95%E8%AE%BA.html">第1章 编译引论</a>：实现流程、六阶段和贯穿支持</td>
+<td>主题与条件整合；原题选项保留在原解析回查，歧义按正文注明</td>
+</tr>
+<tr>
+<td><span title="来源文件保留在本地，未随学习资料上传">编译原理-第1章-引论+正则表达式作业解析.md（本地来源，未上传）</span></td>
+<td>第 10 题：字母表上的字符串</td>
+<td><a href="02_%E8%AF%8D%E6%B3%95%E5%88%86%E6%9E%90.html">第2章 词法分析</a>：正则规则、自动机、转换、扫描及作业难点</td>
+<td>主题与条件整合；原题选项保留在原解析回查，歧义按正文注明</td>
+</tr>
+<tr>
+<td><span title="来源文件保留在本地，未随学习资料上传">编译原理-第1章-引论+正则表达式作业解析.md（本地来源，未上传）</span></td>
+<td>第 11 题（1）：以 a 或 b 开头，以 c 结尾</td>
+<td><a href="02_%E8%AF%8D%E6%B3%95%E5%88%86%E6%9E%90.html">第2章 词法分析</a>：正则规则、自动机、转换、扫描及作业难点</td>
+<td>主题与条件整合；原题选项保留在原解析回查，歧义按正文注明</td>
+</tr>
+<tr>
+<td><span title="来源文件保留在本地，未随学习资料上传">编译原理-第1章-引论+正则表达式作业解析.md（本地来源，未上传）</span></td>
+<td>第 11 题（2）：偶数个 0 和偶数个 1</td>
+<td><a href="02_%E8%AF%8D%E6%B3%95%E5%88%86%E6%9E%90.html">第2章 词法分析</a>：正则规则、自动机、转换、扫描及作业难点</td>
+<td>主题与条件整合；原题选项保留在原解析回查，歧义按正文注明</td>
+</tr>
+<tr>
+<td><span title="来源文件保留在本地，未随学习资料上传">编译原理-第1章-引论+正则表达式作业解析.md（本地来源，未上传）</span></td>
+<td>第 11 题（3）：偶数个 0 和奇数个 1</td>
+<td><a href="02_%E8%AF%8D%E6%B3%95%E5%88%86%E6%9E%90.html">第2章 词法分析</a>：正则规则、自动机、转换、扫描及作业难点</td>
+<td>主题与条件整合；原题选项保留在原解析回查，歧义按正文注明</td>
+</tr>
+<tr>
+<td><span title="来源文件保留在本地，未随学习资料上传">编译原理-第2章-有限自动机+词法分析作业解析.md（本地来源，未上传）</span></td>
+<td>第 1 题：DFA 的构成成分</td>
+<td><a href="02_%E8%AF%8D%E6%B3%95%E5%88%86%E6%9E%90.html">第2章 词法分析</a>：正则规则、自动机、转换、扫描及作业难点</td>
+<td>主题与条件整合；原题选项保留在原解析回查，歧义按正文注明</td>
+</tr>
+<tr>
+<td><span title="来源文件保留在本地，未随学习资料上传">编译原理-第2章-有限自动机+词法分析作业解析.md（本地来源，未上传）</span></td>
+<td>第 2 题：DFA 与无限语言</td>
+<td><a href="02_%E8%AF%8D%E6%B3%95%E5%88%86%E6%9E%90.html">第2章 词法分析</a>：正则规则、自动机、转换、扫描及作业难点</td>
+<td>主题与条件整合；原题选项保留在原解析回查，歧义按正文注明</td>
+</tr>
+<tr>
+<td><span title="来源文件保留在本地，未随学习资料上传">编译原理-第2章-有限自动机+词法分析作业解析.md（本地来源，未上传）</span></td>
+<td>第 3 题：有限自动机等价</td>
+<td><a href="02_%E8%AF%8D%E6%B3%95%E5%88%86%E6%9E%90.html">第2章 词法分析</a>：正则规则、自动机、转换、扫描及作业难点</td>
+<td>主题与条件整合；原题选项保留在原解析回查，歧义按正文注明</td>
+</tr>
+<tr>
+<td><span title="来源文件保留在本地，未随学习资料上传">编译原理-第2章-有限自动机+词法分析作业解析.md（本地来源，未上传）</span></td>
+<td>第 4 题：DFA 与 NFA 的完整区别</td>
+<td><a href="02_%E8%AF%8D%E6%B3%95%E5%88%86%E6%9E%90.html">第2章 词法分析</a>：正则规则、自动机、转换、扫描及作业难点</td>
+<td>主题与条件整合；原题选项保留在原解析回查，歧义按正文注明</td>
+</tr>
+<tr>
+<td><span title="来源文件保留在本地，未随学习资料上传">编译原理-第2章-有限自动机+词法分析作业解析.md（本地来源，未上传）</span></td>
+<td>第 5 题：DFA 是否比正规表达式更强</td>
+<td><a href="02_%E8%AF%8D%E6%B3%95%E5%88%86%E6%9E%90.html">第2章 词法分析</a>：正则规则、自动机、转换、扫描及作业难点</td>
+<td>主题与条件整合；原题选项保留在原解析回查，歧义按正文注明</td>
+</tr>
+<tr>
+<td><span title="来源文件保留在本地，未随学习资料上传">编译原理-第2章-有限自动机+词法分析作业解析.md（本地来源，未上传）</span></td>
+<td>第 6 题：多类单词的自动机合并</td>
+<td><a href="02_%E8%AF%8D%E6%B3%95%E5%88%86%E6%9E%90.html">第2章 词法分析</a>：正则规则、自动机、转换、扫描及作业难点</td>
+<td>主题与条件整合；原题选项保留在原解析回查，歧义按正文注明</td>
+</tr>
+<tr>
+<td><span title="来源文件保留在本地，未随学习资料上传">编译原理-第2章-有限自动机+词法分析作业解析.md（本地来源，未上传）</span></td>
+<td>第 7 题：只含 a 的正规表达式等价</td>
+<td><a href="02_%E8%AF%8D%E6%B3%95%E5%88%86%E6%9E%90.html">第2章 词法分析</a>：正则规则、自动机、转换、扫描及作业难点</td>
+<td>主题与条件整合；原题选项保留在原解析回查，歧义按正文注明</td>
+</tr>
+<tr>
+<td><span title="来源文件保留在本地，未随学习资料上传">编译原理-第2章-有限自动机+词法分析作业解析.md（本地来源，未上传）</span></td>
+<td>第 8 题：英文字母集合的星闭包</td>
+<td><a href="02_%E8%AF%8D%E6%B3%95%E5%88%86%E6%9E%90.html">第2章 词法分析</a>：正则规则、自动机、转换、扫描及作业难点</td>
+<td>主题与条件整合；原题选项保留在原解析回查，歧义按正文注明</td>
+</tr>
+<tr>
+<td><span title="来源文件保留在本地，未随学习资料上传">编译原理-第2章-有限自动机+词法分析作业解析.md（本地来源，未上传）</span></td>
+<td>第 9 题：词法分析器的输入</td>
+<td><a href="02_%E8%AF%8D%E6%B3%95%E5%88%86%E6%9E%90.html">第2章 词法分析</a>：正则规则、自动机、转换、扫描及作业难点</td>
+<td>主题与条件整合；原题选项保留在原解析回查，歧义按正文注明</td>
+</tr>
+<tr>
+<td><span title="来源文件保留在本地，未随学习资料上传">编译原理-第2章-有限自动机+词法分析作业解析.md（本地来源，未上传）</span></td>
+<td>第 10 题：词法分析能够发现的错误</td>
+<td><a href="02_%E8%AF%8D%E6%B3%95%E5%88%86%E6%9E%90.html">第2章 词法分析</a>：正则规则、自动机、转换、扫描及作业难点</td>
+<td>主题与条件整合；原题选项保留在原解析回查，歧义按正文注明</td>
+</tr>
+<tr>
+<td><span title="来源文件保留在本地，未随学习资料上传">编译原理-第2章-有限自动机+词法分析作业解析.md（本地来源，未上传）</span></td>
+<td>第 11 题：确定化、最小化与状态等价</td>
+<td><a href="02_%E8%AF%8D%E6%B3%95%E5%88%86%E6%9E%90.html">第2章 词法分析</a>：正则规则、自动机、转换、扫描及作业难点</td>
+<td>主题与条件整合；原题选项保留在原解析回查，歧义按正文注明</td>
+</tr>
+<tr>
+<td><span title="来源文件保留在本地，未随学习资料上传">编译原理-第2章-有限自动机+词法分析作业解析.md（本地来源，未上传）</span></td>
+<td>第 12 题：NFA 的非确定性来源</td>
+<td><a href="02_%E8%AF%8D%E6%B3%95%E5%88%86%E6%9E%90.html">第2章 词法分析</a>：正则规则、自动机、转换、扫描及作业难点</td>
+<td>主题与条件整合；原题选项保留在原解析回查，歧义按正文注明</td>
+</tr>
+<tr>
+<td><span title="来源文件保留在本地，未随学习资料上传">编译原理-第2章-有限自动机+词法分析作业解析.md（本地来源，未上传）</span></td>
+<td>第 13 题：NFA 的确定化</td>
+<td><a href="02_%E8%AF%8D%E6%B3%95%E5%88%86%E6%9E%90.html">第2章 词法分析</a>：正则规则、自动机、转换、扫描及作业难点</td>
+<td>主题与条件整合；原题选项保留在原解析回查，歧义按正文注明</td>
+</tr>
+<tr>
+<td><span title="来源文件保留在本地，未随学习资料上传">编译原理-第2章-有限自动机+词法分析作业解析.md（本地来源，未上传）</span></td>
+<td>第 14 题：最简 DFA 的判断条件</td>
+<td><a href="02_%E8%AF%8D%E6%B3%95%E5%88%86%E6%9E%90.html">第2章 词法分析</a>：正则规则、自动机、转换、扫描及作业难点</td>
+<td>主题与条件整合；原题选项保留在原解析回查，歧义按正文注明</td>
+</tr>
+<tr>
+<td><span title="来源文件保留在本地，未随学习资料上传">编译原理-第2章-有限自动机+词法分析作业解析.md（本地来源，未上传）</span></td>
+<td>第 15 题：正规表达式与有限自动机的关系</td>
+<td><a href="02_%E8%AF%8D%E6%B3%95%E5%88%86%E6%9E%90.html">第2章 词法分析</a>：正则规则、自动机、转换、扫描及作业难点</td>
+<td>主题与条件整合；原题选项保留在原解析回查，歧义按正文注明</td>
+</tr>
+<tr>
+<td><span title="来源文件保留在本地，未随学习资料上传">编译原理-第3章-文法与语言作业解析.md（本地来源，未上传）</span></td>
+<td>第 1 题：生成 b 比 a 多一个的语言</td>
+<td><a href="03_%E8%AF%AD%E6%B3%95%E5%88%86%E6%9E%90_%E8%87%AA%E9%A1%B6%E5%90%91%E4%B8%8B%E6%96%B9%E6%B3%95.html">第3章 语法分析：自顶向下分析方法</a>：文法/语言、短语、二义、变换、集合与预测判定</td>
+<td>主题与条件整合；原题选项保留在原解析回查，歧义按正文注明</td>
+</tr>
+<tr>
+<td><span title="来源文件保留在本地，未随学习资料上传">编译原理-第3章-文法与语言作业解析.md（本地来源，未上传）</span></td>
+<td>第 2 题：句型中的简单短语</td>
+<td><a href="03_%E8%AF%AD%E6%B3%95%E5%88%86%E6%9E%90_%E8%87%AA%E9%A1%B6%E5%90%91%E4%B8%8B%E6%96%B9%E6%B3%95.html">第3章 语法分析：自顶向下分析方法</a>：文法/语言、短语、二义、变换、集合与预测判定</td>
+<td>主题与条件整合；原题选项保留在原解析回查，歧义按正文注明</td>
+</tr>
+<tr>
+<td><span title="来源文件保留在本地，未随学习资料上传">编译原理-第3章-文法与语言作业解析.md（本地来源，未上传）</span></td>
+<td>第 3 题：生成内外两层配对的语言</td>
+<td><a href="03_%E8%AF%AD%E6%B3%95%E5%88%86%E6%9E%90_%E8%87%AA%E9%A1%B6%E5%90%91%E4%B8%8B%E6%96%B9%E6%B3%95.html">第3章 语法分析：自顶向下分析方法</a>：文法/语言、短语、二义、变换、集合与预测判定</td>
+<td>主题与条件整合；原题选项保留在原解析回查，歧义按正文注明</td>
+</tr>
+<tr>
+<td><span title="来源文件保留在本地，未随学习资料上传">编译原理-第3章-文法与语言作业解析.md（本地来源，未上传）</span></td>
+<td>第 4 题：从开始符号推出的符号串</td>
+<td><a href="03_%E8%AF%AD%E6%B3%95%E5%88%86%E6%9E%90_%E8%87%AA%E9%A1%B6%E5%90%91%E4%B8%8B%E6%96%B9%E6%B3%95.html">第3章 语法分析：自顶向下分析方法</a>：文法/语言、短语、二义、变换、集合与预测判定</td>
+<td>主题与条件整合；原题选项保留在原解析回查，歧义按正文注明</td>
+</tr>
+<tr>
+<td><span title="来源文件保留在本地，未随学习资料上传">编译原理-第3章-文法与语言作业解析.md（本地来源，未上传）</span></td>
+<td>第 5 题：无二义文法的推导与语法树</td>
+<td><a href="03_%E8%AF%AD%E6%B3%95%E5%88%86%E6%9E%90_%E8%87%AA%E9%A1%B6%E5%90%91%E4%B8%8B%E6%96%B9%E6%B3%95.html">第3章 语法分析：自顶向下分析方法</a>：文法/语言、短语、二义、变换、集合与预测判定</td>
+<td>主题与条件整合；原题选项保留在原解析回查，歧义按正文注明</td>
+</tr>
+<tr>
+<td><span title="来源文件保留在本地，未随学习资料上传">编译原理-第3章-自顶向下语法分析作业解析.md（本地来源，未上传）</span></td>
+<td>第 1 题：文法所描述的语言</td>
+<td><a href="03_%E8%AF%AD%E6%B3%95%E5%88%86%E6%9E%90_%E8%87%AA%E9%A1%B6%E5%90%91%E4%B8%8B%E6%96%B9%E6%B3%95.html">第3章 语法分析：自顶向下分析方法</a>：文法/语言、短语、二义、变换、集合与预测判定</td>
+<td>主题与条件整合；原题选项保留在原解析回查，歧义按正文注明</td>
+</tr>
+<tr>
+<td><span title="来源文件保留在本地，未随学习资料上传">编译原理-第3章-自顶向下语法分析作业解析.md（本地来源，未上传）</span></td>
+<td>第 2 题：语法分析的功能</td>
+<td><a href="03_%E8%AF%AD%E6%B3%95%E5%88%86%E6%9E%90_%E8%87%AA%E9%A1%B6%E5%90%91%E4%B8%8B%E6%96%B9%E6%B3%95.html">第3章 语法分析：自顶向下分析方法</a>：文法/语言、短语、二义、变换、集合与预测判定</td>
+<td>主题与条件整合；原题选项保留在原解析回查，歧义按正文注明</td>
+</tr>
+<tr>
+<td><span title="来源文件保留在本地，未随学习资料上传">编译原理-第3章-自顶向下语法分析作业解析.md（本地来源，未上传）</span></td>
+<td>第 3 题：是否任何文法都能改写为 LL(1)</td>
+<td><a href="03_%E8%AF%AD%E6%B3%95%E5%88%86%E6%9E%90_%E8%87%AA%E9%A1%B6%E5%90%91%E4%B8%8B%E6%96%B9%E6%B3%95.html">第3章 语法分析：自顶向下分析方法</a>：文法/语言、短语、二义、变换、集合与预测判定</td>
+<td>主题与条件整合；原题选项保留在原解析回查，歧义按正文注明</td>
+</tr>
+<tr>
+<td><span title="来源文件保留在本地，未随学习资料上传">编译原理-第3章-自顶向下语法分析作业解析.md（本地来源，未上传）</span></td>
+<td>第 4 题：递归下降分析的方向</td>
+<td><a href="03_%E8%AF%AD%E6%B3%95%E5%88%86%E6%9E%90_%E8%87%AA%E9%A1%B6%E5%90%91%E4%B8%8B%E6%96%B9%E6%B3%95.html">第3章 语法分析：自顶向下分析方法</a>：文法/语言、短语、二义、变换、集合与预测判定</td>
+<td>主题与条件整合；原题选项保留在原解析回查，歧义按正文注明</td>
+</tr>
+<tr>
+<td><span title="来源文件保留在本地，未随学习资料上传">编译原理-第3章-自顶向下语法分析作业解析.md（本地来源，未上传）</span></td>
+<td>第 5 题：含左递归的逻辑表达式文法</td>
+<td><a href="03_%E8%AF%AD%E6%B3%95%E5%88%86%E6%9E%90_%E8%87%AA%E9%A1%B6%E5%90%91%E4%B8%8B%E6%96%B9%E6%B3%95.html">第3章 语法分析：自顶向下分析方法</a>：文法/语言、短语、二义、变换、集合与预测判定</td>
+<td>主题与条件整合；原题选项保留在原解析回查，歧义按正文注明</td>
+</tr>
+<tr>
+<td><span title="来源文件保留在本地，未随学习资料上传">编译原理-第3章-自顶向下语法分析作业解析.md（本地来源，未上传）</span></td>
+<td>第 6 题：判断四份文法是否属于 LL(1)</td>
+<td><a href="03_%E8%AF%AD%E6%B3%95%E5%88%86%E6%9E%90_%E8%87%AA%E9%A1%B6%E5%90%91%E4%B8%8B%E6%96%B9%E6%B3%95.html">第3章 语法分析：自顶向下分析方法</a>：文法/语言、短语、二义、变换、集合与预测判定</td>
+<td>主题与条件整合；原题选项保留在原解析回查，歧义按正文注明</td>
+</tr>
+</tbody></table></div>
+<h2>4. 历年题及新增学习任务</h2>
+<p><span title="来源文件保留在本地，未随学习资料上传">完整原题PDF（本地来源，未上传）</span>已经渲染4页。题头的2022级指学生年级，实际考试日期2024-12-07。全部大题对应新章如下。</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>原题编号</th>
+<th>任务</th>
+<th>新资料位置</th>
+<th>证据和限制</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>一.1</td>
+<td>编译与解释</td>
+<td><a href="01_%E7%BC%96%E8%AF%91%E5%BC%95%E8%AE%BA.html">第1章 编译引论</a>：自测第1题</td>
+<td>原题改写与假设已标注；未取得教师标准答案</td>
+</tr>
+<tr>
+<td>一.2</td>
+<td>二义性文法</td>
+<td><a href="03_%E8%AF%AD%E6%B3%95%E5%88%86%E6%9E%90_%E8%87%AA%E9%A1%B6%E5%90%91%E4%B8%8B%E6%96%B9%E6%B3%95.html">第3章 语法分析：自顶向下分析方法</a>：作业回查a+a*a结构反例</td>
+<td>原题改写与假设已标注；未取得教师标准答案</td>
+</tr>
+<tr>
+<td>一.3</td>
+<td>第二次g调用栈</td>
+<td><a href="06_%E8%BF%90%E8%A1%8C%E6%97%B6%E5%AD%98%E5%82%A8%E7%A9%BA%E9%97%B4%E7%AE%A1%E7%90%86.html">第6章 运行时存储空间的组织与管理</a>：综合应用，入口与局部初始化后两时点</td>
+<td>原题改写与假设已标注；未取得教师标准答案</td>
+</tr>
+<tr>
+<td>一.4</td>
+<td>单寄存器while</td>
+<td><a href="09_%E7%9B%AE%E6%A0%87%E4%BB%A3%E7%A0%81%E7%94%9F%E6%88%90.html">第9章 目标代码生成</a>：综合应用，m开始的11条与7条方案</td>
+<td>原题改写与假设已标注；未取得教师标准答案</td>
+</tr>
+<tr>
+<td>二.1</td>
+<td>快速排序符号表</td>
+<td><a href="05_%E8%AF%AD%E4%B9%89%E5%88%86%E6%9E%90%E4%B8%8E%E7%AC%A6%E5%8F%B7%E8%A1%A8.html">第5章 语义分析和符号表</a>：综合应用，驻留表与逐项偏移</td>
+<td>原题改写与假设已标注；未取得教师标准答案</td>
+</tr>
+<tr>
+<td>二.2</td>
+<td>错误阶段判断</td>
+<td><a href="05_%E8%AF%AD%E4%B9%89%E5%88%86%E6%9E%90%E4%B8%8E%E7%AC%A6%E5%8F%B7%E8%A1%A8.html">第5章 语义分析和符号表</a>：静态错误练习，C版本及提前诊断限定</td>
+<td>原题改写与假设已标注；未取得教师标准答案</td>
+</tr>
+<tr>
+<td>三</td>
+<td>性质描述语言自动机</td>
+<td><a href="02_%E8%AF%8D%E6%B3%95%E5%88%86%E6%9E%90.html">第2章 词法分析</a>：综合应用，RE/NFA/确定化/最小化/区分后缀</td>
+<td>原题改写与假设已标注；未取得教师标准答案</td>
+</tr>
+<tr>
+<td>四</td>
+<td>LL(1)变换与aabdde</td>
+<td><a href="03_%E8%AF%AD%E6%B3%95%E5%88%86%E6%9E%90_%E8%87%AA%E9%A1%B6%E5%90%91%E4%B8%8B%E6%96%B9%E6%B3%95.html">第3章 语法分析：自顶向下分析方法</a>：综合应用，集合、完整表及15步驱动</td>
+<td>原题改写与假设已标注；未取得教师标准答案</td>
+</tr>
+<tr>
+<td>五</td>
+<td>LR(1)与(a;a)</td>
+<td><a href="04_%E8%AF%AD%E6%B3%95%E5%88%86%E6%9E%90_%E8%87%AA%E5%BA%95%E5%90%91%E4%B8%8A%E6%96%B9%E6%B3%95.html">第4章 语法分析：自底向上分析方法</a>：综合应用，13状态、完整表与栈轨迹</td>
+<td>原题改写与假设已标注；未取得教师标准答案</td>
+</tr>
+<tr>
+<td>六.1</td>
+<td>完整IR及ENTRY布局</td>
+<td><a href="07_%E4%B8%AD%E9%97%B4%E4%BB%A3%E7%A0%81%E7%94%9F%E6%88%90.html">第7章 中间代码生成</a>：综合应用，39条IR与20个临时槽</td>
+<td>原题改写与假设已标注；未取得教师标准答案</td>
+</tr>
+<tr>
+<td>六.2</td>
+<td>三项优化</td>
+<td><a href="08_%E4%B8%AD%E9%97%B4%E4%BB%A3%E7%A0%81%E4%BC%98%E5%8C%96.html">第8章 中间代码优化</a>：综合应用，局部/跨块区别、严格保守与细化口径</td>
+<td>原题改写与假设已标注；未取得教师标准答案</td>
+</tr>
+</tbody></table></div>
+<h2>5. 程序计算核验</h2>
+<p>可复算脚本：<span title="来源文件保留在本地，未随学习资料上传">计算核验.py（本地来源，未上传）</span>，记录：<span title="来源文件保留在本地，未随学习资料上传">计算核验结果.json（本地来源，未上传）</span>。LR语法和规则编号从明确代码块读取，独立实现FIRST/FOLLOW、闭包、GO及不同构表规则，逐格比较原学习表。</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>对象</th>
+<th>方法</th>
+<th>状态数</th>
+<th>比较表格数</th>
+<th>结果</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>4.4 <code>S→aAc、A→dbb|b</code> 的完整项目集与表</td>
+<td>LR0</td>
+<td>9</td>
+<td>63</td>
+<td>无冲突；对照格无差异</td>
+</tr>
+<tr>
+<td>6.1 简化表达式练习</td>
+<td>LR0</td>
+<td>9</td>
+<td>63</td>
+<td>无冲突；对照格无差异</td>
+</tr>
+<tr>
+<td>6.2 <code>S→aAbB</code> 练习</td>
+<td>LR0</td>
+<td>11</td>
+<td>99</td>
+<td>无冲突；对照格无差异</td>
+</tr>
+<tr>
+<td>6.3 <code>S→aAd、A→Bc、B→b</code> 的分析</td>
+<td>LR0</td>
+<td>8</td>
+<td>64</td>
+<td>无冲突；对照格无差异</td>
+</tr>
+<tr>
+<td>7.2 课件乘法例的 FOLLOW 与表</td>
+<td>SLR</td>
+<td>7</td>
+<td>42</td>
+<td>无冲突；对照格无差异</td>
+</tr>
+<tr>
+<td>9.1 <code>Z→BB、B→aB|b</code></td>
+<td>LR1</td>
+<td>10</td>
+<td>50</td>
+<td>无冲突；对照格无差异</td>
+</tr>
+<tr>
+<td>9.2 <code>S→AS|ε、A→aA|b</code> 练习</td>
+<td>LR1</td>
+<td>7</td>
+<td>35</td>
+<td>无冲突；对照格无差异</td>
+</tr>
+<tr>
+<td>10.2 课件 <code>bMb</code> 完整例</td>
+<td>LALR</td>
+<td>11</td>
+<td>88</td>
+<td>无冲突；对照格无差异</td>
+</tr>
+<tr>
+<td>11.1 <code>S→AaB|B、A→aB|b、B→A</code></td>
+<td>LALR</td>
+<td>10</td>
+<td>60</td>
+<td>无冲突；对照格无差异</td>
+</tr>
+</tbody></table></div>
+<p>上述九表共比较564个ACTION/GOTO格；未发现差异。另独立生成历年LR(1)的13状态表并模拟(a;a)接受；历年LL(1)固定点集合、6条PREDICT、单值表和aabdde的15行过程一致；作业两个奇偶正则对长度0—12共8191个二进制串整串枚举无反例。有限枚举不等同全语言证明，正文提供分组证明。</p>
+<p>附加执行核验：</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>对象</th>
+<th>检查结果</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>完整递归下降教学程序</td>
+<td>4份合法输入接受、6份非法输入拒绝；id+id*+id定位到第5项+。未验证任意深递归或内部EOF混入的调用误用。</td>
+</tr>
+<tr>
+<td>历年函数/二维数组IR及两种优化口径</td>
+<td>教学IR解释器执行原39条、细化优化35条和严格保守版，均i=2、j=500，480次数组写，全部写入位移和值一致；f1的20组小输入两分支结果一致。没有验证真实机器溢出、C指针合法性或ABI。</td>
+</tr>
+<tr>
+<td>单寄存器while目标指令</td>
+<td>11条模板与7条寄存器复用版在i=-1、0、8、9、10、12下按全部跳转执行一致，出口分别m+11/m+7；此为教学指令模拟，不是CPU实机验证。</td>
+</tr>
+<tr>
+<td>性质描述语言DFA</td>
+<td>长度0—7的3280个P/I/Q串，正文DFA与P*IQ+整串匹配一致；四状态最小性由正文区分后缀证明。</td>
+</tr>
+</tbody></table></div>
+<h2>6. 页面与文件验证</h2>
+<p>网页无外部CSS、字体、脚本或联网计算依赖；全部交互以正文教学数据为依据。HTML的meta保存所对应Markdown正文SHA-256，用于识别后续是否同步。</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>页面</th>
+<th>章节目录点击</th>
+<th>速查切换</th>
+<th>分步图解</th>
+<th>窄屏与末尾标记</th>
+<th>控制台</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>01_编译引论</td>
+<td>全部14章入口点击与高亮通过</td>
+<td>6项逐项切换通过</td>
+<td>首尾及键盘滑块通过</td>
+<td>390px目录开关、图表宽度及末尾标记通过</td>
+<td>无脚本异常</td>
+</tr>
+<tr>
+<td>02_词法分析</td>
+<td>全部20章入口点击与高亮通过</td>
+<td>6项逐项切换通过</td>
+<td>首尾及键盘滑块通过</td>
+<td>390px目录开关、图表宽度及末尾标记通过</td>
+<td>无脚本异常</td>
+</tr>
+<tr>
+<td>03_语法分析_自顶向下方法</td>
+<td>全部20章入口点击与高亮通过</td>
+<td>7项逐项切换通过</td>
+<td>首尾及键盘滑块通过</td>
+<td>390px目录开关、图表宽度及末尾标记通过</td>
+<td>无脚本异常</td>
+</tr>
+<tr>
+<td>04_语法分析_自底向上方法</td>
+<td>全部16章入口点击与高亮通过</td>
+<td>7项逐项切换通过</td>
+<td>首尾及键盘滑块通过</td>
+<td>390px目录开关、图表宽度及末尾标记通过</td>
+<td>无脚本异常</td>
+</tr>
+<tr>
+<td>05_语义分析与符号表</td>
+<td>全部15章入口点击与高亮通过</td>
+<td>6项逐项切换通过</td>
+<td>首尾及键盘滑块通过</td>
+<td>390px目录开关、图表宽度及末尾标记通过</td>
+<td>无脚本异常</td>
+</tr>
+<tr>
+<td>06_运行时存储空间管理</td>
+<td>全部16章入口点击与高亮通过</td>
+<td>7项逐项切换通过</td>
+<td>首尾及键盘滑块通过</td>
+<td>390px目录开关、图表宽度及末尾标记通过</td>
+<td>无脚本异常</td>
+</tr>
+<tr>
+<td>07_中间代码生成</td>
+<td>全部17章入口点击与高亮通过</td>
+<td>7项逐项切换通过</td>
+<td>首尾及键盘滑块通过</td>
+<td>390px目录开关、图表宽度及末尾标记通过</td>
+<td>无脚本异常</td>
+</tr>
+<tr>
+<td>08_中间代码优化</td>
+<td>全部17章入口点击与高亮通过</td>
+<td>6项逐项切换通过</td>
+<td>首尾及键盘滑块通过</td>
+<td>390px目录开关、图表宽度及末尾标记通过</td>
+<td>无脚本异常</td>
+</tr>
+<tr>
+<td>09_目标代码生成</td>
+<td>全部17章入口点击与高亮通过</td>
+<td>7项逐项切换通过</td>
+<td>首尾及键盘滑块通过</td>
+<td>390px目录开关、图表宽度及末尾标记通过</td>
+<td>无脚本异常</td>
+</tr>
+</tbody></table></div>
+<p>人工截图检查了第3/8章的桌面综合例、第4/9章的390px窄屏图解，标题、正文、卡片和表格未见重叠或截断；并修复了数学星号被误排斜体的问题。其他章节由自动浏览器操作覆盖，截图留在<code>_整理工具</code>，不把自动检查冒称为每页逐屏人工检查。</p>
+<p>链接静态检查覆盖11份HTML，核对目标文件、锚点唯一性、Markdown正文SHA-256一致性和离线依赖；来源清单复算显示原课件、旧版资料、作业解析和PDF的SHA-256均未改变。</p>
+<h2>7. 未完成的确认与需要的进一步信息</h2>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>内容</th>
+<th>已核实事实</th>
+<th>尚未核实/可能误差</th>
+<th>原因</th>
+<th>进一步核实方法</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>课件图形</td>
+<td>23份提取结果共675页，主题索引有对应</td>
+<td>纯图的每条边、图形层级和动画未逐页视觉复核</td>
+<td>PowerPoint COM启动报0x80080005，未成功渲染课件；文字位置不保留完整边关系</td>
+<td>在可用PowerPoint中打开相关原页逐边确认；已有正文限定保留</td>
+</tr>
+<tr>
+<td>讲者备注</td>
+<td>PPTX备注已读取</td>
+<td>PPT中的全部备注完整性</td>
+<td>旧格式记录提取不能保证恢复全部备注归属</td>
+<td>用实际演示软件查看原PPT备注</td>
+</tr>
+<tr>
+<td>源题标准答案</td>
+<td>题意、规则和独立计算可核对</td>
+<td>选择题歧义、循环非良性禁令与原题外提要求的判分口径</td>
+<td>项目没有教师答案</td>
+<td>提供教师答案/说明后按同一假设重算</td>
+</tr>
+<tr>
+<td>真实目标执行</td>
+<td>课堂伪指令方向、布局与步骤明确</td>
+<td>真实CPU/ABI执行、某C版本诊断、指针和浮点宽度</td>
+<td>没有指定真实目标环境</td>
+<td>指定编译器版本、指令集、ABI与选项后运行测试</td>
+</tr>
+<tr>
+<td>本学期考核</td>
+<td>课件01所载历史方案可读</td>
+<td>是否仍适用，补充数据流算法是否要求</td>
+<td>未提供当前通知</td>
+<td>以教师最新通知确认，正文不称确定考点</td>
+</tr>
+<tr>
+<td>教学例的全域行为</td>
+<td>明确检查过的输入及有限程序核验</td>
+<td>全部输入终止性、未知初始化及异常</td>
+<td>课件某些源片段不完整或本身可能越界/不终止</td>
+<td>补齐变量初值与语言规则，按正文条件分析</td>
+</tr>
+</tbody></table></div>
+<h2>8. 课程镜像与文件处理</h2>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>章节</th>
+<th>JLU课程镜像</th>
+<th>版本比对</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>第1章 编译引论</td>
+<td>文件存在</td>
+<td>字节相同</td>
+</tr>
+<tr>
+<td>第2章 词法分析</td>
+<td>文件存在</td>
+<td>字节相同</td>
+</tr>
+<tr>
+<td>第3章 语法分析：自顶向下分析方法</td>
+<td>文件存在</td>
+<td>字节相同</td>
+</tr>
+<tr>
+<td>第4章 语法分析：自底向上分析方法</td>
+<td>文件存在</td>
+<td>字节相同</td>
+</tr>
+<tr>
+<td>第5章 语义分析和符号表</td>
+<td>文件存在</td>
+<td>字节相同</td>
+</tr>
+<tr>
+<td>第6章 运行时存储空间的组织与管理</td>
+<td>文件存在</td>
+<td>字节相同</td>
+</tr>
+<tr>
+<td>第7章 中间代码生成</td>
+<td>文件存在</td>
+<td>字节相同</td>
+</tr>
+<tr>
+<td>第8章 中间代码优化</td>
+<td>文件存在</td>
+<td>字节相同</td>
+</tr>
+<tr>
+<td>第9章 目标代码生成</td>
+<td>文件存在</td>
+<td>字节相同</td>
+</tr>
+</tbody></table></div>
+<p>本次仅生成/修订新资料及其核验记录，没有删除文件或目录，原课件、旧版、作业解析、期末题均保留。<code>_整理工具</code>中的来源文本、图像和脚本也保留，供追溯。</p>
+<h2>9. 模板交付检查</h2>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>模板要求</th>
+<th>具体落实</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>任务信息与来源</td>
+<td>每章开头有可展开任务信息；来源是真实项目路径</td>
+</tr>
+<tr>
+<td>按理解依赖组织</td>
+<td>统一课程路线和各章阶段分组，保留重要定义、条件与完整课件例</td>
+</tr>
+<tr>
+<td>解释方法为什么需要</td>
+<td>主体讲解以具体问题铺垫，新增综合例说明难点和拆解理由</td>
+</tr>
+<tr>
+<td>准确与通俗</td>
+<td>保留正式术语，解释对象和字段，不把教学单位写成真实标准</td>
+</tr>
+<tr>
+<td>关系与层次</td>
+<td>分别处理Kind/Type、Scope/Level、DL/SL、地址/值、阶段/遍</td>
+</tr>
+<tr>
+<td>输入—过程—结果</td>
+<td>保留原详细表，补历年完整推导，标出每例前提与结果范围</td>
+</tr>
+<tr>
+<td>对比与误区</td>
+<td>有同条件对比、反例和边界，考试歧义单独说明</td>
+</tr>
+<tr>
+<td>自测与理由</td>
+<td>每章新增4项自测及答案，保留既有课件练习解答</td>
+</tr>
+<tr>
+<td>学习速查</td>
+<td>Markdown分类表；HTML单项含含义、形式、例子结果、注意及正文链接</td>
+</tr>
+<tr>
+<td>网页目录</td>
+<td>已认可样式的分组直接章节链接，滑块仅用于正文图解</td>
+</tr>
+<tr>
+<td>核实与不确定性</td>
+<td>分别列文字主题对照、手工推导、程序计算、页面操作和未确认内容</td>
+</tr>
+<tr>
+<td>文件方式</td>
+<td>全部新文件位于指定文件夹，原文件未改动，无未经确认的删除</td>
+</tr>
+</tbody></table></div>
+</article></main></div><script type="application/json" id="diagram-data">null</script><script>
+const links=[...document.querySelectorAll('nav a[href^="#"]')];
+const headings=links.map(a=>document.getElementById(a.hash.slice(1))).filter(Boolean);
+let scheduled=false;
+function markNavigation(){scheduled=false;let id=headings[0]?.id;const offset=Math.max(document.querySelector('.topbar').getBoundingClientRect().height+15,parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--scroll-offset'))||90)+4;for(const el of headings){if(el.getBoundingClientRect().top<=offset)id=el.id;}if(window.innerHeight+window.scrollY>=document.documentElement.scrollHeight-3)id=headings.at(-1)?.id;links.forEach(a=>{const on=a.hash==='#'+id;a.classList.toggle('active',on);if(on)a.setAttribute('aria-current','location');else a.removeAttribute('aria-current');});}
+window.addEventListener('scroll',()=>{if(!scheduled){scheduled=true;requestAnimationFrame(markNavigation)}},{passive:true});window.addEventListener('resize',markNavigation);
+const menu=document.getElementById('menu');function closeMenu(){document.body.classList.remove('nav-open');menu.setAttribute('aria-expanded','false');}menu.addEventListener('click',()=>{const open=document.body.classList.toggle('nav-open');menu.setAttribute('aria-expanded',String(open));});document.querySelector('.nav-shade').addEventListener('click',closeMenu);document.addEventListener('keydown',e=>{if(e.key==='Escape')closeMenu();});links.forEach(a=>a.addEventListener('click',()=>{closeMenu();setTimeout(markNavigation,0);}));
+document.querySelectorAll('[data-font]').forEach(b=>b.addEventListener('click',()=>{const root=document.documentElement;let n=parseFloat(getComputedStyle(root).getPropertyValue('--font'))||17;n=Math.max(14,Math.min(24,n+Number(b.dataset.font)));root.style.setProperty('--font',n+'px');markNavigation();}));document.getElementById('print').addEventListener('click',()=>window.print());
+const diagram=JSON.parse(document.getElementById('diagram-data').textContent);let step=0;
+function showStep(){if(!diagram)return;const row=diagram.rows[step];const panel=document.getElementById('step-panel');panel.replaceChildren();const grid=document.createElement('div');grid.className='step-grid';diagram.fields.forEach((field,i)=>{const cell=document.createElement('div');cell.className='step-field';const strong=document.createElement('strong');strong.textContent=field;const p=document.createElement('p');p.textContent=row[i];cell.append(strong,p);grid.append(cell);});panel.append(grid);document.getElementById('step-count').textContent=(step+1)+' / '+diagram.rows.length;document.getElementById('step-range').value=step;document.getElementById('step-prev').disabled=step===0;document.getElementById('step-next').disabled=step===diagram.rows.length-1;document.querySelectorAll('.progress-track span').forEach((s,i)=>s.classList.toggle('done',i<=step));}
+if(diagram){document.getElementById('step-prev').addEventListener('click',()=>{step=Math.max(0,step-1);showStep();});document.getElementById('step-next').addEventListener('click',()=>{step=Math.min(diagram.rows.length-1,step+1);showStep();});document.getElementById('step-range').addEventListener('input',e=>{step=Number(e.target.value);showStep();});showStep();}
+const quick=document.getElementById('quick-select');if(quick){const items=JSON.parse(document.getElementById('quick-data').textContent);function showQuick(){const r=items[Number(quick.value)];const panel=document.getElementById('quick-panel');panel.innerHTML='<h3>'+r.name+'</h3><p class="ref-kind">'+r.kind+'</p><h4>含义与用途</h4><p>'+r.meaning+'</p><h4>基本形式</h4><p>'+r.form+'</p><h4>学习例子与结果</h4><p class="result">'+r.example+'</p><h4>注意点与前提</h4><p>'+r.notice+'</p><p>'+r.link+'</p>';}quick.addEventListener('change',showQuick);showQuick();}markNavigation();
+</script></body></html>

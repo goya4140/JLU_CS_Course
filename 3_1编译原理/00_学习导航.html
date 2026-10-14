@@ -1,0 +1,163 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>00_学习导航</title><meta name="source-sha256" content="d89cdd6c2d14464bc0e467f13c9fdc0d88260f0bf56a47cf6b748c102efcc2b1"><style>:root{--paper:#fbfaf7;--surface:#fff;--ink:#253341;--muted:#5c6b75;--line:#d5dfdd;--teal:#156b62;--soft:#edf6f1;--font:17px;--scroll-offset:90px}*{box-sizing:border-box}html{scroll-behavior:auto;scroll-padding-top:var(--scroll-offset)}body{margin:0;background:var(--paper);color:var(--ink);font-family:'Microsoft YaHei','PingFang SC',system-ui,sans-serif;font-size:var(--font);line-height:1.85}a{color:var(--teal);text-underline-offset:3px}a:hover{color:#173f75}button,select{font:inherit}button{cursor:pointer}button,select{border:1px solid #b9cbc5;border-radius:7px;padding:7px 11px;background:#fff;color:var(--ink)}button:hover{background:var(--soft)}button:focus-visible,select:focus-visible,a:focus-visible{outline:3px solid #81cbb8;outline-offset:3px}.skip{position:absolute;top:-80px;left:12px;z-index:50;background:#fff;padding:8px}.skip:focus{top:8px}.sidebar{position:fixed;inset:0 auto 0 0;width:270px;padding:23px 18px;background:#f0f4f0;border-right:1px solid var(--line);overflow:auto;z-index:30;overscroll-behavior:contain}.brand{font-size:21px;font-weight:700}.brand small{display:block;font-size:12px;font-weight:400;color:var(--muted)}.sidebar nav a{display:block;color:var(--ink);text-decoration:none;padding:8px 10px;margin:3px 0;border-radius:6px;font-size:14px;line-height:1.6}.sidebar nav a:hover{background:#dcebe3}.sidebar nav a.active,.sidebar nav a.active:hover{background:var(--teal);color:white}.sidebar select{width:100%;font-size:13px}.nav-tip{font-size:12px;color:var(--muted);margin:14px 0}.shell{margin-left:270px;overflow-anchor:none}.topbar{position:sticky;top:0;background:rgba(251,250,247,.98);padding:12px 26px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:12px;z-index:20}.topbar-title{font-size:13px;color:var(--muted)}.toolbar{display:flex;gap:7px;flex-wrap:wrap}.toolbar button{font-size:13px}.menu{display:none}main{max-width:1120px;margin:auto;padding:30px 44px 80px;min-width:0}h1{font-size:32px;line-height:1.5;margin:14px 0 25px}h2{font-size:25px;line-height:1.5;padding:0 0 11px;border-bottom:1px solid var(--line);margin:44px 0 23px}h3{font-size:21px;line-height:1.55;margin:29px 0 16px}h4{font-size:18px;line-height:1.6;margin:22px 0 13px}p{margin:14px 0}li{margin:7px 0}ul,ol{padding-left:1.6em}blockquote{margin:20px 0;padding:5px 18px;border-left:3px solid #a8c6bb;background:#f0f3ef;color:#53655e;font-size:14px}blockquote p{margin:8px 0}hr{border:0;border-top:1px solid var(--line);margin:32px 0}code{font-family:Consolas,'Cascadia Code',monospace;font-size:.9em;background:#eef1ed;padding:2px 5px;border-radius:4px;overflow-wrap:anywhere}pre{background:#18313d;color:#e8f0f0;border-radius:9px;padding:19px;line-height:1.65;overflow-x:auto;max-width:100%;font-size:14px}pre code{background:none;padding:0;color:inherit;white-space:pre;overflow-wrap:normal}table{border-collapse:collapse;width:100%;font-size:15px}th{background:#eaf3ee;text-align:left}td,th{padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:top}tbody tr:nth-child(even){background:#f6f9f6}.table-scroll{overflow-x:auto;border:1px solid var(--line);border-radius:8px;margin:17px 0;max-width:100%}.table-scroll td{min-width:80px}.source-note{font-size:13px;color:var(--muted)}.learning-figure{padding:23px;border:1px solid #b4cfc2;border-radius:12px;background:var(--soft);margin:25px 0}.learning-figure h4{margin:0 0 8px;font-size:20px}.fig-intro{font-size:14px;color:var(--muted)}.learning-figure label{display:block;margin-top:15px;font-size:14px;font-weight:700}.learning-figure select{margin-top:7px;width:100%;min-height:44px;font-size:15px}.fig-output{margin-top:16px}.flow{display:flex;gap:10px;align-items:stretch;flex-wrap:wrap}.flow-node{flex:1 1 150px;border:1px solid #bfd2c9;border-radius:8px;background:#fff;padding:13px;min-width:0}.flow-node strong{display:block;color:var(--teal)}.flow-node p{font-size:14px;margin:8px 0}.flow-arrow{align-self:center;color:var(--teal);font-size:24px}.fig-note{padding:10px 14px;border-left:3px solid var(--teal);background:#fff;font-size:14px;margin:15px 0 0}.svg-scroll{overflow-x:auto;max-width:100%}.svg-scroll svg{display:block;max-width:100%;height:auto}.ref-area{min-height:calc(100vh - var(--scroll-offset));margin-top:24px}.ref-picker{padding:22px;border-radius:12px;background:var(--soft);border:1px solid #b4cfc2}.ref-picker label{display:block;font-weight:700;margin-bottom:10px}.ref-picker select{width:100%;font-size:15px;min-height:46px}.ref-panel{margin-top:18px;background:#fff;border:1px solid var(--line);padding:20px;border-radius:9px}.ref-panel[hidden]{display:none}.ref-panel h3{margin:0;font-size:24px}.ref-panel h4{font-size:16px;margin:18px 0 8px}.ref-kind{font-size:13px;color:var(--teal)}.result{padding:10px 15px;border-left:3px solid var(--teal);background:var(--soft)}.copy{display:block;margin:5px 0 0 auto;font-size:12px;padding:4px 8px}.code-wrap{margin:20px 0}.code-wrap pre{margin-bottom:0}.foot{font-size:13px;color:var(--muted);border-top:1px solid var(--line);padding-top:23px;margin-top:30px}details{border:1px solid var(--line);padding:12px;border-radius:8px;margin:15px 0}summary{cursor:pointer;font-weight:700}@media(max-width:900px){.sidebar{transform:translateX(-100%)}body.nav-open .sidebar{transform:translateX(0);top:60px}.shell{margin-left:0}.menu{display:inline-block}.topbar-title{display:none}.topbar{padding:10px 14px}main{padding:23px 18px 65px}h1{font-size:27px}h2{font-size:23px}.learning-figure,.ref-picker{padding:16px}.flow{flex-direction:column}.flow-arrow{transform:rotate(90deg)}.ref-panel{padding:15px}}@media print{.sidebar,.topbar,.toolbar,.copy,.skip{display:none!important}.shell{margin:0}main{padding:0;max-width:none}body{background:#fff;font-size:11pt}.ref-area{min-height:0}.ref-picker select{display:none}pre{white-space:pre-wrap;background:#f3f5f4;color:#111}.learning-figure{break-inside:avoid}.table-scroll{overflow:visible}a{color:inherit}}@media print{.svg-scroll{overflow:visible}.svg-scroll svg{min-width:0!important;width:100%!important;height:auto!important}}.sidebar{width:266px;background:#f1f4f1;padding:27px 19px;overflow-y:auto}.brand{font-size:21px;font-weight:700;letter-spacing:.03em;margin-bottom:5px}.brand small{font-size:12px;font-weight:400;color:var(--muted);letter-spacing:.1em}.sidebar .sub{font-size:13px;color:var(--muted);margin:5px 0 21px}.sidebar nav a{font-size:14px;line-height:1.5;padding:9px 11px;margin:3px 0;border-radius:6px}.sidebar nav a:hover{background:#e0ece6;color:#174d43}.sidebar nav a.active,.sidebar nav a.active:hover{background:var(--teal);color:#fff}.nav-group{font-size:12px;color:var(--muted);margin:18px 11px 6px;letter-spacing:.08em}.sidebar-footer{margin-top:24px;font-size:12px;color:var(--muted)}.shell{margin-left:266px}@media(max-width:900px){.shell{margin-left:0}}
+h2,h3,h4,[id]{scroll-margin-top:0}.stepper{background:#edf6f1;border:1px solid #b4cfc2;border-radius:12px;padding:22px;margin:24px 0}.stepper h3{margin:0 0 12px}.step-tools{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:15px 0}.step-tools input{width:200px;min-height:40px}.step-card{background:white;padding:18px;border-radius:8px;border:1px solid var(--line)}.step-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}.step-field{border:1px solid #d6e5dd;padding:12px;border-radius:7px;overflow-wrap:anywhere}.step-field strong{display:block;font-size:13px;color:var(--teal)}.step-field p{margin:7px 0 0}.progress-track{display:flex;gap:4px;margin:10px 0}.progress-track span{height:5px;flex:1;border-radius:3px;background:#c8d8d0}.progress-track span.done{background:var(--teal)}.step-count{font-variant-numeric:tabular-nums}.chapter-links{display:flex;gap:15px;justify-content:space-between;border-top:1px solid var(--line);padding-top:25px;margin-top:35px}.ref-area{min-height:0}.ref-panel h4{margin:12px 0 4px}.reading-meta{font-size:13px;color:var(--muted)}summary:focus-visible,input:focus-visible{outline:3px solid #81cbb8;outline-offset:3px}button:disabled{opacity:.5;cursor:default}.quick-select{width:100%}.overview-card{border:1px solid var(--line);background:white;border-radius:9px;padding:18px;margin:14px 0}.overview-card h3{margin-top:0}.sidebar nav a.external{background:#e4eee7}.nav-shade{display:none}@media(max-width:900px){body.nav-open .nav-shade{display:block;position:fixed;inset:60px 0 0 266px;background:#25334155;z-index:25}.stepper{padding:15px}.step-tools input{width:150px}.step-grid{grid-template-columns:1fr}.sidebar{max-width:85vw}.step-field{padding:10px}}@media print{.step-tools,.progress-track,.chapter-links{display:none}.step-card{break-inside:avoid}body.nav-open .nav-shade{display:none}}main{overflow-x:clip}article{min-width:0;max-width:100%}.table-scroll,pre{contain:inline-size}p,li,h1,h2,h3,h4{overflow-wrap:anywhere}</style></head><body><a class="skip" href="#article">跳到正文</a><aside class="sidebar"><div class="brand"><small>COMPILER / LEARNING GUIDE</small>编译原理学习资料</div><p class="sub">九章完整资料 · 课件、作业与原题整合</p><nav><a href="00_学习导航.html">学习导航</a><div class="nav-group">准备与基础</div><a href="01_编译引论.html">第1章 编译引论</a><a href="02_词法分析.html">第2章 词法分析</a><div class="nav-group">程序结构与含义</div><a href="03_语法分析_自顶向下方法.html">第3章 语法分析：自顶向下分析方法</a><a href="04_语法分析_自底向上方法.html">第4章 语法分析：自底向上分析方法</a><a href="05_语义分析与符号表.html">第5章 语义分析和符号表</a><div class="nav-group">执行与生成</div><a href="06_运行时存储空间管理.html">第6章 运行时存储空间的组织与管理</a><a href="07_中间代码生成.html">第7章 中间代码生成</a><a href="08_中间代码优化.html">第8章 中间代码优化</a><a href="09_目标代码生成.html">第9章 目标代码生成</a><div class="nav-group">整理记录</div><a href="10_来源覆盖与核对报告.html">来源覆盖与核对报告</a></nav></aside><div class="nav-shade"></div><div class="shell"><header class="topbar"><span class="topbar-title">课程学习导航与核对记录</span><div class="toolbar"><button id="menu" class="menu" aria-expanded="false">目录</button><button data-font="-1">字号 −</button><button data-font="1">字号 ＋</button><button id="print">打印 / 保存 PDF</button></div></header><main><article id="article"><h1>编译原理学习资料：从字符到可执行程序</h1>
+<blockquote>
+<p>依据本项目23份课件、9章旧版学习资料、4份作业解析及2022级期末题整理。2022级期末题的实际考试时间为2024-12-07；它是历史练习来源，不代表当前考试范围。</p>
+<p>各章同时提供完整Markdown和可离线阅读的HTML。网页沿用数据库参考资料的阶段分组左栏，正文有分步图解，末尾通过选择菜单查看一项速查，正文不会被缩成卡片。</p>
+</blockquote>
+<p>学习主线是：先把字符分成Token，再依据文法恢复结构，检查名字和类型，生成可以优化的中间表示，最后安排运行空间和目标指令。章节编号按课件01的课程目录保留；第6章存储管理在实际授课中安排在优化之后，下面同时提供两种合理阅读顺序。</p>
+<h2>学习阶段导航</h2>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>学习阶段</th>
+<th>要解决的问题</th>
+<th>对应内容</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>准备 · 认识翻译系统</td>
+<td>一份程序怎样成为另一份程序？各阶段分别处理什么？</td>
+<td><a href="01_%E7%BC%96%E8%AF%91%E5%BC%95%E8%AE%BA.html">第1章 编译引论</a> · <a href="01_%E7%BC%96%E8%AF%91%E5%BC%95%E8%AE%BA.html">HTML</a></td>
+</tr>
+<tr>
+<td>基础 · 从字符得到单词</td>
+<td>怎样描述合法单词、构造自动机并连续扫描源码？</td>
+<td><a href="02_%E8%AF%8D%E6%B3%95%E5%88%86%E6%9E%90.html">第2章 词法分析</a> · <a href="02_%E8%AF%8D%E6%B3%95%E5%88%86%E6%9E%90.html">HTML</a></td>
+</tr>
+<tr>
+<td>程序结构 · 先展开再匹配</td>
+<td>文法如何描述结构？何时能凭一个Token选规则？</td>
+<td><a href="03_%E8%AF%AD%E6%B3%95%E5%88%86%E6%9E%90_%E8%87%AA%E9%A1%B6%E5%90%91%E4%B8%8B%E6%96%B9%E6%B3%95.html">第3章 自顶向下分析</a> · <a href="03_%E8%AF%AD%E6%B3%95%E5%88%86%E6%9E%90_%E8%87%AA%E9%A1%B6%E5%90%91%E4%B8%8B%E6%96%B9%E6%B3%95.html">HTML</a></td>
+</tr>
+<tr>
+<td>程序结构 · 从输入归约</td>
+<td>怎样由项目集判断移入/归约、构造并比较LR表？</td>
+<td><a href="04_%E8%AF%AD%E6%B3%95%E5%88%86%E6%9E%90_%E8%87%AA%E5%BA%95%E5%90%91%E4%B8%8A%E6%96%B9%E6%B3%95.html">第4章 自底向上分析</a> · <a href="04_%E8%AF%AD%E6%B3%95%E5%88%86%E6%9E%90_%E8%87%AA%E5%BA%95%E5%90%91%E4%B8%8A%E6%96%B9%E6%B3%95.html">HTML</a></td>
+</tr>
+<tr>
+<td>程序含义 · 声明和属性</td>
+<td>同名出现绑定谁？类型、层数、偏移和符号表如何配合？</td>
+<td><a href="05_%E8%AF%AD%E4%B9%89%E5%88%86%E6%9E%90%E4%B8%8E%E7%AC%A6%E5%8F%B7%E8%A1%A8.html">第5章 语义分析与符号表</a> · <a href="05_%E8%AF%AD%E4%B9%89%E5%88%86%E6%9E%90%E4%B8%8E%E7%AC%A6%E5%8F%B7%E8%A1%A8.html">HTML</a></td>
+</tr>
+<tr>
+<td>执行基础 · 对象与生存</td>
+<td>每次调用怎样取得独立空间，如何访问正确词法环境？</td>
+<td><a href="06_%E8%BF%90%E8%A1%8C%E6%97%B6%E5%AD%98%E5%82%A8%E7%A9%BA%E9%97%B4%E7%AE%A1%E7%90%86.html">第6章 运行时存储空间管理</a> · <a href="06_%E8%BF%90%E8%A1%8C%E6%97%B6%E5%AD%98%E5%82%A8%E7%A9%BA%E9%97%B4%E7%AE%A1%E7%90%86.html">HTML</a></td>
+</tr>
+<tr>
+<td>组合应用 · 结构变成操作</td>
+<td>如何把类型、地址、控制流和调用变成完整IR？</td>
+<td><a href="07_%E4%B8%AD%E9%97%B4%E4%BB%A3%E7%A0%81%E7%94%9F%E6%88%90.html">第7章 中间代码生成</a> · <a href="07_%E4%B8%AD%E9%97%B4%E4%BB%A3%E7%A0%81%E7%94%9F%E6%88%90.html">HTML</a></td>
+</tr>
+<tr>
+<td>变换应用 · 保持语义并降低代价</td>
+<td>哪些常量、重复计算和不变式能安全节省？</td>
+<td><a href="08_%E4%B8%AD%E9%97%B4%E4%BB%A3%E7%A0%81%E4%BC%98%E5%8C%96.html">第8章 中间代码优化</a> · <a href="08_%E4%B8%AD%E9%97%B4%E4%BB%A3%E7%A0%81%E4%BC%98%E5%8C%96.html">HTML</a></td>
+</tr>
+<tr>
+<td>目标实现 · 指令和运行协议</td>
+<td>怎样生成正确地址、跳转、调用和寄存器安排？</td>
+<td><a href="09_%E7%9B%AE%E6%A0%87%E4%BB%A3%E7%A0%81%E7%94%9F%E6%88%90.html">第9章 目标代码生成</a> · <a href="09_%E7%9B%AE%E6%A0%87%E4%BB%A3%E7%A0%81%E7%94%9F%E6%88%90.html">HTML</a></td>
+</tr>
+<tr>
+<td>练习与复习 · 回查依据</td>
+<td>原资料哪些主题对应新资料，实际检查了什么，哪些结论待确认？</td>
+<td><a href="10_%E6%9D%A5%E6%BA%90%E8%A6%86%E7%9B%96%E4%B8%8E%E6%A0%B8%E5%AF%B9%E6%8A%A5%E5%91%8A.html">来源覆盖与核对报告</a> · <a href="10_%E6%9D%A5%E6%BA%90%E8%A6%86%E7%9B%96%E4%B8%8E%E6%A0%B8%E5%AF%B9%E6%8A%A5%E5%91%8A.html">HTML</a></td>
+</tr>
+</tbody></table></div>
+<h2>两条阅读路线</h2>
+<p>按知识依赖读：1→2→3→4→5→6→7→8→9。先认识运行时地址和参数，再读完整IR和后端调用，较少需要中途补前提。</p>
+<p>按原授课安排复习：1→2→3→4→5→7→8→6→9。第7章引用AR、SP/TOP、地址形参时，可先回看第6章的活动记录与调用段，不必立刻读完全部Display与静态链。</p>
+<p>第3章和第4章各自篇幅较长，因为保留了多道课件练习的完整集合、项目集和分析表。第一次读先做贯穿小例，随后按各章分组目录进入进阶例题；目录中的章节级链接可以直接回到完整讲解。</p>
+<h2>每章怎样使用</h2>
+<ol>
+<li>先看范围说明和教学约定，辨清源语言、符号、存储单位与栈顶方向。</li>
+<li>按学习阶段阅读；每遇一个方法，先说出它接收什么、产生什么，再跟踪一个小例。</li>
+<li>分步图解可以前后切换和用键盘拖动步骤滑块；正文的完整表保留，能连续核对。</li>
+<li>综合例中先遮住答案，独立算中间结果；用具体对象判断“地址”“地址槽”“对象值”。</li>
+<li>完成自测后对照带理由答案；看不懂某个速查项时点击返回正文，不能只背菜单里的名字。</li>
+<li>阅读核对说明。原课件、已有解析、整理者补充、教学假设和程序验证各有不同证据等级。</li>
+</ol>
+<h2>历年题的分章入口</h2>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>历年题</th>
+<th>对应解答位置</th>
+<th>用到的方法</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>一.1：编译与解释根本区别</td>
+<td>第1章自测1</td>
+<td>实现流程和产物</td>
+</tr>
+<tr>
+<td>一.2：表达式文法二义性</td>
+<td>第3章作业回查的a+a*a反例</td>
+<td>两棵不同结构树</td>
+</tr>
+<tr>
+<td>一.3：第二次调用g的栈</td>
+<td>第6章综合应用</td>
+<td>词法绑定、静态对象、动态链、调用时点</td>
+</tr>
+<tr>
+<td>一.4：从m开始的单寄存器while</td>
+<td>第9章综合应用</td>
+<td>指令展开、回填及寄存器覆盖</td>
+</tr>
+<tr>
+<td>二.1：快速排序驻留符号表</td>
+<td>第5章综合应用</td>
+<td>签名、地址层、偏移、退出跳转项</td>
+</tr>
+<tr>
+<td>二.2：编译期间可发现的错误</td>
+<td>第5章静态错误练习</td>
+<td>结构与静态语义，已知值和诊断能力区别</td>
+</tr>
+<tr>
+<td>三：P/I/Q语言自动机</td>
+<td>第2章综合应用</td>
+<td>RE、ε-NFA、确定化、最小化、区分后缀</td>
+</tr>
+<tr>
+<td>四：文法改写、LL(1)表、aabdde</td>
+<td>第3章综合应用</td>
+<td>提因子、消左递归、FIRST/FOLLOW/PREDICT、完整驱动</td>
+</tr>
+<tr>
+<td>五：LR(1)状态机与(a;a)</td>
+<td>第4章综合应用</td>
+<td>13个规范项目集、完整ACTION/GOTO、栈过程</td>
+</tr>
+<tr>
+<td>六.1：函数、二维数组与循环IR</td>
+<td>第7章综合应用</td>
+<td>参数/临时布局、ENTRY、数组地址、控制与返回</td>
+</tr>
+<tr>
+<td>六.2：三项中间代码优化</td>
+<td>第8章综合应用</td>
+<td>局部常量、值复用、课程保守与细化外提两种口径</td>
+</tr>
+</tbody></table></div>
+<p>这些是本次学习解答，未取得教师标准答案。第6章注明调用入口与初始化后的时间差，第5章注明指针宽度和C版本，第8章注明局部算法及外提判分口径，避免把补充假设写成原题既定条件。</p>
+<h2>来源与文件说明</h2>
+<p>23份课件文字提取共675页，PPTX额外读取讲者备注；二进制PPT采用已有提取器按记录提取。PowerPoint自动化接口未能启动，所以没有完成课件全页视觉渲染；纯图边有疑点时仍需对照原文件，正文不把无法确认的图当成已验证结果。期末题4页已经渲染并核对。</p>
+<p>旧资料中已有完整解释和例题经主题核对后整合保留，新增内容包括历年综合推导、自测、排错、速查、图解及核对记录。JLU课程镜像中的同章文件另作版本比对，差异写入核对报告；不会无声把不同副本当作同一版本。</p>
+<p>正文新文件与原资料分开。<code>_整理工具</code>子目录保留提取文本、生成脚本、计算检查及浏览器检查记录，便于复算和追溯。本次没有删除本电脑文件或目录。</p>
+</article></main></div><script type="application/json" id="diagram-data">null</script><script>
+const links=[...document.querySelectorAll('nav a[href^="#"]')];
+const headings=links.map(a=>document.getElementById(a.hash.slice(1))).filter(Boolean);
+let scheduled=false;
+function markNavigation(){scheduled=false;let id=headings[0]?.id;const offset=Math.max(document.querySelector('.topbar').getBoundingClientRect().height+15,parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--scroll-offset'))||90)+4;for(const el of headings){if(el.getBoundingClientRect().top<=offset)id=el.id;}if(window.innerHeight+window.scrollY>=document.documentElement.scrollHeight-3)id=headings.at(-1)?.id;links.forEach(a=>{const on=a.hash==='#'+id;a.classList.toggle('active',on);if(on)a.setAttribute('aria-current','location');else a.removeAttribute('aria-current');});}
+window.addEventListener('scroll',()=>{if(!scheduled){scheduled=true;requestAnimationFrame(markNavigation)}},{passive:true});window.addEventListener('resize',markNavigation);
+const menu=document.getElementById('menu');function closeMenu(){document.body.classList.remove('nav-open');menu.setAttribute('aria-expanded','false');}menu.addEventListener('click',()=>{const open=document.body.classList.toggle('nav-open');menu.setAttribute('aria-expanded',String(open));});document.querySelector('.nav-shade').addEventListener('click',closeMenu);document.addEventListener('keydown',e=>{if(e.key==='Escape')closeMenu();});links.forEach(a=>a.addEventListener('click',()=>{closeMenu();setTimeout(markNavigation,0);}));
+document.querySelectorAll('[data-font]').forEach(b=>b.addEventListener('click',()=>{const root=document.documentElement;let n=parseFloat(getComputedStyle(root).getPropertyValue('--font'))||17;n=Math.max(14,Math.min(24,n+Number(b.dataset.font)));root.style.setProperty('--font',n+'px');markNavigation();}));document.getElementById('print').addEventListener('click',()=>window.print());
+const diagram=JSON.parse(document.getElementById('diagram-data').textContent);let step=0;
+function showStep(){if(!diagram)return;const row=diagram.rows[step];const panel=document.getElementById('step-panel');panel.replaceChildren();const grid=document.createElement('div');grid.className='step-grid';diagram.fields.forEach((field,i)=>{const cell=document.createElement('div');cell.className='step-field';const strong=document.createElement('strong');strong.textContent=field;const p=document.createElement('p');p.textContent=row[i];cell.append(strong,p);grid.append(cell);});panel.append(grid);document.getElementById('step-count').textContent=(step+1)+' / '+diagram.rows.length;document.getElementById('step-range').value=step;document.getElementById('step-prev').disabled=step===0;document.getElementById('step-next').disabled=step===diagram.rows.length-1;document.querySelectorAll('.progress-track span').forEach((s,i)=>s.classList.toggle('done',i<=step));}
+if(diagram){document.getElementById('step-prev').addEventListener('click',()=>{step=Math.max(0,step-1);showStep();});document.getElementById('step-next').addEventListener('click',()=>{step=Math.min(diagram.rows.length-1,step+1);showStep();});document.getElementById('step-range').addEventListener('input',e=>{step=Number(e.target.value);showStep();});showStep();}
+const quick=document.getElementById('quick-select');if(quick){const items=JSON.parse(document.getElementById('quick-data').textContent);function showQuick(){const r=items[Number(quick.value)];const panel=document.getElementById('quick-panel');panel.innerHTML='<h3>'+r.name+'</h3><p class="ref-kind">'+r.kind+'</p><h4>含义与用途</h4><p>'+r.meaning+'</p><h4>基本形式</h4><p>'+r.form+'</p><h4>学习例子与结果</h4><p class="result">'+r.example+'</p><h4>注意点与前提</h4><p>'+r.notice+'</p><p>'+r.link+'</p>';}quick.addEventListener('change',showQuick);showQuick();}markNavigation();
+</script></body></html>
