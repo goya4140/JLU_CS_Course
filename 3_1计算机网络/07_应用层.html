@@ -1,0 +1,952 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>第7章 应用层：把域名、资源、邮箱和媒体服务的消息过程讲清并能计算结果</title><style>
+:root{--ink:#20334a;--muted:#63748a;--accent:#17666c;--light:#e9f4f1;--line:#d9e4e9;--paper:#fff;--back:#f5f8fa;color-scheme:light}*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--back);color:var(--ink);font:16px/1.85 'Segoe UI','Microsoft YaHei',sans-serif}a{color:var(--accent);text-underline-offset:4px}a:hover{color:#10494e}button,select{font:inherit}button{cursor:pointer}a:focus-visible,button:focus-visible,select:focus-visible,summary:focus-visible{outline:3px solid #d78b21;outline-offset:3px}aside{position:fixed;inset:0 auto 0 0;width:292px;overflow-y:auto;background:#f0f5f6;border-right:1px solid var(--line);padding:28px 18px 28px 24px;z-index:30}.brand{font-size:21px;font-weight:700;line-height:1.5}.subbrand{font-size:13px;color:var(--muted);margin:8px 0 22px}.navgroup{margin:22px 0}.navgroup h2{font-size:12px;font-weight:600;letter-spacing:.06em;color:#75858e;margin:0 0 8px;border:0;padding:0}.navgroup p{font-size:11px;line-height:1.5;color:#7a8796;margin:0 0 8px}.navlink{display:block;padding:8px 11px;margin:4px 0;border-radius:7px;color:#3c5366;text-decoration:none;font-size:13px;line-height:1.6;border-left:3px solid transparent}.navlink:hover{background:#e2edee}.navlink.active{color:#0c5f62;border-color:var(--accent);background:#dcefed;font-weight:600}.asidefoot{font-size:12px;color:var(--muted);border-top:1px solid var(--line);padding-top:18px}main{margin-left:292px;min-width:0}.toolbar{position:sticky;top:0;z-index:20;background:#ffffffed;border-bottom:1px solid var(--line);height:55px;display:flex;align-items:center;gap:16px;padding:0 32px;font-size:12px;color:var(--muted);backdrop-filter:blur(8px)}.toolbar .spacer{flex:1}.toolbar a{text-decoration:none}.menubtn{display:none;border:1px solid #acbec8;background:white;border-radius:5px;padding:4px 12px;color:var(--ink)}article{max-width:1120px;margin:0 auto;padding:50px 58px 90px;background:white;min-height:100vh}h1{font-size:30px;line-height:1.55;letter-spacing:.01em;margin:0 0 24px}h2{font-size:24px;line-height:1.6;margin:62px 0 22px;padding-bottom:14px;border-bottom:1px solid var(--line);scroll-margin-top:86px}h3{font-size:19px;line-height:1.7;margin:36px 0 14px;scroll-margin-top:86px}h4{font-size:16px;margin:26px 0 10px}p{margin:14px 0}blockquote{margin:22px 0 30px;padding:16px 22px;border-left:4px solid var(--accent);background:#f1f7f6;color:#3c5866;font-size:14px}blockquote p{margin:7px 0}.tablewrap{overflow-x:auto;max-width:100%;margin:22px 0;border:1px solid var(--line);border-radius:7px}table{width:100%;border-collapse:collapse;font-size:14px;line-height:1.75;min-width:500px}th,td{text-align:left;vertical-align:top;padding:12px 15px;border-bottom:1px solid #e1e9ee}th{background:#edf4f5;font-weight:600}tr:last-child td{border-bottom:0}tbody tr:nth-child(even){background:#fafcfd}td a{display:inline-block}pre{max-width:100%;overflow:auto;background:#f1f5f8;border:1px solid #dde6eb;border-radius:7px;padding:20px;font-size:13px;line-height:1.8}code{font-family:Consolas,'Courier New','Microsoft YaHei',monospace;background:#eef4f6;border-radius:3px;padding:2px 4px;overflow-wrap:anywhere}pre code{padding:0;background:transparent;white-space:pre;overflow-wrap:normal}li{margin:7px 0}ul,ol{padding-left:26px}details{border:1px solid #c6dadb;border-radius:8px;margin:24px 0;padding:14px 20px;background:#f8fbfb}summary{cursor:pointer;font-weight:600;color:#17666c}details[open] summary{border-bottom:1px solid var(--line);padding-bottom:12px;margin-bottom:20px}.formula{overflow-x:auto;padding:20px;text-align:center;white-space:nowrap;background:#f9fbfc;font-family:'Cambria Math','Times New Roman',serif;font-size:20px;margin:20px 0}.frac{display:inline-flex;flex-direction:column;vertical-align:middle;text-align:center;line-height:1.4;margin:0 4px}.frac>span:first-child{border-bottom:1px solid #63748a;padding:0 5px 3px}.frac>span:last-child{padding:3px 5px 0}.formula sup,.formula sub{font-size:.65em}.quickbox,.stepbox{margin:24px 0;padding:24px;border:1px solid #c3d9d8;border-radius:10px;background:#f3f9f8}.quickbox label{display:block;font-weight:600;margin-bottom:10px}.quickbox select{width:100%;padding:10px 12px;border:1px solid #9fbfbc;border-radius:6px;background:white;color:var(--ink)}.quickcard{margin-top:20px}.quickcard h3{margin:0 0 12px}.quickcard dl{display:grid;grid-template-columns:90px 1fr;gap:10px 18px;font-size:15px;margin:0}.quickcard dt{font-weight:600;color:#557275}.quickcard dd{margin:0}.stepbox h3{margin:0 0 10px}.stepnotes{font-size:13px;color:var(--muted)}.stepbuttons{display:flex;flex-wrap:wrap;gap:6px;margin:16px 0}.stepbuttons button{border:1px solid #a8c6c4;background:white;color:#436366;border-radius:50%;width:35px;height:35px;font-size:13px}.stepbuttons button.active{background:var(--accent);color:white}.stepdisplay{background:white;border-radius:8px;padding:18px 20px;min-height:145px}.stepdisplay h4{margin:0 0 12px}.stepdisplay dl{margin:0;display:grid;grid-template-columns:140px 1fr;gap:9px 18px}.stepdisplay dt{font-weight:600}.stepdisplay dd{margin:0}.stepcontrols{display:flex;gap:10px;align-items:center;margin-top:16px}.stepcontrols button{border:1px solid #a7c6c3;padding:6px 16px;border-radius:5px;background:white;color:var(--accent)}button:disabled{cursor:default;opacity:.4}.stepcount{font-size:13px;color:var(--muted)}.chaptercards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin:28px 0}.chaptercard{display:block;border:1px solid var(--line);border-radius:10px;background:#f9fcfc;padding:22px;text-decoration:none}.chaptercard strong{display:block;font-size:21px;color:var(--ink);margin-bottom:10px}.chaptercard span{display:block;font-size:14px;line-height:1.7;color:#647a89}.footerlinks{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;border-top:1px solid var(--line);margin-top:64px;padding-top:24px}.footerlinks a{text-decoration:none}hr{border:0;border-top:1px solid var(--line);margin:35px 0}.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)}[id]{scroll-margin-top:86px}.topjump{color:#6b7e8e;font-size:13px}
+@media(max-width:1100px){aside{width:255px;padding:24px 15px}main{margin-left:255px}article{padding:38px 32px 70px}h1{font-size:27px}.toolbar{padding:0 24px}}
+@media(max-width:860px){aside{width:min(320px,87vw);transform:translateX(-100%);transition:transform .18s;box-shadow:12px 0 30px #1233}.nav-open aside{transform:translateX(0)}main{margin-left:0}.menubtn{display:block}.toolbar{padding:0 15px;gap:12px}.toolbar .desktop-only{display:none}article{padding:28px 20px 64px}h1{font-size:24px}h2{font-size:21px;margin-top:48px}h3{font-size:18px}body{font-size:15px}table{font-size:13px}th,td{padding:9px 12px}.quickbox,.stepbox{padding:17px}.quickcard dl,.stepdisplay dl{grid-template-columns:1fr;gap:3px}.quickcard dd,.stepdisplay dd{margin-bottom:12px}.chaptercards{grid-template-columns:1fr}.navshade{display:none;position:fixed;inset:0;background:#10283f55;z-index:25}.nav-open .navshade{display:block}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}aside{transition:none}}
+@media print{aside,.toolbar,.navshade,.stepbox{display:none}main{margin:0}article{max-width:none;padding:0}details{break-inside:avoid}table{min-width:0;font-size:10pt}h2{break-after:avoid}.tablewrap{overflow:visible}body{font-size:11pt}.quickbox select{display:none}.formula{white-space:normal}}
+</style></head><body><div class="navshade"></div><aside id="course-nav" aria-label="阶段分组学习目录"><div class="brand">计算机网络<br>学习资料</div><p class="subbrand">第 7 章 · 应用层</p><nav><a class="navlink" href="#learning-nav">学习导航</a><section class="navgroup"><h2>学习准备</h2><p>确认读者基础和对象</p><a class="navlink" href="#c7-0">7.0 共同场景与符号</a></section><section class="navgroup"><h2>角色与名字</h2><p>先找到谁提供哪种服务</p><a class="navlink" href="#c7-1">7.1 应用分工与服务器组织</a><a class="navlink" href="#c7-2">7.2 DNS</a></section><section class="navgroup"><h2>消息与资源</h2><p>理解邮件、文件、Web 的完整交互</p><a class="navlink" href="#c7-3">7.3 电子邮件</a><a class="navlink" href="#c7-4">7.4 FTP 与 TFTP</a><a class="navlink" href="#c7-5">7.5 Web、HTTP 与缓存</a></section><section class="navgroup"><h2>媒体与分发</h2><p>分析播放条件、位置选择和查找</p><a class="navlink" href="#c7-6">7.6 媒体播放</a><a class="navlink" href="#c7-7">7.7 CDN 与 P2P</a></section><section class="navgroup"><h2>练习与复习</h2><p>组合推导、独立作答与排错</p><a class="navlink" href="#c7-8">7.8 综合应用</a><a class="navlink" href="#c7-9">7.9 自测与答案</a><a class="navlink" href="#c7-10">7.10 排错与复习</a><a class="navlink" href="#c7-11">7.11 分类速查</a></section></nav><p class="asidefoot">先看前提与对象，再推导中间过程。速查只显示当前选项，完整解释可返回正文。<br><a href="00_学习导航.html">全课程入口</a></p></aside><main><div class="toolbar"><button class="menubtn" id="menu-button" aria-expanded="false" aria-controls="course-nav">目录</button><a href="../index.html#/">课程资料站</a><a href="00_学习导航.html">课程导航</a><span class="desktop-only">应用层</span><span class="spacer"></span><a href="07_应用层.md">Markdown</a><span class="desktop-only">离线阅读</span></div><article><h1>第7章 应用层：把域名、资源、邮箱和媒体服务的消息过程讲清并能计算结果</h1>
+<blockquote>
+<p>参考课件：第 7 章课件（原课件未随笔记发布）。</p>
+<p>适合读者：知道 IP、端口、TCP/UDP、RTT、字节流与数据报区别；不要求掌握网页编程。</p>
+<p>学习目标：把域名、资源、邮箱和媒体服务的消息过程讲清并能计算结果。学习公式与时序时，先确认例题中的单位、协议版本和假设。</p>
+</blockquote>
+<a id="learning-nav"></a>
+<h2>学习导航</h2>
+<p>先确定应用角色，再借 DNS 找到服务；邮件和文件协议分别说明状态与通道。Web 解释请求、连接和缓存，媒体与分发则把吞吐、缓冲和服务器位置放在一起考虑。</p>
+<table>
+<thead>
+<tr>
+<th>学习阶段</th>
+<th>要解决的问题</th>
+<th>对应内容</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>学习准备</td>
+<td>确认读者基础和对象</td>
+<td><a href="#c7-0">7.0 共同场景与符号</a></td>
+</tr>
+<tr>
+<td>角色与名字</td>
+<td>先找到谁提供哪种服务</td>
+<td><a href="#c7-1">7.1 应用分工与服务器组织</a>、<a href="#c7-2">7.2 DNS：查询角色、记录与缓存如何连起来</a></td>
+</tr>
+<tr>
+<td>消息与资源</td>
+<td>理解邮件、文件、Web 的完整交互</td>
+<td><a href="#c7-3">7.3 电子邮件：投递、邮箱状态和内容编码</a>、<a href="#c7-4">7.4 FTP 与 TFTP：通道、端口与结束条件</a>、<a href="#c7-5">7.5 Web、HTTP 与缓存：请求成功具体意味着什么</a></td>
+</tr>
+<tr>
+<td>媒体与分发</td>
+<td>分析播放条件、位置选择和查找</td>
+<td><a href="#c7-6">7.6 媒体播放：到达时间、编码依赖和控制通道</a>、<a href="#c7-7">7.7 CDN 与 P2P：副本与查找责任放在哪里</a></td>
+</tr>
+<tr>
+<td>练习与复习</td>
+<td>组合推导、独立作答与排错</td>
+<td><a href="#c7-8">7.8 综合应用</a>、<a href="#c7-9">7.9 自测与答案</a>、<a href="#c7-10">7.10 排错与复习</a>、<a href="#c7-11">7.11 分类速查</a></td>
+</tr>
+</tbody></table>
+<p>返回<a href="00_%E5%AD%A6%E4%B9%A0%E5%AF%BC%E8%88%AA.html">全课程学习导航</a>。</p>
+<a id="c7-0"></a>
+<h2>7.0 共同场景与符号</h2>
+<p>用 <code>www.example.com</code> 作为教学域名，用 <code>192.0.2.10</code> 等作为文档示例地址；不是要求实际访问它们。邮件、FTP、视频例子互相独立，前一例的缓存、登录或连接不会自动沿用。</p>
+<table>
+<thead>
+<tr>
+<th>对象或符号</th>
+<th>含义</th>
+<th>约定</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>客户端、服务器、解析器</td>
+<td>请求者、服务者、代查者</td>
+<td>是角色，不等于特定机箱或域名树的同一层</td>
+</tr>
+<tr>
+<td>记录 TTL、租约、缓存新鲜度</td>
+<td>不同状态的有效时间</td>
+<td>DNS TTL 单位秒，不是 IP 跳数</td>
+</tr>
+<tr>
+<td>RTT、L/R</td>
+<td>一次往返、发送对象的时间</td>
+<td>HTTP 题先声明建连、并行、TLS 是否计入</td>
+</tr>
+<tr>
+<td>n、Base64 字符数</td>
+<td>原字节数、传输编码长度</td>
+<td>字符编码先产字节，Base64 再编码这些字节</td>
+</tr>
+<tr>
+<td>q、b、r</td>
+<td>媒体码率 bit/s、缓冲秒数、下载速率 bit/s</td>
+<td>码率与分辨率分开；秒缓冲按媒体时长计</td>
+</tr>
+<tr>
+<td>RTP 序号、时间戳</td>
+<td>分组次序、媒体时钟位置</td>
+<td>序号逐包变化，时间戳按指定媒体时钟变化</td>
+</tr>
+<tr>
+<td>源站、边缘、对等节点</td>
+<td>原服务、副本位置、贡献资源的参与者</td>
+<td>内容保存位置与索引保存位置可不同</td>
+</tr>
+</tbody></table>
+<a id="c7-1"></a>
+<h2>7.1 应用分工与服务器组织</h2>
+<p>用户完成的是查资料、发邮件或看视频，协议规定程序交换哪些消息。请求者与提供者的角色、循环或并发的程序组织、TCP 或 UDP 的传输选择是不同维度，应在同一任务中分别决定。</p>
+<a id="k7.1.1"></a>
+<h3>7.1.1 应用与协议：做什么、怎样说</h3>
+<p><strong>应用</strong>是用户要完成的任务，例如收邮件；<strong>应用层协议</strong>是程序之间的交流规则，例如先发送哪条命令、回答用什么格式、失败后怎样处理。相同的业务可以采用不同协议，相同协议也能支撑多种产品。</p>
+<p>**客户端/服务器（C/S）**是一种分工：客户端主动请求，服务器接收请求并提供服务。“服务器”首先是角色，可以是普通计算机上的程序，也可以是集群。某程序在一次通信中是服务器，在另一次通信中也可以成为客户端。</p>
+<p>**浏览器/服务器（B/S）**把浏览器作为主要客户端。例如查成绩时，浏览器发送查询，业务服务检查身份并查询数据库，再把结果返回。浏览器、业务服务、数据库是应用的组织方式，不能当作 OSI 的三层。</p>
+<p>**P2P（对等方式）**让参与者同时贡献资源：下载文件时也能把已收到的部分上传给别人。它分散了提供数据的工作，但查找伙伴、处理离线和核对数据也需要额外机制。</p>
+<a id="k7.1.2"></a>
+<h3>7.1.2 一个服务器怎样处理多人请求</h3>
+<p><strong>循环服务器</strong>处理完一个请求再接下一个，容易理解；一个请求等待很久时，其他请求也可能被拖住。<strong>并发服务器</strong>通过多个执行任务或事件处理，让若干请求在重叠的时间内推进。</p>
+<p>并发不等于多个 CPU 在同一瞬间执行；后者叫<strong>并行</strong>。程序等待网络数据时能否继续做别的工作，则涉及<strong>阻塞/非阻塞</strong>。这两组概念描述不同问题，不能把“并发”直接等同于“非阻塞”。</p>
+<p>采用 TCP 时，服务器通常先监听，再接受连接；采用 UDP 时，可以接收数据报后回复。TCP/UDP 决定传输服务，并不直接决定服务器采用循环还是并发处理。</p>
+<a id="c7-2"></a>
+<h2>7.2 DNS：查询角色、记录与缓存如何连起来</h2>
+<p>人使用名字，路由使用地址；一份全网集中表既难维护也难更新。DNS 把权威责任分开，解析器沿线索查找并缓存。别名是名字到名字，查询类型才决定要取得哪种结果。</p>
+<a id="k7.2.1"></a>
+<h3>7.2.1 为什么需要 DNS</h3>
+<p>人容易记住 <code>www.example.com</code>，网络转发主要使用 IP 地址。**DNS（域名系统）**是一套分布式查询系统，能够查出域名对应的地址、邮件服务器等信息。<strong>解析</strong>就是按名字和查询类型取得这些信息。</p>
+<p>早期可以维护一份主机名与地址的 <code>Hosts.txt</code>；主机变多、地址频繁变化后，集中更新和分发越来越困难。DNS 把不同范围交给不同管理者，同时用缓存减少重复查询。</p>
+<p>域名与物理主机并非一一对应：一个域名可以对应多个地址，多个域名也可以指向同一服务。</p>
+<a id="k7.2.2"></a>
+<h3>7.2.2 域名的层次与服务器角色</h3>
+<p>域名从右往左看，由大范围逐步缩小。例如 <code>www.example.edu.</code> 中，最后的点表示根，<code>edu</code> 是顶级域，<code>example</code> 是其下的名字，<code>www</code> 又是下一层。日常输入往往省略最后的点。</p>
+<p>顶级域有国家或地区类，如 <code>cn</code>；有通用类，如 <code>com</code>；<code>arpa</code> 用于基础设施。ICANN、CNNIC 等涉及名字资源的协调或管理，不能直接当作每次查询都要访问的服务器。</p>
+<table>
+<thead>
+<tr>
+<th>角色</th>
+<th>通俗理解</th>
+<th>主要工作</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>根服务器</td>
+<td>知道各顶级域去哪里问</td>
+<td>返回相应顶级域的服务器线索</td>
+</tr>
+<tr>
+<td>顶级域服务器</td>
+<td>知道该顶级域下谁负责某个域</td>
+<td>返回下一层的服务器线索</td>
+</tr>
+<tr>
+<td>权威服务器</td>
+<td>管理某个区域的正式记录</td>
+<td>给出它所负责记录的答案</td>
+</tr>
+<tr>
+<td>递归解析器</td>
+<td>帮用户查完整答案的人</td>
+<td>查询、跟随线索、缓存并返回结果</td>
+</tr>
+</tbody></table>
+<p>前三者解释命名层次；递归解析器是查询中的角色，不是域名树的“第四层”。</p>
+<p>**域（domain）**是树中的一片名字范围；<strong>区（zone）<strong>是一次权威管理所负责的范围。若把一个子域交给另一组服务器管理，原区便不再直接保存该子域的全部记录，而通过 NS 记录说明应该去哪里问。这种交接叫</strong>委派</strong>。</p>
+<p>课件中的“13 台根服务器”应理解为 13 个逻辑标识 <code>a.root-servers.net</code>～<code>m.root-servers.net</code>。**任播（anycast）**允许不同地点的服务器使用同一服务地址，由路由把请求送到其中一个，因此物理实例不止 13 台。参见 <a href="https://www.iana.org/domains/root/servers">IANA 根服务器资料</a>。</p>
+<p>DNS 的线缆格式把每一段名字称为<strong>标签</strong>。单标签最多 63 字节；完整未压缩名字连同长度字节和结尾根标签，最多 255 字节。这是字节限制，不能说成“最多 255 个汉字”；也不能要求任何域名都必须包含一个点。参见 <a href="https://www.rfc-editor.org/rfc/rfc1035.html#section-2.3.4">RFC 1035 的长度限制</a>。</p>
+<a id="k7.2.3"></a>
+<h3>7.2.3 递归与迭代：谁继续查</h3>
+<p><strong>递归查询</strong>相当于“请你替我查出最后答案”；<strong>迭代查询</strong>相当于“如果你不知道，请告诉我下一步去问谁”。典型过程如下，假设缓存中没有可用记录：</p>
+<pre><code class="language-text">电脑 → 递归解析器：请查 www.example.com 的地址
+解析器 → 根服务器：得到 com 的服务器线索
+解析器 → com 服务器：得到 example.com 的权威服务器线索
+解析器 → 权威服务器：得到地址，或继续跟随别名
+解析器 → 电脑：返回结果
+</code></pre>
+<p>电脑通常向解析器提出递归请求，解析器再向各级服务器迭代查询。不是每次访问都要完整走一遍：浏览器、操作系统或解析器已有缓存时，步骤可以减少。</p>
+<p>**TTL（生存时间）**说明记录可以在缓存中保留多长时间，单位为秒，由记录设置。它不是统一的“两天”，也不是一个分组最多能跳多少次；这里只是与 IP 的 TTL 使用了相同缩写。</p>
+<p>传统 DNS 使用 UDP 或 TCP 的 53 端口。UDP 回复被截断时，可以转用 TCP，不能记成“DNS 只使用 UDP”。</p>
+<a id="k7.2.4"></a>
+<h3>7.2.4 DNS 报文：先辨认四个区域</h3>
+<p>报文由 <strong>12 字节首部</strong>和四个数量可变的部分构成：问题、回答、权威信息、附加信息。首部中的四个计数分别说明这些部分包含多少条项目，每个计数占 16 位。</p>
+<table>
+<thead>
+<tr>
+<th>首部内容</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>ID</td>
+<td>匹配查询与响应的标识</td>
+</tr>
+<tr>
+<td>QR</td>
+<td>这是查询还是响应</td>
+</tr>
+<tr>
+<td>AA</td>
+<td>响应是否具有相应权威性</td>
+</tr>
+<tr>
+<td>TC</td>
+<td>响应是否被截断</td>
+</tr>
+<tr>
+<td>RD / RA</td>
+<td>请求是否希望递归 / 服务器是否支持递归</td>
+</tr>
+<tr>
+<td>RCODE</td>
+<td>处理结果，例如成功、域名不存在</td>
+</tr>
+</tbody></table>
+<p>常见 RCODE：0 成功，2 服务器失败，3 名字不存在，5 拒绝处理。不要把“名字不存在”与“暂时查询失败”混为一谈。</p>
+<p><strong>问题项</strong>包含 QNAME（问哪个名字）、QTYPE（问哪种记录）、QCLASS（哪种类别，互联网通常为 IN）。回答等部分使用<strong>资源记录 RR</strong>：</p>
+<pre><code class="language-text">NAME | TYPE | CLASS | TTL | RDLENGTH | RDATA
+名字   类型   类别    缓存时间  数据长度    具体数据
+</code></pre>
+<p>TYPE、CLASS、RDLENGTH 各占 16 位，TTL 占 32 位；RDATA 的解释由 TYPE 决定。因此看见一串数据时，先看记录类型，再判断是地址、域名还是其他信息。</p>
+<p>“UDP DNS 最多 512 字节”指没有扩展机制时的经典限制。<strong>EDNS</strong>用 OPT 伪资源记录等机制扩展 DNS，允许说明可接收的 UDP 载荷大小；仍会受到网络与实现条件限制。参见 <a href="https://www.rfc-editor.org/rfc/rfc6891.html">RFC 6891</a>。</p>
+<a id="k7.2.5"></a>
+<h3>7.2.5 常见记录与别名过程</h3>
+<table>
+<thead>
+<tr>
+<th>记录</th>
+<th>回答什么</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>A / AAAA</td>
+<td>IPv4 地址 / IPv6 地址</td>
+</tr>
+<tr>
+<td>CNAME</td>
+<td>这个名字的规范名字，即别名最终指向的名字</td>
+</tr>
+<tr>
+<td>NS</td>
+<td>哪个名字服务器负责相应区域</td>
+</tr>
+<tr>
+<td>MX</td>
+<td>邮件服务器名字及其优先级数值</td>
+</tr>
+<tr>
+<td>SOA</td>
+<td>区域的管理和更新信息</td>
+</tr>
+<tr>
+<td>TXT</td>
+<td>文本信息</td>
+</tr>
+<tr>
+<td>PTR</td>
+<td>常用于由地址反查名字</td>
+</tr>
+</tbody></table>
+<p>例如记录为：</p>
+<pre><code class="language-text">www.example.com  CNAME  web.example.com
+web.example.com A      192.0.2.10
+</code></pre>
+<p>查 <code>www.example.com</code> 的 A 记录时，可能先得到 CNAME，再得到规范名字的地址。**CNAME 存放的是名字，不是 IP 地址。**附加部分可以提供继续处理所需的信息，并不只能放名字服务器地址。</p>
+<p>反向查询 IPv4 地址 <code>192.0.2.10</code> 时，按字节逆序组织名字 <code>10.2.0.192.in-addr.arpa</code>，查询其 PTR 记录。这里逆序的是四个十进制字节，不是把整个字符串逐字符倒过来。</p>
+<a id="k7.2.6"></a>
+<h3>7.2.6 DNSSEC：验证答案是否可信</h3>
+<p>普通 DNS 查询得到一个答案，仍要面对“记录是否由对应管理者提供、传途中有没有被改动”的问题。<strong>DNSSEC</strong>用数字签名验证记录来源与完整性。</p>
+<p><strong>数字签名</strong>可理解为：管理者用私钥生成证明，验证者用公开的公钥检查证明。RRSIG 保存签名，DNSKEY 保存公钥，父区的 DS 记录把信任关系连接到子区；从预先信任的起点向下验证，形成信任链。</p>
+<p>它还需要检查签名有效期和信任配置。DNSSEC 本身不负责加密查询内容，也不保证网站内容安全；如果要隐藏查询内容，需要其他机制。</p>
+<h3>一次别名查询怎样保存与失效</h3>
+<p><strong>扩展例题：</strong> t=0 时得到 <code>www.example.com CNAME web.example.com TTL=60</code>，以及 <code>web.example.com A 192.0.2.10 TTL=120</code>。t=30 时两条缓存分别剩 30、90 s；t=70 时别名已过期，而地址记录可能还剩 50 s。访问原名字时不能把过期的别名当作确定仍有效的事实，需要按解析器策略重新获取相应关系。</p>
+<p>权威管理员在 t=20 改成新地址，不会让所有旧缓存瞬间同步。TTL 是可缓存期限，实际解析器还可能因容量或策略提前移除；它不是强制保存到最后一秒的承诺。</p>
+<h3>报文标志为何要结合版本读</h3>
+<p>经典 DNS 首部还包括 OPCODE 等字段。旧图常把三个位置统称保留 Z，但 DNSSEC 后 AD/CD 有专门含义，不能把旧图的“全部必须为 0”推广到扩展后的报文，参见 <a href="https://www.rfc-editor.org/rfc/rfc4035.html">RFC 4035</a>。名字压缩可以用指针引用报文中已有的名字后缀；这改变线上表示长度，不改变逻辑域名。此处只辨认作用，不自行补出未给定报文的每个字节。</p>
+<h3>讲义题型：递归的“一条”必须指定从谁数</h3>
+<p>来源：讲义 PDF 物理第 1504～1505 页的递归链模型。用户主机给本地解析器一个请求；本地解析器给根一条递归请求，再由根、顶级、权威层级继续代查。题目只统计“用户主机、本地服务器各自发出的查询”，在这个指定模型中分别是一条、一条，不能把后续其他服务器发出的查询算到本地服务器身上。</p>
+<p>本资料前面介绍的通常流程不同：用户请求本地解析器递归，解析器自己向根、顶级、权威迭代，因此解析器可能发多条。两题并不矛盾，区别在“谁承担继续查找”。缓存、别名、委派层级或失败重试还能改变条数；没有完整拓扑时不强行给固定最大次数。</p>
+<a id="c7-3"></a>
+<h2>7.3 电子邮件：投递、邮箱状态和内容编码</h2>
+<p>收发双方未必同时在线，服务器需暂存和转交；用户还需要从邮箱取信或同步。SMTP、POP3/IMAP、MIME 分别管交接、邮箱访问、内容表示。消息信封与显示给用户的首部也属于不同用途。</p>
+<a id="k7.3.1"></a>
+<h3>7.3.1 一封邮件经过哪里</h3>
+<p><strong>用户代理 UA</strong>是用户操作的邮件程序；<strong>邮件服务器</strong>负责接收、暂存和转交邮件。收发双方不必同时在线：服务器可先保存，再等待取信或重试转交。</p>
+<pre><code class="language-text">发件人的邮件程序
+    ↓ SMTP 提交
+发件邮件服务器
+    ↓ 查收件域的 MX，使用 SMTP 转交
+收件邮件服务器
+    ↓ POP3 / IMAP 获取或同步
+收件人的邮件程序
+</code></pre>
+<p>SMTP 负责提交、转交；POP3 和 IMAP 主要解决用户怎样访问已到达邮箱的邮件。邮件服务器之间的经典 SMTP 端口为 TCP 25；不能由此推断所有用户发信连接都使用 25 端口。</p>
+<a id="k7.3.2"></a>
+<h3>7.3.2 信封与正文首部：两套地址各有用途</h3>
+<p>SMTP 的 <code>MAIL FROM</code>、<code>RCPT TO</code> 构成投递所用的<strong>信封</strong>；消息内部的 <code>From:</code>、<code>To:</code> 等属于<strong>邮件首部</strong>，用于向用户描述这封信。就像快递外包装的收件信息与盒子里信纸上的称呼，不必完全相同。</p>
+<table>
+<thead>
+<tr>
+<th>邮件首部</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>From / Sender</td>
+<td>内容所标明的作者 / 发送者</td>
+</tr>
+<tr>
+<td>To / Cc / Bcc</td>
+<td>主要收件、抄送、密送信息；密送地址通常不会展示给其他收件人</td>
+</tr>
+<tr>
+<td>Date / Subject</td>
+<td>日期 / 主题</td>
+</tr>
+<tr>
+<td>Reply-To</td>
+<td>希望接收回复的地址</td>
+</tr>
+<tr>
+<td>Message-ID</td>
+<td>标识这条消息</td>
+</tr>
+<tr>
+<td>In-Reply-To / References</td>
+<td>关联回复链</td>
+</tr>
+<tr>
+<td>Received</td>
+<td>记录邮件经过的处理节点</td>
+</tr>
+<tr>
+<td>Return-Path</td>
+<td>记录返回路径，供退信等处理</td>
+</tr>
+</tbody></table>
+<p>这些字段并非都必须出现，字段文本本身也不能单独证明发件人身份。首部之后有一个空行，再开始消息正文。</p>
+<a id="k7.3.3"></a>
+<h3>7.3.3 SMTP：命令、响应、结束标记</h3>
+<p>SMTP 使用 TCP，一般由客户端发命令、服务器回状态码。下面省略具体域名和地址，展示一次投递的主要过程：</p>
+<pre><code class="language-text">服务器：220   服务就绪
+客户端：EHLO  报告身份并询问扩展能力
+服务器：250   可以继续
+客户端：MAIL FROM:&lt;发件地址&gt;
+服务器：250
+客户端：RCPT TO:&lt;收件地址&gt;
+服务器：250
+客户端：DATA
+服务器：354   开始发送邮件内容
+客户端：邮件首部、空行、正文
+客户端：.     单独一行，表示内容结束
+服务器：250   已接受这封邮件
+客户端：QUIT
+服务器：221   结束会话
+</code></pre>
+<p>HELO 是基本问候，EHLO 用于扩展 SMTP。多个收件人可以重复发送 <code>RCPT TO</code>，不需要把整个正文重复提交多次。</p>
+<p>状态码首位有规律：2 表示成功；3 表示需要继续输入；4 表示暂时失败，可按策略重试；5 表示永久失败。收到最终 250，表示服务器接受处理，<strong>不等于收件人已经阅读</strong>。</p>
+<p>协议中的行结束符是 CRLF，即回车与换行两个字符。正文中若某行以点开头，发送方在前面再加一个点，接收方移除加上的点；这样正文中的点不会被误认成结束标记。这叫<strong>点透明处理</strong>。</p>
+<a id="k7.3.4"></a>
+<h3>7.3.4 POP3 与 IMAP：下载和同步</h3>
+<p><strong>POP3</strong>偏重从邮箱取信，经典端口为 TCP 110。会话经历认证、事务、更新三个阶段。主要命令如下：</p>
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>做什么</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>USER / PASS</td>
+<td>提供用户名与密码进行认证</td>
+</tr>
+<tr>
+<td>STAT / LIST</td>
+<td>获取邮件数量、总大小或各邮件大小</td>
+</tr>
+<tr>
+<td>RETR</td>
+<td>取回某封邮件</td>
+</tr>
+<tr>
+<td>DELE / RSET</td>
+<td>标记邮件待删除 / 撤销本次删除标记</td>
+</tr>
+<tr>
+<td>UIDL</td>
+<td>获取可用于识别邮件的唯一标识</td>
+</tr>
+<tr>
+<td>TOP</td>
+<td>获取首部与部分正文，是可选命令</td>
+</tr>
+<tr>
+<td>QUIT</td>
+<td>正常退出，在相应阶段提交更新</td>
+</tr>
+</tbody></table>
+<p>取回邮件不必然删除邮件。DELE 先做标记，正常进入更新阶段后才执行相应移除；客户端也可以配置保留服务器副本。</p>
+<p><strong>IMAP</strong>偏重“服务器上的邮箱与多个设备保持一致”，经典端口为 TCP 143。它支持文件夹、已读标记、搜索以及只取所需部分；本地缓存仍可支持离线阅读。</p>
+<p>可按功能记命令：CAPABILITY 查能力，LOGIN/AUTHENTICATE 做认证，SELECT/EXAMINE 选择邮箱，LIST/SEARCH 查目录或邮件，FETCH 取内容，STORE 改标记，COPY/APPEND 复制或追加消息，EXPUNGE 清除已标记删除的消息，LOGOUT 退出。先理解这些操作，不必把所有命令一次背完。</p>
+<a id="k7.3.5"></a>
+<h3>7.3.5 MIME：正文和附件怎样装在一封信里</h3>
+<p>早期邮件主要处理文本；图片、音频、附件需要说明数据类型和表示方法。<strong>MIME</strong>是一组扩展规则，让同一消息可以容纳不同内容。</p>
+<ul>
+<li><code>Content-Type</code>：这是哪种内容；可附带字符集 charset 或分隔符 boundary。</li>
+<li><code>Content-Transfer-Encoding</code>：这些字节怎样表示，便于传输。</li>
+<li><code>multipart</code>：消息由多个部分组成，以 boundary 划分；各部分又有自己的首部。</li>
+</ul>
+<p>常见顶级类型有 text、image、audio、video、application、multipart。<code>multipart/mixed</code> 用于组合正文与附件；<code>multipart/alternative</code> 的不同部分是同一内容的不同表示，例如纯文本版和 HTML 版。课件中的 parallel、digest 也属于多部分组织方式，不是新的传输协议。</p>
+<p><strong>字符编码</strong>先把文字变成字节，<strong>传输编码</strong>再把字节变成适于传输的字符。两者不能混用。</p>
+<p><strong>Quoted-Printable</strong>可以用 <code>=十六进制字节</code> 表示字节，等号自身写作 <code>=3D</code>。例如“系统”采用 GBK 时：</p>
+<pre><code class="language-text">字节：CF B5 CD B3
+二进制：11001111 10110101 11001101 10110011
+表示：=CF=B5=CD=B3
+</code></pre>
+<p>采用 UTF-8 时原始字节不同，结果也会不同。以上更正了课件第 86 页原例的二进制表示。</p>
+<p><strong>Base64</strong>把三个字节的 24 位分成四组，每组 6 位，查表得到四个字符。表依次使用 <code>A～Z</code>、<code>a～z</code>、<code>0～9</code>、<code>+</code>、<code>/</code>。</p>
+<pre><code class="language-text">原字节：49 31 79（十六进制，对应文本 I1y）
+位分组：010010 010011 000101 111001
+索引：  18     19     5      57
+字符：  S      T      F      5
+结果：STF5
+</code></pre>
+<p>课件原例的 <code>STE5</code> 应改为 <code>STF5</code>。剩一个原始字节时补两个 <code>=</code>，剩两个时补一个 <code>=</code>。不计换行，n 字节编码后长度为 <code>4 × ⌈n/3⌉</code>，通常增加约三分之一。<strong>编码不等于加密</strong>，知道编码规则就能还原字节。参见 <a href="https://www.rfc-editor.org/rfc/rfc4648.html#section-4">RFC 4648 的 Base64 规则</a>。</p>
+<h3>邮箱中的状态与本地副本分别追踪</h3>
+<p>设 POP3 会话取回第 2 封邮件，随后没有发送 DELE，而是正常 QUIT：仅凭 RETR 不能推出服务器已删除该邮件。若发送 DELE 2，先是本会话标记，正常进入更新阶段才按协议移除。连接异常终止需要按所处状态判断，不能凭本地已经保存一份就推断远端结果。</p>
+<p>IMAP 客户端本地已有缓存时可以离线看已缓存内容；新邮件和服务器状态需要联网同步。“协议偏重服务器邮箱”与“任何离线内容都无法读”是不同结论。</p>
+<h3>从文字到附件表示的两层转换</h3>
+<p>“你好”先按 UTF-8 得 <code>E4 BD A0 E5 A5 BD</code> 六字节，再 Base64 得 <code>5L2g5aW9</code> 八字符。这里字数 2、字节数 6、编码字符数 8，三个统计边界不同。Base64 保留可恢复的字节；按错误字符集解码仍可能乱码，传输编码并没有替双方选择字符集。</p>
+<a id="c7-4"></a>
+<h2>7.4 FTP 与 TFTP：通道、端口与结束条件</h2>
+<p>文件命令和文件内容可在不同连接上传送；简单 UDP 传输又需要上层明确确认与结束。选主动或被动决定谁发起数据连接，不能只记住两个常见端口就推断所有数据方向。</p>
+<a id="k7.4.1"></a>
+<h3>7.4.1 FTP 为什么有两种连接</h3>
+<p><strong>FTP</strong>把发命令和传数据分开：** 控制连接**使用 TCP，服务器经典监听端口为 21；<strong>数据连接</strong>传文件内容或目录列表。控制连接可持续存在，数据连接按操作建立和结束。</p>
+<p>因此 <code>LIST</code> 虽然是在控制连接上发出的命令，目录列表仍通过数据连接传输。RETR 表示下载，STOR 表示上传；USER/PASS 做登录，TYPE I 选择二进制传输类型，QUIT 退出。</p>
+<a id="k7.4.2"></a>
+<h3>7.4.2 主动与被动：谁发起数据连接</h3>
+<table>
+<thead>
+<tr>
+<th>模式</th>
+<th>客户端告诉服务器什么</th>
+<th>数据 TCP 连接由谁发起</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>主动</td>
+<td>PORT 提供客户端接收地址与端口</td>
+<td>服务器连接客户端；经典服务器数据端口为 20</td>
+</tr>
+<tr>
+<td>被动</td>
+<td>PASV 请求服务器给出监听地址与端口</td>
+<td>客户端连接服务器给出的地址与端口</td>
+</tr>
+</tbody></table>
+<p>PORT/PASV 的端口由两个字节 p1、p2 表示，实际端口为 <code>256p1+p2</code>。例如 p1=195、p2=80，则端口为 <code>195×256+80=50000</code>。</p>
+<p>主动模式需要服务器能够连接客户端给出的端点，因此 NAT、入站过滤等可能带来困难；被动模式由客户端发起。这里是机制区别，不能记成“FTP 的数据一定走 20 端口”。</p>
+<a id="k7.4.3"></a>
+<h3>7.4.3 TFTP：在 UDP 上做简单确认</h3>
+<p><strong>TFTP</strong>是更简单的文件传输协议，初始请求发往 UDP 69；后续传输使用双方为此次会话选定的传输标识端口，并非所有数据都经过 69。它没有 FTP 那套登录和目录操作。</p>
+<p>主要报文是读请求 RRQ、写请求 WRQ、数据 DATA、确认 ACK、错误 ERROR。基本方式接近停等：发送一个编号数据块，收到相应 ACK，再发下一个；超时则重传。UDP 自身不提供可靠交付，应用协议仍能添加确认和重传。</p>
+<p>基本 TFTP 的每个数据块最多 512 字节；<strong>最后一个数据块不足 512 字节</strong>表示结束。如果文件恰好有 1024 字节：</p>
+<pre><code class="language-text">DATA 1：512 字节 → ACK 1
+DATA 2：512 字节 → ACK 2
+DATA 3：  0 字节 → ACK 3，结束
+</code></pre>
+<p>不能仅因“前两块已经有 1024 字节”就省略结束块。扩展选项可以协商其他块大小，做题先看是否采用基本协议。参见 <a href="https://www.rfc-editor.org/rfc/rfc1350.html#section-6">RFC 1350 的传输结束规则</a>。</p>
+<h3>用三个长度检验 TFTP 的结束规则</h3>
+<p>基本块大小 512 B，且未协商扩展：文件 511 B 只发一个 511 B DATA；512 B 发一个 512 B DATA 后，再发零数据 DATA；513 B 先 512 B 后 1 B。接收端以“本块数据不足 512 B”判断结束，并确认最后一块。空文件也需要一个零数据 DATA，而不是完全无报文。</p>
+<a id="c7-5"></a>
+<h2>7.5 Web、HTTP 与缓存：请求成功具体意味着什么</h2>
+<p>找到服务地址后，还要说明请求哪个资源、返回哪种表示、是否复用连接和缓存。连接保持、应用会话保持、响应缓存是不同状态；收到响应中的错误码也可能说明通信链路已经工作。</p>
+<a id="k7.5.1"></a>
+<h3>7.5.1 Internet、Web、URL 各是什么</h3>
+<p><strong>Internet</strong>是互连网络基础设施；<strong>Web</strong>是在其上使用网页和链接组织信息的应用体系；<strong>浏览器</strong>是访问和呈现这些内容的程序。网络还承载邮件、文件传输等，不能把 Internet 与 Web 完全画等号。</p>
+<p><strong>URL</strong>说明要以什么方式访问哪个资源。例如：</p>
+<pre><code class="language-text">https://www.example.com:8443/course?id=7#section2
+协议     主机名          端口 路径   查询     片段
+</code></pre>
+<p><code>https</code> 表示采用受 TLS 保护的 HTTP；8443 是显式端口；<code>/course</code> 是路径；<code>id=7</code> 是查询部分；<code>section2</code> 是片段，通常由浏览器在得到资源后处理，不作为 HTTP 请求目标发送给服务器。主机名大小写通常不敏感，路径是否区分大小写取决于服务规则。</p>
+<a id="k7.5.2"></a>
+<h3>7.5.2 网页内容与生成方式</h3>
+<p><strong>HTML</strong>描述内容结构，例如标题和段落；<strong>CSS</strong>控制呈现方式，例如颜色和排版；<strong>JavaScript</strong>在浏览器中执行行为，例如点击后请求新数据。</p>
+<p><strong>静态页面</strong>的主要内容预先保存；<strong>动态页面</strong>由服务器根据查询、用户身份或数据生成；课件所说的<strong>活动页面</strong>强调客户端执行程序。这些能力可以同时存在于一个网站中。</p>
+<p><strong>XML</strong>用于表示有结构的数据；<strong>AJAX</strong>强调浏览器异步取数据并局部更新页面。它不要求数据一定是 XML，也不需要每次整页刷新。</p>
+<p>浏览器包含网络、页面解析、渲染、脚本执行与存储等功能。服务器可能经 CGI 或其他接口把请求交给业务程序，再查询数据库。CGI 是服务器与程序的接口机制，不是网络协议层。HTTP 的 Content-Type 帮接收方判断正文类型。</p>
+<a id="k7.5.3"></a>
+<h3>7.5.3 无状态、Cookie、会话</h3>
+<p><strong>HTTP 无状态</strong>指协议本身不会自动把连续请求关联成同一用户的交互过程。两次请求即使复用一个 TCP 连接，也不会仅因此完成用户身份管理。</p>
+<p>网站可以用 <strong>Cookie</strong>保存一个会话标识，再让服务器关联状态：</p>
+<pre><code class="language-text">第一次请求 → 服务器返回 Set-Cookie: sid=某个标识
+浏览器保存 → 后续符合条件的请求携带 Cookie: sid=某个标识
+服务器查 sid → 找到对应会话，例如登录状态或购物车
+</code></pre>
+<p>**会话（session）**是应用对一段交互的管理，不等于一条 TCP 连接。一个会话可能跨多条连接，一条连接也能承载多个请求。</p>
+<p>Cookie 的 Domain、Path 限定适用范围，过期时间决定保存期限；Secure 限制在安全连接上发送，HttpOnly 限制普通脚本接口访问。理解它们各自约束什么即可，任何单个属性都不能保证整体安全；Cookie 值也不必然是加密数据。</p>
+<a id="k7.5.4"></a>
+<h3>7.5.4 HTTP 连接与 RTT：先画请求顺序</h3>
+<p><strong>非持续连接</strong>在经典模型中为每个对象重新建立连接；<strong>持续连接</strong>让多个请求复用连接。<strong>流水线</strong>允许前一个响应未收到时就发出后续请求，HTTP/1.1 的响应仍按请求顺序交付。</p>
+<p><strong>多路复用</strong>进一步让多个请求对应的流交错传输。HTTP/2 在同一 TCP 连接上多路复用，但 TCP 丢失某些字节仍可能使其他流等待，称为传输层的<strong>队头阻塞</strong>。HTTP/3 使用 QUIC 的多个流，减少不同流因同一 TCP 字节序列而相互等待；仍可能受到拥塞控制等共同条件影响。参见 <a href="https://datatracker.ietf.org/doc/html/rfc9114">HTTP/3 标准</a>。</p>
+<p>做课件的 RTT 题时，必须先列模型：**忽略 DNS、TLS、服务器计算和排队，数据传输时间可忽略；TCP 建连计 1 RTT，请求到响应计 1 RTT。**RTT 是往返时间。如果对象有 L bit、有效传输率为 R bit/s，简单单对象模型还需加上 L/R。</p>
+<p>**例：同一服务器上的 1 个 HTML 加 2 个小图片。**先得到 HTML，才知道图片地址；所有对象按题设安排获取。</p>
+<table>
+<thead>
+<tr>
+<th>方式</th>
+<th>时间线</th>
+<th align="right">总计</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>非持续，三个对象串行</td>
+<td>每个对象各建连与请求一次</td>
+<td align="right">6 RTT</td>
+</tr>
+<tr>
+<td>持续，无流水线</td>
+<td>建连 1 + HTML 1 + 图片各 1</td>
+<td align="right">4 RTT</td>
+</tr>
+<tr>
+<td>持续，图片流水线</td>
+<td>建连 1 + HTML 1 + 两图片请求共同计 1</td>
+<td align="right">3 RTT</td>
+</tr>
+</tbody></table>
+<p>如果允许并行连接、已有缓存、TLS 握手或对象传输时间不可忽略，结果就会变化。这三个数字不能脱离题设套用。</p>
+<a id="k7.5.5"></a>
+<h3>7.5.5 HTTP/1.x 报文：起始行、首部、空行、正文</h3>
+<p>请求的起始行写方法、请求目标和版本；响应的起始行写版本、状态码和简短说明。首部之后的空行把元信息与正文分开。</p>
+<pre><code class="language-http">GET /hello HTTP/1.1
+Host: www.example.com
+Accept: text/plain
+</code></pre>
+<p>一个简化响应可以是：</p>
+<pre><code class="language-http">HTTP/1.1 200 OK
+Content-Type: text/plain; charset=utf-8
+Content-Length: 5
+
+hello
+</code></pre>
+<p>这里正文假定仅含 <code>hello</code> 的 5 个字节，代码块的排版换行不算额外正文。Content-Length 计的是字节，不是汉字个数。HTTP/2、HTTP/3 使用其他帧结构，不能把以上文本格式原样当作所有版本的线上格式。</p>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>通常表达的意图</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>GET</td>
+<td>获取资源的表示</td>
+</tr>
+<tr>
+<td>HEAD</td>
+<td>类似 GET，但响应不带该资源正文</td>
+</tr>
+<tr>
+<td>POST</td>
+<td>提交内容，让目标资源按其规则处理</td>
+</tr>
+<tr>
+<td>PUT</td>
+<td>创建或替换指定目标的表示</td>
+</tr>
+<tr>
+<td>DELETE</td>
+<td>请求移除目标资源的关联</td>
+</tr>
+<tr>
+<td>OPTIONS</td>
+<td>询问通信选项；拼写带 S</td>
+</tr>
+<tr>
+<td>TRACE</td>
+<td>用于诊断请求经过的处理</td>
+</tr>
+<tr>
+<td>CONNECT</td>
+<td>建立隧道，例如经代理转发连接</td>
+</tr>
+</tbody></table>
+<p>具体业务结果由服务器实现与权限决定。方法名字说明语义，不能把所有操作都简化成“网页增删改查”。</p>
+<p>状态码首位：1 信息响应，2 成功，3 重定向或缓存相关处理，4 客户端请求相关错误，5 服务器处理错误。常见值包括 200 成功、301/302 重定向、304 无需重传表示、400 请求有问题、403 拒绝访问、404 目标未找到、500 服务器内部错误。收到 404 说明收到了一条 HTTP 响应，不等于网络完全不通。</p>
+<a id="k7.5.6"></a>
+<h3>7.5.6 缓存与代理：少传一次相同内容</h3>
+<p><strong>代理</strong>替请求方或服务方中转请求；<strong>缓存</strong>保存可复用的响应。代理可以带缓存，但两者不是同义词。</p>
+<p>缓存先根据新鲜度规则判断能否直接复用；需要确认内容是否变化时，可以带上旧内容的验证标识。<strong>ETag</strong>是服务器给某个表示的标识，例如浏览器把先前的 ETag 放入 <code>If-None-Match</code>：</p>
+<pre><code class="language-text">内容没变 → 服务器返回 304 → 浏览器复用已有正文
+内容已变 → 服务器返回新正文与新的缓存信息
+</code></pre>
+<p>304 本身不重新携带完整资源正文。缓存能否共享还取决于响应规则、授权、Cookie 以及 Vary 等字段；Vary 指出哪些请求首部影响响应的选择。因此“URL 相同”不必然意味着所有用户都能复用相同内容。</p>
+<h3>持续连接与缓存不能互相代替</h3>
+<p><strong>独立条件：</strong> HTML 加两张图片，原模型忽略 DNS/TLS/传输时间，TCP 建连 1 RTT，每轮请求响应 1 RTT。持续无流水线原需 4 RTT。若 HTML 已在本地且新鲜，图片地址已知，又已有可复用连接，逐个请求两张图片只需 2 RTT；若两图也有可直接使用的缓存，则网络请求可为 0。</p>
+<p>304 的另一种情况仍需要一次验证往返，只省正文重传。必须区分“直接用新鲜缓存”与“发条件请求后收到 304”，不能说凡有缓存就不需要网络等待。</p>
+<p>URL 的 scheme 与 host 通常按各自规则处理大小写，路径与查询的语义则由服务定义，不能把课件中的“字符大小写没有要求”当作整个 URL 通用规则。<code>#片段</code> 通常由客户端定位，不随普通 HTTP 请求目标发送。</p>
+<a id="c7-6"></a>
+<h2>7.6 媒体播放：到达时间、编码依赖和控制通道</h2>
+<p>视频的字节最终正确到达仍可能来不及播放。吞吐决定长期能否供足，缓冲吸收短期波动但增加延迟；时间戳描述媒体时刻，信令负责建立交互，两者不能按相同编号解释。</p>
+<a id="k7.6.1"></a>
+<h3>7.6.1 吞吐、时延、抖动与缓冲</h3>
+<p><strong>流媒体</strong>不必等整个文件下载完成才播放。点播内容预先存在；直播边产生边发布；交互式音视频还要求双方尽快听到、看到彼此。</p>
+<ul>
+<li><strong>吞吐量</strong>：每秒实际收到多少数据，影响能否维持播放。</li>
+<li><strong>时延</strong>：从产生到播放要等多久，交互通信对它更敏感。</li>
+<li><strong>抖动</strong>：到达间隔忽快忽慢，即时延的波动。</li>
+<li><strong>缓冲</strong>：先存一段待播内容，用来吸收到达不均匀或短暂变慢。</li>
+</ul>
+<p>缓冲多可以抵御短暂波动，但增加起播等待或直播延迟；缓冲不能让长期不足的带宽凭空变大。</p>
+<p>**例：视频码率为 2 Mb/s，一个 2 秒片段有 4 Mb。**如果下载速率为 4 Mb/s，1 秒下载完，期间播放消耗 1 秒内容，新片段增加 2 秒内容，缓冲净增 1 秒。若下载速率降到 1 Mb/s，则需 4 秒，缓冲净减 2 秒；原缓冲不够就可能卡顿。这里忽略协议开销并假定持续播放。</p>
+<p><strong>码率</strong>是每秒编码数据量，<strong>分辨率</strong>是画面像素尺寸。分辨率相同也可能有不同码率，不能直接互换。</p>
+<a id="k7.6.2"></a>
+<h3>7.6.2 I、P、B 帧与 GOP</h3>
+<p>视频编码常利用相邻画面的相似部分来减少数据。<strong>I 帧</strong>主要在本帧内编码；<strong>P 帧</strong>利用先前参考画面；<strong>B 帧</strong>可利用前后参考画面。**GOP（图像组）**把一段相关帧组织在一起。</p>
+<p>解码一帧可能需要先得到参考帧，因此传输或解码顺序可以与显示顺序不同。某帧丢失会影响哪些后续画面，要看实际依赖关系；不能说“任意 B 帧一丢，整段视频一定全坏”。</p>
+<a id="k7.6.3"></a>
+<h3>7.6.3 信令、媒体与反馈：三件不同的事</h3>
+<p><strong>信令</strong>处理“邀请谁、协商什么格式、何时开始”等控制信息；<strong>媒体数据</strong>是音视频内容；<strong>反馈</strong>报告接收效果。课件涉及的协议各有分工：</p>
+<table>
+<thead>
+<tr>
+<th>协议或格式</th>
+<th>主要作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>SIP、H.323</td>
+<td>会话建立、能力协商等信令体系</td>
+</tr>
+<tr>
+<td>SDP</td>
+<td>描述媒体类型、地址、端口、编码等会话参数</td>
+</tr>
+<tr>
+<td>RTSP</td>
+<td>对媒体会话进行建立、播放、暂停、结束等控制</td>
+</tr>
+<tr>
+<td>RTP</td>
+<td>传送带序号、时间信息的实时媒体</td>
+</tr>
+<tr>
+<td>RTCP</td>
+<td>报告接收质量、同步等信息</td>
+</tr>
+</tbody></table>
+<p>它们不必在每个流媒体应用中全部出现，也不能仅因用途相近就互换名称。</p>
+<p>RTSP 的 SETUP 建立传输相关安排，PLAY 开始播放，PAUSE 暂停，TEARDOWN 结束。RTSP 控制与实际媒体传送可以采用不同通道。防火墙是否允许流量取决于配置和策略，不能把课件“允许 TCP”表述当作普遍保证。</p>
+<a id="k7.6.4"></a>
+<h3>7.6.4 RTP：序号管顺序，时间戳管播放时刻</h3>
+<p>RTP 基本首部最少 12 字节。主要字段包括：V 版本（2 位）、P 填充标志、X 扩展标志、CC 源列表数量（4 位）、M 标记、PT 载荷类型（7 位）、序号（16 位）、时间戳（32 位）、SSRC 同步源标识（32 位）。源列表和扩展会增加首部长度。</p>
+<p><strong>序号</strong>通常每发送一个 RTP 分组加 1，帮助发现丢包、重排；<strong>时间戳</strong>按媒体时钟计数，帮助确定相对播放时刻。时间戳不是统一的“毫秒数”。SSRC 区分参与会话的媒体来源；CSRC 列表可说明混合内容的贡献来源。</p>
+<p>**例：8 kHz 音频，每个分组装 20 ms 采样。**一个分组对应 <code>8000×0.020=160</code> 个采样时刻，连续分组的序号加 1，时间戳通常加 160。数据包因为网络抖动晚到，不改变这段音频本来的采样间隔。</p>
+<p>RTCP 可报告丢失比例、抖动等，帮助发送方调整。RTP/RTCP 本身不保证每个包都得到重传或按时到达。</p>
+<a id="k7.6.5"></a>
+<h3>7.6.5 WebRTC：浏览器怎样实时通信</h3>
+<p><strong>WebRTC</strong>让浏览器等端点建立实时音视频或数据通信。PeerConnection 管理对等连接，DataChannel 提供数据通道；仍需要应用安排信令，交换建立连接所需的信息。</p>
+<p>难点之一是双方处于 NAT 或过滤设备后面。<strong>ICE</strong>收集并测试候选路径；<strong>STUN</strong>帮助了解对外映射等信息；直接连接不可用时，<strong>TURN</strong>可提供中继。不是使用 STUN 就必然能让任意两端直连。</p>
+<p>媒体通常用 SRTP 保护，连接安全协商涉及 DTLS。SRTP 可理解为在 RTP 基础上添加安全保护，DTLS 则提供适用于数据报通信的安全机制。这里掌握分工即可，不必把所有握手细节混入媒体播放过程。</p>
+<a id="k7.6.6"></a>
+<h3>7.6.6 DASH、自适应码率与 SVC</h3>
+<p><strong>DASH</strong>把视频切成小段，并准备多种质量版本。描述文件告诉客户端有哪些片段、版本和访问地址；客户端通过 HTTP 下载，结合近期吞吐与缓冲，选择下一段的版本。</p>
+<p>例如可选码率为 1、2、4 Mb/s，近期估计下载能力约 3 Mb/s。选 2 Mb/s 留有余量；持续选 4 Mb/s 会消耗缓冲。真实选择还考虑估计误差、切换成本和当前缓冲，不是只比较两个数字。</p>
+<p>HLS 也采用描述文件和片段进行 HTTP 分发，但具体格式与规则不同。它们可借助既有 Web 缓存与 CDN，并不需要把每次播放都组织成 RTP 会话。</p>
+<p>**SVC（可伸缩视频编码）**把内容分成基础层和增强层：基础层即可得到基本画面，收到增强层可提高质量。它与“各码率各存一个完整版本”是不同组织方式；增强层可能依赖基础层。此处 SVC 与前面交换技术中的缩写含义不同。</p>
+<a id="c7-7"></a>
+<h2>7.7 CDN 与 P2P：副本与查找责任放在哪里</h2>
+<p>所有用户都从一个源站下载，会加大源站和路径负载。CDN 把可缓存副本放到边缘，P2P 让参与者贡献已有内容；索引、伙伴发现和实际内容传送是分开的步骤，DHT 负责者不一定保存整个文件。</p>
+<a id="k7.7.1"></a>
+<h3>7.7.1 CDN：把副本放到多个位置</h3>
+<p><strong>CDN（内容分发网络）<strong>通过分散部署的边缘节点，把常用内容副本放到离请求者较合适的位置。保存原始内容的服务叫</strong>源站</strong>；边缘没找到可用副本时，从源站获取，叫<strong>回源</strong>。</p>
+<p><strong>推送式</strong>由源站主动分发；<strong>拉取式</strong>在用户请求造成缓存未命中时获取。缓存过期、版本更新和失效处理决定用户看到哪份内容，不能保证所有节点瞬间同步。</p>
+<p>“就近”不只按地图距离判断，还可能考虑网络路径、节点负载、可用性与运营策略。</p>
+<p>课件中的 DNS 调度可理解为：</p>
+<pre><code class="language-text">用户查询网站名字
+    ↓ CNAME 指向 CDN 管理的名字
+CDN 的 DNS / 调度系统选择节点
+    ↓ 返回节点地址
+用户连接节点 → 命中缓存则返回，否则回源
+</code></pre>
+<p>**GSLB（全局服务器负载均衡）**就是在多个服务位置之间安排请求。DNS 是一种调度手段；缓存 TTL 和解析器位置可能影响选择，不是每次请求都立即重新选择同一个地理最近节点。</p>
+<p>动态、按用户授权的响应能否缓存，需要遵循应用与 HTTP 规则。CDN 本身也不保证内容真实性或安全。课件“2022 年视频流量占 82%”属于历史预测材料，不能作为当前流量统计背诵。</p>
+<a id="k7.7.2"></a>
+<h3>7.7.2 P2P 的覆盖网络与查找方式</h3>
+<p>P2P 中参与者互相建立逻辑连接，形成<strong>覆盖网络（overlay）</strong>。两个逻辑邻居在物理网络中可能隔着许多路由器，逻辑边不等于一根直接连接的网线。</p>
+<table>
+<thead>
+<tr>
+<th>组织方式</th>
+<th>怎样查内容</th>
+<th>主要代价</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>集中式索引</td>
+<td>向中心问提供者，再与对等方传数据</td>
+<td>依赖中心可用性与容量</td>
+</tr>
+<tr>
+<td>非结构化网络</td>
+<td>向邻居传播查询等</td>
+<td>查询消息可能很多，也可能找不到</td>
+</tr>
+<tr>
+<td>结构化网络</td>
+<td>按约定的编号规则逐步找到负责者</td>
+<td>需要维护编号、路由与节点变化</td>
+</tr>
+</tbody></table>
+<p>树状分发路径清晰，但父节点离开会影响子节点；网状分发可从多个伙伴取数据，但选择伙伴与维护连接更复杂。</p>
+<a id="k7.7.3"></a>
+<h3>7.7.3 BitTorrent：分片、交换、核对</h3>
+<p><strong>BitTorrent</strong>把文件分成 pieces，用户从多个伙伴获取不同片，同时上传自己已有的片。拥有完整内容的参与者叫 <strong>seed（种子）</strong>；其他参与者可持有部分内容。</p>
+<p><strong>Tracker</strong>帮助发现伙伴；也可以通过 DHT 等方式发现伙伴。发现谁有内容与实际传输文件是两项工作。piece 内还可划分更小的请求块，不能把 piece 与每条数据报的大小画等号；课件的 256 KB 只是示例或常见设置，不是所有文件都固定使用的片长，更不是 256 Kb。</p>
+<p>**最稀缺优先（rarest first）**倾向先获取伙伴中副本最少的片。例如 A、B、C 有多个副本，D 只有一个伙伴持有，先补充 D 能减少唯一提供者离线后无法完成下载的风险。</p>
+<p>片下载完成后，可用元数据中的哈希检查内容。<strong>哈希</strong>把数据算成固定长度的摘要，帮助判断片是否与预期一致；摘要匹配不自动证明元数据来源可信。</p>
+<a id="k7.7.4"></a>
+<h3>7.7.4 DHT：把索引责任分给节点</h3>
+<p>**DHT（分布式哈希表）**把“某个键由谁负责”分布到许多节点上。键可以来自内容标识的哈希；查到的值可以是提供者信息，不意味着整部视频必然保存在负责节点上。</p>
+<p>先用一个<strong>教学用环模型</strong>理解：编号空间 0～15，节点编号为 1、5、9、14，约定键归顺时针遇到的第一个节点。键 7 归节点 9；键 15 绕回节点 1。这是某类环式 DHT 的简化，不是所有 DHT 的通用查找规则。</p>
+<p>BitTorrent 的 DHT 使用 Kademlia 思路，以 <strong>XOR 距离</strong>比较编号：把两编号按位异或，将结果作为距离。例如 <code>7 XOR 5=2</code>，<code>7 XOR 9=14</code>，所以按这种距离 5 比 9 更接近 7。不能拿上面的环上顺时针规则直接推导 Kademlia。参见 <a href="https://www.bittorrent.org/beps/bep_0005.html">BitTorrent DHT 协议 BEP 5</a>。</p>
+<p>结构化查找常见的 <code>O(log N)</code> 表示：在相应设计与假设下，所需步骤随节点数大致按对数增长，规模扩大时步骤增加相对缓慢。它不是任何 P2P 网络在任意故障下都成立的保证。</p>
+<a id="c7-8"></a>
+<h2>7.8 综合应用</h2>
+<p><strong>任务与前提：</strong> 浏览器访问教学视频 URL，DNS 结果将域名指向 CDN。边缘有可用网页与片段，视频码率 2 Mbit/s，每片媒体时长 2 s，下载速率起初 4 Mbit/s、随后 1 Mbit/s。忽略协议开销，起始缓冲 3 s，持续播放且开始每次下载时串行请求一片。</p>
+<table>
+<thead>
+<tr>
+<th>步骤</th>
+<th>使用机制</th>
+<th>输入与具体结果</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>DNS 查询及 CDN 调度</td>
+<td>取得服务地址，缓存期限由记录规定，后续连接这个地址</td>
+</tr>
+<tr>
+<td>2</td>
+<td>传输与安全连接</td>
+<td>按实际 HTTP 版本选择 TCP/TLS 或 QUIC；不给未指定握手凭空填 RTT</td>
+</tr>
+<tr>
+<td>3</td>
+<td>HTTP 请求</td>
+<td>得到网页、描述文件与片段地址；缓存命中由边缘返回</td>
+</tr>
+<tr>
+<td>4</td>
+<td>高速下载第一片</td>
+<td>片长 2×2=4 Mbit，下载 1 s；缓冲从 3 消耗到 2，再加 2 得 4 s</td>
+</tr>
+<tr>
+<td>5</td>
+<td>低速下载下一片</td>
+<td>4 Mbit/1 Mbit/s=4 s；缓冲恰在下载完成前降到 0，再加 2 得 2 s</td>
+</tr>
+<tr>
+<td>6</td>
+<td>继续低速且码率不变</td>
+<td>下一片需 4 s，只有 2 s 可播，出现约 2 s 等待，完成后再有 2 s</td>
+</tr>
+<tr>
+<td>7</td>
+<td>自适应策略</td>
+<td>可选择更低码率并留余量；不能保证实际速率恒定或任意情况下不卡顿</td>
+</tr>
+</tbody></table>
+<p>缓冲秒数表示当前能播放的媒体时间，不等于下载等待时间。上面的加片采用完整片下载后进入可播放缓冲的简化模型；真实播放器可有渐进下载和更复杂状态。若边缘未命中，回源还会改变请求时间；索引知道文件位置也不等于已取得媒体字节。</p>
+<h3>视频访问的完整流程</h3>
+<pre><code class="language-text">输入视频 URL
+    ↓ DNS：找服务地址，可能经 CDN 调度
+建立传输与安全连接
+    ↓ HTTP：取得网页、描述文件和视频片段
+CDN 节点返回内容，必要时回源
+    ↓ 客户端按吞吐和缓冲选择质量
+缓冲 → 解码 → 按媒体时间播放
+</code></pre>
+<p>这条路线适合 HTTP 分段视频。实时通话可以采用信令、WebRTC、RTP 等另一条路线，不应要求所有网络视频都同时经过 SMTP、FTP、RTSP 和 RTP。</p>
+<a id="c7-9"></a>
+<h2>7.9 自测与答案</h2>
+<p>先独立完成概念自测，再做应用题。展开答案时，检查自己的前提、推导和方法选择。</p>
+<h3>概念自测</h3>
+<ol>
+<li>根服务器为什么不必保存每个网站的 IP？递归解析器处在域名树的哪一层？</li>
+<li>查询 A 记录时得到 CNAME，下一步应理解或查询什么？</li>
+<li>SMTP 返回接受邮件的 250，能否证明对方已经读信？</li>
+<li>为什么 Base64 会变长，却不能当作加密？5 个字节编码后多长？</li>
+<li>FTP 的 LIST 命令与它的目录内容是否使用同一连接？</li>
+<li>基本 TFTP 传 1024 字节文件，为什么还要一个零数据字节的 DATA？</li>
+<li>HTTP 无状态与 TCP 持续连接是否矛盾？</li>
+<li>在本章简化题设中，一个 HTML 加两个图片采用持续、非流水线方式需多少 RTT？</li>
+<li>8 kHz 音频每包 20 ms，相邻 RTP 包的序号与时间戳分别怎样变化？</li>
+<li>CDN 节点缓存未命中怎么办？DHT 查找负责节点是否等于从该节点下载完整文件？</li>
+</ol>
+<details>
+<summary>参考答案</summary>
+
+<ol>
+<li>根主要提供下一层线索，由不同权威区分担记录；递归解析器是查询角色，不是独立的域名树层次。</li>
+<li>CNAME 给的是规范名字；需要沿名字继续取得相应 A 记录，响应也可能已包含它。</li>
+<li>不能，只说明相应服务器接受处理。</li>
+<li>三个字节转成四个字符，编码可逆且不依赖保密密钥；5 字节得到 <code>4×⌈5/3⌉=8</code> 个字符。</li>
+<li>命令走控制连接，目录内容走数据连接。</li>
+<li>前两个满块不能表明结束，需要不足 512 字节的最后块。</li>
+<li>不矛盾：协议是否自动关联应用状态与传输连接是否复用是不同问题。</li>
+<li>4 RTT：建连 1、HTML 1、两个图片各 1。</li>
+<li>序号加 1，时间戳通常加 160。</li>
+<li>可回源获取；DHT 可能只保存提供者信息，之后还需联系实际提供者。</li>
+</ol>
+</details>
+
+<h3>应用练习</h3>
+<table>
+<thead>
+<tr>
+<th>题号</th>
+<th>学习任务</th>
+<th>检查能力</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>DNS 的 A 记录在 t=0 得到 TTL=120 s，权威地址 t=30 更新，t=40 缓存还能返回旧地址吗？</td>
+<td>写条件、推导、解释结果与边界</td>
+</tr>
+<tr>
+<td>2</td>
+<td>UTF-8 的“你好”先占几字节，再 Base64 几字符？5 个原字节呢？</td>
+<td>写条件、推导、解释结果与边界</td>
+</tr>
+<tr>
+<td>3</td>
+<td>基本 TFTP 传 1536 B，无扩展，DATA 数据长度顺序是什么？</td>
+<td>写条件、推导、解释结果与边界</td>
+</tr>
+<tr>
+<td>4</td>
+<td>HTML 加 4 小图片，简化持续无流水线与图片流水线分别多少 RTT？</td>
+<td>写条件、推导、解释结果与边界</td>
+</tr>
+<tr>
+<td>5</td>
+<td>视频 3 Mbit/s，每片 2 s，下载 2 Mbit/s，起始缓冲 4 s，第一片完成后缓冲多少？</td>
+<td>写条件、推导、解释结果与边界</td>
+</tr>
+<tr>
+<td>6</td>
+<td>8 kHz RTP 音频每包 30 ms，序号和时间戳各增加多少？</td>
+<td>写条件、推导、解释结果与边界</td>
+</tr>
+</tbody></table>
+<details>
+<summary>应用练习答案与理由</summary>
+
+<p><strong>1.</strong> 按普通未过期缓存可能仍返回旧地址，剩余约 80 s。权威更新不让所有缓存立即同步；实际解析器可能有提前刷新或移除策略。</p>
+<p><strong>2.</strong> 你好为 6 B，4×ceil(6/3)=8 字符，结果 5L2g5aW9。5 B 也得 8 字符，但有一个 = 填充。不能按汉字数直接代入 n。</p>
+<p><strong>3.</strong> 512、512、512、0 B。前三块恰好满块，必须用第四个不足 512 B 的末块标明结束，每块均按协议确认。</p>
+<p><strong>4.</strong> 前者 1 建连+1 HTML+4 图片=6 RTT；后者 1+1+1=3 RTT。图片地址在 HTML 后才知道，假定流水线的小响应在模型中共同计一轮；实际长度、TLS、并行和缓存会改变结果。</p>
+<p><strong>5.</strong> 片长 6 Mbit，下载 3 s，缓冲先消耗到 1 s，片完成增加 2 s，最终 3 s。每片净减 1 s，长期继续仍会耗尽，初始缓冲不能弥补持续吞吐不足。</p>
+<p><strong>6.</strong> 序号逐包加 1；媒体时间戳按 8000×0.03=240 增加。网络实际到达间隔波动不改变原媒体采样间隔。</p>
+</details>
+
+<a id="c7-10"></a>
+<h2>7.10 排错与复习</h2>
+<table>
+<thead>
+<tr>
+<th>现象或疑问</th>
+<th>可能原因</th>
+<th>怎样核对</th>
+<th>正确理解</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>CNAME 直接当 IP</td>
+<td>忽略记录类型</td>
+<td>读 TYPE 后解释 RDATA</td>
+<td>CNAME 存名字，需要继续找到地址记录</td>
+</tr>
+<tr>
+<td>SMTP 250 被认为已读回执</td>
+<td>混淆服务器接受与用户阅读</td>
+<td>看是哪条命令的响应</td>
+<td>提交完成只表示接受相应处理</td>
+</tr>
+<tr>
+<td>FTP 登录正常却 LIST 无数据</td>
+<td>只验证控制连接</td>
+<td>分别查数据连接发起方和端点可达性</td>
+<td>控制与数据通道不同</td>
+</tr>
+<tr>
+<td>HTTP 304 没有正文被当作丢包</td>
+<td>忽略条件缓存请求</td>
+<td>核对已有正文及验证标识</td>
+<td>304 用来复用已有表示</td>
+</tr>
+<tr>
+<td>缓冲秒数越算越大却网速更低</td>
+<td>把下载时间当新增媒体时间</td>
+<td>每片先减下载期间播放量，再加片时长</td>
+<td>码率和下载速率分开计算</td>
+</tr>
+<tr>
+<td>DHT 环模型用于推 BitTorrent</td>
+<td>混用不同距离度量</td>
+<td>先声明环顺序或 XOR 距离</td>
+<td>教学环与 Kademlia 规则不同</td>
+</tr>
+</tbody></table>
+<p>学完后应能独立做到：</p>
+<ul>
+<li><input disabled="" type="checkbox"> 用自己的话解释本章机制要处理的对象和困难。</li>
+<li><input disabled="" type="checkbox"> 指出整体、部分、分类维度和执行动作之间的关系。</li>
+<li><input disabled="" type="checkbox"> 写出算例的前提、单位、中间结果与最终对象。</li>
+<li><input disabled="" type="checkbox"> 解释确认、缓存、租约或映射的状态怎样变化。</li>
+<li><input disabled="" type="checkbox"> 指出相近方法的差别及可以组合的条件。</li>
+<li><input disabled="" type="checkbox"> 完成概念自测和应用练习，并说明前提改变后的结果。</li>
+</ul>
+<a id="c7-11"></a>
+<h2>7.11 分类速查</h2>
+<p>选择一项查看含义、基本形式、例子与结果、使用条件。完整表保存在对应 Markdown。</p>
+<div class="quickbox"><label for="quick-select">选择速查项</label><select id="quick-select"></select><div id="quick-card" class="quickcard" aria-live="polite"></div></div>
+
+<div class="footerlinks"><a href="06_传输层.html">← 上一章：传输层</a><a href="00_学习导航.html">返回课程导航 →</a></div></article></main><script>window.CHAPTER={"chapter":7,"name":"应用层","file":"07_应用层.md","title":"第7章 应用层：把域名、资源、邮箱和媒体服务的消息过程讲清并能计算结果","toc":[{"id":"c7-0","title":"7.0 共同场景与符号"},{"id":"c7-1","title":"7.1 应用分工与服务器组织"},{"id":"c7-2","title":"7.2 DNS：查询角色、记录与缓存如何连起来"},{"id":"c7-3","title":"7.3 电子邮件：投递、邮箱状态和内容编码"},{"id":"c7-4","title":"7.4 FTP 与 TFTP：通道、端口与结束条件"},{"id":"c7-5","title":"7.5 Web、HTTP 与缓存：请求成功具体意味着什么"},{"id":"c7-6","title":"7.6 媒体播放：到达时间、编码依赖和控制通道"},{"id":"c7-7","title":"7.7 CDN 与 P2P：副本与查找责任放在哪里"},{"id":"c7-8","title":"7.8 综合应用"},{"id":"c7-9","title":"7.9 自测与答案"},{"id":"c7-10","title":"7.10 排错与复习"},{"id":"c7-11","title":"7.11 分类速查"}],"stages":[{"name":"学习准备","task":"确认读者基础和对象","ids":["c7-0"]},{"name":"角色与名字","task":"先找到谁提供哪种服务","ids":["c7-1","c7-2"]},{"name":"消息与资源","task":"理解邮件、文件、Web 的完整交互","ids":["c7-3","c7-4","c7-5"]},{"name":"媒体与分发","task":"分析播放条件、位置选择和查找","ids":["c7-6","c7-7"]},{"name":"练习与复习","task":"组合推导、独立作答与排错","ids":["c7-8","c7-9","c7-10","c7-11"]}],"quick":[["DNS 查询与 TTL","名字服务","按类型获取记录并减少重复查询","递归代查、迭代给线索、TTL 秒","CNAME 再查 A；TTL120 过 40 剩约80","DNS 缓存不即时随权威改动同步",1],["SMTP、POP3/IMAP、MIME","邮件分工","区分投递、邮箱状态与内容表示","SMTP 交接；访问协议取信；MIME 定类型和编码","250 表接受，RETR 不自动删信","按协议阶段判断状态，不凭端口推出所有部署",2],["Base64","传输编码","把字节写成可传输字符","4×ceil(n/3)","你好 6 B 得 5L2g5aW9 8 字符","可逆编码不等于加密，n 是字节",2],["FTP 主动与被动","连接组织","判断数据连接谁发起","PORT 由服务器连接；PASV 由客户端连接","p1=195、p2=80 得50000","控制连接在21，数据不总是20",3],["TFTP 结束","应用恢复","明确最后块和确认","末块数据\u003c512 B（基本协议）","1024 B 后加0 B DATA","扩展块大小须按协商值判断",3],["HTTP RTT 与缓存","请求依赖","估计等待及是否重传正文","按建连、依赖、并行条件逐项累加","1 HTML+2 图：6/4/3 RTT 的三个模型","直接新鲜缓存与304验证不同",4],["媒体缓冲与 RTP","实时交付","计算播放存量并区分时间信息","下载时间=qT/r；缓冲变化=T−下载时间","2 Mbit/s、2 s、4 Mbit/s 净增1 s","不足存量会停播，RTP 时间戳按媒体时钟",5],["CDN、BitTorrent、DHT","内容分发","分别定位副本、交换片与查找提供者","边缘缓存；pieces；分布索引","键7在教学环归9，XOR距离按位另算","索引命中不等于文件字节到达",6]],"quick_id":"c7-11","synthesis_id":"c7-8","source_module_count":32,"retained_core_chars":14485,"new_chars":24660};</script><script>
+const $$=(s,r=document)=>[...r.querySelectorAll(s)];
+const menu=document.getElementById('menu-button');
+const setNav=v=>{document.body.classList.toggle('nav-open',v);menu.setAttribute('aria-expanded',String(v))};
+menu.addEventListener('click',()=>setNav(!document.body.classList.contains('nav-open')));
+document.querySelector('.navshade').addEventListener('click',()=>setNav(false));
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){setNav(false);menu.focus()}});
+for(const table of $$('article table')){const wrap=document.createElement('div');wrap.className='tablewrap';table.before(wrap);wrap.append(table)}
+const anchors=$$('.navlink[href^="#"]');
+const entries=anchors.map(a=>({a,id:a.getAttribute('href').slice(1),el:document.getElementById(a.getAttribute('href').slice(1))})).filter(x=>x.el);
+function activate(id){for(const e of entries){const yes=e.id===id;e.a.classList.toggle('active',yes);if(yes)e.a.setAttribute('aria-current','location');else e.a.removeAttribute('aria-current')}}
+let scheduled=false;
+function sync(){scheduled=false;let last=entries[0];for(const e of entries){if(e.el.getBoundingClientRect().top<=135)last=e}if(window.innerHeight+window.scrollY>=document.documentElement.scrollHeight-6)last=entries.at(-1);if(last)activate(last.id)}
+window.addEventListener('scroll',()=>{if(!scheduled){scheduled=true;requestAnimationFrame(sync)}},{passive:true});
+window.addEventListener('resize',sync);
+for(const e of entries)e.a.addEventListener('click',()=>{activate(e.id);setNav(false)});
+sync();
+if(window.CHAPTER){
+ const cfg=window.CHAPTER;
+ const q=document.getElementById('quick-select'),card=document.getElementById('quick-card');
+ cfg.quick.forEach((r,i)=>{const o=document.createElement('option');o.value=i;o.textContent=r[0]+' · '+r[1];q.append(o)});
+ function showQuick(){const r=cfg.quick[Number(q.value)];card.replaceChildren();let h=document.createElement('h3');h.textContent=r[0]+' · '+r[1];card.append(h);const dl=document.createElement('dl');for(const [label,value] of [['含义',r[2]],['基本形式',r[3]],['例子与结果',r[4]],['注意点',r[5]]]){const dt=document.createElement('dt');dt.textContent=label;const dd=document.createElement('dd');dd.textContent=value;dl.append(dt,dd)}card.append(dl);const a=document.createElement('a');a.href='#c'+cfg.chapter+'-'+(r[6]+1);a.textContent='回正文查看完整解释';card.append(a)}
+ q.addEventListener('change',showQuick);showQuick();
+ const synth=document.getElementById(cfg.synthesis_id).nextElementSibling;
+ let cur=synth.nextElementSibling,table=null;while(cur&&!/^H2$/.test(cur.tagName)){if(cur.classList.contains('tablewrap')){table=cur.querySelector('table');break}cur=cur.nextElementSibling}
+ if(table){
+  const heads=$$('th',table).map(x=>x.textContent),rows=$$('tbody tr',table).map(tr=>$$('td',tr).map(td=>td.textContent));
+  const box=document.createElement('div');box.className='stepbox';box.innerHTML='<h3>分步观察综合应用</h3><p class="stepnotes">沿用下方综合题的全部前提。每个编号对应原表一行，分开观察当前对象、规则和结果。</p><div class="stepbuttons" role="group" aria-label="步骤选择"></div><div class="stepdisplay" aria-live="polite"></div><div class="stepcontrols"><button type="button" data-prev>上一步</button><span class="stepcount"></span><button type="button" data-next>下一步</button></div>';
+  cur.before(box);const buttons=box.querySelector('.stepbuttons'),display=box.querySelector('.stepdisplay'),count=box.querySelector('.stepcount'),prev=box.querySelector('[data-prev]'),next=box.querySelector('[data-next]');let index=0;
+  rows.forEach((row,i)=>{const b=document.createElement('button');b.textContent=i+1;b.setAttribute('aria-label','查看步骤 '+(i+1));b.addEventListener('click',()=>{index=i;showStep()});buttons.append(b)});
+  function showStep(){display.replaceChildren();const h=document.createElement('h4');h.textContent='步骤 '+(index+1)+(/^[0-9]+$/.test(rows[index][0])?'':'：'+rows[index][0]);display.append(h);const dl=document.createElement('dl');rows[index].slice(1).forEach((value,i)=>{const dt=document.createElement('dt');dt.textContent=heads[i+1]||'内容';const dd=document.createElement('dd');dd.textContent=value;dl.append(dt,dd)});display.append(dl);count.textContent=(index+1)+' / '+rows.length;prev.disabled=index===0;next.disabled=index===rows.length-1;$$('button',buttons).forEach((b,i)=>{b.classList.toggle('active',i===index);b.setAttribute('aria-pressed',String(i===index))})}
+  prev.addEventListener('click',()=>{index--;showStep()});next.addEventListener('click',()=>{index++;showStep()});showStep();
+ }
+}
+</script></body></html>

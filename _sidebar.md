@@ -254,6 +254,7 @@
       - [06 事务](https://goya4140.github.io/JLU_CS_Course/3_1%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F/06_%E4%BA%8B%E5%8A%A1.html ':ignore')
       - [07 并发控制](https://goya4140.github.io/JLU_CS_Course/3_1%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F/07_%E5%B9%B6%E5%8F%91%E6%8E%A7%E5%88%B6.html ':ignore')
   - **计算机网络**
+    - [图文交互阅读版](https://goya4140.github.io/JLU_CS_Course/3_1%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/index.html ':ignore')
     - [00 学习导航](/3_1%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/00_%E5%AD%A6%E4%B9%A0%E5%AF%BC%E8%88%AA.md)
     - [01 概论](/3_1%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/01_%E6%A6%82%E8%AE%BA.md)
     - [02 数据通信基础](/3_1%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/02_%E6%95%B0%E6%8D%AE%E9%80%9A%E4%BF%A1%E5%9F%BA%E7%A1%80.md)

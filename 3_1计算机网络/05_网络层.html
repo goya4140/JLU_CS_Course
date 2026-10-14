@@ -1,0 +1,1405 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>第5章 网络层：从目的地址逐步推导当前下一跳、分片和路由选择</title><style>
+:root{--ink:#20334a;--muted:#63748a;--accent:#17666c;--light:#e9f4f1;--line:#d9e4e9;--paper:#fff;--back:#f5f8fa;color-scheme:light}*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--back);color:var(--ink);font:16px/1.85 'Segoe UI','Microsoft YaHei',sans-serif}a{color:var(--accent);text-underline-offset:4px}a:hover{color:#10494e}button,select{font:inherit}button{cursor:pointer}a:focus-visible,button:focus-visible,select:focus-visible,summary:focus-visible{outline:3px solid #d78b21;outline-offset:3px}aside{position:fixed;inset:0 auto 0 0;width:292px;overflow-y:auto;background:#f0f5f6;border-right:1px solid var(--line);padding:28px 18px 28px 24px;z-index:30}.brand{font-size:21px;font-weight:700;line-height:1.5}.subbrand{font-size:13px;color:var(--muted);margin:8px 0 22px}.navgroup{margin:22px 0}.navgroup h2{font-size:12px;font-weight:600;letter-spacing:.06em;color:#75858e;margin:0 0 8px;border:0;padding:0}.navgroup p{font-size:11px;line-height:1.5;color:#7a8796;margin:0 0 8px}.navlink{display:block;padding:8px 11px;margin:4px 0;border-radius:7px;color:#3c5366;text-decoration:none;font-size:13px;line-height:1.6;border-left:3px solid transparent}.navlink:hover{background:#e2edee}.navlink.active{color:#0c5f62;border-color:var(--accent);background:#dcefed;font-weight:600}.asidefoot{font-size:12px;color:var(--muted);border-top:1px solid var(--line);padding-top:18px}main{margin-left:292px;min-width:0}.toolbar{position:sticky;top:0;z-index:20;background:#ffffffed;border-bottom:1px solid var(--line);height:55px;display:flex;align-items:center;gap:16px;padding:0 32px;font-size:12px;color:var(--muted);backdrop-filter:blur(8px)}.toolbar .spacer{flex:1}.toolbar a{text-decoration:none}.menubtn{display:none;border:1px solid #acbec8;background:white;border-radius:5px;padding:4px 12px;color:var(--ink)}article{max-width:1120px;margin:0 auto;padding:50px 58px 90px;background:white;min-height:100vh}h1{font-size:30px;line-height:1.55;letter-spacing:.01em;margin:0 0 24px}h2{font-size:24px;line-height:1.6;margin:62px 0 22px;padding-bottom:14px;border-bottom:1px solid var(--line);scroll-margin-top:86px}h3{font-size:19px;line-height:1.7;margin:36px 0 14px;scroll-margin-top:86px}h4{font-size:16px;margin:26px 0 10px}p{margin:14px 0}blockquote{margin:22px 0 30px;padding:16px 22px;border-left:4px solid var(--accent);background:#f1f7f6;color:#3c5866;font-size:14px}blockquote p{margin:7px 0}.tablewrap{overflow-x:auto;max-width:100%;margin:22px 0;border:1px solid var(--line);border-radius:7px}table{width:100%;border-collapse:collapse;font-size:14px;line-height:1.75;min-width:500px}th,td{text-align:left;vertical-align:top;padding:12px 15px;border-bottom:1px solid #e1e9ee}th{background:#edf4f5;font-weight:600}tr:last-child td{border-bottom:0}tbody tr:nth-child(even){background:#fafcfd}td a{display:inline-block}pre{max-width:100%;overflow:auto;background:#f1f5f8;border:1px solid #dde6eb;border-radius:7px;padding:20px;font-size:13px;line-height:1.8}code{font-family:Consolas,'Courier New','Microsoft YaHei',monospace;background:#eef4f6;border-radius:3px;padding:2px 4px;overflow-wrap:anywhere}pre code{padding:0;background:transparent;white-space:pre;overflow-wrap:normal}li{margin:7px 0}ul,ol{padding-left:26px}details{border:1px solid #c6dadb;border-radius:8px;margin:24px 0;padding:14px 20px;background:#f8fbfb}summary{cursor:pointer;font-weight:600;color:#17666c}details[open] summary{border-bottom:1px solid var(--line);padding-bottom:12px;margin-bottom:20px}.formula{overflow-x:auto;padding:20px;text-align:center;white-space:nowrap;background:#f9fbfc;font-family:'Cambria Math','Times New Roman',serif;font-size:20px;margin:20px 0}.frac{display:inline-flex;flex-direction:column;vertical-align:middle;text-align:center;line-height:1.4;margin:0 4px}.frac>span:first-child{border-bottom:1px solid #63748a;padding:0 5px 3px}.frac>span:last-child{padding:3px 5px 0}.formula sup,.formula sub{font-size:.65em}.quickbox,.stepbox{margin:24px 0;padding:24px;border:1px solid #c3d9d8;border-radius:10px;background:#f3f9f8}.quickbox label{display:block;font-weight:600;margin-bottom:10px}.quickbox select{width:100%;padding:10px 12px;border:1px solid #9fbfbc;border-radius:6px;background:white;color:var(--ink)}.quickcard{margin-top:20px}.quickcard h3{margin:0 0 12px}.quickcard dl{display:grid;grid-template-columns:90px 1fr;gap:10px 18px;font-size:15px;margin:0}.quickcard dt{font-weight:600;color:#557275}.quickcard dd{margin:0}.stepbox h3{margin:0 0 10px}.stepnotes{font-size:13px;color:var(--muted)}.stepbuttons{display:flex;flex-wrap:wrap;gap:6px;margin:16px 0}.stepbuttons button{border:1px solid #a8c6c4;background:white;color:#436366;border-radius:50%;width:35px;height:35px;font-size:13px}.stepbuttons button.active{background:var(--accent);color:white}.stepdisplay{background:white;border-radius:8px;padding:18px 20px;min-height:145px}.stepdisplay h4{margin:0 0 12px}.stepdisplay dl{margin:0;display:grid;grid-template-columns:140px 1fr;gap:9px 18px}.stepdisplay dt{font-weight:600}.stepdisplay dd{margin:0}.stepcontrols{display:flex;gap:10px;align-items:center;margin-top:16px}.stepcontrols button{border:1px solid #a7c6c3;padding:6px 16px;border-radius:5px;background:white;color:var(--accent)}button:disabled{cursor:default;opacity:.4}.stepcount{font-size:13px;color:var(--muted)}.chaptercards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin:28px 0}.chaptercard{display:block;border:1px solid var(--line);border-radius:10px;background:#f9fcfc;padding:22px;text-decoration:none}.chaptercard strong{display:block;font-size:21px;color:var(--ink);margin-bottom:10px}.chaptercard span{display:block;font-size:14px;line-height:1.7;color:#647a89}.footerlinks{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;border-top:1px solid var(--line);margin-top:64px;padding-top:24px}.footerlinks a{text-decoration:none}hr{border:0;border-top:1px solid var(--line);margin:35px 0}.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)}[id]{scroll-margin-top:86px}.topjump{color:#6b7e8e;font-size:13px}
+@media(max-width:1100px){aside{width:255px;padding:24px 15px}main{margin-left:255px}article{padding:38px 32px 70px}h1{font-size:27px}.toolbar{padding:0 24px}}
+@media(max-width:860px){aside{width:min(320px,87vw);transform:translateX(-100%);transition:transform .18s;box-shadow:12px 0 30px #1233}.nav-open aside{transform:translateX(0)}main{margin-left:0}.menubtn{display:block}.toolbar{padding:0 15px;gap:12px}.toolbar .desktop-only{display:none}article{padding:28px 20px 64px}h1{font-size:24px}h2{font-size:21px;margin-top:48px}h3{font-size:18px}body{font-size:15px}table{font-size:13px}th,td{padding:9px 12px}.quickbox,.stepbox{padding:17px}.quickcard dl,.stepdisplay dl{grid-template-columns:1fr;gap:3px}.quickcard dd,.stepdisplay dd{margin-bottom:12px}.chaptercards{grid-template-columns:1fr}.navshade{display:none;position:fixed;inset:0;background:#10283f55;z-index:25}.nav-open .navshade{display:block}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}aside{transition:none}}
+@media print{aside,.toolbar,.navshade,.stepbox{display:none}main{margin:0}article{max-width:none;padding:0}details{break-inside:avoid}table{min-width:0;font-size:10pt}h2{break-after:avoid}.tablewrap{overflow:visible}body{font-size:11pt}.quickbox select{display:none}.formula{white-space:normal}}
+</style></head><body><div class="navshade"></div><aside id="course-nav" aria-label="阶段分组学习目录"><div class="brand">计算机网络<br>学习资料</div><p class="subbrand">第 5 章 · 网络层</p><nav><a class="navlink" href="#learning-nav">学习导航</a><section class="navgroup"><h2>学习准备</h2><p>确认读者基础和对象</p><a class="navlink" href="#c5-0">5.0 共同场景与符号</a></section><section class="navgroup"><h2>地址与逐跳处理</h2><p>从配置推导出口、邻居和包大小</p><a class="navlink" href="#c5-1">5.1 网络层服务</a><a class="navlink" href="#c5-2">5.2 IPv4 地址规划</a><a class="navlink" href="#c5-3">5.3 逐跳转发与辅助协议</a><a class="navlink" href="#c5-4">5.4 IPv4 首部、MTU 与分片</a><a class="navlink" href="#c5-5">5.5 DHCP 与 NAT</a></section><section class="navgroup"><h2>路径与资源</h2><p>理解选路、收敛和容量条件</p><a class="navlink" href="#c5-6">5.6 路由算法</a><a class="navlink" href="#c5-7">5.7 资源控制</a></section><section class="navgroup"><h2>扩展与进阶</h2><p>辨认 IPv6、域间路由与新型转发</p><a class="navlink" href="#c5-8">5.8 IPv6</a><a class="navlink" href="#c5-9">5.9 互联网路由与路由器结构</a><a class="navlink" href="#c5-10">5.10 SDN、MPLS 与段路由</a></section><section class="navgroup"><h2>练习与复习</h2><p>组合推导、独立作答与排错</p><a class="navlink" href="#c5-11">5.11 综合应用</a><a class="navlink" href="#c5-12">5.12 自测与答案</a><a class="navlink" href="#c5-13">5.13 排错与复习</a><a class="navlink" href="#c5-14">5.14 分类速查</a></section></nav><p class="asidefoot">先看前提与对象，再推导中间过程。速查只显示当前选项，完整解释可返回正文。<br><a href="00_学习导航.html">全课程入口</a></p></aside><main><div class="toolbar"><button class="menubtn" id="menu-button" aria-expanded="false" aria-controls="course-nav">目录</button><a href="../index.html#/">课程资料站</a><a href="00_学习导航.html">课程导航</a><span class="desktop-only">网络层</span><span class="spacer"></span><a href="05_网络层.md">Markdown</a><span class="desktop-only">离线阅读</span></div><article><h1>第5章 网络层：从目的地址逐步推导当前下一跳、分片和路由选择</h1>
+<blockquote>
+<p>参考课件：第 5 章课件（原课件未随笔记发布）。</p>
+<p>适合读者：已学以太网帧、交换转发和链路地址；能做二进制 AND、异或、向下取整。</p>
+<p>学习目标：从目的地址逐步推导当前下一跳、分片和路由选择。学习公式与时序时，先确认例题中的单位、协议版本和假设。</p>
+</blockquote>
+<a id="learning-nav"></a>
+<h2>学习导航</h2>
+<p>先明确跨网络服务，再学习地址块与逐跳处理；包格式与 MTU 解释长度变化。之后比较路由算法、资源控制和 IPv6，最后阅读域间策略与可编程转发。</p>
+<table>
+<thead>
+<tr>
+<th>学习阶段</th>
+<th>要解决的问题</th>
+<th>对应内容</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>学习准备</td>
+<td>确认读者基础和对象</td>
+<td><a href="#c5-0">5.0 共同场景与符号</a></td>
+</tr>
+<tr>
+<td>地址与逐跳处理</td>
+<td>从配置推导出口、邻居和包大小</td>
+<td><a href="#c5-1">5.1 网络层服务：跨网络交付与下一跳</a>、<a href="#c5-2">5.2 IPv4 地址规划：主机属于哪个地址块</a>、<a href="#c5-3">5.3 逐跳转发与辅助协议：IP 和 MAC 分别指谁</a>、<a href="#c5-4">5.4 IPv4 首部、MTU 与分片：尺寸变化怎样计算</a>、<a href="#c5-5">5.5 DHCP 与 NAT：配置和映射有什么生命周期</a></td>
+</tr>
+<tr>
+<td>路径与资源</td>
+<td>理解选路、收敛和容量条件</td>
+<td><a href="#c5-6">5.6 路由算法：邻居距离与全网拓扑怎样选路</a>、<a href="#c5-7">5.7 资源控制：排队、死锁、整形与 QoS</a></td>
+</tr>
+<tr>
+<td>扩展与进阶</td>
+<td>辨认 IPv6、域间路由与新型转发</td>
+<td><a href="#c5-8">5.8 IPv6：地址、邻居发现与过渡怎样配合</a>、<a href="#c5-9">5.9 互联网路由与路由器结构</a>、<a href="#c5-10">5.10 SDN、MPLS 与段路由：控制位置和转发依据怎样变化</a></td>
+</tr>
+<tr>
+<td>练习与复习</td>
+<td>组合推导、独立作答与排错</td>
+<td><a href="#c5-11">5.11 综合应用</a>、<a href="#c5-12">5.12 自测与答案</a>、<a href="#c5-13">5.13 排错与复习</a>、<a href="#c5-14">5.14 分类速查</a></td>
+</tr>
+</tbody></table>
+<p>返回<a href="00_%E5%AD%A6%E4%B9%A0%E5%AF%BC%E8%88%AA.html">全课程学习导航</a>。</p>
+<a id="c5-0"></a>
+<h2>5.0 共同场景与符号</h2>
+<p>主机 A=192.168.10.10/24，网关 R=192.168.10.1，服务器 S=192.168.20.20/24。两端之间路由已按各题指定，普通例子不含 NAT、隧道和过滤。NAT 的独立例子会重置地址并说明映射。</p>
+<table>
+<thead>
+<tr>
+<th>符号或对象</th>
+<th>含义</th>
+<th>必要约定</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>IP/p、h</td>
+<td>地址与前缀长度、主机位数</td>
+<td>IPv4 h=32−p；特殊 /31、/32 另论</td>
+</tr>
+<tr>
+<td>掩码、AND</td>
+<td>前缀标记、逐位相与</td>
+<td>网络地址保留前缀位、主机位清零</td>
+</tr>
+<tr>
+<td>下一跳</td>
+<td>当前出口链路要交给谁</td>
+<td>不一定是最终目的主机</td>
+</tr>
+<tr>
+<td>MTU、H、D</td>
+<td>链路网络层上限、首部字节数、原载荷字节数</td>
+<td>MTU 不计普通以太网 MAC 首尾</td>
+</tr>
+<tr>
+<td>片偏移</td>
+<td>相对原载荷起点的位置</td>
+<td>字段值以 8 B 为单位，不相对上一片</td>
+</tr>
+<tr>
+<td>c(x,v)、D_v(y)</td>
+<td>到邻居链路代价、邻居到目的距离</td>
+<td>合成路径时同一度量，Dijkstra 非负代价</td>
+</tr>
+<tr>
+<td>b、r</td>
+<td>令牌桶容量 B、生成速率 B/s</td>
+<td>与物理出口速率另行比较</td>
+</tr>
+</tbody></table>
+<p>地址、分片、路由与拥塞例子独立计算，不把一题的新转发表、租约或缓存偷偷带入下一题。</p>
+<a id="c5-1"></a>
+<h2>5.1 网络层服务：跨网络交付与下一跳</h2>
+<p>A 的链路只能直接交给相邻接口，S 又在另一个网络，因而需要跨网寻址与逐跳转发。路由器送出当前包与路由算法形成路径信息是不同动作，不能把逻辑连接当成专用线缆。</p>
+<a id="k5.1.1"></a>
+<h3>5.1.1 数据报与虚电路</h3>
+<p>网络层统一寻址，路由选择产生路径信息，转发对具体分组选择出口。</p>
+<table>
+<thead>
+<tr>
+<th>方式</th>
+<th>发送前</th>
+<th>分组转发依据</th>
+<th>中间状态</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>数据报</td>
+<td>不建立持续的网络层连接</td>
+<td>每份分组的目的地址</td>
+<td>路由/转发表等</td>
+</tr>
+<tr>
+<td>虚电路</td>
+<td>先建立或预配置逻辑路径</td>
+<td>虚电路标识</td>
+<td>连接对应的映射</td>
+</tr>
+</tbody></table>
+<p>IP采用无连接、<strong>尽力而为</strong>的数据报服务：尝试交付，但不保证必达、按序、无重复或固定延迟。需要可靠交付时，由TCP等上层机制补充。</p>
+<p>“无连接”不表示没有线缆；虚电路也不表示必然可靠或独占物理链路。</p>
+<a id="k5.1.2"></a>
+<h3>5.1.2 路由器怎样处理一跳</h3>
+<pre><code class="language-text">收帧 → 去链路封装 → 检查IP → 查转发表 → 确定下一跳 → 重新封装帧
+</code></pre>
+<p>二层交换机主要按MAC转发，路由器按IP前缀转发。三层交换机也可执行路由，不能只看设备名字判断职责。</p>
+<p>同子网通常直接给目标主机；不同子网通常交给网关。<strong>默认网关是下一跳，不是最终目标</strong>：发往校外服务器的包，IP目的地址仍指向服务器，链路目的地址才指向当前网关。</p>
+<p>“网关”还可指应用协议转换设备，具体含义依上下文而定。</p>
+<a id="c5-2"></a>
+<h2>5.2 IPv4 地址规划：主机属于哪个地址块</h2>
+<p>只看到一个 IP，不能知道谁与它同网。前缀告诉双方哪些位共同标识网络；分配时还要使容量够用、起点对齐、地址块不重叠。历史 A/B/C 默认边界不能覆盖明确给出的前缀。</p>
+<a id="k5.2.1"></a>
+<h3>5.2.1 地址与前缀</h3>
+<p>IPv4地址32位，分成4个8位组，以点分十进制表示，每组0～255。</p>
+<p><code>192.168.1.10/24</code>中的<strong>前缀长度/24</strong>表示前24位为网络部分，后8位为主机部分。分类地址A/B/C是历史组织方式，显式给出前缀时必须按前缀判断。</p>
+<table>
+<thead>
+<tr>
+<th>历史类别</th>
+<th>首字节范围</th>
+<th>默认前缀或用途</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>A</td>
+<td>0～127，0和127另有用途</td>
+<td>/8</td>
+</tr>
+<tr>
+<td>B</td>
+<td>128～191</td>
+<td>/16</td>
+</tr>
+<tr>
+<td>C</td>
+<td>192～223</td>
+<td>/24</td>
+</tr>
+<tr>
+<td>D</td>
+<td>224～239</td>
+<td>多播</td>
+</tr>
+<tr>
+<td>E</td>
+<td>240～255</td>
+<td>保留分类，另有特殊地址用途</td>
+</tr>
+</tbody></table>
+<p>课件E类写240～247不完整。32位有2³²种编码，不意味着都能分给普通主机。</p>
+<table>
+<thead>
+<tr>
+<th>特殊地址或范围</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>0.0.0.0</td>
+<td>未指定地址；不同于默认路由0.0.0.0/0</td>
+</tr>
+<tr>
+<td>127.0.0.0/8</td>
+<td>环回，数据留在本机；常用127.0.0.1</td>
+</tr>
+<tr>
+<td>255.255.255.255</td>
+<td>本地受限广播</td>
+</tr>
+<tr>
+<td>10.0.0.0/8</td>
+<td>私有地址</td>
+</tr>
+<tr>
+<td>172.16.0.0/12</td>
+<td>私有地址，仅172.16～172.31</td>
+</tr>
+<tr>
+<td>192.168.0.0/16</td>
+<td>私有地址</td>
+</tr>
+</tbody></table>
+<p>私有地址可在不同组织内部重复使用，不作为全球公共路由地址；公网地址也不自动表示服务可达或安全。</p>
+<a id="k5.2.2"></a>
+<h3>5.2.2 子网掩码与地址计算</h3>
+<p><strong>子网掩码</strong>用连续1指出前缀位置，剩余0指出主机位。网络地址=IP与掩码逐位<strong>相与AND</strong>，即两位都为1时才得1。</p>
+<p>普通子网中，主机位全0为网络地址，全1为广播地址。有h个主机位，总地址数2ʰ，常规可分配主机数2ʰ−2；/31点到点和/32主机路由需要单独理解。</p>
+<p><strong>课件例题：</strong> 192.168.150.122，掩码255.255.255.248。</p>
+<pre><code class="language-text">248 = 11111000，所以前缀/29，主机位3
+122 = 01111010
+248 = 11111000
+AND = 01111000 = 120
+</code></pre>
+<p>结果：网络192.168.150.120，广播.127，可用.121～.126，共6个。</p>
+<p>快速算法：最后一字节块大小<code>256−248=8</code>，122落在120～127这一块。遇到跨字节前缀，要对实际变化字节计算，不能总看最后字节。</p>
+<p>202.198.50.10/25与.140/25分别属于0～127和128～255两块；前24位相同不意味着同子网。</p>
+<a id="k5.2.3"></a>
+<h3>5.2.3 CIDR、VLSM与聚合</h3>
+<p><strong>CIDR，无类别域间路由</strong>用“地址/前缀”表示地址块，摆脱A/B/C固定边界。<strong>VLSM，可变长子网掩码</strong>按不同容量给子网分配不同前缀。</p>
+<p>前缀越长，块越小；划子网通常延长前缀，聚合则把多个连续块用较短前缀概括。</p>
+<table>
+<thead>
+<tr>
+<th>课件地址块</th>
+<th>掩码或范围</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>88.166.0.1/19</td>
+<td>掩码255.255.224.0</td>
+</tr>
+<tr>
+<td>10.0.0.0/10</td>
+<td>掩码255.192.0.0</td>
+</tr>
+<tr>
+<td>128.14.32.0/20</td>
+<td>32.0～47.255，共4096个地址</td>
+</tr>
+<tr>
+<td>128.123.1.8/28所在块</td>
+<td>128.123.1.0～.15</td>
+</tr>
+</tbody></table>
+<p>课件188.66.100.0/22覆盖第三字节100～103，可按大块优先划为：</p>
+<table>
+<thead>
+<tr>
+<th>子网</th>
+<th>地址范围</th>
+<th>常规可用主机</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>188.66.100.0/23</td>
+<td>100.0～101.255</td>
+<td>510</td>
+</tr>
+<tr>
+<td>188.66.102.0/24</td>
+<td>102.0～102.255</td>
+<td>254</td>
+</tr>
+<tr>
+<td>188.66.103.0/25</td>
+<td>103.0～103.127</td>
+<td>126</td>
+</tr>
+<tr>
+<td>188.66.103.128/25</td>
+<td>103.128～103.255</td>
+<td>126</td>
+</tr>
+</tbody></table>
+<p>最后一块可保留。块起点必须对齐：例如/23的第三字节起点应为偶数，不能从101.0开始定义一个新的/23块。</p>
+<p>精确聚合需要连续、二的幂大小、正确对齐。<code>192.0.2.0/25</code>与<code>192.0.2.128/25</code>恰好合为<code>192.0.2.0/24</code>。较宽聚合若包含无实际可达性的部分，要有相应处理策略，不能仅因地址接近就随意合并。</p>
+<h3>VLSM 小例：把需求放回一整个块</h3>
+<p><strong>扩展例题：</strong> 分配 192.168.10.0/24 给三个部门，分别需 100、50、20 个普通主机地址，网关若占地址应计入这些数量。先按最大需求找满足 <code>2ʰ−2≥需求</code> 的 h：依次 7、6、5，所以需 /25、/26、/27。</p>
+<table>
+<thead>
+<tr>
+<th>分配顺序</th>
+<th>选定块</th>
+<th>可用范围</th>
+<th>广播</th>
+<th>容量</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>100 主机</td>
+<td>.0/25</td>
+<td>.1～.126</td>
+<td>.127</td>
+<td>126</td>
+</tr>
+<tr>
+<td>50 主机</td>
+<td>.128/26</td>
+<td>.129～.190</td>
+<td>.191</td>
+<td>62</td>
+</tr>
+<tr>
+<td>20 主机</td>
+<td>.192/27</td>
+<td>.193～.222</td>
+<td>.223</td>
+<td>30</td>
+</tr>
+<tr>
+<td>保留</td>
+<td>.224/27</td>
+<td>.225～.254</td>
+<td>.255</td>
+<td>30</td>
+</tr>
+</tbody></table>
+<p>块大小为 128、64、32，起点分别按这些大小对齐，范围互不重叠且恰好留一块。把第三个需求改成 40，需要 /26；剩余 .192～.255 正好可用，但此时没有最后一块保留空间。</p>
+<a id="c5-3"></a>
+<h2>5.3 逐跳转发与辅助协议：IP 和 MAC 分别指谁</h2>
+<p>地址属于哪个块之后，还要选择出口，解析本地链路的下一跳并诊断失败。ARP、ICMP、IGMP 分别处理邻居地址、控制诊断与组成员，三者不能互换，也不具有相同封装关系。</p>
+<a id="k5.3.1"></a>
+<h3>5.3.1 最长前缀匹配</h3>
+<p>目的地址可以同时匹配多条路由，选择<strong>前缀最长</strong>、范围最具体的一条。默认路由/0在没有更具体匹配时才使用。</p>
+<p>课件目标192.168.3.2：</p>
+<table>
+<thead>
+<tr>
+<th>表项</th>
+<th>下一跳</th>
+<th>匹配情况</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>192.168.0.0/16</td>
+<td>10.1.1.2</td>
+<td>匹配</td>
+</tr>
+<tr>
+<td>192.168.2.0/24</td>
+<td>20.1.1.2</td>
+<td>不匹配</td>
+</tr>
+<tr>
+<td>192.168.3.0/24</td>
+<td>30.1.1.2</td>
+<td>匹配且更长</td>
+</tr>
+</tbody></table>
+<p>选30.1.1.2。课件“只匹配一条”不准确，正确理由是/24优先于/16。</p>
+<p>度量等策略主要用于同一前缀的候选路由选择，不能直接用较小跳数替代最长前缀规则。查出出口后，还需得到本地下一跳的链路地址。</p>
+<a id="k5.3.2"></a>
+<h3>5.3.2 ARP与逐跳MAC</h3>
+<p><strong>ARP</strong>在本地链路解析IPv4地址对应的MAC，通常广播请求、单播回答，结果可缓存。它直接由以太网帧承载，不装在IP包内。</p>
+<p>以太网/IPv4的ARP内容28 B：硬件类型2 B、协议类型2 B、两种地址长度各1 B、操作码2 B、发送方MAC/IP 6+4 B、目标MAC/IP 6+4 B。请求操作码1，回答2。</p>
+<p>理解例子：A=192.168.1.10/24发给192.168.2.20，网关192.168.1.1。</p>
+<ol>
+<li>A按掩码判断目标不在本子网。</li>
+<li>A查询网关MAC，必要时广播ARP请求。</li>
+<li>网关回复MAC。</li>
+<li>A发帧：目的MAC是网关，目的IP仍是192.168.2.20。</li>
+<li>网关在下一链路按新的下一跳再次封装。</li>
+</ol>
+<p>主机到主机、主机到路由器、路由器到主机、路由器到路由器，都遵循<strong>解析当前出口链路的下一跳</strong>这一规则。缓存可能过期，不能把每条记录视为永久绑定。</p>
+<a id="k5.3.3"></a>
+<h3>5.3.3 ICMP、ping与traceroute</h3>
+<p><strong>ICMP</strong>传递IP差错或诊断消息，由IP承载。起始字段Type、Code、Checksum分别8、8、16位，其余随类型变化。</p>
+<table>
+<thead>
+<tr>
+<th>IPv4类型</th>
+<th>值</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>回显请求、回答</td>
+<td>8、0</td>
+<td>ping常用，观察往返可达性</td>
+</tr>
+<tr>
+<td>目的不可达</td>
+<td>3</td>
+<td>Code进一步说明原因</td>
+</tr>
+<tr>
+<td>重定向</td>
+<td>5</td>
+<td>提示更合适下一跳，受配置限制</td>
+</tr>
+<tr>
+<td>超时</td>
+<td>11</td>
+<td>TTL耗尽或重组超时</td>
+</tr>
+<tr>
+<td>参数问题</td>
+<td>12</td>
+<td>报告首部问题</td>
+</tr>
+</tbody></table>
+<p><strong>traceroute</strong>依次用TTL=1、2、3……探测，观察各跳超时响应。探测可用UDP、ICMP或TCP，依实现不同。</p>
+<p>某跳不回答可能是过滤或回程原因，不能确定该跳断网；ping成功也不能证明目标Web服务正常。时间戳、地址掩码等是课件列出的历史类型，不代表所有现代网络都在使用。</p>
+<a id="k5.3.4"></a>
+<h3>5.3.4 IPv4多播与IGMP</h3>
+<p><strong>多播</strong>向一组接收者传数据，组地址范围224.0.0.0/4。<strong>IGMP</strong>管理本地链路成员资格，路由器之间怎样分发则由多播路由机制处理。</p>
+<p>IPv4多播映射到以太网：固定前缀<code>01:00:5e</code>加组地址低23位。课件的<code>6e</code>为笔误。</p>
+<p><strong>课件例子：</strong> 225.128.47.81的低23位为00:2f:51，所以MAC为<code>01:00:5e:00:2f:51</code>。28位组地址部分只取23位，会有32个IP组地址映射到同一MAC，接收方还要在IP层筛选。<a href="https://www.rfc-editor.org/rfc/rfc1112.html">RFC 1112</a></p>
+<p>课件重点IGMPv1：8 B报文，包含版本、类型、校验和、组地址等。路由器查询，成员随机延后报告；听到同组报告可抑制自己的报告。v1靠查询超时判断离组，不代表全部版本都没有离组消息。</p>
+<p>IGMP的IP协议号为2，但多播业务数据仍可用UDP等协议，不能把所有多播数据都当作IGMP。</p>
+<h3>完整比较最长前缀与路由代价</h3>
+<p>给目的 192.168.20.20：/0 默认经 R1；192.168.0.0/16 经 R2；192.168.20.0/24 经 R3。三条均匹配，先选 /24。若 /24 有两条候选，才在该相同前缀的候选间按管理与协议度量等规则选优。给出 R2 代价更小，不能直接让 /16 替代更具体 /24。</p>
+<p>主机 A 在本例中先根据本地 /24 判断 S 不同网，ARP 查询 R 的 MAC；R 收包后用自己的表选择下一跳。主机的同网判断与路由器的最长前缀查表相关，但不是同一个操作对象。</p>
+<h3>讲义补充：静态路由、聚合与丢弃路由如何防循环</h3>
+<p>参考：讲义 PDF 第 894～931 页。配置错误、聚合了不存在的网络或网络故障都可能造成路由环路。下面用一个小模型分析原因。</p>
+<p><strong>简化模型：</strong> R1 的默认路由 <code>/0</code> 指 R2；R2 将 <code>192.168.0.0/22</code> 指 R1。实际只有 R1 后的 <code>192.168.1.0/24</code> 与 <code>192.168.2.0/24</code> 存在，<code>.0/24</code> 和 <code>.3/24</code> 不存在。发往 <code>192.168.3.10</code> 的包到 R2 后，匹配 /22 回 R1；R1 没有 /24，只能用默认路由又交 R2，形成循环，TTL 最终耗尽。</p>
+<p>可在汇总的提供者 R1 配置 <code>192.168.0.0/22</code> 的丢弃路由，保留实际存在的更具体 /24 路由。发往 <code>.1</code>、<code>.2</code> 的包因更具体前缀照常交付，发往不存在的 <code>.3</code> 时命中丢弃项，不再落入回 R2 的默认路由。</p>
+<p><strong>丢弃路由</strong>是查表结果主动不转发，设备常用 null 接口等形式表达；不是有效数据穿过一个“黑洞设备”。<code>/32</code> 特定主机路由比同地址的普通网络前缀更具体，<code>/0</code> 默认路由最不具体。失效与错误策略仍需另行检测，加入丢弃路由不能证明任意配置都无环。</p>
+<a id="c5-4"></a>
+<h2>5.4 IPv4 首部、MTU 与分片：尺寸变化怎样计算</h2>
+<p>链路能承载的 IP 包有限，包太大时要分片或反馈失败。先从总长减首部得到原载荷，再决定各片可承载多少；重新分片仍必须保持相对原数据的位置。</p>
+<a id="k5.4.1"></a>
+<h3>5.4.1 IPv4首部</h3>
+<p>基本首部20 B，有选项时最多60 B。<strong>IHL</strong>以4 B为单位，值5表示20 B；总长度包含首部与载荷。</p>
+<table>
+<thead>
+<tr>
+<th>字段</th>
+<th>位数</th>
+<th>解释</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Version、IHL</td>
+<td>4、4</td>
+<td>版本4，首部长度</td>
+</tr>
+<tr>
+<td>DS字段</td>
+<td>8</td>
+<td>服务类别与拥塞通知相关，旧称服务类型</td>
+</tr>
+<tr>
+<td>Total Length</td>
+<td>16</td>
+<td>整个IP包字节数</td>
+</tr>
+<tr>
+<td>Identification</td>
+<td>16</td>
+<td>标识同一原包的分片</td>
+</tr>
+<tr>
+<td>Flags、Fragment Offset</td>
+<td>3、13</td>
+<td>分片控制、偏移</td>
+</tr>
+<tr>
+<td>TTL、Protocol</td>
+<td>8、8</td>
+<td>跳数限制、上层协议</td>
+</tr>
+<tr>
+<td>Header Checksum</td>
+<td>16</td>
+<td>只检查首部的反码校验和</td>
+</tr>
+<tr>
+<td>源、目的地址</td>
+<td>各32</td>
+<td>两端IPv4地址</td>
+</tr>
+<tr>
+<td>Options、Padding</td>
+<td>可变</td>
+<td>可选信息与4 B对齐填充</td>
+</tr>
+</tbody></table>
+<p>16位总长最大值是65535 B，不是65536 B。无选项、总长1000 B时，载荷980 B。<a href="https://www.rfc-editor.org/rfc/rfc791.html">RFC 791</a></p>
+<p>TTL每次路由转发递减，耗尽就丢弃并按条件返回超时消息；在通常处理中是跳数限制，不是毫秒计时。Protocol常见TCP=6、UDP=17、ICMP=1。</p>
+<p>校验和计算前将该字段置零，修改TTL后也要更新。它不覆盖IP载荷，算法见<a href="02_%E6%95%B0%E6%8D%AE%E9%80%9A%E4%BF%A1%E5%9F%BA%E7%A1%80.html#c2-7">第二章反码校验和</a>。记录路由、时间戳、源路由等选项表示格式能力，不等于所有网络允许使用。</p>
+<a id="k5.4.2"></a>
+<h3>5.4.2 分片：先分清首部与载荷</h3>
+<p><strong>MTU，最大传输单元</strong>表示出口链路一次能承载的网络层数据单元上限。IPv4包超过出口MTU且允许分片时，可以拆成多个各带首部的分片。</p>
+<ul>
+<li><strong>DF</strong>：禁止分片。</li>
+<li><strong>MF</strong>：后面还有原报文的分片。</li>
+<li><strong>片偏移</strong>：相对原始载荷起点的位置，单位8 B。</li>
+</ul>
+<p>非最后一片载荷必须为8的倍数。重组在最终目的端完成，中间路由器一般不先重组再转发。</p>
+<p><strong>课件例题：</strong> 总长3820 B，首部20 B，MTU=1420 B。</p>
+<pre><code class="language-text">原载荷 = 3820−20 = 3800 B
+非末片最大载荷 = floor((1420−20)/8)×8 = 1400 B
+floor表示向下取整。
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>分片</th>
+<th>原载荷字节区间，从0计</th>
+<th>载荷</th>
+<th>总长</th>
+<th>片偏移</th>
+<th>MF</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>0～1399</td>
+<td>1400 B</td>
+<td>1420 B</td>
+<td>0</td>
+<td>1</td>
+</tr>
+<tr>
+<td>2</td>
+<td>1400～2799</td>
+<td>1400 B</td>
+<td>1420 B</td>
+<td>175</td>
+<td>1</td>
+</tr>
+<tr>
+<td>3</td>
+<td>2800～3799</td>
+<td>1000 B</td>
+<td>1020 B</td>
+<td>350</td>
+<td>0</td>
+</tr>
+</tbody></table>
+<p>偏移175表示从原载荷第1400字节开始。三片载荷仍合计3800 B，但三份首部使总发送长度增加。</p>
+<p>若第2片再遇MTU=820 B，载荷拆成800+600 B：</p>
+<table>
+<thead>
+<tr>
+<th>再分片</th>
+<th>载荷</th>
+<th>总长</th>
+<th>相对原包的偏移</th>
+<th>MF</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>2a</td>
+<td>800 B</td>
+<td>820 B</td>
+<td>175</td>
+<td>1</td>
+</tr>
+<tr>
+<td>2b</td>
+<td>600 B</td>
+<td>620 B</td>
+<td>275</td>
+<td>1</td>
+</tr>
+</tbody></table>
+<p>2b的MF仍为1，因为原包后面还有第3片；偏移不能重新归零。各片保留相应原包标识。课件第137页的3280与前页3820矛盾，本文明确按3820计算。</p>
+<p>DF=1却过大时不能分片，按条件报告“需要分片”，帮助源端发现路径MTU。最后一片不必补齐8 B倍数。</p>
+<h3>片长不整齐时为什么要向下对齐</h3>
+<p><strong>独立例子：</strong> 原 IP 总长 2000 B、H=20 B、MTU=700 B，允许分片。原载荷 1980 B，非末片上限 <code>floor((700−20)/8)×8=680 B</code>。</p>
+<table>
+<thead>
+<tr>
+<th>片</th>
+<th>载荷</th>
+<th>总长</th>
+<th>偏移字段</th>
+<th>MF</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>680</td>
+<td>700</td>
+<td>0</td>
+<td>1</td>
+</tr>
+<tr>
+<td>2</td>
+<td>680</td>
+<td>700</td>
+<td>85</td>
+<td>1</td>
+</tr>
+<tr>
+<td>3</td>
+<td>620</td>
+<td>640</td>
+<td>170</td>
+<td>0</td>
+</tr>
+</tbody></table>
+<p>载荷和 1980 B 与原包一致，发送的总字节数变成 2040 B，因为多出两份首部。最后 620 B 不必是 8 的倍数。若 MTU 改成 699 B，非末片载荷变 <code>floor(679/8)×8=672 B</code>，不能仍填 680 B。</p>
+<a id="c5-5"></a>
+<h2>5.5 DHCP 与 NAT：配置和映射有什么生命周期</h2>
+<p>手工配置大量主机容易冲突，DHCP 提供有期限的参数；内网共享对外地址时，NAT/NAPT 维护映射。租约与映射是两个不同的状态，访问能否继续取决于各自有效性及网络规则。</p>
+<a id="k5.5.1"></a>
+<h3>5.5.1 DHCP与租约</h3>
+<p><strong>DHCP</strong>自动提供地址、掩码、网关、DNS等参数。IPv4服务器用UDP 67端口，客户端用UDP 68。</p>
+<pre><code class="language-text">Discover：客户端寻找服务器
+Offer：服务器提供候选地址
+Request：客户端表明选中的配置
+ACK：服务器确认租约与参数
+</code></pre>
+<p>初始客户端没可用IP，通过广播发现服务器。多个服务器可响应，客户端不被协议强制要求选择第一个。跨广播域要配置<strong>中继代理</strong>，路由器不会默认把所有广播转发过去。</p>
+<p><strong>租约</strong>是地址允许使用的时间。按常用默认，约租期一半T1时找原服务器续租，约0.875T的T2时扩大寻找；实际定时可由服务器指定。到期未续租必须停止使用该租约地址。NAK表示原配置不能继续使用，Release用于主动释放。</p>
+<table>
+<thead>
+<tr>
+<th>报文字段</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>op、htype、hlen、hops</td>
+<td>消息方向、硬件类型/长度、中继跳数</td>
+</tr>
+<tr>
+<td>xid</td>
+<td>事务标识，用于匹配同一轮交换</td>
+</tr>
+<tr>
+<td>secs、flags</td>
+<td>已经历时间及广播等标志</td>
+</tr>
+<tr>
+<td>ciaddr、yiaddr</td>
+<td>已有地址、给客户端提供的地址</td>
+</tr>
+<tr>
+<td>siaddr、giaddr</td>
+<td>引导服务器地址、中继地址</td>
+</tr>
+<tr>
+<td>chaddr</td>
+<td>客户端硬件地址区域</td>
+</tr>
+<tr>
+<td>sname、file</td>
+<td>服务器名、引导文件名区域</td>
+</tr>
+<tr>
+<td>options</td>
+<td>消息类型、租期等可变参数</td>
+</tr>
+</tbody></table>
+<p>固定部分236 B，后接识别标记和选项，不能把图中的选项长度当作所有报文固定值。</p>
+<a id="k5.5.2"></a>
+<h3>5.5.2 NAT与NAPT</h3>
+<p><strong>NAT</strong>改写IP地址；<strong>NAPT</strong>同时处理地址和端口，允许多台内网主机共享一个公网地址。</p>
+<p>理解例子：内网<code>192.168.1.10:50000</code>访问<code>198.51.100.20:443</code>，网关改成公网源<code>203.0.113.5:40001</code>并记录映射。响应回来时，再把该目的还原给内网主机。这些公网形式地址用于文档示例。</p>
+<p>静态地址/端口映射可把外部访问转给内部服务。改写要更新相关校验和；它增加状态并改变端到端可达性，不能当作完整的安全机制。</p>
+<p>第125页文字与图的转换后源地址不一致，采用“外发源映射为外部地址”的原理解释，不猜哪一处才是教师原意。</p>
+<h3>一份响应怎样找回原来的内网端点</h3>
+<p>独立例子中 A 的内网源为 192.168.1.10:50000，NAPT 映射为 203.0.113.5:40001，目标 198.51.100.20:443。出站时源被改写并记录协议、端点映射；回包目的 203.0.113.5:40001 被查表还原为 A。若表项过期且无静态映射，旧回包不能仅靠公网地址找到 A。</p>
+<p>DHCP 给 A 的地址即使尚在租约内，也不保证 NAPT 表项仍在；NAPT 表项尚在也不允许 A 在 DHCP 租约到期后继续未经许可使用该地址。这里未指定映射超时秒数，不能填成所有设备一致的常量。</p>
+<h3>讲义补充：VPN 隧道与 NAT 为什么不能互换</h3>
+<p>参考：讲义 PDF 第 1108～1122 页。两个部门要借公共网络连接各自私有网，公共网络不为它们直接转发所有私有目的前缀。<strong>VPN，虚拟专用网</strong>提供受管理的逻辑专用连接；本例采用 IP 隧道承载内部 IP 包。</p>
+<p>为了避免把讲义示例公网地址当作现场配置，下面改用文档地址。内部主机 <code>10.1.0.3</code> 发往 <code>10.2.0.3</code>，隧道入口 R1 公共端点 <code>203.0.113.1</code>，出口 R2 公共端点 <code>198.51.100.2</code>；两侧有必要路由和匹配的隧道配置。</p>
+<table>
+<thead>
+<tr>
+<th>步骤</th>
+<th>输入对象</th>
+<th>操作</th>
+<th>输出对象与目的</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>内部 IP 包，源 10.1.0.3、目的 10.2.0.3</td>
+<td>内部路由选择隧道入口</td>
+<td>原包交给 R1，内部目的不变</td>
+</tr>
+<tr>
+<td>2</td>
+<td>原包</td>
+<td>添加外层 IP；若所用 VPN 提供密码保护，再按配置认证或加密</td>
+<td>外层源 203.0.113.1、目的 198.51.100.2，原包为内层</td>
+</tr>
+<tr>
+<td>3</td>
+<td>公共网络上的外包</td>
+<td>依据外层目的逐跳转发</td>
+<td>到 R2；公共路由不需要知道内层私有目标</td>
+</tr>
+<tr>
+<td>4</td>
+<td>R2 收到外包</td>
+<td>验证并按所用协议解封装</td>
+<td>恢复内部包，向 10.2.0.3 的网络转发</td>
+</tr>
+</tbody></table>
+<p>隧道增加首部并影响 MTU；题设未给封装类型，不能算具体新增字节或断定每种 VPN 都采用相同加密机制。NAT 改写相应地址并维护转换关系，隧道则主要把一个包放进另一个包，两者可组合。</p>
+<p>讲义把同机构部门互连称内联网 VPN、合作伙伴加入称外联网 VPN、员工远程访问称远程接入 VPN。这是使用场景分类，不是三种固定且互斥的首部格式。VPN 可达也仍需应用权限，不自动证明任意内部资源都可访问。</p>
+<a id="c5-6"></a>
+<h2>5.6 路由算法：邻居距离与全网拓扑怎样选路</h2>
+<p>路由器只处理当前包，仍需要先获得怎样接近目的的知识。距离向量从邻居提供的距离组合选择；链路状态传播邻接信息后独立计算。输入信息不同，失败传播与收敛问题也不同。</p>
+<a id="k5.6.1"></a>
+<h3>5.6.1 路由选择的分类与目标</h3>
+<p><strong>度量</strong>是比较路径的代价，例如跳数、链路成本或时延。“最短”指所选度量总成本最小，不一定地理最近。</p>
+<table>
+<thead>
+<tr>
+<th>分类维度</th>
+<th>类型</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>如何配置</td>
+<td>静态：人工配置；动态：交换信息适应变化</td>
+</tr>
+<tr>
+<td>信息怎样组织</td>
+<td>距离向量：依赖邻居距离；链路状态：获得拓扑信息</td>
+</tr>
+<tr>
+<td>决策放在哪里</td>
+<td>集中式：一个逻辑中心；分布式：多个设备协作</td>
+</tr>
+</tbody></table>
+<p>算法还要考虑正确、稳定、公平、计算和通信开销。<strong>收敛</strong>是拓扑变化后，各设备逐步形成相容的新路由；收敛期间可能出现暂时不一致。</p>
+<a id="k5.6.2"></a>
+<h3>5.6.2 距离向量与RIP</h3>
+<p><strong>距离向量</strong>告诉邻居：“我到各目的有多远”。本机加上到邻居的代价，再选择最小值：</p>
+<div class="formula" role="math" aria-label="D_x(y)=\min_v\{c(x,v)+D_v(y)\}">D<sub>x</sub>(y)=min<sub>v</sub>{c(x,v)+D<sub>v</sub>(y)}</div>
+
+
+<p>x是本机，y是目的，v是邻居；c是到邻居的链路代价，D_v(y)是邻居通告的距离。</p>
+<p><strong>理解例子：</strong> A—B成本1，B—C成本2，A—C成本7。B通告到C为2，A算出经B总成本1+2=3，因此优于直连的7，下一跳选B。</p>
+<p>但如果B—C断了，B误信A尚未更新的旧通告，A、B可能互相认为对方能到C，形成环路并不断增加距离，叫<strong>计数到无穷</strong>。</p>
+<p>RIP是距离向量协议，用跳数作为度量，16表示不可达，最多15个有效跳。</p>
+<ul>
+<li><strong>水平分割</strong>：不向学到路由的方向再通告同一路由。</li>
+<li><strong>毒性逆转</strong>：向该方向明确通告该目的不可达。</li>
+<li><strong>触发更新</strong>：变化后及时通告，不只等周期。</li>
+</ul>
+<p>这些减少部分环路问题，不能保证消除所有瞬态环路。计算多轮表时，还要说明每轮统一用上一轮表，还是立即采用新结果。</p>
+<a id="k5.6.3"></a>
+<h3>5.6.3 链路状态与Dijkstra</h3>
+<p><strong>链路状态</strong>告诉网络：“我连接哪些邻居，各链路成本是多少”。通告经<strong>泛洪</strong>传播，让各路由器建立拓扑数据库，再独立算最短路径。</p>
+<p>泛洪要用序列号、老化与重复检测控制，不能让旧通告无限复制。OSPF的周期刷新与故障触发更新不同，不能因为刷新周期长就认为故障也要等那么久。</p>
+<p><strong>Dijkstra算法</strong>适用于非负链路代价：每次选暂定距离最小、尚未确定的结点，再检查经它是否能缩短邻居距离，这一步叫<strong>松弛</strong>。</p>
+<p>理解例子：无向图A—B=2，A—C=5，B—C=1，B—D=4，C—D=1。</p>
+<table>
+<thead>
+<tr>
+<th>操作</th>
+<th>已确定结点</th>
+<th>B距离</th>
+<th>C距离</th>
+<th>D距离</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>从A开始</td>
+<td>A</td>
+<td>2</td>
+<td>5</td>
+<td>∞</td>
+</tr>
+<tr>
+<td>选B</td>
+<td>A、B</td>
+<td>2</td>
+<td>3</td>
+<td>6</td>
+</tr>
+<tr>
+<td>选C</td>
+<td>A、B、C</td>
+<td>2</td>
+<td>3</td>
+<td>4</td>
+</tr>
+<tr>
+<td>选D</td>
+<td>A、B、C、D</td>
+<td>2</td>
+<td>3</td>
+<td>4</td>
+</tr>
+</tbody></table>
+<p>到D路径为A—B—C—D，代价4；转发表只需说明下一跳B，不让包携带整棵最短路径树。这个结果依赖上表给出的边权；拓扑或代价变化后需要重新计算。</p>
+<a id="c5-7"></a>
+<h2>5.7 资源控制：排队、死锁、整形与 QoS</h2>
+<p>路径可达不表示出口能立刻发出所有数据。持续到达超过出口能力时会排队和丢弃；互相等待资源还可能停滞。整形控制进入节奏，调度安排队列服务，两者不能凭标记创造带宽。</p>
+<a id="k5.7.1"></a>
+<h3>5.7.1 拥塞与反馈控制</h3>
+<p><strong>拥塞</strong>是网络输入超过传输或处理能力，队列、时延与丢包增长。缓存能吸收短时突发，不能永久解决持续超载。</p>
+<p><strong>开环控制</strong>提前预防，如准入、预留、整形；<strong>闭环控制</strong>检测拥塞后反馈调整发送。</p>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>怎样工作</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>准入控制</td>
+<td>在新业务进入前检查容量</td>
+</tr>
+<tr>
+<td>Drop Tail，尾部丢弃</td>
+<td>队列满时丢弃新到分组</td>
+</tr>
+<tr>
+<td>RED，随机早期检测</td>
+<td>根据平均队列长度提前概率丢弃或标记</td>
+</tr>
+<tr>
+<td>反馈控制</td>
+<td>通过状态反馈让源端减速</td>
+</tr>
+</tbody></table>
+<p>流量控制保护接收端，拥塞控制保护网络，两者可能都限制发送量，但原因不同。</p>
+<p>课件“抑制分组”用于讲历史反馈思想。ICMP Source Quench已被规范废弃，不作为应启用的现代控制方法。<a href="https://www.rfc-editor.org/rfc/rfc6633.html">RFC 6633</a></p>
+<a id="k5.7.2"></a>
+<h3>5.7.2 死锁</h3>
+<p><strong>死锁</strong>是一组实体互相等待被对方占用的资源，无法继续。</p>
+<p>例如A的缓冲存着要给B的包，B的缓冲存着要给A的包，双方都没有空间先接收。间接等待还可形成A→B→C→A的环。</p>
+<p>分片重组也可能出现缓冲被多个不完整报文占满，而补齐任一报文的后续片段都进不来的问题。合理分配、限制占用、超时释放等方法可破坏等待条件。</p>
+<p>拥塞通常还有数据缓慢前进，死锁则可能持续停住。“再加一点缓冲”不是通用的正确性证明。</p>
+<a id="k5.7.3"></a>
+<h3>5.7.3 QoS、整形与调度</h3>
+<p><strong>QoS，服务质量</strong>关注带宽、时延、丢包和<strong>抖动</strong>，即分组延迟的变化。语音可能能容忍少量损失，却对延迟与抖动敏感；文件传输更重完整性。</p>
+<p><strong>整形</strong>控制数据进入网络的节奏；<strong>调度</strong>决定多个等待队列谁先发。</p>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>通俗解释</th>
+<th>特点</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>漏桶</td>
+<td>像固定速率排水</td>
+<td>平滑输出，过量到达需排队或丢弃</td>
+</tr>
+<tr>
+<td>令牌桶</td>
+<td>按速率生成发送许可，允许积累</td>
+<td>长期受限，允许受控突发</td>
+</tr>
+<tr>
+<td>严格优先级调度</td>
+<td>总先服务高优先队列</td>
+<td>低优先级可能长期得不到服务</td>
+</tr>
+<tr>
+<td>轮询或加权调度</td>
+<td>轮流按份额服务</td>
+<td>分配服务机会</td>
+</tr>
+</tbody></table>
+<p>令牌桶每秒生成r个令牌，最多积累b个；若每字节消耗一个令牌，时间t内允许流量满足：</p>
+<div class="formula" role="math" aria-label="A(t)\le b+rt">A(t)≤ b+rt</div>
+
+
+<p>r用B/s、b用B、t用s。理解例子：r=1 MB/s、b=2 MB，桶满时可允许约2 MB突发，但物理发送仍需要时间。</p>
+<p><strong>IntServ</strong>强调逐流资源管理和预留；<strong>DiffServ</strong>在边缘分类、标记，在内部按类别处理。优先级标记不能凭空创造带宽，也不自动保证跨所有网络的端到端质量。</p>
+<h3>令牌约束与物理发送约束要同时检查</h3>
+<p><strong>扩展例题：</strong> 满桶 b=2000 B，r=1000 B/s，出口 C=1500 B/s。观察 2 s，令牌上限 b+rt=4000 B，物理出口最多 C×t=3000 B，因此实际最多受较小值 3000 B 限制。令牌允许的突发只表示许可，不让 2000 B 在零时间发完。</p>
+<p>若系统另有限制队列或包不能切分，上述结果仍只是上限；还需要到达时间和分组大小才能判断具体调度序列。</p>
+<a id="c5-8"></a>
+<h2>5.8 IPv6：地址、邻居发现与过渡怎样配合</h2>
+<p>IPv4 地址规模有限，IPv6 扩大地址并调整首部及邻居机制。它不是只把十进制换成十六进制：路由器分片、广播、ARP 与自动配置规则都有相应变化。缩写只改变显示，不改变 128 位地址。</p>
+<a id="k5.8.1"></a>
+<h3>5.8.1 基本首部与扩展首部</h3>
+<p>IPv6地址128位，基本首部固定40 B，不含IPv4式首部校验和。<strong>扩展首部</strong>把额外功能放在基本首部之后，通过Next Header串起来。</p>
+<table>
+<thead>
+<tr>
+<th>字段</th>
+<th>位数</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Version</td>
+<td>4</td>
+<td>值为6</td>
+</tr>
+<tr>
+<td>Traffic Class</td>
+<td>8</td>
+<td>流量类别</td>
+</tr>
+<tr>
+<td>Flow Label</td>
+<td>20</td>
+<td>流标识</td>
+</tr>
+<tr>
+<td>Payload Length</td>
+<td>16</td>
+<td>基本首部之后的字节数，普通情况包含扩展首部</td>
+</tr>
+<tr>
+<td>Next Header</td>
+<td>8</td>
+<td>指出紧跟的首部类型</td>
+</tr>
+<tr>
+<td>Hop Limit</td>
+<td>8</td>
+<td>跳数限制</td>
+</tr>
+<tr>
+<td>源、目的地址</td>
+<td>各128</td>
+<td>IPv6通信地址</td>
+</tr>
+</tbody></table>
+<pre><code class="language-text">IPv6基本首部 → 路由扩展首部 → 分片扩展首部 → UDP
+每一段用Next Header指出下一段。
+</code></pre>
+<p>常见编号：逐跳选项0，路由43，分片44，ESP 50，AH 51，目的选项60，TCP 6，UDP 17。ESP、AH是IP安全相关首部，本章先辨认名称与位置。</p>
+<p>扩展首部的长度规则并不统一：部分选项首部以8 B为单位表示额外长度，分片首部固定8 B，不应套用一张图的规则解释全部。</p>
+<p>**IPv6路由器不分片，必要分片由源端执行。**过大的包会按条件触发“Packet Too Big”反馈，帮助源端调整大小。<a href="https://datatracker.ietf.org/doc/html/rfc8200">RFC 8200</a></p>
+<a id="k5.8.2"></a>
+<h3>5.8.2 地址表示与零压缩</h3>
+<p>地址一般写成8组十六进制数，每组16位。两条基本缩写规则：</p>
+<ol>
+<li>组内前导零可省略。</li>
+<li>一段连续零组可用<code>::</code>省略，一处地址最多一次。</li>
+</ol>
+<p>理解例子：</p>
+<pre><code class="language-text">2001:0db8:0000:0000:0008:0800:200c:417a
+2001:db8:0:0:8:800:200c:417a
+2001:db8::8:800:200c:417a
+</code></pre>
+<p>展开时已有6组，<code>::</code>补2组。若用两处<code>::</code>，无法知道各省了几组，所以非法。</p>
+<p>规范输出推荐小写、压缩最长零串、平局选最左，不用<code>::</code>压缩单个零组。<strong>合法写法与推荐的规范写法不同。</strong><a href="https://www.rfc-editor.org/rfc/rfc5952">RFC 5952</a></p>
+<a id="k5.8.3"></a>
+<h3>5.8.3 地址类型</h3>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>指向谁</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>单播</td>
+<td>一个接口</td>
+</tr>
+<tr>
+<td>任播</td>
+<td>一组接口中的一个，按路由规则选择</td>
+</tr>
+<tr>
+<td>多播</td>
+<td>一组接收接口</td>
+</tr>
+</tbody></table>
+<p>IPv6没有广播。任播的“最近”按路由意义判断，不保证地理最近，也没有与单播完全独立的外观。</p>
+<table>
+<thead>
+<tr>
+<th>地址或范围</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>::</code></td>
+<td>未指定地址</td>
+</tr>
+<tr>
+<td><code>::1</code></td>
+<td>环回</td>
+</tr>
+<tr>
+<td><code>fe80::/10</code></td>
+<td>链路本地，局限于相应链路</td>
+</tr>
+<tr>
+<td><code>fc00::/7</code></td>
+<td>唯一本地地址范围，常见本地生成形式从fd开始</td>
+</tr>
+<tr>
+<td><code>2000::/3</code></td>
+<td>课件介绍的常见全球单播范围</td>
+</tr>
+<tr>
+<td><code>ff00::/8</code></td>
+<td>多播，包含作用域等信息</td>
+</tr>
+</tbody></table>
+<p>URL写IPv6并带端口时用方括号，如<code>http://[2001:db8::1]:8080/</code>，避免地址中的冒号与端口分隔混淆。</p>
+<a id="k5.8.4"></a>
+<h3>5.8.4 NDP、SLAAC与接口标识</h3>
+<p><strong>NDP，邻居发现协议</strong>用ICMPv6进行邻居解析、路由器发现、重复地址检测等；IPv6不使用IPv4的ARP。</p>
+<table>
+<thead>
+<tr>
+<th>消息</th>
+<th>类型</th>
+<th>做什么</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>RS</td>
+<td>133</td>
+<td>请求路由器通告</td>
+</tr>
+<tr>
+<td>RA</td>
+<td>134</td>
+<td>发布前缀、默认路由等信息</td>
+</tr>
+<tr>
+<td>NS</td>
+<td>135</td>
+<td>邻居请求，解析或检测地址</td>
+</tr>
+<tr>
+<td>NA</td>
+<td>136</td>
+<td>邻居通告，提供相应反馈</td>
+</tr>
+</tbody></table>
+<p><strong>SLAAC，无状态地址自动配置</strong>让主机按RA中的前缀和规则生成地址，不必逐个租用服务器地址。课件的SLACC应写SLAAC。默认路由器信息来自RA，不是从自己的地址推算。</p>
+<p><strong>接口标识</strong>是地址中用于识别接口的部分。修改EUI-64是课件介绍的一种生成办法，不是全部系统必须采用的方法。</p>
+<p>课件MAC为<code>08-70-5a-90-1a-01</code>：</p>
+<pre><code class="language-text">插入ff-fe：08-70-5a-ff-fe-90-1a-01
+翻转首字节U/L位：08 XOR 02 = 0a
+接口标识：0a70:5aff:fe90:1a01
+</code></pre>
+<p>不能把整个首字节取反；隐私等机制可使用其他标识生成方式。</p>
+<a id="k5.8.5"></a>
+<h3>5.8.5 被请求节点地址与DAD</h3>
+<p>为解析邻居，主机使用目标地址低24位构造<strong>被请求节点多播地址</strong>：加到<code>ff02::1:ff00:0/104</code>之后。</p>
+<p>理解例子：目标末尾为<code>1234:5678</code>，低24位是34:56:78，得到<code>ff02::1:ff34:5678</code>；以太网多播地址对应<code>33:33:ff:34:56:78</code>。</p>
+<p><strong>DAD，重复地址检测</strong>在正式使用新地址前检查是否冲突，可用源地址<code>::</code>发NS。没有冲突反馈后按规则启用，但故障导致的无响应不能证明任何环境下绝对无冲突。</p>
+<p>IPv6组成员管理用MLD，即多播侦听发现，与IPv4的IGMP区分。</p>
+<a id="k5.8.6"></a>
+<h3>5.8.6 IPv4与IPv6过渡</h3>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>做什么</th>
+<th>关键区别</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>双栈</td>
+<td>同时支持IPv4、IPv6</td>
+<td>选择相应协议通信</td>
+</tr>
+<tr>
+<td>隧道</td>
+<td>给原包再加外层封装</td>
+<td>中间网络只处理外层，出口去掉</td>
+</tr>
+<tr>
+<td>协议转换</td>
+<td>转换地址与协议表示</td>
+<td>改变协议语义，可能需映射状态</td>
+</tr>
+</tbody></table>
+<p>NAT64可让IPv6客户端访问IPv4服务；DNS64可合成相应IPv6地址帮助访问。能否支持反向主动连接依具体映射与配置，不能一概说任意双向互通。</p>
+<p>隧道里的IPv6包没有变成IPv4语义的包，只是装在IPv4外层中传。额外首部还会影响MTU。</p>
+<a id="c5-9"></a>
+<h2>5.9 互联网路由与路由器结构</h2>
+<p>单一管理网络的最短路径不足以解释整个互联网。自治系统间还要处理政策与可达性，内部则需要区域和快速转发表；控制信息与实际数据走向必须分别分析。</p>
+<a id="k5.9.1"></a>
+<h3>5.9.1 AS、IGP与域间路由</h3>
+<p><strong>AS，自治系统</strong>是一组采用统一管理与路由策略的网络。一个运营商或大型组织可按需要组织AS，不能只凭公司名字判断数量。</p>
+<p><strong>IGP</strong>是域内路由协议，主要在AS内工作；域间路由处理AS之间的可达性和策略。</p>
+<table>
+<thead>
+<tr>
+<th>协议</th>
+<th>方法</th>
+<th>本课重点</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>RIP</td>
+<td>距离向量</td>
+<td>跳数、16不可达、邻居更新</td>
+</tr>
+<tr>
+<td>OSPF</td>
+<td>链路状态</td>
+<td>拓扑数据库、最短路径、区域</td>
+</tr>
+<tr>
+<td>BGP</td>
+<td>路径向量</td>
+<td>AS路径与策略，使用TCP 179</td>
+</tr>
+</tbody></table>
+<a id="k5.9.2"></a>
+<h3>5.9.2 OSPF与区域</h3>
+<p>OSPF用Hello发现邻居，通过数据库描述、链路状态请求、更新和确认交换信息，再算最短路径。</p>
+<p><strong>区域</strong>把大型网络的路由信息组织成多个部分，减少各处需要维护的规模；骨干区域是Area 0。链路成本可与带宽有关，但参考值可配置，不是固定的历史默认数值。</p>
+<p>周期刷新是维护信息有效性，拓扑变化也能触发通告。多条等代价路径可以参与转发，具体认证和策略依配置而定。</p>
+<a id="k5.9.3"></a>
+<h3>5.9.3 BGP与路径向量</h3>
+<p>BGP通告可达前缀以及路径属性。<strong>AS_PATH</strong>记录所经过的AS，看到自己的AS可识别相应环路。</p>
+<p>BGP会考虑管理和商业策略，不能仅用“跳数最少”解释所有选路。TCP负责消息可靠传输，不保证通告本身在业务策略上正确。</p>
+<p>公共首部19 B：Marker 16 B、Length 2 B、Type 1 B。</p>
+<table>
+<thead>
+<tr>
+<th>消息</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>OPEN</td>
+<td>建立会话参数</td>
+</tr>
+<tr>
+<td>UPDATE</td>
+<td>发布或撤销路由</td>
+</tr>
+<tr>
+<td>KEEPALIVE</td>
+<td>维持会话</td>
+</tr>
+<tr>
+<td>NOTIFICATION</td>
+<td>报告差错并结束</td>
+</tr>
+<tr>
+<td>路由刷新扩展</td>
+<td>请求重新通告相应信息</td>
+</tr>
+</tbody></table>
+<a id="k5.9.4"></a>
+<h3>5.9.4 路由器内部结构</h3>
+<p><strong>控制平面</strong>运行路由协议、计算并维护转发信息；<strong>数据平面</strong>按照已有规则快速转发实际分组。</p>
+<pre><code class="language-text">输入端口 → 交换结构 → 输出端口
+接收、查表    内部搬运    排队、调度、发送
+</code></pre>
+<p>交换结构可基于内存、总线或交叉开关。多个输入争同一个出口时仍要排队，即使内部很快也不能提高该出口容量。</p>
+<p><strong>队首阻塞</strong>指队首分组等待繁忙出口，挡住后面本可送往空闲出口的分组。路由表可含较多控制信息，转发表可为快速查询另行组织。</p>
+<a id="c5-10"></a>
+<h2>5.10 SDN、MPLS 与段路由：控制位置和转发依据怎样变化</h2>
+<p>普通前缀转发难以直接表达所有业务策略。SDN 调整控制的组织方式，MPLS 使用标签，段路由表达一组有序动作。它们回答的角度不同，可在实际设计中组合，不是三种完全互斥的网络层。</p>
+<a id="k5.10.1"></a>
+<h3>5.10.1 SDN的控制与转发分离</h3>
+<p><strong>SDN</strong>让控制逻辑通过可编程接口管理转发设备。控制器具有逻辑上的集中视角，物理上可由多个节点实现。</p>
+<ul>
+<li><strong>北向接口</strong>：应用向控制系统描述需求或策略。</li>
+<li><strong>南向接口</strong>：控制系统向设备下发规则、获取状态。</li>
+<li><strong>流表规则</strong>：按地址、端口等匹配，执行转发、丢弃、修改或上送等动作。</li>
+</ul>
+<p>理解例子：新流到达，设备没有匹配规则时按配置通知控制器；控制器计算策略并装规则，后续数据由设备直接处理。</p>
+<p>不是每个数据包都经过控制器，也不是所有SDN采用同一南向协议。控制器可用性、一致性和规则规模仍需设计，分离控制没有消除队列与容量限制。</p>
+<a id="k5.10.2"></a>
+<h3>5.10.2 MPLS标签转发</h3>
+<p><strong>MPLS，多协议标签交换</strong>在相应网络内按短标签转发。入口压入标签，中间换标签，出口按规则弹出。</p>
+<p><strong>FEC，转发等价类</strong>是采用相同转发处理的一组分组；<strong>LSP，标签交换路径</strong>是按标签转发的路径。</p>
+<p>理解例子：入口给某类包标签100，中间节点根据标签查表，换为205并从指定出口发，出口移除标签。100与205可有局部意义，并非目的主机地址。</p>
+<p>标签栈项32位：Label 20位，TC 3位，S 1位，TTL 8位；TC是类别信息，S=1表示栈底。push、swap、pop分别指压入、交换、弹出。</p>
+<p>它可用于业务承载和流量工程，即按需求组织流量走向；路径仍需控制机制建立，标签不会自行知道全网路径。</p>
+<a id="k5.10.3"></a>
+<h3>5.10.3 段路由与SRv6</h3>
+<p><strong>段路由</strong>用有序段列表表达希望执行的节点或动作。<strong>SID</strong>是段标识，SRv6用IPv6地址形式表示它；<strong>SRH</strong>是携带段列表的路由扩展首部。</p>
+<p>普通IPv6中间路由器按当前目的地址转发；执行相应SID行为的段端点，才推进下一段。</p>
+<p>理解例子：希望依次执行A、B、C，SRH反向索引保存<code>[C,B,A]</code>。</p>
+<pre><code class="language-text">开始：Segments Left=2，当前目的A
+A执行段行为：减为1，目的改B
+B执行段行为：减为0，目的改C
+</code></pre>
+<p>不能每经过一个普通中间路由器就减Segments Left。SID可表示节点或函数，实际行为由SID定义，不把上例套为所有行为的完整处理流程。</p>
+<p><strong>Last Entry</strong>是最后一个列表索引，3项时是2，不是3。SRH还含Next Header、长度、Routing Type、标志、Tag等。</p>
+<p>IPv6的Next Header=43指出路由扩展首部，SRH内Routing Type=4进一步识别SRH。段列表一般不是每执行一段就删除一项，也不记录全部实际中间节点。<a href="https://datatracker.ietf.org/doc/html/rfc8754">RFC 8754</a></p>
+<a id="c5-11"></a>
+<h2>5.11 综合应用</h2>
+<p><strong>任务与前提：</strong> A=192.168.10.10/24 发往 S=192.168.20.20，默认网关 R=192.168.10.1。R 有目的 192.168.20.0/24 的路由，下一跳 T；R 出口 MTU=700 B。原 IPv4 总长 2000 B、首部 20 B、DF=0、无选项，无 NAT。分别求每步对象及结果。</p>
+<table>
+<thead>
+<tr>
+<th>步骤</th>
+<th>采用规则</th>
+<th>具体结果</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>A 将地址分别 AND /24 掩码</td>
+<td>A 网络 .10.0、S 网络 .20.0，不同网</td>
+</tr>
+<tr>
+<td>2</td>
+<td>不同网先交默认下一跳</td>
+<td>A 必要时 ARP 查询 R，不查询远端 S 的 MAC</td>
+</tr>
+<tr>
+<td>3</td>
+<td>在当前链路封装</td>
+<td>目的 IP=S，目的 MAC=R 当前接口，不能互换</td>
+</tr>
+<tr>
+<td>4</td>
+<td>R 查目的 IP 的最长前缀</td>
+<td>选 /24 的出口与 T，更新 TTL 等字段</td>
+</tr>
+<tr>
+<td>5</td>
+<td>原包过 MTU 且可分片</td>
+<td>载荷 1980 B 分为 680、680、620 B</td>
+</tr>
+<tr>
+<td>6</td>
+<td>每片独立首部与位置</td>
+<td>总长 700、700、640；偏移 0、85、170；MF 1、1、0</td>
+</tr>
+<tr>
+<td>7</td>
+<td>出口邻居解析并封装</td>
+<td>每片对应当前出口帧，目的 MAC 指 T</td>
+</tr>
+<tr>
+<td>8</td>
+<td>最终 S 重组</td>
+<td>按原包标识与偏移恢复 1980 B IP 载荷，超时不齐则失败</td>
+</tr>
+</tbody></table>
+<p><strong>条件变化：</strong> DF=1 时第 5 步不能分片，按条件反馈需要分片；换 IPv6 也不能由 R 执行分片。图中没有给完整拓扑和下一跳 MAC，所以能确定“解析 T”，不能凭空填出具体 MAC 值。</p>
+<a id="c5-12"></a>
+<h2>5.12 自测与答案</h2>
+<p>先独立完成概念自测，再做应用题。展开答案时，检查自己的前提、推导和方法选择。</p>
+<h3>概念自测</h3>
+<ol>
+<li>192.168.150.122/29的网络、广播、可用主机数是多少？</li>
+<li>地址同时匹配/16、/24、/0时，选哪条？</li>
+<li>分片偏移175表示相对哪里、偏移多少字节？</li>
+<li>本章第2分片再拆后，最后一个子片为什么MF仍为1？</li>
+<li>跨子网发给远端主机，ARP查询谁？</li>
+<li>RIP和链路状态各通告什么？</li>
+<li>IPv6路由器能否像IPv4一样执行分片？</li>
+<li>IPv6地址能用两处<code>::</code>吗？</li>
+<li>IGMP是否负责路由器间建立完整多播分发路径？</li>
+<li>SDN是否要求所有数据包都经过控制器？</li>
+</ol>
+<details>
+<summary>参考答案</summary>
+
+<ol>
+<li>网络.120，广播.127，可用.121～.126，共6个。</li>
+<li>/24，范围最具体。</li>
+<li>相对原始载荷起点，<code>175×8=1400 B</code>。</li>
+<li>原报文后面还有第3分片。</li>
+<li>当前出口链路的下一跳，通常是本地网关。</li>
+<li>RIP通告到目的的距离；链路状态通告邻接和链路成本。</li>
+<li>不能，IPv6必要分片由源端执行。</li>
+<li>不能，省略的零组数量会产生歧义。</li>
+<li>不负责，它管理本地成员，另需多播路由机制。</li>
+<li>不要求，已装规则的流量通常由设备直接转发。</li>
+</ol>
+</details>
+
+<h3>应用练习</h3>
+<table>
+<thead>
+<tr>
+<th>题号</th>
+<th>学习任务</th>
+<th>检查能力</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>10.1.6.140/23 的网络、广播、普通可用范围是什么？</td>
+<td>写条件、推导、解释结果与边界</td>
+</tr>
+<tr>
+<td>2</td>
+<td>总长 2000 B、首部 20 B、MTU=699 B 时，各片载荷、偏移、MF 是什么？</td>
+<td>写条件、推导、解释结果与边界</td>
+</tr>
+<tr>
+<td>3</td>
+<td>收到目的 192.168.20.20，既有 /16 又有 /24；/16 跳数更少，能选 /16 吗？</td>
+<td>写条件、推导、解释结果与边界</td>
+</tr>
+<tr>
+<td>4</td>
+<td>A 到 B 成本 2，B 到 D 通告 7，A 到 C 成本 4，C 到 D 通告 3，按距离向量选谁？</td>
+<td>写条件、推导、解释结果与边界</td>
+</tr>
+<tr>
+<td>5</td>
+<td>IPv6 地址 2001:db8::8:1 需要补几个零组？</td>
+<td>写条件、推导、解释结果与边界</td>
+</tr>
+</tbody></table>
+<details>
+<summary>应用练习答案与理由</summary>
+
+<p><strong>1.</strong> /23 掩码 255.255.254.0，第三字节块大小 2，6 在 6～7 块；网络 10.1.6.0，广播 10.1.7.255，可用 10.1.6.1～10.1.7.254，共 510。只看末字节会遗漏跨字节主机位。</p>
+<p><strong>2.</strong> 非末片 672 B；1980 分为 672、672、636 B，总长 692、692、656 B，偏移 0、84、168，MF 1、1、0。三片载荷之和必须等于 1980。</p>
+<p><strong>3.</strong> 仍优先匹配 /24。路由代价不取代最长前缀规则；同一前缀的候选才结合协议和管理规则比较。</p>
+<p><strong>4.</strong> 经 B 为 2+7=9，经 C 为 4+3=7，所以选 C。通告是邻居信息，若过时仍可能产生暂时错误，计算成立依赖给定这一轮的输入。</p>
+<p><strong>5.</strong> 显式 2001、db8、8、1 共 4 组，所以补 4 组，展开为 2001:db8:0:0:0:0:8:1。压缩不减少地址位数。</p>
+</details>
+
+<a id="c5-13"></a>
+<h2>5.13 排错与复习</h2>
+<table>
+<thead>
+<tr>
+<th>现象或疑问</th>
+<th>可能原因</th>
+<th>怎样核对</th>
+<th>正确理解</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>跨子网 ARP 查询最终目标</td>
+<td>把主机目标当当前链路目标</td>
+<td>先判断同网，再找下一跳</td>
+<td>解析网关或当前出口邻居</td>
+</tr>
+<tr>
+<td>片偏移直接填字节数</td>
+<td>忘记字段单位</td>
+<td>用原载荷起点字节数除 8</td>
+<td>再分片也相对原载荷</td>
+</tr>
+<tr>
+<td>最后子片一律 MF=0</td>
+<td>忽略原包还有后续片</td>
+<td>看原始数据后面是否仍有片</td>
+<td>局部最后不一定原包最后</td>
+</tr>
+<tr>
+<td>ping 不通就断言目标离线</td>
+<td>缺少过滤和回程信息</td>
+<td>比较其他探测、路由与应用反馈</td>
+<td>无回应是信息不足，不是充分证明</td>
+</tr>
+<tr>
+<td>IPv6 有地址便一定有默认路由</td>
+<td>混淆地址生成和路由发现</td>
+<td>检查 RA 与默认路由状态</td>
+<td>SLAAC 地址与默认路由有不同信息来源</td>
+</tr>
+</tbody></table>
+<p>学完后应能独立做到：</p>
+<ul>
+<li><input disabled="" type="checkbox"> 用自己的话解释本章机制要处理的对象和困难。</li>
+<li><input disabled="" type="checkbox"> 指出整体、部分、分类维度和执行动作之间的关系。</li>
+<li><input disabled="" type="checkbox"> 写出算例的前提、单位、中间结果与最终对象。</li>
+<li><input disabled="" type="checkbox"> 解释确认、缓存、租约或映射的状态怎样变化。</li>
+<li><input disabled="" type="checkbox"> 指出相近方法的差别及可以组合的条件。</li>
+<li><input disabled="" type="checkbox"> 完成概念自测和应用练习，并说明前提改变后的结果。</li>
+</ul>
+<a id="c5-14"></a>
+<h2>5.14 分类速查</h2>
+<p>选择一项查看含义、基本形式、例子与结果、使用条件。完整表保存在对应 Markdown。</p>
+<div class="quickbox"><label for="quick-select">选择速查项</label><select id="quick-select"></select><div id="quick-card" class="quickcard" aria-live="polite"></div></div>
+
+<div class="footerlinks"><a href="04_数据链路层.html">← 上一章：数据链路层</a><a href="06_传输层.html">下一章：传输层 →</a></div></article></main><script>window.CHAPTER={"chapter":5,"name":"网络层","file":"05_网络层.md","title":"第5章 网络层：从目的地址逐步推导当前下一跳、分片和路由选择","toc":[{"id":"c5-0","title":"5.0 共同场景与符号"},{"id":"c5-1","title":"5.1 网络层服务：跨网络交付与下一跳"},{"id":"c5-2","title":"5.2 IPv4 地址规划：主机属于哪个地址块"},{"id":"c5-3","title":"5.3 逐跳转发与辅助协议：IP 和 MAC 分别指谁"},{"id":"c5-4","title":"5.4 IPv4 首部、MTU 与分片：尺寸变化怎样计算"},{"id":"c5-5","title":"5.5 DHCP 与 NAT：配置和映射有什么生命周期"},{"id":"c5-6","title":"5.6 路由算法：邻居距离与全网拓扑怎样选路"},{"id":"c5-7","title":"5.7 资源控制：排队、死锁、整形与 QoS"},{"id":"c5-8","title":"5.8 IPv6：地址、邻居发现与过渡怎样配合"},{"id":"c5-9","title":"5.9 互联网路由与路由器结构"},{"id":"c5-10","title":"5.10 SDN、MPLS 与段路由：控制位置和转发依据怎样变化"},{"id":"c5-11","title":"5.11 综合应用"},{"id":"c5-12","title":"5.12 自测与答案"},{"id":"c5-13","title":"5.13 排错与复习"},{"id":"c5-14","title":"5.14 分类速查"}],"stages":[{"name":"学习准备","task":"确认读者基础和对象","ids":["c5-0"]},{"name":"地址与逐跳处理","task":"从配置推导出口、邻居和包大小","ids":["c5-1","c5-2","c5-3","c5-4","c5-5"]},{"name":"路径与资源","task":"理解选路、收敛和容量条件","ids":["c5-6","c5-7"]},{"name":"扩展与进阶","task":"辨认 IPv6、域间路由与新型转发","ids":["c5-8","c5-9","c5-10"]},{"name":"练习与复习","task":"组合推导、独立作答与排错","ids":["c5-11","c5-12","c5-13","c5-14"]}],"quick":[["子网计算","地址规划","判断同网与容量","网络=IP AND 掩码；总数=2^(32−p)","/29 有 8 编码、通常 6 主机","/31、/32 与特殊地址单独处理",1],["最长前缀与 ARP","逐跳处理","选择出口并找到本链路邻居","最长匹配前缀；ARP 解析下一跳","远端 S 的 IP 不变，首跳 MAC 指 R","ARP 缓存不是全网 IP-MAC 表",2],["IPv4 分片","包尺寸","把过大可分片包放入出口 MTU","载荷上限=floor((MTU−H)/8)×8","2000 B 经 700 MTU 得 680、680、620","偏移以 8 B 计；DF 与原 MF 必须检查",3],["DHCP 租约与 NAPT 映射","配置状态","提供地址与回程端点还原","DORA；地址端口映射表","外部 :40001 还原内网 :50000","期限、策略、校验和改写分别检查",4],["DV 与 Dijkstra","路由算法","依据邻居距离或拓扑求路径","min_v(c+D_v)；最小暂定结点后松弛","A→B→C→D 总成本 4","明确更新轮次；Dijkstra 边权非负",5],["令牌桶","流量整形","允许受控突发并限制长期速率","A(t)≤b+rt","b=2 MB、r=1 MB/s，1 s 许可≤3 MB","许可仍受物理出口与实际到达约束",6],["IPv6 邻居与尺寸","协议机制","配置邻居、发现路由并处理过大包","ICMPv6 RS/RA/NS/NA；源端分片","EUI-64 只翻 U/L 位","不是所有接口标识都从 MAC 生成",7],["SDN/MPLS/SRv6","进阶转发","分别组织控制、标签与有序段","流表；push/swap/pop；SID/SRH","普通中间路由器不推进 Segments Left","按版本和具体 SID 行为判断",9],["静态丢弃路由","讲义补充","防止不存在的汇总子网落入默认回路","实际更具体前缀转发；汇总范围其余丢弃",".3/24 不存在时 /22 丢弃优于 /0 回传","按正确汇总设计，不代表所有配置自动无环",2],["VPN 隧道与 NAT","讲义补充","借公共网络连接内部网并分清封装与改写","内层原包+外层隧道端点；NAT 地址转换","10.1.0.3→10.2.0.3 装入公共端点包","封装、安全机制、MTU 开销按所用协议",4]],"quick_id":"c5-14","synthesis_id":"c5-11","source_module_count":32,"retained_core_chars":13108,"new_chars":24427};</script><script>
+const $$=(s,r=document)=>[...r.querySelectorAll(s)];
+const menu=document.getElementById('menu-button');
+const setNav=v=>{document.body.classList.toggle('nav-open',v);menu.setAttribute('aria-expanded',String(v))};
+menu.addEventListener('click',()=>setNav(!document.body.classList.contains('nav-open')));
+document.querySelector('.navshade').addEventListener('click',()=>setNav(false));
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){setNav(false);menu.focus()}});
+for(const table of $$('article table')){const wrap=document.createElement('div');wrap.className='tablewrap';table.before(wrap);wrap.append(table)}
+const anchors=$$('.navlink[href^="#"]');
+const entries=anchors.map(a=>({a,id:a.getAttribute('href').slice(1),el:document.getElementById(a.getAttribute('href').slice(1))})).filter(x=>x.el);
+function activate(id){for(const e of entries){const yes=e.id===id;e.a.classList.toggle('active',yes);if(yes)e.a.setAttribute('aria-current','location');else e.a.removeAttribute('aria-current')}}
+let scheduled=false;
+function sync(){scheduled=false;let last=entries[0];for(const e of entries){if(e.el.getBoundingClientRect().top<=135)last=e}if(window.innerHeight+window.scrollY>=document.documentElement.scrollHeight-6)last=entries.at(-1);if(last)activate(last.id)}
+window.addEventListener('scroll',()=>{if(!scheduled){scheduled=true;requestAnimationFrame(sync)}},{passive:true});
+window.addEventListener('resize',sync);
+for(const e of entries)e.a.addEventListener('click',()=>{activate(e.id);setNav(false)});
+sync();
+if(window.CHAPTER){
+ const cfg=window.CHAPTER;
+ const q=document.getElementById('quick-select'),card=document.getElementById('quick-card');
+ cfg.quick.forEach((r,i)=>{const o=document.createElement('option');o.value=i;o.textContent=r[0]+' · '+r[1];q.append(o)});
+ function showQuick(){const r=cfg.quick[Number(q.value)];card.replaceChildren();let h=document.createElement('h3');h.textContent=r[0]+' · '+r[1];card.append(h);const dl=document.createElement('dl');for(const [label,value] of [['含义',r[2]],['基本形式',r[3]],['例子与结果',r[4]],['注意点',r[5]]]){const dt=document.createElement('dt');dt.textContent=label;const dd=document.createElement('dd');dd.textContent=value;dl.append(dt,dd)}card.append(dl);const a=document.createElement('a');a.href='#c'+cfg.chapter+'-'+(r[6]+1);a.textContent='回正文查看完整解释';card.append(a)}
+ q.addEventListener('change',showQuick);showQuick();
+ const synth=document.getElementById(cfg.synthesis_id).nextElementSibling;
+ let cur=synth.nextElementSibling,table=null;while(cur&&!/^H2$/.test(cur.tagName)){if(cur.classList.contains('tablewrap')){table=cur.querySelector('table');break}cur=cur.nextElementSibling}
+ if(table){
+  const heads=$$('th',table).map(x=>x.textContent),rows=$$('tbody tr',table).map(tr=>$$('td',tr).map(td=>td.textContent));
+  const box=document.createElement('div');box.className='stepbox';box.innerHTML='<h3>分步观察综合应用</h3><p class="stepnotes">沿用下方综合题的全部前提。每个编号对应原表一行，分开观察当前对象、规则和结果。</p><div class="stepbuttons" role="group" aria-label="步骤选择"></div><div class="stepdisplay" aria-live="polite"></div><div class="stepcontrols"><button type="button" data-prev>上一步</button><span class="stepcount"></span><button type="button" data-next>下一步</button></div>';
+  cur.before(box);const buttons=box.querySelector('.stepbuttons'),display=box.querySelector('.stepdisplay'),count=box.querySelector('.stepcount'),prev=box.querySelector('[data-prev]'),next=box.querySelector('[data-next]');let index=0;
+  rows.forEach((row,i)=>{const b=document.createElement('button');b.textContent=i+1;b.setAttribute('aria-label','查看步骤 '+(i+1));b.addEventListener('click',()=>{index=i;showStep()});buttons.append(b)});
+  function showStep(){display.replaceChildren();const h=document.createElement('h4');h.textContent='步骤 '+(index+1)+(/^[0-9]+$/.test(rows[index][0])?'':'：'+rows[index][0]);display.append(h);const dl=document.createElement('dl');rows[index].slice(1).forEach((value,i)=>{const dt=document.createElement('dt');dt.textContent=heads[i+1]||'内容';const dd=document.createElement('dd');dd.textContent=value;dl.append(dt,dd)});display.append(dl);count.textContent=(index+1)+' / '+rows.length;prev.disabled=index===0;next.disabled=index===rows.length-1;$$('button',buttons).forEach((b,i)=>{b.classList.toggle('active',i===index);b.setAttribute('aria-pressed',String(i===index))})}
+  prev.addEventListener('click',()=>{index--;showStep()});next.addEventListener('click',()=>{index++;showStep()});showStep();
+ }
+}
+</script></body></html>

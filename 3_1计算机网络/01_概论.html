@@ -1,0 +1,1572 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>第1章 概论：说明一次网络访问中设备与协议怎样分工</title><style>
+:root{--ink:#20334a;--muted:#63748a;--accent:#17666c;--light:#e9f4f1;--line:#d9e4e9;--paper:#fff;--back:#f5f8fa;color-scheme:light}*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--back);color:var(--ink);font:16px/1.85 'Segoe UI','Microsoft YaHei',sans-serif}a{color:var(--accent);text-underline-offset:4px}a:hover{color:#10494e}button,select{font:inherit}button{cursor:pointer}a:focus-visible,button:focus-visible,select:focus-visible,summary:focus-visible{outline:3px solid #d78b21;outline-offset:3px}aside{position:fixed;inset:0 auto 0 0;width:292px;overflow-y:auto;background:#f0f5f6;border-right:1px solid var(--line);padding:28px 18px 28px 24px;z-index:30}.brand{font-size:21px;font-weight:700;line-height:1.5}.subbrand{font-size:13px;color:var(--muted);margin:8px 0 22px}.navgroup{margin:22px 0}.navgroup h2{font-size:12px;font-weight:600;letter-spacing:.06em;color:#75858e;margin:0 0 8px;border:0;padding:0}.navgroup p{font-size:11px;line-height:1.5;color:#7a8796;margin:0 0 8px}.navlink{display:block;padding:8px 11px;margin:4px 0;border-radius:7px;color:#3c5366;text-decoration:none;font-size:13px;line-height:1.6;border-left:3px solid transparent}.navlink:hover{background:#e2edee}.navlink.active{color:#0c5f62;border-color:var(--accent);background:#dcefed;font-weight:600}.asidefoot{font-size:12px;color:var(--muted);border-top:1px solid var(--line);padding-top:18px}main{margin-left:292px;min-width:0}.toolbar{position:sticky;top:0;z-index:20;background:#ffffffed;border-bottom:1px solid var(--line);height:55px;display:flex;align-items:center;gap:16px;padding:0 32px;font-size:12px;color:var(--muted);backdrop-filter:blur(8px)}.toolbar .spacer{flex:1}.toolbar a{text-decoration:none}.menubtn{display:none;border:1px solid #acbec8;background:white;border-radius:5px;padding:4px 12px;color:var(--ink)}article{max-width:1120px;margin:0 auto;padding:50px 58px 90px;background:white;min-height:100vh}h1{font-size:30px;line-height:1.55;letter-spacing:.01em;margin:0 0 24px}h2{font-size:24px;line-height:1.6;margin:62px 0 22px;padding-bottom:14px;border-bottom:1px solid var(--line);scroll-margin-top:86px}h3{font-size:19px;line-height:1.7;margin:36px 0 14px;scroll-margin-top:86px}h4{font-size:16px;margin:26px 0 10px}p{margin:14px 0}blockquote{margin:22px 0 30px;padding:16px 22px;border-left:4px solid var(--accent);background:#f1f7f6;color:#3c5866;font-size:14px}blockquote p{margin:7px 0}.tablewrap{overflow-x:auto;max-width:100%;margin:22px 0;border:1px solid var(--line);border-radius:7px}table{width:100%;border-collapse:collapse;font-size:14px;line-height:1.75;min-width:500px}th,td{text-align:left;vertical-align:top;padding:12px 15px;border-bottom:1px solid #e1e9ee}th{background:#edf4f5;font-weight:600}tr:last-child td{border-bottom:0}tbody tr:nth-child(even){background:#fafcfd}td a{display:inline-block}pre{max-width:100%;overflow:auto;background:#f1f5f8;border:1px solid #dde6eb;border-radius:7px;padding:20px;font-size:13px;line-height:1.8}code{font-family:Consolas,'Courier New','Microsoft YaHei',monospace;background:#eef4f6;border-radius:3px;padding:2px 4px;overflow-wrap:anywhere}pre code{padding:0;background:transparent;white-space:pre;overflow-wrap:normal}li{margin:7px 0}ul,ol{padding-left:26px}details{border:1px solid #c6dadb;border-radius:8px;margin:24px 0;padding:14px 20px;background:#f8fbfb}summary{cursor:pointer;font-weight:600;color:#17666c}details[open] summary{border-bottom:1px solid var(--line);padding-bottom:12px;margin-bottom:20px}.formula{overflow-x:auto;padding:20px;text-align:center;white-space:nowrap;background:#f9fbfc;font-family:'Cambria Math','Times New Roman',serif;font-size:20px;margin:20px 0}.frac{display:inline-flex;flex-direction:column;vertical-align:middle;text-align:center;line-height:1.4;margin:0 4px}.frac>span:first-child{border-bottom:1px solid #63748a;padding:0 5px 3px}.frac>span:last-child{padding:3px 5px 0}.formula sup,.formula sub{font-size:.65em}.quickbox,.stepbox{margin:24px 0;padding:24px;border:1px solid #c3d9d8;border-radius:10px;background:#f3f9f8}.quickbox label{display:block;font-weight:600;margin-bottom:10px}.quickbox select{width:100%;padding:10px 12px;border:1px solid #9fbfbc;border-radius:6px;background:white;color:var(--ink)}.quickcard{margin-top:20px}.quickcard h3{margin:0 0 12px}.quickcard dl{display:grid;grid-template-columns:90px 1fr;gap:10px 18px;font-size:15px;margin:0}.quickcard dt{font-weight:600;color:#557275}.quickcard dd{margin:0}.stepbox h3{margin:0 0 10px}.stepnotes{font-size:13px;color:var(--muted)}.stepbuttons{display:flex;flex-wrap:wrap;gap:6px;margin:16px 0}.stepbuttons button{border:1px solid #a8c6c4;background:white;color:#436366;border-radius:50%;width:35px;height:35px;font-size:13px}.stepbuttons button.active{background:var(--accent);color:white}.stepdisplay{background:white;border-radius:8px;padding:18px 20px;min-height:145px}.stepdisplay h4{margin:0 0 12px}.stepdisplay dl{margin:0;display:grid;grid-template-columns:140px 1fr;gap:9px 18px}.stepdisplay dt{font-weight:600}.stepdisplay dd{margin:0}.stepcontrols{display:flex;gap:10px;align-items:center;margin-top:16px}.stepcontrols button{border:1px solid #a7c6c3;padding:6px 16px;border-radius:5px;background:white;color:var(--accent)}button:disabled{cursor:default;opacity:.4}.stepcount{font-size:13px;color:var(--muted)}.chaptercards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin:28px 0}.chaptercard{display:block;border:1px solid var(--line);border-radius:10px;background:#f9fcfc;padding:22px;text-decoration:none}.chaptercard strong{display:block;font-size:21px;color:var(--ink);margin-bottom:10px}.chaptercard span{display:block;font-size:14px;line-height:1.7;color:#647a89}.footerlinks{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;border-top:1px solid var(--line);margin-top:64px;padding-top:24px}.footerlinks a{text-decoration:none}hr{border:0;border-top:1px solid var(--line);margin:35px 0}.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)}[id]{scroll-margin-top:86px}.topjump{color:#6b7e8e;font-size:13px}
+@media(max-width:1100px){aside{width:255px;padding:24px 15px}main{margin-left:255px}article{padding:38px 32px 70px}h1{font-size:27px}.toolbar{padding:0 24px}}
+@media(max-width:860px){aside{width:min(320px,87vw);transform:translateX(-100%);transition:transform .18s;box-shadow:12px 0 30px #1233}.nav-open aside{transform:translateX(0)}main{margin-left:0}.menubtn{display:block}.toolbar{padding:0 15px;gap:12px}.toolbar .desktop-only{display:none}article{padding:28px 20px 64px}h1{font-size:24px}h2{font-size:21px;margin-top:48px}h3{font-size:18px}body{font-size:15px}table{font-size:13px}th,td{padding:9px 12px}.quickbox,.stepbox{padding:17px}.quickcard dl,.stepdisplay dl{grid-template-columns:1fr;gap:3px}.quickcard dd,.stepdisplay dd{margin-bottom:12px}.chaptercards{grid-template-columns:1fr}.navshade{display:none;position:fixed;inset:0;background:#10283f55;z-index:25}.nav-open .navshade{display:block}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}aside{transition:none}}
+@media print{aside,.toolbar,.navshade,.stepbox{display:none}main{margin:0}article{max-width:none;padding:0}details{break-inside:avoid}table{min-width:0;font-size:10pt}h2{break-after:avoid}.tablewrap{overflow:visible}body{font-size:11pt}.quickbox select{display:none}.formula{white-space:normal}}
+</style></head><body><div class="navshade"></div><aside id="course-nav" aria-label="阶段分组学习目录"><div class="brand">计算机网络<br>学习资料</div><p class="subbrand">第 1 章 · 概论</p><nav><a class="navlink" href="#learning-nav">学习导航</a><section class="navgroup"><h2>学习准备</h2><p>确认读者基础和对象</p><a class="navlink" href="#c1-0">1.0 共同场景与符号</a></section><section class="navgroup"><h2>基础对象</h2><p>认清设备、连线与分类</p><a class="navlink" href="#c1-1">1.1 网络对象</a><a class="navlink" href="#c1-2">1.2 连接关系与功能分类</a></section><section class="navgroup"><h2>通信分工</h2><p>区分层次、服务和封装</p><a class="navlink" href="#c1-3">1.3 分层与服务</a><a class="navlink" href="#c1-4">1.4 封装与连接</a></section><section class="navgroup"><h2>互连与背景</h2><p>建立协议族和标准的整体认识</p><a class="navlink" href="#c1-5">1.5 TCP/IP 与互连标准</a><a class="navlink" href="#c1-6">1.6 发展主线</a></section><section class="navgroup"><h2>讲义补充</h2><p>分清性能指标的对象和量纲</p><a class="navlink" href="#c1-7">1.7 讲义补充</a></section><section class="navgroup"><h2>练习与复习</h2><p>组合推导、独立作答与排错</p><a class="navlink" href="#c1-8">1.8 综合应用</a><a class="navlink" href="#c1-9">1.9 自测与答案</a><a class="navlink" href="#c1-10">1.10 排错与复习</a><a class="navlink" href="#c1-11">1.11 分类速查</a></section></nav><p class="asidefoot">先看前提与对象，再推导中间过程。速查只显示当前选项，完整解释可返回正文。<br><a href="00_学习导航.html">全课程入口</a></p></aside><main><div class="toolbar"><button class="menubtn" id="menu-button" aria-expanded="false" aria-controls="course-nav">目录</button><a href="../index.html#/">课程资料站</a><a href="00_学习导航.html">课程导航</a><span class="desktop-only">概论</span><span class="spacer"></span><a href="01_概论.md">Markdown</a><span class="desktop-only">离线阅读</span></div><article><h1>第1章 概论：说明一次网络访问中设备与协议怎样分工</h1>
+<blockquote>
+<p>参考课件：第 1 章课件（原课件未随笔记发布）。</p>
+<p>适合读者：不默认已学过协议栈；只需知道电脑、手机能运行程序。</p>
+<p>学习目标：说明一次网络访问中设备与协议怎样分工。学习公式与时序时，先确认例题中的单位、协议版本和假设。</p>
+</blockquote>
+<a id="learning-nav"></a>
+<h2>学习导航</h2>
+<p>先观察校园网中的对象，再学习连接方式和通信分工，最后把分层模型放回一次真实的访问。网络发展史可在理解分组与互连之后复习。</p>
+<table>
+<thead>
+<tr>
+<th>学习阶段</th>
+<th>要解决的问题</th>
+<th>对应内容</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>学习准备</td>
+<td>确认读者基础和对象</td>
+<td><a href="#c1-0">1.0 共同场景与符号</a></td>
+</tr>
+<tr>
+<td>基础对象</td>
+<td>认清设备、连线与分类</td>
+<td><a href="#c1-1">1.1 网络对象：请求到底由谁处理</a>、<a href="#c1-2">1.2 连接关系与功能分类：怎样扩大网络</a></td>
+</tr>
+<tr>
+<td>通信分工</td>
+<td>区分层次、服务和封装</td>
+<td><a href="#c1-3">1.3 分层与服务：把复杂通信拆成职责</a>、<a href="#c1-4">1.4 封装与连接：数据逐层变成什么</a></td>
+</tr>
+<tr>
+<td>互连与背景</td>
+<td>建立协议族和标准的整体认识</td>
+<td><a href="#c1-5">1.5 TCP/IP 与互连标准：怎样跨不同网络合作</a>、<a href="#c1-6">1.6 发展主线：标准与共享怎样形成规模</a></td>
+</tr>
+<tr>
+<td>讲义补充</td>
+<td>分清性能指标的对象和量纲</td>
+<td><a href="#c1-7">1.7 讲义补充：怎样描述网络性能</a></td>
+</tr>
+<tr>
+<td>练习与复习</td>
+<td>组合推导、独立作答与排错</td>
+<td><a href="#c1-8">1.8 综合应用</a>、<a href="#c1-9">1.9 自测与答案</a>、<a href="#c1-10">1.10 排错与复习</a>、<a href="#c1-11">1.11 分类速查</a></td>
+</tr>
+</tbody></table>
+<p>返回<a href="00_%E5%AD%A6%E4%B9%A0%E5%AF%BC%E8%88%AA.html">全课程学习导航</a>。</p>
+<a id="c1-0"></a>
+<h2>1.0 共同场景与符号</h2>
+<p>假设学生用电脑 A 查询校园服务器 S 上的课程资料。A 经交换机接入路由器 R，R 再连接 S 所在网络。A、R、S 是本章反复使用的对象，不代表吉林大学实际布线。服务器上的文件查询是应用工作，沿途搬运数据是通信工作。</p>
+<table>
+<thead>
+<tr>
+<th>对象或符号</th>
+<th>含义</th>
+<th>本章约定</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>A、S</td>
+<td>请求端主机、服务端主机</td>
+<td>角色可互换，设备有独立处理能力</td>
+</tr>
+<tr>
+<td>R</td>
+<td>两个 IP 网络之间的路由器</td>
+<td>不假定具有 NAT 或应用代理</td>
+</tr>
+<tr>
+<td>首部、载荷、尾部</td>
+<td>控制信息与本层承载的数据</td>
+<td>总是相对某一层判断</td>
+</tr>
+<tr>
+<td>n、L</td>
+<td>设备数、两两直接链路数</td>
+<td>n 为正整数；不计自环与重复线路</td>
+</tr>
+<tr>
+<td>bit、B</td>
+<td>位、字节</td>
+<td>1 B = 8 bit，所有长度写明统计边界</td>
+</tr>
+</tbody></table>
+<p>下文算例彼此独立；同一个访问场景仅用来说明职责，不表示已经建立连接或保存过缓存。</p>
+<a id="c1-1"></a>
+<h2>1.1 网络对象：请求到底由谁处理</h2>
+<p>A 插上网线以后，仍需要有人把数据送到 S，也需要 S 上的程序读懂查询。先分清主机、链路和中间设备，才能解释“已连接”与“服务可用”的区别。</p>
+<a id="k1.1.1"></a>
+<h3>1.1.1 计算机网络、主机与互联网</h3>
+<p><strong>计算机网络</strong>是具有独立处理能力的设备通过通信链路互连、按照共同规则交换数据和共享资源的系统。</p>
+<p>“独立”指设备有自己的处理能力；“互连”不仅要有线缆或无线信号，还要有共同的通信规则。两个人通上电话，如果语言和交流规则完全不通，仍无法完成沟通。</p>
+<table>
+<thead>
+<tr>
+<th>名称</th>
+<th>含义</th>
+<th>例子</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>主机</td>
+<td>运行网络应用的终端设备</td>
+<td>电脑、手机、服务器</td>
+</tr>
+<tr>
+<td>链路</td>
+<td>连接相邻设备的通信通道</td>
+<td>网线、光纤、无线连接</td>
+</tr>
+<tr>
+<td>结点</td>
+<td>网络中的设备或连接位置，含义依具体模型而定</td>
+<td>主机、交换机、路由器</td>
+</tr>
+<tr>
+<td>互联网</td>
+<td>许多网络通过统一的协议体系互连形成的整体</td>
+<td>校园网与运营商网络互连</td>
+</tr>
+</tbody></table>
+<p><strong>服务器</strong>是提供服务的主机，<strong>客户</strong>是请求服务的一方。这是工作角色，一台机器也可以同时承担两种角色。</p>
+<a id="k1.1.2"></a>
+<h3>1.1.2 用校园网理解设备分工</h3>
+<pre><code class="language-text">电脑 ─────────────┐
+                  ├─ 接入交换机 ─ 汇聚/核心设备 ─ 校内服务器
+手机 ─ 无线接入点 ┘                    │
+                                      └─ 校园出口 ─ 外部网络
+</code></pre>
+<p>这是功能示意，实际布线和设备组合可能不同。</p>
+<ul>
+<li><strong>网卡</strong>：让主机接入网络，收发链路上的数据。</li>
+<li><strong>交换机</strong>：在局域网内转发数据，连接多个终端。</li>
+<li><strong>无线接入点 AP</strong>：让无线终端接入局域网。</li>
+<li><strong>路由器</strong>：连接不同的IP网络，选择下一跳。</li>
+<li><strong>防火墙</strong>：按访问策略检查、放行或拒绝通信。</li>
+</ul>
+<p>查询成绩时，网络负责传递请求与响应，服务器上的应用负责解释学号、查询成绩。<strong>连接上Wi-Fi，只能说明获得了无线接入，不保证校园出口和目标网站也正常。</strong></p>
+<a id="c1-2"></a>
+<h2>1.2 连接关系与功能分类：怎样扩大网络</h2>
+<p>两台设备可直接接线，增加到几十台时，线路数量、故障影响和共享成本就成为问题。拓扑回答怎样连接；资源子网与通信子网回答承担什么工作；范围和介质则是另外的分类角度。</p>
+<a id="k1.2.1"></a>
+<h3>1.2.1 网络的主要功能</h3>
+<table>
+<thead>
+<tr>
+<th>功能</th>
+<th>含义</th>
+<th>理解例子</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>数据通信</td>
+<td>在设备之间传递数据</td>
+<td>发消息、传文件</td>
+</tr>
+<tr>
+<td>资源共享</td>
+<td>多个用户使用同一份资源或服务</td>
+<td>共享打印机、数据库</td>
+</tr>
+<tr>
+<td>分布式处理</td>
+<td>任务分散在多台联网计算机上完成</td>
+<td>多台服务器处理不同请求</td>
+</tr>
+<tr>
+<td>并行处理</td>
+<td>多个任务或任务部分同时执行</td>
+<td>多个处理单元同时计算</td>
+</tr>
+<tr>
+<td>提高可靠性</td>
+<td>通过备份和冗余降低故障影响</td>
+<td>一条线路故障后换备用路径</td>
+</tr>
+<tr>
+<td>提高可扩展性</td>
+<td>能增加资源支持更多用户</td>
+<td>扩充服务器或链路容量</td>
+</tr>
+</tbody></table>
+<p>分布式强调“在哪些系统上处理”，并行强调“是否同时处理”，两者可以重合。可靠性和可扩展性需要具体设计，不能仅靠“联网”自动获得。</p>
+<a id="k1.2.2"></a>
+<h3>1.2.2 资源子网与通信子网</h3>
+<p>传统教材按功能把网络分成：</p>
+<ul>
+<li><strong>资源子网</strong>：负责处理数据和提供资源，例如主机、服务器、数据库。</li>
+<li><strong>通信子网</strong>：负责传递数据，例如链路、中间转发设备。</li>
+</ul>
+<p>它们是同一个网络中相互配合的功能部分。一台设备可能同时具有处理和转发能力，不能按机箱外观简单分类。</p>
+<a id="k1.2.3"></a>
+<h3>1.2.3 六类拓扑</h3>
+<p><strong>拓扑</strong>描述结点与链路的连接关系。学习时要同时看连接方式和故障影响。</p>
+<table>
+<thead>
+<tr>
+<th>拓扑</th>
+<th>怎样连接</th>
+<th>主要特点</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>星状</td>
+<td>每个设备连接中心</td>
+<td>接入线故障较易定位；中心故障影响大</td>
+</tr>
+<tr>
+<td>总线</td>
+<td>多个设备共享一条主干</td>
+<td>共享带宽；主干或端接故障影响范围大</td>
+</tr>
+<tr>
+<td>环状</td>
+<td>相邻结点首尾连成环</td>
+<td>沿环组织传输；需要考虑断环与恢复</td>
+</tr>
+<tr>
+<td>树状</td>
+<td>多级分支连接</td>
+<td>便于分层扩展；上级设备可能成为瓶颈</td>
+</tr>
+<tr>
+<td>网状</td>
+<td>结点之间有多条连接路径</td>
+<td>冗余较好；接口、线路和管理成本较高</td>
+</tr>
+<tr>
+<td>混合型</td>
+<td>多种拓扑组合</td>
+<td>按实际地理和业务条件设计</td>
+</tr>
+</tbody></table>
+<pre><code class="language-text">星状             环状             总线
+    A            A──B            主干══════════
+    │            │  │                │  │  │
+B──中心──C       D──C                A  B  C
+    │
+    D
+</code></pre>
+<p><strong>完全网状</strong>要求任意两台设备都有直接链路；一般网状只需部分结点互连。n台设备完全互连的链路数为：</p>
+<div class="formula" role="math" aria-label="L=\frac{n(n-1)}{2}">L=<span class="frac"><span>n(n-1)</span><span>2</span></span></div>
+
+
+<p><strong>理解例子：</strong> 6台设备，每台连另外5台，先数出30个链路端点；每条链路被数了两次，所以是15条，每台需要5个对应接口。</p>
+<p>还要区分：<strong>物理拓扑</strong>描述实际连线，<strong>逻辑拓扑</strong>描述数据使用链路的关系。集线器接线像星状，但终端仍共享介质；交换机也可以星状接线，却能分端口转发。仅看形状无法判断通信方式。</p>
+<a id="k1.2.4"></a>
+<h3>1.2.4 接入、汇聚与核心</h3>
+<p>园区网常按三个角色组织设备：</p>
+<ul>
+<li><strong>接入层</strong>：直接连接电脑、无线接入点等终端。</li>
+<li><strong>汇聚层</strong>：集中多个接入设备的流量，执行相应策略。</li>
+<li><strong>核心层</strong>：为多个区域提供高速互连。</li>
+</ul>
+<p>例如楼层接入交换机接楼宇汇聚设备，再接园区核心。小网络可以合并汇聚和核心功能。</p>
+<p>双上联可提供冗余，但要配合避免环路和选择可用路径的机制。接入、汇聚、核心是设计角色，不对应OSI的三个协议层。</p>
+<a id="k1.2.5"></a>
+<h3>1.2.5 按范围与介质分类</h3>
+<table>
+<thead>
+<tr>
+<th>范围类别</th>
+<th>全称与含义</th>
+<th>例子</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>PAN</td>
+<td>个域网，围绕个人的小范围网络</td>
+<td>手机与耳机</td>
+</tr>
+<tr>
+<td>LAN</td>
+<td>局域网，家庭、楼宇、园区等局部网络</td>
+<td>实验室网络</td>
+</tr>
+<tr>
+<td>MAN</td>
+<td>城域网，覆盖城市范围</td>
+<td>城市内多个园区互连</td>
+</tr>
+<tr>
+<td>WAN</td>
+<td>广域网，跨地区等较大范围</td>
+<td>运营商骨干网</td>
+</tr>
+</tbody></table>
+<p>这些范围是典型概念，不存在适合所有技术的统一公里分界线。</p>
+<p>“有线/无线”是另一种分类：局域网可以有线也可以无线，广域通信也能使用无线链路。覆盖范围、介质、管理主体是不同维度。</p>
+<h3>同一网络可以同时拥有多个分类标签</h3>
+<p>设一个教学楼内 20 台电脑通过双绞线接入中心交换机。按范围它是 LAN，按介质它是有线网络，按物理连接它是星状，按设备功能又包含资源和通信两部分。四个判断互不排斥。</p>
+<p>若 20 台全互连，先算每台要接 19 条线，再除以每条线被两端重复计数的 2，得到 190 条。星状仅需 20 条终端上联，但中心成为关键故障点。线路减少没有自动带来冗余，需要另行设计备用路径。</p>
+<a id="c1-3"></a>
+<h2>1.3 分层与服务：把复杂通信拆成职责</h2>
+<p>若浏览器既要决定网线电压，又要选择每台路由器的出口，它就很难在不同网络上复用。分层把能力逐层提供：应用提出业务需求，下层完成传输任务；横向规则与纵向调用必须分开看。</p>
+<a id="k1.3.1"></a>
+<h3>1.3.1 协议及其三要素</h3>
+<p><strong>协议</strong>是通信双方共同遵守的规则。它不仅规定消息长什么样，也规定怎样解释、何时发送。</p>
+<table>
+<thead>
+<tr>
+<th>要素</th>
+<th>规定什么</th>
+<th>查询成绩的理解例子</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>语法</td>
+<td>数据格式与结构</td>
+<td>学号放在消息哪个字段</td>
+</tr>
+<tr>
+<td>语义</td>
+<td>字段和操作的含义</td>
+<td>“查询”要求返回什么结果</td>
+</tr>
+<tr>
+<td>时序</td>
+<td>事件顺序及时间关系</td>
+<td>先发请求，再返回响应</td>
+</tr>
+</tbody></table>
+<p><strong>体系结构</strong>描述网络怎样分层，以及各层的功能和协议。<strong>实现</strong>是执行这些规则的软件与硬件。不同系统可以采用不同实现，只要外部行为满足共同协议，就能互通。</p>
+<a id="k1.3.2"></a>
+<h3>1.3.2 为什么分层</h3>
+<p>一次通信需要表达业务、找目标、选路径、组织数据、传输信号。分层把这些问题分开处理，让每层通过明确接口使用下层能力。</p>
+<p>例如浏览器不必直接决定网线上用多大电压；换成无线接入，只要下层仍提供所需服务，应用通常不必改写。</p>
+<p>分层的原则是职责明确、相近功能放在一起、接口尽量简单、层数适当。它也有首部和处理开销，不能认为层数越多越好。</p>
+<p><strong>对等实体</strong>是两端同层的处理模块，例如两台主机中的TCP模块。它们按同一协议进行逻辑通信，实际数据仍要向下经过本机各层、通过介质，再向上到对端。</p>
+<a id="k1.3.3"></a>
+<h3>1.3.3 OSI七层及其通信范围</h3>
+<p>OSI是帮助描述通信职责的七层参考模型。</p>
+<table>
+<thead>
+<tr>
+<th>从下到上</th>
+<th>主要任务</th>
+<th>典型数据单位</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1 物理层</td>
+<td>用信号传送比特，约定接口</td>
+<td>比特</td>
+</tr>
+<tr>
+<td>2 数据链路层</td>
+<td>组织帧，管理相邻结点间的链路传输</td>
+<td>帧</td>
+</tr>
+<tr>
+<td>3 网络层</td>
+<td>寻址、路由与跨网络转发</td>
+<td>分组</td>
+</tr>
+<tr>
+<td>4 传输层</td>
+<td>为应用端点提供端到端通信</td>
+<td>TCP报文段、UDP数据报</td>
+</tr>
+<tr>
+<td>5 会话层</td>
+<td>组织、维持和协调对话</td>
+<td>依协议而定</td>
+</tr>
+<tr>
+<td>6 表示层</td>
+<td>约定数据表示、转换等</td>
+<td>依协议而定</td>
+</tr>
+<tr>
+<td>7 应用层</td>
+<td>定义网络业务的请求与响应</td>
+<td>应用消息</td>
+</tr>
+</tbody></table>
+<p>先记住三种范围：链路层关注<strong>相邻结点</strong>；网络层关注<strong>跨网络到达目标</strong>；传输层关注<strong>两端应用端点</strong>。</p>
+<p>“可靠传输”不是每一层、每一种协议都提供的保证。例如UDP不提供自身的确认重传；链路层检测到错误，也不意味着一定能自动修复。</p>
+<a id="k1.3.4"></a>
+<h3>1.3.4 物理层与数据链路层</h3>
+<p>一个<strong>比特</strong>是0或1，一个<strong>字节</strong>通常是8比特。物理层通过电、光或无线信号让接收端恢复这些比特。</p>
+<table>
+<thead>
+<tr>
+<th>物理接口特性</th>
+<th>要规定什么</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>机械</td>
+<td>插头尺寸、触点位置等</td>
+</tr>
+<tr>
+<td>电气</td>
+<td>电压、信号范围等</td>
+</tr>
+<tr>
+<td>功能</td>
+<td>各线或触点的用途</td>
+</tr>
+<tr>
+<td>规程</td>
+<td>控制信号和操作的先后关系</td>
+</tr>
+</tbody></table>
+<p>数据链路层把连续比特组织成<strong>帧</strong>，使接收方知道一份链路数据的边界，这叫<strong>成帧</strong>。它还可按协议提供差错检测、流量控制和链路管理。</p>
+<p><strong>差错控制</strong>关注数据是否损坏、丢失或重复；<strong>流量控制</strong>关注接收方是否来得及处理。两者解决的问题不同。</p>
+<a id="k1.3.5"></a>
+<h3>1.3.5 网络层与传输层</h3>
+<p><strong>IP地址</strong>用于网络层寻址。路由器根据目的地址和转发表选择出口，让分组逐跳接近目标。</p>
+<ul>
+<li><strong>路由选择</strong>：形成“到某个目标应走哪条方向”的信息。</li>
+<li><strong>转发</strong>：收到一个具体分组后，按表把它从相应出口发出去。</li>
+<li><strong>拥塞</strong>：到达的数据超过网络传输或处理能力，导致排队，严重时丢包。</li>
+</ul>
+<p>分组到达服务器后，还要交给正确程序。<strong>进程</strong>是运行中的程序实例；<strong>端口</strong>是传输层区分通信端点的编号，例如网页和邮件服务使用不同的端点。</p>
+<p>IP地址、端口和物理插口分别属于不同概念。“数据报”也不能单独决定层次：UDP与IP都使用这个名称，要结合协议判断。</p>
+<a id="k1.3.6"></a>
+<h3>1.3.6 会话、表示与应用</h3>
+<p>会话层协调一场对话的建立、维持、结束等工作。用户会话与TCP连接不必一一对应，一次登录会话可能使用多个连接。</p>
+<p>表示层处理双方怎样解释数据。例如十进制258写成两个字节是<code>01 02</code>；若另一端反过来按<code>02 01</code>理解，就会得到513。双方必须约定字节顺序、字符编码等表示规则。</p>
+<p>应用层定义业务交互。例如HTTP定义Web资源的请求与响应，SMTP定义邮件传递命令。浏览器是应用程序，HTTP是它使用的协议。</p>
+<p>TCP/IP通常把会话、表示及应用相关功能归入应用层，不要求程序必须拆成三个独立模块。</p>
+<a id="k1.3.7"></a>
+<h3>1.3.7 互连设备与工作层次</h3>
+<table>
+<thead>
+<tr>
+<th>设备</th>
+<th>主要处理依据</th>
+<th>典型职责</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>中继器、集线器</td>
+<td>信号与比特</td>
+<td>再生信号、扩展物理覆盖</td>
+</tr>
+<tr>
+<td>网桥、二层交换机</td>
+<td>MAC地址，链路层地址</td>
+<td>过滤和转发帧</td>
+</tr>
+<tr>
+<td>路由器、三层交换功能</td>
+<td>IP地址与前缀</td>
+<td>跨IP网络转发分组</td>
+</tr>
+<tr>
+<td>协议网关</td>
+<td>具体协议的消息含义</td>
+<td>转换不同协议体系</td>
+</tr>
+</tbody></table>
+<p>设备“工作在某层”通常指主要处理判断达到的层次。路由器仍要用链路层和物理层收发数据。</p>
+<p>主机设置中的<strong>默认网关</strong>通常是默认下一跳路由器，并不一定承担应用协议翻译。交换机端口是物理连接位置，TCP/UDP端口是软件通信编号。</p>
+<a id="k1.3.8"></a>
+<h3>1.3.8 协议、服务与接口</h3>
+<table>
+<thead>
+<tr>
+<th>概念</th>
+<th>看的是哪种关系</th>
+<th>解释</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>协议</td>
+<td>两端同层之间，横向</td>
+<td>对等模块遵守的通信规则</td>
+</tr>
+<tr>
+<td>服务</td>
+<td>本机相邻层之间，纵向</td>
+<td>下层向上层提供的能力</td>
+</tr>
+<tr>
+<td>接口</td>
+<td>本机相邻层之间</td>
+<td>上层使用下层服务的入口与约定</td>
+</tr>
+</tbody></table>
+<p>例如TCP按协议与对端TCP通信，同时通过本机接口向应用提供可靠字节流服务。</p>
+<h3>在一次调用中找到协议、服务与接口</h3>
+<p>A 的浏览器把一串请求字节交给本机 TCP。调用入口属于接口；“按序把字节交到对端”是 TCP 向应用提供的服务；两端 TCP 怎样编号、确认和重传由 TCP 协议约定。接口调用不等于直接隔空调用服务器的程序。</p>
+<p>若 S 的应用不读取已到缓存的字节，TCP 可以限制发送，但无法替应用生成查询结果。传输成功与业务成功是两个需要分别检查的结果。</p>
+<a id="c1-4"></a>
+<h2>1.4 封装与连接：数据逐层变成什么</h2>
+<p>每层都需要自己的地址或控制信息，而下层不能凭空猜出这些信息。封装把本层规则带到对端；连接说明双方是否先维护一段持续状态，两者应分别理解。</p>
+<a id="k1.4.1"></a>
+<h3>1.4.1 封装与数据单元</h3>
+<p><strong>封装</strong>是给上层数据加本层控制信息，<strong>解封装</strong>是接收时处理并去除这些信息。</p>
+<pre><code class="language-text">应用消息
+TCP首部 | 应用消息
+IP首部  | TCP首部 | 应用消息
+链路首部 | IP首部 | TCP首部 | 应用消息 | 链路尾部
+</code></pre>
+<p><strong>首部</strong>是放在前面的控制信息，<strong>尾部</strong>是放在后面的控制信息；<strong>载荷</strong>是本层承载的数据。某层的首部到下一层眼中，通常就成为载荷的一部分。</p>
+<table>
+<thead>
+<tr>
+<th>缩写</th>
+<th>含义</th>
+<th>放回封装过程理解</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>SDU</td>
+<td>服务数据单元</td>
+<td>上层交给本层处理的数据</td>
+</tr>
+<tr>
+<td>PCI</td>
+<td>协议控制信息</td>
+<td>本层加上的控制信息</td>
+</tr>
+<tr>
+<td>PDU</td>
+<td>协议数据单元</td>
+<td>本层与对端交换的数据单元</td>
+</tr>
+<tr>
+<td>SAP</td>
+<td>服务访问点</td>
+<td>上层使用下层服务的位置</td>
+</tr>
+<tr>
+<td>ICI</td>
+<td>接口控制信息</td>
+<td>本机层间调用附带的控制信息</td>
+</tr>
+<tr>
+<td>IDU</td>
+<td>接口数据单元</td>
+<td>通过层间接口提交的整体</td>
+</tr>
+</tbody></table>
+<p>简单的、不分段的模型中：</p>
+<pre><code class="language-text">PDU = PCI + SDU
+IDU = ICI + SDU
+</code></pre>
+<p>ICI供本机层间交互使用，不一定原样发给对方；PCI要按本层协议供对端解释。实际还可能分段或合并，不能默认始终一对一。</p>
+<p><strong>理解例子：</strong> 应用数据100 B，无选项TCP首部20 B、IPv4首部20 B，再加无VLAN的Ethernet II首部14 B与FCS尾部4 B：</p>
+<pre><code class="language-text">应用数据：       100 B
+TCP报文段：     120 B
+IP数据报：      140 B
+以太网MAC帧：   158 B
+</code></pre>
+<p>FCS是帧校验序列。本例不分片、不需要最小帧填充，帧长不包括物理层前导码和帧间间隔。对IP层来说，整个120 B的TCP报文段都是它的载荷。</p>
+<a id="k1.4.2"></a>
+<h3>1.4.2 面向连接与无连接</h3>
+<p><strong>面向连接服务</strong>先建立双方的逻辑状态，再交换数据，最后释放。<strong>无连接服务</strong>允许独立发送数据单元，不先建立持续连接。</p>
+<table>
+<thead>
+<tr>
+<th>服务</th>
+<th>理解</th>
+<th>例子</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>面向连接</td>
+<td>先建立一场需要保存状态的对话</td>
+<td>TCP连接</td>
+</tr>
+<tr>
+<td>无连接数据报</td>
+<td>独立发送，逐份处理</td>
+<td>IP数据报</td>
+</tr>
+<tr>
+<td>带确认的数据报</td>
+<td>对单份消息提供收到的反馈</td>
+<td>课件的证实交付服务模型</td>
+</tr>
+<tr>
+<td>请求/响应</td>
+<td>一份请求对应一份业务响应</td>
+<td>课件的交互模型</td>
+</tr>
+</tbody></table>
+<p>**是否建立连接、是否可靠，是两个维度。**逻辑连接也不意味着独占线路。收到一次确认或业务响应，不能据此断定底层建立了连接。</p>
+<h3>把长度结果放回整体</h3>
+<p>沿用应用 100 B、TCP 20 B、IPv4 20 B、以太网首尾 18 B 的独立算例。对链路层而言，140 B IP 数据报是载荷；对 IP 而言，120 B TCP 报文段是载荷。算得 158 B 的对象是 MAC 帧。A 发出后，原应用内容仍是 100 B；控制信息不意味着修改了应用文件。</p>
+<p>到达 R 时，R 去掉当前链路的首尾，在下一链路重新加首尾。本例不含 NAT、分片、隧道，不能推断每跳首部完全不变：例如 IPv4 TTL 会递减，首部校验和随之更新。</p>
+<a id="c1-5"></a>
+<h2>1.5 TCP/IP 与互连标准：怎样跨不同网络合作</h2>
+<p>同一请求可以从以太网进入光纤骨干，最后经无线链路到达主机。底层技术不同，需要一个共同的互连层，也需要双方可查阅的标准说明。先把模型的对应关系与实际协议分开。</p>
+<a id="k1.5.1"></a>
+<h3>1.5.1 四层、五层与OSI的关系</h3>
+<table>
+<thead>
+<tr>
+<th>OSI七层</th>
+<th>TCP/IP四层</th>
+<th>教学五层</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>应用、表示、会话</td>
+<td>应用层</td>
+<td>应用层</td>
+</tr>
+<tr>
+<td>传输</td>
+<td>传输层</td>
+<td>传输层</td>
+</tr>
+<tr>
+<td>网络</td>
+<td>网际层</td>
+<td>网络层</td>
+</tr>
+<tr>
+<td>数据链路、物理</td>
+<td>网络接口层</td>
+<td>数据链路层、物理层</td>
+</tr>
+</tbody></table>
+<p>四层与五层主要是组织方式不同，五层把底层的链路处理与信号传输分开。OSI协议栈没有成为互联网的主流协议栈，但七层模型仍有分析和教学价值。</p>
+<a id="k1.5.2"></a>
+<h3>1.5.2 IP沙漏结构</h3>
+<p>IP位于多种上层协议和多种底层网络之间，像沙漏中部：</p>
+<pre><code class="language-text">多种应用：HTTP、DNS、邮件等
+          TCP / UDP
+              IP
+    以太网 / Wi-Fi / PPP等
+</code></pre>
+<p>上层不必为每种介质各设计一套应用；下层也可接入不同网络。这对应课件的“IP over everything”和“Everything over IP”。</p>
+<p>IP提供<strong>尽力而为</strong>的交付：网络尝试送达，但不承诺不丢失、不乱序。需要可靠传输时，可由两端使用TCP等机制补充。网络核心仍需要路由表、邻居信息和队列，不能把“简单网络”理解成完全没有状态。</p>
+<a id="k1.5.3"></a>
+<h3>1.5.3 TCP/IP协议族</h3>
+<p>TCP/IP是协议族，不只包含TCP与IP。这里先认清用途，具体格式在后续章节学习。</p>
+<table>
+<thead>
+<tr>
+<th>协议</th>
+<th>首次理解</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>HTTP</td>
+<td>请求与响应Web资源</td>
+</tr>
+<tr>
+<td>DNS</td>
+<td>查询域名对应的记录等命名信息</td>
+</tr>
+<tr>
+<td>FTP</td>
+<td>文件传输</td>
+</tr>
+<tr>
+<td>SMTP、POP</td>
+<td>邮件传递、从邮箱取信</td>
+</tr>
+<tr>
+<td>TELNET</td>
+<td>传统远程终端协议</td>
+</tr>
+<tr>
+<td>SNMP</td>
+<td>交换网络管理信息</td>
+</tr>
+<tr>
+<td>NNTP</td>
+<td>网络新闻传递，课件中的历史应用例子</td>
+</tr>
+<tr>
+<td>TCP</td>
+<td>提供可靠、按序的字节流</td>
+</tr>
+<tr>
+<td>UDP</td>
+<td>传送有消息边界的数据报，不内置可靠交付</td>
+</tr>
+<tr>
+<td>IP</td>
+<td>跨网络寻址与分组交付</td>
+</tr>
+<tr>
+<td>ICMP</td>
+<td>差错报告与诊断等控制消息</td>
+</tr>
+<tr>
+<td>IGMP</td>
+<td>IPv4多播组成员管理</td>
+</tr>
+<tr>
+<td>ARP</td>
+<td>在本地链路上解析IPv4地址对应的链路地址</td>
+</tr>
+<tr>
+<td>RARP</td>
+<td>历史上的反向地址解析机制</td>
+</tr>
+</tbody></table>
+<p>ARP直接承载于以太网帧，不装在IP包内；ICMP、IGMP则由IP承载。图中画得接近不代表封装关系相同。</p>
+<a id="k1.5.4"></a>
+<h3>1.5.4 IETF与RFC</h3>
+<p><strong>RFC</strong>是按编号发布的技术文档系列，包括标准规范、最佳实践、信息性和实验性文档等。RFC不全是标准，也不是编号越大就自动取代较小编号。</p>
+<p>阅读时先看主题、状态，以及是否标明更新（Updates）或取代（Obsoletes）其他文档。</p>
+<p>课件组织缩写用于辨认角色：ISOC是互联网协会；IAB关注互联网体系结构；IETF推进工程规范；IESG负责相应技术管理与标准流程；IRTF关注较长期研究，IRSG协调研究工作。WG是工作组，RG是研究组。它们不是数据包转发的层级。具体机构安排可能调整，不把课件组织图当作当前完整架构。</p>
+<a id="k1.5.5"></a>
+<h3>1.5.5 标准化组织</h3>
+<p>标准让不同厂商采用共同约定。形状相同的插头还需要电气特性、编码、速率和协议相容，才能实际通信。</p>
+<table>
+<thead>
+<tr>
+<th>缩写</th>
+<th>中文名称与主要关联</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>ISO</td>
+<td>国际标准化组织；与OSI参考模型有关</td>
+</tr>
+<tr>
+<td>ITU-T</td>
+<td>国际电信联盟电信标准化部门；电信标准</td>
+</tr>
+<tr>
+<td>IEC</td>
+<td>国际电工委员会；电工与相关接口标准</td>
+</tr>
+<tr>
+<td>IEEE</td>
+<td>电气与电子工程师协会；802系列局域网标准</td>
+</tr>
+<tr>
+<td>IETF</td>
+<td>互联网工程任务组；互联网协议规范</td>
+</tr>
+<tr>
+<td>3GPP</td>
+<td>第三代合作伙伴计划；移动通信规范</td>
+</tr>
+<tr>
+<td>CCSA</td>
+<td>中国通信标准化协会</td>
+</tr>
+<tr>
+<td>ETSI</td>
+<td>欧洲电信标准协会</td>
+</tr>
+<tr>
+<td>ANSI</td>
+<td>美国国家标准学会</td>
+</tr>
+</tbody></table>
+<p>ISO是组织名，OSI是模型名。ANSI不是政府“标准局”，官方将其介绍为协调自愿标准体系的私人非营利机构。<a href="https://www.ansi.org/about/introduction">ANSI官方介绍</a></p>
+<a id="c1-6"></a>
+<h2>1.6 发展主线：标准与共享怎样形成规模</h2>
+<p>前面已经看见共享链路与统一规则的作用，再读发展史就能理解每一步解决的规模问题。遇到资料中不同的日期或缩写，结合具体来源辨认其含义。</p>
+<a id="k1.6.1"></a>
+<h3>1.6.1 发展的主线</h3>
+<table>
+<thead>
+<tr>
+<th>阶段</th>
+<th>主要变化</th>
+<th>怎样理解</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>终端连接主机</td>
+<td>用户通过终端使用中心主机</td>
+<td>主要计算集中在主机</td>
+</tr>
+<tr>
+<td>分时系统</td>
+<td>主机轮流处理多个用户的任务</td>
+<td>多人共享一台主机的处理能力</td>
+</tr>
+<tr>
+<td>独立计算机互连</td>
+<td>多台能自行工作的计算机交换数据</td>
+<td>计算和资源分布到不同设备</td>
+</tr>
+<tr>
+<td>开放标准与网络互连</td>
+<td>不同厂商、不同类型网络遵循共同规则</td>
+<td>通信规模扩大，不必全部采用同一种设备</td>
+</tr>
+</tbody></table>
+<p><strong>分组交换</strong>把长消息切成较小的数据块，让多个用户的数据交替通过链路。它能提高共享效率；有备用路径和恢复机制时，也能降低局部故障的影响。它本身不能保证永不断网。</p>
+<p>课件用ARPANET说明早期分组交换实践。较稳妥的时间表述是：1969年建立，到年底形成四节点网络。课件文字中的“11月”与配图“DEC 1969”不一致，不能把前者当作四节点完成时间的确定证据。<a href="https://www.internetsociety.org/internet/history-internet/brief-history-internet/">Internet Society：互联网简史</a></p>
+<a id="k1.6.2"></a>
+<h3>1.6.2 互联网怎样扩大</h3>
+<p><strong>ISP</strong>是互联网服务提供者，提供接入或网络间转接等服务。校园网可经运营商接入外部网络，各运营网络还会互相连接。</p>
+<p>早期可以用“接入网—区域网—骨干网”理解层次。互联网进一步发展为多个运营网络通过转接和对等互联共同提供可达性的系统：<strong>没有一台掌管所有通信的互联网总服务器，也不是严格的一棵树。</strong></p>
+<p>课件还提到：</p>
+<table>
+<thead>
+<tr>
+<th>名称</th>
+<th>首次理解</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>NFS，网络文件系统</td>
+<td>让程序通过网络访问远端文件</td>
+</tr>
+<tr>
+<td>以太网</td>
+<td>常见的有线局域网技术</td>
+</tr>
+<tr>
+<td>Wi-Fi</td>
+<td>无线局域网接入技术</td>
+</tr>
+<tr>
+<td>5G</td>
+<td>移动通信体系的一代技术</td>
+</tr>
+<tr>
+<td>云计算</td>
+<td>通过网络使用远端计算、存储等资源</td>
+</tr>
+<tr>
+<td>物联网</td>
+<td>让传感器、控制器等设备联网交换数据</td>
+</tr>
+<tr>
+<td>大数据、移动互联网、智能应用</td>
+<td>对规模、接入方式、数据处理提出不同需求的应用方向</td>
+</tr>
+</tbody></table>
+<p>这些名称涉及不同层次，不能都当成局域网标准。第7页的“SAGES”未给出全称，现有材料不足以确认，暂不作为确定名称背诵。</p>
+<a id="c1-7"></a>
+<h2>1.7 讲义补充：怎样描述网络性能</h2>
+<p>接入与分层说明了通信怎样完成，但“快不快”仍需明确统计对象。下面分别说明常用指标测量的对象，并用小例比较它们的含义。</p>
+<h3>指标各自测量什么</h3>
+<table>
+<thead>
+<tr>
+<th>指标</th>
+<th>对象与解释</th>
+<th>如何使用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>速率</td>
+<td>指定接口每秒发送比特的能力或当前速率</td>
+<td>100 Mbit/s 先说明是哪段接口</td>
+</tr>
+<tr>
+<td>带宽</td>
+<td>通信语境中可指数据速率；频谱语境指 Hz</td>
+<td>根据量纲分辨，不用 Hz 直接当 bit/s</td>
+</tr>
+<tr>
+<td>吞吐量</td>
+<td>指定时间内实际通过的数据量除时间</td>
+<td>写明计应用数据还是包含控制信息</td>
+</tr>
+<tr>
+<td>时延</td>
+<td>从指定起点到终点的等待</td>
+<td>可拆发送、传播、处理、排队</td>
+</tr>
+<tr>
+<td>时延带宽积</td>
+<td>带宽与相应时延相乘的比特量</td>
+<td>单程传播用 R×t_prop；窗口估算常用 R×RTT，二者需注明</td>
+</tr>
+<tr>
+<td>往返时间</td>
+<td>从发起到收到对应反馈的时间</td>
+<td>与单程传播不直接等同</td>
+</tr>
+<tr>
+<td>利用率</td>
+<td>实际占用相对所定义资源总量的比例</td>
+<td>先规定观察窗口和占用口径</td>
+</tr>
+<tr>
+<td>丢包率</td>
+<td>丢失包数除以相应发送或统计包数</td>
+<td>写明统计范围与测量方法</td>
+</tr>
+</tbody></table>
+<p><strong>独立教学例子：</strong> 100 Mbit/s 链路、单程传播 5 ms，传播管道可容纳 <code>10⁸×0.005=500000 bit=62500 B</code>。若纯传播往返为 10 ms，则相应往返带宽积为 125000 B。不能把单程与往返积混用。</p>
+<p>另一次测量中 2 s 内送达 10 MB 应用数据，按十进制 MB 得应用吞吐 <code>10×10⁶×8/2=40 Mbit/s</code>。虽然接口标称 100 Mbit/s，此测量只说明应用实际到达率。缺少链路忙闲时间和控制流量，不能据此确定链路利用率就是 40%。</p>
+<a id="c1-8"></a>
+<h2>1.8 综合应用</h2>
+<p><strong>任务与前提：</strong> A 经 R 向 S 发送 100 B 应用请求。地址已获得，TCP 已建立，不含安全封装、选项、分片与 NAT，以太网首尾 18 B。要分别说出长度和每个处理者的结果。</p>
+<table>
+<thead>
+<tr>
+<th>步骤</th>
+<th>当前对象</th>
+<th>规则与计算</th>
+<th>得到的结果</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>应用请求</td>
+<td>加 20 B TCP 首部</td>
+<td>120 B TCP 段，端口说明应用端点</td>
+</tr>
+<tr>
+<td>2</td>
+<td>TCP 段</td>
+<td>加 20 B IPv4 首部</td>
+<td>140 B IP 包，目的 IP 指 S</td>
+</tr>
+<tr>
+<td>3</td>
+<td>IP 包</td>
+<td>加 14 B 帧首部与 4 B FCS</td>
+<td>158 B 帧，目的 MAC 指本链路 R</td>
+</tr>
+<tr>
+<td>4</td>
+<td>R 收到的帧</td>
+<td>去当前链路首尾，查目的 IP</td>
+<td>确定下一跳与出口，更新相应 IP 字段</td>
+</tr>
+<tr>
+<td>5</td>
+<td>下一跳发出的数据</td>
+<td>按出口重新封装</td>
+<td>链路地址随下一跳改变，应用内容仍为 100 B</td>
+</tr>
+<tr>
+<td>6</td>
+<td>S 上的接收处理</td>
+<td>逐层解封装并按端点交付</td>
+<td>应用得到请求，业务结果另由应用产生</td>
+</tr>
+</tbody></table>
+<p><strong>检查方法：</strong> 首部与载荷相加应与下一层载荷一致；每次提到“目的”都说明是目的 IP、目的 MAC 还是目的端口。实际网络还可能包含选项、分片、隧道等处理，应按具体条件分析。</p>
+<h3>一次访问中的分层处理</h3>
+<p>理解例子：浏览器通过TCP访问校外服务器，假定需要的地址信息已经获得。</p>
+<ol>
+<li>应用生成资源请求。</li>
+<li>TCP用端口区分通信端点，并加入序号等传输控制信息。</li>
+<li>IP加入源、目的IP地址，目的仍是服务器。</li>
+<li>链路层封装当前一跳的帧；链路目的地址对应当前下一跳。</li>
+<li>物理层把比特变成信号。</li>
+<li>路由器选择下一跳，在下一条链路上重新封装帧。</li>
+<li>服务器逐层处理，把请求交给应用，再返回响应。</li>
+</ol>
+<p>端到端通信与逐跳传输同时存在。普通逐跳转发中，目的IP用于指出最终目标，帧地址用于当前链路；实际有NAT、隧道等情况时还需额外分析。</p>
+<a id="c1-9"></a>
+<h2>1.9 自测与答案</h2>
+<p>先独立完成概念自测，再做应用题。展开答案时，检查自己的前提、推导和方法选择。</p>
+<h3>概念自测</h3>
+<ol>
+<li>6台设备完全网状互连，需要几条链路？</li>
+<li>Wi-Fi连接正常，是否一定能访问互联网？</li>
+<li>路由选择与转发有什么区别？</li>
+<li>路由器工作在网络层，是否还使用链路层？</li>
+<li>TCP首部在IP层眼中属于什么？</li>
+<li>应用100 B，TCP与IPv4首部各20 B，以太网首尾共18 B，按本文条件帧长是多少？</li>
+<li>有确认消息，是否一定是面向连接服务？</li>
+<li>RFC编号较大，是否一定取代所有较早RFC？</li>
+</ol>
+<details>
+<summary>参考答案</summary>
+
+<ol>
+<li><code>6×5/2=15</code>条。</li>
+<li>不一定，出口、地址、路由和服务仍可能有问题。</li>
+<li>路由选择产生路径信息；转发对具体分组选出口。</li>
+<li>使用，也必须接收和发送帧。</li>
+<li>属于IP载荷的一部分。</li>
+<li><code>100+20+20+18=158 B</code>。</li>
+<li>不一定，独立数据报也可以有确认。</li>
+<li>不一定，要检查状态及Updates、Obsoletes关系。</li>
+</ol>
+</details>
+
+<h3>应用练习</h3>
+<table>
+<thead>
+<tr>
+<th>题号</th>
+<th>学习任务</th>
+<th>检查能力</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>一台主机接到中心交换机，能否由星状外观判断它采用共享半双工？</td>
+<td>写条件、推导、解释结果与边界</td>
+</tr>
+<tr>
+<td>2</td>
+<td>应用数据 20 B，TCP、IPv4 首部各 20 B，以太网最小载荷 46 B，MAC 首尾 18 B。帧长多少？</td>
+<td>写条件、推导、解释结果与边界</td>
+</tr>
+<tr>
+<td>3</td>
+<td>某协议对每份消息回确认，但发送前没有建立持续状态，能否称面向连接？</td>
+<td>写条件、推导、解释结果与边界</td>
+</tr>
+<tr>
+<td>4</td>
+<td>用一句话分别说明更换网线和修改网页查询格式影响哪些层。</td>
+<td>写条件、推导、解释结果与边界</td>
+</tr>
+</tbody></table>
+<details>
+<summary>应用练习答案与理由</summary>
+
+<p><strong>1.</strong> 不能。星状只说明物理连线；集线器与交换机可有相似外观，但前者共享介质，后者可按端口转发并全双工。需知道设备功能和端口工作模式。</p>
+<p><strong>2.</strong> IP 包为 20+20+20=60 B，已超过最小载荷 46 B，无需填充，帧为 78 B。不能直接对 20 B 应用数据补到 46 B，因为链路层载荷是整个 IP 包。</p>
+<p><strong>3.</strong> 按题设不能；确认是交付反馈，连接是状态建立方式。它可以是有确认的无连接服务，不能从有 ACK 推出有连接。</p>
+<p><strong>4.</strong> 网线变化首先影响介质与物理接口；网页消息格式变化影响应用协议。接口兼容时上层可不变，但实际故障需要逐层检查。</p>
+</details>
+
+<details>
+<summary>展开基础选择题与判断题解析</summary>
+
+<h3>基础选择题与判断题</h3>
+<p>以下基础题用于练习分层、服务、拓扑与封装关系。遇到有不同教材口径的题目，先确认题目采用的模型。</p>
+<p>第 5 题使用经典 OSI 选择题的“首个端到端服务层”口径；网络层本身也有主机到主机的跨网职责。第 9 题的网状结构需具备可用冗余路径和恢复机制才满足故障条件，拓扑不能自动证明安全。第 10 题中 ARP 归属存在教材差异，答题先写本课程的网络层相关协议口径，线上 ARP 直接由链路层承载。</p>
+<h3>第 1 题：端到端的流量控制</h3>
+<h4>题目</h4>
+<p>下面哪一层可以完成端到端的流量控制？</p>
+<ul>
+<li>A. 物理层</li>
+<li>B. 数据链路层</li>
+<li>C. 网络层</li>
+<li>D. 传输层</li>
+</ul>
+<h4>正确答案</h4>
+<p><strong>D. 传输层</strong></p>
+<h4>详细解析</h4>
+<p>传输层负责为不同主机中的应用进程提供端到端通信服务。TCP 通过接收窗口、滑动窗口等机制，使发送方根据接收方的处理能力调整发送速度，从而实现端到端的流量控制。</p>
+<p>数据链路层也可能进行流量控制，但它控制的是相邻结点之间的一段链路，属于点到点或逐跳控制，不是源主机到目的主机之间的端到端控制。</p>
+<h4>知识点详解</h4>
+<ul>
+<li><strong>物理层</strong>：传输原始比特，不负责端到端流量控制。</li>
+<li><strong>数据链路层</strong>：负责相邻结点之间的成帧、差错检测和介质访问，某些协议可进行链路级流量控制。</li>
+<li><strong>网络层</strong>：负责逻辑寻址、路由选择和分组转发。</li>
+<li><strong>传输层</strong>：负责应用进程之间的端到端通信，可提供可靠传输、流量控制和拥塞控制。</li>
+</ul>
+<h4>易错点</h4>
+<p>流量控制需要区分作用范围：数据链路层的流量控制面向相邻结点，传输层的流量控制面向通信两端。</p>
+<hr>
+<h3>第 2 题：服务数据单元的交换对象</h3>
+<h4>题目</h4>
+<p>服务数据单元是计算机网络中________间交换的信息。</p>
+<ul>
+<li>A. 相邻层实体</li>
+<li>B. 对等层实体</li>
+<li>C. 支持相同协议的实体</li>
+<li>D. 支持不同协议的实体</li>
+</ul>
+<h4>正确答案</h4>
+<p><strong>A. 相邻层实体</strong></p>
+<h4>详细解析</h4>
+<p>服务数据单元 SDU（Service Data Unit）是通过层间接口在相邻层之间传递的数据。上层把 SDU 交给下层，下层加入本层协议控制信息 PCI 后，形成该层的协议数据单元 PDU。</p>
+<p>对等层实体之间逻辑交换的是 PDU，而不是 SDU。因此，题目中的“服务数据单元”对应相邻层实体之间的信息交换。</p>
+<h4>知识点详解</h4>
+<p>分层体系中的基本关系为：</p>
+<pre><code class="language-text">本层 PDU = 上层交付的 SDU + 本层添加的 PCI
+</code></pre>
+<ul>
+<li><strong>SDU</strong>：上层通过服务接口交给本层处理的数据。</li>
+<li><strong>PCI</strong>：本层为实现协议功能而添加的控制信息，例如首部中的地址、序号和类型字段。</li>
+<li><strong>PDU</strong>：本层实体与对端同层实体进行逻辑通信时使用的数据单位。</li>
+<li><strong>SAP</strong>：相邻层之间访问服务的逻辑位置或标识。</li>
+</ul>
+<h4>易错点</h4>
+<p>“对等层之间使用协议，垂直相邻层之间使用服务”是区分 PDU 和 SDU 的关键。PDU 对应对等层，SDU 对应相邻层。</p>
+<hr>
+<h3>第 3 题：为会话层提供服务的层次</h3>
+<h4>题目</h4>
+<p>在 OSI/RM 中，为会话层提供服务的是哪一层？</p>
+<ul>
+<li>A. 应用层</li>
+<li>B. 表示层</li>
+<li>C. 会话层</li>
+<li>D. 传输层</li>
+</ul>
+<h4>正确答案</h4>
+<p><strong>D. 传输层</strong></p>
+<h4>详细解析</h4>
+<p>在分层体系结构中，每一层都使用下一层提供的服务，并向上一层提供服务。会话层的下一层是传输层，因此传输层为会话层提供服务。</p>
+<p>表示层位于会话层之上，它使用会话层提供的服务，并向应用层提供服务，所以不能选表示层。</p>
+<h4>知识点详解</h4>
+<p>OSI 七层模型从高到低依次为：</p>
+<pre><code class="language-text">应用层
+表示层
+会话层
+传输层
+网络层
+数据链路层
+物理层
+</code></pre>
+<p>服务关系沿垂直方向发生：下一层是服务提供者，上一层是服务使用者。例如，网络层向传输层提供服务，传输层向会话层提供服务。</p>
+<h4>易错点</h4>
+<p>回答“谁为某层提供服务”时，应找该层的下一层；回答“某层为谁提供服务”时，应找该层的上一层。</p>
+<hr>
+<h3>第 4 题：以帧为传输单位的层次</h3>
+<h4>题目</h4>
+<p>在 OSI/RM 中，数据传输基本单位是帧（Frame）的层次是哪个？</p>
+<ul>
+<li>A. 数据链路层</li>
+<li>B. 网络层</li>
+<li>C. 物理层</li>
+<li>D. 传输层</li>
+</ul>
+<h4>正确答案</h4>
+<p><strong>A. 数据链路层</strong></p>
+<h4>详细解析</h4>
+<p>数据链路层把网络层交付的分组封装成帧，在帧中加入链路层首部和尾部，然后通过物理层发送。帧是数据链路层的协议数据单元。</p>
+<h4>知识点详解</h4>
+<table>
+<thead>
+<tr>
+<th>OSI 层次</th>
+<th>典型数据单位</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>应用层、表示层、会话层</td>
+<td>数据或报文</td>
+</tr>
+<tr>
+<td>传输层</td>
+<td>TCP 报文段或 UDP 用户数据报</td>
+</tr>
+<tr>
+<td>网络层</td>
+<td>分组、包或 IP 数据报</td>
+</tr>
+<tr>
+<td>数据链路层</td>
+<td>帧</td>
+</tr>
+<tr>
+<td>物理层</td>
+<td>比特</td>
+</tr>
+</tbody></table>
+<h4>易错点</h4>
+<p>“分组”和“帧”不是同一个概念。分组属于网络层，帧属于数据链路层；一个网络层分组通常作为载荷封装在数据链路层帧中。</p>
+<hr>
+<h3>第 5 题：自下而上第一个端到端层次</h3>
+<h4>题目</h4>
+<p>在 OSI/RM 中，自下而上第一个提供端到端服务的层次是哪个？</p>
+<ul>
+<li>A. 应用层</li>
+<li>B. 网络层</li>
+<li>C. 物理层</li>
+<li>D. 传输层</li>
+</ul>
+<h4>正确答案</h4>
+<p><strong>D. 传输层</strong></p>
+<h4>详细解析</h4>
+<p>物理层和数据链路层主要处理相邻结点之间的传输，网络层通过多个中间结点把分组逐跳送往目的主机。传输层位于通信子网与高层应用之间，为源端和目的端的应用进程提供端到端服务。因此，从 OSI 模型底部向上看，传输层是第一个端到端层次。</p>
+<h4>知识点详解</h4>
+<ul>
+<li><strong>点到点或逐跳通信</strong>：关注一段链路或相邻网络结点之间的传输。</li>
+<li><strong>端到端通信</strong>：关注源主机上的进程与目的主机上的进程之间的整体通信。</li>
+<li>传输层通过端口号实现进程的复用和分用，并可根据协议提供可靠交付、流量控制等功能。</li>
+</ul>
+<h4>易错点</h4>
+<p>网络层能够把分组送到目的主机，但在经典 OSI 分层题中，自下而上第一个完整提供端到端服务的层次通常指传输层。</p>
+<hr>
+<h3>第 6 题：ARPANET 的交换方式</h3>
+<h4>题目</h4>
+<p>ARPANET 是因特网之父，它是一种什么网络？</p>
+<ul>
+<li>A. 混合交换网</li>
+<li>B. 电路交换网</li>
+<li>C. 报文交换网</li>
+<li>D. 分组交换网</li>
+</ul>
+<h4>正确答案</h4>
+<p><strong>D. 分组交换网</strong></p>
+<h4>详细解析</h4>
+<p>ARPANET 是早期采用分组交换技术的计算机网络，也是互联网发展的重要基础。分组交换把较长的数据划分为较小的分组，每个分组携带必要的控制信息，由网络中的交换结点采用存储转发方式进行传输。</p>
+<h4>知识点详解</h4>
+<ul>
+<li><strong>电路交换</strong>：通信前建立专用通路，通信期间独占相关资源，典型应用是传统电话网。</li>
+<li><strong>报文交换</strong>：以完整报文为单位进行存储转发，对结点存储空间要求较高。</li>
+<li><strong>分组交换</strong>：把报文拆分为多个较小分组，便于共享链路，提高突发数据业务的传输效率。</li>
+</ul>
+<h4>易错点</h4>
+<p>ARPANET 的代表性技术特征是分组交换。它并不为每对通信主机长期建立一条独占电路。</p>
+<hr>
+<h3>第 7 题：网络协议的语法</h3>
+<h4>题目</h4>
+<p>网络协议三要素中，语法规定了什么？</p>
+<ul>
+<li>A. 通信双方在讲什么</li>
+<li>B. 数据与控制信息的结构和格式</li>
+<li>C. 通信事件的先后顺序</li>
+<li>D. 以上都对</li>
+</ul>
+<h4>正确答案</h4>
+<p><strong>B. 数据与控制信息的结构和格式</strong></p>
+<h4>详细解析</h4>
+<p>协议的语法说明数据和控制信息采用怎样的结构、字段怎样排列、字段长度是多少以及采用什么编码格式。通信双方只有遵守相同语法，才能正确识别收到的数据。</p>
+<h4>知识点详解</h4>
+<p>网络协议具有三个基本要素：</p>
+<table>
+<thead>
+<tr>
+<th>要素</th>
+<th>规定的内容</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>语法</td>
+<td>数据与控制信息的结构、格式和编码方式</td>
+</tr>
+<tr>
+<td>语义</td>
+<td>各字段的含义以及通信双方应采取的动作</td>
+</tr>
+<tr>
+<td>时序或同步</td>
+<td>事件发生的先后顺序、速度匹配和时间关系</td>
+</tr>
+</tbody></table>
+<h4>易错点</h4>
+<p>结构和格式属于语法；字段含义和操作要求属于语义；通信事件的先后顺序属于时序。</p>
+<hr>
+<h3>第 8 题：资源子网和通信子网</h3>
+<h4>题目</h4>
+<p>某企业总部的财务数据服务器需向 3 个异地分支机构的终端提供财务报表查询服务。在该过程中，下列关于资源子网与通信子网作用的描述，正确的是哪一项？</p>
+<ul>
+<li>A. 分支机构终端向财务数据服务器发送查询请求时，终端属于通信子网，负责发起数据传输任务</li>
+<li>B. 财务数据服务器验证查询权限并提取报表数据，此过程由通信子网完成，属于“传输性处理”</li>
+<li>C. 路由器将查询请求从分支机构子网转发至总部子网，该操作由通信子网承担，实现数据路径选择</li>
+<li>D. 终端接收并显示财务报表，此过程仅涉及资源子网，与通信子网无任何关联</li>
+</ul>
+<h4>正确答案</h4>
+<p><strong>C</strong></p>
+<h4>详细解析</h4>
+<p>路由器和通信链路属于通信子网的主要组成部分。路由器根据网络层地址进行路由选择和分组转发，把查询请求从分支机构网络送往总部网络，因此 C 正确。</p>
+<p>A 中的终端属于资源子网。B 中权限验证、数据库查询和报表提取属于信息处理与服务功能，应由资源子网中的服务器和应用完成。D 中终端的显示工作属于资源子网功能，但报表到达终端之前仍必须经过通信子网，不能说与通信子网无任何关联。</p>
+<h4>知识点详解</h4>
+<ul>
+<li><strong>资源子网</strong>：由主机、终端、服务器及应用系统等组成，负责数据处理、资源共享和网络服务。</li>
+<li><strong>通信子网</strong>：由通信链路和交换设备等组成，负责数据传输、分组转发和路由选择。</li>
+</ul>
+<p>这种划分强调功能。实际设备可能同时承担多种功能，不能只凭设备名称机械判断。</p>
+<h4>易错点</h4>
+<p>服务器对数据进行计算、检索或权限验证属于资源处理；路由器选择路径并转发数据属于通信处理。</p>
+<hr>
+<h3>第 9 题：高可靠网络的拓扑结构</h3>
+<h4>题目</h4>
+<p>某大型金融机构需要构建一个高安全性、高健壮性的内部数据传输网络，要求任意两台设备间的数据传输不依赖共享链路，且单条链路故障不会影响整体网络运行。同时，该机构对成本控制要求较低，更注重可靠性与安全性。下列哪种网络拓扑结构最符合该需求？</p>
+<ul>
+<li>A. 星状拓扑</li>
+<li>B. 网状拓扑</li>
+<li>C. 总线型拓扑</li>
+<li>D. 环状拓扑</li>
+</ul>
+<h4>正确答案</h4>
+<p><strong>B. 网状拓扑</strong></p>
+<h4>详细解析</h4>
+<p>网状拓扑在结点之间提供多条连接路径。在全网状结构中，任意两个结点之间都可以具有直接的点到点链路；即使采用部分网状结构，也通常存在可供故障绕行的冗余路径。因此，网状拓扑具有较强的可靠性、健壮性和容错能力，适合对成本不敏感但重视安全与连续运行的场景。</p>
+<h4>知识点详解</h4>
+<table>
+<thead>
+<tr>
+<th>拓扑</th>
+<th>主要特点</th>
+<th>典型风险</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>星状</td>
+<td>所有结点连接中心设备，管理方便</td>
+<td>中心设备可能成为单点故障</td>
+</tr>
+<tr>
+<td>网状</td>
+<td>结点间存在多条路径，可靠性高</td>
+<td>链路多，建设和维护成本高</td>
+</tr>
+<tr>
+<td>总线型</td>
+<td>多个结点共享主干链路，布线简单</td>
+<td>主干故障可能影响整个网络</td>
+</tr>
+<tr>
+<td>环状</td>
+<td>结点首尾相连，结构规则</td>
+<td>单向单环中一处故障可能影响全环</td>
+</tr>
+</tbody></table>
+<h4>易错点</h4>
+<p>题干中的“多条独立路径”“单链路故障不影响整体运行”和“成本要求较低”共同指向网状拓扑。</p>
+<hr>
+<h3>第 10 题：网络层协议</h3>
+<h4>题目</h4>
+<p>以下哪些协议是网络层协议？</p>
+<ul>
+<li>A. ARP</li>
+<li>B. ICMP</li>
+<li>C. DNS</li>
+<li>D. IGMP</li>
+</ul>
+<h4>正确答案</h4>
+<p><strong>A、B、D</strong></p>
+<h4>详细解析</h4>
+<p>按照本课程的分层口径，ARP、ICMP 和 IGMP 都作为网络层相关协议学习。DNS 为应用程序提供域名解析服务，属于应用层协议。</p>
+<h4>知识点详解</h4>
+<table>
+<thead>
+<tr>
+<th>协议</th>
+<th>主要作用</th>
+<th>本课程归属</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>ARP</td>
+<td>根据下一跳 IPv4 地址解析相应的 MAC 地址</td>
+<td>网络层相关协议</td>
+</tr>
+<tr>
+<td>ICMP</td>
+<td>传递差错报告和网络诊断信息，ping 会使用 ICMP</td>
+<td>网络层</td>
+</tr>
+<tr>
+<td>DNS</td>
+<td>完成域名与 IP 地址等信息的查询和映射</td>
+<td>应用层</td>
+</tr>
+<tr>
+<td>IGMP</td>
+<td>管理 IPv4 主机的组播组成员关系</td>
+<td>网络层</td>
+</tr>
+</tbody></table>
+<h4>易错点</h4>
+<p>ARP 直接处理 IP 地址与链路层地址之间的映射，因此其层次归属在不同教材中存在差异。有些资料把 ARP 归入链路层或网络接口层。本课程将 ARP、ICMP 和 IGMP 放在网络层相关内容中，因此本题应选 A、B、D。</p>
+<hr>
+<h3>第 11 题：TCP/IP 应用层与 OSI 模型的对应关系</h3>
+<h4>题目</h4>
+<p>TCP/IP 的应用层相当于 OSI 模型的哪些层？</p>
+<ul>
+<li>A. 应用层</li>
+<li>B. 表示层</li>
+<li>C. 会话层</li>
+<li>D. 传输层</li>
+</ul>
+<h4>正确答案</h4>
+<p><strong>A、B、C</strong></p>
+<h4>详细解析</h4>
+<p>TCP/IP 模型没有分别设置会话层和表示层，而是把 OSI 模型中应用层、表示层和会话层的功能统一放入 TCP/IP 应用层。因此应选择 A、B、C。</p>
+<p>OSI 的传输层和 TCP/IP 的传输层大体对应，所以 D 不属于 TCP/IP 应用层的对应范围。</p>
+<h4>知识点详解</h4>
+<table>
+<thead>
+<tr>
+<th>TCP/IP 四层模型</th>
+<th>OSI 七层模型中的对应层次</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>应用层</td>
+<td>应用层、表示层、会话层</td>
+</tr>
+<tr>
+<td>传输层</td>
+<td>传输层</td>
+</tr>
+<tr>
+<td>网际层</td>
+<td>网络层</td>
+</tr>
+<tr>
+<td>网络接口层</td>
+<td>数据链路层、物理层</td>
+</tr>
+</tbody></table>
+<p>需要注意，两个模型的设计背景和边界并不完全相同，这种表格表示的是常见的功能对应关系。</p>
+<h4>易错点</h4>
+<p>TCP/IP 应用层覆盖 OSI 上三层，但不包含 OSI 传输层。</p>
+<hr>
+<h3>第 12 题：分组与数据帧的封装关系</h3>
+<h4>题目</h4>
+<p>一个分组中通常封装一个数据帧。</p>
+<ul>
+<li>A. 对</li>
+<li>B. 错</li>
+</ul>
+<h4>正确答案</h4>
+<p><strong>B. 错</strong></p>
+<h4>详细解析</h4>
+<p>题目把封装方向说反了。发送数据时，网络层把分组交给数据链路层；数据链路层把这个分组作为载荷，并加入帧首部和帧尾部，形成数据帧。因此通常是一个数据帧封装一个网络层分组。</p>
+<h4>知识点详解</h4>
+<p>典型封装顺序为：</p>
+<pre><code class="language-text">应用数据
+  ↓ 加入传输层首部
+传输层报文段
+  ↓ 加入网络层首部
+网络层分组
+  ↓ 加入数据链路层首部和尾部
+数据链路层帧
+  ↓ 转换为信号
+物理层比特流
+</code></pre>
+<p>接收端按照相反顺序进行解封装。</p>
+<h4>易错点</h4>
+<p>越靠下的层，其数据单位通常封装越靠上层的数据单位。帧封装分组，分组封装报文段。</p>
+<hr>
+<h3>第 13 题：服务访问点能否看作层间接口</h3>
+<h4>题目</h4>
+<p>在 OSI/RM 中，服务访问点可以看成层与层之间的接口。</p>
+<ul>
+<li>A. 对</li>
+<li>B. 错</li>
+</ul>
+<h4>正确答案</h4>
+<p><strong>A. 对</strong></p>
+<h4>详细解析</h4>
+<p>服务访问点 SAP（Service Access Point）是上层实体访问下层服务的逻辑位置或标识，可以看作相邻层之间的逻辑接口。上层通过 SAP 调用下层提供的服务。</p>
+<h4>知识点详解</h4>
+<p>在分层模型中，需要区分三个概念：</p>
+<ul>
+<li><strong>协议</strong>：规定对等实体之间通信的规则。</li>
+<li><strong>服务</strong>：下层向相邻上层提供的功能。</li>
+<li><strong>接口或 SAP</strong>：相邻层之间访问服务的位置和方式。</li>
+</ul>
+<p>协议描述水平方向的逻辑通信，服务和接口描述垂直方向的层间关系。</p>
+<h4>易错点</h4>
+<p>SAP 是逻辑概念，不一定对应现实中的物理插口。</p>
+<hr>
+<h3>第 14 题：相邻层交互的位置</h3>
+<h4>题目</h4>
+<p>在 OSI/RM 中，相邻层之间进行交互的地方被称为服务访问点 SAP。</p>
+<ul>
+<li>A. 对</li>
+<li>B. 错</li>
+</ul>
+<h4>正确答案</h4>
+<p><strong>A. 对</strong></p>
+<h4>详细解析</h4>
+<p>相邻层之间通过接口交互，接口上的服务访问位置或标识称为服务访问点 SAP。上层实体通过 SAP 使用下层实体提供的服务，因此题目表述正确。</p>
+<h4>知识点详解</h4>
+<p>可以用下面的关系理解 SAP：</p>
+<pre><code class="language-text">上层实体
+   │ 使用服务
+   ▼
+服务访问点 SAP
+   │ 提供服务
+   ▼
+下层实体
+</code></pre>
+<p>具体协议体系中常能看到类似 SAP 的标识。例如端口号可以帮助传输层把数据交给不同应用进程，但学习 OSI 基本概念时，应先把 SAP 理解为通用的层间服务访问点。</p>
+<h4>易错点</h4>
+<p>第 13 题和第 14 题表达的是同一类基本关系：SAP 是相邻层之间使用服务的逻辑接口或访问点。</p>
+<hr>
+<h3>第 15 题：TCP/IP 协议栈的漏斗形结构</h3>
+<h4>题目</h4>
+<p>TCP/IP 协议栈呈漏斗状，其中位于漏斗最窄地方的是 TCP 协议。</p>
+<ul>
+<li>A. 对</li>
+<li>B. 错</li>
+</ul>
+<h4>正确答案</h4>
+<p><strong>B. 错</strong></p>
+<h4>详细解析</h4>
+<p>TCP/IP 体系常被描述为“沙漏形”或“漏斗形”结构。上层可以运行 HTTP、DNS、SMTP 等多种应用协议，下层可以使用以太网、无线局域网和光纤等多种网络技术，而中间由统一的 IP 协议完成互连。因此，最窄处是 IP 协议，不是 TCP 协议。</p>
+<h4>知识点详解</h4>
+<pre><code class="language-text">        多种应用协议
+   HTTP、DNS、SMTP、FTP 等
+              │
+        TCP、UDP 等
+              │
+             IP       ← 最窄处
+              │
+  以太网、Wi-Fi、光纤等多种网络
+</code></pre>
+<p>IP 提供统一的网络层寻址和分组转发能力，使不同应用能够运行在不同底层网络之上。TCP 只是传输层协议之一，UDP 等协议也可直接使用 IP，因此 TCP 不可能成为整个协议栈唯一的最窄连接点。</p>
+<h4>易错点</h4>
+<p>“TCP/IP”是协议族名称，不表示所有网络通信都必须使用 TCP。许多应用使用 UDP，二者都可建立在 IP 之上。</p>
+<hr>
+</details>
+
+<a id="c1-10"></a>
+<h2>1.10 排错与复习</h2>
+<table>
+<thead>
+<tr>
+<th>现象或疑问</th>
+<th>可能原因</th>
+<th>怎样核对</th>
+<th>正确理解</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>插上网线却不能查资料</td>
+<td>只完成部分接入条件</td>
+<td>依次查链路、地址、路由、端口、应用响应</td>
+<td>网络连通与业务可用分步证明</td>
+</tr>
+<tr>
+<td>把源帧首部当作所有跳的首部</td>
+<td>忽略逐跳重封装</td>
+<td>标出当前链路的发送者和下一跳</td>
+<td>IP 目标与链路目标可不同</td>
+</tr>
+<tr>
+<td>SAP 被说成物理插口</td>
+<td>混淆逻辑入口与连接器</td>
+<td>看它是否用于相邻层调用</td>
+<td>服务访问点是逻辑层间概念</td>
+</tr>
+</tbody></table>
+<p>学完后应能独立做到：</p>
+<ul>
+<li><input disabled="" type="checkbox"> 用自己的话解释本章机制要处理的对象和困难。</li>
+<li><input disabled="" type="checkbox"> 指出整体、部分、分类维度和执行动作之间的关系。</li>
+<li><input disabled="" type="checkbox"> 写出算例的前提、单位、中间结果与最终对象。</li>
+<li><input disabled="" type="checkbox"> 解释确认、缓存、租约或映射的状态怎样变化。</li>
+<li><input disabled="" type="checkbox"> 指出相近方法的差别及可以组合的条件。</li>
+<li><input disabled="" type="checkbox"> 完成概念自测和应用练习，并说明前提改变后的结果。</li>
+</ul>
+<a id="c1-11"></a>
+<h2>1.11 分类速查</h2>
+<p>选择一项查看含义、基本形式、例子与结果、使用条件。完整表保存在对应 Markdown。</p>
+<div class="quickbox"><label for="quick-select">选择速查项</label><select id="quick-select"></select><div id="quick-card" class="quickcard" aria-live="polite"></div></div>
+
+<div class="footerlinks"><a href="00_学习导航.html">← 课程导航</a><a href="02_数据通信基础.html">下一章：数据通信基础 →</a></div></article></main><script>window.CHAPTER={"chapter":1,"name":"概论","file":"01_概论.md","title":"第1章 概论：说明一次网络访问中设备与协议怎样分工","toc":[{"id":"c1-0","title":"1.0 共同场景与符号"},{"id":"c1-1","title":"1.1 网络对象：请求到底由谁处理"},{"id":"c1-2","title":"1.2 连接关系与功能分类：怎样扩大网络"},{"id":"c1-3","title":"1.3 分层与服务：把复杂通信拆成职责"},{"id":"c1-4","title":"1.4 封装与连接：数据逐层变成什么"},{"id":"c1-5","title":"1.5 TCP/IP 与互连标准：怎样跨不同网络合作"},{"id":"c1-6","title":"1.6 发展主线：标准与共享怎样形成规模"},{"id":"c1-7","title":"1.7 讲义补充：怎样描述网络性能"},{"id":"c1-8","title":"1.8 综合应用"},{"id":"c1-9","title":"1.9 自测与答案"},{"id":"c1-10","title":"1.10 排错与复习"},{"id":"c1-11","title":"1.11 分类速查"}],"stages":[{"name":"学习准备","task":"确认读者基础和对象","ids":["c1-0"]},{"name":"基础对象","task":"认清设备、连线与分类","ids":["c1-1","c1-2"]},{"name":"通信分工","task":"区分层次、服务和封装","ids":["c1-3","c1-4"]},{"name":"互连与背景","task":"建立协议族和标准的整体认识","ids":["c1-5","c1-6"]},{"name":"讲义补充","task":"分清性能指标的对象和量纲","ids":["c1-7"]},{"name":"练习与复习","task":"组合推导、独立作答与排错","ids":["c1-8","c1-9","c1-10","c1-11"]}],"quick":[["网络拓扑","连接模型","评估连线与故障影响","完全网状 L=n(n−1)/2","6 台得 15 条","每条无向链路计一次",1],["协议、服务、接口","层次关系","分清横向通信与纵向调用","同层协议；下层服务；本机接口","TCP 给应用字节流服务","接口调用不是跨网远程调用",2],["封装","处理流程","携带每层控制信息","PDU=PCI+SDU（简单模型）","100 B 应用形成 158 B MAC 帧","需查选项、分段、填充及计数边界",3],["OSI 与 TCP/IP","参考模型","解释功能组织","七层、四层、教学五层","OSI 上三层常归 TCP/IP 应用层","模型对应不是软件模块一一对应",4],["连接与可靠性","服务属性","判断建立状态与交付保证","先建立状态；是否确认重传另看","无连接也可逐消息确认","两种属性不能互相推出",3],["时延与带宽积","讲义补充","估计在途数据规模","R×所选时延","100 Mbit/s、单程5 ms 得62500 B","注明单程或 RTT，不等同下载吞吐",6]],"quick_id":"c1-11","synthesis_id":"c1-8","source_module_count":24,"retained_core_chars":8393,"new_chars":23624};</script><script>
+const $$=(s,r=document)=>[...r.querySelectorAll(s)];
+const menu=document.getElementById('menu-button');
+const setNav=v=>{document.body.classList.toggle('nav-open',v);menu.setAttribute('aria-expanded',String(v))};
+menu.addEventListener('click',()=>setNav(!document.body.classList.contains('nav-open')));
+document.querySelector('.navshade').addEventListener('click',()=>setNav(false));
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){setNav(false);menu.focus()}});
+for(const table of $$('article table')){const wrap=document.createElement('div');wrap.className='tablewrap';table.before(wrap);wrap.append(table)}
+const anchors=$$('.navlink[href^="#"]');
+const entries=anchors.map(a=>({a,id:a.getAttribute('href').slice(1),el:document.getElementById(a.getAttribute('href').slice(1))})).filter(x=>x.el);
+function activate(id){for(const e of entries){const yes=e.id===id;e.a.classList.toggle('active',yes);if(yes)e.a.setAttribute('aria-current','location');else e.a.removeAttribute('aria-current')}}
+let scheduled=false;
+function sync(){scheduled=false;let last=entries[0];for(const e of entries){if(e.el.getBoundingClientRect().top<=135)last=e}if(window.innerHeight+window.scrollY>=document.documentElement.scrollHeight-6)last=entries.at(-1);if(last)activate(last.id)}
+window.addEventListener('scroll',()=>{if(!scheduled){scheduled=true;requestAnimationFrame(sync)}},{passive:true});
+window.addEventListener('resize',sync);
+for(const e of entries)e.a.addEventListener('click',()=>{activate(e.id);setNav(false)});
+sync();
+if(window.CHAPTER){
+ const cfg=window.CHAPTER;
+ const q=document.getElementById('quick-select'),card=document.getElementById('quick-card');
+ cfg.quick.forEach((r,i)=>{const o=document.createElement('option');o.value=i;o.textContent=r[0]+' · '+r[1];q.append(o)});
+ function showQuick(){const r=cfg.quick[Number(q.value)];card.replaceChildren();let h=document.createElement('h3');h.textContent=r[0]+' · '+r[1];card.append(h);const dl=document.createElement('dl');for(const [label,value] of [['含义',r[2]],['基本形式',r[3]],['例子与结果',r[4]],['注意点',r[5]]]){const dt=document.createElement('dt');dt.textContent=label;const dd=document.createElement('dd');dd.textContent=value;dl.append(dt,dd)}card.append(dl);const a=document.createElement('a');a.href='#c'+cfg.chapter+'-'+(r[6]+1);a.textContent='回正文查看完整解释';card.append(a)}
+ q.addEventListener('change',showQuick);showQuick();
+ const synth=document.getElementById(cfg.synthesis_id).nextElementSibling;
+ let cur=synth.nextElementSibling,table=null;while(cur&&!/^H2$/.test(cur.tagName)){if(cur.classList.contains('tablewrap')){table=cur.querySelector('table');break}cur=cur.nextElementSibling}
+ if(table){
+  const heads=$$('th',table).map(x=>x.textContent),rows=$$('tbody tr',table).map(tr=>$$('td',tr).map(td=>td.textContent));
+  const box=document.createElement('div');box.className='stepbox';box.innerHTML='<h3>分步观察综合应用</h3><p class="stepnotes">沿用下方综合题的全部前提。每个编号对应原表一行，分开观察当前对象、规则和结果。</p><div class="stepbuttons" role="group" aria-label="步骤选择"></div><div class="stepdisplay" aria-live="polite"></div><div class="stepcontrols"><button type="button" data-prev>上一步</button><span class="stepcount"></span><button type="button" data-next>下一步</button></div>';
+  cur.before(box);const buttons=box.querySelector('.stepbuttons'),display=box.querySelector('.stepdisplay'),count=box.querySelector('.stepcount'),prev=box.querySelector('[data-prev]'),next=box.querySelector('[data-next]');let index=0;
+  rows.forEach((row,i)=>{const b=document.createElement('button');b.textContent=i+1;b.setAttribute('aria-label','查看步骤 '+(i+1));b.addEventListener('click',()=>{index=i;showStep()});buttons.append(b)});
+  function showStep(){display.replaceChildren();const h=document.createElement('h4');h.textContent='步骤 '+(index+1)+(/^[0-9]+$/.test(rows[index][0])?'':'：'+rows[index][0]);display.append(h);const dl=document.createElement('dl');rows[index].slice(1).forEach((value,i)=>{const dt=document.createElement('dt');dt.textContent=heads[i+1]||'内容';const dd=document.createElement('dd');dd.textContent=value;dl.append(dt,dd)});display.append(dl);count.textContent=(index+1)+' / '+rows.length;prev.disabled=index===0;next.disabled=index===rows.length-1;$$('button',buttons).forEach((b,i)=>{b.classList.toggle('active',i===index);b.setAttribute('aria-pressed',String(i===index))})}
+  prev.addEventListener('click',()=>{index--;showStep()});next.addEventListener('click',()=>{index++;showStep()});showStep();
+ }
+}
+</script></body></html>
