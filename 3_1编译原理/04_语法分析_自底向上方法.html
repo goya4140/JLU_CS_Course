@@ -1,15 +1,6 @@
-<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="source-sha256" content="413b8357a8257d3e11b23e8cbb078eed17c5a8e6f1e90b661e6412931e95932b"><title>第4章 语法分析：自底向上分析方法 · 学习资料</title><style>:root{--paper:#fbfaf7;--surface:#fff;--ink:#253341;--muted:#5c6b75;--line:#d5dfdd;--teal:#156b62;--soft:#edf6f1;--font:17px;--scroll-offset:90px}*{box-sizing:border-box}html{scroll-behavior:auto;scroll-padding-top:var(--scroll-offset)}body{margin:0;background:var(--paper);color:var(--ink);font-family:'Microsoft YaHei','PingFang SC',system-ui,sans-serif;font-size:var(--font);line-height:1.85}a{color:var(--teal);text-underline-offset:3px}a:hover{color:#173f75}button,select{font:inherit}button{cursor:pointer}button,select{border:1px solid #b9cbc5;border-radius:7px;padding:7px 11px;background:#fff;color:var(--ink)}button:hover{background:var(--soft)}button:focus-visible,select:focus-visible,a:focus-visible{outline:3px solid #81cbb8;outline-offset:3px}.skip{position:absolute;top:-80px;left:12px;z-index:50;background:#fff;padding:8px}.skip:focus{top:8px}.sidebar{position:fixed;inset:0 auto 0 0;width:270px;padding:23px 18px;background:#f0f4f0;border-right:1px solid var(--line);overflow:auto;z-index:30;overscroll-behavior:contain}.brand{font-size:21px;font-weight:700}.brand small{display:block;font-size:12px;font-weight:400;color:var(--muted)}.sidebar nav a{display:block;color:var(--ink);text-decoration:none;padding:8px 10px;margin:3px 0;border-radius:6px;font-size:14px;line-height:1.6}.sidebar nav a:hover{background:#dcebe3}.sidebar nav a.active,.sidebar nav a.active:hover{background:var(--teal);color:white}.sidebar select{width:100%;font-size:13px}.nav-tip{font-size:12px;color:var(--muted);margin:14px 0}.shell{margin-left:270px;overflow-anchor:none}.topbar{position:sticky;top:0;background:rgba(251,250,247,.98);padding:12px 26px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:12px;z-index:20}.topbar-title{font-size:13px;color:var(--muted)}.toolbar{display:flex;gap:7px;flex-wrap:wrap}.toolbar button{font-size:13px}.menu{display:none}main{max-width:1120px;margin:auto;padding:30px 44px 80px;min-width:0}h1{font-size:32px;line-height:1.5;margin:14px 0 25px}h2{font-size:25px;line-height:1.5;padding:0 0 11px;border-bottom:1px solid var(--line);margin:44px 0 23px}h3{font-size:21px;line-height:1.55;margin:29px 0 16px}h4{font-size:18px;line-height:1.6;margin:22px 0 13px}p{margin:14px 0}li{margin:7px 0}ul,ol{padding-left:1.6em}blockquote{margin:20px 0;padding:5px 18px;border-left:3px solid #a8c6bb;background:#f0f3ef;color:#53655e;font-size:14px}blockquote p{margin:8px 0}hr{border:0;border-top:1px solid var(--line);margin:32px 0}code{font-family:Consolas,'Cascadia Code',monospace;font-size:.9em;background:#eef1ed;padding:2px 5px;border-radius:4px;overflow-wrap:anywhere}pre{background:#18313d;color:#e8f0f0;border-radius:9px;padding:19px;line-height:1.65;overflow-x:auto;max-width:100%;font-size:14px}pre code{background:none;padding:0;color:inherit;white-space:pre;overflow-wrap:normal}table{border-collapse:collapse;width:100%;font-size:15px}th{background:#eaf3ee;text-align:left}td,th{padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:top}tbody tr:nth-child(even){background:#f6f9f6}.table-scroll{overflow-x:auto;border:1px solid var(--line);border-radius:8px;margin:17px 0;max-width:100%}.table-scroll td{min-width:80px}.source-note{font-size:13px;color:var(--muted)}.learning-figure{padding:23px;border:1px solid #b4cfc2;border-radius:12px;background:var(--soft);margin:25px 0}.learning-figure h4{margin:0 0 8px;font-size:20px}.fig-intro{font-size:14px;color:var(--muted)}.learning-figure label{display:block;margin-top:15px;font-size:14px;font-weight:700}.learning-figure select{margin-top:7px;width:100%;min-height:44px;font-size:15px}.fig-output{margin-top:16px}.flow{display:flex;gap:10px;align-items:stretch;flex-wrap:wrap}.flow-node{flex:1 1 150px;border:1px solid #bfd2c9;border-radius:8px;background:#fff;padding:13px;min-width:0}.flow-node strong{display:block;color:var(--teal)}.flow-node p{font-size:14px;margin:8px 0}.flow-arrow{align-self:center;color:var(--teal);font-size:24px}.fig-note{padding:10px 14px;border-left:3px solid var(--teal);background:#fff;font-size:14px;margin:15px 0 0}.svg-scroll{overflow-x:auto;max-width:100%}.svg-scroll svg{display:block;max-width:100%;height:auto}.ref-area{min-height:calc(100vh - var(--scroll-offset));margin-top:24px}.ref-picker{padding:22px;border-radius:12px;background:var(--soft);border:1px solid #b4cfc2}.ref-picker label{display:block;font-weight:700;margin-bottom:10px}.ref-picker select{width:100%;font-size:15px;min-height:46px}.ref-panel{margin-top:18px;background:#fff;border:1px solid var(--line);padding:20px;border-radius:9px}.ref-panel[hidden]{display:none}.ref-panel h3{margin:0;font-size:24px}.ref-panel h4{font-size:16px;margin:18px 0 8px}.ref-kind{font-size:13px;color:var(--teal)}.result{padding:10px 15px;border-left:3px solid var(--teal);background:var(--soft)}.copy{display:block;margin:5px 0 0 auto;font-size:12px;padding:4px 8px}.code-wrap{margin:20px 0}.code-wrap pre{margin-bottom:0}.foot{font-size:13px;color:var(--muted);border-top:1px solid var(--line);padding-top:23px;margin-top:30px}details{border:1px solid var(--line);padding:12px;border-radius:8px;margin:15px 0}summary{cursor:pointer;font-weight:700}@media(max-width:900px){.sidebar{transform:translateX(-100%)}body.nav-open .sidebar{transform:translateX(0);top:60px}.shell{margin-left:0}.menu{display:inline-block}.topbar-title{display:none}.topbar{padding:10px 14px}main{padding:23px 18px 65px}h1{font-size:27px}h2{font-size:23px}.learning-figure,.ref-picker{padding:16px}.flow{flex-direction:column}.flow-arrow{transform:rotate(90deg)}.ref-panel{padding:15px}}@media print{.sidebar,.topbar,.toolbar,.copy,.skip{display:none!important}.shell{margin:0}main{padding:0;max-width:none}body{background:#fff;font-size:11pt}.ref-area{min-height:0}.ref-picker select{display:none}pre{white-space:pre-wrap;background:#f3f5f4;color:#111}.learning-figure{break-inside:avoid}.table-scroll{overflow:visible}a{color:inherit}}@media print{.svg-scroll{overflow:visible}.svg-scroll svg{min-width:0!important;width:100%!important;height:auto!important}}.sidebar{width:266px;background:#f1f4f1;padding:27px 19px;overflow-y:auto}.brand{font-size:21px;font-weight:700;letter-spacing:.03em;margin-bottom:5px}.brand small{font-size:12px;font-weight:400;color:var(--muted);letter-spacing:.1em}.sidebar .sub{font-size:13px;color:var(--muted);margin:5px 0 21px}.sidebar nav a{font-size:14px;line-height:1.5;padding:9px 11px;margin:3px 0;border-radius:6px}.sidebar nav a:hover{background:#e0ece6;color:#174d43}.sidebar nav a.active,.sidebar nav a.active:hover{background:var(--teal);color:#fff}.nav-group{font-size:12px;color:var(--muted);margin:18px 11px 6px;letter-spacing:.08em}.sidebar-footer{margin-top:24px;font-size:12px;color:var(--muted)}.shell{margin-left:266px}@media(max-width:900px){.shell{margin-left:0}}
-h2,h3,h4,[id]{scroll-margin-top:0}.stepper{background:#edf6f1;border:1px solid #b4cfc2;border-radius:12px;padding:22px;margin:24px 0}.stepper h3{margin:0 0 12px}.step-tools{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:15px 0}.step-tools input{width:200px;min-height:40px}.step-card{background:white;padding:18px;border-radius:8px;border:1px solid var(--line)}.step-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}.step-field{border:1px solid #d6e5dd;padding:12px;border-radius:7px;overflow-wrap:anywhere}.step-field strong{display:block;font-size:13px;color:var(--teal)}.step-field p{margin:7px 0 0}.progress-track{display:flex;gap:4px;margin:10px 0}.progress-track span{height:5px;flex:1;border-radius:3px;background:#c8d8d0}.progress-track span.done{background:var(--teal)}.step-count{font-variant-numeric:tabular-nums}.chapter-links{display:flex;gap:15px;justify-content:space-between;border-top:1px solid var(--line);padding-top:25px;margin-top:35px}.ref-area{min-height:0}.ref-panel h4{margin:12px 0 4px}.reading-meta{font-size:13px;color:var(--muted)}summary:focus-visible,input:focus-visible{outline:3px solid #81cbb8;outline-offset:3px}button:disabled{opacity:.5;cursor:default}.quick-select{width:100%}.overview-card{border:1px solid var(--line);background:white;border-radius:9px;padding:18px;margin:14px 0}.overview-card h3{margin-top:0}.sidebar nav a.external{background:#e4eee7}.nav-shade{display:none}@media(max-width:900px){body.nav-open .nav-shade{display:block;position:fixed;inset:60px 0 0 266px;background:#25334155;z-index:25}.stepper{padding:15px}.step-tools input{width:150px}.step-grid{grid-template-columns:1fr}.sidebar{max-width:85vw}.step-field{padding:10px}}@media print{.step-tools,.progress-track,.chapter-links{display:none}.step-card{break-inside:avoid}body.nav-open .nav-shade{display:none}}main{overflow-x:clip}article{min-width:0;max-width:100%}.table-scroll,pre{contain:inline-size}p,li,h1,h2,h3,h4{overflow-wrap:anywhere}</style></head><body><a class="skip" href="#article">跳到正文</a><aside class="sidebar" aria-label="章节目录"><div class="brand"><small>COMPILER / CHAPTER 04</small>第4章 语法分析：自底向上分析方法</div><p class="sub">完整讲解 · 分步推导 · 离线阅读</p><nav><a href="#navigation">学习导航</a><div class="nav-group">准备 · 归约与前缀</div><a href="#ch04-s01">1. 自底向上分析要做什么</a><a href="#ch04-s02">2. 符号与规范活前缀</a><div class="nav-group">基础 · 项目与LR(0)</div><a href="#ch04-s03">3. LR(0) 项目及三个运算</a><a href="#ch04-s04">4. 构造 LR(0) 状态机</a><a href="#ch04-s05">5. 分析表与通用驱动</a><a href="#ch04-s06">6. LR(0) 完整构表与冲突</a><div class="nav-group">进阶 · 限制归约与合并</div><a href="#ch04-s07">7. SLR(1)：用 FOLLOW 限制归约</a><a href="#ch04-s08">8. LR(1)：给项目增加展望符</a><a href="#ch04-s09">9. LR(1) 完整例题与空产生式</a><a href="#ch04-s10">10. LALR(1)：合并同心状态</a><div class="nav-group">应用 · 文法判定</div><a href="#ch04-s11">11. 课件判定练习</a><div class="nav-group">综合应用 · 推导与同类检查</div><a href="#ch04-s12">12. 综合应用：历年题规范 LR(1) 的完整构造</a><div class="nav-group">练习与复习 · 回查、自测和速查</div><a href="#ch04-s13">13. 课件例题回查与知识路线</a><a href="#ch04-s14">14. 自测与答案：一个完成项目何时允许归约</a><a href="#ch04-s15">15. 排错与复习</a><a href="#ch04-s16">16. 末尾速查表</a><div class="nav-group">来源与核对</div><a href="#verification">整理与核对说明</a><a class="external" href="00_学习导航.html">全课程学习导航</a></nav><div class="sidebar-footer">阶段分组 · 章节直接链接<br>原题、补充与未核实范围分别标注</div></aside><div class="nav-shade"></div><div class="shell"><header class="topbar"><span class="topbar-title">第4章 语法分析：自底向上分析方法</span><div class="toolbar"><button id="menu" class="menu" aria-label="打开或收起目录" aria-expanded="false">目录</button><button data-font="-1" aria-label="减小正文字号">字号 −</button><button data-font="1" aria-label="增大正文字号">字号 ＋</button><button id="print">打印 / 保存 PDF</button></div></header><main><article id="article"><h1>第4章 语法分析：自底向上分析方法：理解规则、推导过程与实际结果</h1>
-<blockquote>
-<p>整理依据：项目现存课件及讲者备注、旧版资料，并结合对应作业解析与历年题重新核对和整合。各类来源和未核实内容分别说明。</p>
-<p>适合读者：具备基础程序阅读能力；本章先解释新增术语，不默认已经掌握后续章的算法。</p>
-<p>范围说明：课件为主要依据。理解补充、自拟题、重建例图和独立计算均注明性质。课程教学机、单位与源语言规则有专门约定，不等同真实平台；未取得教师标准答案和最新考试范围。</p>
-</blockquote>
-<p>资料沿本章的问题主线推进：先认清输入、对象和条件，再理解规则如何组合，最后完整推导并独立自测。与后续章连接时，可回到<a href="00_%E5%AD%A6%E4%B9%A0%E5%AF%BC%E8%88%AA.html">全课程学习导航</a>。本章各例除明确标注连续推导外，均从各自所列初始条件开始，不能沿用上一例已改写的变量值。</p>
-<blockquote>
-<p>本章依据课件 11、12-1、12-2 重新编写，覆盖移入归约、规范活前缀、LR(0) 项目集及分析表、SLR(1)、规范 LR(1)、LALR(1)，并完整展开课件构表练习与分析过程。</p>
-<p>建议先掌握“移入或归约”的问题，再学项目集表达分析进度，最后比较各方法如何限制归约。全部计算例统一增加 <code>S&#39;→原开始符</code>，只把 # 当输入结束记号，不移入 #。状态编号由本资料的构造顺序确定，可能与课件不同；实际比较应看项目和转换。</p>
-</blockquote>
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="source-sha256" content="02fdcd22f207433f38b2cbacb3ca430fd256515ed4f2b9d3f451e1e6a79f03f5"><title>第4章 语法分析：自底向上分析方法 · 学习资料</title><style>:root{--paper:#fbfaf7;--surface:#fff;--ink:#253341;--muted:#5c6b75;--line:#d5dfdd;--teal:#156b62;--soft:#edf6f1;--font:17px;--scroll-offset:90px}*{box-sizing:border-box}html{scroll-behavior:auto;scroll-padding-top:var(--scroll-offset)}body{margin:0;background:var(--paper);color:var(--ink);font-family:'Microsoft YaHei','PingFang SC',system-ui,sans-serif;font-size:var(--font);line-height:1.85}a{color:var(--teal);text-underline-offset:3px}a:hover{color:#173f75}button,select{font:inherit}button{cursor:pointer}button,select{border:1px solid #b9cbc5;border-radius:7px;padding:7px 11px;background:#fff;color:var(--ink)}button:hover{background:var(--soft)}button:focus-visible,select:focus-visible,a:focus-visible{outline:3px solid #81cbb8;outline-offset:3px}.skip{position:absolute;top:-80px;left:12px;z-index:50;background:#fff;padding:8px}.skip:focus{top:8px}.sidebar{position:fixed;inset:0 auto 0 0;width:270px;padding:23px 18px;background:#f0f4f0;border-right:1px solid var(--line);overflow:auto;z-index:30;overscroll-behavior:contain}.brand{font-size:21px;font-weight:700}.brand small{display:block;font-size:12px;font-weight:400;color:var(--muted)}.sidebar nav a{display:block;color:var(--ink);text-decoration:none;padding:8px 10px;margin:3px 0;border-radius:6px;font-size:14px;line-height:1.6}.sidebar nav a:hover{background:#dcebe3}.sidebar nav a.active,.sidebar nav a.active:hover{background:var(--teal);color:white}.sidebar select{width:100%;font-size:13px}.nav-tip{font-size:12px;color:var(--muted);margin:14px 0}.shell{margin-left:270px;overflow-anchor:none}.topbar{position:sticky;top:0;background:rgba(251,250,247,.98);padding:12px 26px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:12px;z-index:20}.topbar-title{font-size:13px;color:var(--muted)}.toolbar{display:flex;gap:7px;flex-wrap:wrap}.toolbar button{font-size:13px}.menu{display:none}main{max-width:1120px;margin:auto;padding:30px 44px 80px;min-width:0}h1{font-size:32px;line-height:1.5;margin:14px 0 25px}h2{font-size:25px;line-height:1.5;padding:0 0 11px;border-bottom:1px solid var(--line);margin:44px 0 23px}h3{font-size:21px;line-height:1.55;margin:29px 0 16px}h4{font-size:18px;line-height:1.6;margin:22px 0 13px}p{margin:14px 0}li{margin:7px 0}ul,ol{padding-left:1.6em}blockquote{margin:20px 0;padding:5px 18px;border-left:3px solid #a8c6bb;background:#f0f3ef;color:#53655e;font-size:14px}blockquote p{margin:8px 0}hr{border:0;border-top:1px solid var(--line);margin:32px 0}code{font-family:Consolas,'Cascadia Code',monospace;font-size:.9em;background:#eef1ed;padding:2px 5px;border-radius:4px;overflow-wrap:anywhere}pre{background:#18313d;color:#e8f0f0;border-radius:9px;padding:19px;line-height:1.65;overflow-x:auto;max-width:100%;font-size:14px}pre code{background:none;padding:0;color:inherit;white-space:pre;overflow-wrap:normal}table{border-collapse:collapse;width:100%;font-size:15px}th{background:#eaf3ee;text-align:left}td,th{padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:top}tbody tr:nth-child(even){background:#f6f9f6}.table-scroll{overflow-x:auto;border:1px solid var(--line);border-radius:8px;margin:17px 0;max-width:100%}.table-scroll td{min-width:80px}.source-note{font-size:13px;color:var(--muted)}.learning-figure{padding:23px;border:1px solid #b4cfc2;border-radius:12px;background:var(--soft);margin:25px 0}.learning-figure h4{margin:0 0 8px;font-size:20px}.fig-intro{font-size:14px;color:var(--muted)}.learning-figure label{display:block;margin-top:15px;font-size:14px;font-weight:700}.learning-figure select{margin-top:7px;width:100%;min-height:44px;font-size:15px}.fig-output{margin-top:16px}.flow{display:flex;gap:10px;align-items:stretch;flex-wrap:wrap}.flow-node{flex:1 1 150px;border:1px solid #bfd2c9;border-radius:8px;background:#fff;padding:13px;min-width:0}.flow-node strong{display:block;color:var(--teal)}.flow-node p{font-size:14px;margin:8px 0}.flow-arrow{align-self:center;color:var(--teal);font-size:24px}.fig-note{padding:10px 14px;border-left:3px solid var(--teal);background:#fff;font-size:14px;margin:15px 0 0}.svg-scroll{overflow-x:auto;max-width:100%}.svg-scroll svg{display:block;max-width:100%;height:auto}.ref-area{min-height:calc(100vh - var(--scroll-offset));margin-top:24px}.ref-picker{padding:22px;border-radius:12px;background:var(--soft);border:1px solid #b4cfc2}.ref-picker label{display:block;font-weight:700;margin-bottom:10px}.ref-picker select{width:100%;font-size:15px;min-height:46px}.ref-panel{margin-top:18px;background:#fff;border:1px solid var(--line);padding:20px;border-radius:9px}.ref-panel[hidden]{display:none}.ref-panel h3{margin:0;font-size:24px}.ref-panel h4{font-size:16px;margin:18px 0 8px}.ref-kind{font-size:13px;color:var(--teal)}.result{padding:10px 15px;border-left:3px solid var(--teal);background:var(--soft)}.copy{display:block;margin:5px 0 0 auto;font-size:12px;padding:4px 8px}.code-wrap{margin:20px 0}.code-wrap pre{margin-bottom:0}.foot{font-size:13px;color:var(--muted);border-top:1px solid var(--line);padding-top:23px;margin-top:30px}details{border:1px solid var(--line);padding:12px;border-radius:8px;margin:15px 0}summary{cursor:pointer;font-weight:700}@media(max-width:900px){.sidebar{transform:translateX(-100%)}body.nav-open .sidebar{transform:translateX(0);top:60px}.shell{margin-left:0}.menu{display:inline-block}.topbar-title{display:none}.topbar{padding:10px 14px}main{padding:23px 18px 65px}h1{font-size:27px}h2{font-size:23px}.learning-figure,.ref-picker{padding:16px}.flow{flex-direction:column}.flow-arrow{transform:rotate(90deg)}.ref-panel{padding:15px}}@media print{.sidebar,.topbar,.toolbar,.copy,.skip{display:none!important}.shell{margin:0}main{padding:0;max-width:none}body{background:#fff;font-size:11pt}.ref-area{min-height:0}.ref-picker select{display:none}pre{white-space:pre-wrap;background:#f3f5f4;color:#111}.learning-figure{break-inside:avoid}.table-scroll{overflow:visible}a{color:inherit}}@media print{.svg-scroll{overflow:visible}.svg-scroll svg{min-width:0!important;width:100%!important;height:auto!important}}.sidebar{width:266px;background:#f1f4f1;padding:27px 19px;overflow-y:auto}.brand{font-size:21px;font-weight:700;letter-spacing:.03em;margin-bottom:5px}.brand small{font-size:12px;font-weight:400;color:var(--muted);letter-spacing:.1em}.sidebar .sub{font-size:13px;color:var(--muted);margin:5px 0 21px}.sidebar nav a{font-size:14px;line-height:1.5;padding:9px 11px;margin:3px 0;border-radius:6px}.sidebar nav a:hover{background:#e0ece6;color:#174d43}.sidebar nav a.active,.sidebar nav a.active:hover{background:var(--teal);color:#fff}.nav-group{font-size:12px;color:var(--muted);margin:18px 11px 6px;letter-spacing:.08em}.sidebar-footer{margin-top:24px;font-size:12px;color:var(--muted)}.shell{margin-left:266px}@media(max-width:900px){.shell{margin-left:0}}
+h2,h3,h4,[id]{scroll-margin-top:0}.stepper{background:#edf6f1;border:1px solid #b4cfc2;border-radius:12px;padding:22px;margin:24px 0}.stepper h3{margin:0 0 12px}.step-tools{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:15px 0}.step-tools input{width:200px;min-height:40px}.step-card{background:white;padding:18px;border-radius:8px;border:1px solid var(--line)}.step-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}.step-field{border:1px solid #d6e5dd;padding:12px;border-radius:7px;overflow-wrap:anywhere}.step-field strong{display:block;font-size:13px;color:var(--teal)}.step-field p{margin:7px 0 0}.progress-track{display:flex;gap:4px;margin:10px 0}.progress-track span{height:5px;flex:1;border-radius:3px;background:#c8d8d0}.progress-track span.done{background:var(--teal)}.step-count{font-variant-numeric:tabular-nums}.chapter-links{display:flex;gap:15px;justify-content:space-between;border-top:1px solid var(--line);padding-top:25px;margin-top:35px}.ref-area{min-height:0}.ref-panel h4{margin:12px 0 4px}.reading-meta{font-size:13px;color:var(--muted)}summary:focus-visible,input:focus-visible{outline:3px solid #81cbb8;outline-offset:3px}button:disabled{opacity:.5;cursor:default}.quick-select{width:100%}.overview-card{border:1px solid var(--line);background:white;border-radius:9px;padding:18px;margin:14px 0}.overview-card h3{margin-top:0}.sidebar nav a.external{background:#e4eee7}.nav-shade{display:none}@media(max-width:900px){body.nav-open .nav-shade{display:block;position:fixed;inset:60px 0 0 266px;background:#25334155;z-index:25}.stepper{padding:15px}.step-tools input{width:150px}.step-grid{grid-template-columns:1fr}.sidebar{max-width:85vw}.step-field{padding:10px}}@media print{.step-tools,.progress-track,.chapter-links{display:none}.step-card{break-inside:avoid}body.nav-open .nav-shade{display:none}}main{overflow-x:clip}article{min-width:0;max-width:100%}.table-scroll,pre{contain:inline-size}p,li,h1,h2,h3,h4{overflow-wrap:anywhere}</style></head><body><a class="skip" href="#article">跳到正文</a><aside class="sidebar" aria-label="章节目录"><div class="brand"><small>COMPILER / CHAPTER 04</small>第4章 语法分析：自底向上分析方法</div><p class="sub">完整讲解 · 分步推导 · 离线阅读</p><nav><a href="#navigation">学习导航</a><div class="nav-group">准备 · 归约与前缀</div><a href="#ch04-s01">1. 自底向上分析要做什么</a><a href="#ch04-s02">2. 符号与规范活前缀</a><div class="nav-group">基础 · 项目与LR(0)</div><a href="#ch04-s03">3. LR(0) 项目及三个运算</a><a href="#ch04-s04">4. 构造 LR(0) 状态机</a><a href="#ch04-s05">5. 分析表与通用驱动</a><a href="#ch04-s06">6. LR(0) 完整构表与冲突</a><div class="nav-group">进阶 · 限制归约与合并</div><a href="#ch04-s07">7. SLR(1)：用 FOLLOW 限制归约</a><a href="#ch04-s08">8. LR(1)：给项目增加展望符</a><a href="#ch04-s09">9. LR(1) 完整例题与空产生式</a><a href="#ch04-s10">10. LALR(1)：合并同心状态</a><div class="nav-group">应用 · 文法判定</div><a href="#ch04-s11">11. 课件判定练习</a><div class="nav-group">综合应用 · 完整解题</div><a href="#ch04-s12">12. 综合应用：历年题规范 LR(1) 的完整构造</a><div class="nav-group">练习与复习 · 回查、自测和速查</div><a href="#ch04-s13">13. 知识联系与复习</a><a href="#ch04-s14">14. 自测与答案：一个完成项目何时允许归约</a><a href="#ch04-s15">15. 排错与复习</a><a href="#ch04-s16">16. 末尾速查表</a><div class="nav-group">全课程</div><a class="external" href="00_学习导航.html">全课程学习导航</a></nav><div class="sidebar-footer">先看问题与条件，再跟踪推导和例题</div></aside><div class="nav-shade"></div><div class="shell"><header class="topbar"><span class="topbar-title">第4章 语法分析：自底向上分析方法</span><div class="toolbar"><button id="menu" class="menu" aria-label="打开或收起目录" aria-expanded="false">目录</button><button data-font="-1" aria-label="减小正文字号">字号 −</button><button data-font="1" aria-label="增大正文字号">字号 ＋</button><button id="print">打印 / 保存 PDF</button></div></header><main><article id="article"><h1>第4章 语法分析：自底向上分析方法：怎样决定移入还是归约</h1>
+<p>读到一段输入后，分析器要决定：继续移入单词，还是把已经识别的结构归约成非终结符？本章先观察移入归约过程，再用项目集记录进度，依次学习 LR(0)、SLR(1)、LR(1) 与 LALR(1) 怎样作出这些决策。</p>
 <p><a id="navigation"></a></p>
 <h2>学习导航</h2>
 <div class="table-scroll"><table>
@@ -22,96 +13,41 @@ h2,h3,h4,[id]{scroll-margin-top:0}.stepper{background:#edf6f1;border:1px solid #
 </thead>
 <tbody><tr>
 <td>准备 · 归约与前缀</td>
-<td>理解自底向上分析要做什么，连接本阶段各方法的输入与输出。</td>
+<td>从输入搭回开始符时，栈中哪一段才是现在应归约的句柄？</td>
 <td><a href="#ch04-s01">1. 自底向上分析要做什么</a>、<a href="#ch04-s02">2. 符号与规范活前缀</a></td>
 </tr>
 <tr>
 <td>基础 · 项目与LR(0)</td>
-<td>理解LR(0) 项目及三个运算，连接本阶段各方法的输入与输出。</td>
+<td>如何用项目集记录进度、构造状态与表，并按表更新两种栈？</td>
 <td><a href="#ch04-s03">3. LR(0) 项目及三个运算</a>、<a href="#ch04-s04">4. 构造 LR(0) 状态机</a>、<a href="#ch04-s05">5. 分析表与通用驱动</a>、<a href="#ch04-s06">6. LR(0) 完整构表与冲突</a></td>
 </tr>
 <tr>
 <td>进阶 · 限制归约与合并</td>
-<td>理解SLR(1)：用 FOLLOW 限制归约，连接本阶段各方法的输入与输出。</td>
+<td>LR(0) 的冲突怎样用更精确的后继信息处理；状态合并有何代价？</td>
 <td><a href="#ch04-s07">7. SLR(1)：用 FOLLOW 限制归约</a>、<a href="#ch04-s08">8. LR(1)：给项目增加展望符</a>、<a href="#ch04-s09">9. LR(1) 完整例题与空产生式</a>、<a href="#ch04-s10">10. LALR(1)：合并同心状态</a></td>
 </tr>
 <tr>
 <td>应用 · 文法判定</td>
-<td>理解课件判定练习，连接本阶段各方法的输入与输出。</td>
+<td>用具体冲突证明文法不属于某一类，用完整表证明无冲突。</td>
 <td><a href="#ch04-s11">11. 课件判定练习</a></td>
 </tr>
 <tr>
-<td>综合应用 · 推导与同类检查</td>
-<td>理解综合应用：历年题规范 LR(1) 的完整构造，连接本阶段各方法的输入与输出。</td>
+<td>综合应用 · 完整解题</td>
+<td>按同一规则编号完成项目集、分析表与输入轨迹。</td>
 <td><a href="#ch04-s12">12. 综合应用：历年题规范 LR(1) 的完整构造</a></td>
 </tr>
 <tr>
 <td>练习与复习 · 回查、自测和速查</td>
-<td>理解课件例题回查与知识路线，连接本阶段各方法的输入与输出。</td>
-<td><a href="#ch04-s13">13. 课件例题回查与知识路线</a>、<a href="#ch04-s14">14. 自测与答案：一个完成项目何时允许归约</a>、<a href="#ch04-s15">15. 排错与复习</a>、<a href="#ch04-s16">16. 末尾速查表</a></td>
+<td>比较归约条件，回查课件并练习闭包、空归约和冲突判断。</td>
+<td><a href="#ch04-s13">13. 知识联系与复习</a>、<a href="#ch04-s14">14. 自测与答案：一个完成项目何时允许归约</a>、<a href="#ch04-s15">15. 排错与复习</a>、<a href="#ch04-s16">16. 末尾速查表</a></td>
 </tr>
 </tbody></table></div>
-<details><summary>任务信息、来源与整理约定</summary>
-
-<div class="table-scroll"><table>
-<thead>
-<tr>
-<th>项目</th>
-<th>本次采用的内容</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>资料名称</td>
-<td>第4章 语法分析：自底向上分析方法</td>
-</tr>
-<tr>
-<td>整理范围</td>
-<td>本章课件正文、必要备注、原例题及相关学习资料</td>
-</tr>
-<tr>
-<td>原始来源</td>
-<td><span title="来源文件保留在本地，未随学习资料上传">11.语法分析_自底向上分析概述_LR0.pptx（本地来源，未上传）</span>、<span title="来源文件保留在本地，未随学习资料上传">12-1.语法分析_SLR(1)_LR(1).pptx（本地来源，未上传）</span>、<span title="来源文件保留在本地，未随学习资料上传">12-2.语法分析_LALR(1)方法.ppt（本地来源，未上传）</span>；辅助来源：<span title="来源文件保留在本地，未随学习资料上传">本章旧版资料（本地来源，未上传）</span></td>
-</tr>
-<tr>
-<td>读者基础</td>
-<td>默认能读变量、表达式和条件语句；集合、文法、寄存器等新术语在正文解释</td>
-</tr>
-<tr>
-<td>学习目标</td>
-<td>解释各方法用途、准确区分类别，手算中间步骤并独立判断结果与边界</td>
-</tr>
-<tr>
-<td>用户补充</td>
-<td>要求多章节均按模板完整整理；未提供逐章新问答，不补造反馈</td>
-</tr>
-<tr>
-<td>输出形式</td>
-<td>Markdown与HTML，正文和结论一致</td>
-</tr>
-<tr>
-<td>导航版式</td>
-<td>参照数据库01资料的阶段分组左栏；Markdown使用阶段导航表</td>
-</tr>
-<tr>
-<td>文件处理方式</td>
-<td>在新文件夹生成文件，原课件、旧资料和作业解析保留</td>
-</tr>
-<tr>
-<td>需要保留的内容</td>
-<td>主要知识、适用条件、课件例题、作业难点和原资料的纠错说明</td>
-</tr>
-<tr>
-<td>范围限制</td>
-<td>教学模型；未确认的图边、判分答案和本学期安排不写成事实</td>
-</tr>
-</tbody></table></div>
-</details>
-<a id="ch04-s01"></a>
+<p><a id="ch04-s01"></a>
 <a id="一自底向上分析要做什么"></a>
-<a id="自底向上分析要做什么"></a>
-
+<a id="自底向上分析要做什么"></a></p>
 <h2>1. 自底向上分析要做什么</h2>
 <h3>1.1 从输入的单词逐步搭回开始符</h3>
+<p>第三章从开始符向下展开；另一条路线是先读实际单词，把已识别的局部结构逐层组合回开始符。难点在于：何时继续读，何时把栈顶的一段归约，才能保留正确结构。</p>
 <p><strong>自底向上分析</strong>从输入 Token 出发，把已识别的局部结构归约成非终结符，直到完整程序被归约为开始符。相比自顶向下先展开文法，它先看见具体输入，再逐层确认结构。</p>
 <p>四种动作是：<strong>移入</strong>，把当前输入 Token 压栈并前进输入；<strong>归约</strong>，用一条规则左部替换栈顶对应右部；<strong>接受</strong>，确认完整输入与开始结构匹配；<strong>报错</strong>，当前格局没有合法动作。</p>
 <p>核心不是“有没有一段文字等于某规则右部”，而是“它是否是此时应该撤销的最右推导步骤”。例如表达式中看到 T 时，既可能归约成 E，也可能还需等待 <code>*F</code>，不能任选。</p>
@@ -230,6 +166,7 @@ h2,h3,h4,[id]{scroll-margin-top:0}.stepper{background:#edf6f1;border:1px solid #
 <a id="符号与规范活前缀"></a>
 <a id="ref-前缀"></a></p>
 <h2>2. 符号与规范活前缀</h2>
+<p>栈中一段文字即使等于某条产生式右部，也未必应该立即归约。要把判断交给算法，需要先说明栈允许保存怎样的前缀，以及句柄在这个前缀中的位置。</p>
 <h3>2.1 记号说明</h3>
 <div class="table-scroll"><table>
 <thead>
@@ -303,6 +240,7 @@ h2,h3,h4,[id]{scroll-margin-top:0}.stepper{background:#edf6f1;border:1px solid #
 <a id="三lr0-项目及三个运算"></a>
 <a id="ref-运算"></a></p>
 <h2>3. LR(0) 项目及三个运算</h2>
+<p>活前缀说明栈不能越过句柄，但还没有给出逐步识别的方法。可以在产生式中标出“已经识别到哪里”，再把当前可能的进度收在一起，用作分析器的状态。</p>
 <h3>3.1 圆点表示进度</h3>
 <p><strong>LR(0) 项目</strong>是在产生式右部加入一个圆点。<code>S→aAc</code> 有四种：</p>
 <pre><code class="language-text">S→·aAc   尚未识别此右部
@@ -312,9 +250,11 @@ S→aAc·   整个右部已经识别，可提出归约
 </code></pre>
 <p>点后是终结符时可移入该 Token；点后是非终结符时需要识别其结构，不能从输入直接“移入非终结符”；点在末尾时是完成/归约项目。空规则 A→ε 只有 A→·，从开始就完成，不能把 ε 当作待移入字符。</p>
 <h3>3.2 投影：圆点越过同一符号</h3>
+<p>已有一组可能进度时，读到或归约出 X，就要找出哪些进度能接受这个 X，并把它们向前推进一格。投影负责这一步，不负责补入新结构的起点。</p>
 <p>项目集 I 关于 X 的<strong>投影</strong>为 <code>I(X)={A→αX·β | A→α·Xβ∈I}</code>。只取点后恰为 X 的项目，点右移一位。</p>
 <p>若 <code>I={S→a·Ac,A→·dbb,A→·b}</code>，则 I(A) 为 <code>{S→aA·c}</code>，I(d) 为 <code>{A→d·bb}</code>，I(b) 为 <code>{A→b·}</code>；I(a)、I(c)、I(S) 为空。课件投影例里 A→dbb 的编号误排，这里按原规则身份处理。</p>
 <h3>3.3 闭包：等待 A 就加入 A 的所有开头</h3>
+<p>圆点停在非终结符 A 前时，接下来可能从 A 的任意候选式开始。只保存外层进度会漏掉这些可能性，因此要把它们及后续依赖逐项补齐。</p>
 <p><strong>CLOSURE(I)</strong> 先包含 I；若有 B→α·Aβ，则加入 A 的每条规则 A→·γ，再对新增项目继续检查，直到没有新项。它表达“接下来要识别 A，因此 A 的所有起始方式也可能处于当前分析进度”。</p>
 <p>例如 <code>{S→a·Ac}</code> 的闭包为 <code>{S→a·Ac,A→·dbb,A→·b}</code>。只加点后非终结符的规则，不能把文法全部规则无条件塞入每个状态。</p>
 <h3>3.4 GO：投影后闭包</h3>
@@ -324,9 +264,10 @@ S→aAc·   整个右部已经识别，可提出归约
 <a id="四构造-lr0-状态机"></a>
 <a id="构造-lr0-状态机"></a></p>
 <h2>4. 构造 LR(0) 状态机</h2>
+<p>单个项目集表示某一时刻的可能进度。要处理任意合法输入，还需从初态出发，把每个符号能到达的项目集全部构造出来，形成可反复查用的有限状态机。</p>
 <h3>4.1 增广与接受约定</h3>
 <p>统一增加新开始符 S&#39;，规则 S&#39;→S。初态为 <code>CLOSURE({S&#39;→·S})</code>，S&#39;→S· 且头符 # 时接受。S&#39; 不出现在任何规则右部。</p>
-<p>课件有些例子直接在原开始规则完成时接受，有的用 <code>S→E$</code> 并移入 $，这些采用不同约定。本资料使用统一增广，不把课件 $ 和 # 混合；因此可能比不增广课件多一个接受状态。</p>
+<p>这里采用增广规则 S&#39;→S，# 只作输入结束标志，不移入栈。若采用 S→E$ 并移入 $ 的另一套约定，接受状态与计数会相应不同；比较结果时应对齐项目和转换，不能只看状态编号。</p>
 <h3>4.2 待处理队列构造</h3>
 <p>从初态开始，对每个未处理 I 和每个 X∈VT∪VN 算 GO。非空且新集合出现，就加一个新状态；若已存在，连接到旧状态。直到全部已知状态都处理完。</p>
 <p>因为产生式与圆点位置有限，可能项目集有限，构造会终止。实现要按集合去重；课件的 NO 是“尚未处理”的工作标记，不是状态属性或源码内容。</p>
@@ -340,7 +281,7 @@ S→aAc·   整个右部已经识别，可提出归约
 (2) A → d b b
 (3) A → b
 </code></pre>
-<p>全部项目集（同一项目的展望符合写成集合）：</p>
+<p>全部项目集：</p>
 <pre><code class="language-text">I0:
   S&#39; → · S
   S → · a A c
@@ -533,23 +474,45 @@ I8:
 <a id="分析表与通用驱动"></a>
 <a id="ref-驱动"></a></p>
 <h2>5. 分析表与通用驱动</h2>
+<p>状态机已经记录可行进度，执行时却还要决定本次移入、归约、接受还是报错。分析表把这些决策整理成按“状态与当前 Token”查询的动作，驱动负责实际改栈。</p>
 <h3>5.1 ACTION 与 GOTO 分工</h3>
 <p>ACTION 的列是 VT∪{#}，GOTO 的列是 VN。移入由点后终结符边决定；归约由完成项目和方法规定的展望范围决定；接受只填增广完成状态的 # 列；未填格报错。</p>
 <p>LR(0) 普通完成项目 A→β· 要在全部终结符及 # 列填该规则归约。如果同格还要移入或另一个归约，表有冲突，不能悄悄覆盖其中一个。</p>
 <h3>5.2 归约为何先弹栈再查 GOTO</h3>
 <p>状态栈初始 <code>[0]</code>，符号栈初始 <code>[#]</code>。当按 A→β 归约，令 n=|β|，从符号栈弹 n 个文法符号，状态栈也弹 n 个状态；用弹出后的栈顶 s 查 GOTO[s,A]，再压 A 和新状态。</p>
 <p>例如 β 长 3，就撤销识别这三个符号带来的三次状态推进。若用归约前栈顶查 GOTO，会找错前驱。ε 规则 n=0，不弹任何项，仍查当前栈顶 GOTO 并压左部。</p>
-<h3>5.3 通用驱动伪代码</h3>
-<pre><code class="language-text">状态栈=[0]；符号栈=[#]；a=当前 Token
-循环：
-    action=ACTION[状态栈顶,a]
-    若 sj：压 a 和 j，取下一 Token
-    若 rk：取规则 A→β，弹 |β| 对符号/状态
-           j=GOTO[新的状态栈顶,A]；压 A 和 j
-    若 acc：接受（不应仍有未处理普通 Token）
-    若 Error：报告当前位置与状态允许的 Token
-</code></pre>
-<p>只识别合法性时可只保留状态栈，符号由转换隐含；若要构树或执行语义动作，则还要维护相关值。课件同时画两个栈是清楚的教学表示，不能因此断言所有实现都必须保存独立符号栈。</p>
+<h3>5.3 按表执行的栈操作</h3>
+<p>下面对照课件 11 第 27、29—31 页，归纳各动作怎样更新栈与输入：</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>查得动作</th>
+<th>状态与符号怎样变化</th>
+<th>输入是否前进</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>sj</td>
+<td>压入当前 Token 和状态 j</td>
+<td>取下一 Token</td>
+</tr>
+<tr>
+<td>rk：A→β</td>
+<td>弹出 |β| 个符号和同样多的状态；按弹后栈顶查 GOTO，压 A 与新状态</td>
+<td>不前进</td>
+</tr>
+<tr>
+<td>acc</td>
+<td>按增广开始符和结束记号约定接受</td>
+<td>已无未处理普通 Token</td>
+</tr>
+<tr>
+<td>Error</td>
+<td>报告当前状态与输入不匹配</td>
+<td>是否继续由恢复策略决定</td>
+</tr>
+</tbody></table></div>
+<p>状态栈最初为 [0]，符号栈最初为 [#]。只识别合法性时可以只保存状态；若构树或执行语义动作，还需要对应属性。</p>
 <h3>5.4 出错与恢复</h3>
 <p>遇到空格动作可及时报错，指出实际 Token 和当前允许类别。错误恢复可跳过输入或弹状态寻找同步点，但不能把任意恢复后到 acc 的路径当成原程序完全合法。第三章所讲定位、恐慌恢复等原则仍适用。</p>
 <p><a id="ch04-s06"></a>
@@ -557,6 +520,7 @@ I8:
 <a id="六lr0-完整构表与冲突"></a>
 <a id="ref-LR0"></a></p>
 <h2>6. LR(0) 完整构表与冲突</h2>
+<p>下面将项目集、分析表与输入轨迹放在同一道课件题中核对。若同一个表格需要填两个不同动作，就说明仅靠当前项目进度还不能作唯一决策。</p>
 <h3>6.1 简化表达式练习</h3>
 <p>课件文法为 <code>E→E+T|T、T→id|(E)</code>。只有加法与括号，不是同时有加乘的常见文法。它的完成项目状态没有同时要求移入的终结符边，因此是 LR(0)。不能凭“表达式文法一般不是 LR(0)”直接下结论。</p>
 <p>本题规则编号：</p>
@@ -566,7 +530,7 @@ I8:
 (3) T → id
 (4) T → ( E )
 </code></pre>
-<p>全部项目集（同一项目的展望符合写成集合）：</p>
+<p>全部项目集：</p>
 <pre><code class="language-text">I0:
   S&#39; → · E
   E → · E + T
@@ -772,7 +736,7 @@ I8:
 (4) B → e
 (5) B → d B
 </code></pre>
-<p>全部项目集（同一项目的展望符合写成集合）：</p>
+<p>全部项目集：</p>
 <pre><code class="language-text">I0:
   S&#39; → · S
   S → · a A b B
@@ -1056,7 +1020,7 @@ I10:
 (2) A → B c
 (3) B → b
 </code></pre>
-<p>全部项目集（同一项目的展望符合写成集合）：</p>
+<p>全部项目集：</p>
 <pre><code class="language-text">I0:
   S&#39; → · S
   S → · a A d
@@ -1247,9 +1211,9 @@ I7:
 <p><a id="ch04-s07"></a>
 <a id="slr1用-follow-限制归约"></a>
 <a id="七slr1用-follow-限制归约"></a>
-<a id="ref-SLR"></a>
-<a id="ref-LR1"></a></p>
+<a id="ref-SLR"></a></p>
 <h2>7. SLR(1)：用 FOLLOW 限制归约</h2>
+<p>前面的乘法例在 * 上既要求移入又要求归约，但已完成的 T 在该文法中并不能后接 *。利用这种后继信息，可以删去不适用的归约格；SLR 就是在 LR(0) 状态机上作这一限制。</p>
 <h3>7.1 相同状态机，更小的归约范围</h3>
 <p><strong>SLR(1)</strong> 使用 LR(0) 项目集与转换，但完成项目 A→β· 只在 FOLLOW(A) 列填归约。FOLLOW 收集某非终结符在所有文法位置上可能遇到的后继；开始符加入 #，不能忘记结束列。</p>
 <p>移入、GOTO 和增广接受与 LR(0) 相同。它不是遇到冲突以后临时随便挑动作，而是用明确规则重新限定全表的归约格。</p>
@@ -1263,7 +1227,7 @@ I7:
 (3) T → F * T
 (4) F → a
 </code></pre>
-<p>全部项目集（同一项目的展望符合写成集合）：</p>
+<p>全部项目集：</p>
 <pre><code class="language-text">I0:
   S&#39; → · M
   M → · T
@@ -1469,7 +1433,9 @@ B→d
 <p><a id="ch04-s08"></a>
 <a id="lr1给项目增加展望符"></a>
 <a id="八lr1给项目增加展望符"></a></p>
+<p><a id="ref-LR1"></a></p>
 <h2>8. LR(1)：给项目增加展望符</h2>
+<p>7.4 中同一个 B 出现在多个位置，全局 FOLLOW 把各处后继混在一起，仍可能产生不必要的冲突。LR(1) 为每个具体项目保存局部后继，使归约条件随当前上下文区分。</p>
 <h3>8.1 展望符解释的是完成后的后继</h3>
 <p><strong>LR(1) 项目</strong>是 <code>[A→α·β,a]</code>。a 是一个展望符，表示该位置上的 A 结构完整结束后允许跟随的 Token，不是圆点后紧接着必须移入的字符。</p>
 <p><code>[A→x·y,#]</code> 仍先等待 y，不能因为展望符是 # 就跳过 y。只有 <code>[A→xy·,#]</code> 完成后，# 才限定归约。合写 <code>{a,b}</code> 等于同一 LR(0) 项目配两个不同展望符，不是一次看两个 Token。</p>
@@ -1482,11 +1448,12 @@ B→d
 <p>判断规范 LR(1) 状态相同必须同时比较点位与展望符。只忽略展望符去重，已经是 LALR 合并的思路，不能再称完整规范 LR(1)。</p>
 <h3>8.4 LR(1) 构表</h3>
 <p>点后终结符 a 的 GO 边填移入；<code>[A→β·,a]</code> 只在 a 列填该归约；增广 <code>[S&#39;→S·,#]</code> 填 acc；非终结符边填 GOTO。归约范围由项目的局部展望符提供，不用全局 FOLLOW 代替。</p>
-<p>SLR 失败备注例中读初始 d 后的完成项为 <code>[A→d·,b]</code> 和 <code>[B→d·,a]</code>，a 归约 B、b 归约 A，互不冲突。语义相同的非终结符不同出现，被具体项目上下文区分。</p>
+<p>SLR 失败备注例中读初始 d 后的完成项为 <code>[A→d·,b]</code> 和 <code>[B→d·,a]</code>，a 归约 B、b 归约 A，互不冲突。同一个非终结符的不同出现，由具体项目上下文区分。</p>
 <p><a id="ch04-s09"></a>
 <a id="lr1-完整例题与空产生式"></a>
 <a id="九lr1-完整例题与空产生式"></a></p>
 <h2>9. LR(1) 完整例题与空产生式</h2>
+<p>下面用两个课件文法落实局部展望的计算：先比较两个相同 B 的不同出现，再观察空规则如何不读输入、不弹右部而完成归约。</p>
 <h3>9.1 <code>Z→BB、B→aB|b</code></h3>
 <p>B 生成 a*b，Z 生成两个这种片段，即 <code>a*ba*b</code>。初态中的第一个 B 后有 B，FIRST(B#)={a,b}；识别完第一个 B 后，第二个 B 位于尾部，展望符为 #。这解释了相同 B 项目为什么出现不同展望符版本。</p>
 <p>本题规则编号：</p>
@@ -1495,7 +1462,7 @@ B→d
 (2) B → a B
 (3) B → b
 </code></pre>
-<p>全部项目集（同一项目的展望符合写成集合）：</p>
+<p>全部项目集：</p>
 <pre><code class="language-text">I0:
   S&#39; → · Z , {#}
   Z → · B B , {#}
@@ -1712,7 +1679,7 @@ I9:
 (3) A → a A
 (4) A → b
 </code></pre>
-<p>全部项目集（同一项目的展望符合写成集合）：</p>
+<p>全部项目集：</p>
 <pre><code class="language-text">I0:
   S&#39; → · S , {#}
   S → · A S , {#}
@@ -1908,7 +1875,7 @@ M→a | (L
 L→Ma)
 </code></pre>
 <p>M→(L 的右部只有左括号与 L；右括号在 L→Ma) 中。不要为了习惯“括号应成对”把规则悄悄改成 M→(L)。句子 b(aa)b 的内部 M 先生成 (L，再由 L 生成 Ma)，其中 M→a。</p>
-<p>课件未统一增广的图有 16 状态，同心组是 4/9、5/11、6/12、7/13、8/14、10/15，合并为 10 状态。本资料加统一增广后有额外开始结构，具体编号与计数见计算结果。</p>
+<p>课件未统一增广的图有 16 状态，同心组是 4/9、5/11、6/12、7/13、8/14、10/15，合并为 10 状态。加上统一增广规则后，规范 LR(1) 为 17 状态，LALR(1) 为 11 状态；项目及转换如下。</p>
 <p>本题规则编号：</p>
 <pre><code class="language-text">(0) S&#39; → Z
 (1) Z → b M b
@@ -1916,7 +1883,7 @@ L→Ma)
 (3) M → ( L
 (4) L → M a )
 </code></pre>
-<p>全部项目集（同一项目的展望符合写成集合）：</p>
+<p>全部项目集：</p>
 <pre><code class="language-text">I0:
   S&#39; → · Z , {#}
   Z → · b M b , {#}
@@ -2178,6 +2145,7 @@ B→e
 <a id="十一课件判定练习"></a>
 <a id="课件判定练习"></a></p>
 <h2>11. 课件判定练习</h2>
+<p>判断文法属于哪一类，需要给出该方法下的证据。下面一题用具体冲突排除 SLR，再检查合并表；另一题直接在 LR(1) 初态找到竞争动作。</p>
 <h3>11.1 <code>S→AaB|B、A→aB|b、B→A</code></h3>
 <p>FOLLOW(S)={#}，FOLLOW(A)=FOLLOW(B)={a,#}。LR(0) 的一个状态有 <code>S→A·aB</code> 与 <code>B→A·</code>，a 上移入与 FOLLOW(B) 所要求的归约冲突，所以不是 SLR(1)。</p>
 <p>规范 LR(1) 在对应外层状态，B→A· 的展望只有 #，a 上仅移入；其他同心状态合并后也没有把这个外层冲突引回。统一增广计算得到 14 个规范 LR(1) 状态、10 个 LALR 状态，LALR 表单值，因此是 LALR(1)。</p>
@@ -2189,7 +2157,7 @@ B→e
 (4) A → b
 (5) B → A
 </code></pre>
-<p>全部项目集（同一项目的展望符合写成集合）：</p>
+<p>全部项目集：</p>
 <pre><code class="language-text">I0:
   S&#39; → · S , {#}
   S → · A a B , {#}
@@ -2395,7 +2363,7 @@ I9:
 <h2>12. 综合应用：历年题规范 LR(1) 的完整构造</h2><div class="stepper" aria-label="分步图解"><h3>(a;a)的LR(1)分析轨迹</h3><p class="fig-intro">使用正文13状态表，状态从0起。归约弹右部长度后查GOTO，输入不前进。</p><div class="progress-track" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div><div class="step-tools"><button id="step-prev">上一步</button><label for="step-range">推导步骤</label><input id="step-range" type="range" min="0" max="10" value="0"><button id="step-next">下一步</button><span id="step-count" class="step-count"></span></div><div id="step-panel" class="step-card" aria-live="polite"></div><details><summary>完整轨迹（适合打印与连续核对）</summary><div class="table-scroll"><table><thead><tr><th>状态栈</th><th>符号栈</th><th>剩余输入</th><th>本步动作</th><th>转向状态</th></tr></thead><tbody><tr><td>0</td><td>#</td><td>( a ; a ) #</td><td>s1</td><td>1</td></tr><tr><td>0,1</td><td># (</td><td>a ; a ) #</td><td>s5</td><td>5</td></tr><tr><td>0,1,5</td><td># ( a</td><td>; a ) #</td><td>r1</td><td>6</td></tr><tr><td>0,1,6</td><td># ( S</td><td>; a ) #</td><td>r4</td><td>7</td></tr><tr><td>0,1,7</td><td># ( T</td><td>; a ) #</td><td>s10</td><td>10</td></tr><tr><td>0,1,7,10</td><td># ( T ;</td><td>a ) #</td><td>s5</td><td>5</td></tr><tr><td>0,1,7,10,5</td><td># ( T ; a</td><td>) #</td><td>r1</td><td>12</td></tr><tr><td>0,1,7,10,12</td><td># ( T ; S</td><td>) #</td><td>r3</td><td>7</td></tr><tr><td>0,1,7</td><td># ( T</td><td>) #</td><td>s9</td><td>9</td></tr><tr><td>0,1,7,9</td><td># ( T )</td><td>#</td><td>r2</td><td>3</td></tr><tr><td>0,3</td><td># S</td><td>#</td><td>acc</td><td>—</td></tr></tbody></table></div></details></div>
 <p>完整构表比只模拟一个串多一步关键要求：所有可达状态都必须纳入，全部动作格都要检查冲突。下面从原题规则重新构造13个规范LR(1)状态，再用同一编号给出表和输入分析。</p>
 <h3>12.1 原题文法、编号与初态闭包</h3>
-<p>来源：期末题 PDF 第 3—4 页第五题。原题状态栈从 1 起，本资料统一从 0 起；比较时按项目内容对应。</p>
+<p>例题取自期末题第五题。本例初态编号为 0；状态编号只作标记，判断应依据项目内容与转换。</p>
 <pre><code class="language-text">(0) S&#39; → S
 (1) S → a
 (2) S → ( T )
@@ -2680,10 +2648,9 @@ I12:
 </tr>
 </tbody></table></div>
 <p>先把第一个 a 归约为 S，再用 T→S 建立列表；移入分号后识别第二个 S，按 T→T;S 合成更长列表；最后 (T) 归约为 S。归约不消费输入，完成且头符为 # 才接受。</p>
-<p>该表由本次独立程序构造，全部可达状态无冲突，输入模拟接受；这项核验限于此文法和构造，不是教师标准答案。</p>
 <p><a id="ch04-s13"></a>
 <a id="课件例题回查与知识路线"></a></p>
-<h2>13. 课件例题回查与知识路线</h2>
+<h2>13. 知识联系与复习</h2>
 <h3>13.1 方法比较</h3>
 <div class="table-scroll"><table>
 <thead>
@@ -2735,95 +2702,6 @@ I12:
 <p><strong>10. LALR 合并不会新增任何冲突吗？</strong> 在原 LR(1) 无冲突前提下不新增移入/归约，但可能新增归约/归约。</p>
 <p><strong>11. LR 是否必须消除左递归？</strong> 本章 LR 可以处理许多左递归文法，不必照搬预测递归下降要求。</p>
 <p><strong>12. 一个输入成功能证明文法 LR(1) 吗？</strong> 不能，要核对完整可达项目集与全表单值性。</p>
-<h3>13.4 课件覆盖索引</h3>
-<div class="table-scroll"><table>
-<thead>
-<tr>
-<th>课件及页码/记录</th>
-<th>内容</th>
-<th>对应正文</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>11：2—5</td>
-<td>移入归约、表达式例、动作与 LR 名称</td>
-<td>第 1 节</td>
-</tr>
-<tr>
-<td>11：7—11</td>
-<td>规范句型/前缀、活前缀、派生定理、aAc</td>
-<td>第 2、4 节</td>
-</tr>
-<tr>
-<td>11：12—20</td>
-<td>项目、投影、闭包、GO、增广与构造</td>
-<td>第 3—4 节</td>
-</tr>
-<tr>
-<td>11：21—25</td>
-<td>项目类型、空规则、表达式与 aAbB 练习</td>
-<td>3.1、6.1—6.2</td>
-</tr>
-<tr>
-<td>11：26—31</td>
-<td>aAd、两栈、驱动、ACTION/GOTO</td>
-<td>第 5 节、6.3</td>
-</tr>
-<tr>
-<td>11：32—34</td>
-<td>冲突、乘法例、局限</td>
-<td>6.4</td>
-</tr>
-<tr>
-<td>12-1：2—10</td>
-<td>LR(0) 不足、SLR 条件/表/全过程</td>
-<td>7.1—7.3</td>
-</tr>
-<tr>
-<td>12-1：11—12及备注</td>
-<td>FOLLOW 精度问题、A/B 冲突扩展示例</td>
-<td>7.4、8.4</td>
-</tr>
-<tr>
-<td>12-1：13—21</td>
-<td>LR(1) 定义、运算、构造与构表</td>
-<td>第 8 节、9.3</td>
-</tr>
-<tr>
-<td>12-1：17—18、22—23</td>
-<td>BB 例的全部状态、表、abaab</td>
-<td>9.1</td>
-</tr>
-<tr>
-<td>12-1：24—26</td>
-<td>含 ε 文法构表与 abab</td>
-<td>9.2</td>
-</tr>
-<tr>
-<td>12-2：2—10</td>
-<td>bMb、同心、合并与分析</td>
-<td>10.1—10.3</td>
-</tr>
-<tr>
-<td>12-2：11—13</td>
-<td>合并冲突及 ae/be 反例</td>
-<td>10.4</td>
-</tr>
-<tr>
-<td>12-2：14—15</td>
-<td>驱动、方法及规模比较</td>
-<td>第 5 节、12.1</td>
-</tr>
-<tr>
-<td>12-2：16—20</td>
-<td>两道判定练习</td>
-<td>第 11 节</td>
-</tr>
-</tbody></table></div>
-<h3>13.5 澄清与补充范围</h3>
-<p>所有表采用同一增广规则，避免课件接受约定混用。简化表达式题确实是 LR(0)；“二义性状态”按表冲突解释；LR(0) 不利用输入作归约判断，与移入仍读头符明确区分。LR(1) 移入项仍按点后终结符移入，不是移入其外层展望符。</p>
-<p>课件关于状态数“严格更大”、LR 后续无人研究等说法不作为理论结论；正文只保留可从构造核对的性质。详细表与过程为课件例题的展开，不把有限输入验证当普遍等价证明。</p>
-<p>课件：<span title="来源文件保留在本地，未随学习资料上传">11：自底向上概述与 LR(0)（本地来源，未上传）</span>；<span title="来源文件保留在本地，未随学习资料上传">12-1：SLR(1) 与 LR(1)（本地来源，未上传）</span>；<span title="来源文件保留在本地，未随学习资料上传">12-2：LALR(1)（本地来源，未上传）</span>。</p>
 <p><a id="ch04-s14"></a>
 <a id="自测与答案一个完成项目何时允许归约"></a></p>
 <h2>14. 自测与答案：一个完成项目何时允许归约</h2>
@@ -2917,60 +2795,7 @@ I12:
 <a id="末尾速查表"></a></p>
 <h2>16. 末尾速查表</h2>
 <div class="ref-picker"><label for="quick-select">选择一个概念或方法，查看含义、形式、例子、结果和前提</label><select id="quick-select" class="quick-select"><option value="0">活前缀</option><option value="1">CLOSURE/GO</option><option value="2">LR(0)</option><option value="3">SLR(1)</option><option value="4">规范LR(1)</option><option value="5">LALR(1)</option><option value="6">归约驱动</option></select><div id="quick-panel" class="ref-panel" aria-live="polite"></div></div>
-<p><a id="verification"></a></p>
-<h2>整理与核对说明</h2>
-<p>本章重新读取现存课件提取文字与PPTX讲者备注，对照旧版讲解，保留详细定义、条件和原例题，按问题主线重排，新增综合推导、自测答案、排错和分类速查，修复旧来源路径。旧版末尾的课件页码对应保留供回查；正文新增的自拟题及理解补充不自动成为考试范围。</p>
-<p>主要课件：<span title="来源文件保留在本地，未随学习资料上传">11.语法分析_自底向上分析概述_LR0.pptx（本地来源，未上传）</span>、<span title="来源文件保留在本地，未随学习资料上传">12-1.语法分析_SLR(1)_LR(1).pptx（本地来源，未上传）</span>、<span title="来源文件保留在本地，未随学习资料上传">12-2.语法分析_LALR(1)方法.ppt（本地来源，未上传）</span></p>
-<p>相关作业解析：本章没有单独的现存作业解析文件；练习依据课件与本次自拟题。</p>
-<p>相关历年题：<span title="来源文件保留在本地，未随学习资料上传">2022级期末题（本地来源，未上传）</span>。PDF实际题头为2024—2025学年第一学期、考试日2024-12-07，“22级”指学生年级，不能误说考试发生在2022年。</p>
-<div class="table-scroll"><table>
-<thead>
-<tr>
-<th>内容</th>
-<th>已核实的事实</th>
-<th>不确定或可能出错的部分</th>
-<th>原因</th>
-<th>进一步核实方法</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>课件覆盖</td>
-<td>对照本项目本章课件提取正文/备注的主题与旧版索引，源文件路径存在</td>
-<td>纯图中个别未明确边、布局与原图美观不在文字核验范围</td>
-<td>PowerPoint COM启动失败；二进制PPT图形关系不由文本顺序完整保留</td>
-<td>对照原课件图页；未确认处在正文保留限定，不凭空补边</td>
-</tr>
-<tr>
-<td>推导与计算</td>
-<td>本章给出前提、规则、步骤和结果；程序检查的具体对象另列于<a href="10_%E6%9D%A5%E6%BA%90%E8%A6%86%E7%9B%96%E4%B8%8E%E6%A0%B8%E5%AF%B9%E6%8A%A5%E5%91%8A.html">总核对报告</a></td>
-<td>其他教学伪代码未在真实编译器/ABI中运行</td>
-<td>源语言和目标机为课程抽象</td>
-<td>选定真实实现后核对语法、布局与运行行为</td>
-</tr>
-<tr>
-<td>历年/作业解答</td>
-<td>已核对题意和相关理论规则，本次解答标明补充、改写与假设</td>
-<td>未取得教师标准答案与歧义题判分口径</td>
-<td>项目只提供题目和已有学习解析</td>
-<td>请教师确认歧义与标准答案，必要时重算</td>
-</tr>
-<tr>
-<td>考试范围/课程安排</td>
-<td>只转述课件记载</td>
-<td>本学期是否更改、补充算法是否考查</td>
-<td>未提供最新通知</td>
-<td>按教师最新课程通知确认</td>
-</tr>
-<tr>
-<td>两种格式</td>
-<td>HTML由当前Markdown正文生成，离线分组目录、图解、速查一致</td>
-<td>浏览器以外的软件排版可能不同</td>
-<td>阅读器实现与字号设置不同</td>
-<td>优先用本章HTML或常规Markdown阅读器</td>
-</tr>
-</tbody></table></div>
-<p>更详细的来源覆盖矩阵、可复算的检查记录与交付限制见<a href="10_%E6%9D%A5%E6%BA%90%E8%A6%86%E7%9B%96%E4%B8%8E%E6%A0%B8%E5%AF%B9%E6%8A%A5%E5%91%8A.html">来源覆盖与核对报告</a>。</p>
-</article><div class="chapter-links"><a href="03_语法分析_自顶向下方法.html">← 第3章 语法分析：自顶向下分析方法</a><a href="05_语义分析与符号表.html">第5章 语义分析和符号表 →</a></div><p class="foot">编译原理学习资料 · 整理于2026-10-13 · 请结合正文条件使用结论</p></main></div><script type="application/json" id="diagram-data">{"title":"(a;a)的LR(1)分析轨迹","premise":"使用正文13状态表，状态从0起。归约弹右部长度后查GOTO，输入不前进。","fields":["状态栈","符号栈","剩余输入","本步动作","转向状态"],"rows":[["0","#","( a ; a ) #","s1","1"],["0,1","# (","a ; a ) #","s5","5"],["0,1,5","# ( a","; a ) #","r1","6"],["0,1,6","# ( S","; a ) #","r4","7"],["0,1,7","# ( T","; a ) #","s10","10"],["0,1,7,10","# ( T ;","a ) #","s5","5"],["0,1,7,10,5","# ( T ; a",") #","r1","12"],["0,1,7,10,12","# ( T ; S",") #","r3","7"],["0,1,7","# ( T",") #","s9","9"],["0,1,7,9","# ( T )","#","r2","3"],["0,3","# S","#","acc","—"]]}</script><script type="application/json" id="quick-data">[{"name":"活前缀","kind":"分析栈的结构约束","meaning":"保证没有越过句柄右端","form":"最右句型的合法前缀","notice":"右部匹配不必为当前句柄；","example":"adbb先归约A再读c","link":"\u003ca href=\"#ref-%E5%89%8D%E7%BC%80\">规范活前缀\u003c/a>"},{"name":"CLOSURE/GO","kind":"构造运算","meaning":"补等待项并推进状态","form":"GO(I,X)=CLOSURE(投影(I,X))","notice":"点后为非终结符才补其规则；","example":"等A补A→·dbb与·b","link":"\u003ca href=\"#ref-%E8%BF%90%E7%AE%97\">三个运算\u003c/a>"},{"name":"LR(0)","kind":"LR构表方法","meaning":"仅靠项目进度归约","form":"完成项归约填全部输入列","notice":"移入仍读当前输入；","example":"A→x·与·a竞争","link":"\u003ca href=\"#ref-LR0\">LR(0)构表\u003c/a>"},{"name":"SLR(1)","kind":"LR构表方法","meaning":"以全局后继限制归约","form":"仅FOLLOW(A)列填A归约","notice":"全局信息可能过宽；","example":"FOLLOW(A)={#}避开a移入","link":"\u003ca href=\"#ref-SLR\">SLR\u003c/a>"},{"name":"规范LR(1)","kind":"LR构表方法","meaning":"区分局部语法上下文","form":"[A→α·β,a]，闭包用FIRST(βa)","notice":"展望是A完成后继；","example":"FIRST(Cb)={c,b}","link":"\u003ca href=\"#ref-LR1\">LR(1)\u003c/a>"},{"name":"LALR(1)","kind":"状态压缩方法","meaning":"合并同心状态减少表","form":"同心并展望、映射全部GO","notice":"合后查归约冲突；","example":"ae/be两态合出c/d双归约","link":"\u003ca href=\"#ref-LALR\">LALR\u003c/a>"},{"name":"归约驱动","kind":"分析执行动作","meaning":"撤销右部后压左部","form":"弹|β|对，查GOTO，压A","notice":"ε弹零项，输入不动；","example":"[0,3,6]归空得[0,3,6,8]","link":"\u003ca href=\"#ref-%E9%A9%B1%E5%8A%A8\">驱动\u003c/a>"}]</script><script>
+</article><div class="chapter-links"><a href="03_语法分析_自顶向下方法.html">← 第3章 语法分析：从文法规则到自顶向下分析器</a><a href="05_语义分析与符号表.html">第5章 语义分析和符号表 →</a></div></main></div><script type="application/json" id="diagram-data">{"title":"(a;a)的LR(1)分析轨迹","premise":"使用正文13状态表，状态从0起。归约弹右部长度后查GOTO，输入不前进。","fields":["状态栈","符号栈","剩余输入","本步动作","转向状态"],"rows":[["0","#","( a ; a ) #","s1","1"],["0,1","# (","a ; a ) #","s5","5"],["0,1,5","# ( a","; a ) #","r1","6"],["0,1,6","# ( S","; a ) #","r4","7"],["0,1,7","# ( T","; a ) #","s10","10"],["0,1,7,10","# ( T ;","a ) #","s5","5"],["0,1,7,10,5","# ( T ; a",") #","r1","12"],["0,1,7,10,12","# ( T ; S",") #","r3","7"],["0,1,7","# ( T",") #","s9","9"],["0,1,7,9","# ( T )","#","r2","3"],["0,3","# S","#","acc","—"]]}</script><script type="application/json" id="quick-data">[{"name":"活前缀","kind":"分析栈的结构约束","meaning":"保证没有越过句柄右端","form":"最右句型的合法前缀","notice":"右部匹配不必为当前句柄；","example":"adbb先归约A再读c","link":"\u003ca href=\"#ref-%E5%89%8D%E7%BC%80\">规范活前缀\u003c/a>"},{"name":"CLOSURE/GO","kind":"构造运算","meaning":"补等待项并推进状态","form":"GO(I,X)=CLOSURE(投影(I,X))","notice":"点后为非终结符才补其规则；","example":"等A补A→·dbb与·b","link":"\u003ca href=\"#ref-%E8%BF%90%E7%AE%97\">三个运算\u003c/a>"},{"name":"LR(0)","kind":"LR构表方法","meaning":"仅靠项目进度归约","form":"完成项归约填全部输入列","notice":"移入仍读当前输入；","example":"A→x·与B→x·a在a上竞争","link":"\u003ca href=\"#ref-LR0\">LR(0)构表\u003c/a>"},{"name":"SLR(1)","kind":"LR构表方法","meaning":"以全局后继限制归约","form":"仅FOLLOW(A)列填A归约","notice":"全局信息可能过宽；","example":"FOLLOW(A)={#}避开a移入","link":"\u003ca href=\"#ref-SLR\">SLR\u003c/a>"},{"name":"规范LR(1)","kind":"LR构表方法","meaning":"区分局部语法上下文","form":"[A→α·β,a]，闭包用FIRST(βa)","notice":"展望是A完成后继；","example":"FIRST(Cb)={c,b}","link":"\u003ca href=\"#ref-LR1\">LR(1)\u003c/a>"},{"name":"LALR(1)","kind":"状态压缩方法","meaning":"合并同心状态减少表","form":"同心并展望、映射全部GO","notice":"合后查归约冲突；","example":"ae/be两态合出c/d双归约","link":"\u003ca href=\"#ref-LALR\">LALR\u003c/a>"},{"name":"归约驱动","kind":"分析执行动作","meaning":"撤销右部后压左部","form":"弹|β|对，查GOTO，压A","notice":"ε弹零项，输入不动；","example":"[0,3,6]归空得[0,3,6,8]","link":"\u003ca href=\"#ref-%E9%A9%B1%E5%8A%A8\">驱动\u003c/a>"}]</script><script>
 const links=[...document.querySelectorAll('nav a[href^="#"]')];
 const headings=links.map(a=>document.getElementById(a.hash.slice(1))).filter(Boolean);
 let scheduled=false;

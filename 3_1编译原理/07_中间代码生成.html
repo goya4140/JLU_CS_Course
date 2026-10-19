@@ -1,15 +1,6 @@
-<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="source-sha256" content="ca14e51e2c14e83c9b92f4f61df172af80209a3dd8aa758783a6800b28a48154"><title>第7章 中间代码生成 · 学习资料</title><style>:root{--paper:#fbfaf7;--surface:#fff;--ink:#253341;--muted:#5c6b75;--line:#d5dfdd;--teal:#156b62;--soft:#edf6f1;--font:17px;--scroll-offset:90px}*{box-sizing:border-box}html{scroll-behavior:auto;scroll-padding-top:var(--scroll-offset)}body{margin:0;background:var(--paper);color:var(--ink);font-family:'Microsoft YaHei','PingFang SC',system-ui,sans-serif;font-size:var(--font);line-height:1.85}a{color:var(--teal);text-underline-offset:3px}a:hover{color:#173f75}button,select{font:inherit}button{cursor:pointer}button,select{border:1px solid #b9cbc5;border-radius:7px;padding:7px 11px;background:#fff;color:var(--ink)}button:hover{background:var(--soft)}button:focus-visible,select:focus-visible,a:focus-visible{outline:3px solid #81cbb8;outline-offset:3px}.skip{position:absolute;top:-80px;left:12px;z-index:50;background:#fff;padding:8px}.skip:focus{top:8px}.sidebar{position:fixed;inset:0 auto 0 0;width:270px;padding:23px 18px;background:#f0f4f0;border-right:1px solid var(--line);overflow:auto;z-index:30;overscroll-behavior:contain}.brand{font-size:21px;font-weight:700}.brand small{display:block;font-size:12px;font-weight:400;color:var(--muted)}.sidebar nav a{display:block;color:var(--ink);text-decoration:none;padding:8px 10px;margin:3px 0;border-radius:6px;font-size:14px;line-height:1.6}.sidebar nav a:hover{background:#dcebe3}.sidebar nav a.active,.sidebar nav a.active:hover{background:var(--teal);color:white}.sidebar select{width:100%;font-size:13px}.nav-tip{font-size:12px;color:var(--muted);margin:14px 0}.shell{margin-left:270px;overflow-anchor:none}.topbar{position:sticky;top:0;background:rgba(251,250,247,.98);padding:12px 26px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:12px;z-index:20}.topbar-title{font-size:13px;color:var(--muted)}.toolbar{display:flex;gap:7px;flex-wrap:wrap}.toolbar button{font-size:13px}.menu{display:none}main{max-width:1120px;margin:auto;padding:30px 44px 80px;min-width:0}h1{font-size:32px;line-height:1.5;margin:14px 0 25px}h2{font-size:25px;line-height:1.5;padding:0 0 11px;border-bottom:1px solid var(--line);margin:44px 0 23px}h3{font-size:21px;line-height:1.55;margin:29px 0 16px}h4{font-size:18px;line-height:1.6;margin:22px 0 13px}p{margin:14px 0}li{margin:7px 0}ul,ol{padding-left:1.6em}blockquote{margin:20px 0;padding:5px 18px;border-left:3px solid #a8c6bb;background:#f0f3ef;color:#53655e;font-size:14px}blockquote p{margin:8px 0}hr{border:0;border-top:1px solid var(--line);margin:32px 0}code{font-family:Consolas,'Cascadia Code',monospace;font-size:.9em;background:#eef1ed;padding:2px 5px;border-radius:4px;overflow-wrap:anywhere}pre{background:#18313d;color:#e8f0f0;border-radius:9px;padding:19px;line-height:1.65;overflow-x:auto;max-width:100%;font-size:14px}pre code{background:none;padding:0;color:inherit;white-space:pre;overflow-wrap:normal}table{border-collapse:collapse;width:100%;font-size:15px}th{background:#eaf3ee;text-align:left}td,th{padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:top}tbody tr:nth-child(even){background:#f6f9f6}.table-scroll{overflow-x:auto;border:1px solid var(--line);border-radius:8px;margin:17px 0;max-width:100%}.table-scroll td{min-width:80px}.source-note{font-size:13px;color:var(--muted)}.learning-figure{padding:23px;border:1px solid #b4cfc2;border-radius:12px;background:var(--soft);margin:25px 0}.learning-figure h4{margin:0 0 8px;font-size:20px}.fig-intro{font-size:14px;color:var(--muted)}.learning-figure label{display:block;margin-top:15px;font-size:14px;font-weight:700}.learning-figure select{margin-top:7px;width:100%;min-height:44px;font-size:15px}.fig-output{margin-top:16px}.flow{display:flex;gap:10px;align-items:stretch;flex-wrap:wrap}.flow-node{flex:1 1 150px;border:1px solid #bfd2c9;border-radius:8px;background:#fff;padding:13px;min-width:0}.flow-node strong{display:block;color:var(--teal)}.flow-node p{font-size:14px;margin:8px 0}.flow-arrow{align-self:center;color:var(--teal);font-size:24px}.fig-note{padding:10px 14px;border-left:3px solid var(--teal);background:#fff;font-size:14px;margin:15px 0 0}.svg-scroll{overflow-x:auto;max-width:100%}.svg-scroll svg{display:block;max-width:100%;height:auto}.ref-area{min-height:calc(100vh - var(--scroll-offset));margin-top:24px}.ref-picker{padding:22px;border-radius:12px;background:var(--soft);border:1px solid #b4cfc2}.ref-picker label{display:block;font-weight:700;margin-bottom:10px}.ref-picker select{width:100%;font-size:15px;min-height:46px}.ref-panel{margin-top:18px;background:#fff;border:1px solid var(--line);padding:20px;border-radius:9px}.ref-panel[hidden]{display:none}.ref-panel h3{margin:0;font-size:24px}.ref-panel h4{font-size:16px;margin:18px 0 8px}.ref-kind{font-size:13px;color:var(--teal)}.result{padding:10px 15px;border-left:3px solid var(--teal);background:var(--soft)}.copy{display:block;margin:5px 0 0 auto;font-size:12px;padding:4px 8px}.code-wrap{margin:20px 0}.code-wrap pre{margin-bottom:0}.foot{font-size:13px;color:var(--muted);border-top:1px solid var(--line);padding-top:23px;margin-top:30px}details{border:1px solid var(--line);padding:12px;border-radius:8px;margin:15px 0}summary{cursor:pointer;font-weight:700}@media(max-width:900px){.sidebar{transform:translateX(-100%)}body.nav-open .sidebar{transform:translateX(0);top:60px}.shell{margin-left:0}.menu{display:inline-block}.topbar-title{display:none}.topbar{padding:10px 14px}main{padding:23px 18px 65px}h1{font-size:27px}h2{font-size:23px}.learning-figure,.ref-picker{padding:16px}.flow{flex-direction:column}.flow-arrow{transform:rotate(90deg)}.ref-panel{padding:15px}}@media print{.sidebar,.topbar,.toolbar,.copy,.skip{display:none!important}.shell{margin:0}main{padding:0;max-width:none}body{background:#fff;font-size:11pt}.ref-area{min-height:0}.ref-picker select{display:none}pre{white-space:pre-wrap;background:#f3f5f4;color:#111}.learning-figure{break-inside:avoid}.table-scroll{overflow:visible}a{color:inherit}}@media print{.svg-scroll{overflow:visible}.svg-scroll svg{min-width:0!important;width:100%!important;height:auto!important}}.sidebar{width:266px;background:#f1f4f1;padding:27px 19px;overflow-y:auto}.brand{font-size:21px;font-weight:700;letter-spacing:.03em;margin-bottom:5px}.brand small{font-size:12px;font-weight:400;color:var(--muted);letter-spacing:.1em}.sidebar .sub{font-size:13px;color:var(--muted);margin:5px 0 21px}.sidebar nav a{font-size:14px;line-height:1.5;padding:9px 11px;margin:3px 0;border-radius:6px}.sidebar nav a:hover{background:#e0ece6;color:#174d43}.sidebar nav a.active,.sidebar nav a.active:hover{background:var(--teal);color:#fff}.nav-group{font-size:12px;color:var(--muted);margin:18px 11px 6px;letter-spacing:.08em}.sidebar-footer{margin-top:24px;font-size:12px;color:var(--muted)}.shell{margin-left:266px}@media(max-width:900px){.shell{margin-left:0}}
-h2,h3,h4,[id]{scroll-margin-top:0}.stepper{background:#edf6f1;border:1px solid #b4cfc2;border-radius:12px;padding:22px;margin:24px 0}.stepper h3{margin:0 0 12px}.step-tools{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:15px 0}.step-tools input{width:200px;min-height:40px}.step-card{background:white;padding:18px;border-radius:8px;border:1px solid var(--line)}.step-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}.step-field{border:1px solid #d6e5dd;padding:12px;border-radius:7px;overflow-wrap:anywhere}.step-field strong{display:block;font-size:13px;color:var(--teal)}.step-field p{margin:7px 0 0}.progress-track{display:flex;gap:4px;margin:10px 0}.progress-track span{height:5px;flex:1;border-radius:3px;background:#c8d8d0}.progress-track span.done{background:var(--teal)}.step-count{font-variant-numeric:tabular-nums}.chapter-links{display:flex;gap:15px;justify-content:space-between;border-top:1px solid var(--line);padding-top:25px;margin-top:35px}.ref-area{min-height:0}.ref-panel h4{margin:12px 0 4px}.reading-meta{font-size:13px;color:var(--muted)}summary:focus-visible,input:focus-visible{outline:3px solid #81cbb8;outline-offset:3px}button:disabled{opacity:.5;cursor:default}.quick-select{width:100%}.overview-card{border:1px solid var(--line);background:white;border-radius:9px;padding:18px;margin:14px 0}.overview-card h3{margin-top:0}.sidebar nav a.external{background:#e4eee7}.nav-shade{display:none}@media(max-width:900px){body.nav-open .nav-shade{display:block;position:fixed;inset:60px 0 0 266px;background:#25334155;z-index:25}.stepper{padding:15px}.step-tools input{width:150px}.step-grid{grid-template-columns:1fr}.sidebar{max-width:85vw}.step-field{padding:10px}}@media print{.step-tools,.progress-track,.chapter-links{display:none}.step-card{break-inside:avoid}body.nav-open .nav-shade{display:none}}main{overflow-x:clip}article{min-width:0;max-width:100%}.table-scroll,pre{contain:inline-size}p,li,h1,h2,h3,h4{overflow-wrap:anywhere}</style></head><body><a class="skip" href="#article">跳到正文</a><aside class="sidebar" aria-label="章节目录"><div class="brand"><small>COMPILER / CHAPTER 07</small>第7章 中间代码生成</div><p class="sub">完整讲解 · 分步推导 · 离线阅读</p><nav><a href="#navigation">学习导航</a><div class="nav-group">准备 · 表示与字段</div><a href="#ch07-s01">1. 为什么生成中间代码</a><a href="#ch07-s02">2. 记号与常见表示</a><a href="#ch07-s03">3. 四元式字段与操作码</a><div class="nav-group">基础 · 动作与属性</div><a href="#ch07-s04">4. 语法制导与统计 b 的完整例子</a><a href="#ch07-s05">5. 语义栈、类型检查与属性保存</a><a href="#ch07-s06">6. 表达式翻译</a><div class="nav-group">应用 · 数组与赋值</div><a href="#ch07-s07">7. 数组地址计算</a><a href="#ch07-s08">8. 下标的语法制导翻译</a><a href="#ch07-s09">9. 赋值语句</a><div class="nav-group">组合 · 控制与调用</div><a href="#ch07-s10">10. 条件与循环语句</a><a href="#ch07-s11">11. 调用与过程函数声明</a><a href="#ch07-s12">12. 二维数组综合练习</a><div class="nav-group">综合应用 · 推导与同类检查</div><a href="#ch07-s13">13. 综合应用：历年题的函数、传参、二维数组与循环一起翻译</a><div class="nav-group">练习与复习 · 回查、自测和速查</div><a href="#ch07-s14">14. 课件例题回查与知识路线</a><a href="#ch07-s15">15. 自测与答案</a><a href="#ch07-s16">16. 排错与复习</a><a href="#ch07-s17">17. 末尾速查表</a><div class="nav-group">来源与核对</div><a href="#verification">整理与核对说明</a><a class="external" href="00_学习导航.html">全课程学习导航</a></nav><div class="sidebar-footer">阶段分组 · 章节直接链接<br>原题、补充与未核实范围分别标注</div></aside><div class="nav-shade"></div><div class="shell"><header class="topbar"><span class="topbar-title">第7章 中间代码生成</span><div class="toolbar"><button id="menu" class="menu" aria-label="打开或收起目录" aria-expanded="false">目录</button><button data-font="-1" aria-label="减小正文字号">字号 −</button><button data-font="1" aria-label="增大正文字号">字号 ＋</button><button id="print">打印 / 保存 PDF</button></div></header><main><article id="article"><h1>第7章 中间代码生成：理解规则、推导过程与实际结果</h1>
-<blockquote>
-<p>整理依据：项目现存课件及讲者备注、旧版资料，并结合对应作业解析与历年题重新核对和整合。各类来源和未核实内容分别说明。</p>
-<p>适合读者：具备基础程序阅读能力；本章先解释新增术语，不默认已经掌握后续章的算法。</p>
-<p>范围说明：课件为主要依据。理解补充、自拟题、重建例图和独立计算均注明性质。课程教学机、单位与源语言规则有专门约定，不等同真实平台；未取得教师标准答案和最新考试范围。</p>
-</blockquote>
-<p>资料沿本章的问题主线推进：先认清输入、对象和条件，再理解规则如何组合，最后完整推导并独立自测。与后续章连接时，可回到<a href="00_%E5%AD%A6%E4%B9%A0%E5%AF%BC%E8%88%AA.html">全课程学习导航</a>。本章各例除明确标注连续推导外，均从各自所列初始条件开始，不能沿用上一例已改写的变量值。</p>
-<blockquote>
-<p>本章依据课件 15—17 重新编写，覆盖后缀式、AST/DAG、三元式/四元式、语法制导、语义栈、类型转换，以及表达式、下标、赋值、控制、调用和声明的翻译，包含课件综合练习。</p>
-<p>先理解四元式每个字段，再按“语法结构 → 属性准备 → 语义动作 → 生成代码”阅读。课件的 <code>[+]</code>、<code>[ ]</code> 与 AADD 在地址计算例中统一写为 AADD。地址临时量在普通运算中读所指值，在地址运算中使用地址本身；这一约定贯穿例题。</p>
-</blockquote>
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="source-sha256" content="a5a911e137aedd8136fcc4af74ea6cfac861f70017e5cb3763ebce35564ac15d"><title>第7章 中间代码生成 · 学习资料</title><style>:root{--paper:#fbfaf7;--surface:#fff;--ink:#253341;--muted:#5c6b75;--line:#d5dfdd;--teal:#156b62;--soft:#edf6f1;--font:17px;--scroll-offset:90px}*{box-sizing:border-box}html{scroll-behavior:auto;scroll-padding-top:var(--scroll-offset)}body{margin:0;background:var(--paper);color:var(--ink);font-family:'Microsoft YaHei','PingFang SC',system-ui,sans-serif;font-size:var(--font);line-height:1.85}a{color:var(--teal);text-underline-offset:3px}a:hover{color:#173f75}button,select{font:inherit}button{cursor:pointer}button,select{border:1px solid #b9cbc5;border-radius:7px;padding:7px 11px;background:#fff;color:var(--ink)}button:hover{background:var(--soft)}button:focus-visible,select:focus-visible,a:focus-visible{outline:3px solid #81cbb8;outline-offset:3px}.skip{position:absolute;top:-80px;left:12px;z-index:50;background:#fff;padding:8px}.skip:focus{top:8px}.sidebar{position:fixed;inset:0 auto 0 0;width:270px;padding:23px 18px;background:#f0f4f0;border-right:1px solid var(--line);overflow:auto;z-index:30;overscroll-behavior:contain}.brand{font-size:21px;font-weight:700}.brand small{display:block;font-size:12px;font-weight:400;color:var(--muted)}.sidebar nav a{display:block;color:var(--ink);text-decoration:none;padding:8px 10px;margin:3px 0;border-radius:6px;font-size:14px;line-height:1.6}.sidebar nav a:hover{background:#dcebe3}.sidebar nav a.active,.sidebar nav a.active:hover{background:var(--teal);color:white}.sidebar select{width:100%;font-size:13px}.nav-tip{font-size:12px;color:var(--muted);margin:14px 0}.shell{margin-left:270px;overflow-anchor:none}.topbar{position:sticky;top:0;background:rgba(251,250,247,.98);padding:12px 26px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:12px;z-index:20}.topbar-title{font-size:13px;color:var(--muted)}.toolbar{display:flex;gap:7px;flex-wrap:wrap}.toolbar button{font-size:13px}.menu{display:none}main{max-width:1120px;margin:auto;padding:30px 44px 80px;min-width:0}h1{font-size:32px;line-height:1.5;margin:14px 0 25px}h2{font-size:25px;line-height:1.5;padding:0 0 11px;border-bottom:1px solid var(--line);margin:44px 0 23px}h3{font-size:21px;line-height:1.55;margin:29px 0 16px}h4{font-size:18px;line-height:1.6;margin:22px 0 13px}p{margin:14px 0}li{margin:7px 0}ul,ol{padding-left:1.6em}blockquote{margin:20px 0;padding:5px 18px;border-left:3px solid #a8c6bb;background:#f0f3ef;color:#53655e;font-size:14px}blockquote p{margin:8px 0}hr{border:0;border-top:1px solid var(--line);margin:32px 0}code{font-family:Consolas,'Cascadia Code',monospace;font-size:.9em;background:#eef1ed;padding:2px 5px;border-radius:4px;overflow-wrap:anywhere}pre{background:#18313d;color:#e8f0f0;border-radius:9px;padding:19px;line-height:1.65;overflow-x:auto;max-width:100%;font-size:14px}pre code{background:none;padding:0;color:inherit;white-space:pre;overflow-wrap:normal}table{border-collapse:collapse;width:100%;font-size:15px}th{background:#eaf3ee;text-align:left}td,th{padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:top}tbody tr:nth-child(even){background:#f6f9f6}.table-scroll{overflow-x:auto;border:1px solid var(--line);border-radius:8px;margin:17px 0;max-width:100%}.table-scroll td{min-width:80px}.source-note{font-size:13px;color:var(--muted)}.learning-figure{padding:23px;border:1px solid #b4cfc2;border-radius:12px;background:var(--soft);margin:25px 0}.learning-figure h4{margin:0 0 8px;font-size:20px}.fig-intro{font-size:14px;color:var(--muted)}.learning-figure label{display:block;margin-top:15px;font-size:14px;font-weight:700}.learning-figure select{margin-top:7px;width:100%;min-height:44px;font-size:15px}.fig-output{margin-top:16px}.flow{display:flex;gap:10px;align-items:stretch;flex-wrap:wrap}.flow-node{flex:1 1 150px;border:1px solid #bfd2c9;border-radius:8px;background:#fff;padding:13px;min-width:0}.flow-node strong{display:block;color:var(--teal)}.flow-node p{font-size:14px;margin:8px 0}.flow-arrow{align-self:center;color:var(--teal);font-size:24px}.fig-note{padding:10px 14px;border-left:3px solid var(--teal);background:#fff;font-size:14px;margin:15px 0 0}.svg-scroll{overflow-x:auto;max-width:100%}.svg-scroll svg{display:block;max-width:100%;height:auto}.ref-area{min-height:calc(100vh - var(--scroll-offset));margin-top:24px}.ref-picker{padding:22px;border-radius:12px;background:var(--soft);border:1px solid #b4cfc2}.ref-picker label{display:block;font-weight:700;margin-bottom:10px}.ref-picker select{width:100%;font-size:15px;min-height:46px}.ref-panel{margin-top:18px;background:#fff;border:1px solid var(--line);padding:20px;border-radius:9px}.ref-panel[hidden]{display:none}.ref-panel h3{margin:0;font-size:24px}.ref-panel h4{font-size:16px;margin:18px 0 8px}.ref-kind{font-size:13px;color:var(--teal)}.result{padding:10px 15px;border-left:3px solid var(--teal);background:var(--soft)}.copy{display:block;margin:5px 0 0 auto;font-size:12px;padding:4px 8px}.code-wrap{margin:20px 0}.code-wrap pre{margin-bottom:0}.foot{font-size:13px;color:var(--muted);border-top:1px solid var(--line);padding-top:23px;margin-top:30px}details{border:1px solid var(--line);padding:12px;border-radius:8px;margin:15px 0}summary{cursor:pointer;font-weight:700}@media(max-width:900px){.sidebar{transform:translateX(-100%)}body.nav-open .sidebar{transform:translateX(0);top:60px}.shell{margin-left:0}.menu{display:inline-block}.topbar-title{display:none}.topbar{padding:10px 14px}main{padding:23px 18px 65px}h1{font-size:27px}h2{font-size:23px}.learning-figure,.ref-picker{padding:16px}.flow{flex-direction:column}.flow-arrow{transform:rotate(90deg)}.ref-panel{padding:15px}}@media print{.sidebar,.topbar,.toolbar,.copy,.skip{display:none!important}.shell{margin:0}main{padding:0;max-width:none}body{background:#fff;font-size:11pt}.ref-area{min-height:0}.ref-picker select{display:none}pre{white-space:pre-wrap;background:#f3f5f4;color:#111}.learning-figure{break-inside:avoid}.table-scroll{overflow:visible}a{color:inherit}}@media print{.svg-scroll{overflow:visible}.svg-scroll svg{min-width:0!important;width:100%!important;height:auto!important}}.sidebar{width:266px;background:#f1f4f1;padding:27px 19px;overflow-y:auto}.brand{font-size:21px;font-weight:700;letter-spacing:.03em;margin-bottom:5px}.brand small{font-size:12px;font-weight:400;color:var(--muted);letter-spacing:.1em}.sidebar .sub{font-size:13px;color:var(--muted);margin:5px 0 21px}.sidebar nav a{font-size:14px;line-height:1.5;padding:9px 11px;margin:3px 0;border-radius:6px}.sidebar nav a:hover{background:#e0ece6;color:#174d43}.sidebar nav a.active,.sidebar nav a.active:hover{background:var(--teal);color:#fff}.nav-group{font-size:12px;color:var(--muted);margin:18px 11px 6px;letter-spacing:.08em}.sidebar-footer{margin-top:24px;font-size:12px;color:var(--muted)}.shell{margin-left:266px}@media(max-width:900px){.shell{margin-left:0}}
+h2,h3,h4,[id]{scroll-margin-top:0}.stepper{background:#edf6f1;border:1px solid #b4cfc2;border-radius:12px;padding:22px;margin:24px 0}.stepper h3{margin:0 0 12px}.step-tools{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:15px 0}.step-tools input{width:200px;min-height:40px}.step-card{background:white;padding:18px;border-radius:8px;border:1px solid var(--line)}.step-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}.step-field{border:1px solid #d6e5dd;padding:12px;border-radius:7px;overflow-wrap:anywhere}.step-field strong{display:block;font-size:13px;color:var(--teal)}.step-field p{margin:7px 0 0}.progress-track{display:flex;gap:4px;margin:10px 0}.progress-track span{height:5px;flex:1;border-radius:3px;background:#c8d8d0}.progress-track span.done{background:var(--teal)}.step-count{font-variant-numeric:tabular-nums}.chapter-links{display:flex;gap:15px;justify-content:space-between;border-top:1px solid var(--line);padding-top:25px;margin-top:35px}.ref-area{min-height:0}.ref-panel h4{margin:12px 0 4px}.reading-meta{font-size:13px;color:var(--muted)}summary:focus-visible,input:focus-visible{outline:3px solid #81cbb8;outline-offset:3px}button:disabled{opacity:.5;cursor:default}.quick-select{width:100%}.overview-card{border:1px solid var(--line);background:white;border-radius:9px;padding:18px;margin:14px 0}.overview-card h3{margin-top:0}.sidebar nav a.external{background:#e4eee7}.nav-shade{display:none}@media(max-width:900px){body.nav-open .nav-shade{display:block;position:fixed;inset:60px 0 0 266px;background:#25334155;z-index:25}.stepper{padding:15px}.step-tools input{width:150px}.step-grid{grid-template-columns:1fr}.sidebar{max-width:85vw}.step-field{padding:10px}}@media print{.step-tools,.progress-track,.chapter-links{display:none}.step-card{break-inside:avoid}body.nav-open .nav-shade{display:none}}main{overflow-x:clip}article{min-width:0;max-width:100%}.table-scroll,pre{contain:inline-size}p,li,h1,h2,h3,h4{overflow-wrap:anywhere}</style></head><body><a class="skip" href="#article">跳到正文</a><aside class="sidebar" aria-label="章节目录"><div class="brand"><small>COMPILER / CHAPTER 07</small>第7章 中间代码生成</div><p class="sub">完整讲解 · 分步推导 · 离线阅读</p><nav><a href="#navigation">学习导航</a><div class="nav-group">准备 · 表示与字段</div><a href="#ch07-s01">1. 为什么生成中间代码</a><a href="#ch07-s02">2. 记号与常见表示</a><a href="#ch07-s03">3. 四元式字段与操作码</a><div class="nav-group">基础 · 动作与属性</div><a href="#ch07-s04">4. 语法制导与统计 b 的完整例子</a><a href="#ch07-s05">5. 语义栈、类型检查与属性保存</a><a href="#ch07-s06">6. 表达式翻译</a><div class="nav-group">应用 · 数组与赋值</div><a href="#ch07-s07">7. 数组地址计算</a><a href="#ch07-s08">8. 下标的语法制导翻译</a><a href="#ch07-s09">9. 赋值语句</a><div class="nav-group">组合 · 控制与调用</div><a href="#ch07-s10">10. 条件与循环语句</a><a href="#ch07-s11">11. 调用与过程函数声明</a><a href="#ch07-s12">12. 二维数组综合练习</a><div class="nav-group">综合应用 · 完整解题</div><a href="#ch07-s13">13. 综合应用：历年题的函数、传参、二维数组与循环一起翻译</a><div class="nav-group">练习与复习 · 回查、自测和速查</div><a href="#ch07-s14">14. 知识联系与复习</a><a href="#ch07-s15">15. 自测与答案</a><a href="#ch07-s16">16. 排错与复习</a><a href="#ch07-s17">17. 末尾速查表</a><div class="nav-group">全课程</div><a class="external" href="00_学习导航.html">全课程学习导航</a></nav><div class="sidebar-footer">先看问题与条件，再跟踪推导和例题</div></aside><div class="nav-shade"></div><div class="shell"><header class="topbar"><span class="topbar-title">第7章 中间代码生成</span><div class="toolbar"><button id="menu" class="menu" aria-label="打开或收起目录" aria-expanded="false">目录</button><button data-font="-1" aria-label="减小正文字号">字号 −</button><button data-font="1" aria-label="增大正文字号">字号 ＋</button><button id="print">打印 / 保存 PDF</button></div></header><main><article id="article"><h1>第7章 中间代码生成：怎样随语法结构生成四元式</h1>
+<p>理解了程序结构和类型之后，还要把表达式、数组访问、分支、循环与调用拆成清楚的小操作。本章使用语法动作和语义栈保存处理进度，逐步生成四元式，并核对每一步交出的值或地址。</p>
 <p><a id="navigation"></a></p>
 <h2>学习导航</h2>
 <div class="table-scroll"><table>
@@ -22,96 +13,41 @@ h2,h3,h4,[id]{scroll-margin-top:0}.stepper{background:#edf6f1;border:1px solid #
 </thead>
 <tbody><tr>
 <td>准备 · 表示与字段</td>
-<td>理解为什么生成中间代码，连接本阶段各方法的输入与输出。</td>
+<td>为什么使用 IR，常见表示与四元式各字段怎样理解？</td>
 <td><a href="#ch07-s01">1. 为什么生成中间代码</a>、<a href="#ch07-s02">2. 记号与常见表示</a>、<a href="#ch07-s03">3. 四元式字段与操作码</a></td>
 </tr>
 <tr>
 <td>基础 · 动作与属性</td>
-<td>理解语法制导与统计 b 的完整例子，连接本阶段各方法的输入与输出。</td>
+<td>语法分析怎样触发动作，如何保存属性并按类型生成表达式代码？</td>
 <td><a href="#ch07-s04">4. 语法制导与统计 b 的完整例子</a>、<a href="#ch07-s05">5. 语义栈、类型检查与属性保存</a>、<a href="#ch07-s06">6. 表达式翻译</a></td>
 </tr>
 <tr>
 <td>应用 · 数组与赋值</td>
-<td>理解数组地址计算，连接本阶段各方法的输入与输出。</td>
+<td>怎样逐维求地址，并区分赋值左位置与右值？</td>
 <td><a href="#ch07-s07">7. 数组地址计算</a>、<a href="#ch07-s08">8. 下标的语法制导翻译</a>、<a href="#ch07-s09">9. 赋值语句</a></td>
 </tr>
 <tr>
 <td>组合 · 控制与调用</td>
-<td>理解条件与循环语句，连接本阶段各方法的输入与输出。</td>
+<td>把条件、循环、调用与声明翻译接到表达式和数组处理中。</td>
 <td><a href="#ch07-s10">10. 条件与循环语句</a>、<a href="#ch07-s11">11. 调用与过程函数声明</a>、<a href="#ch07-s12">12. 二维数组综合练习</a></td>
 </tr>
 <tr>
-<td>综合应用 · 推导与同类检查</td>
-<td>理解综合应用：历年题的函数、传参、二维数组与循环一起翻译，连接本阶段各方法的输入与输出。</td>
+<td>综合应用 · 完整解题</td>
+<td>按同一字段约定翻译历年题，核对参数、帧大小、地址和值。</td>
 <td><a href="#ch07-s13">13. 综合应用：历年题的函数、传参、二维数组与循环一起翻译</a></td>
 </tr>
 <tr>
 <td>练习与复习 · 回查、自测和速查</td>
-<td>理解课件例题回查与知识路线，连接本阶段各方法的输入与输出。</td>
-<td><a href="#ch07-s14">14. 课件例题回查与知识路线</a>、<a href="#ch07-s15">15. 自测与答案</a>、<a href="#ch07-s16">16. 排错与复习</a>、<a href="#ch07-s17">17. 末尾速查表</a></td>
+<td>回查原例、自测动作顺序和寻址，再用速查定位规则。</td>
+<td><a href="#ch07-s14">14. 知识联系与复习</a>、<a href="#ch07-s15">15. 自测与答案</a>、<a href="#ch07-s16">16. 排错与复习</a>、<a href="#ch07-s17">17. 末尾速查表</a></td>
 </tr>
 </tbody></table></div>
-<details><summary>任务信息、来源与整理约定</summary>
-
-<div class="table-scroll"><table>
-<thead>
-<tr>
-<th>项目</th>
-<th>本次采用的内容</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>资料名称</td>
-<td>第7章 中间代码生成</td>
-</tr>
-<tr>
-<td>整理范围</td>
-<td>本章课件正文、必要备注、原例题及相关学习资料</td>
-</tr>
-<tr>
-<td>原始来源</td>
-<td><span title="来源文件保留在本地，未随学习资料上传">15.中间代码生成_表示形式、语法制导方法[1].pptx（本地来源，未上传）</span>、<span title="来源文件保留在本地，未随学习资料上传">16.中间代码生成_[2].ppt（本地来源，未上传）</span>、<span title="来源文件保留在本地，未随学习资料上传">17.中间代码生成_[3].pptx（本地来源，未上传）</span>；辅助来源：<span title="来源文件保留在本地，未随学习资料上传">本章旧版资料（本地来源，未上传）</span></td>
-</tr>
-<tr>
-<td>读者基础</td>
-<td>默认能读变量、表达式和条件语句；集合、文法、寄存器等新术语在正文解释</td>
-</tr>
-<tr>
-<td>学习目标</td>
-<td>解释各方法用途、准确区分类别，手算中间步骤并独立判断结果与边界</td>
-</tr>
-<tr>
-<td>用户补充</td>
-<td>要求多章节均按模板完整整理；未提供逐章新问答，不补造反馈</td>
-</tr>
-<tr>
-<td>输出形式</td>
-<td>Markdown与HTML，正文和结论一致</td>
-</tr>
-<tr>
-<td>导航版式</td>
-<td>参照数据库01资料的阶段分组左栏；Markdown使用阶段导航表</td>
-</tr>
-<tr>
-<td>文件处理方式</td>
-<td>在新文件夹生成文件，原课件、旧资料和作业解析保留</td>
-</tr>
-<tr>
-<td>需要保留的内容</td>
-<td>主要知识、适用条件、课件例题、作业难点和原资料的纠错说明</td>
-</tr>
-<tr>
-<td>范围限制</td>
-<td>教学模型；未确认的图边、判分答案和本学期安排不写成事实</td>
-</tr>
-</tbody></table></div>
-</details>
-<a id="ch07-s01"></a>
+<p><a id="ch07-s01"></a>
 <a id="一为什么生成中间代码"></a>
-<a id="为什么生成中间代码"></a>
-
+<a id="为什么生成中间代码"></a></p>
 <h2>1. 为什么生成中间代码</h2>
 <h3>1.1 便于分析与优化</h3>
+<p>语法和类型确认之后，还要把程序交给优化与目标代码生成。直接操作复杂源码不便跟踪每一步计算，而直接生成机器指令又会过早绑定机器细节，因此先使用适合分析的内部表示。</p>
 <p><strong>中间表示 IR</strong>是源程序与最终指令之间的内部表示。源程序含嵌套语法和名字规则，目标指令又含机器细节；把计算拆成简单操作后，容易找重复表达式、传播常量、计算地址依赖和移动安全操作。</p>
 <p>课件 <code>r=5;c=2*3.14*r</code> 中，已知 r 未被改变时可把后面结果折叠为 31.4。数组循环中，行首地址计算可能重复；IR 让这些操作显式出现。优化目标是改善代价并保持行为，不等于只减少源代码行数。</p>
 <h3>1.2 便于前后端复用</h3>
@@ -122,6 +58,7 @@ h2,h3,h4,[id]{scroll-margin-top:0}.stepper{background:#edf6f1;border:1px solid #
 <a id="记号与常见表示"></a>
 <a id="ref-表示"></a></p>
 <h2>2. 记号与常见表示</h2>
+<p>同一个表达式可以保存成运算顺序、树结构或简单指令序列。下面固定例子比较这些表示，先认清结构如何保留，再进入本章重点的四元式。</p>
 <h3>2.1 本章记号</h3>
 <div class="table-scroll"><table>
 <thead>
@@ -172,6 +109,7 @@ h2,h3,h4,[id]{scroll-margin-top:0}.stepper{background:#edf6f1;border:1px solid #
 </tr>
 </tbody></table></div>
 <h3>2.2 逆波兰式与栈求值</h3>
+<p>中缀写法要靠括号和优先级确定顺序。把操作符放到其操作数之后，就能用从左到右的栈处理直接恢复计算次序，这就是后缀表示的用途。</p>
 <p><strong>逆波兰式/后缀式</strong>把操作数放前、操作符放后。a+b*c 为 <code>a b c * +</code>，(a+b)*c 为 <code>a b + c *</code>；无须括号，结构由操作符出现顺序和目数决定。</p>
 <p>从左到右，操作数压栈，二元操作先弹右操作数，再弹左操作数，运算结果压回。课件 <code>b c d * +</code>：</p>
 <div class="table-scroll"><table>
@@ -204,10 +142,12 @@ h2,h3,h4,[id]{scroll-margin-top:0}.stepper{background:#edf6f1;border:1px solid #
 </tbody></table></div>
 <p>顺序在减除中尤其重要：<code>a b -</code> 是 a-b。完整表达式最终应只剩一个值，途中缺操作数或最后多值说明后缀式不合法。</p>
 <h3>2.3 AST 与 DAG</h3>
+<p>后缀式突出执行次序，树则更直观地展示谁由谁组成。如果还要表示两处使用共享同一个计算结果，就需要允许多个引用指向同一结点。</p>
 <p><strong>抽象语法树 AST</strong>保留有意义的操作与结构，省去不影响含义的文法辅助层；不要求每个结点和孩子都机械对应一条原产生式，后者更接近完整分析树。</p>
 <p><strong>有向无环图 DAG</strong>允许多处引用同一个计算结点。<code>c:=a*b+a*b</code> 的 AST 有两个乘法子树，DAG 可共享一个 a*b 结点，再让加法两输入指向它。</p>
 <p>共享的前提是两次计算输入值一致且操作没有需要重复执行的副作用。<code>f()+f()</code> 若 f 改变状态，不能仅因文本相同就共享。课件 DAG 用来说明表达式共享，详细安全判断在优化章展开。</p>
 <h3>2.4 三元式与四元式</h3>
+<p>为了逐条分析和移动计算，可以把表达式拆成小操作。每步的结果还要供后续引用；三元式用位置编号引用，四元式给结果单独命名。</p>
 <p><strong>三地址代码</strong>把一条复杂表达式拆成简单操作，通常最多有两个输入和一个结果；“地址”是广义参数，并非每个字段必为物理内存地址。常数、标号、空项也可出现。</p>
 <p>课件 <code>a:=b*c+b/d</code>：</p>
 <div class="table-scroll"><table>
@@ -234,12 +174,13 @@ h2,h3,h4,[id]{scroll-margin-top:0}.stepper{background:#edf6f1;border:1px solid #
 <td><code>(ASSIG,t3,-,a)</code></td>
 </tr>
 </tbody></table></div>
-<p>三元式用位置编号引用结果，插入/移动后需维护引用；四元式显式临时名不依赖位置，便于移动。这里“删除代码”是程序表示变换，不涉及删除项目文件。</p>
+<p>三元式用位置编号引用结果，插入/移动后需维护引用；四元式显式临时名不依赖位置，便于移动。</p>
 <p><a id="ch07-s03"></a>
 <a id="三四元式字段与操作码"></a>
 <a id="四元式字段与操作码"></a>
 <a id="ref-字段"></a></p>
 <h2>3. 四元式字段与操作码</h2>
+<p>选用四元式后，必须先规定每种操作怎样解释四个字段。否则同样把一个名字写在 RESULT，可能被误读成结果值、赋值目标或跳转目的地。</p>
 <h3>3.1 不是每条都按两个值输入一个值输出</h3>
 <p>一般运算 <code>(ADDI,x,y,t)</code> 表示 t=x+y。ASSIG 的第一项是源、RESULT 是目标；JMP 的 RESULT 是标号；ENTRY 的字段存入口、大小和层数。每种 op 都须明确协议。</p>
 <div class="table-scroll"><table>
@@ -340,15 +281,15 @@ h2,h3,h4,[id]{scroll-margin-top:0}.stepper{background:#edf6f1;border:1px solid #
 <a id="语法制导与统计-b-的完整例子"></a>
 <a id="ref-动作"></a></p>
 <h2>4. 语法制导与统计 b 的完整例子</h2>
+<p>已经知道代码要表示什么，还需决定在分析的哪个位置生成它。语法制导把处理动作放到相应结构中；先用课件的计数任务观察动作怎样随匹配顺序执行。</p>
 <h3>4.1 动作嵌入结构</h3>
 <p><strong>语法制导翻译</strong>在分析识别到某结构时执行相关语义子程序。动作可以统计、检查类型、构树或生成代码；不是只限编译器。</p>
 <p>LL(1) 中动作可写在右部适当位置，遇动作执行、不读输入。课件 LR 方案在归约时执行右部末尾动作；这是其简化约定，通用 LR 工具也可通过改写等支持中间动作，不能称 LR 理论上绝不允许。</p>
 <h3>4.2 文法、表与动作</h3>
 <p>课件 <code>S→AB、A→aA|b、B→bB|c</code> 生成 <code>a*b+c</code>。要数句子里 b 的个数：</p>
-<pre><code class="language-text">S→Init A B
-A→aA | b Add
-B→b Add B | c Out
-Init: m=0；Add: m=m+1；Out: 输出 m
+<pre><code class="language-text">S→#Init# A B
+A→aA | b #Add#
+B→b #Add# B | c #Out_Val#
 </code></pre>
 <div class="table-scroll"><table>
 <thead>
@@ -378,11 +319,16 @@ Init: m=0；Add: m=m+1；Out: 输出 m
 <td>B</td>
 <td>Error</td>
 <td>b Add B</td>
-<td>c Out</td>
+<td>c Out_Val</td>
 <td>Error</td>
 </tr>
 </tbody></table></div>
-<p>动作不参与 FIRST/PREDICT 的输入类别，原文法选择保持。Add 放在匹配 b 后面，避免未真正读到 b 就计数。</p>
+<p>动作两侧的 # 用于区分语义符号，与输入结尾的 # 按位置区别。课件 15 第 21 页的动作程序如下：</p>
+<pre><code class="language-text">Init() { m = 0; }
+Out_Val() { printf(&quot;%d&quot;, m); }
+Add() { m++; }
+</code></pre>
+<p>Init 清零，Add 每执行一次加一，Out_Val 输出结果。动作不参与 FIRST/PREDICT 的输入类别，原文法选择保持。Add 放在匹配 b 后面，避免未真正读到 b 就计数。</p>
 <h3>4.3 abbbc 的全过程</h3>
 <p>下表栈顶在左，与本章后面的 Sem 左底右顶记法分开注明：</p>
 <div class="table-scroll"><table>
@@ -461,15 +407,15 @@ Init: m=0；Add: m=m+1；Out: 输出 m
 <tr>
 <td>B #</td>
 <td>c#</td>
-<td>B→c Out</td>
+<td>B→c Out_Val</td>
 </tr>
 <tr>
-<td>c Out #</td>
+<td>c Out_Val #</td>
 <td>c#</td>
 <td>匹配 c</td>
 </tr>
 <tr>
-<td>Out #</td>
+<td>Out_Val #</td>
 <td>#</td>
 <td>输出 3</td>
 </tr>
@@ -485,6 +431,7 @@ Init: m=0；Add: m=m+1；Out: 输出 m
 <a id="语义栈类型检查与属性保存"></a>
 <a id="ref-Sem"></a></p>
 <h2>5. 语义栈、类型检查与属性保存</h2>
+<p>计数例只需保存一个 m，表达式却要暂存多个操作数的类型和值或位置，直到运算结构完整。语义栈保存这些已处理成分的属性，供动作取用。</p>
 <h3>5.1 Sem 的元素</h3>
 <p><strong>语义栈 Sem</strong>每项保存 <code>(Type,ARG)</code>，必要时再含可写性等属性。它记录已处理成分对应的值或位置；语法栈记录接下来还要分析哪些文法符号，职责不同。</p>
 <p>Push(id/C) 查符号或常量描述后压属性；GenCode(ω) 取右、左两项，检查操作、转换必要输入、生成临时 t，弹两项再压结果。ASSIG 则取左位置和右值，生成存储后弹掉语句所占项。</p>
@@ -492,12 +439,13 @@ Init: m=0；Add: m=m+1；Out: 输出 m
 <p>对 int+real，若语言允许整数提升，先 FLOAT 整数再 ADDF。两个 int 用 ADDI，两个 real 用 ADDF。不相容结构要报错，不能“类型不同就 FLOAT”。real→int 若允许还需另一个规定的转换，FLOAT 并不能完成它。</p>
 <p>课件 15 的 3.5+i 若 i:int，完整代码应是 <code>(FLOAT,i,-,t1)</code>、<code>(ADDF,3.5,t1,t2)</code>；原单条 ADDF 未显式表达转换。赋值、下标、条件、实参、返回值都要各按规则检查。</p>
 <h3>5.3 属性必须活到使用结束</h3>
-<p>如果局部符号表会失效，IR 不应持有随后被覆盖的表项地址，应复制后端必要属性或指向持久对象。类型检查完成不意味着所有后端都再不需要类型：本课 typed op 已反映主要算术选择，但尺寸、调用、调试或其他 IR 仍可能需要类型。</p>
+<p>IR 引用的类型、地址等属性必须保存到后续使用完成；不能引用已经被覆盖的局部表项。I/F 后缀虽记录了运算类型，数组尺寸和参数属性仍须保留。</p>
 <p>地址临时量的槽里保存地址值；普通加法通过它读元素，AADD 使用地址值继续累加，ASSIG 左部通过地址写对象。先弄清操作上下文，才不会把地址数值和对象值混用。</p>
 <p><a id="ch07-s06"></a>
 <a id="六表达式翻译"></a>
 <a id="表达式翻译"></a></p>
 <h2>6. 表达式翻译</h2>
+<p>现在用语义栈处理完整表达式。生成顺序必须同时遵守乘除优先、括号和结合性，因此不能只照单词出现顺序遇到操作符就立即生成运算。</p>
 <h3>6.1 完整动作文法</h3>
 <p>消除左递归后，课件编号为：</p>
 <pre><code class="language-text">(1) E→T Es
@@ -681,6 +629,7 @@ Init: m=0；Add: m=m+1；Out: 输出 m
 <a id="数组地址计算"></a>
 <a id="ref-数组"></a></p>
 <h2>7. 数组地址计算</h2>
+<p>普通变量已有一个位置，多维数组元素的位置还随下标变化。要先把每维下标换成相对位移，再按该维步长累加，才能知道应读写哪个元素。</p>
 <h3>7.1 行优先与步长</h3>
 <p><strong>行优先</strong>让最后一维变化最快，相邻最后维元素连续存储。声明 <code>A:[L1..U1]…[Ln..Un] of T</code>，令 <code>Di=Ui-Li+1</code>、α=Size(T)，第 i 维前进一格跳过的存储量叫<strong>步长 Si</strong>：</p>
 <pre><code class="language-text">Sn=α
@@ -689,7 +638,7 @@ Size(A)=D1×S1=α×D1×…×Dn
 addr(A[i1]…[in])=base(A)+Σk=1..n (ik-Lk)Sk
 </code></pre>
 <p>Σk 是逐项求和，与字母表 Σ 无关。下标 i+1 表示下一维，例如 S_1=D_2×S_2，不是把 D_i 加 1。减下界把下标转成从零计数的位移，乘步长把位置数转成地址单位。索引在合法范围内、尺寸与地址单位统一是公式前提。</p>
-<p>课件提醒这里 Si 与教材其他定义可能不同；本资料固定它表示“第 i 层一个成分的大小”。切勿只抄名字不看定义。</p>
+<p>这里 Si 表示第 i 层一个成分的大小。使用其他记号体系的公式时，应先对齐 Si 的含义，再比较公式。</p>
 <h3>7.2 课件 [1..3][1..4]，int 占 4 字节</h3>
 <p>这里课件特意改用字节单位，α=4，D1=3、D2=4，S2=4、S1=16，总 48 字节。A[3][2] 位移 <code>(3-1)×16+(2-1)×4=36</code>。</p>
 <div class="table-scroll"><table>
@@ -731,6 +680,7 @@ addr(A[i1]…[in])=base(A)+Σk=1..n (ik-Lk)Sk
 <a id="下标的语法制导翻译"></a>
 <a id="八下标的语法制导翻译"></a></p>
 <h2>8. 下标的语法制导翻译</h2>
+<p>上节已经给出地址公式，分析器还需在每读完一对方括号时知道当前是哪一维、下一步处理什么类型。下面把逐维计算接到文法动作与 Sem 属性上。</p>
 <h3>8.1 下标文法与 AddNext</h3>
 <p>简单下标串可写 <code>V→id Push(id) A、A→Init [E] AddNext B、B→[E] AddNext B|ε</code>。扩展成允许普通变量，则 A 增加 ε。</p>
 <p>AddNext 取 Sem 顶部索引与其下方当前数组信息：检查索引类型、当前 Type 是数组；取该层 Low 与成分 Size；生成减下界、乘步长、地址加；弹两项，压 <code>(ElemType,新地址)</code>。Init 的维数计数用于说明进度，不应代替逐层类型检查。</p>
@@ -950,6 +900,7 @@ addr(A[i1]…[in])=base(A)+Σk=1..n (ik-Lk)Sk
 <a id="九赋值语句"></a>
 <a id="赋值语句"></a></p>
 <h2>9. 赋值语句</h2>
+<p>表达式生成一个待使用的值，赋值左边却要提供可写的位置。两边即使都由变量和下标组成，使用其属性的方式也不同；最后一步才把右值存入左位置。</p>
 <h3>9.1 左边提供位置，右边提供值</h3>
 <p><code>S→V := E Assig</code>：先生成 V 的必要地址，再生成 E；Assig 检查左边可写和赋值兼容，按允许规则转换右值，再生成 <code>(ASSIG,right,-,left)</code>。</p>
 <p>简单 x 左部无须额外取值；数组地址 t 是左位置，不能先把数组旧值读出来当目标。赋值不返回普通表达式值时，动作弹掉左右属性。</p>
@@ -970,6 +921,7 @@ addr(A[i1]…[in])=base(A)+Σk=1..n (ik-Lk)Sk
 <a id="条件与循环语句"></a>
 <a id="ref-控制"></a></p>
 <h2>10. 条件与循环语句</h2>
+<p>顺序四元式还不能表达“只执行一个分支”或“反复检查条件”。条件和循环标记保存这些控制关系，让后端能够定位入口、出口并生成跳转。</p>
 <h3>10.1 if 标记的含义</h3>
 <p>带 else：条件计算→THEN t→真分支→ELSE→假分支→ENDIF。THEN 在条件假时跳到假分支，ELSE 在真分支末尾跳过假分支并定位它的入口，ENDIF 定位共同出口。没有 else 时假分支直接跳 ENDIF。</p>
 <p>ThenIf 检查 Sem 顶条件是否按教学语言为 bool，生成 THEN 并弹条件；ElseIf 生成 ELSE；EndIf 生成 ENDIF。</p>
@@ -1054,6 +1006,7 @@ NextList → , ExpList | ε
 <a id="二维数组综合练习"></a>
 <a id="十二二维数组综合练习"></a></p>
 <h2>12. 二维数组综合练习</h2>
+<p>下面把数组寻址、条件与循环放进同一课件例子。先分清哪些四元式计算地址、哪些读写元素、哪些控制执行顺序，再核对完整序列。</p>
 <h3>12.1 从源语句确定每一类动作</h3>
 <p>课件 17 第 19 页设 A:[1..5,1..10]int，int 占 1 单位：</p>
 <pre><code class="language-text">a:=1; b:=1;
@@ -1109,7 +1062,7 @@ end
 <h2>13. 综合应用：历年题的函数、传参、二维数组与循环一起翻译</h2><div class="stepper" aria-label="分步图解"><h3>二维数组综合例的数据交接</h3><p class="fig-intro">int与地址各1单位，行优先，a[100][500]下界0。main.i=2；f1只读取*a。</p><div class="progress-track" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div><div class="step-tools"><button id="step-prev">上一步</button><label for="step-range">推导步骤</label><input id="step-range" type="range" min="0" max="6" value="0"><button id="step-next">下一步</button><span id="step-count" class="step-count"></span></div><div id="step-panel" class="step-card" aria-live="polite"></div><details><summary>完整轨迹（适合打印与连续核对）</summary><div class="table-scroll"><table><thead><tr><th>步骤</th><th>当前输入</th><th>使用的规则</th><th>本步结果</th></tr></thead><tbody><tr><td>1</td><td>i=2</td><td>计算实参5*i</td><td>t8=10</td></tr><tr><td>2</td><td>&amp;i及10</td><td>写f1参数槽</td><td>a槽保存i的地址，b=10</td></tr><tr><td>3</td><td>*a=2，c=10</td><td>GE 2,10为假，执行else</td><td>20*10/10=20，返回j=20</td></tr><tr><td>4</td><td>a与下标10,j=20</td><td>row=10*500，element=row+j</td><td>元素位移5020，地址=base(a)+5020</td></tr><tr><td>5</td><td>j=20，i=2</td><td>整数10*j/(5*i)</td><td>值20；通过元素地址写a[10][20]</td></tr><tr><td>6</td><td>j递增至499</td><td>每轮重算j相关地址和值</td><td>最后写a[10][499]=499</td></tr><tr><td>7</td><td>j变为500</td><td>条件j&lt;500为假</td><td>退出，循环体480次；其他数组元素仍未由本片段初始化</td></tr></tbody></table></div></details></div>
 <p><strong>来源：</strong>期末题第4页第六题。f1(int* a,int b)声明c，先c=10，再按<code>*a&gt;=10</code>返回<code>20*b/c+20*b</code>或<code>20*b/c</code>。main声明<code>int a[100][500]</code>和i,j，令i=2、j=f1(&amp;i,5*i)，循环执行<code>a[10][j]=10*j/(5*i);j=j+1</code>直到j&gt;=500。</p>
 <p><strong>教学假设：</strong>int、地址、每个临时量各占1单位，无对齐，行优先，各维下界0；管理区和参数/局部区的起点是off。两个函数的Level按课件C模型写0。f1的a是指针槽，使用<code>*a</code>表示所指整数；同名main.a是数组，两者并非同一对象。</p>
-<p>RETURN沿原课件格式把返回值放RESULT，本章普通运算仍把输入放ARG1。CALL的标志<code>actual</code>是本例为明确对象类别使用的说明标记，对应实在函数，不是新增的机器操作码。若课堂要求true/false编码，需按已确定的CALL字段协议替换该标记。</p>
+<p>RETURN 沿原课件格式把返回值放 RESULT；CALL 沿用课件例子的 true 标志。课件未充分解释 true/false 的编码含义，仍需教师确认；本题由符号项确定 f1 是实在函数。</p>
 <h3>13.1 先算符号与临时量，再回填入口大小</h3>
 <div class="table-scroll"><table>
 <thead>
@@ -1155,7 +1108,7 @@ end
 18 (MULTI,5,i,t8)
 19 (VARACT,i,off,1)
 20 (VALACT,t8,off+1,1)
-21 (CALL,Lf1,actual,t9)
+21 (CALL,Lf1,true,t9)
 22 (ASSIG,t9,-,j)
 23 (WHILE,-,-,-)
 24 (LT,j,500,t10)
@@ -1183,7 +1136,7 @@ end
 <p>第8章使用同一编号和字段协议展示三项优化，第9章则用更小的while例详细展开回填。这样改变一条IR时，能够解释它对后续阶段的影响。</p>
 <p><a id="ch07-s14"></a>
 <a id="课件例题回查与知识路线"></a></p>
-<h2>14. 课件例题回查与知识路线</h2>
+<h2>14. 知识联系与复习</h2>
 <h3>14.1 生成代码时的检查顺序</h3>
 <ol>
 <li>查声明和类型，确定操作是否合法。</li>
@@ -1202,49 +1155,6 @@ end
 <p><strong>5. while 的开始标记为何在条件表达式之前？</strong> 回边必须重新计算条件，才能看到循环体对变量的更新。</p>
 <p><strong>6. 引用参数 Y 继续传给引用形参时传什么？</strong> Y 槽中存储的对象地址，不是槽地址，也不是对象值。</p>
 <p><strong>7. 语法动作出现 ε 是否等于没有任何工作？</strong> 不等于。动作可由不消耗输入的产生式触发，仍会查表、操作语义栈或发射代码。</p>
-<h3>14.3 课件内容索引与阅读约定</h3>
-<div class="table-scroll"><table>
-<thead>
-<tr>
-<th>课件</th>
-<th>知识内容</th>
-<th>本章位置</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>15：第 1—11 页</td>
-<td>中间表示、后缀、语法树、三元式、四元式及操作码</td>
-<td>一—三</td>
-</tr>
-<tr>
-<td>15：第 12—29 页</td>
-<td>语法制导、计数例、语义信息与表达式翻译</td>
-<td>四—六</td>
-</tr>
-<tr>
-<td>16：第 1—34 页</td>
-<td>表达式动作、数组跨度与寻址、带数组的文法及预测表</td>
-<td>六—九</td>
-</tr>
-<tr>
-<td>17：第 1—12 页</td>
-<td>赋值、if、while 及例题</td>
-<td>九—十</td>
-</tr>
-<tr>
-<td>17：第 13—18 页</td>
-<td>调用、参数、过程函数声明</td>
-<td>十一</td>
-</tr>
-<tr>
-<td>17：第 19 页</td>
-<td>二维数组综合练习</td>
-<td>十二</td>
-</tr>
-</tbody></table></div>
-<p>表中页码按文件幻灯片顺序计数。本文统一使用 <code>(OP,ARG1,ARG2,RESULT)</code> 和 <code>-</code> 空字段；赋值方向为 ARG1→RESULT，WRITE 等一元操作的输入也统一写在 ARG1。不同课件版面采用的空字段或排版位置可能不同，不应把版式差异当作语义差异。</p>
-<p>动作及算法的白话解释、嵌套调用上下文、越界与短路条件的辨析是理解补充。课件源例未给的声明、布局和安全条件已在对应例题明确保留或说明，未补造为事实。</p>
-<p>课件：<span title="来源文件保留在本地，未随学习资料上传">15 中间代码表示与语法制导（本地来源，未上传）</span>、<span title="来源文件保留在本地，未随学习资料上传">16 中间代码生成（本地来源，未上传）</span>、<span title="来源文件保留在本地，未随学习资料上传">17 中间代码生成（本地来源，未上传）</span>。</p>
 <p><a id="ch07-s15"></a>
 <a id="自测与答案"></a></p>
 <h2>15. 自测与答案</h2>
@@ -1331,60 +1241,7 @@ end
 <a id="末尾速查表"></a></p>
 <h2>17. 末尾速查表</h2>
 <div class="ref-picker"><label for="quick-select">选择一个概念或方法，查看含义、形式、例子、结果和前提</label><select id="quick-select" class="quick-select"><option value="0">后缀式</option><option value="1">四元式</option><option value="2">语法制导</option><option value="3">Sem</option><option value="4">行优先寻址</option><option value="5">WHILE/DO/ENDWHILE</option><option value="6">参数与ENTRY</option></select><div id="quick-panel" class="ref-panel" aria-live="polite"></div></div>
-<p><a id="verification"></a></p>
-<h2>整理与核对说明</h2>
-<p>本章重新读取现存课件提取文字与PPTX讲者备注，对照旧版讲解，保留详细定义、条件和原例题，按问题主线重排，新增综合推导、自测答案、排错和分类速查，修复旧来源路径。旧版末尾的课件页码对应保留供回查；正文新增的自拟题及理解补充不自动成为考试范围。</p>
-<p>主要课件：<span title="来源文件保留在本地，未随学习资料上传">15.中间代码生成_表示形式、语法制导方法[1].pptx（本地来源，未上传）</span>、<span title="来源文件保留在本地，未随学习资料上传">16.中间代码生成_[2].ppt（本地来源，未上传）</span>、<span title="来源文件保留在本地，未随学习资料上传">17.中间代码生成_[3].pptx（本地来源，未上传）</span></p>
-<p>相关作业解析：本章没有单独的现存作业解析文件；练习依据课件与本次自拟题。</p>
-<p>相关历年题：<span title="来源文件保留在本地，未随学习资料上传">2022级期末题（本地来源，未上传）</span>。PDF实际题头为2024—2025学年第一学期、考试日2024-12-07，“22级”指学生年级，不能误说考试发生在2022年。</p>
-<div class="table-scroll"><table>
-<thead>
-<tr>
-<th>内容</th>
-<th>已核实的事实</th>
-<th>不确定或可能出错的部分</th>
-<th>原因</th>
-<th>进一步核实方法</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>课件覆盖</td>
-<td>对照本项目本章课件提取正文/备注的主题与旧版索引，源文件路径存在</td>
-<td>纯图中个别未明确边、布局与原图美观不在文字核验范围</td>
-<td>PowerPoint COM启动失败；二进制PPT图形关系不由文本顺序完整保留</td>
-<td>对照原课件图页；未确认处在正文保留限定，不凭空补边</td>
-</tr>
-<tr>
-<td>推导与计算</td>
-<td>本章给出前提、规则、步骤和结果；程序检查的具体对象另列于<a href="10_%E6%9D%A5%E6%BA%90%E8%A6%86%E7%9B%96%E4%B8%8E%E6%A0%B8%E5%AF%B9%E6%8A%A5%E5%91%8A.html">总核对报告</a></td>
-<td>其他教学伪代码未在真实编译器/ABI中运行</td>
-<td>源语言和目标机为课程抽象</td>
-<td>选定真实实现后核对语法、布局与运行行为</td>
-</tr>
-<tr>
-<td>历年/作业解答</td>
-<td>已核对题意和相关理论规则，本次解答标明补充、改写与假设</td>
-<td>未取得教师标准答案与歧义题判分口径</td>
-<td>项目只提供题目和已有学习解析</td>
-<td>请教师确认歧义与标准答案，必要时重算</td>
-</tr>
-<tr>
-<td>考试范围/课程安排</td>
-<td>只转述课件记载</td>
-<td>本学期是否更改、补充算法是否考查</td>
-<td>未提供最新通知</td>
-<td>按教师最新课程通知确认</td>
-</tr>
-<tr>
-<td>两种格式</td>
-<td>HTML由当前Markdown正文生成，离线分组目录、图解、速查一致</td>
-<td>浏览器以外的软件排版可能不同</td>
-<td>阅读器实现与字号设置不同</td>
-<td>优先用本章HTML或常规Markdown阅读器</td>
-</tr>
-</tbody></table></div>
-<p>更详细的来源覆盖矩阵、可复算的检查记录与交付限制见<a href="10_%E6%9D%A5%E6%BA%90%E8%A6%86%E7%9B%96%E4%B8%8E%E6%A0%B8%E5%AF%B9%E6%8A%A5%E5%91%8A.html">来源覆盖与核对报告</a>。</p>
-</article><div class="chapter-links"><a href="06_运行时存储空间管理.html">← 第6章 运行时存储空间的组织与管理</a><a href="08_中间代码优化.html">第8章 中间代码优化 →</a></div><p class="foot">编译原理学习资料 · 整理于2026-10-13 · 请结合正文条件使用结论</p></main></div><script type="application/json" id="diagram-data">{"title":"二维数组综合例的数据交接","premise":"int与地址各1单位，行优先，a[100][500]下界0。main.i=2；f1只读取*a。","fields":["步骤","当前输入","使用的规则","本步结果"],"rows":[["1","i=2","计算实参5*i","t8=10"],["2","&i及10","写f1参数槽","a槽保存i的地址，b=10"],["3","*a=2，c=10","GE 2,10为假，执行else","20*10/10=20，返回j=20"],["4","a与下标10,j=20","row=10*500，element=row+j","元素位移5020，地址=base(a)+5020"],["5","j=20，i=2","整数10*j/(5*i)","值20；通过元素地址写a[10][20]"],["6","j递增至499","每轮重算j相关地址和值","最后写a[10][499]=499"],["7","j变为500","条件j\u003c500为假","退出，循环体480次；其他数组元素仍未由本片段初始化"]]}</script><script type="application/json" id="quick-data">[{"name":"后缀式","kind":"表达式表示","meaning":"按栈顺序求值","form":"a b c * +","notice":"减除先弹右后弹左；","example":"a b -是a-b","link":"\u003ca href=\"#ref-%E8%A1%A8%E7%A4%BA\">常见表示\u003c/a>"},{"name":"四元式","kind":"IR记录形式","meaning":"显式表示小操作和结果","form":"(OP,ARG1,ARG2,RESULT)","notice":"字段随OP解释；","example":"JMP的RESULT是标号","link":"\u003ca href=\"#ref-%E5%AD%97%E6%AE%B5\">字段\u003c/a>"},{"name":"语法制导","kind":"翻译组织方式","meaning":"随结构执行语义处理","form":"文法符号与动作标记组合","notice":"动作不消费Token；","example":"读b后Add使计数加1","link":"\u003ca href=\"#ref-%E5%8A%A8%E4%BD%9C\">语法制导\u003c/a>"},{"name":"Sem","kind":"属性栈","meaning":"保存类型与当前值/位置","form":"(Type,ARG)","notice":"不同于分析控制栈；","example":"先压x,y,z再生成乘加","link":"\u003ca href=\"#ref-Sem\">属性栈\u003c/a>"},{"name":"行优先寻址","kind":"地址计算方法","meaning":"求多维元素位置","form":"base+Σ(ik-Lk)Sk","notice":"下标有效且单位一致；","example":"a[10][20]位移5020","link":"\u003ca href=\"#ref-%E6%95%B0%E7%BB%84\">数组地址\u003c/a>"},{"name":"WHILE/DO/ENDWHILE","kind":"结构控制IR","meaning":"保留条件、退出、回边关系","form":"WHILE在条件前，DO判假，END回跳","notice":"与源短路规则协调；","example":"i更新后重算i&lt;10","link":"\u003ca href=\"#ref-%E6%8E%A7%E5%88%B6\">条件循环\u003c/a>"},{"name":"参数与ENTRY","kind":"调用和布局IR","meaning":"交付值/地址并定位入口","form":"VALACT、VARACT、CALL、ENTRY","notice":"明确协议；","example":"f1.Size=off+10","link":"\u003ca href=\"#ref-%E7%BB%BC%E5%90%88\">综合翻译\u003c/a>"}]</script><script>
+</article><div class="chapter-links"><a href="06_运行时存储空间管理.html">← 第6章 运行时存储空间的组织与管理</a><a href="08_中间代码优化.html">第8章 中间代码优化 →</a></div></main></div><script type="application/json" id="diagram-data">{"title":"二维数组综合例的数据交接","premise":"int与地址各1单位，行优先，a[100][500]下界0。main.i=2；f1只读取*a。","fields":["步骤","当前输入","使用的规则","本步结果"],"rows":[["1","i=2","计算实参5*i","t8=10"],["2","&i及10","写f1参数槽","a槽保存i的地址，b=10"],["3","*a=2，c=10","GE 2,10为假，执行else","20*10/10=20，返回j=20"],["4","a与下标10,j=20","row=10*500，element=row+j","元素位移5020，地址=base(a)+5020"],["5","j=20，i=2","整数10*j/(5*i)","值20；通过元素地址写a[10][20]"],["6","j递增至499","每轮重算j相关地址和值","最后写a[10][499]=499"],["7","j变为500","条件j\u003c500为假","退出，循环体480次；其他数组元素仍未由本片段初始化"]]}</script><script type="application/json" id="quick-data">[{"name":"后缀式","kind":"表达式表示","meaning":"按栈顺序求值","form":"a b c * +","notice":"减除先弹右后弹左；","example":"a b -是a-b","link":"\u003ca href=\"#ref-%E8%A1%A8%E7%A4%BA\">常见表示\u003c/a>"},{"name":"四元式","kind":"IR记录形式","meaning":"显式表示小操作和结果","form":"(OP,ARG1,ARG2,RESULT)","notice":"字段随OP解释；","example":"JMP的RESULT是标号","link":"\u003ca href=\"#ref-%E5%AD%97%E6%AE%B5\">字段\u003c/a>"},{"name":"语法制导","kind":"翻译组织方式","meaning":"随结构执行语义处理","form":"文法符号与动作标记组合","notice":"动作不消费Token；","example":"读b后Add使计数加1","link":"\u003ca href=\"#ref-%E5%8A%A8%E4%BD%9C\">语法制导\u003c/a>"},{"name":"Sem","kind":"属性栈","meaning":"保存类型与当前值/位置","form":"(Type,ARG)","notice":"不同于分析控制栈；","example":"先压x,y,z再生成乘加","link":"\u003ca href=\"#ref-Sem\">属性栈\u003c/a>"},{"name":"行优先寻址","kind":"地址计算方法","meaning":"求多维元素位置","form":"base+Σ(ik-Lk)Sk","notice":"下标有效且单位一致；","example":"a[10][20]位移5020","link":"\u003ca href=\"#ref-%E6%95%B0%E7%BB%84\">数组地址\u003c/a>"},{"name":"WHILE/DO/ENDWHILE","kind":"结构控制IR","meaning":"保留条件、退出、回边关系","form":"WHILE在条件前，DO判假，END回跳","notice":"与源短路规则协调；","example":"i更新后重算i&lt;10","link":"\u003ca href=\"#ref-%E6%8E%A7%E5%88%B6\">条件循环\u003c/a>"},{"name":"参数与ENTRY","kind":"调用和布局IR","meaning":"交付值/地址并定位入口","form":"VALACT、VARACT、CALL、ENTRY","notice":"明确协议；","example":"f1.Size=off+10","link":"\u003ca href=\"#ref-%E7%BB%BC%E5%90%88\">综合翻译\u003c/a>"}]</script><script>
 const links=[...document.querySelectorAll('nav a[href^="#"]')];
 const headings=links.map(a=>document.getElementById(a.hash.slice(1))).filter(Boolean);
 let scheduled=false;
