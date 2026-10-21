@@ -1,15 +1,11 @@
-<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>第6章 传输层：根据字节位置、连接状态和两个窗口推导发送与恢复过程</title><style>
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>第6章 传输层：按字节追踪确认、连接与发送窗口</title><style>
 :root{--ink:#20334a;--muted:#63748a;--accent:#17666c;--light:#e9f4f1;--line:#d9e4e9;--paper:#fff;--back:#f5f8fa;color-scheme:light}*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--back);color:var(--ink);font:16px/1.85 'Segoe UI','Microsoft YaHei',sans-serif}a{color:var(--accent);text-underline-offset:4px}a:hover{color:#10494e}button,select{font:inherit}button{cursor:pointer}a:focus-visible,button:focus-visible,select:focus-visible,summary:focus-visible{outline:3px solid #d78b21;outline-offset:3px}aside{position:fixed;inset:0 auto 0 0;width:292px;overflow-y:auto;background:#f0f5f6;border-right:1px solid var(--line);padding:28px 18px 28px 24px;z-index:30}.brand{font-size:21px;font-weight:700;line-height:1.5}.subbrand{font-size:13px;color:var(--muted);margin:8px 0 22px}.navgroup{margin:22px 0}.navgroup h2{font-size:12px;font-weight:600;letter-spacing:.06em;color:#75858e;margin:0 0 8px;border:0;padding:0}.navgroup p{font-size:11px;line-height:1.5;color:#7a8796;margin:0 0 8px}.navlink{display:block;padding:8px 11px;margin:4px 0;border-radius:7px;color:#3c5366;text-decoration:none;font-size:13px;line-height:1.6;border-left:3px solid transparent}.navlink:hover{background:#e2edee}.navlink.active{color:#0c5f62;border-color:var(--accent);background:#dcefed;font-weight:600}.asidefoot{font-size:12px;color:var(--muted);border-top:1px solid var(--line);padding-top:18px}main{margin-left:292px;min-width:0}.toolbar{position:sticky;top:0;z-index:20;background:#ffffffed;border-bottom:1px solid var(--line);height:55px;display:flex;align-items:center;gap:16px;padding:0 32px;font-size:12px;color:var(--muted);backdrop-filter:blur(8px)}.toolbar .spacer{flex:1}.toolbar a{text-decoration:none}.menubtn{display:none;border:1px solid #acbec8;background:white;border-radius:5px;padding:4px 12px;color:var(--ink)}article{max-width:1120px;margin:0 auto;padding:50px 58px 90px;background:white;min-height:100vh}h1{font-size:30px;line-height:1.55;letter-spacing:.01em;margin:0 0 24px}h2{font-size:24px;line-height:1.6;margin:62px 0 22px;padding-bottom:14px;border-bottom:1px solid var(--line);scroll-margin-top:86px}h3{font-size:19px;line-height:1.7;margin:36px 0 14px;scroll-margin-top:86px}h4{font-size:16px;margin:26px 0 10px}p{margin:14px 0}blockquote{margin:22px 0 30px;padding:16px 22px;border-left:4px solid var(--accent);background:#f1f7f6;color:#3c5866;font-size:14px}blockquote p{margin:7px 0}.tablewrap{overflow-x:auto;max-width:100%;margin:22px 0;border:1px solid var(--line);border-radius:7px}table{width:100%;border-collapse:collapse;font-size:14px;line-height:1.75;min-width:500px}th,td{text-align:left;vertical-align:top;padding:12px 15px;border-bottom:1px solid #e1e9ee}th{background:#edf4f5;font-weight:600}tr:last-child td{border-bottom:0}tbody tr:nth-child(even){background:#fafcfd}td a{display:inline-block}pre{max-width:100%;overflow:auto;background:#f1f5f8;border:1px solid #dde6eb;border-radius:7px;padding:20px;font-size:13px;line-height:1.8}code{font-family:Consolas,'Courier New','Microsoft YaHei',monospace;background:#eef4f6;border-radius:3px;padding:2px 4px;overflow-wrap:anywhere}pre code{padding:0;background:transparent;white-space:pre;overflow-wrap:normal}li{margin:7px 0}ul,ol{padding-left:26px}details{border:1px solid #c6dadb;border-radius:8px;margin:24px 0;padding:14px 20px;background:#f8fbfb}summary{cursor:pointer;font-weight:600;color:#17666c}details[open] summary{border-bottom:1px solid var(--line);padding-bottom:12px;margin-bottom:20px}.formula{overflow-x:auto;padding:20px;text-align:center;white-space:nowrap;background:#f9fbfc;font-family:'Cambria Math','Times New Roman',serif;font-size:20px;margin:20px 0}.frac{display:inline-flex;flex-direction:column;vertical-align:middle;text-align:center;line-height:1.4;margin:0 4px}.frac>span:first-child{border-bottom:1px solid #63748a;padding:0 5px 3px}.frac>span:last-child{padding:3px 5px 0}.formula sup,.formula sub{font-size:.65em}.quickbox,.stepbox{margin:24px 0;padding:24px;border:1px solid #c3d9d8;border-radius:10px;background:#f3f9f8}.quickbox label{display:block;font-weight:600;margin-bottom:10px}.quickbox select{width:100%;padding:10px 12px;border:1px solid #9fbfbc;border-radius:6px;background:white;color:var(--ink)}.quickcard{margin-top:20px}.quickcard h3{margin:0 0 12px}.quickcard dl{display:grid;grid-template-columns:90px 1fr;gap:10px 18px;font-size:15px;margin:0}.quickcard dt{font-weight:600;color:#557275}.quickcard dd{margin:0}.stepbox h3{margin:0 0 10px}.stepnotes{font-size:13px;color:var(--muted)}.stepbuttons{display:flex;flex-wrap:wrap;gap:6px;margin:16px 0}.stepbuttons button{border:1px solid #a8c6c4;background:white;color:#436366;border-radius:50%;width:35px;height:35px;font-size:13px}.stepbuttons button.active{background:var(--accent);color:white}.stepdisplay{background:white;border-radius:8px;padding:18px 20px;min-height:145px}.stepdisplay h4{margin:0 0 12px}.stepdisplay dl{margin:0;display:grid;grid-template-columns:140px 1fr;gap:9px 18px}.stepdisplay dt{font-weight:600}.stepdisplay dd{margin:0}.stepcontrols{display:flex;gap:10px;align-items:center;margin-top:16px}.stepcontrols button{border:1px solid #a7c6c3;padding:6px 16px;border-radius:5px;background:white;color:var(--accent)}button:disabled{cursor:default;opacity:.4}.stepcount{font-size:13px;color:var(--muted)}.chaptercards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin:28px 0}.chaptercard{display:block;border:1px solid var(--line);border-radius:10px;background:#f9fcfc;padding:22px;text-decoration:none}.chaptercard strong{display:block;font-size:21px;color:var(--ink);margin-bottom:10px}.chaptercard span{display:block;font-size:14px;line-height:1.7;color:#647a89}.footerlinks{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;border-top:1px solid var(--line);margin-top:64px;padding-top:24px}.footerlinks a{text-decoration:none}hr{border:0;border-top:1px solid var(--line);margin:35px 0}.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)}[id]{scroll-margin-top:86px}.topjump{color:#6b7e8e;font-size:13px}
 @media(max-width:1100px){aside{width:255px;padding:24px 15px}main{margin-left:255px}article{padding:38px 32px 70px}h1{font-size:27px}.toolbar{padding:0 24px}}
 @media(max-width:860px){aside{width:min(320px,87vw);transform:translateX(-100%);transition:transform .18s;box-shadow:12px 0 30px #1233}.nav-open aside{transform:translateX(0)}main{margin-left:0}.menubtn{display:block}.toolbar{padding:0 15px;gap:12px}.toolbar .desktop-only{display:none}article{padding:28px 20px 64px}h1{font-size:24px}h2{font-size:21px;margin-top:48px}h3{font-size:18px}body{font-size:15px}table{font-size:13px}th,td{padding:9px 12px}.quickbox,.stepbox{padding:17px}.quickcard dl,.stepdisplay dl{grid-template-columns:1fr;gap:3px}.quickcard dd,.stepdisplay dd{margin-bottom:12px}.chaptercards{grid-template-columns:1fr}.navshade{display:none;position:fixed;inset:0;background:#10283f55;z-index:25}.nav-open .navshade{display:block}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}aside{transition:none}}
 @media print{aside,.toolbar,.navshade,.stepbox{display:none}main{margin:0}article{max-width:none;padding:0}details{break-inside:avoid}table{min-width:0;font-size:10pt}h2{break-after:avoid}.tablewrap{overflow:visible}body{font-size:11pt}.quickbox select{display:none}.formula{white-space:normal}}
-</style></head><body><div class="navshade"></div><aside id="course-nav" aria-label="阶段分组学习目录"><div class="brand">计算机网络<br>学习资料</div><p class="subbrand">第 6 章 · 传输层</p><nav><a class="navlink" href="#learning-nav">学习导航</a><section class="navgroup"><h2>学习准备</h2><p>确认读者基础和对象</p><a class="navlink" href="#c6-0">6.0 共同场景与符号</a></section><section class="navgroup"><h2>端点与服务</h2><p>认清标识、边界和校验</p><a class="navlink" href="#c6-1">6.1 应用端点与复用</a><a class="navlink" href="#c6-2">6.2 UDP</a></section><section class="navgroup"><h2>TCP 的状态与控制</h2><p>推导字节恢复、连接与发送额度</p><a class="navlink" href="#c6-3">6.3 TCP 字节流、首部与丢失恢复</a><a class="navlink" href="#c6-4">6.4 连接建立与释放</a><a class="navlink" href="#c6-5">6.5 流量、拥塞与小段控制</a></section><section class="navgroup"><h2>扩展与使用</h2><p>区分 QUIC v1 并正确使用 Socket</p><a class="navlink" href="#c6-6">6.6 QUIC v1</a><a class="navlink" href="#c6-7">6.7 Socket</a></section><section class="navgroup"><h2>练习与复习</h2><p>组合推导、独立作答与排错</p><a class="navlink" href="#c6-8">6.8 综合应用</a><a class="navlink" href="#c6-9">6.9 自测与答案</a><a class="navlink" href="#c6-10">6.10 排错与复习</a><a class="navlink" href="#c6-11">6.11 分类速查</a></section></nav><p class="asidefoot">先看前提与对象，再推导中间过程。速查只显示当前选项，完整解释可返回正文。<br><a href="00_学习导航.html">全课程入口</a></p></aside><main><div class="toolbar"><button class="menubtn" id="menu-button" aria-expanded="false" aria-controls="course-nav">目录</button><a href="../index.html#/">课程资料站</a><a href="00_学习导航.html">课程导航</a><span class="desktop-only">传输层</span><span class="spacer"></span><a href="06_传输层.md">Markdown</a><span class="desktop-only">离线阅读</span></div><article><h1>第6章 传输层：根据字节位置、连接状态和两个窗口推导发送与恢复过程</h1>
-<blockquote>
-<p>参考课件：第 6 章课件（原课件未随笔记发布）。</p>
-<p>适合读者：已学 IP、MTU、链路层确认与滑窗；注意 TCP 序号的单位改为字节。</p>
-<p>学习目标：根据字节位置、连接状态和两个窗口推导发送与恢复过程。学习公式与时序时，先确认例题中的单位、协议版本和假设。</p>
-</blockquote>
+</style></head><body><div class="navshade"></div><aside id="course-nav" aria-label="阶段分组学习目录"><div class="brand">计算机网络<br>学习资料</div><p class="subbrand">第 6 章 · 传输层</p><nav><a class="navlink" href="#learning-nav">学习导航</a><section class="navgroup"><h2>学习准备</h2><p>认清场景、对象与计数边界</p><a class="navlink" href="#c6-0">6.0 共同场景与符号</a></section><section class="navgroup"><h2>端点与服务</h2><p>认清标识、边界和校验</p><a class="navlink" href="#c6-1">6.1 应用端点与复用</a><a class="navlink" href="#c6-2">6.2 UDP</a></section><section class="navgroup"><h2>TCP 的状态与控制</h2><p>推导字节恢复、连接与发送额度</p><a class="navlink" href="#c6-3">6.3 TCP 字节流、首部与丢失恢复</a><a class="navlink" href="#c6-4">6.4 连接建立与释放</a><a class="navlink" href="#c6-5">6.5 流量、拥塞与小段控制</a></section><section class="navgroup"><h2>扩展与使用</h2><p>区分 QUIC v1 并正确使用 Socket</p><a class="navlink" href="#c6-6">6.6 QUIC v1</a><a class="navlink" href="#c6-7">6.7 Socket</a></section><section class="navgroup"><h2>练习与复习</h2><p>组合推导、独立作答与排错</p><a class="navlink" href="#c6-8">6.8 综合应用</a><a class="navlink" href="#c6-9">6.9 自测与答案</a><a class="navlink" href="#c6-10">6.10 排错与复习</a><a class="navlink" href="#c6-11">6.11 分类速查</a></section></nav><p class="asidefoot">先看前提与对象，再推导中间过程。速查只显示当前选项，完整解释可返回正文。<br><a href="00_学习导航.html">全课程入口</a></p></aside><main><div class="toolbar"><button class="menubtn" id="menu-button" aria-expanded="false" aria-controls="course-nav">目录</button><a href="../index.html#/">课程资料站</a><a href="00_学习导航.html">课程导航</a><span class="desktop-only">传输层</span><span class="spacer"></span><a href="06_传输层.md">Markdown</a><span class="desktop-only">离线阅读</span></div><article><h1>第6章 传输层：按字节追踪确认、连接与发送窗口</h1>
+<p>IP 包到达服务器，并没有回答交给哪个程序、缺失的数据怎样补齐。本章承接 IP 与滑动窗口，先区分应用端点和传输服务，再用字节位置追踪 TCP 的确认、连接和发送额度。TCP 序号按字节计数，不能沿用链路层按帧编号的习惯。</p>
 <a id="learning-nav"></a>
 <h2>学习导航</h2>
 <p>先找到应用端点，再比较 UDP 与 TCP 的服务。TCP 分为字节恢复、连接生命周期和发送控制三部分；最后把 QUIC 与 Socket 放回应用使用场景。</p>
@@ -23,7 +19,7 @@
 </thead>
 <tbody><tr>
 <td>学习准备</td>
-<td>确认读者基础和对象</td>
+<td>认清场景、对象与计数边界</td>
 <td><a href="#c6-0">6.0 共同场景与符号</a></td>
 </tr>
 <tr>
@@ -127,6 +123,7 @@
 <p>课件TSAP是传输服务访问点，NSAP是网络服务访问点，属于分层描述；应用通常通过Socket接口使用服务，无须直接操作这些抽象名词。</p>
 <a id="k6.1.2"></a>
 <h3>6.1.2 复用、缓冲与控制</h3>
+<p>许多应用共用 IP 传输，又可能以不同速度读写。端点分用解决交给谁，缓冲吸收暂时的速度差，控制机制再约束未完成数据的规模。</p>
 <p>多个应用通信共用网络层，接收端按端点信息分开，称为传输层的<strong>复用与分用</strong>。</p>
 <p>发送缓存保存待发和未确认的数据，接收缓存暂存收到但尚未交给应用的数据。缓存吸收速度差异，不能无限解决应用不读取的问题。</p>
 <table>
@@ -171,7 +168,7 @@
 <p>短请求想独立发送，不一定要先建持续连接。UDP 给出端点、长度和检错信息，却不保存恢复与排序机制；上层是否补充可靠性，应按任务判断。校验的伪首部不是网上多发送的首部。</p>
 <a id="k6.2.1"></a>
 <h3>6.2.1 UDP提供什么</h3>
-<p><strong>UDP，用户数据报协议</strong>无连接、面向报文，基本首部8 B。它不内置确认、重传、排序和拥塞控制，但上层可以自行实现这些功能。</p>
+<p><strong>UDP，用户数据报协议</strong>无连接、面向报文，基本首部8 B。它不内置确认、重传、排序和拥塞控制，但使用它的上层协议可以按需要实现这些功能。</p>
 <p><strong>消息边界</strong>指一条消息从哪里开始、在哪里结束。UDP保留数据报边界，应用发送两份数据报，接收端仍按数据报处理；接收缓冲不足可能截断，不会自动拼成连续字节流。</p>
 <table>
 <thead>
@@ -205,11 +202,13 @@
 <p>UDP减少自身协议功能和连接管理开销，并不保证比TCP在任何任务上都快。实时应用也需要控制发送量；大数据报可能引起IP分片，必要分片丢失会导致整个数据报无法重组。</p>
 <a id="k6.2.2"></a>
 <h3>6.2.2 UDP校验和与伪首部</h3>
+<p>数据即使位数正确，也可能被误交给错误的地址或协议端点。UDP 把部分 IP 信息临时纳入检错计算，同时保持自身首部仍为 8 B。</p>
 <p>校验和按16位字反码求和、回卷进位、逐位取反，覆盖IP伪首部、UDP首部和数据。</p>
 <p><strong>伪首部</strong>是把源/目的IP、协议、长度等信息临时加入计算，检查是否误投递；它不是UDP在网上额外发送的一段首部。IPv4伪首部12 B。</p>
 <p>IPv4的零校验字段可表示未使用校验；计算值恰为零时用全1编码。IPv6通常要求UDP校验和，少数特殊例外须按对应规范，不能推广为普通用途。</p>
 <a id="k6.2.3"></a>
 <h3>6.2.3 课件校验和例题</h3>
+<p>把规则用到奇数字节数据时，最容易混淆计算补零与实际报文长度。下面先列出所有 16 位字，再做回卷进位并填回校验字段。</p>
 <p>源IP153.19.8.104，目的171.3.14.11；源端口1087，目的13；数据<code>TESTING</code>为7 B，因此UDP长度为15 B。</p>
 <p>按网络字节顺序，每两个字节组成一个16位字：</p>
 <pre><code class="language-text">IPv4伪首部：9913 0868 AB03 0E0B 0011 000F
@@ -234,6 +233,7 @@ UDP首部：   043F 000D 000F 0000
 <p>TCP按字节编号，两方向独立维护序号与窗口。可靠服务通过校验、序号、确认、重传和缓存实现；网络永久故障仍可能使连接失败，也不自动保证应用事务只执行一次。</p>
 <a id="k6.3.2"></a>
 <h3>6.3.2 首部字段与控制位</h3>
+<p>TCP 要让对端知道本段属于谁、处在字节流哪里，以及是否建立或关闭方向。这些状态不能从应用正文推测，必须由首部字段表达。</p>
 <p>基本首部20 B，有选项时最多60 B。Data Offset以4 B为单位指明首部长度。</p>
 <table>
 <thead>
@@ -323,6 +323,7 @@ UDP首部：   043F 000D 000F 0000
 <p>SYN、FIN各占一个序号，纯ACK不占。紧急指针相对本段序号，标准定义及历史实现存在兼容问题，不把它当紧急字节的绝对序号。<a href="https://www.rfc-editor.org/rfc/rfc9293.html">RFC 9293</a></p>
 <a id="k6.3.3"></a>
 <h3>6.3.3 MSS与常见选项</h3>
+<p>IP 包受 MTU 限制，能装入的 TCP 数据还要扣掉各层实际首部。MSS 与选项帮助双方约定发送条件，不能把链路的 1500 B 全当成用户正文。</p>
 <p><strong>MSS，最大报文段大小</strong>限制TCP数据部分，不包括IP和TCP首部。</p>
 <p>理解例子：MTU=1500 B、无额外选项与封装：IPv4按20+20 B首部计算，数据1460 B；IPv6按40+20 B计算，数据1440 B。选项或隧道可能减少实际可装数据。</p>
 <table>
@@ -356,6 +357,7 @@ UDP首部：   043F 000D 000F 0000
 <p>窗口缩放按协商的倍数解释窗口字段，不改变“保护接收缓存”的含义。</p>
 <a id="k6.3.4"></a>
 <h3>6.3.4 字节序号与累计ACK</h3>
+<p>接收方可能先收到后面的段，却仍缺少前面的字节。确认必须指向连续范围的终点，才能让发送方知道哪一段缺口还没有补齐。</p>
 <p><strong>ACK=a</strong>表示a之前的数据已连续收到，下一期待a。</p>
 <pre><code class="language-text">Seq=1001，Len=500
 覆盖字节1001～1500
@@ -366,7 +368,7 @@ UDP首部：   043F 000D 000F 0000
 <a id="k6.3.5"></a>
 <h3>6.3.5 SACK：告诉发送方哪些后续区间已收到</h3>
 <p><strong>SACK，选择确认</strong>保留累计ACK，同时报告非连续的已收区间。要先协商支持；它报告已收范围，而非直接列出丢失范围。</p>
-<p>课件累计ACK=1001，SACK为<code>[1501,3001)</code>、<code>[3501,4501)</code>：</p>
+<p>课件例中，假定发送端已发出 <code>[1001,4501)</code> 的全部数据，收到累计 ACK=1001，SACK 为 <code>[1501,3001)</code>、<code>[3501,4501)</code>：</p>
 <table>
 <thead>
 <tr>
@@ -391,7 +393,7 @@ UDP首部：   043F 000D 000F 0000
 <td>已收</td>
 </tr>
 </tbody></table>
-<p>发送端结合自己的发送记录补缺口。一个SACK块有两个32位边界，需8 B，加Kind、Length开销，40 B选项空间最多装4块；其他选项会继续占空间。</p>
+<p>在这个题设下，发送端结合自己的发送记录补缺口。一般情况下，一个范围没出现在某次 SACK 中，不足以单独证明它已经发送且丢失；还需看发送记录及后续反馈。一个 SACK 块有两个 32 位边界，需 8 B，加 Kind、Length 开销，40 B 选项空间最多装 4 块；其他选项会继续占空间。</p>
 <p>课件早期“TCP不采用选择确认”的概括应与后续SACK扩展区分。</p>
 <a id="k6.3.6"></a>
 <h3>6.3.6 RTT、RTO与超时</h3>
@@ -401,7 +403,7 @@ UDP首部：   043F 000D 000F 0000
 SRTT   ← 7/8×旧SRTT + 1/8×新样本
 RTO    ← SRTT + max(G,4×RTTVAR)
 </code></pre>
-<p>G为计时粒度，更新时间偏差时用旧SRTT。理解例子：先100 ms，后120 ms，得到SRTT=102.5 ms、RTTVAR=42.5 ms；若G很小，原始计算272.5 ms。该RFC算法还规定小于1 s时提高到1 s，不能遗漏下限。<a href="https://www.rfc-editor.org/rfc/rfc6298">RFC 6298</a></p>
+<p>G为计时粒度，更新时间偏差时用旧SRTT。理解例子：先100 ms，后120 ms，得到SRTT=102.5 ms、RTTVAR=42.5 ms；若G很小，原始计算272.5 ms。RFC 6298 第 2.4 节建议（SHOULD）把小于 1 s 的计算结果提高到 1 s；按这个保守规则，本例使用 1 s。这里的建议不能改写成所有实现都强制采用同一最低值。<a href="https://www.rfc-editor.org/rfc/rfc6298">RFC 6298</a></p>
 <p><strong>Karn思想</strong>：重传后无法确定ACK对应原发还是重发，若没有消除歧义的机制，就不采用该RTT样本。超时后RTO通常加倍，避免反复迅速重传。</p>
 <h3>三个层次的编号不要互换</h3>
 <p>TCP 数据 Seq=1001、Len=500，字节范围为 [1001,1501)。它封装成一个 IP 包，IP 若分片，片偏移按原 IP 载荷的 8 B 块计；每片又进入链路帧。TCP 序号、IP 分片偏移、链路帧序号各标识自己的对象，不能拿 500 B 数据段直接叫“第 500 帧”。</p>
@@ -416,6 +418,7 @@ RTO    ← SRTT + max(G,4×RTTVAR)
 <p>双方各有独立发送方向，建立时必须同步初始序号，释放时也要分别结束。关闭一个方向后，另一个方向可能还有数据；最后确认丢失还需要保留状态进行再次响应。</p>
 <a id="k6.4.1"></a>
 <h3>6.4.1 三次握手</h3>
+<p>只让 A 说“我要连接”，B 还不知道 A 是否收到了自己的初始状态。三次握手使两端分别确认对方的初始编号，并进入本轮连接。</p>
 <p>理解例子：客户端初始序号100，服务器500。</p>
 <pre><code class="language-text">客户端                                   服务器
   ─ SYN Seq=100 ───────────────────────&gt;  LISTEN→SYN-RECEIVED
@@ -457,6 +460,7 @@ RTO    ← SRTT + max(G,4×RTTVAR)
 <p>B 的缓冲容量与沿途网络容量是两个限制。rwnd 与 cwnd 共同限制在途数据，而在途量已经占据额度；零窗口探测、小段合并与拥塞恢复的触发条件也不同。经典增长曲线先声明模型再计算。</p>
 <a id="k6.5.1"></a>
 <h3>6.5.1 接收窗口与可新发数据</h3>
+<p>知道对方缓冲还能装多少，只给出了总许可；已有未确认数据也占着额度。计算还能新发多少时，要同时检查接收窗口、拥塞窗口和在途量。</p>
 <p><strong>rwnd，接收窗口</strong>告诉发送端还能接收多少字节。ACK=1501、rwnd=3000，通告区间为<code>[1501,4501)</code>，即1501～4500。</p>
 <p>方括号表示包含左边界，圆括号表示不包含右边界，叫<strong>左闭右开区间</strong>。</p>
 <p>发送还受<strong>cwnd，拥塞窗口</strong>限制。常用简化上限为：</p>
@@ -472,6 +476,7 @@ RTO    ← SRTT + max(G,4×RTTVAR)
 <p>其他定时机制包括可选保活和关闭后的TIME_WAIT。保活不是每条连接都必须高频发送的心跳。</p>
 <a id="k6.5.3"></a>
 <h3>6.5.3 慢开始与拥塞避免</h3>
+<p>连接刚开始时，并不知道网络能承受多大在途量。经典 TCP 先逐步探测容量，接近阈值后放慢增长，再根据反馈调整。</p>
 <p>cwnd保护网络，rwnd保护接收端。<strong>ssthresh</strong>是慢开始阈值。</p>
 <p>课件采用初始cwnd=1 MSS的经典模型：</p>
 <ul>
@@ -535,7 +540,7 @@ RTO    ← SRTT + max(G,4×RTTVAR)
 <p>“第6轮窗口”有两种计数位置，要写清开始10 KB、结束11 KB，不能混用。</p>
 <h3>同一窗口下连续追踪三个事件</h3>
 <p><strong>独立简化条件：</strong> cwnd=8000 B，rwnd=12000 B，当前在途 5000 B，应用有足够数据。初始最多新发 3000 B；发完后在途变 8000 B。之后 ACK 确认了其中 2000 B，若两个窗口都暂按原值保持，在途降到 6000 B，可再发 2000 B。</p>
-<p>如果 ACK 同时把 rwnd 改为 4000 B，而在途仍为 6000 B，则新增许可取 <code>max(0,4000−6000)=0</code>，不能给负数新发量，也不能强行撤回已在路上的数据。本例故意冻结 cwnd 更新，便于单独检查窗口算术；真实拥塞算法还会更新 cwnd。</p>
+<p>如果 ACK 同时把 rwnd 改为 4000 B，而在途仍为 6000 B，则新增许可取 <code>max(0,4000−6000)=0</code>，不能给负数新发量，也不能强行撤回已在路上的数据。本例故意冻结 cwnd 更新，便于单独检查窗口算术；真实拥塞算法还会更新 cwnd。这里还假设对端将已通告的右边界向左缩回，以演示发送端的处理；RFC 9293 第 3.8.6 节不建议接收端主动这样收缩，但要求发送端能处理这种情况。不能把本例当成常规窗口更新方式。</p>
 <h3>讲义原题：确认释放多少额度</h3>
 <p>参考：讲义 PDF 第 1227 页。MSS=1000 B，cwnd=4000 B，已连续发两段共 2000 B；收到第一段确认，通告 rwnd=2000 B。按题目固定 cwnd 的简化计算，已确认 1000 B、还在途 1000 B，新上限 <code>min(4000,2000)=2000 B</code>，还可新发 <code>2000−1000=1000 B</code>。</p>
 <p>如果不扣第二段，会错答 2000 B；如果把旧 cwnd 直接当新增许可，会错答 4000 B。题设没有表示接收方只剩 2000 B 应用文件，rwnd 描述的是接收许可而不是文件长度。</p>
@@ -550,6 +555,7 @@ RTO    ← SRTT + max(G,4×RTTVAR)
 <p>QUIC v1结合TLS 1.3认证和建立密钥；初次通常需要相应往返，已有会话信息时可尝试0-RTT早期数据。0-RTT不表示第一次访问毫无等待，并有重放限制，即同一早期请求可能被重复使用。</p>
 <a id="k6.6.2"></a>
 <h3>6.6.2 先认清版本，再读首部</h3>
+<p>QUIC 的旧实现与 v1 字段并不完全相同。读取首部前先固定版本，再区分握手阶段、连接标识与包号，才能避免按旧图算错字段长度。</p>
 <p>课件混有早期gQUIC与IETF格式。下面字段按IETF QUIC v1说明，不能跨版本套用。<a href="https://www.rfc-editor.org/rfc/rfc9000">RFC 9000</a></p>
 <table>
 <thead>
@@ -572,6 +578,7 @@ RTO    ← SRTT + max(G,4×RTTVAR)
 <p>CID可变长，v1相应字段最多20 B，不是都固定160位。包号长度编码0～3对应1～4 B，公式是<code>(编码+1)×8 bit</code>，课件“P+8 bits”不正确。1350/1370 B是特定实现选择，不是QUIC统一固定包长。</p>
 <a id="k6.6.3"></a>
 <h3>6.6.3 包、帧与流偏移</h3>
+<p>一个连接内可能同时传多个流，还要发送确认与控制消息。QUIC 用包承载帧，用流标识和偏移定位字节，三种对象的编号各有作用。</p>
 <p>一个QUIC包可带多个<strong>帧</strong>，帧表达数据、确认或控制操作。这里的帧是QUIC包内部单位，不是链路层以太帧。</p>
 <p>STREAM帧用Stream ID、Offset及长度等描述流中数据。v1类型0x08～0x0f，低位标志决定是否有Offset、Length、FIN等；课件旧格式不能作为v1字段图。</p>
 <table>
@@ -595,7 +602,8 @@ RTO    ← SRTT + max(G,4×RTTVAR)
 <p>理解例子：流0的<code>[0,1000)</code>丢失，后段已到；流4的<code>[0,500)</code>完整。流0等待补缺口，流4可独立交付。</p>
 <a id="k6.6.4"></a>
 <h3>6.6.4 流量控制与FIN</h3>
-<p><strong>MAX_STREAM_DATA</strong>给某流最大允许偏移，<strong>MAX_DATA</strong>给连接级总信用。信用可理解为接收方允许发送的新增数据额度，重发原有数据不反复扣新增额度。</p>
+<p>可靠多流也不能无限占用接收内存。接收方分别给每条流和整个连接授信，发送方要同时检查这两层许可，结束一条流也不等于关闭全部流。</p>
+<p><strong>MAX_STREAM_DATA</strong>给某流允许发送的最大结束偏移，<strong>MAX_DATA</strong>给连接级的数据总上限。两者是累计上限，不能把通告的数直接当成“本次还能新发多少”；新增额度要扣除已经占用的部分。重发原有范围不重复占用新增额度。</p>
 <p>若流上限3000，Offset=2500、Length=500不越界，Length=600越界；还要满足连接级限制。FIN表示该流最终大小，不等于关闭整个连接。</p>
 <a id="c6-7"></a>
 <h2>6.7 Socket：应用怎样正确读写通信服务</h2>
@@ -720,27 +728,27 @@ close：关闭连接                   close：关闭
 <tbody><tr>
 <td>1</td>
 <td>Seq=1001、500 B 到达，后一段 Seq=2001、500 B 也到达，中间丢失。累计 ACK 与 SACK 可分别表示什么？</td>
-<td>写条件、推导、解释结果与边界</td>
+<td>累计确认与非连续区间</td>
 </tr>
 <tr>
 <td>2</td>
 <td>cwnd=9000 B、rwnd=6000 B、在途 4500 B，最多新增多少？rwnd 随后为 0 呢？</td>
-<td>写条件、推导、解释结果与边界</td>
+<td>总窗口与新增额度</td>
 </tr>
 <tr>
 <td>3</td>
 <td>客户端 SYN=1000，发 600 B 后紧接 FIN，其 Seq 与对端确认是多少？</td>
-<td>写条件、推导、解释结果与边界</td>
+<td>字节编号及关闭标记</td>
 </tr>
 <tr>
 <td>4</td>
 <td>QUIC v1 流 4 的偏移 0～999 数据重发，包号是否与原包相同？影响另一流的完整交付吗？</td>
-<td>写条件、推导、解释结果与边界</td>
+<td>包恢复与流独立性</td>
 </tr>
 <tr>
 <td>5</td>
 <td>recv(10) 只返回 3 B 能否判协议错误？</td>
-<td>写条件、推导、解释结果与边界</td>
+<td>部分读取与消息边界</td>
 </tr>
 </tbody></table>
 <details>
@@ -797,19 +805,19 @@ close：关闭连接                   close：关闭
 </tbody></table>
 <p>学完后应能独立做到：</p>
 <ul>
-<li><input disabled="" type="checkbox"> 用自己的话解释本章机制要处理的对象和困难。</li>
-<li><input disabled="" type="checkbox"> 指出整体、部分、分类维度和执行动作之间的关系。</li>
-<li><input disabled="" type="checkbox"> 写出算例的前提、单位、中间结果与最终对象。</li>
-<li><input disabled="" type="checkbox"> 解释确认、缓存、租约或映射的状态怎样变化。</li>
-<li><input disabled="" type="checkbox"> 指出相近方法的差别及可以组合的条件。</li>
-<li><input disabled="" type="checkbox"> 完成概念自测和应用练习，并说明前提改变后的结果。</li>
+<li><input disabled="" type="checkbox"> 区分 UDP 消息边界与 TCP 字节流，并计算校验时的实际长度。</li>
+<li><input disabled="" type="checkbox"> 根据字节区间求累计 ACK、SACK、SYN 和 FIN 的序号。</li>
+<li><input disabled="" type="checkbox"> 追踪握手、半关闭与 TIME_WAIT，说明两个发送方向独立。</li>
+<li><input disabled="" type="checkbox"> 计算 max(0,min(cwnd,rwnd)−在途量)，并明确模型与单位。</li>
+<li><input disabled="" type="checkbox"> 在经典题设下区分慢开始、拥塞避免、超时与快重传。</li>
+<li><input disabled="" type="checkbox"> 按 QUIC v1 区分包号与流偏移，用长度格式解释部分读取。</li>
 </ul>
 <a id="c6-11"></a>
 <h2>6.11 分类速查</h2>
-<p>选择一项查看含义、基本形式、例子与结果、使用条件。完整表保存在对应 Markdown。</p>
+<p>选择一项查看用途、计算方法与适用条件，再回正文核对完整推导。</p>
 <div class="quickbox"><label for="quick-select">选择速查项</label><select id="quick-select"></select><div id="quick-card" class="quickcard" aria-live="polite"></div></div>
 
-<div class="footerlinks"><a href="05_网络层.html">← 上一章：网络层</a><a href="07_应用层.html">下一章：应用层 →</a></div></article></main><script>window.CHAPTER={"chapter":6,"name":"传输层","file":"06_传输层.md","title":"第6章 传输层：根据字节位置、连接状态和两个窗口推导发送与恢复过程","toc":[{"id":"c6-0","title":"6.0 共同场景与符号"},{"id":"c6-1","title":"6.1 应用端点与复用：同一主机怎样接多人通信"},{"id":"c6-2","title":"6.2 UDP：有边界的数据报与校验"},{"id":"c6-3","title":"6.3 TCP 字节流、首部与丢失恢复"},{"id":"c6-4","title":"6.4 连接建立与释放：双方状态怎样开始与结束"},{"id":"c6-5","title":"6.5 流量、拥塞与小段控制：还能发多少"},{"id":"c6-6","title":"6.6 QUIC v1：包恢复与多条流怎样分工"},{"id":"c6-7","title":"6.7 Socket：应用怎样正确读写通信服务"},{"id":"c6-8","title":"6.8 综合应用"},{"id":"c6-9","title":"6.9 自测与答案"},{"id":"c6-10","title":"6.10 排错与复习"},{"id":"c6-11","title":"6.11 分类速查"}],"stages":[{"name":"学习准备","task":"确认读者基础和对象","ids":["c6-0"]},{"name":"端点与服务","task":"认清标识、边界和校验","ids":["c6-1","c6-2"]},{"name":"TCP 的状态与控制","task":"推导字节恢复、连接与发送额度","ids":["c6-3","c6-4","c6-5"]},{"name":"扩展与使用","task":"区分 QUIC v1 并正确使用 Socket","ids":["c6-6","c6-7"]},{"name":"练习与复习","task":"组合推导、独立作答与排错","ids":["c6-8","c6-9","c6-10","c6-11"]}],"quick":[["通信端点","复用标识","区分多应用与多连接","TCP 四元组；TCP/UDP 端口空间独立","同服务 :443 接多个客户端","端口不是进程永久身份",0],["UDP 校验与长度","数据报","检查首部和数据并保持边界","Length=8+数据；反码和含伪首部","7 B TESTING 得 Length15、校验 6912","临时补零与伪首部不增加线上 UDP 长度",1],["TCP ACK 与 SACK","恢复机制","说明连续已收与非连续已收","ACK 下一期待；SACK 左闭右开区间","缺口 1501 后仍 ACK1501","SACK 不代替累计确认",2],["握手与 FIN","连接状态","同步初始序号并分向关闭","SYN/FIN 各占 1 序号","SYN100、200 B 数据后 FIN301","半关闭仍允许反向数据",3],["可新发量","窗口控制","同时保护接收端与网络","max(0,min(cwnd,rwnd)−在途)","8000、12000、5000 得 3000 B","简化算式，需给定状态和算法",4],["RTO","时间恢复","在反馈不足时决定重传","SRTT+max(G,4RTTVAR)","100、120 ms 样本原值 272.5 ms","RFC6298 基础算法还需 1 s 下限；重传样本有歧义",2],["QUIC 包、帧、流","v1 结构","分开传输反馈与字节定位","包号 ACK；流 ID+Offset 定位","流 ID2 为客户端单向流","不同于以太网帧；按 v1 字段",5],["长度前缀读取","应用格式","在 TCP 字节流中恢复消息","先累计 4 B 长度，再累计正文","你好：长度6、正文6 B","大端、编码、长度上限和部分读写均需约定",6]],"quick_id":"c6-11","synthesis_id":"c6-8","source_module_count":24,"retained_core_chars":8509,"new_chars":17537};</script><script>
+<div class="footerlinks"><a href="05_网络层.html">← 上一章：网络层</a><a href="07_应用层.html">下一章：应用层 →</a></div></article></main><script>window.CHAPTER={"chapter":6,"name":"传输层","file":"06_传输层.md","title":"第6章 传输层：按字节追踪确认、连接与发送窗口","toc":[{"id":"c6-0","title":"6.0 共同场景与符号"},{"id":"c6-1","title":"6.1 应用端点与复用：同一主机怎样接多人通信"},{"id":"c6-2","title":"6.2 UDP：有边界的数据报与校验"},{"id":"c6-3","title":"6.3 TCP 字节流、首部与丢失恢复"},{"id":"c6-4","title":"6.4 连接建立与释放：双方状态怎样开始与结束"},{"id":"c6-5","title":"6.5 流量、拥塞与小段控制：还能发多少"},{"id":"c6-6","title":"6.6 QUIC v1：包恢复与多条流怎样分工"},{"id":"c6-7","title":"6.7 Socket：应用怎样正确读写通信服务"},{"id":"c6-8","title":"6.8 综合应用"},{"id":"c6-9","title":"6.9 自测与答案"},{"id":"c6-10","title":"6.10 排错与复习"},{"id":"c6-11","title":"6.11 分类速查"}],"stages":[{"name":"学习准备","task":"认清场景、对象与计数边界","ids":["c6-0"]},{"name":"端点与服务","task":"认清标识、边界和校验","ids":["c6-1","c6-2"]},{"name":"TCP 的状态与控制","task":"推导字节恢复、连接与发送额度","ids":["c6-3","c6-4","c6-5"]},{"name":"扩展与使用","task":"区分 QUIC v1 并正确使用 Socket","ids":["c6-6","c6-7"]},{"name":"练习与复习","task":"组合推导、独立作答与排错","ids":["c6-8","c6-9","c6-10","c6-11"]}],"quick":[["通信端点","复用标识","区分多应用与多连接","TCP 四元组；TCP/UDP 端口空间独立","同服务 :443 接多个客户端","端口不是进程永久身份",0],["UDP 校验与长度","数据报","检查首部和数据并保持边界","Length=8+数据；反码和含伪首部","7 B TESTING 得 Length15、校验 6912","临时补零与伪首部不增加线上 UDP 长度",1],["TCP ACK 与 SACK","恢复机制","说明连续已收与非连续已收","ACK 下一期待；SACK 左闭右开区间","缺口 1501 后仍 ACK1501","SACK 不代替累计确认",2],["握手与 FIN","连接状态","同步初始序号并分向关闭","SYN/FIN 各占 1 序号","SYN100、200 B 数据后 FIN301","半关闭仍允许反向数据",3],["可新发量","窗口控制","同时保护接收端与网络","max(0,min(cwnd,rwnd)−在途)","8000、12000、5000 得 3000 B","简化算式，需给定状态和算法",4],["RTO","时间恢复","在反馈不足时决定重传","SRTT+max(G,4RTTVAR)","100、120 ms 样本原值 272.5 ms","RFC 6298 建议计算后至少取 1 s；重传样本有歧义",2],["QUIC 包、帧、流","v1 结构","分开传输反馈与字节定位","包号 ACK；流 ID+Offset 定位","流 ID2 为客户端单向流","不同于以太网帧；按 v1 字段",5],["长度前缀读取","应用格式","在 TCP 字节流中恢复消息","先累计 4 B 长度，再累计正文","你好：长度6、正文6 B","大端、编码、长度上限和部分读写均需约定",6]],"quick_id":"c6-11","synthesis_id":"c6-8","source_module_count":24,"retained_core_chars":8509,"new_chars":18583};</script><script>
 const $$=(s,r=document)=>[...r.querySelectorAll(s)];
 const menu=document.getElementById('menu-button');
 const setNav=v=>{document.body.classList.toggle('nav-open',v);menu.setAttribute('aria-expanded',String(v))};
