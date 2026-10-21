@@ -205,7 +205,7 @@ def append_directory(lines: list[str], directory: Path, level: int) -> None:
         lines.append(f"{indent}- [{title_for(file_path)}]({link_for(file_path)})")
 
     if directory.name == "3_1数据库系统":
-        html_files = sorted(directory.glob("0[1-7]_*.html"), key=sort_key)
+        html_files = sorted(directory.glob("0[0-7]_*.html"), key=sort_key)
         if html_files:
             lines.append(f"{indent}- **图解学习版（HTML）**")
             for html_file in html_files:
