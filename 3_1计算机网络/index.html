@@ -4,10 +4,10 @@
 @media(max-width:860px){aside{width:min(320px,87vw);transform:translateX(-100%);transition:transform .18s;box-shadow:12px 0 30px #1233}.nav-open aside{transform:translateX(0)}main{margin-left:0}.menubtn{display:block}.toolbar{padding:0 15px;gap:12px}.toolbar .desktop-only{display:none}article{padding:28px 20px 64px}h1{font-size:24px}h2{font-size:21px;margin-top:48px}h3{font-size:18px}body{font-size:15px}table{font-size:13px}th,td{padding:9px 12px}.quickbox,.stepbox{padding:17px}.quickcard dl,.stepdisplay dl{grid-template-columns:1fr;gap:3px}.quickcard dd,.stepdisplay dd{margin-bottom:12px}.chaptercards{grid-template-columns:1fr}.navshade{display:none;position:fixed;inset:0;background:#10283f55;z-index:25}.nav-open .navshade{display:block}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}aside{transition:none}}
 @media print{aside,.toolbar,.navshade,.stepbox{display:none}main{margin:0}article{max-width:none;padding:0}details{break-inside:avoid}table{min-width:0;font-size:10pt}h2{break-after:avoid}.tablewrap{overflow:visible}body{font-size:11pt}.quickbox select{display:none}.formula{white-space:normal}}
-</style></head><body><div class="navshade"></div><aside id="course-nav" aria-label="阶段分组学习目录"><div class="brand">计算机网络<br>学习资料</div><p class="subbrand">七章学习路线与资料入口</p><nav><a class="navlink" href="#learning-nav">学习导航</a><section class="navgroup"><h2>建立整体认识</h2><a class="navlink" href="01_概论.html">1 · 概论</a></section><section class="navgroup"><h2>信号与介质基础</h2><a class="navlink" href="02_数据通信基础.html">2 · 数据通信基础</a><a class="navlink" href="03_物理层.html">3 · 物理层</a></section><section class="navgroup"><h2>一跳与跨网</h2><a class="navlink" href="04_数据链路层.html">4 · 数据链路层</a><a class="navlink" href="05_网络层.html">5 · 网络层</a></section><section class="navgroup"><h2>端点与应用</h2><a class="navlink" href="06_传输层.html">6 · 传输层</a><a class="navlink" href="07_应用层.html">7 · 应用层</a></section><section class="navgroup"><h2>学习与复习</h2><a class="navlink" href="#usage">怎样学每章</a><a class="navlink" href="#compare">跨章节比较</a></section></nav><p class="asidefoot">先看前提与对象，再推导中间过程。速查只显示当前选项，完整解释可返回正文。<br><a href="00_学习导航.html">全课程入口</a></p></aside><main><div class="toolbar"><button class="menubtn" id="menu-button" aria-expanded="false" aria-controls="course-nav">目录</button><a href="../index.html#/">课程资料站</a><a href="00_学习导航.html">课程导航</a><span class="desktop-only">计算机网络</span><span class="spacer"></span><a href="00_学习导航.md">Markdown</a><span class="desktop-only">离线阅读</span></div><article><h1>计算机网络学习资料</h1>
+</style></head><body><div class="navshade"></div><aside id="course-nav" aria-label="阶段分组学习目录"><div class="brand">计算机网络<br>学习资料</div><p class="subbrand">七章学习路线与资料入口</p><nav><a class="navlink" href="#learning-nav">学习导航</a><section class="navgroup"><h2>建立整体认识</h2><a class="navlink" href="01_概论.html">1 · 概论</a></section><section class="navgroup"><h2>信号与介质基础</h2><a class="navlink" href="02_数据通信基础.html">2 · 数据通信基础</a><a class="navlink" href="03_物理层.html">3 · 物理层</a></section><section class="navgroup"><h2>一跳与跨网</h2><a class="navlink" href="04_数据链路层.html">4 · 数据链路层</a><a class="navlink" href="05_网络层.html">5 · 网络层</a></section><section class="navgroup"><h2>端点与应用</h2><a class="navlink" href="06_传输层.html">6 · 传输层</a><a class="navlink" href="07_应用层.html">7 · 应用层</a></section><section class="navgroup"><h2>学习与复习</h2><a class="navlink" href="#usage">怎样学每章</a><a class="navlink" href="#compare">跨章节比较</a><a class="navlink" href="#review-paths">按任务选择复习路线</a></section></nav><p class="asidefoot">先看前提与对象，再推导中间过程。速查只显示当前选项，完整解释可返回正文。<br><a href="00_学习导航.html">全课程入口</a></p></aside><main><div class="toolbar"><button class="menubtn" id="menu-button" aria-expanded="false" aria-controls="course-nav">目录</button><a href="../index.html#/">课程资料站</a><a href="00_学习导航.html">课程导航</a><span class="desktop-only">计算机网络</span><span class="spacer"></span><a href="00_学习导航.md">Markdown</a><span class="desktop-only">离线阅读</span></div><article><h1>计算机网络学习资料</h1>
 <p>这门课可以沿着一次访问理解：应用提出请求，传输层找到端点并按需要恢复数据，网络层选择逐跳出口，链路层组织帧并协调共享，物理层实际传信号。学习时从基本对象进入信号与链路，再回到跨网与应用，避免只按名词背诵。</p>
-<p>课程共七章，各章均提供概念解释、例题推导、综合应用、自测与速查。网页中的分步演示帮助观察过程，可以离线阅读。</p>
-<a id="learning-nav"></a><h2>学习导航</h2><div class="chaptercards"><a class="chaptercard" href="01_概论.html"><strong>01 · 概论</strong><span>说明一次网络访问中设备与协议怎样分工</span></a><a class="chaptercard" href="02_数据通信基础.html"><strong>02 · 数据通信基础</strong><span>把数据、信号、容量、共享与检错放在同一条通信链上</span></a><a class="chaptercard" href="03_物理层.html"><strong>03 · 物理层</strong><span>依据介质、接口和时序条件判断比特能否正确传过去</span></a><a class="chaptercard" href="04_数据链路层.html"><strong>04 · 数据链路层</strong><span>让一帧在当前链路上有边界、可检查、可恢复，并正确进入下一网段</span></a><a class="chaptercard" href="05_网络层.html"><strong>05 · 网络层</strong><span>从目的地址逐步推导当前下一跳、分片和路由选择</span></a><a class="chaptercard" href="06_传输层.html"><strong>06 · 传输层</strong><span>根据字节位置、连接状态和两个窗口推导发送与恢复过程</span></a><a class="chaptercard" href="07_应用层.html"><strong>07 · 应用层</strong><span>把域名、资源、邮箱和媒体服务的消息过程讲清并能计算结果</span></a></div>
+<p>课程共七章，各章提供概念解释、例题推导、综合应用、自测与速查。初学按下表顺序阅读；复习先独立作答，再用分类速查回到推导。网页中的波形与分步演示可离线使用。</p>
+<a id="learning-nav"></a><h2>学习导航</h2><div class="chaptercards"><a class="chaptercard" href="01_概论.html"><strong>01 · 概论</strong><span>一次网络访问中设备与协议怎样分工</span></a><a class="chaptercard" href="02_数据通信基础.html"><strong>02 · 数据通信基础</strong><span>信号怎样承载数据并通过信道</span></a><a class="chaptercard" href="03_物理层.html"><strong>03 · 物理层</strong><span>接口、介质与传输时序怎样配合</span></a><a class="chaptercard" href="04_数据链路层.html"><strong>04 · 数据链路层</strong><span>识别帧边界、按协议恢复并控制局域网转发</span></a><a class="chaptercard" href="05_网络层.html"><strong>05 · 网络层</strong><span>从目的地址推导下一跳、分片与路由</span></a><a class="chaptercard" href="06_传输层.html"><strong>06 · 传输层</strong><span>按字节追踪确认、连接与发送窗口</span></a><a class="chaptercard" href="07_应用层.html"><strong>07 · 应用层</strong><span>完成名字查询、邮件投递与资源访问</span></a></div>
 <table>
 <thead>
 <tr>
@@ -38,10 +38,61 @@
 </tr>
 </tbody></table>
 <a id="usage"></a><h2>每章如何学</h2>
-<p>先读共同场景，把所有符号和单位说清；再按阶段顺序学正文模块。计算时遮住结果，自己写出已知量和中间值。综合题会把本章多个机制串起来，自测答案折叠保存。复习时先用排错表识别遗漏的条件，再通过速查链接回完整解释。</p>
+<p>先读章节开头的问题，再在共同场景里认清本章对象和单位，随后按阶段进入正文。计算时遮住结果，自己写出已知量和中间值。综合题会把本章多个机制串起来，自测答案折叠保存。复习时先用排错表识别遗漏的条件，再通过速查链接回完整解释。</p>
 <p>不要求记住每个旧技术参数。遇到帧长、时隙、编码极性、窗口轮次和协议版本，先在题设中确定模型，再计算。遇到图形题，应先明确拓扑、方向、编号及单位；条件不完整时，不能仅凭术语猜出结果。</p>
-<h2>章节目标与网页入口</h2>
-<div class="tablewrap"><table><thead><tr><th>章</th><th>学完要能够做什么</th><th>Markdown</th><th>HTML</th><th>PPT 页数</th></tr></thead><tbody><tr><td>1</td><td>说明一次网络访问中设备与协议怎样分工</td><td><a href="01_%E6%A6%82%E8%AE%BA.md">概论</a></td><td><a href="01_%E6%A6%82%E8%AE%BA.html">网页阅读</a></td><td>57</td></tr><tr><td>2</td><td>把数据、信号、容量、共享与检错放在同一条通信链上</td><td><a href="02_%E6%95%B0%E6%8D%AE%E9%80%9A%E4%BF%A1%E5%9F%BA%E7%A1%80.md">数据通信基础</a></td><td><a href="02_%E6%95%B0%E6%8D%AE%E9%80%9A%E4%BF%A1%E5%9F%BA%E7%A1%80.html">网页阅读</a></td><td>82</td></tr><tr><td>3</td><td>依据介质、接口和时序条件判断比特能否正确传过去</td><td><a href="03_%E7%89%A9%E7%90%86%E5%B1%82.md">物理层</a></td><td><a href="03_%E7%89%A9%E7%90%86%E5%B1%82.html">网页阅读</a></td><td>51</td></tr><tr><td>4</td><td>让一帧在当前链路上有边界、可检查、可恢复，并正确进入下一网段</td><td><a href="04_%E6%95%B0%E6%8D%AE%E9%93%BE%E8%B7%AF%E5%B1%82.md">数据链路层</a></td><td><a href="04_%E6%95%B0%E6%8D%AE%E9%93%BE%E8%B7%AF%E5%B1%82.html">网页阅读</a></td><td>240</td></tr><tr><td>5</td><td>从目的地址逐步推导当前下一跳、分片和路由选择</td><td><a href="05_%E7%BD%91%E7%BB%9C%E5%B1%82.md">网络层</a></td><td><a href="05_%E7%BD%91%E7%BB%9C%E5%B1%82.html">网页阅读</a></td><td>252</td></tr><tr><td>6</td><td>根据字节位置、连接状态和两个窗口推导发送与恢复过程</td><td><a href="06_%E4%BC%A0%E8%BE%93%E5%B1%82.md">传输层</a></td><td><a href="06_%E4%BC%A0%E8%BE%93%E5%B1%82.html">网页阅读</a></td><td>111</td></tr><tr><td>7</td><td>把域名、资源、邮箱和媒体服务的消息过程讲清并能计算结果</td><td><a href="07_%E5%BA%94%E7%94%A8%E5%B1%82.md">应用层</a></td><td><a href="07_%E5%BA%94%E7%94%A8%E5%B1%82.html">网页阅读</a></td><td>186</td></tr></tbody></table></div>
+<h2>章节目标与阅读入口</h2>
+<table>
+<thead>
+<tr>
+<th>章</th>
+<th>学完要能够做什么</th>
+<th>Markdown</th>
+<th>网页</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>说明一次网络访问中设备与协议怎样分工</td>
+<td><a href="01_%E6%A6%82%E8%AE%BA.html">概论</a></td>
+<td><a href="01_%E6%A6%82%E8%AE%BA.html">网页阅读</a></td>
+</tr>
+<tr>
+<td>2</td>
+<td>把数据、信号、容量、共享与检错放在同一条通信链上</td>
+<td><a href="02_%E6%95%B0%E6%8D%AE%E9%80%9A%E4%BF%A1%E5%9F%BA%E7%A1%80.html">数据通信基础</a></td>
+<td><a href="02_%E6%95%B0%E6%8D%AE%E9%80%9A%E4%BF%A1%E5%9F%BA%E7%A1%80.html">网页阅读</a></td>
+</tr>
+<tr>
+<td>3</td>
+<td>依据介质、接口和时序条件判断比特能否正确传过去</td>
+<td><a href="03_%E7%89%A9%E7%90%86%E5%B1%82.html">物理层</a></td>
+<td><a href="03_%E7%89%A9%E7%90%86%E5%B1%82.html">网页阅读</a></td>
+</tr>
+<tr>
+<td>4</td>
+<td>识别帧边界、按协议恢复并控制局域网转发</td>
+<td><a href="04_%E6%95%B0%E6%8D%AE%E9%93%BE%E8%B7%AF%E5%B1%82.html">数据链路层</a></td>
+<td><a href="04_%E6%95%B0%E6%8D%AE%E9%93%BE%E8%B7%AF%E5%B1%82.html">网页阅读</a></td>
+</tr>
+<tr>
+<td>5</td>
+<td>从目的地址逐步推导当前下一跳、分片和路由选择</td>
+<td><a href="05_%E7%BD%91%E7%BB%9C%E5%B1%82.html">网络层</a></td>
+<td><a href="05_%E7%BD%91%E7%BB%9C%E5%B1%82.html">网页阅读</a></td>
+</tr>
+<tr>
+<td>6</td>
+<td>根据字节位置、连接状态和两个窗口推导发送与恢复过程</td>
+<td><a href="06_%E4%BC%A0%E8%BE%93%E5%B1%82.html">传输层</a></td>
+<td><a href="06_%E4%BC%A0%E8%BE%93%E5%B1%82.html">网页阅读</a></td>
+</tr>
+<tr>
+<td>7</td>
+<td>把域名、资源、邮箱和媒体服务的消息过程讲清并能计算结果</td>
+<td><a href="07_%E5%BA%94%E7%94%A8%E5%B1%82.html">应用层</a></td>
+<td><a href="07_%E5%BA%94%E7%94%A8%E5%B1%82.html">网页阅读</a></td>
+</tr>
+</tbody></table>
 <a id="compare"></a><h2>跨章节比较</h2>
 <table>
 <thead>
@@ -90,6 +141,36 @@
 <td>缓存、租约、映射</td>
 <td>DNS/HTTP 内容、DHCP 地址、NAPT 转换状态</td>
 <td>期限和更新规则各自决定，不能当自动永久同步</td>
+</tr>
+</tbody></table>
+<a id="review-paths"></a><h2>按任务选择复习路线</h2>
+<table>
+<thead>
+<tr>
+<th>想解决的问题</th>
+<th>建议依次重读</th>
+<th>应当写出的结果</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>算容量、传输与到达时间</td>
+<td><a href="02_%E6%95%B0%E6%8D%AE%E9%80%9A%E4%BF%A1%E5%9F%BA%E7%A1%80.html#c2-2">2.2～2.4 信号与容量</a> → <a href="03_%E7%89%A9%E7%90%86%E5%B1%82.html#c3-2">3.2 发送与传播</a> → <a href="04_%E6%95%B0%E6%8D%AE%E9%93%BE%E8%B7%AF%E5%B1%82.html#c4-2">4.2 窗口效率</a></td>
+<td>同一单位下的条件、公式、中间值和对应事件</td>
+</tr>
+<tr>
+<td>判断一包每跳交给谁</td>
+<td><a href="04_%E6%95%B0%E6%8D%AE%E9%93%BE%E8%B7%AF%E5%B1%82.html#c4-6">4.6 交换转发</a> → <a href="05_%E7%BD%91%E7%BB%9C%E5%B1%82.html#c5-2">5.2 地址块</a> → <a href="05_%E7%BD%91%E7%BB%9C%E5%B1%82.html#c5-3">5.3 最长前缀与 ARP</a></td>
+<td>当前链路、目的 IP、下一跳与目的 MAC</td>
+</tr>
+<tr>
+<td>推导丢失之后怎样恢复</td>
+<td><a href="04_%E6%95%B0%E6%8D%AE%E9%93%BE%E8%B7%AF%E5%B1%82.html#c4-2">4.2 ARQ</a> → <a href="06_%E4%BC%A0%E8%BE%93%E5%B1%82.html#c6-3">6.3 TCP 确认</a> → <a href="06_%E4%BC%A0%E8%BE%93%E5%B1%82.html#c6-5">6.5 发送额度</a></td>
+<td>编号单位、接收缓存、反馈内容与可新发量</td>
+</tr>
+<tr>
+<td>解释访问成功却等待或卡顿</td>
+<td><a href="07_%E5%BA%94%E7%94%A8%E5%B1%82.html#c7-2">7.2 DNS 缓存</a> → <a href="07_%E5%BA%94%E7%94%A8%E5%B1%82.html#c7-5">7.5 HTTP</a> → <a href="07_%E5%BA%94%E7%94%A8%E5%B1%82.html#c7-6">7.6 媒体</a></td>
+<td>查询或请求的依赖、缓存状态、下载与播放的时间线</td>
 </tr>
 </tbody></table>
 <div class="footerlinks"><a href="01_概论.html">开始学习第 1 章 →</a></div></article></main><script>window.CHAPTER=null;</script><script>

@@ -1,15 +1,11 @@
-<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>第4章 数据链路层：让一帧在当前链路上有边界、可检查、可恢复，并正确进入下一网段</title><style>
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>第4章 数据链路层：识别帧边界、按协议恢复并控制局域网转发</title><style>
 :root{--ink:#20334a;--muted:#63748a;--accent:#17666c;--light:#e9f4f1;--line:#d9e4e9;--paper:#fff;--back:#f5f8fa;color-scheme:light}*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--back);color:var(--ink);font:16px/1.85 'Segoe UI','Microsoft YaHei',sans-serif}a{color:var(--accent);text-underline-offset:4px}a:hover{color:#10494e}button,select{font:inherit}button{cursor:pointer}a:focus-visible,button:focus-visible,select:focus-visible,summary:focus-visible{outline:3px solid #d78b21;outline-offset:3px}aside{position:fixed;inset:0 auto 0 0;width:292px;overflow-y:auto;background:#f0f5f6;border-right:1px solid var(--line);padding:28px 18px 28px 24px;z-index:30}.brand{font-size:21px;font-weight:700;line-height:1.5}.subbrand{font-size:13px;color:var(--muted);margin:8px 0 22px}.navgroup{margin:22px 0}.navgroup h2{font-size:12px;font-weight:600;letter-spacing:.06em;color:#75858e;margin:0 0 8px;border:0;padding:0}.navgroup p{font-size:11px;line-height:1.5;color:#7a8796;margin:0 0 8px}.navlink{display:block;padding:8px 11px;margin:4px 0;border-radius:7px;color:#3c5366;text-decoration:none;font-size:13px;line-height:1.6;border-left:3px solid transparent}.navlink:hover{background:#e2edee}.navlink.active{color:#0c5f62;border-color:var(--accent);background:#dcefed;font-weight:600}.asidefoot{font-size:12px;color:var(--muted);border-top:1px solid var(--line);padding-top:18px}main{margin-left:292px;min-width:0}.toolbar{position:sticky;top:0;z-index:20;background:#ffffffed;border-bottom:1px solid var(--line);height:55px;display:flex;align-items:center;gap:16px;padding:0 32px;font-size:12px;color:var(--muted);backdrop-filter:blur(8px)}.toolbar .spacer{flex:1}.toolbar a{text-decoration:none}.menubtn{display:none;border:1px solid #acbec8;background:white;border-radius:5px;padding:4px 12px;color:var(--ink)}article{max-width:1120px;margin:0 auto;padding:50px 58px 90px;background:white;min-height:100vh}h1{font-size:30px;line-height:1.55;letter-spacing:.01em;margin:0 0 24px}h2{font-size:24px;line-height:1.6;margin:62px 0 22px;padding-bottom:14px;border-bottom:1px solid var(--line);scroll-margin-top:86px}h3{font-size:19px;line-height:1.7;margin:36px 0 14px;scroll-margin-top:86px}h4{font-size:16px;margin:26px 0 10px}p{margin:14px 0}blockquote{margin:22px 0 30px;padding:16px 22px;border-left:4px solid var(--accent);background:#f1f7f6;color:#3c5866;font-size:14px}blockquote p{margin:7px 0}.tablewrap{overflow-x:auto;max-width:100%;margin:22px 0;border:1px solid var(--line);border-radius:7px}table{width:100%;border-collapse:collapse;font-size:14px;line-height:1.75;min-width:500px}th,td{text-align:left;vertical-align:top;padding:12px 15px;border-bottom:1px solid #e1e9ee}th{background:#edf4f5;font-weight:600}tr:last-child td{border-bottom:0}tbody tr:nth-child(even){background:#fafcfd}td a{display:inline-block}pre{max-width:100%;overflow:auto;background:#f1f5f8;border:1px solid #dde6eb;border-radius:7px;padding:20px;font-size:13px;line-height:1.8}code{font-family:Consolas,'Courier New','Microsoft YaHei',monospace;background:#eef4f6;border-radius:3px;padding:2px 4px;overflow-wrap:anywhere}pre code{padding:0;background:transparent;white-space:pre;overflow-wrap:normal}li{margin:7px 0}ul,ol{padding-left:26px}details{border:1px solid #c6dadb;border-radius:8px;margin:24px 0;padding:14px 20px;background:#f8fbfb}summary{cursor:pointer;font-weight:600;color:#17666c}details[open] summary{border-bottom:1px solid var(--line);padding-bottom:12px;margin-bottom:20px}.formula{overflow-x:auto;padding:20px;text-align:center;white-space:nowrap;background:#f9fbfc;font-family:'Cambria Math','Times New Roman',serif;font-size:20px;margin:20px 0}.frac{display:inline-flex;flex-direction:column;vertical-align:middle;text-align:center;line-height:1.4;margin:0 4px}.frac>span:first-child{border-bottom:1px solid #63748a;padding:0 5px 3px}.frac>span:last-child{padding:3px 5px 0}.formula sup,.formula sub{font-size:.65em}.quickbox,.stepbox{margin:24px 0;padding:24px;border:1px solid #c3d9d8;border-radius:10px;background:#f3f9f8}.quickbox label{display:block;font-weight:600;margin-bottom:10px}.quickbox select{width:100%;padding:10px 12px;border:1px solid #9fbfbc;border-radius:6px;background:white;color:var(--ink)}.quickcard{margin-top:20px}.quickcard h3{margin:0 0 12px}.quickcard dl{display:grid;grid-template-columns:90px 1fr;gap:10px 18px;font-size:15px;margin:0}.quickcard dt{font-weight:600;color:#557275}.quickcard dd{margin:0}.stepbox h3{margin:0 0 10px}.stepnotes{font-size:13px;color:var(--muted)}.stepbuttons{display:flex;flex-wrap:wrap;gap:6px;margin:16px 0}.stepbuttons button{border:1px solid #a8c6c4;background:white;color:#436366;border-radius:50%;width:35px;height:35px;font-size:13px}.stepbuttons button.active{background:var(--accent);color:white}.stepdisplay{background:white;border-radius:8px;padding:18px 20px;min-height:145px}.stepdisplay h4{margin:0 0 12px}.stepdisplay dl{margin:0;display:grid;grid-template-columns:140px 1fr;gap:9px 18px}.stepdisplay dt{font-weight:600}.stepdisplay dd{margin:0}.stepcontrols{display:flex;gap:10px;align-items:center;margin-top:16px}.stepcontrols button{border:1px solid #a7c6c3;padding:6px 16px;border-radius:5px;background:white;color:var(--accent)}button:disabled{cursor:default;opacity:.4}.stepcount{font-size:13px;color:var(--muted)}.chaptercards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin:28px 0}.chaptercard{display:block;border:1px solid var(--line);border-radius:10px;background:#f9fcfc;padding:22px;text-decoration:none}.chaptercard strong{display:block;font-size:21px;color:var(--ink);margin-bottom:10px}.chaptercard span{display:block;font-size:14px;line-height:1.7;color:#647a89}.footerlinks{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;border-top:1px solid var(--line);margin-top:64px;padding-top:24px}.footerlinks a{text-decoration:none}hr{border:0;border-top:1px solid var(--line);margin:35px 0}.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)}[id]{scroll-margin-top:86px}.topjump{color:#6b7e8e;font-size:13px}
 @media(max-width:1100px){aside{width:255px;padding:24px 15px}main{margin-left:255px}article{padding:38px 32px 70px}h1{font-size:27px}.toolbar{padding:0 24px}}
 @media(max-width:860px){aside{width:min(320px,87vw);transform:translateX(-100%);transition:transform .18s;box-shadow:12px 0 30px #1233}.nav-open aside{transform:translateX(0)}main{margin-left:0}.menubtn{display:block}.toolbar{padding:0 15px;gap:12px}.toolbar .desktop-only{display:none}article{padding:28px 20px 64px}h1{font-size:24px}h2{font-size:21px;margin-top:48px}h3{font-size:18px}body{font-size:15px}table{font-size:13px}th,td{padding:9px 12px}.quickbox,.stepbox{padding:17px}.quickcard dl,.stepdisplay dl{grid-template-columns:1fr;gap:3px}.quickcard dd,.stepdisplay dd{margin-bottom:12px}.chaptercards{grid-template-columns:1fr}.navshade{display:none;position:fixed;inset:0;background:#10283f55;z-index:25}.nav-open .navshade{display:block}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}aside{transition:none}}
 @media print{aside,.toolbar,.navshade,.stepbox{display:none}main{margin:0}article{max-width:none;padding:0}details{break-inside:avoid}table{min-width:0;font-size:10pt}h2{break-after:avoid}.tablewrap{overflow:visible}body{font-size:11pt}.quickbox select{display:none}.formula{white-space:normal}}
-</style></head><body><div class="navshade"></div><aside id="course-nav" aria-label="阶段分组学习目录"><div class="brand">计算机网络<br>学习资料</div><p class="subbrand">第 4 章 · 数据链路层</p><nav><a class="navlink" href="#learning-nav">学习导航</a><section class="navgroup"><h2>学习准备</h2><p>确认读者基础和对象</p><a class="navlink" href="#c4-0">4.0 共同场景与符号</a></section><section class="navgroup"><h2>成帧与恢复</h2><p>把连续比特变成可控制的一次交付</p><a class="navlink" href="#c4-1">4.1 帧边界与链路组织</a><a class="navlink" href="#c4-2">4.2 可靠传输与窗口</a></section><section class="navgroup"><h2>协议与共享</h2><p>区分协议字段、有线与无线访问</p><a class="navlink" href="#c4-3">4.3 HDLC、PPP 与 LLC/MAC</a><a class="navlink" href="#c4-4">4.4 共享信道与以太网</a><a class="navlink" href="#c4-5">4.5 无线竞争</a></section><section class="navgroup"><h2>局域网组网</h2><p>学会查表、无环转发与广播隔离</p><a class="navlink" href="#c4-6">4.6 交换学习与生成树</a><a class="navlink" href="#c4-7">4.7 VLAN</a></section><section class="navgroup"><h2>练习与复习</h2><p>组合推导、独立作答与排错</p><a class="navlink" href="#c4-8">4.8 综合应用</a><a class="navlink" href="#c4-9">4.9 自测与答案</a><a class="navlink" href="#c4-10">4.10 排错与复习</a><a class="navlink" href="#c4-11">4.11 分类速查</a></section></nav><p class="asidefoot">先看前提与对象，再推导中间过程。速查只显示当前选项，完整解释可返回正文。<br><a href="00_学习导航.html">全课程入口</a></p></aside><main><div class="toolbar"><button class="menubtn" id="menu-button" aria-expanded="false" aria-controls="course-nav">目录</button><a href="../index.html#/">课程资料站</a><a href="00_学习导航.html">课程导航</a><span class="desktop-only">数据链路层</span><span class="spacer"></span><a href="04_数据链路层.md">Markdown</a><span class="desktop-only">离线阅读</span></div><article><h1>第4章 数据链路层：让一帧在当前链路上有边界、可检查、可恢复，并正确进入下一网段</h1>
-<blockquote>
-<p>参考课件：第 4 章课件（原课件未随笔记发布）。</p>
-<p>适合读者：已学信号同步、CRC、发送与传播时间；能够逐位异或并计算简单比值。</p>
-<p>学习目标：让一帧在当前链路上有边界、可检查、可恢复，并正确进入下一网段。学习公式与时序时，先确认例题中的单位、协议版本和假设。</p>
-</blockquote>
+</style></head><body><div class="navshade"></div><aside id="course-nav" aria-label="阶段分组学习目录"><div class="brand">计算机网络<br>学习资料</div><p class="subbrand">第 4 章 · 数据链路层</p><nav><a class="navlink" href="#learning-nav">学习导航</a><section class="navgroup"><h2>学习准备</h2><p>认清场景、对象与计数边界</p><a class="navlink" href="#c4-0">4.0 共同场景与符号</a></section><section class="navgroup"><h2>成帧与恢复</h2><p>把连续比特变成可控制的一次交付</p><a class="navlink" href="#c4-1">4.1 帧边界与链路组织</a><a class="navlink" href="#c4-2">4.2 可靠传输与窗口</a></section><section class="navgroup"><h2>协议与共享</h2><p>区分协议字段、有线与无线访问</p><a class="navlink" href="#c4-3">4.3 HDLC、PPP 与 LLC/MAC</a><a class="navlink" href="#c4-4">4.4 共享信道与以太网</a><a class="navlink" href="#c4-5">4.5 无线竞争</a></section><section class="navgroup"><h2>局域网组网</h2><p>学会查表、无环转发与广播隔离</p><a class="navlink" href="#c4-6">4.6 交换学习与生成树</a><a class="navlink" href="#c4-7">4.7 VLAN</a></section><section class="navgroup"><h2>练习与复习</h2><p>组合推导、独立作答与排错</p><a class="navlink" href="#c4-8">4.8 综合应用</a><a class="navlink" href="#c4-9">4.9 自测与答案</a><a class="navlink" href="#c4-10">4.10 排错与复习</a><a class="navlink" href="#c4-11">4.11 分类速查</a></section></nav><p class="asidefoot">先看前提与对象，再推导中间过程。速查只显示当前选项，完整解释可返回正文。<br><a href="00_学习导航.html">全课程入口</a></p></aside><main><div class="toolbar"><button class="menubtn" id="menu-button" aria-expanded="false" aria-controls="course-nav">目录</button><a href="../index.html#/">课程资料站</a><a href="00_学习导航.html">课程导航</a><span class="desktop-only">数据链路层</span><span class="spacer"></span><a href="04_数据链路层.md">Markdown</a><span class="desktop-only">离线阅读</span></div><article><h1>第4章 数据链路层：识别帧边界、按协议恢复并控制局域网转发</h1>
+<p>相邻设备收到连续比特后，怎样认出一帧，怎样发现损坏，又怎样在共享线路上轮流发送？本章承接编码、CRC 和时延，先研究帧边界与按协议恢复，再把帧放进以太网、无线网络和交换网络，分析实际转发范围。</p>
 <a id="learning-nav"></a>
 <h2>学习导航</h2>
 <p>先确定帧的边界，再研究丢失与重复，随后看协议怎样落实控制。多站竞争是另一个问题；最后把帧放到交换机、生成树和 VLAN 的局域网中。</p>
@@ -23,7 +19,7 @@
 </thead>
 <tbody><tr>
 <td>学习准备</td>
-<td>确认读者基础和对象</td>
+<td>认清场景、对象与计数边界</td>
 <td><a href="#c4-0">4.0 共同场景与符号</a></td>
 </tr>
 <tr>
@@ -172,6 +168,7 @@
 <p>编码违禁法利用保留模式，例如有些码组编码保留控制码。不能据此说所有以太网都用同一种违禁码定界。</p>
 <a id="k4.1.3"></a>
 <h3>4.1.3 线路配置与传输方式</h3>
+<p>连接几台设备、能否同时双向发送、比特怎样排布，是互相独立的选择。先按问题分类，就不会把“串行”和“全双工”误看成只能二选一。</p>
 <table>
 <thead>
 <tr>
@@ -200,6 +197,7 @@
 <p><strong>位同步</strong>确定在哪个时刻读比特，<strong>帧同步</strong>确定哪些比特属于同一帧。</p>
 <a id="k4.1.4"></a>
 <h3>4.1.4 链路管理与询问应答</h3>
+<p>定界解决了一帧怎样识别，还需要约定双方是否就绪、何时轮到谁发送、何时结束。下面用传统询问应答规程说明这些控制动作。</p>
 <p>链路管理协调建立、维持、结束以及发送权。课件中的ENQ为询问，ACK为肯定响应，NAK为否定响应，EOT表示本次传输结束。</p>
 <p>点到点场景：A询问能否发送，B就绪则确认，随后传数据。多点主从场景还要指明对象：</p>
 <ul>
@@ -252,9 +250,28 @@
 <li>A发DATA0，保存副本并计时。</li>
 <li>B正确收到期待的DATA0，交付一次，改为期待1，回复ACK1。</li>
 <li>A收到ACK1，释放副本，发送DATA1。</li>
-<li>DATA0丢失或损坏，A超时重发，B仍期待0。</li>
-<li>若只有ACK1丢失，A也会重发；B已期待1，识别重复DATA0，再回ACK1，不重复交付。</li>
 </ol>
+<p>这是无差错的一轮。下面两种故障分别从“A 正准备发送 DATA0，B 期待 0”的初始状态重新开始，不能接在第 3 步以后继续理解。</p>
+<table>
+<thead>
+<tr>
+<th>独立故障</th>
+<th>A 怎样处理</th>
+<th>B 的状态与处理</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>DATA0 丢失，或损坏后被丢弃</td>
+<td>超时重发 DATA0</td>
+<td>仍期待 0；重发正确到达后才交付一次并回 ACK1</td>
+</tr>
+<tr>
+<td>DATA0 正确到达，只有 ACK1 丢失</td>
+<td>超时重发 DATA0</td>
+<td>已期待 1；识别重复 DATA0，再回 ACK1，不重复交付</td>
+</tr>
+</tbody></table>
+<p>下图只展示第二种故障。</p>
 <pre><code class="language-text">A                                      B
 | ───────── DATA0 ───────────────────&gt; | 交付一次
 |           × &lt;──────── ACK1 ───────── | 确认丢失
@@ -266,6 +283,7 @@
 <p>确认不只是“收到了”，还要说明确认的是哪一轮数据。课件部分页面用“已收到n”命名ACK，与本节规则不同，读题时先确认，不能混用。交替位模型还假定旧帧不会无限存活到多轮回绕后。</p>
 <a id="k4.2.3"></a>
 <h3>4.2.3 停等利用率与有效数据率</h3>
+<p>停等能恢复丢失，但发送方会花时间等待反馈。把发送、传播、处理和确认逐项排进一个周期，才能比较线路忙了多久与真正交付了多少有效数据。</p>
 <p>按课件两端处理时间相同的模型：</p>
 <div class="formula" role="math" aria-label="t_W=t_I+2t_P+2t_{Proc}+t_S">t<sub>W</sub>=t<sub>I</sub>+2t<sub>P</sub>+2t<sub>Proc</sub>+t<sub>S</sub></div>
 
@@ -326,9 +344,10 @@ G   = 160/28 ≈ 5.714 Mbit/s
 <p><strong>带宽时延积</strong><code>R×RTT</code>表示一个往返时间内可发送的比特数，帮助估计需要多少在途数据。RTT是往返时间；计算时要说明是否包含发送与处理时间。</p>
 <a id="k4.2.5"></a>
 <h3>4.2.5 GBN：回退N</h3>
+<p>允许流水后，一帧丢失会使后面的帧先到。若接收端只保留下一期待帧，发送端就必须从缺口起重新发送后续未确认帧，这就是回退 N 的取舍。</p>
 <p>GBN接收窗口为1，只接收下一期待帧。出错后续帧即使正确，也先丢弃；发送方超时后从最早未确认帧开始重传其后的未确认帧。</p>
 <p><strong>理解例子：</strong> 发0、1、2、3，2丢失。接收方收到0、1后期待2，丢弃3；发送方随后重发2、3。接收简单，但重复传输较多。</p>
-<p>若ACK1丢失但之后ACK3到达，累计确认仍可覆盖0～2，不一定需要重传。</p>
+<p>另看一次数据 0～2 都正确到达、只有 ACK1 丢失的独立发送：之后 ACK3 到达时，累计确认仍可覆盖 0～2，不一定需要重传。它不是前面“数据 2 丢失”过程的后续事件。</p>
 <p>k位序号共有<code>M=2ᵏ</code>种值，GBN发送窗口上限：</p>
 <div class="formula" role="math" aria-label="W\le2^k-1">W≤2<sup>k</sup>-1</div>
 
@@ -336,6 +355,7 @@ G   = 160/28 ≈ 5.714 Mbit/s
 <p>不能设W=M：接收方收完一整轮后再次期待0，旧0重传可能被当作新0。课件第66页的“n位，窗口≤n−1”混淆位数与序号个数，应改为上述关系。</p>
 <a id="k4.2.6"></a>
 <h3>4.2.6 SR：选择重传</h3>
+<p>回退重发会浪费已经正确传过的后续帧。若接收方先缓存窗口内的乱序帧，再分别反馈，就可以只补缺失部分，但必须管理更多状态并限制窗口。</p>
 <p>SR允许缓存接收窗口内的乱序帧，按帧记录接收与确认情况，只重传丢失或损坏部分。</p>
 <p>仍以2丢失为例：接收方保留正确的3，发送方只重发2；2到达后把2、3按序交付。代价是更多缓存和状态管理。最后一帧丢失也可能没有后续数据暴露缺口，因此仍需要定时恢复。</p>
 <p>为了区分旧副本与新一轮数据：</p>
@@ -375,6 +395,7 @@ G   = 160/28 ≈ 5.714 Mbit/s
 <p>窗口限制采用本章简化模型；具体协议还需要防止旧帧长期存活、正确处理序号回绕。</p>
 <a id="k4.2.7"></a>
 <h3>4.2.7 有错流水模型与题设冲突</h3>
+<p>前面的无错利用率没有计入恢复代价。有错时需明确窗口是否足够、失败怎样重发，再选相应效率模型；同一道题的传播条件也必须自洽。</p>
 <p>课件第82页在窗口足够大、忽略ACK丢失、采用规定重传代价的饱和流水模型下给出：</p>
 <div class="formula" role="math" aria-label="\eta=\frac{1-p}{1+p(t_W/t_I-1)}">η=<span class="frac"><span>1-p</span><span>1+p(t<sub>W</sub>/t<sub>I</sub>-1)</span></span></div>
 
@@ -406,7 +427,7 @@ G   = 160/28 ≈ 5.714 Mbit/s
 <p>原答案0.32、0.97对应第一行，不能声称由所写距离推出。需要原教材或教师说明决定原题应采用哪组条件。</p>
 <p>第84页条件一致：9600 bit/s、1200 bit帧、120 bit ACK、160 km、200 m/μs、p=0.01。计算得t_I=125 ms、t_P=0.8 ms、t_S=12.5 ms、t_W=139.1 ms；停等约0.88965，课件流水模型约0.98888。</p>
 <h3>对同一故障比较 GBN 与 SR 的状态</h3>
-<p><strong>扩展例题：</strong> 序号 3 位，发送窗口 4，A 已发 0～3，帧 1 丢失，其他正确到达。GBN 的接收窗口为 1；SR 的接收窗口为 4，支持逐帧反馈。</p>
+<p><strong>例题：</strong> 序号 3 位，发送窗口 4，A 已发 0～3，帧 1 丢失，其他正确到达。GBN 的接收窗口为 1；SR 的接收窗口为 4，支持逐帧反馈。</p>
 <table>
 <thead>
 <tr>
@@ -473,6 +494,7 @@ G   = 160/28 ≈ 5.714 Mbit/s
 <p>非平衡配置有主从关系，平衡配置通常由两个复合站组成，对称配置组合双向主从角色。这里的“异步”不是起始位、停止位式的异步字符格式。</p>
 <a id="k4.3.2"></a>
 <h3>4.3.2 HDLC帧格式与三类帧</h3>
+<p>双方已经选定站点角色，接下来要让接收方从帧中辨认数据、确认或管理动作。HDLC 把这些信息放入地址、控制和数据等字段。</p>
 <pre><code class="language-text">Flag | Address | Control | Information | FCS | Flag
 </code></pre>
 <p>Flag为8位<code>01111110</code>；Address标识相应站点；Control控制域区分帧类型；Information携带数据或管理信息；FCS为CRC校验。</p>
@@ -505,6 +527,7 @@ G   = 160/28 ≈ 5.714 Mbit/s
 <p><strong>P/F</strong>在命令中为Poll，请求响应；在响应中为Final，表示对轮询的最终响应。它不能一概解释成“没有更多数据”。</p>
 <a id="k4.3.3"></a>
 <h3>4.3.3 HDLC监督与管理帧</h3>
+<p>控制域标明是监督帧还不够，接收方还需要分清“已经确认但接收忙”和“要求重发”。把状态与下一期待序号一起读，才能推出发送方的下一步。</p>
 <p>以下N(R)=3均采用“下一期待3”的约定。</p>
 <table>
 <thead>
@@ -549,6 +572,7 @@ G   = 160/28 ≈ 5.714 Mbit/s
 <p>课件对等交互可以读成：SABM/UA建立；I帧交换并通过N(R)捎带确认；RR单独确认；DISC/UA断开。解读时结合方向、命令/响应和P/F，不能只记帧名。</p>
 <a id="k4.3.4"></a>
 <h3>4.3.4 PPP：点到点协议</h3>
+<p>点到点两端除了传网络层数据，还要先协商链路参数与网络层配置。PPP 用不同协议字段区分这些阶段；有检错字段不意味着用户数据会被自动重传。</p>
 <p>PPP提供点到点链路封装与配置。<strong>LCP</strong>是链路控制协议，用于建立、测试、协商链路；<strong>NCP</strong>是网络控制协议族，用于配置相应网络层参数。</p>
 <pre><code class="language-text">物理链路可用 → LCP协商 → 按需认证 → NCP配置 → 传网络层数据
 </code></pre>
@@ -561,6 +585,7 @@ G   = 160/28 ≈ 5.714 Mbit/s
 <p>异步封装中，0x7E转义为<code>7D 5E</code>，0x7D为<code>7D 5D</code>；接收端逆变换。面向比特的同步封装可采用比特填充，所以“PPP总是字节填充”过于笼统。<a href="https://www.rfc-editor.org/rfc/rfc1662">RFC 1662</a></p>
 <a id="k4.3.5"></a>
 <h3>4.3.5 IEEE 802、LLC与MAC</h3>
+<p>把链路层功能全部混在一起，容易误以为每种局域网都采用同一控制格式。IEEE 802 的子层划分将逻辑服务与介质访问分开，具体封装还要看所用帧格式。</p>
 <p>IEEE 802的链路层常按两个子层描述：<strong>LLC，逻辑链路控制</strong>提供逻辑服务接口；<strong>MAC，介质访问控制</strong>负责介质访问和链路寻址等。</p>
 <pre><code class="language-text">网络层数据 → LLC数据单元 → MAC帧
 </code></pre>
@@ -658,6 +683,7 @@ G   = 160/28 ≈ 5.714 Mbit/s
 <p><strong>理解例子：</strong> τ=20 μs、R=10 Mbit/s，理论下界是400 bit=50 B；标准仍要求64 B，不能因此发送非标准短帧。课件按传播速度推算的约5 km也是理想上界估算，不是布线安装规范。</p>
 <a id="k4.4.4"></a>
 <h3>4.4.4 截断二进制指数退避</h3>
+<p>检测到碰撞后，若各站立刻一起重发，可能再次同步碰撞。随机扩大等待范围可以分散重试时刻，下面明确次数、随机数范围与等待单位。</p>
 <p>第n次冲突后：</p>
 <pre><code class="language-text">k = min(n,10)
 随机选r：0～2ᵏ−1
@@ -668,6 +694,7 @@ G   = 160/28 ≈ 5.714 Mbit/s
 <p>“截断”是指数不再无限增大，不是允许无限重发；达到重试限制后报告失败。课件从1开始的随机范围与标准不同，这里采用从0开始的范围。<a href="https://www.ieee802.org/3/efm/public/jan04/THIN_MAC/4Ad3_1CMP.pdf">IEEE 802.3公开MAC条款草案</a>给出传统 MAC 规则；具体标准版本应按题设确认。</p>
 <a id="k4.4.5"></a>
 <h3>4.4.5 以太网帧与MAC地址</h3>
+<p>获得发送机会后，接收方仍需识别当前链路的收发者、上层类型和检错结果。完整帧格式还决定最小填充量与长度统计边界。</p>
 <p>无VLAN的基本Ethernet II MAC帧：</p>
 <pre><code class="language-text">目的MAC 6B | 源MAC 6B | 类型 2B | 数据及填充 46～1500B | FCS 4B
 </code></pre>
@@ -794,6 +821,7 @@ G   = 160/28 ≈ 5.714 Mbit/s
 <p><strong>竞争窗口CW</strong>限制随机计数范围，其最小、最大值依物理层和访问类别而定。课件固定“8槽到255”的数值不能套到全部802.11场景。ACK超时也不能证明一定发生碰撞，可能是数据或确认受到其他损失。</p>
 <a id="k4.5.3"></a>
 <h3>4.5.3 802.11地址与虚拟侦听</h3>
+<p>无线站点经 AP 发数据时，当前无线接收者可能是 AP，最终接收者却是另一台主机。首部需要分别表达这些地址关系，还需携带序号和预约时间。</p>
 <p>802.11帧可含帧控制、持续期、多个地址、序号控制、数据和FCS。最多四个地址，用于区分无线当前收发者和最终源、目的。</p>
 <p><strong>DS</strong>是分布系统。To DS、From DS指示帧相对它的方向；<strong>BSSID</strong>是基本服务集标识。</p>
 <table>
@@ -839,6 +867,7 @@ G   = 160/28 ≈ 5.714 Mbit/s
 <p>序号控制含12位序号和4位分片号，用于重复及分片处理。<strong>NAV，网络分配向量</strong>是站点根据持续期字段维护的本地预约忙时间，用于虚拟载波侦听，不是一根全网共同的锁线。</p>
 <a id="k4.5.4"></a>
 <h3>4.5.4 隐蔽站、暴露站与RTS/CTS</h3>
+<p>A 听不到 C，不表示 C 不会干扰 B 接收；反过来，听见别人也不一定必须停止另一条本可并行的通信。下面用接收位置区分隐蔽站与暴露站，再看短预约怎样缓解问题。</p>
 <p><strong>隐蔽站</strong>：A、C都能到B，却听不到彼此。A发给B时，C可能以为空闲也发送，冲突发生在B。</p>
 <p><strong>暴露站</strong>：B发给A，C想发给D；假如两次通信原本可互不干扰，C却因听到B而不必要地等待。</p>
 <p><strong>RTS</strong>是请求发送，<strong>CTS</strong>是允许发送，先用短控制帧预约后续交换：</p>
@@ -851,6 +880,7 @@ A ← ACK  ─ B
 <p>RTS本身也可碰撞，短数据使用它还会增加开销；RTS/CTS只能缓解部分问题。</p>
 <a id="k4.5.5"></a>
 <h3>4.5.5 WPAN、蓝牙与ZigBee</h3>
+<p>传感器的小消息与局域网的大文件对速率、耗电和休眠有不同要求。无线个域网的设计面向更小范围和特定业务，容量限制需要结合具体版本。</p>
 <p><strong>WPAN</strong>是无线个域网，服务个人或小范围设备。课件采用经典蓝牙微网模型说明设备互连，不能把该模型的角色和活跃设备限制推广到所有蓝牙版本。</p>
 <p><strong>ZigBee</strong>下层基于IEEE 802.15.4，上层提供网络组织与应用支持。低速、短时收发和休眠适合传感器、控制消息，不以高清视频为主要目标。</p>
 <p>课件“最多255个结点”缺少层次与配置条件，不作为统一容量上限；需要指定规范或授课说明才能确认。</p>
@@ -861,6 +891,7 @@ A ← ACK  ─ B
 <p>交换机不知道主机在哪个端口时，只能先学习并按规则泛洪。多台交换机加备用线路会形成环路，普通帧又没有 IP TTL，必须管理活动拓扑。学习、查表和阻塞是相互配合的动作。</p>
 <a id="k4.6.1"></a>
 <h3>4.6.1 网桥、交换机与两个“域”</h3>
+<p>把共享网段接入交换机后，碰撞范围与广播范围会发生不同变化。先区分这两个“域”，才能判断增加端口或 VLAN 具体隔离了什么。</p>
 <p><strong>网桥</strong>按帧地址连接网段，二层交换机可视为多端口网桥。它解释帧并决定转发，区别于只再生信号的中继器。</p>
 <table>
 <thead>
@@ -951,10 +982,12 @@ A ← ACK  ─ B
 <p>分析更复杂的拓扑时，必须根据实际连线、链路代价和端口标识逐项比较。故障后还需要协议重新收敛，即各设备逐步达成新的转发选择。</p>
 <a id="k4.6.4"></a>
 <h3>4.6.4 源路由网桥</h3>
+<p>透明网桥由沿途设备自行学习出口；另一种做法是让发送端指定要经过的网段与网桥。比较路径决定的位置，可以看清两种网桥机制的差别。</p>
 <p>源路由方式由发送端在帧中给出要经过的网段与网桥，网桥照此转发。源站可以通过探索帧发现路径。</p>
 <p>课件路径<code>L1:B5 → L3:B4 → L4</code>表示从L1经B5到L3，再经B4到L4。它与透明网桥自行学习不同，增加源端和控制字段的复杂度；这里用于比较路径决策的位置，不当作普通以太网主机的默认行为。</p>
 <a id="k4.6.5"></a>
 <h3>4.6.5 三种交换转发方式</h3>
+<p>交换机读出目的地址后，可以立即开始发，也可以等整帧收齐后检查。等待多少内容决定转发延迟和开始转发前能发现哪些错误。</p>
 <table>
 <thead>
 <tr>
@@ -1030,7 +1063,7 @@ TCI：PCP 3位 + DEI 1位 + VID 12位
 <td>无需再次未知单播泛洪</td>
 </tr>
 </tbody></table>
-<p>每个 MAC 帧长度为 <code>100+14+4=118 B</code>。帧已超过 46 B 最小载荷，无需填充。这里全双工端口不做 CSMA/CD 退避；CRC 失败会被检测丢弃，但普通以太网 MAC 不会因此自动进行 TCP 式重传。若表项老化，未知目的又可能泛洪；所以状态不是永久记忆。</p>
+<p>每个 MAC 帧长度为 <code>100+14+4=118 B</code>。帧已超过 46 B 最小载荷，无需填充。这里全双工端口不做 CSMA/CD 退避；FCS 检查未通过的帧通常会被丢弃，但普通以太网 MAC 不会因此自动进行 TCP 式重传。检查通过仍可能存在漏检。若表项老化，未知目的又可能泛洪；所以状态不是永久记忆。</p>
 <p><strong>延伸：</strong> 若端口 3 改属 VLAN20，从端口 1 发来的 VLAN10 广播也不会到端口 3。判断出口必须同时用目的类型、表项、VLAN 与生成树状态。</p>
 <a id="c4-9"></a>
 <h2>4.9 自测与答案</h2>
@@ -1077,27 +1110,27 @@ TCI：PCP 3位 + DEI 1位 + VID 12位
 <tbody><tr>
 <td>1</td>
 <td>ACK 1 丢失后重发 DATA0，接收方已期待 1。具体做什么？</td>
-<td>写条件、推导、解释结果与边界</td>
+<td>确认丢失与去重</td>
 </tr>
 <tr>
 <td>2</td>
 <td>k=4、t_I=2 ms、t_W=18 ms，等窗口 SR 能否按该配置达到 100% 无错利用率？</td>
-<td>写条件、推导、解释结果与边界</td>
+<td>时延需求与序号上限</td>
 </tr>
 <tr>
 <td>3</td>
 <td>第 3 次碰撞，在传统 10 Mbit/s 以太网抽到 r=7，退避多少？</td>
-<td>写条件、推导、解释结果与边界</td>
+<td>冲突次数与退避单位</td>
 </tr>
 <tr>
 <td>4</td>
 <td>MAC 表 B→入端口，收到 A→B 帧，应发回入端口吗？</td>
-<td>写条件、推导、解释结果与边界</td>
+<td>学习与过滤规则</td>
 </tr>
 <tr>
 <td>5</td>
 <td>未知单播泛洪为何不叫广播帧？</td>
-<td>写条件、推导、解释结果与边界</td>
+<td>目的地址类型与复制行为</td>
 </tr>
 </tbody></table>
 <details>
@@ -1154,19 +1187,19 @@ TCI：PCP 3位 + DEI 1位 + VID 12位
 </tbody></table>
 <p>学完后应能独立做到：</p>
 <ul>
-<li><input disabled="" type="checkbox"> 用自己的话解释本章机制要处理的对象和困难。</li>
-<li><input disabled="" type="checkbox"> 指出整体、部分、分类维度和执行动作之间的关系。</li>
-<li><input disabled="" type="checkbox"> 写出算例的前提、单位、中间结果与最终对象。</li>
-<li><input disabled="" type="checkbox"> 解释确认、缓存、租约或映射的状态怎样变化。</li>
-<li><input disabled="" type="checkbox"> 指出相近方法的差别及可以组合的条件。</li>
-<li><input disabled="" type="checkbox"> 完成概念自测和应用练习，并说明前提改变后的结果。</li>
+<li><input disabled="" type="checkbox"> 完成字节或比特填充，再还原原内容并指出真正的边界。</li>
+<li><input disabled="" type="checkbox"> 追踪数据或确认丢失后双方序号、缓存和重传的变化。</li>
+<li><input disabled="" type="checkbox"> 同时检查 GBN/SR 序号上限与填满链路所需窗口。</li>
+<li><input disabled="" type="checkbox"> 从协议字段分清数据、确认、管理和配置交换。</li>
+<li><input disabled="" type="checkbox"> 按半双工或无线模型推导碰撞、退避与确认，说明适用条件。</li>
+<li><input disabled="" type="checkbox"> 从源地址学习，结合目的、VLAN 与端口状态推出允许出口。</li>
 </ul>
 <a id="c4-11"></a>
 <h2>4.11 分类速查</h2>
-<p>选择一项查看含义、基本形式、例子与结果、使用条件。完整表保存在对应 Markdown。</p>
+<p>选择一项查看用途、计算方法与适用条件，再回正文核对完整推导。</p>
 <div class="quickbox"><label for="quick-select">选择速查项</label><select id="quick-select"></select><div id="quick-card" class="quickcard" aria-live="polite"></div></div>
 
-<div class="footerlinks"><a href="03_物理层.html">← 上一章：物理层</a><a href="05_网络层.html">下一章：网络层 →</a></div></article></main><script>window.CHAPTER={"chapter":4,"name":"数据链路层","file":"04_数据链路层.md","title":"第4章 数据链路层：让一帧在当前链路上有边界、可检查、可恢复，并正确进入下一网段","toc":[{"id":"c4-0","title":"4.0 共同场景与符号"},{"id":"c4-1","title":"4.1 帧边界与链路组织"},{"id":"c4-2","title":"4.2 可靠传输与窗口：丢失后怎样恢复一次交付"},{"id":"c4-3","title":"4.3 HDLC、PPP 与 LLC/MAC：机制怎样落到格式中"},{"id":"c4-4","title":"4.4 共享信道与以太网：先听为何仍会碰撞"},{"id":"c4-5","title":"4.5 无线竞争：接收端听到的情况为何不同"},{"id":"c4-6","title":"4.6 交换学习与生成树：怎样转发而不形成循环"},{"id":"c4-7","title":"4.7 VLAN：在同一设备上划分广播范围"},{"id":"c4-8","title":"4.8 综合应用"},{"id":"c4-9","title":"4.9 自测与答案"},{"id":"c4-10","title":"4.10 排错与复习"},{"id":"c4-11","title":"4.11 分类速查"}],"stages":[{"name":"学习准备","task":"确认读者基础和对象","ids":["c4-0"]},{"name":"成帧与恢复","task":"把连续比特变成可控制的一次交付","ids":["c4-1","c4-2"]},{"name":"协议与共享","task":"区分协议字段、有线与无线访问","ids":["c4-3","c4-4","c4-5"]},{"name":"局域网组网","task":"学会查表、无环转发与广播隔离","ids":["c4-6","c4-7"]},{"name":"练习与复习","task":"组合推导、独立作答与排错","ids":["c4-8","c4-9","c4-10","c4-11"]}],"quick":[["透明传输","成帧","避免数据被误识别为边界","转义或五个连续 1 后补 0","01111110 内容填成 011111010","定界标志本身不填充",0],["停等周期与有效率","可靠传输","计算等待和有效数据率","t_W=t_I+2t_P+2t_Proc+t_S；G=N/t_W","课件 200 bit 帧得 28 μs 周期","失败周期更长时需另建模型",1],["GBN 与 SR 窗口","序号限制","避免旧帧被当新帧","GBN≤2ᵏ−1；等窗口 SR≤2ᵏ⁻¹","3 位得 7 与 4","还需保证旧副本不无限存活",1],["PPP 的控制阶段","链路协议","配置链路与网络层参数","LCP→按需认证→NCP→数据","IPCP 标识 0x8021","有 FCS 不等于内置重传",2],["碰撞检测与退避","介质访问","处理共享半双工竞争","L/R≥2τ；r∈[0,2^min(n,10)−1]","第 3 次 r=5 等 256 μs","全双工交换以太网不使用 CD",3],["CSMA/CA","无线访问","降低碰撞并反馈结果","侦听、间隔、退避、DATA/ACK","剩 4 槽遇忙冻结在 4","ACK 丢失不证明一定碰撞",4],["MAC 学习与转发","网桥","找到当前帧的允许出口","源+入端口学习，目的查表","空表 A→B 先泛洪，B 回 A 后学习","受 VLAN、端口状态与老化限制",5],["STP 与 VLAN","组网机制","避免环路并控制广播范围","生成树管活动路径，VLAN 管归属","三角形阻塞冗余端口；VLAN10 广播不入 20","不同机制可同时使用",6]],"quick_id":"c4-11","synthesis_id":"c4-8","source_module_count":33,"retained_core_chars":13012,"new_chars":22624};</script><script>
+<div class="footerlinks"><a href="03_物理层.html">← 上一章：物理层</a><a href="05_网络层.html">下一章：网络层 →</a></div></article></main><script>window.CHAPTER={"chapter":4,"name":"数据链路层","file":"04_数据链路层.md","title":"第4章 数据链路层：识别帧边界、按协议恢复并控制局域网转发","toc":[{"id":"c4-0","title":"4.0 共同场景与符号"},{"id":"c4-1","title":"4.1 帧边界与链路组织"},{"id":"c4-2","title":"4.2 可靠传输与窗口：丢失后怎样恢复一次交付"},{"id":"c4-3","title":"4.3 HDLC、PPP 与 LLC/MAC：机制怎样落到格式中"},{"id":"c4-4","title":"4.4 共享信道与以太网：先听为何仍会碰撞"},{"id":"c4-5","title":"4.5 无线竞争：接收端听到的情况为何不同"},{"id":"c4-6","title":"4.6 交换学习与生成树：怎样转发而不形成循环"},{"id":"c4-7","title":"4.7 VLAN：在同一设备上划分广播范围"},{"id":"c4-8","title":"4.8 综合应用"},{"id":"c4-9","title":"4.9 自测与答案"},{"id":"c4-10","title":"4.10 排错与复习"},{"id":"c4-11","title":"4.11 分类速查"}],"stages":[{"name":"学习准备","task":"认清场景、对象与计数边界","ids":["c4-0"]},{"name":"成帧与恢复","task":"把连续比特变成可控制的一次交付","ids":["c4-1","c4-2"]},{"name":"协议与共享","task":"区分协议字段、有线与无线访问","ids":["c4-3","c4-4","c4-5"]},{"name":"局域网组网","task":"学会查表、无环转发与广播隔离","ids":["c4-6","c4-7"]},{"name":"练习与复习","task":"组合推导、独立作答与排错","ids":["c4-8","c4-9","c4-10","c4-11"]}],"quick":[["透明传输","成帧","避免数据被误识别为边界","转义或五个连续 1 后补 0","01111110 内容填成 011111010","定界标志本身不填充",0],["停等周期与有效率","可靠传输","计算等待和有效数据率","t_W=t_I+2t_P+2t_Proc+t_S；G=N/t_W","课件 200 bit 帧得 28 μs 周期","失败周期更长时需另建模型",1],["GBN 与 SR 窗口","序号限制","避免旧帧被当新帧","GBN≤2ᵏ−1；等窗口 SR≤2ᵏ⁻¹","3 位得 7 与 4","还需保证旧副本不无限存活",1],["PPP 的控制阶段","链路协议","配置链路与网络层参数","LCP→按需认证→NCP→数据","IPCP 标识 0x8021","有 FCS 不等于内置重传",2],["碰撞检测与退避","介质访问","处理共享半双工竞争","L/R≥2τ；r∈[0,2^min(n,10)−1]","第 3 次 r=5 等 256 μs","全双工交换以太网不使用 CD",3],["CSMA/CA","无线访问","降低碰撞并反馈结果","侦听、间隔、退避、DATA/ACK","剩 4 槽遇忙冻结在 4","ACK 丢失不证明一定碰撞",4],["MAC 学习与转发","网桥","找到当前帧的允许出口","源+入端口学习，目的查表","空表 A→B 先泛洪，B 回 A 后学习","受 VLAN、端口状态与老化限制",5],["STP","活动拓扑","在冗余二层网络中避免转发环路","选根、比较到根代价、控制端口转发","三角形阻塞一侧冗余端口","保留物理备用连接，故障后还需收敛",5],["VLAN","广播范围","按逻辑归属限制二层广播","接入端口归属；干道携带 VLAN 信息","VLAN10 广播不进入 VLAN20","干道允许多个 VLAN 不等于提供跨 VLAN 路由",6]],"quick_id":"c4-11","synthesis_id":"c4-8","source_module_count":33,"retained_core_chars":13012,"new_chars":24094};</script><script>
 const $$=(s,r=document)=>[...r.querySelectorAll(s)];
 const menu=document.getElementById('menu-button');
 const setNav=v=>{document.body.classList.toggle('nav-open',v);menu.setAttribute('aria-expanded',String(v))};
