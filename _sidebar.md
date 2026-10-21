@@ -246,6 +246,7 @@
     - [06 事务](/3_1%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F/06_%E4%BA%8B%E5%8A%A1.md)
     - [07 并发控制](/3_1%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F/07_%E5%B9%B6%E5%8F%91%E6%8E%A7%E5%88%B6.md)
     - **图解学习版（HTML）**
+      - [00 学习导航](https://goya4140.github.io/JLU_CS_Course/3_1%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F/00_%E5%AD%A6%E4%B9%A0%E5%AF%BC%E8%88%AA.html ':ignore')
       - [01 数据库基本概念](https://goya4140.github.io/JLU_CS_Course/3_1%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F/01_%E6%95%B0%E6%8D%AE%E5%BA%93%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5.html ':ignore')
       - [02 关系模型与关系代数](https://goya4140.github.io/JLU_CS_Course/3_1%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F/02_%E5%85%B3%E7%B3%BB%E6%A8%A1%E5%9E%8B%E4%B8%8E%E5%85%B3%E7%B3%BB%E4%BB%A3%E6%95%B0.html ':ignore')
       - [03 SQL语言](https://goya4140.github.io/JLU_CS_Course/3_1%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F/03_SQL%E8%AF%AD%E8%A8%80.html ':ignore')
