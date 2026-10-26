@@ -1,0 +1,54 @@
+/* Color is paired with a text label and a border; body contrast stays readable. */
+.study-card {
+  --study-bg: #f6f7f9;
+  --study-border: #c4cbd3;
+  --study-label: #52606e;
+  background: var(--study-bg);
+  border: 1px solid color-mix(in srgb, var(--study-border) 30%, white);
+  border-left: 4px solid var(--study-border);
+  border-radius: 8px;
+  padding: 17px 21px;
+  margin: 22px 0;
+  color: #263b47;
+  min-width: 0;
+}
+.study-concept { --study-bg: #edf8f6; --study-border: #258579; --study-label: #16675e; }
+.study-result { --study-bg: #fff6e5; --study-border: #c18a29; --study-label: #805813; }
+.study-warning { --study-bg: #fff1ee; --study-border: #bb6b54; --study-label: #91452f; }
+.study-process { --study-bg: #f7f8fa; --study-border: #c4cbd3; --study-label: #52606e; }
+.study-question { --study-bg: #fff; --study-border: #cbd6de; --study-label: #52606e; }
+.study-card-title, .study-field-title > strong {
+  color: var(--study-label);
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: .04em;
+}
+.study-card-title { margin-bottom: 9px; }
+.study-field-title > strong { display: block; margin-bottom: 7px; }
+.study-card > p:first-of-type { margin-top: 0; }
+.study-card > :last-child { margin-bottom: 0; }
+.study-card .katex-display { margin: 10px 0; overflow-x: auto; overflow-y: hidden; }
+.study-card > .study-result { margin: 18px 0 0; }
+.study-card > .study-result > p { margin-top: 0; }
+.study-card table { background: white; }
+.study-legend { display: flex; flex-wrap: wrap; gap: 7px; margin: -8px 0 25px; }
+.study-chip {
+  background: var(--study-bg);
+  color: var(--study-label);
+  border-left: 3px solid var(--study-border);
+  border-radius: 4px;
+  padding: 3px 9px;
+  font-size: 12px;
+  line-height: 1.8;
+}
+@media (max-width: 900px) {
+  .study-card { padding: 14px 13px; margin: 18px 0; border-left-width: 3px; }
+  .study-card > .study-result { padding: 12px 10px; }
+  .study-legend { gap: 6px; margin-bottom: 22px; }
+  .study-chip { padding: 3px 7px; font-size: 11px; }
+}
+@media print {
+  .study-card { border: 1px solid #999; border-left: 3px solid #666; box-shadow: none; }
+  .study-card-title, .study-field-title > strong { color: #222; }
+  .study-legend { display: none; }
+}

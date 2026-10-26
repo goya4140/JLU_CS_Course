@@ -10,6 +10,17 @@ let formulas=0,links=0;
 for(const file of files){
  const source=fs.readFileSync(file,'utf8');
  const data=JSON.parse(source.match(/<script type="application\/json" id="data">([\s\S]*?)<\/script>/)[1]);
+ let noteOpen=false;
+ for(const marker of data.markdown.matchAll(/<!--\s*(study:[^>]+|\/study)\s*-->/g)){
+  if(marker[1].trim()==='/study'){
+   if(!noteOpen)throw new Error('Unmatched emphasis end in '+file);
+   noteOpen=false;
+  }else{
+   if(noteOpen)throw new Error('Nested emphasis annotation in '+file);
+   noteOpen=true;
+  }
+ }
+ if(noteOpen)throw new Error('Unclosed emphasis annotation in '+file);
  const tokenized=data.markdown.replace(/\$\$([\s\S]*?)\$\$|\$([^$\n]+)\$/g,(whole,block,inline)=>{
    try{katex.renderToString(block??inline,{displayMode:block!==undefined,throwOnError:true,strict:'ignore'});}catch(e){throw new Error(path.relative(root,file)+': '+e.message);}
    formulas++;return 'MATH';

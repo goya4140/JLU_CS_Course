@@ -16,6 +16,8 @@ $(2,0)$ 表示一个只沿 $+x$ 方向的力。如果位移为 $(1,0)$，功是 
 
 推广到很小的位移时，写成 $Pdx+Qdy+Rdz$；将每一小步的功相加，就进入第二型曲线积分。
 
+<!-- study:concept|第二型曲线积分：做功与有向累积 -->
+
 第一型积分累积标量函数乘长度。现在设质点沿曲线运动，力为 $\mathbf F=(P,Q,R)$，微小位移为 $d\mathbf r=(dx,dy,dz)$。微小功为
 
 $$
@@ -27,6 +29,8 @@ $$
 $$
 \int_L Pdx+Qdy+Rdz=\int_L\mathbf F\cdot d\mathbf r.
 $$
+
+<!-- /study -->
 
 在分割和式中，$\Delta x_i,\Delta y_i,\Delta z_i$ 是按行进方向取的坐标增量。它们可以为负；这与非负弧长 $\Delta s_i$ 有本质区别。
 
@@ -40,6 +44,8 @@ $$
 
 ### 参数法保留导数的符号
 
+<!-- study:result|有向曲线的参数计算公式 -->
+
 设 $\mathbf r(t)=(x(t),y(t),z(t))$，随 $t$ 从 $a$ 到 $b$ 按题目方向行进，则
 
 $$
@@ -47,9 +53,17 @@ $$
 =\int_a^b\big(P(\mathbf r(t))x'(t)+Q(\mathbf r(t))y'(t)+R(\mathbf r(t))z'(t)\big)dt.
 $$
 
+<!-- /study -->
+
+<!-- study:warning|导数的符号必须保留 -->
+
 这里没有速度长度的根号，也没有导数的绝对值。反向取 $b$ 到 $a$ 时积分变号。如果同一坐标在曲线上先增后减，用参数统一处理比直接设上下限更稳妥。
 
+<!-- /study -->
+
 ### 用有向单位切向量连接两型
+
+<!-- study:result|两型曲线积分的关系 -->
 
 设 $\mathbf T=(\cos\alpha,\cos\beta,\cos\gamma)$ 为沿行进方向的单位切向量，则 $d\mathbf r=\mathbf Tds$，因此
 
@@ -57,6 +71,8 @@ $$
 \int_L Pdx+Qdy+Rdz
 =\int_L(P\cos\alpha+Q\cos\beta+R\cos\gamma)ds.
 $$
+
+<!-- /study -->
 
 反向后 $ds$ 不变，$\mathbf T$ 反向，所以第二型变号。
 

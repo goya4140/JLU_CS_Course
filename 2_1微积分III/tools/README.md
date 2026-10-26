@@ -20,3 +20,9 @@
 - `chapter*/section*.md`、`chapter*/README.md`和`chapter*/summary.md`是生成文件，应修改原教程后重新构建。原`chapter4.html`、`chapter5.html`保留整章连续阅读与旧锚点；新章节入口为`chapter4/index.html`和`chapter5/index.html`。
 - 运行`python3 tools/generate_sidebar.py --course 2_1微积分III`仅更新课程导航，保留其他课程已有的人工整理。
 - 数学与链接检查：`python3 tools/check_math_fragments.py 2_1微积分III`、`python3 2_1微积分III/tools/check_examples.py`、`python3 2_1微积分III/tools/check_homework.py`及`node 2_1微积分III/tools/check_reading.cjs`。
+
+## 阅读色块
+
+讲解原文使用成对的HTML注释标出经过人工选择的重点范围，例如`<!-- study:result|参数计算公式 -->`与`<!-- /study -->`。可用类型为`concept`（核心知识点）、`result`（结论与公式）、`process`（推导说明）、`warning`（易错提醒）；不要跨标题或嵌套标记，定理条件应和公式放在同一范围内。
+
+`assets/emphasis.js`与`assets/emphasis.css`为图文阅读版和Docsify主站共用的渲染与样式。作业的原题、对应知识点、解题过程按现有字段分层；作者用LaTeX的`boxed`命令或明确选项标出的最终答案加结论色块。颜色配合文字标签和边框，保持推导文字的正常对比度。

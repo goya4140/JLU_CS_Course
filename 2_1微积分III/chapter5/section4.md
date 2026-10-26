@@ -6,6 +6,8 @@
 
 ## Gauss 公式：封闭面变为体积分
 
+<!-- study:result|Gauss公式：条件与公式 -->
+
 设 $\Omega$ 的分片光滑边界取外侧，场在包含 $\overline\Omega$ 的开邻域内一阶连续可微，则
 
 $$
@@ -14,7 +16,13 @@ $$
 =\iiint_\Omega\operatorname{div}\mathbf F\,dV.
 $$
 
+<!-- /study -->
+
+<!-- study:concept|散度的含义 -->
+
 散度 $\operatorname{div}\mathbf F=P_x+Q_y+R_z$ 衡量单位体积的局部净流出。体内相邻小块的公共面外法向相反，内部通量抵消，只留下边界总通量。
+
+<!-- /study -->
 
 ![三个具体向量场的散度比较](../assets/divergence.svg)
 
@@ -42,7 +50,11 @@ $$
 -\iint_B\mathbf F\cdot\mathbf n\,dS.
 $$
 
+<!-- study:warning|补面的法向必须取外侧 -->
+
 补面必须选为该立体的外侧。对上半球封闭成上半球体时，底盘的外法向朝下。
+
+<!-- /study -->
 
 ### 例12 半球面补底盘
 
@@ -56,7 +68,11 @@ $$
 
 ### 奇点与挖去小球
 
+<!-- study:warning|奇点不能被散度为零掩盖 -->
+
 $\mathbf F=\mathbf r/\lVert\mathbf r\rVert^3$ 在原点外散度为零，但原点不定义。以原点为中心的半径 $a$ 球面上，$\mathbf F\cdot\mathbf n=1/a^2$，故外通量为 $4\pi$，不能以“散度为零”得零。
+
+<!-- /study -->
 
 若在包含原点的区域内挖小球，Gauss 可用于剩余光滑区域。小球内边界的外法向朝向被挖去的球心；外边界与小球向外的通量相等。本地第三次选择题3就是这一类径向场的球面通量问题。
 

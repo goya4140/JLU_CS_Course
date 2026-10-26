@@ -90,12 +90,12 @@ def generate():
         site_home = relative('../index.html', html) + '#/'
         doc = f'''<!doctype html>
 <html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>{escape(title)} | 微积分 III</title><link rel="stylesheet" href="{prefix}/vendor/katex.css"><link rel="stylesheet" href="{prefix}/reading.css"></head>
+<title>{escape(title)} | 微积分 III</title><link rel="stylesheet" href="{prefix}/vendor/katex.css"><link rel="stylesheet" href="{prefix}/reading.css"><link rel="stylesheet" href="{prefix}/emphasis.css?v=20261026-1"></head>
 <body><header class="top"><a href="{site_home}" style="color:#cfdee3;text-decoration:none;font-size:14px">JLU CS Course / 大二上</a><br><strong>微积分 III · 第4、5章</strong><p>按章节与 Section 学习 · 图文教程与平时作业</p></header>
 <div class="layout"><aside class="nav" aria-label="课程导航"><details id="course-menu" open><summary>课程目录</summary>{nav}</details><div class="label">本页目录</div><nav id="toc" aria-label="本页目录"></nav></aside>
 <main><div class="breadcrumb">{crumb}</div>{tabs}<article id="content"></article><div class="foot">{previous}{following}</div><noscript>本阅读页需要启用 JavaScript；也可在 GitHub 仓库直接阅读对应 Markdown 文件。</noscript></main></div>
 <footer>JLU CS Course · 教材 Section 导航 · 本地公式与图片资源</footer>
-<script type="application/json" id="data">{data}</script><script src="{prefix}/vendor/marked.js"></script><script src="{prefix}/vendor/katex.js"></script><script src="{prefix}/reading.js"></script></body></html>'''
+<script type="application/json" id="data">{data}</script><script src="{prefix}/vendor/marked.js"></script><script src="{prefix}/vendor/katex.js"></script><script src="{prefix}/emphasis.js?v=20261026-1"></script><script src="{prefix}/reading.js?v=20261026-1"></script></body></html>'''
         (ROOT/html).write_text(doc)
     print(f'Built {len(pages)} offline reading pages')
 

@@ -8,6 +8,7 @@
   <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/docsify@4/lib/themes/vue.css" />
   <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/docsify-sidebar-collapse/dist/sidebar.min.css" />
   <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/katex@0.16.22/dist/katex.min.css" />
+  <link rel="stylesheet" href="2_1微积分III/assets/emphasis.css?v=20261026-1" />
   <style>
     :root {
       --theme-color: #1f7a8c;
@@ -87,7 +88,7 @@
 <body>
   <div id="app">正在加载课程资料...</div>
   <script>
-    window.__DOCS_VERSION__ = '2026-10-26-calculus-sections-homework';
+    window.__DOCS_VERSION__ = '2026-10-26-calculus-emphasis';
 
     (function() {
       var originalOpen = XMLHttpRequest.prototype.open;
@@ -255,6 +256,9 @@
               });
             }
             renderLooseInlineMath(article);
+            if (decodeURIComponent(route).startsWith('2_1微积分III/') && window.applyCalculusEmphasis) {
+              window.applyCalculusEmphasis(article);
+            }
 
             var oldToc = document.querySelector('.page-toc');
             if (oldToc) {
@@ -294,6 +298,7 @@
     };
   </script>
   <script src="//cdn.jsdelivr.net/npm/katex@0.16.22/dist/katex.min.js"></script>
+  <script src="2_1微积分III/assets/emphasis.js?v=20261026-1"></script>
   <script src="//cdn.jsdelivr.net/npm/katex@0.16.22/dist/contrib/auto-render.min.js"></script>
   <script src="//cdn.jsdelivr.net/npm/docsify@4/lib/docsify.min.js"></script>
   <script src="//cdn.jsdelivr.net/npm/docsify-sidebar-collapse/dist/docsify-sidebar-collapse.min.js"></script>
