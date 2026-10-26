@@ -2,6 +2,8 @@
 """Generate the Docsify sidebar from repository Markdown and PDF files."""
 
 import re
+import json
+import argparse
 from pathlib import Path
 from urllib.parse import quote
 
@@ -161,10 +163,19 @@ def append_directory(lines: list[str], directory: Path, level: int) -> None:
         return
     if directory.name == "2_1微积分III":
         indent = "  " * level
+        structure = json.loads((directory / "tools/course_structure.json").read_text())
+        lines.append(f"{indent}- [课程导览]({link_for(directory / 'README.md')})")
+        for chapter in structure["chapters"]:
+            number = chapter["number"]
+            base = directory / f"chapter{number}"
+            lines.append(f"{indent}- [第{number}章 {chapter['title']}]({link_for(base / 'README.md')})")
+            for section in chapter["sections"]:
+                n = section["number"]
+                lines.append(f"{indent}  - [{number}.{n} {section['title']}]({link_for(base / f'section{n}.md')})")
+                lines.append(f"{indent}    - [本节教程]({link_for(base / f'section{n}.md')})")
+                lines.append(f"{indent}    - [作业解读]({link_for(base / f'homework{n}.md')})")
+            lines.append(f"{indent}  - [章末总结与自测]({link_for(base / 'summary.md')})")
         for filename, title in (
-            ("README.md", "课程导览"),
-            ("04_第一型积分_教程.md", "第4章 第一型积分"),
-            ("05_第二型积分_教程.md", "第5章 第二型积分"),
             ("06_期末题型与复习路线.md", "期末题型与复习路线"),
             ("资料依据与覆盖对照.md", "资料依据与覆盖对照"),
         ):
@@ -317,4 +328,19 @@ def append_oop_mock_directory(lines: list[str], directory: Path, level: int) -> 
 
 
 if __name__ == "__main__":
-    OUTPUT.write_text(build_sidebar(), encoding="utf-8")
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--course', help='Update one existing course without regenerating other navigation')
+    args = parser.parse_args()
+    if args.course:
+        directory = ROOT / args.course
+        _, course = split_course_dir(directory)
+        heading = f'  - **{course}**\n'
+        original = OUTPUT.read_text(encoding='utf-8')
+        start = original.index(heading) + len(heading)
+        following = re.search(r'^(?:  - |-[ ])', original[start:], re.M)
+        end = start + following.start() if following else len(original)
+        lines = []
+        append_directory(lines, directory, 2)
+        OUTPUT.write_text(original[:start] + '\n'.join(lines) + '\n' + original[end:], encoding='utf-8')
+    else:
+        OUTPUT.write_text(build_sidebar(), encoding='utf-8')

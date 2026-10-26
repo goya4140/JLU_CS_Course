@@ -11,3 +11,12 @@
 `assets/math-figures.json` 记录图名、图注、使用的版本以及数学核验值。图形不得通过缩放或平移变成与正文公式不符的对象。向量箭头如缩放展示，应在图注中说明。
 
 讲解顺序以章节和正文小节为主线，导图、目录与正文应保持同一顺序。第4章路线图直接读取正文十个二级标题；修改正文标题后应重新生成图。新增概念、图示和例题放入对应的小节，并用简短开场承接上一节，避免按知识类别来回跳转。
+
+## Section与作业内容维护
+
+- `course_structure.json`保存第4章3节、第5章5节与原教程讲解单元的对应关系。
+- 两份根目录教程Markdown是讲解内容源；`chapter4/homework*.md`和`chapter5/homework*.md`是作业内容源。每题保留批次、题型、原题号，正文仅包含原题、对应知识点（1—2句话）、解题过程。
+- 运行`python3 2_1微积分III/tools/build_reading.py`（仓库根目录）生成Section教程、章节导览、章末总结及全部25个HTML页面。`build_sections.py`检查原讲解单元无遗漏、无重复归类，并检查作业三字段完整。
+- `chapter*/section*.md`、`chapter*/README.md`和`chapter*/summary.md`是生成文件，应修改原教程后重新构建。原`chapter4.html`、`chapter5.html`保留整章连续阅读与旧锚点；新章节入口为`chapter4/index.html`和`chapter5/index.html`。
+- 运行`python3 tools/generate_sidebar.py --course 2_1微积分III`仅更新课程导航，保留其他课程已有的人工整理。
+- 数学与链接检查：`python3 tools/check_math_fragments.py 2_1微积分III`、`python3 2_1微积分III/tools/check_examples.py`、`python3 2_1微积分III/tools/check_homework.py`及`node 2_1微积分III/tools/check_reading.cjs`。
