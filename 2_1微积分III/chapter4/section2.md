@@ -72,6 +72,163 @@ $$
 
 <!-- /study -->
 
+<details class="study-extension" id="parametric-extension">
+<summary>扩展说明：参数偏导的含义，以及表中四种曲面的参数式与面积元推导</summary>
+
+#### 先读懂参数式和偏导向量
+
+参数式 $\mathbf r(u,v)=(x(u,v),y(u,v),z(u,v))$ 表示：给定两个参数 $u,v$，就确定曲面上的一个点。两个参数可以是角度、高度或平面坐标，不一定就是 $x,y$。
+
+$\mathbf r_u,\mathbf r_v$ 是分别对两个参数求偏导得到的向量；每个坐标分量都要分别求导：
+
+$$
+\mathbf r_u=\frac{\partial\mathbf r}{\partial u}
+=\left(\frac{\partial x}{\partial u},\frac{\partial y}{\partial u},\frac{\partial z}{\partial u}\right),
+$$
+
+$$
+\mathbf r_v=\frac{\partial\mathbf r}{\partial v}
+=\left(\frac{\partial x}{\partial v},\frac{\partial y}{\partial v},\frac{\partial z}{\partial v}\right).
+$$
+
+固定 $v$，让 $u$ 增加很小的 $du$，曲面上的位移近似为 $\mathbf r_u\,du$；固定 $u$，另一方向的位移近似为 $\mathbf r_v\,dv$。因此小曲面块可以用这两条切向边构成的平行四边形近似，其面积为
+
+$$
+\left\|(\mathbf r_u\,du)\times(\mathbf r_v\,dv)\right\|
+=\|\mathbf r_u\times\mathbf r_v\|\,du\,dv.
+$$
+
+这里把 $du\,dv$ 理解为参数平面上的正面积元。曲面光滑且参数化正则时，这个局部近似给出面积元 $dS$。叉积通常不能直接改成两个向量长度相乘，因为两条切向边未必垂直。
+
+#### 1. 球面：先用角度确定点的位置
+
+半径为 $a>0$ 的球面，取 $\phi$ 为从 $+z$ 轴量起的极角，$\theta$ 为水平投影从 $+x$ 轴量起的方位角。
+
+点的高度为 $z=a\cos\phi$，到 $z$ 轴的水平距离为 $\rho=a\sin\phi$。再把水平距离分解到两条坐标轴：
+
+$$
+x=\rho\cos\theta=a\sin\phi\cos\theta,\quad
+y=\rho\sin\theta=a\sin\phi\sin\theta,\quad
+z=a\cos\phi.
+$$
+
+所以球面参数式为 $\mathbf r(\phi,\theta)=(a\sin\phi\cos\theta,a\sin\phi\sin\theta,a\cos\phi)$。分别求偏导：
+
+$$
+\mathbf r_\phi=(a\cos\phi\cos\theta,a\cos\phi\sin\theta,-a\sin\phi),
+$$
+
+$$
+\mathbf r_\theta=(-a\sin\phi\sin\theta,a\sin\phi\cos\theta,0).
+$$
+
+叉积为
+
+$$
+\mathbf r_\phi\times\mathbf r_\theta
+=a^2\sin\phi\,(\sin\phi\cos\theta,\sin\phi\sin\theta,\cos\phi).
+$$
+
+括号内向量的长度为 $\sqrt{\sin^2\phi(\cos^2\theta+\sin^2\theta)+\cos^2\phi}=1$。当 $0\le\phi\le\pi$ 时，$\sin\phi\ge0$，于是
+
+$$
+\boxed{dS=a^2\sin\phi\,d\phi\,d\theta}.
+$$
+
+整球取 $0\le\phi\le\pi,0\le\theta\le2\pi$；上半球取 $0\le\phi\le\pi/2$。极角从 $+z$ 轴量起，所以北极为 $\phi=0$、赤道为 $\phi=\pi/2$。极点及参数区间接缝的重复表示不影响曲面积分。
+
+#### 2. 圆柱侧面：一个参数控制角度，一个参数控制高度
+
+圆柱 $x^2+y^2=a^2$ 的水平截面是半径为 $a$ 的圆，故令 $x=a\cos\theta,y=a\sin\theta$；高度独立变化，直接令 $z=v$：
+
+$$
+\mathbf r(\theta,v)=(a\cos\theta,a\sin\theta,v).
+$$
+
+分别求偏导并叉乘：
+
+$$
+\mathbf r_\theta=(-a\sin\theta,a\cos\theta,0),\qquad
+\mathbf r_v=(0,0,1),
+$$
+
+$$
+\mathbf r_\theta\times\mathbf r_v=(a\cos\theta,a\sin\theta,0),\qquad
+\|\mathbf r_\theta\times\mathbf r_v\|=a.
+$$
+
+所以
+
+$$
+\boxed{dS=a\,d\theta\,dv}.
+$$
+
+几何上，这是“周向小弧长 $a\,d\theta$ × 竖直小高度 $dv$”。整周取 $0\le\theta\le2\pi$；若侧面高度为 $0\le z\le h$，则 $0\le v\le h$。这里只参数化侧面，不包含上下底盘。
+
+#### 3. 圆锥：水平半径与高度由锥面方程联系
+
+为避免把位置向量 $\mathbf r$ 和标量半径混淆，这里把表中的半径参数 $r$ 改写成 $\rho=\sqrt{x^2+y^2}\ge0$。锥面 $z=k\rho$ 中，$k$ 为常数，故可取
+
+$$
+\mathbf r(\rho,\theta)=(\rho\cos\theta,\rho\sin\theta,k\rho).
+$$
+
+其中 $\rho$ 控制沿母线走到哪里，$\theta$ 控制绕轴转到哪个方向。分别求偏导：
+
+$$
+\mathbf r_\rho=(\cos\theta,\sin\theta,k),\qquad
+\mathbf r_\theta=(-\rho\sin\theta,\rho\cos\theta,0).
+$$
+
+叉积及其长度为
+
+$$
+\mathbf r_\rho\times\mathbf r_\theta
+=(-k\rho\cos\theta,-k\rho\sin\theta,\rho),
+$$
+
+$$
+\|\mathbf r_\rho\times\mathbf r_\theta\|
+=\sqrt{k^2\rho^2(\cos^2\theta+\sin^2\theta)+\rho^2}
+=\rho\sqrt{1+k^2}.
+$$
+
+因此
+
+$$
+\boxed{dS=\rho\sqrt{1+k^2}\,d\rho\,d\theta}.
+$$
+
+也可以看成“母线小长度 $\sqrt{1+k^2}\,d\rho$ × 周向小弧长 $\rho\,d\theta$”。例如 $z=\sqrt{x^2+y^2}$ 且 $0\le z\le2$ 时，$k=1$，范围为 $0\le\rho\le2,0\le\theta\le2\pi$。锥顶是一个点，不影响面积积分。
+
+#### 4. 图形面：直接把两个平面坐标作为参数
+
+对 $z=g(x,y)$，直接用 $x,y$ 控制曲面上的点，即
+
+$$
+\mathbf r(x,y)=(x,y,g(x,y)).
+$$
+
+分别求偏导并叉乘：
+
+$$
+\mathbf r_x=(1,0,g_x),\qquad\mathbf r_y=(0,1,g_y),
+$$
+
+$$
+\mathbf r_x\times\mathbf r_y=(-g_x,-g_y,1).
+$$
+
+所以
+
+$$
+\boxed{dS=\sqrt{1+g_x^2+g_y^2}\,dx\,dy}.
+$$
+
+这里的参数域就是曲面在 $Oxy$ 平面上的投影域。可见投影公式是参数曲面公式的一种特殊情形。
+
+</details>
+
 叉积的长度是两条微小切向边所形成平行四边形的面积。交换 $u,v$ 会使叉积反向，但长度不变，这也说明第一型面积积分与定向无关。
 
 |曲面|参数与范围|面积元|
