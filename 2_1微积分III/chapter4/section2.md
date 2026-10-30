@@ -100,6 +100,51 @@ $$
 
 这里把 $du\,dv$ 理解为参数平面上的正面积元。曲面光滑且参数化正则时，这个局部近似给出面积元 $dS$。叉积通常不能直接改成两个向量长度相乘，因为两条切向边未必垂直。
 
+#### 叉积具体怎么算？先展开三个分量
+
+这里的 $\times$ 表示两个向量的**叉积**；公式中参与运算的是 $\mathbf r_u$ 和 $\mathbf r_v$ 这两个偏导向量。
+
+对 $\mathbf A=(A_1,A_2,A_3)$、$\mathbf B=(B_1,B_2,B_3)$，按下列顺序计算。其中 $\mathbf i=(1,0,0),\mathbf j=(0,1,0),\mathbf k=(0,0,1)$ 是三个坐标轴方向的单位向量。
+
+$$
+\mathbf A\times\mathbf B
+=\begin{vmatrix}
+\mathbf i&\mathbf j&\mathbf k\\
+A_1&A_2&A_3\\
+B_1&B_2&B_3
+\end{vmatrix}.
+$$
+
+沿第一行展开时，三个位置的符号依次为“正、负、正”：
+
+$$
+\begin{aligned}
+\mathbf A\times\mathbf B
+={}&(A_2B_3-A_3B_2)\mathbf i\\
+&-(A_1B_3-A_3B_1)\mathbf j\\
+&+(A_1B_2-A_2B_1)\mathbf k.
+\end{aligned}
+$$
+
+将中间的负号乘进去，得到三个坐标分量：
+
+$$
+\boxed{\mathbf A\times\mathbf B
+=(A_2B_3-A_3B_2,\ A_3B_1-A_1B_3,\ A_1B_2-A_2B_1)}.
+$$
+
+特别注意：**第二个分量是 $A_3B_1-A_1B_3$**。例如上一段斜面的两条切向量为 $(1,0,1)$ 和 $(0,1,1)$，逐项代入得到
+
+$$
+\begin{aligned}
+C_x&=0\cdot1-1\cdot1=-1,\\
+C_y&=1\cdot0-1\cdot1=-1,\\
+C_z&=1\cdot1-0\cdot0=1.
+\end{aligned}
+$$
+
+所以叉积是 $(-1,-1,1)$，再取长度 $\sqrt{(-1)^2+(-1)^2+1^2}=\sqrt3$，才得到面积修正因子。**先求叉积向量，再求向量长度，是两步运算。** 下面每种曲面也都按这三个分量展开。
+
 #### 1. 球面：先用角度确定点的位置
 
 半径为 $a>0$ 的球面，取 $\phi$ 为从 $+z$ 轴量起的极角，$\theta$ 为水平投影从 $+x$ 轴量起的方位角。
@@ -122,7 +167,24 @@ $$
 \mathbf r_\theta=(-a\sin\phi\sin\theta,a\sin\phi\cos\theta,0).
 $$
 
-叉积为
+记 $\mathbf r_\phi\times\mathbf r_\theta=(C_x,C_y,C_z)$，将两条偏导向量逐项代入通用公式：
+
+$$
+\begin{aligned}
+C_x&=(a\cos\phi\sin\theta)\cdot0
+-(-a\sin\phi)(a\sin\phi\cos\theta)\\
+&=a^2\sin^2\phi\cos\theta,\\[4pt]
+C_y&=(-a\sin\phi)(-a\sin\phi\sin\theta)
+-(a\cos\phi\cos\theta)\cdot0\\
+&=a^2\sin^2\phi\sin\theta,\\[4pt]
+C_z&=(a\cos\phi\cos\theta)(a\sin\phi\cos\theta)\\
+&\quad-(a\cos\phi\sin\theta)(-a\sin\phi\sin\theta)\\
+&=a^2\sin\phi\cos\phi(\cos^2\theta+\sin^2\theta)\\
+&=a^2\sin\phi\cos\phi.
+\end{aligned}
+$$
+
+把三个分量组成向量，并提出公因子：
 
 $$
 \mathbf r_\phi\times\mathbf r_\theta
@@ -152,9 +214,25 @@ $$
 \mathbf r_v=(0,0,1),
 $$
 
+记 $\mathbf r_\theta\times\mathbf r_v=(C_x,C_y,C_z)$，则
+
 $$
-\mathbf r_\theta\times\mathbf r_v=(a\cos\theta,a\sin\theta,0),\qquad
-\|\mathbf r_\theta\times\mathbf r_v\|=a.
+\begin{aligned}
+C_x&=(a\cos\theta)\cdot1-0\cdot0=a\cos\theta,\\
+C_y&=0\cdot0-(-a\sin\theta)\cdot1=a\sin\theta,\\
+C_z&=(-a\sin\theta)\cdot0-(a\cos\theta)\cdot0=0.
+\end{aligned}
+$$
+
+所以叉积向量与其长度分别为
+
+$$
+\mathbf r_\theta\times\mathbf r_v=(a\cos\theta,a\sin\theta,0),
+$$
+
+$$
+\|\mathbf r_\theta\times\mathbf r_v\|
+=\sqrt{a^2\cos^2\theta+a^2\sin^2\theta}=a.
 $$
 
 所以
@@ -180,12 +258,28 @@ $$
 \mathbf r_\theta=(-\rho\sin\theta,\rho\cos\theta,0).
 $$
 
-叉积及其长度为
+记 $\mathbf r_\rho\times\mathbf r_\theta=(C_x,C_y,C_z)$，逐项计算：
+
+$$
+\begin{aligned}
+C_x&=\sin\theta\cdot0-k\cdot(\rho\cos\theta)
+=-k\rho\cos\theta,\\
+C_y&=k\cdot(-\rho\sin\theta)-\cos\theta\cdot0
+=-k\rho\sin\theta,\\
+C_z&=\cos\theta\cdot(\rho\cos\theta)
+-\sin\theta\cdot(-\rho\sin\theta)\\
+&=\rho(\cos^2\theta+\sin^2\theta)=\rho.
+\end{aligned}
+$$
+
+因此，叉积向量为
 
 $$
 \mathbf r_\rho\times\mathbf r_\theta
-=(-k\rho\cos\theta,-k\rho\sin\theta,\rho),
+=(-k\rho\cos\theta,-k\rho\sin\theta,\rho).
 $$
+
+再对三个分量平方、相加、开根号，得到长度：
 
 $$
 \|\mathbf r_\rho\times\mathbf r_\theta\|
@@ -215,8 +309,34 @@ $$
 \mathbf r_x=(1,0,g_x),\qquad\mathbf r_y=(0,1,g_y),
 $$
 
+将这两个向量放入行列式：
+
 $$
-\mathbf r_x\times\mathbf r_y=(-g_x,-g_y,1).
+\mathbf r_x\times\mathbf r_y
+=\begin{vmatrix}
+\mathbf i&\mathbf j&\mathbf k\\
+1&0&g_x\\
+0&1&g_y
+\end{vmatrix}.
+$$
+
+逐项展开，三个分量为
+
+$$
+\begin{aligned}
+C_x&=0\cdot g_y-g_x\cdot1=-g_x,\\
+C_y&=g_x\cdot0-1\cdot g_y=-g_y,\\
+C_z&=1\cdot1-0\cdot0=1.
+\end{aligned}
+$$
+
+所以
+
+$$
+\mathbf r_x\times\mathbf r_y=(-g_x,-g_y,1),
+\qquad
+\|\mathbf r_x\times\mathbf r_y\|
+=\sqrt{(-g_x)^2+(-g_y)^2+1^2}.
 $$
 
 所以
