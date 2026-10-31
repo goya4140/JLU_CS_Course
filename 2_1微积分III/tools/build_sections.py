@@ -74,6 +74,8 @@ def build():
         )
         if number == 4:
             intro += '\n## 学习地图\n\n![第一型积分的讲解路线](../assets/map4.svg)\n\n图中的01—10是原教程的讲解单元：01—04归入4.1，05—06归入4.2，07—08归入4.3，09—10放在章末总结与自测。\n'
+        if number == 5:
+            intro += '\n## 本章知识导图\n\n![第5章知识导图：五节内容及其联系](../assets/chapter5-map.svg)\n\n每节开头另有知识导图。正文依照总结主线展开，完整推导与进阶方法默认折叠，例题紧跟知识点。\n'
         (directory / 'README.md').write_text(intro)
     print('Built 8 textbook Sections and 2 chapter overviews; checked 42 homework records')
 

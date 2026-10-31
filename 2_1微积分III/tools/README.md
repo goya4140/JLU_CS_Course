@@ -26,3 +26,7 @@
 讲解原文使用成对的HTML注释标出经过人工选择的重点范围，例如`<!-- study:result|参数计算公式 -->`与`<!-- /study -->`。可用类型为`concept`（核心知识点）、`result`（结论与公式）、`process`（推导说明）、`warning`（易错提醒）；不要跨标题或嵌套标记，定理条件应和公式放在同一范围内。
 
 `assets/emphasis.js`与`assets/emphasis.css`为图文阅读版和Docsify主站共用的渲染与样式。作业的原题、对应知识点、解题过程按现有字段分层；作者用LaTeX的`boxed`命令或明确选项标出的最终答案加结论色块。颜色配合文字标签和边框，保持推导文字的正常对比度。
+
+## 第5章导图与示意图
+
+运行 `python3 tools/build_chapter5_maps.py` 生成6张知识导图和4张教学示意图；再运行 `python3 tools/build_reading.py` 同步 Section Markdown 与离线 HTML。第5章正文仍以 `05_第二型积分_教程.md` 为唯一编辑源，分组见 `course_structure.json`。

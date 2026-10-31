@@ -74,3 +74,9 @@
   .study-card-title, .study-field-title > strong { color: #222; }
   .study-legend { display: none; }
 }
+
+/* Keep the new chapter maps readable on narrow screens. */
+@media (max-width: 900px) {
+  :is(.markdown-section, #content) :is(p, figure):has(> img[src*="-map.svg"]) { overflow-x: auto; }
+  :is(.markdown-section, #content) img[src*="-map.svg"] { min-width: 760px; }
+}
