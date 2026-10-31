@@ -74,6 +74,118 @@ $$
 
 <!-- /study -->
 
+<details class="study-extension" id="curve-integral-relation">
+<summary>扩展推导：从弧长参数、单位切向量到两型曲线积分的关系</summary>
+
+#### 1. 用沿行进方向累计的弧长作参数
+
+设曲线从 $A$ 指向 $B$，全长为 $\ell$。用从 $A$ 出发累计走过的弧长 $s$ 表示曲线上的位置：
+
+$$
+\mathbf r(s)=(x(s),y(s),z(s)),\qquad0\le s\le\ell.
+$$
+
+这里 $s$ 是已经走过的长度，$ds$ 是微小弧长；$dx,dy,dz$ 是这段运动在三个坐标轴方向上的有符号变化量。走了一小段正的长度，某个坐标仍然可能减小。
+
+#### 2. 为什么对弧长求导得到单位切向量？
+
+先在一段光滑正则曲线上取一般参数 $t$，并使 $t$ 增大时从 $A$ 向 $B$ 行进。其速度长度为
+
+$$
+\frac{ds}{dt}=\|\mathbf r'(t)\|
+=\sqrt{x'(t)^2+y'(t)^2+z'(t)^2}>0.
+$$
+
+由链式法则，
+
+$$
+\frac{d\mathbf r}{ds}
+=\frac{d\mathbf r/dt}{ds/dt}
+=\frac{\mathbf r'(t)}{\|\mathbf r'(t)\|}.
+$$
+
+右侧把切向量除以它的长度，方向仍沿行进方向，长度则变成 $1$，所以它就是有向单位切向量：
+
+$$
+\mathbf T=\frac{d\mathbf r}{ds}
+=\left(\frac{dx}{ds},\frac{dy}{ds},\frac{dz}{ds}\right),
+\qquad
+\left(\frac{dx}{ds}\right)^2+
+\left(\frac{dy}{ds}\right)^2+
+\left(\frac{dz}{ds}\right)^2=1.
+$$
+
+分段光滑曲线可以在每一段上这样推导，再把积分相加；有限个折点不影响积分。
+
+#### 3. 方向余弦为什么等于这三个导数？
+
+设 $\alpha,\beta,\gamma$ 分别为 $\mathbf T$ 与三个坐标轴正方向的夹角。以 $x$ 轴单位向量 $\mathbf e_x=(1,0,0)$ 为例，按点积公式，
+
+$$
+\mathbf T\cdot\mathbf e_x
+=\|\mathbf T\|\,\|\mathbf e_x\|\cos\alpha
+=\cos\alpha.
+$$
+
+另一方面，按分量计算同一个点积，
+
+$$
+\mathbf T\cdot\mathbf e_x
+=\frac{dx}{ds}\cdot1+\frac{dy}{ds}\cdot0+\frac{dz}{ds}\cdot0
+=\frac{dx}{ds}.
+$$
+
+因此 $dx/ds=\cos\alpha$；另外两条坐标轴同理，得到
+
+$$
+\frac{dx}{ds}=\cos\alpha,\qquad
+\frac{dy}{ds}=\cos\beta,\qquad
+\frac{dz}{ds}=\cos\gamma.
+$$
+
+也就是
+
+$$
+\boxed{dx=\cos\alpha\,ds,\quad dy=\cos\beta\,ds,\quad dz=\cos\gamma\,ds}.
+$$
+
+这三个式子表示微小位移在各坐标轴上的有向投影。例如沿途 $x$ 减小时，$dx/ds<0$，相应的 $\cos\alpha<0$，于是 $dx$ 为负，符号没有丢失。
+
+#### 4. 将三个微分逐项代入积分
+
+先看被积表达式：
+
+$$
+\begin{aligned}
+Pdx+Qdy+Rdz
+&=P\cos\alpha\,ds+Q\cos\beta\,ds+R\cos\gamma\,ds\\
+&=(P\cos\alpha+Q\cos\beta+R\cos\gamma)ds.
+\end{aligned}
+$$
+
+再沿整条曲线累加，就得到
+
+$$
+\boxed{\int_\Gamma Pdx+Qdy+Rdz
+=\int_\Gamma(P\cos\alpha+Q\cos\beta+R\cos\gamma)ds}.
+$$
+
+如果记 $\mathbf F=(P,Q,R)$，括号里的标量正是 $\mathbf F\cdot\mathbf T$。因此这一步把第二型曲线积分化为以 $\mathbf F\cdot\mathbf T$ 为被积函数的第一型曲线积分。方向余弦随曲线上点的位置变化，一般不能当作常数提出积分号。
+
+#### 5. 为什么右边用的是第一型积分，仍然保留方向？
+
+第一型积分对同一个标量函数沿同一条曲线积分，与行进方向无关。但这里的标量函数包含了有向单位切向量 $\mathbf T$：反向行进时，$ds$ 不变，而 $\mathbf T$ 变为 $-\mathbf T$，所以 $\mathbf F\cdot\mathbf T$ 整体变号。
+
+例如线段从 $(0,0,0)$ 指向 $(1,1,0)$，有 $\mathbf T=(1,1,0)/\sqrt2$，所以
+
+$$
+Pdx+Qdy=\frac{P+Q}{\sqrt2}\,ds.
+$$
+
+反向时单位切向量变成 $(-1,-1,0)/\sqrt2$，相同向量场对应的表达式变成 $-(P+Q)ds/\sqrt2$。因此第二型积分反向变号，与上面的关系式完全一致。
+
+</details>
+
 反向后 $ds$ 不变，$\mathbf T$ 反向，所以第二型变号。
 
 |比较|第一型曲线积分|第二型曲线积分|
