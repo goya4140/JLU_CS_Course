@@ -12,9 +12,9 @@
 
 (A) $\iint_\Sigma x\,dS=4\iint_{\Sigma_1}x\,dS$；
 
-(B) $\iint_\Sigma y\,dS=4\iint_{\Sigma_1}y\,dS$；
+(B) $\iint_\Sigma y\,dS=4\iint_{\Sigma_1}x\,dS$；
 
-(C) $\iint_\Sigma z\,dS=4\iint_{\Sigma_1}z\,dS$；
+(C) $\iint_\Sigma z\,dS=4\iint_{\Sigma_1}x\,dS$；
 
 (D) $\iint_\Sigma xyz\,dS=4\iint_{\Sigma_1}xyz\,dS$。
 
@@ -22,7 +22,7 @@
 
 **解题过程**
 
-$\Sigma$ 关于 $x=0$ 和 $y=0$ 对称，故 $\iint_\Sigma x\,dS=\iint_\Sigma y\,dS=\iint_\Sigma xyz\,dS=0$；对应的第一卦限积分均大于零，所以 A、B、D 不成立。
+$\Sigma$ 关于 $x=0$ 和 $y=0$ 对称，故 $\iint_\Sigma x\,dS=\iint_\Sigma y\,dS=\iint_\Sigma xyz\,dS=0$；右侧对应的第一卦限积分均大于零，所以 A、B、D 不成立。
 
 将上半球分成四个全等部分。反射改变 $x,y$ 的符号，却不改变 $z$ 和 $dS$，所以四部分的 $z$ 积分相等：
 
@@ -30,13 +30,13 @@ $$
 \iint_\Sigma z\,dS=4\iint_{\Sigma_1}z\,dS.
 $$
 
-故选 **C**。
+第一卦限球面关于坐标交换 $x\leftrightarrow z$ 不变，因此 $\iint_{\Sigma_1}z\,dS=\iint_{\Sigma_1}x\,dS$。所以原题 C 选项右侧虽写的是 $x$，等式仍成立，故选 **C**。
 
 ## 第一次作业 · 填空题2
 
 **原题**
 
-设 $\Sigma$ 为 $Oyz$ 平面上的圆域 $y^2+z^2\le1$，则 $\iint_\Sigma[x+(y^2+z^2)^2]dS=$ ______。
+设 $\Sigma$ 为 $Oyz$ 平面上的圆域 $y^2+z^2\le1$，则 $\iint_\Sigma[x+(y^2+z^2)]dS=$ ______。
 
 **对应知识点**：平面上的第一型曲面积分；在投影平面中使用极坐标。
 
@@ -45,8 +45,8 @@ $$
 在 $Oyz$ 平面上 $x=0,dS=dy\,dz$。令 $y=r\cos\theta,z=r\sin\theta$，则
 
 $$
-I=\int_0^{2\pi}\int_0^1r^4\,r\,drd\theta
-=2\pi\cdot\frac16=\boxed{\frac\pi3}.
+I=\int_0^{2\pi}\int_0^1r^2\,r\,drd\theta
+=2\pi\cdot\frac14=\boxed{\frac\pi2}.
 $$
 
 ## 第一次作业 · 填空题3
