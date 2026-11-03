@@ -1,10 +1,61 @@
-<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>第5章 网络层：从目的地址推导下一跳、分片与路由</title><style>
+<!doctype html><html lang="zh-CN"><head><script>(function(){let t;try{t=localStorage.getItem('network-reading-theme')}catch(e){}if(t!=='light'&&t!=='dark')t=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';document.documentElement.dataset.theme=t})()</script><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>第5章 网络层：从目的地址推导下一跳、分片与路由</title><style>
 :root{--ink:#20334a;--muted:#63748a;--accent:#17666c;--light:#e9f4f1;--line:#d9e4e9;--paper:#fff;--back:#f5f8fa;color-scheme:light}*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--back);color:var(--ink);font:16px/1.85 'Segoe UI','Microsoft YaHei',sans-serif}a{color:var(--accent);text-underline-offset:4px}a:hover{color:#10494e}button,select{font:inherit}button{cursor:pointer}a:focus-visible,button:focus-visible,select:focus-visible,summary:focus-visible{outline:3px solid #d78b21;outline-offset:3px}aside{position:fixed;inset:0 auto 0 0;width:292px;overflow-y:auto;background:#f0f5f6;border-right:1px solid var(--line);padding:28px 18px 28px 24px;z-index:30}.brand{font-size:21px;font-weight:700;line-height:1.5}.subbrand{font-size:13px;color:var(--muted);margin:8px 0 22px}.navgroup{margin:22px 0}.navgroup h2{font-size:12px;font-weight:600;letter-spacing:.06em;color:#75858e;margin:0 0 8px;border:0;padding:0}.navgroup p{font-size:11px;line-height:1.5;color:#7a8796;margin:0 0 8px}.navlink{display:block;padding:8px 11px;margin:4px 0;border-radius:7px;color:#3c5366;text-decoration:none;font-size:13px;line-height:1.6;border-left:3px solid transparent}.navlink:hover{background:#e2edee}.navlink.active{color:#0c5f62;border-color:var(--accent);background:#dcefed;font-weight:600}.asidefoot{font-size:12px;color:var(--muted);border-top:1px solid var(--line);padding-top:18px}main{margin-left:292px;min-width:0}.toolbar{position:sticky;top:0;z-index:20;background:#ffffffed;border-bottom:1px solid var(--line);height:55px;display:flex;align-items:center;gap:16px;padding:0 32px;font-size:12px;color:var(--muted);backdrop-filter:blur(8px)}.toolbar .spacer{flex:1}.toolbar a{text-decoration:none}.menubtn{display:none;border:1px solid #acbec8;background:white;border-radius:5px;padding:4px 12px;color:var(--ink)}article{max-width:1120px;margin:0 auto;padding:50px 58px 90px;background:white;min-height:100vh}h1{font-size:30px;line-height:1.55;letter-spacing:.01em;margin:0 0 24px}h2{font-size:24px;line-height:1.6;margin:62px 0 22px;padding-bottom:14px;border-bottom:1px solid var(--line);scroll-margin-top:86px}h3{font-size:19px;line-height:1.7;margin:36px 0 14px;scroll-margin-top:86px}h4{font-size:16px;margin:26px 0 10px}p{margin:14px 0}blockquote{margin:22px 0 30px;padding:16px 22px;border-left:4px solid var(--accent);background:#f1f7f6;color:#3c5866;font-size:14px}blockquote p{margin:7px 0}.tablewrap{overflow-x:auto;max-width:100%;margin:22px 0;border:1px solid var(--line);border-radius:7px}table{width:100%;border-collapse:collapse;font-size:14px;line-height:1.75;min-width:500px}th,td{text-align:left;vertical-align:top;padding:12px 15px;border-bottom:1px solid #e1e9ee}th{background:#edf4f5;font-weight:600}tr:last-child td{border-bottom:0}tbody tr:nth-child(even){background:#fafcfd}td a{display:inline-block}pre{max-width:100%;overflow:auto;background:#f1f5f8;border:1px solid #dde6eb;border-radius:7px;padding:20px;font-size:13px;line-height:1.8}code{font-family:Consolas,'Courier New','Microsoft YaHei',monospace;background:#eef4f6;border-radius:3px;padding:2px 4px;overflow-wrap:anywhere}pre code{padding:0;background:transparent;white-space:pre;overflow-wrap:normal}li{margin:7px 0}ul,ol{padding-left:26px}details{border:1px solid #c6dadb;border-radius:8px;margin:24px 0;padding:14px 20px;background:#f8fbfb}summary{cursor:pointer;font-weight:600;color:#17666c}details[open] summary{border-bottom:1px solid var(--line);padding-bottom:12px;margin-bottom:20px}.formula{overflow-x:auto;padding:20px;text-align:center;white-space:nowrap;background:#f9fbfc;font-family:'Cambria Math','Times New Roman',serif;font-size:20px;margin:20px 0}.frac{display:inline-flex;flex-direction:column;vertical-align:middle;text-align:center;line-height:1.4;margin:0 4px}.frac>span:first-child{border-bottom:1px solid #63748a;padding:0 5px 3px}.frac>span:last-child{padding:3px 5px 0}.formula sup,.formula sub{font-size:.65em}.quickbox,.stepbox{margin:24px 0;padding:24px;border:1px solid #c3d9d8;border-radius:10px;background:#f3f9f8}.quickbox label{display:block;font-weight:600;margin-bottom:10px}.quickbox select{width:100%;padding:10px 12px;border:1px solid #9fbfbc;border-radius:6px;background:white;color:var(--ink)}.quickcard{margin-top:20px}.quickcard h3{margin:0 0 12px}.quickcard dl{display:grid;grid-template-columns:90px 1fr;gap:10px 18px;font-size:15px;margin:0}.quickcard dt{font-weight:600;color:#557275}.quickcard dd{margin:0}.stepbox h3{margin:0 0 10px}.stepnotes{font-size:13px;color:var(--muted)}.stepbuttons{display:flex;flex-wrap:wrap;gap:6px;margin:16px 0}.stepbuttons button{border:1px solid #a8c6c4;background:white;color:#436366;border-radius:50%;width:35px;height:35px;font-size:13px}.stepbuttons button.active{background:var(--accent);color:white}.stepdisplay{background:white;border-radius:8px;padding:18px 20px;min-height:145px}.stepdisplay h4{margin:0 0 12px}.stepdisplay dl{margin:0;display:grid;grid-template-columns:140px 1fr;gap:9px 18px}.stepdisplay dt{font-weight:600}.stepdisplay dd{margin:0}.stepcontrols{display:flex;gap:10px;align-items:center;margin-top:16px}.stepcontrols button{border:1px solid #a7c6c3;padding:6px 16px;border-radius:5px;background:white;color:var(--accent)}button:disabled{cursor:default;opacity:.4}.stepcount{font-size:13px;color:var(--muted)}.chaptercards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin:28px 0}.chaptercard{display:block;border:1px solid var(--line);border-radius:10px;background:#f9fcfc;padding:22px;text-decoration:none}.chaptercard strong{display:block;font-size:21px;color:var(--ink);margin-bottom:10px}.chaptercard span{display:block;font-size:14px;line-height:1.7;color:#647a89}.footerlinks{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;border-top:1px solid var(--line);margin-top:64px;padding-top:24px}.footerlinks a{text-decoration:none}hr{border:0;border-top:1px solid var(--line);margin:35px 0}.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)}[id]{scroll-margin-top:86px}.topjump{color:#6b7e8e;font-size:13px}
 @media(max-width:1100px){aside{width:255px;padding:24px 15px}main{margin-left:255px}article{padding:38px 32px 70px}h1{font-size:27px}.toolbar{padding:0 24px}}
 @media(max-width:860px){aside{width:min(320px,87vw);transform:translateX(-100%);transition:transform .18s;box-shadow:12px 0 30px #1233}.nav-open aside{transform:translateX(0)}main{margin-left:0}.menubtn{display:block}.toolbar{padding:0 15px;gap:12px}.toolbar .desktop-only{display:none}article{padding:28px 20px 64px}h1{font-size:24px}h2{font-size:21px;margin-top:48px}h3{font-size:18px}body{font-size:15px}table{font-size:13px}th,td{padding:9px 12px}.quickbox,.stepbox{padding:17px}.quickcard dl,.stepdisplay dl{grid-template-columns:1fr;gap:3px}.quickcard dd,.stepdisplay dd{margin-bottom:12px}.chaptercards{grid-template-columns:1fr}.navshade{display:none;position:fixed;inset:0;background:#10283f55;z-index:25}.nav-open .navshade{display:block}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}aside{transition:none}}
 @media print{aside,.toolbar,.navshade,.stepbox{display:none}main{margin:0}article{max-width:none;padding:0}details{break-inside:avoid}table{min-width:0;font-size:10pt}h2{break-after:avoid}.tablewrap{overflow:visible}body{font-size:11pt}.quickbox select{display:none}.formula{white-space:normal}}
-</style></head><body><div class="navshade"></div><aside id="course-nav" aria-label="阶段分组学习目录"><div class="brand">计算机网络<br>学习资料</div><p class="subbrand">第 5 章 · 网络层</p><nav><a class="navlink" href="#learning-nav">学习导航</a><section class="navgroup"><h2>学习准备</h2><p>认清场景、对象与计数边界</p><a class="navlink" href="#c5-0">5.0 共同场景与符号</a></section><section class="navgroup"><h2>地址与逐跳处理</h2><p>从配置推导出口、邻居和包大小</p><a class="navlink" href="#c5-1">5.1 网络层服务</a><a class="navlink" href="#c5-2">5.2 IPv4 地址规划</a><a class="navlink" href="#c5-3">5.3 逐跳转发与辅助协议</a><a class="navlink" href="#c5-4">5.4 IPv4 首部、MTU 与分片</a><a class="navlink" href="#c5-5">5.5 DHCP 与 NAT</a></section><section class="navgroup"><h2>路径与资源</h2><p>理解选路、收敛和容量条件</p><a class="navlink" href="#c5-6">5.6 路由算法</a><a class="navlink" href="#c5-7">5.7 资源控制</a></section><section class="navgroup"><h2>扩展与进阶</h2><p>辨认 IPv6、域间路由与新型转发</p><a class="navlink" href="#c5-8">5.8 IPv6</a><a class="navlink" href="#c5-9">5.9 互联网路由与路由器结构</a><a class="navlink" href="#c5-10">5.10 SDN、MPLS 与段路由</a></section><section class="navgroup"><h2>练习与复习</h2><p>组合推导、独立作答与排错</p><a class="navlink" href="#c5-11">5.11 综合应用</a><a class="navlink" href="#c5-12">5.12 自测与答案</a><a class="navlink" href="#c5-13">5.13 排错与复习</a><a class="navlink" href="#c5-14">5.14 分类速查</a></section></nav><p class="asidefoot">先看前提与对象，再推导中间过程。速查只显示当前选项，完整解释可返回正文。<br><a href="00_学习导航.html">全课程入口</a></p></aside><main><div class="toolbar"><button class="menubtn" id="menu-button" aria-expanded="false" aria-controls="course-nav">目录</button><a href="../index.html#/">课程资料站</a><a href="00_学习导航.html">课程导航</a><span class="desktop-only">网络层</span><span class="spacer"></span><a href="05_网络层.md">Markdown</a><span class="desktop-only">离线阅读</span></div><article><h1>第5章 网络层：从目的地址推导下一跳、分片与路由</h1>
+
+.chapter-search-toggle{font:inherit;border:1px solid #b1cecb;border-radius:6px;background:#f1f8f6;color:#155e63;padding:4px 12px;white-space:nowrap}.chapter-search-dialog{position:fixed;inset:70px 18px auto auto;margin:0;width:min(620px,calc(100vw - 36px));max-width:none;max-height:calc(100vh - 90px);max-height:calc(100dvh - 90px);border:1px solid #bfd5d2;border-radius:12px;padding:0;background:#fff;color:#20334a;box-shadow:0 16px 65px #102e4033;font:14px/1.7 'Segoe UI','Microsoft YaHei',sans-serif}.chapter-search-dialog::backdrop{background:#102e4055}.chapter-search-dialog[open]{display:flex;flex-direction:column}.chapter-search-head{display:flex;gap:14px;align-items:center;padding:17px 20px;border-bottom:1px solid #d9e4e9}.chapter-search-head h2{font-size:20px;line-height:1.5;margin:0;padding:0;border:0;flex:1}.chapter-search-ui button{font:inherit;cursor:pointer}.chapter-search-close{border:1px solid #b6cccb;border-radius:5px;background:white;color:#17666c;padding:3px 10px}.chapter-search-form{padding:14px 20px 4px}.chapter-search-form label{display:block;font-weight:600;font-size:13px;margin-bottom:7px}.chapter-search-fields{display:flex;gap:8px}.chapter-search-fields input{min-width:0;flex:1;border:1px solid #a9c7c1;border-radius:6px;padding:9px 11px;font:16px/1.5 'Segoe UI','Microsoft YaHei',sans-serif;color:#20334a;background:white}.chapter-search-fields button{border:1px solid #17666c;border-radius:6px;background:#17666c;color:white;padding:8px 15px;white-space:nowrap}.chapter-search-help{margin:9px 0 0;font-size:12px;color:#63748a;line-height:1.7}.chapter-search-status{margin:10px 20px;font-size:13px;color:#4b6e70}.chapter-search-results{overflow-y:auto;overscroll-behavior:contain;min-height:0;padding:0 13px 16px;flex:1}.chapter-search-result{display:block;width:100%;text-align:left;border:1px solid #d7e4e2;border-radius:7px;background:#fff;margin:7px 0;padding:11px 13px;color:#20334a;overflow-wrap:anywhere}.chapter-search-result:hover{background:#f0f8f5;border-color:#80b2aa}.chapter-search-result[aria-current="true"]{border-color:#17666c;background:#edf7f3}.chapter-search-result-title{display:block;font-size:12px;color:#17666c;font-weight:600;margin-bottom:5px}.chapter-search-snippet{display:block;font-size:13px}.chapter-search-snippet mark{background:#fff0a8;color:inherit;padding:0}.chapter-search-more{display:block;width:100%;border:1px solid #bfd4cf;border-radius:6px;background:#f4f9f7;color:#17666c;padding:8px;margin-top:12px}.chapter-search-empty{margin:16px 8px;color:#63748a;font-size:13px}.chapter-search-dock{position:fixed;bottom:18px;left:calc(50% + 146px);transform:translateX(-50%);max-width:calc(100vw - 24px);display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;z-index:35;border:1px solid #bdd3ce;border-radius:9px;background:#fffffffa;box-shadow:0 4px 24px #102e4026;padding:9px 12px;color:#20334a;font-size:13px}.chapter-search-dock[hidden]{display:none}.chapter-search-dock button{border:1px solid #b2cdc5;border-radius:5px;padding:4px 9px;background:#f5faf7;color:#17666c;white-space:nowrap}.chapter-search-counter{min-width:60px;text-align:center;font-variant-numeric:tabular-nums}.chapter-search-ui :focus-visible,.chapter-search-toggle:focus-visible{outline:3px solid #d78b21;outline-offset:2px}mark.chapter-search-hit{color:inherit;background:#fff0a8;padding:0;border-radius:2px;box-decoration-break:clone;-webkit-box-decoration-break:clone}mark.chapter-search-hit.chapter-search-current{background:#ffc66b;outline:2px solid #be7114;outline-offset:1px}.chapter-search-has-results article{padding-bottom:170px}
+@media(max-width:1100px){.chapter-search-dock{left:calc(50% + 127.5px)}}
+@media(max-width:860px){.chapter-search-dialog{inset:65px 12px auto;width:calc(100vw - 24px);max-height:calc(100vh - 80px);max-height:calc(100dvh - 80px)}.chapter-search-dock{left:50%;bottom:12px;width:max-content;gap:6px;padding:8px}.chapter-search-head{padding:14px 16px}.chapter-search-form{padding:12px 16px 4px}.chapter-search-status{margin:9px 16px}.chapter-search-results{padding:0 10px 12px}.chapter-search-fields button{padding:8px 11px}.chapter-search-toggle{padding:4px 10px}}
+@media print{.chapter-search-ui,.chapter-search-toggle{display:none!important}mark.chapter-search-hit{background:transparent;outline:none}.chapter-search-has-results article{padding-bottom:0}}
+</style><style>
+.theme-control{display:inline-flex;align-items:center;gap:5px;white-space:nowrap;color:var(--ink)}
+.theme-control select{font:inherit;color:var(--ink);background:var(--paper);border:1px solid var(--line);border-radius:5px;padding:4px 6px}
+.theme-control select:focus-visible{outline:3px solid #d78b21;outline-offset:2px}
+.toolbar{height:auto;min-height:55px;flex-wrap:wrap;padding-top:8px;padding-bottom:8px}
+:root[data-theme=dark]{color-scheme:dark;--ink:#e1eaf3;--muted:#a6b6c9;--accent:#83d5cf;--light:#223f40;--line:#45576a;--paper:#18232f;--back:#111b25}
+[data-theme=dark] article,[data-theme=dark] .stepdisplay,[data-theme=dark] button,[data-theme=dark] select,[data-theme=dark] input{background:var(--paper);color:var(--ink);border-color:var(--line)}
+[data-theme=dark] aside,[data-theme=dark] .toolbar{background:#1b2937;color:var(--muted)}
+[data-theme=dark] .navlink{color:#c4d7e5}[data-theme=dark] .navlink:hover{background:#2b414d}[data-theme=dark] .navlink.active{background:#254846;color:#a4eee7}
+[data-theme=dark] .navgroup h2,[data-theme=dark] .navgroup p,[data-theme=dark] .chaptercard span{color:var(--muted)}
+[data-theme=dark] a:hover{color:#b4f2eb}
+[data-theme=dark] th{background:#293d4c}[data-theme=dark] tbody tr:nth-child(even){background:#1e303d}[data-theme=dark] td,[data-theme=dark] th{border-color:var(--line)}
+[data-theme=dark] pre,[data-theme=dark] code,[data-theme=dark] .formula{background:#22313f;color:var(--ink);border-color:var(--line)}[data-theme=dark] pre code{background:transparent}
+[data-theme=dark] blockquote,[data-theme=dark] details,[data-theme=dark] .quickbox,[data-theme=dark] .stepbox,[data-theme=dark] .chaptercard{background:#20363c;color:var(--ink);border-color:#4b7074}
+[data-theme=dark] summary,[data-theme=dark] .quickcard dt{color:var(--accent)}
+[data-theme=dark] .stepbuttons button.active{background:#83d5cf;color:#142f32}
+[data-theme=dark] .chapter-search-dialog,[data-theme=dark] .chapter-search-dock,[data-theme=dark] .chapter-search-result{background:#1b2937;color:var(--ink);border-color:var(--line)}
+[data-theme=dark] .chapter-search-result:hover,[data-theme=dark] .chapter-search-result[aria-current=true]{background:#2a484a;border-color:var(--accent)}
+[data-theme=dark] .chapter-search-result-title,[data-theme=dark] .chapter-search-status{color:var(--accent)}
+[data-theme=dark] .chapter-search-help,[data-theme=dark] .chapter-search-empty{color:var(--muted)}
+[data-theme=dark] mark.chapter-search-hit,[data-theme=dark] .chapter-search-snippet mark{color:#ffedaf;background:#665217}
+[data-theme=dark] mark.chapter-search-current{color:#fff3da;background:#8b4a0b;outline-color:#ffc778}
+/* Waveform drawings use semantic fixed colors; map the whole drawing together. */
+[data-theme=dark] svg{filter:invert(.88) hue-rotate(165deg)}
+[data-theme=dark] .wave-card{background:#20313d;border-color:var(--line)}
+[data-theme=dark] .wave-title,[data-theme=dark] .wave-readout{color:var(--accent)}
+[data-theme=dark] .wave-readout{background:#294447}
+[data-theme=dark] .wave-caption,[data-theme=dark] .wave-legend,[data-theme=dark] .wave-mobile-hint{color:var(--muted)}
+[data-theme=dark] .wave-legend span:before{background:#83d5cf}
+[data-theme=dark] .wave-legend .amber:before{background:#dfb16c}
+[data-theme=dark] .wave-legend .gray:before{background:#b3c4ce}
+@media(max-width:860px){.toolbar{gap:8px;padding-left:12px;padding-right:12px}.theme-control{font-size:12px}h2,h3{scroll-margin-top:115px}}
+@media print{
+ :root[data-theme]{color-scheme:light;--ink:#17212b;--muted:#425363;--accent:#155d63;--line:#b9c4ce;--paper:#fff;--back:#fff}
+ .theme-control{display:none!important}
+ html[data-theme] body,html[data-theme] article,html[data-theme] pre,html[data-theme] code,html[data-theme] blockquote,html[data-theme] details,html[data-theme] .formula,html[data-theme] .quickbox,html[data-theme] .quickcard,html[data-theme] .stepbox,html[data-theme] .stepdisplay,html[data-theme] th,html[data-theme] tr{background:white!important;color:#17212b!important}
+ html[data-theme] svg{filter:none!important}html[data-theme] summary,html[data-theme] .quickcard dt{color:#155d63!important}
+ html[data-theme] .wave-card,html[data-theme] .wave-readout{background:white!important;color:#17212b!important}
+ html[data-theme] .wave-title,html[data-theme] .wave-caption,html[data-theme] .wave-legend{color:#17212b!important}
+}
+</style></head><body><div class="navshade"></div><aside id="course-nav" aria-label="阶段分组学习目录"><div class="brand">计算机网络<br>学习资料</div><p class="subbrand">第 5 章 · 网络层</p><nav><a class="navlink" href="#learning-nav">学习导航</a><section class="navgroup"><h2>学习准备</h2><p>认清场景、对象与计数边界</p><a class="navlink" href="#c5-0">5.0 共同场景与符号
+</a></section><section class="navgroup"><h2>地址与逐跳处理</h2><p>从配置推导出口、邻居和包大小</p><a class="navlink" href="#c5-1">5.1 网络层服务</a><a class="navlink" href="#c5-2">5.2 IPv4 地址规划</a><a class="navlink" href="#c5-3">5.3 逐跳转发与辅助协议</a><a class="navlink" href="#c5-4">5.4 IPv4 首部、MTU 与分片</a><a class="navlink" href="#c5-5">5.5 DHCP 与 NAT</a></section><section class="navgroup"><h2>路径与资源</h2><p>理解选路、收敛和容量条件</p><a class="navlink" href="#c5-6">5.6 路由算法</a><a class="navlink" href="#c5-7">5.7 资源控制</a></section><section class="navgroup"><h2>扩展与进阶</h2><p>辨认 IPv6、域间路由与新型转发</p><a class="navlink" href="#c5-8">5.8 IPv6</a><a class="navlink" href="#c5-9">5.9 互联网路由与路由器结构
+</a><a class="navlink" href="#c5-10">5.10 SDN、MPLS 与段路由</a></section><section class="navgroup"><h2>练习与复习</h2><p>组合推导、独立作答与排错</p><a class="navlink" href="#c5-11">5.11 综合应用
+</a><a class="navlink" href="#c5-12">5.12 自测与答案
+</a><a class="navlink" href="#c5-13">5.13 排错与复习
+</a><a class="navlink" href="#c5-14">5.14 分类速查
+</a></section></nav><p class="asidefoot">先看前提与对象，再推导中间过程。速查只显示当前选项，完整解释可返回正文。<br><a href="00_学习导航.html">全课程入口</a></p></aside><main><div class="toolbar"><button class="menubtn" id="menu-button" aria-expanded="false" aria-controls="course-nav">目录</button><a href="../index.html#/">课程资料站</a><a href="00_学习导航.html">课程导航</a><span class="desktop-only">网络层</span><span class="spacer"></span><label class="theme-control">外观 <select id="reading-theme" aria-label="阅读配色"><option value="light">白天</option><option value="dark">夜间</option></select></label><button type="button" id="chapter-search-toggle" class="chapter-search-toggle" aria-haspopup="dialog" aria-expanded="false" aria-controls="chapter-search-dialog" disabled>搜索</button><a href="05_网络层.md">Markdown</a><span class="desktop-only">离线阅读</span></div><article><h1>第5章 网络层：从目的地址推导下一跳、分片与路由</h1>
 <p>交换机能在当前局域网里转发帧，服务器却可能在另一张网络中。主机需要判断先交给谁，路由器需要逐跳选择出口，过大的 IP 包还要适应链路尺寸。本章从地址块出发，把下一跳、分片、配置状态和路由算法连起来。</p>
 <a id="learning-nav"></a>
 <h2>学习导航</h2>
@@ -120,22 +171,24 @@
 <td>连接对应的映射</td>
 </tr>
 </tbody></table>
-<p>IP采用无连接、<strong>尽力而为</strong>的数据报服务：尝试交付，但不保证必达、按序、无重复或固定延迟。需要可靠交付时，由TCP等上层机制补充。</p>
+<p>IP采用无连接、<strong>尽力而为</strong> 的数据报服务：尝试交付，但不保证必达、按序、无重复或固定延迟。需要可靠交付时，由TCP等上层机制补充。</p>
 <p>“无连接”不表示没有线缆；虚电路也不表示必然可靠或独占物理链路。</p>
+<p>例如甲要连续发三个包：采用数据报服务时，每个包各自携带目的信息，沿途分别查表；采用虚电路模型时，先建立路径相关状态，再由标识关联后续包。虚电路描述网络服务的组织方式，不意味着每条物理链路都被独占。</p>
 <a id="k5.1.2"></a>
 <h3>5.1.2 路由器怎样处理一跳</h3>
 <pre><code class="language-text">收帧 → 去链路封装 → 检查IP → 查转发表 → 确定下一跳 → 重新封装帧
 </code></pre>
 <p>二层交换机主要按MAC转发，路由器按IP前缀转发。三层交换机也可执行路由，不能只看设备名字判断职责。</p>
-<p>同子网通常直接给目标主机；不同子网通常交给网关。<strong>默认网关是下一跳，不是最终目标</strong>：发往校外服务器的包，IP目的地址仍指向服务器，链路目的地址才指向当前网关。</p>
+<p>同子网通常直接给目标主机；不同子网通常交给网关。<strong>默认网关是下一跳，不是最终目标</strong> ：发往校外服务器的包，IP目的地址仍指向服务器，链路目的地址才指向当前网关。</p>
 <p>“网关”还可指应用协议转换设备，具体含义依上下文而定。</p>
+<p>例如甲把包交给路由器 R，包的目的 IP 是远端乙。R 去掉入站链路帧，检查 IP 首部、减少 TTL、查下一跳，再把包放进出站链路的新帧。目的 IP 通常仍为乙，新帧的目的 MAC 却指向当前下一跳，两个目的字段作用范围不同。</p>
 <a id="c5-2"></a>
 <h2>5.2 IPv4 地址规划：主机属于哪个地址块</h2>
 <p>只看到一个 IP，不能知道谁与它同网。前缀告诉双方哪些位共同标识网络；分配时还要使容量够用、起点对齐、地址块不重叠。历史 A/B/C 默认边界不能覆盖明确给出的前缀。</p>
 <a id="k5.2.1"></a>
 <h3>5.2.1 地址与前缀</h3>
 <p>IPv4地址32位，分成4个8位组，以点分十进制表示，每组0～255。</p>
-<p><code>192.168.1.10/24</code>中的<strong>前缀长度/24</strong>表示前24位为网络部分，后8位为主机部分。分类地址A/B/C是历史组织方式，显式给出前缀时必须按前缀判断。</p>
+<p><code>192.168.1.10/24</code>中的<strong>前缀长度/24</strong> 表示前24位为网络部分，后8位为主机部分。分类地址A/B/C是历史组织方式，显式给出前缀时必须按前缀判断。</p>
 <table>
 <thead>
 <tr>
@@ -207,9 +260,9 @@
 <a id="k5.2.2"></a>
 <h3>5.2.2 子网掩码与地址计算</h3>
 <p>确定前缀长度后，还要从具体地址算出网络边界，才能判断同网与可分配范围。掩码把“保留哪些位、清除哪些位”写成可逐位计算的形式。</p>
-<p><strong>子网掩码</strong>用连续1指出前缀位置，剩余0指出主机位。网络地址=IP与掩码逐位<strong>相与AND</strong>，即两位都为1时才得1。</p>
+<p><strong>子网掩码</strong> 用连续1指出前缀位置，剩余0指出主机位。网络地址=IP与掩码逐位<strong>相与AND</strong> ，即两位都为1时才得1。</p>
 <p>普通子网中，主机位全0为网络地址，全1为广播地址。有h个主机位，总地址数2ʰ，常规可分配主机数2ʰ−2；/31点到点和/32主机路由需要单独理解。</p>
-<p><strong>课件例题：</strong> 192.168.150.122，掩码255.255.255.248。</p>
+<p><strong>例题：</strong> 192.168.150.122，掩码255.255.255.248。</p>
 <pre><code class="language-text">248 = 11111000，所以前缀/29，主机位3
 122 = 01111010
 248 = 11111000
@@ -221,12 +274,12 @@ AND = 01111000 = 120
 <a id="k5.2.3"></a>
 <h3>5.2.3 CIDR、VLSM与聚合</h3>
 <p>部门规模不同，固定大小地址块会浪费空间；转发表过细又难维护。按需求划不同大小的子网，再按条件合并连续块，可以分别处理这两种规模问题。</p>
-<p><strong>CIDR，无类别域间路由</strong>用“地址/前缀”表示地址块，摆脱A/B/C固定边界。<strong>VLSM，可变长子网掩码</strong>按不同容量给子网分配不同前缀。</p>
+<p><strong>CIDR，无类别域间路由</strong> 用“地址/前缀”表示地址块，摆脱A/B/C固定边界。<strong>VLSM，可变长子网掩码</strong> 按不同容量给子网分配不同前缀。</p>
 <p>前缀越长，块越小；划子网通常延长前缀，聚合则把多个连续块用较短前缀概括。</p>
 <table>
 <thead>
 <tr>
-<th>课件地址块</th>
+<th>地址块</th>
 <th>掩码或范围</th>
 </tr>
 </thead>
@@ -247,7 +300,7 @@ AND = 01111000 = 120
 <td>128.123.1.0～.15</td>
 </tr>
 </tbody></table>
-<p>课件188.66.100.0/22覆盖第三字节100～103，可按大块优先划为：</p>
+<p>地址块 188.66.100.0/22覆盖第三字节100～103，可按大块优先划为：</p>
 <table>
 <thead>
 <tr>
@@ -327,8 +380,8 @@ AND = 01111000 = 120
 <a id="k5.3.1"></a>
 <h3>5.3.1 最长前缀匹配</h3>
 <p>一个目的地址可能同时落在默认路由、较大的汇总块和更小的子网内。转发时先取最具体的匹配范围，才能把包交给真正负责该子网的出口。</p>
-<p>目的地址可以同时匹配多条路由，选择<strong>前缀最长</strong>、范围最具体的一条。默认路由/0在没有更具体匹配时才使用。</p>
-<p>课件目标192.168.3.2：</p>
+<p>目的地址可以同时匹配多条路由，选择<strong>前缀最长</strong> 、范围最具体的一条。默认路由/0在没有更具体匹配时才使用。</p>
+<p>设目的地址为 192.168.3.2：</p>
 <table>
 <thead>
 <tr>
@@ -358,7 +411,7 @@ AND = 01111000 = 120
 <a id="k5.3.2"></a>
 <h3>5.3.2 ARP与逐跳MAC</h3>
 <p>选出下一跳 IP 后，以太网还需要它的 MAC 才能组成帧。ARP 在当前链路查询这层对应关系；远端服务器的 IP 不会因此变成本地网关的 IP。</p>
-<p><strong>ARP</strong>在本地链路解析IPv4地址对应的MAC，通常广播请求、单播回答，结果可缓存。它直接由以太网帧承载，不装在IP包内。</p>
+<p><strong>ARP</strong> 在本地链路解析IPv4地址对应的MAC，通常广播请求、单播回答，结果可缓存。它直接由以太网帧承载，不装在IP包内。</p>
 <p>以太网/IPv4的ARP内容28 B：硬件类型2 B、协议类型2 B、两种地址长度各1 B、操作码2 B、发送方MAC/IP 6+4 B、目标MAC/IP 6+4 B。请求操作码1，回答2。</p>
 <p>理解例子：A=192.168.1.10/24发给192.168.2.20，网关192.168.1.1。</p>
 <ol>
@@ -368,11 +421,11 @@ AND = 01111000 = 120
 <li>A发帧：目的MAC是网关，目的IP仍是192.168.2.20。</li>
 <li>网关在下一链路按新的下一跳再次封装。</li>
 </ol>
-<p>主机到主机、主机到路由器、路由器到主机、路由器到路由器，都遵循<strong>解析当前出口链路的下一跳</strong>这一规则。缓存可能过期，不能把每条记录视为永久绑定。</p>
+<p>主机到主机、主机到路由器、路由器到主机、路由器到路由器，都遵循<strong>解析当前出口链路的下一跳</strong> 这一规则。缓存可能过期，不能把每条记录视为永久绑定。</p>
 <a id="k5.3.3"></a>
 <h3>5.3.3 ICMP、ping与traceroute</h3>
 <p>转发失败时，源端需要知道是目标不可达、跳数用尽，还是暂时没有反馈。IP 控制消息及诊断工具提供线索，但一次无响应不足以直接定位故障。</p>
-<p><strong>ICMP</strong>传递IP差错或诊断消息，由IP承载。起始字段Type、Code、Checksum分别8、8、16位，其余随类型变化。</p>
+<p><strong>ICMP</strong> 传递IP差错或诊断消息，由IP承载。起始字段Type、Code、Checksum分别8、8、16位，其余随类型变化。</p>
 <table>
 <thead>
 <tr>
@@ -407,15 +460,16 @@ AND = 01111000 = 120
 <td>报告首部问题</td>
 </tr>
 </tbody></table>
-<p><strong>traceroute</strong>依次用TTL=1、2、3……探测，观察各跳超时响应。探测可用UDP、ICMP或TCP，依实现不同。</p>
+<p><strong>traceroute</strong> 依次用TTL=1、2、3……探测，观察各跳超时响应。探测可用UDP、ICMP或TCP，依实现不同。</p>
 <p>某跳不回答可能是过滤或回程原因，不能确定该跳断网；ping成功也不能证明目标Web服务正常。时间戳、地址掩码等是课件列出的历史类型，不代表所有现代网络都在使用。</p>
+<p>例如甲发探测包时设 TTL=1，第一台路由器减到 0 后可返回 ICMP 超时消息，由此暴露第一跳。若第二跳不回消息，可能是过滤或回程问题，不能直接判定第二跳断网；而收到 ping 回应只表明相应诊断交换可达，不能证明 Web 应用正在服务。</p>
 <a id="k5.3.4"></a>
 <h3>5.3.4 IPv4多播与IGMP</h3>
 <p>同一份内容要发给一组主机时，逐个复制单播会增加工作量。多播用组地址表示接收集合，本地路由器还需要知道当前链路是否有组成员。</p>
-<p><strong>多播</strong>向一组接收者传数据，组地址范围224.0.0.0/4。<strong>IGMP</strong>管理本地链路成员资格，路由器之间怎样分发则由多播路由机制处理。</p>
+<p><strong>多播</strong> 向一组接收者传数据，组地址范围224.0.0.0/4。<strong>IGMP</strong> 管理本地链路成员资格，路由器之间怎样分发则由多播路由机制处理。</p>
 <p>IPv4多播映射到以太网：固定前缀<code>01:00:5e</code>加组地址低23位。课件的<code>6e</code>为笔误。</p>
-<p><strong>课件例子：</strong> 225.128.47.81的低23位为00:2f:51，所以MAC为<code>01:00:5e:00:2f:51</code>。28位组地址部分只取23位，会有32个IP组地址映射到同一MAC，接收方还要在IP层筛选。<a href="https://www.rfc-editor.org/rfc/rfc1112.html">RFC 1112</a></p>
-<p>课件重点IGMPv1：8 B报文，包含版本、类型、校验和、组地址等。路由器查询，成员随机延后报告；听到同组报告可抑制自己的报告。v1靠查询超时判断离组，不代表全部版本都没有离组消息。</p>
+<p><strong>例如：</strong> 225.128.47.81的低23位为00:2f:51，所以MAC为<code>01:00:5e:00:2f:51</code>。28位组地址部分只取23位，会有32个IP组地址映射到同一MAC，接收方还要在IP层筛选。<a href="https://www.rfc-editor.org/rfc/rfc1112.html">RFC 1112</a></p>
+<p>以 IGMPv1 为例：8 B报文，包含版本、类型、校验和、组地址等。路由器查询，成员随机延后报告；听到同组报告可抑制自己的报告。v1靠查询超时判断离组，不代表全部版本都没有离组消息。</p>
 <p>IGMP的IP协议号为2，但多播业务数据仍可用UDP等协议，不能把所有多播数据都当作IGMP。</p>
 <h3>完整比较最长前缀与路由代价</h3>
 <p>给目的 192.168.20.20：/0 默认经 R1；192.168.0.0/16 经 R2；192.168.20.0/24 经 R3。三条均匹配，先选 /24。若 /24 有两条候选，才在该相同前缀的候选间按管理与协议度量等规则选优。给出 R2 代价更小，不能直接让 /16 替代更具体 /24。</p>
@@ -424,14 +478,14 @@ AND = 01111000 = 120
 <p>参考：讲义 PDF 第 894～931 页。配置错误、聚合了不存在的网络或网络故障都可能造成路由环路。下面用一个小模型分析原因。</p>
 <p><strong>简化模型：</strong> R1 的默认路由 <code>/0</code> 指 R2；R2 将 <code>192.168.0.0/22</code> 指 R1。实际只有 R1 后的 <code>192.168.1.0/24</code> 与 <code>192.168.2.0/24</code> 存在，<code>.0/24</code> 和 <code>.3/24</code> 不存在。发往 <code>192.168.3.10</code> 的包到 R2 后，匹配 /22 回 R1；R1 没有 /24，只能用默认路由又交 R2，形成循环，TTL 最终耗尽。</p>
 <p>可在汇总的提供者 R1 配置 <code>192.168.0.0/22</code> 的丢弃路由，保留实际存在的更具体 /24 路由。发往 <code>.1</code>、<code>.2</code> 的包因更具体前缀照常交付，发往不存在的 <code>.3</code> 时命中丢弃项，不再落入回 R2 的默认路由。</p>
-<p><strong>丢弃路由</strong>是查表结果主动不转发，设备常用 null 接口等形式表达；不是有效数据穿过一个“黑洞设备”。<code>/32</code> 特定主机路由比同地址的普通网络前缀更具体，<code>/0</code> 默认路由最不具体。失效与错误策略仍需另行检测，加入丢弃路由不能证明任意配置都无环。</p>
+<p><strong>丢弃路由</strong> 是查表结果主动不转发，设备常用 null 接口等形式表达；不是有效数据穿过一个“黑洞设备”。<code>/32</code> 特定主机路由比同地址的普通网络前缀更具体，<code>/0</code> 默认路由最不具体。失效与错误策略仍需另行检测，加入丢弃路由不能证明任意配置都无环。</p>
 <a id="c5-4"></a>
 <h2>5.4 IPv4 首部、MTU 与分片：尺寸变化怎样计算</h2>
 <p>链路能承载的 IP 包有限，包太大时要分片或反馈失败。先从总长减首部得到原载荷，再决定各片可承载多少；重新分片仍必须保持相对原数据的位置。</p>
 <a id="k5.4.1"></a>
 <h3>5.4.1 IPv4首部</h3>
 <p>路由器要查目的、扣跳数，并判断长度与分片条件，这些依据都必须随包携带。先看 IPv4 完整首部的字段职责，再使用其中的长度和控制位计算。</p>
-<p>基本首部20 B，有选项时最多60 B。<strong>IHL</strong>以4 B为单位，值5表示20 B；总长度包含首部与载荷。</p>
+<p>基本首部20 B，有选项时最多60 B。<strong>IHL</strong> 以4 B为单位，值5表示20 B；总长度包含首部与载荷。</p>
 <table>
 <thead>
 <tr>
@@ -489,16 +543,18 @@ AND = 01111000 = 120
 <p>16位总长最大值是65535 B，不是65536 B。无选项、总长1000 B时，载荷980 B。<a href="https://www.rfc-editor.org/rfc/rfc791.html">RFC 791</a></p>
 <p>TTL每次路由转发递减，耗尽就丢弃并按条件返回超时消息；在通常处理中是跳数限制，不是毫秒计时。Protocol常见TCP=6、UDP=17、ICMP=1。</p>
 <p>校验和计算前将该字段置零，修改TTL后也要更新。它不覆盖IP载荷，算法见<a href="02_%E6%95%B0%E6%8D%AE%E9%80%9A%E4%BF%A1%E5%9F%BA%E7%A1%80.html#c2-7">第二章反码校验和</a>。记录路由、时间戳、源路由等选项表示格式能力，不等于所有网络允许使用。</p>
+<p>例如一个无选项 IPv4 包的 IHL=5、总长度=100 B、TTL=3，首部长度为 5×4=20 B，载荷为 80 B。经一台正常转发的路由器后 TTL 变 2，首部校验和相应更新；总长度不是单独的应用数据长度，协议字段还标明载荷交给哪种上层协议。</p>
 <a id="k5.4.2"></a>
 <h3>5.4.2 分片：先分清首部与载荷</h3>
-<p><strong>MTU，最大传输单元</strong>表示出口链路一次能承载的网络层数据单元上限。IPv4包超过出口MTU且允许分片时，可以拆成多个各带首部的分片。</p>
+<p>出口一次可承载的包长有限，过大的包可能需要拆开。若不先区分原首部与原载荷，就容易把每片新增的首部漏算或把偏移算错。</p>
+<p><strong>MTU，最大传输单元</strong> 表示出口链路一次能承载的网络层数据单元上限。IPv4包超过出口MTU且允许分片时，可以拆成多个各带首部的分片。</p>
 <ul>
-<li><strong>DF</strong>：禁止分片。</li>
-<li><strong>MF</strong>：后面还有原报文的分片。</li>
-<li><strong>片偏移</strong>：相对原始载荷起点的位置，单位8 B。</li>
+<li><strong>DF</strong> ：禁止分片。</li>
+<li><strong>MF</strong> ：后面还有原报文的分片。</li>
+<li><strong>片偏移</strong> ：相对原始载荷起点的位置，单位8 B。</li>
 </ul>
 <p>非最后一片载荷必须为8的倍数。重组在最终目的端完成，中间路由器一般不先重组再转发。</p>
-<p><strong>课件例题：</strong> 总长3820 B，首部20 B，MTU=1420 B。</p>
+<p><strong>例题：</strong> 总长3820 B，首部20 B，MTU=1420 B。</p>
 <pre><code class="language-text">原载荷 = 3820−20 = 3800 B
 非末片最大载荷 = floor((1420−20)/8)×8 = 1400 B
 floor表示向下取整。
@@ -609,14 +665,14 @@ floor表示向下取整。
 <a id="k5.5.1"></a>
 <h3>5.5.1 DHCP与租约</h3>
 <p>逐台手写地址与网关容易出错，主机加入和离开网络后也需要回收地址。DHCP 通过请求与租约提供有期限的配置，不能把一次获址理解为永久拥有。</p>
-<p><strong>DHCP</strong>自动提供地址、掩码、网关、DNS等参数。IPv4服务器用UDP 67端口，客户端用UDP 68。</p>
+<p><strong>DHCP</strong> 自动提供地址、掩码、网关、DNS等参数。IPv4服务器用UDP 67端口，客户端用UDP 68。</p>
 <pre><code class="language-text">Discover：客户端寻找服务器
 Offer：服务器提供候选地址
 Request：客户端表明选中的配置
 ACK：服务器确认租约与参数
 </code></pre>
-<p>初始客户端没可用IP，通过广播发现服务器。多个服务器可响应，客户端不被协议强制要求选择第一个。跨广播域要配置<strong>中继代理</strong>，路由器不会默认把所有广播转发过去。</p>
-<p><strong>租约</strong>是地址允许使用的时间。按常用默认，约租期一半T1时找原服务器续租，约0.875T的T2时扩大寻找；实际定时可由服务器指定。到期未续租必须停止使用该租约地址。NAK表示原配置不能继续使用，Release用于主动释放。</p>
+<p>初始客户端没可用IP，通过广播发现服务器。多个服务器可响应，客户端不被协议强制要求选择第一个。跨广播域要配置<strong>中继代理</strong> ，路由器不会默认把所有广播转发过去。</p>
+<p><strong>租约</strong> 是地址允许使用的时间。按常用默认，约租期一半T1时找原服务器续租，约0.875T的T2时扩大寻找；实际定时可由服务器指定。到期未续租必须停止使用该租约地址。NAK表示原配置不能继续使用，Release用于主动释放。</p>
 <table>
 <thead>
 <tr>
@@ -658,10 +714,11 @@ ACK：服务器确认租约与参数
 </tr>
 </tbody></table>
 <p>固定部分236 B，后接识别标记和选项，不能把图中的选项长度当作所有报文固定值。</p>
+<p>例如主机甲首次接入网络，按发现、提供、请求、确认的过程获得地址与 1 小时租约，并同时获得掩码、默认网关、DNS 等配置。租约到期前应尝试续租；主机断开再接入，不能只因上次使用过该地址就认定这次仍永久拥有它。</p>
 <a id="k5.5.2"></a>
 <h3>5.5.2 NAT与NAPT</h3>
 <p>多个私有地址主机共享一个对外地址时，返回的数据还要能找到原来的内网端点。地址转换与端口映射保存这种对应关系，并在出入两个方向作相应改写。</p>
-<p><strong>NAT</strong>改写IP地址；<strong>NAPT</strong>同时处理地址和端口，允许多台内网主机共享一个公网地址。</p>
+<p><strong>NAT</strong> 改写IP地址；<strong>NAPT</strong> 同时处理地址和端口，允许多台内网主机共享一个公网地址。</p>
 <p>理解例子：内网<code>192.168.1.10:50000</code>访问<code>198.51.100.20:443</code>，网关改成公网源<code>203.0.113.5:40001</code>并记录映射。响应回来时，再把该目的还原给内网主机。这些公网形式地址用于文档示例。</p>
 <p>静态地址/端口映射可把外部访问转给内部服务。改写要更新相关校验和；它增加状态并改变端到端可达性，不能当作完整的安全机制。</p>
 <p>第125页文字与图的转换后源地址不一致，采用“外发源映射为外部地址”的原理解释，不猜哪一处才是教师原意。</p>
@@ -669,7 +726,7 @@ ACK：服务器确认租约与参数
 <p>独立例子中 A 的内网源为 192.168.1.10:50000，NAPT 映射为 203.0.113.5:40001，目标 198.51.100.20:443。出站时源被改写并记录协议、端点映射；回包目的 203.0.113.5:40001 被查表还原为 A。若表项过期且无静态映射，旧回包不能仅靠公网地址找到 A。</p>
 <p>DHCP 给 A 的地址即使尚在租约内，也不保证 NAPT 表项仍在；NAPT 表项尚在也不允许 A 在 DHCP 租约到期后继续未经许可使用该地址。这里未指定映射超时秒数，不能填成所有设备一致的常量。</p>
 <h3>VPN 隧道与 NAT 为什么不能互换</h3>
-<p>参考：讲义 PDF 第 1108～1122 页。两个部门要借公共网络连接各自私有网，公共网络不为它们直接转发所有私有目的前缀。<strong>VPN，虚拟专用网</strong>提供受管理的逻辑专用连接；本例采用 IP 隧道承载内部 IP 包。</p>
+<p>参考：讲义 PDF 第 1108～1122 页。两个部门要借公共网络连接各自私有网，公共网络不为它们直接转发所有私有目的前缀。<strong>VPN，虚拟专用网</strong> 提供受管理的逻辑专用连接；本例采用 IP 隧道承载内部 IP 包。</p>
 <p>为了避免把讲义示例公网地址当作现场配置，下面改用文档地址。内部主机 <code>10.1.0.3</code> 发往 <code>10.2.0.3</code>，隧道入口 R1 公共端点 <code>203.0.113.1</code>，出口 R2 公共端点 <code>198.51.100.2</code>；两侧有必要路由和匹配的隧道配置。</p>
 <table>
 <thead>
@@ -712,7 +769,8 @@ ACK：服务器确认租约与参数
 <p>路由器只处理当前包，仍需要先获得怎样接近目的的知识。距离向量从邻居提供的距离组合选择；链路状态传播邻接信息后独立计算。输入信息不同，失败传播与收敛问题也不同。</p>
 <a id="k5.6.1"></a>
 <h3>5.6.1 路由选择的分类与目标</h3>
-<p><strong>度量</strong>是比较路径的代价，例如跳数、链路成本或时延。“最短”指所选度量总成本最小，不一定地理最近。</p>
+<p>从一台路由器出发可能有多条路径，需要先规定比较依据，再谈哪条更好。配置方式、更新方式和路径代价回答的是不同问题。</p>
+<p><strong>度量</strong> 是比较路径的代价，例如跳数、链路成本或时延。“最短”指所选度量总成本最小，不一定地理最近。</p>
 <table>
 <thead>
 <tr>
@@ -733,30 +791,31 @@ ACK：服务器确认租约与参数
 <td>集中式：一个逻辑中心；分布式：多个设备协作</td>
 </tr>
 </tbody></table>
-<p>算法还要考虑正确、稳定、公平、计算和通信开销。<strong>收敛</strong>是拓扑变化后，各设备逐步形成相容的新路由；收敛期间可能出现暂时不一致。</p>
+<p>算法还要考虑正确、稳定、公平、计算和通信开销。<strong>收敛</strong> 是拓扑变化后，各设备逐步形成相容的新路由；收敛期间可能出现暂时不一致。</p>
+<p>例如到乙有路径甲—丙—乙，代价为 2+2=4；另有甲—丁—乙，代价为 1+5=6。按该度量选前者。若改用地理距离，结果未必相同；人工写定出口是静态配置，随协议通告更新则是动态选路，这又是另一个分类角度。</p>
 <a id="k5.6.2"></a>
 <h3>5.6.2 距离向量与RIP</h3>
 <p>本机没有全网拓扑，也可以询问邻居到各目的有多远。把邻居通告的距离加上走到邻居的代价，就能形成一轮候选路径比较。</p>
-<p><strong>距离向量</strong>告诉邻居：“我到各目的有多远”。本机加上到邻居的代价，再选择最小值：</p>
+<p><strong>距离向量</strong> 告诉邻居：“我到各目的有多远”。本机加上到邻居的代价，再选择最小值：</p>
 <div class="formula" role="math" aria-label="D_x(y)=\min_v\{c(x,v)+D_v(y)\}">D<sub>x</sub>(y)=min<sub>v</sub>{c(x,v)+D<sub>v</sub>(y)}</div>
 
 
 <p>x是本机，y是目的，v是邻居；c是到邻居的链路代价，D_v(y)是邻居通告的距离。</p>
 <p><strong>理解例子：</strong> A—B成本1，B—C成本2，A—C成本7。B通告到C为2，A算出经B总成本1+2=3，因此优于直连的7，下一跳选B。</p>
-<p>但如果B—C断了，B误信A尚未更新的旧通告，A、B可能互相认为对方能到C，形成环路并不断增加距离，叫<strong>计数到无穷</strong>。</p>
+<p>但如果B—C断了，B误信A尚未更新的旧通告，A、B可能互相认为对方能到C，形成环路并不断增加距离，叫<strong>计数到无穷</strong> 。</p>
 <p>RIP是距离向量协议，用跳数作为度量，16表示不可达，最多15个有效跳。</p>
 <ul>
-<li><strong>水平分割</strong>：不向学到路由的方向再通告同一路由。</li>
-<li><strong>毒性逆转</strong>：向该方向明确通告该目的不可达。</li>
-<li><strong>触发更新</strong>：变化后及时通告，不只等周期。</li>
+<li><strong>水平分割</strong> ：不向学到路由的方向再通告同一路由。</li>
+<li><strong>毒性逆转</strong> ：向该方向明确通告该目的不可达。</li>
+<li><strong>触发更新</strong> ：变化后及时通告，不只等周期。</li>
 </ul>
 <p>这些减少部分环路问题，不能保证消除所有瞬态环路。计算多轮表时，还要说明每轮统一用上一轮表，还是立即采用新结果。</p>
 <a id="k5.6.3"></a>
 <h3>5.6.3 链路状态与Dijkstra</h3>
 <p>只听邻居的距离容易受过时信息影响。若各路由器先交换本地邻接关系，再建立共同拓扑，就能分别从本机出发计算最短路径。</p>
-<p><strong>链路状态</strong>告诉网络：“我连接哪些邻居，各链路成本是多少”。通告经<strong>泛洪</strong>传播，让各路由器建立拓扑数据库，再独立算最短路径。</p>
+<p><strong>链路状态</strong> 告诉网络：“我连接哪些邻居，各链路成本是多少”。通告经<strong>泛洪</strong> 传播，让各路由器建立拓扑数据库，再独立算最短路径。</p>
 <p>泛洪要用序列号、老化与重复检测控制，不能让旧通告无限复制。OSPF的周期刷新与故障触发更新不同，不能因为刷新周期长就认为故障也要等那么久。</p>
-<p><strong>Dijkstra算法</strong>适用于非负链路代价：每次选暂定距离最小、尚未确定的结点，再检查经它是否能缩短邻居距离，这一步叫<strong>松弛</strong>。</p>
+<p><strong>Dijkstra算法</strong> 适用于非负链路代价：每次选暂定距离最小、尚未确定的结点，再检查经它是否能缩短邻居距离，这一步叫<strong>松弛</strong> 。</p>
 <p>理解例子：无向图A—B=2，A—C=5，B—C=1，B—D=4，C—D=1。</p>
 <table>
 <thead>
@@ -803,8 +862,9 @@ ACK：服务器确认租约与参数
 <p>路径可达不表示出口能立刻发出所有数据。持续到达超过出口能力时会排队和丢弃；互相等待资源还可能停滞。整形控制进入节奏，调度安排队列服务，两者不能凭标记创造带宽。</p>
 <a id="k5.7.1"></a>
 <h3>5.7.1 拥塞与反馈控制</h3>
-<p><strong>拥塞</strong>是网络输入超过传输或处理能力，队列、时延与丢包增长。缓存能吸收短时突发，不能永久解决持续超载。</p>
-<p><strong>开环控制</strong>提前预防，如准入、预留、整形；<strong>闭环控制</strong>检测拥塞后反馈调整发送。</p>
+<p>每个发送者都可能在自身许可范围内发送，但多股流量汇入同一出口时，总量仍可能超过出口能力。需要从全网资源角度看排队与反馈。</p>
+<p><strong>拥塞</strong> 是网络输入超过传输或处理能力，队列、时延与丢包增长。缓存能吸收短时突发，不能永久解决持续超载。</p>
+<p><strong>开环控制</strong> 提前预防，如准入、预留、整形；<strong>闭环控制</strong> 检测拥塞后反馈调整发送。</p>
 <table>
 <thead>
 <tr>
@@ -831,18 +891,19 @@ ACK：服务器确认租约与参数
 </tbody></table>
 <p>流量控制保护接收端，拥塞控制保护网络，两者可能都限制发送量，但原因不同。</p>
 <p>课件“抑制分组”用于讲历史反馈思想。ICMP Source Quench已被规范废弃，不作为应启用的现代控制方法。<a href="https://www.rfc-editor.org/rfc/rfc6633.html">RFC 6633</a></p>
+<p>例如两路各以 8 Mbit/s 输入同一个 10 Mbit/s 出口，持续超出 6 Mbit/s。增加缓存只能推迟溢出；提前限制准入属于开环预防，检测队列增大后通知降低速率属于闭环反馈。它与只保护某个接收端缓冲的流量控制不同。</p>
 <a id="k5.7.2"></a>
 <h3>5.7.2 死锁</h3>
 <p>数据停住不一定只是出口太慢。如果各处缓冲都被等待对方接收的数据占满，又没有任何一方能释放空间，就要分析相互等待的资源关系。</p>
-<p><strong>死锁</strong>是一组实体互相等待被对方占用的资源，无法继续。</p>
+<p><strong>死锁</strong> 是一组实体互相等待被对方占用的资源，无法继续。</p>
 <p>例如A的缓冲存着要给B的包，B的缓冲存着要给A的包，双方都没有空间先接收。间接等待还可形成A→B→C→A的环。</p>
 <p>分片重组也可能出现缓冲被多个不完整报文占满，而补齐任一报文的后续片段都进不来的问题。合理分配、限制占用、超时释放等方法可破坏等待条件。</p>
 <p>拥塞通常还有数据缓慢前进，死锁则可能持续停住。“再加一点缓冲”不是通用的正确性证明。</p>
 <a id="k5.7.3"></a>
 <h3>5.7.3 QoS、整形与调度</h3>
 <p>不同业务容忍时延和丢失的程度不同。要提供相应服务，既要限制流量进入的节奏，也要决定多个队列谁先获得出口，这些措施仍受总容量约束。</p>
-<p><strong>QoS，服务质量</strong>关注带宽、时延、丢包和<strong>抖动</strong>，即分组延迟的变化。语音可能能容忍少量损失，却对延迟与抖动敏感；文件传输更重完整性。</p>
-<p><strong>整形</strong>控制数据进入网络的节奏；<strong>调度</strong>决定多个等待队列谁先发。</p>
+<p><strong>QoS，服务质量</strong> 关注带宽、时延、丢包和<strong>抖动</strong> ，即分组延迟的变化。语音可能能容忍少量损失，却对延迟与抖动敏感；文件传输更重完整性。</p>
+<p><strong>整形</strong> 控制数据进入网络的节奏；<strong>调度</strong> 决定多个等待队列谁先发。</p>
 <table>
 <thead>
 <tr>
@@ -877,7 +938,7 @@ ACK：服务器确认租约与参数
 
 
 <p>r用B/s、b用B、t用s。理解例子：r=1 MB/s、b=2 MB，桶满时可允许约2 MB突发，但物理发送仍需要时间。</p>
-<p><strong>IntServ</strong>强调逐流资源管理和预留；<strong>DiffServ</strong>在边缘分类、标记，在内部按类别处理。优先级标记不能凭空创造带宽，也不自动保证跨所有网络的端到端质量。</p>
+<p><strong>IntServ</strong> 强调逐流资源管理和预留；<strong>DiffServ</strong> 在边缘分类、标记，在内部按类别处理。优先级标记不能凭空创造带宽，也不自动保证跨所有网络的端到端质量。</p>
 <h3>令牌约束与物理发送约束要同时检查</h3>
 <p><strong>例题：</strong> 满桶 b=2000 B，r=1000 B/s，出口 C=1500 B/s。观察 2 s，令牌上限 b+rt=4000 B，物理出口最多 C×t=3000 B，因此实际最多受较小值 3000 B 限制。令牌允许的突发只表示许可，不让 2000 B 在零时间发完。</p>
 <p>若系统另有限制队列或包不能切分，上述结果仍只是上限；还需要到达时间和分组大小才能判断具体调度序列。</p>
@@ -887,7 +948,7 @@ ACK：服务器确认租约与参数
 <a id="k5.8.1"></a>
 <h3>5.8.1 基本首部与扩展首部</h3>
 <p>地址扩大后，路由器仍要快速识别固定的基本转发信息，额外功能则按需要携带。IPv6 将基本首部与扩展首部分开，先看各自包含什么。</p>
-<p>IPv6地址128位，基本首部固定40 B，不含IPv4式首部校验和。<strong>扩展首部</strong>把额外功能放在基本首部之后，通过Next Header串起来。</p>
+<p>IPv6地址128位，基本首部固定40 B，不含IPv4式首部校验和。<strong>扩展首部</strong> 把额外功能放在基本首部之后，通过Next Header串起来。</p>
 <table>
 <thead>
 <tr>
@@ -937,7 +998,8 @@ ACK：服务器确认租约与参数
 </code></pre>
 <p>常见编号：逐跳选项0，路由43，分片44，ESP 50，AH 51，目的选项60，TCP 6，UDP 17。ESP、AH是IP安全相关首部，本章先辨认名称与位置。</p>
 <p>扩展首部的长度规则并不统一：部分选项首部以8 B为单位表示额外长度，分片首部固定8 B，不应套用一张图的规则解释全部。</p>
-<p>**IPv6路由器不分片，必要分片由源端执行。**过大的包会按条件触发“Packet Too Big”反馈，帮助源端调整大小。<a href="https://datatracker.ietf.org/doc/html/rfc8200">RFC 8200</a></p>
+<p><strong>IPv6路由器不分片，必要分片由源端执行。</strong> 过大的包会按条件触发“Packet Too Big”反馈，帮助源端调整大小。<a href="https://datatracker.ietf.org/doc/html/rfc8200">RFC 8200</a></p>
+<p>例如一个不带扩展首部的 IPv6 包装载 100 B 上层数据，基本首部为 40 B，Payload Length 为 100 B，总长为 140 B。若再加入 8 B 扩展首部，Payload Length 变为 108 B，Next Header 链说明先解释哪种扩展，再解释上层内容，固定基本首部本身仍是 40 B。</p>
 <a id="k5.8.2"></a>
 <h3>5.8.2 地址表示与零压缩</h3>
 <p>128 位地址直接写成二进制很长，十六进制分组和零压缩使它便于阅读。缩写仍必须能唯一展开，否则接收者无法确定实际地址。</p>
@@ -952,7 +1014,7 @@ ACK：服务器确认租约与参数
 2001:db8::8:800:200c:417a
 </code></pre>
 <p>展开时已有6组，<code>::</code>补2组。若用两处<code>::</code>，无法知道各省了几组，所以非法。</p>
-<p>规范输出推荐小写、压缩最长零串、平局选最左，不用<code>::</code>压缩单个零组。<strong>合法写法与推荐的规范写法不同。</strong><a href="https://www.rfc-editor.org/rfc/rfc5952">RFC 5952</a></p>
+<p>规范输出推荐小写、压缩最长零串、平局选最左，不用<code>::</code>压缩单个零组。<strong>合法写法与推荐的规范写法不同。</strong> <a href="https://www.rfc-editor.org/rfc/rfc5952">RFC 5952</a></p>
 <a id="k5.8.3"></a>
 <h3>5.8.3 地址类型</h3>
 <p>向一个接口、一组接口中的一个或所有组成员交付，是不同的寻址需求。先按接收对象分类，再辨认各地址范围的用途与作用域。</p>
@@ -1010,10 +1072,11 @@ ACK：服务器确认租约与参数
 </tr>
 </tbody></table>
 <p>URL写IPv6并带端口时用方括号，如<code>http://[2001:db8::1]:8080/</code>，避免地址中的冒号与端口分隔混淆。</p>
+<p>例如甲向乙的一个接口发包，是单播；向某多播组发包，是交付给组成员；多个服务位置共享一个任播地址时，路由通常把包送往其中一个位置。任播不会因为共享地址就把同一包复制给所有位置，IPv6 也不靠广播地址替代这些区别。</p>
 <a id="k5.8.4"></a>
 <h3>5.8.4 NDP、SLAAC与接口标识</h3>
 <p>IPv6 主机既要找到链路邻居，也要发现路由器并配置地址。它用邻居发现消息协调这些任务，不能把 IPv4 的 ARP 报文直接搬过来。</p>
-<p><strong>NDP，邻居发现协议</strong>用ICMPv6进行邻居解析、路由器发现、重复地址检测等；IPv6不使用IPv4的ARP。</p>
+<p><strong>NDP，邻居发现协议</strong> 用ICMPv6进行邻居解析、路由器发现、重复地址检测等；IPv6不使用IPv4的ARP。</p>
 <table>
 <thead>
 <tr>
@@ -1043,9 +1106,9 @@ ACK：服务器确认租约与参数
 <td>邻居通告，提供相应反馈</td>
 </tr>
 </tbody></table>
-<p><strong>SLAAC，无状态地址自动配置</strong>让主机按允许自主配置的 RA 前缀和相应规则生成地址，不必逐个租用服务器地址。课件的SLACC应写SLAAC。默认路由器信息来自RA，不是从自己的地址推算。</p>
-<p><strong>接口标识</strong>是地址中用于识别接口的部分。修改EUI-64是课件介绍的一种生成办法，不是全部系统必须采用的方法。</p>
-<p>课件MAC为<code>08-70-5a-90-1a-01</code>：</p>
+<p><strong>SLAAC，无状态地址自动配置</strong> 让主机按允许自主配置的 RA 前缀和相应规则生成地址，不必逐个租用服务器地址。课件的SLACC应写SLAAC。默认路由器信息来自RA，不是从自己的地址推算。</p>
+<p><strong>接口标识</strong> 是地址中用于识别接口的部分。修改EUI-64是课件介绍的一种生成办法，不是全部系统必须采用的方法。</p>
+<p>例如 MAC 为<code>08-70-5a-90-1a-01</code>：</p>
 <pre><code class="language-text">插入ff-fe：08-70-5a-ff-fe-90-1a-01
 翻转首字节U/L位：08 XOR 02 = 0a
 接口标识：0a70:5aff:fe90:1a01
@@ -1053,9 +1116,10 @@ ACK：服务器确认租约与参数
 <p>不能把整个首字节取反；隐私等机制可使用其他标识生成方式。</p>
 <a id="k5.8.5"></a>
 <h3>5.8.5 被请求节点地址与DAD</h3>
-<p>为解析邻居，主机使用目标地址低24位构造<strong>被请求节点多播地址</strong>：加到<code>ff02::1:ff00:0/104</code>之后。</p>
+<p>IPv6 解析邻居时不希望向链路上的每台主机都广播请求，需要先由目标地址构造一个较小范围的多播目标。新地址启用前也需要检查是否重复。</p>
+<p>为解析邻居，主机使用目标地址低24位构造<strong>被请求节点多播地址</strong> ：加到<code>ff02::1:ff00:0/104</code>之后。</p>
 <p>理解例子：目标末尾为<code>1234:5678</code>，低24位是34:56:78，得到<code>ff02::1:ff34:5678</code>；以太网多播地址对应<code>33:33:ff:34:56:78</code>。</p>
-<p><strong>DAD，重复地址检测</strong>在正式使用新地址前检查是否冲突，可用源地址<code>::</code>发NS。没有冲突反馈后按规则启用，但故障导致的无响应不能证明任何环境下绝对无冲突。</p>
+<p><strong>DAD，重复地址检测</strong> 在正式使用新地址前检查是否冲突，可用源地址<code>::</code>发NS。没有冲突反馈后按规则启用，但故障导致的无响应不能证明任何环境下绝对无冲突。</p>
 <p>IPv6组成员管理用MLD，即多播侦听发现，与IPv4的IGMP区分。</p>
 <a id="k5.8.6"></a>
 <h3>5.8.6 IPv4与IPv6过渡</h3>
@@ -1086,14 +1150,15 @@ ACK：服务器确认租约与参数
 </tbody></table>
 <p>NAT64可让IPv6客户端访问IPv4服务；DNS64可合成相应IPv6地址帮助访问。能否支持反向主动连接依具体映射与配置，不能一概说任意双向互通。</p>
 <p>隧道里的IPv6包没有变成IPv4语义的包，只是装在IPv4外层中传。额外首部还会影响MTU。</p>
+<p>例如甲同时启用 IPv4、IPv6 并按目标选择协议，是双栈；把一个 IPv6 包放入 IPv4 外层跨越中间网络，是隧道；在边界把一种协议的报文转换成另一种，是翻译。隧道中原包在解封装后仍是 IPv6，翻译则实际改变相应协议表示。</p>
 <a id="c5-9"></a>
 <h2>5.9 互联网路由与路由器结构</h2>
 <p>单一管理网络的最短路径不足以解释整个互联网。自治系统间还要处理政策与可达性，内部则需要区域和快速转发表；控制信息与实际数据走向必须分别分析。</p>
 <a id="k5.9.1"></a>
 <h3>5.9.1 AS、IGP与域间路由</h3>
 <p>互联网由不同管理者共同运行，选路除了代价还受管理策略约束。先区分一个管理体系内部与不同体系之间，再选择相应路由协议。</p>
-<p><strong>AS，自治系统</strong>是一组采用统一管理与路由策略的网络。一个运营商或大型组织可按需要组织AS，不能只凭公司名字判断数量。</p>
-<p><strong>IGP</strong>是域内路由协议，主要在AS内工作；域间路由处理AS之间的可达性和策略。</p>
+<p><strong>AS，自治系统</strong> 是一组采用统一管理与路由策略的网络。一个运营商或大型组织可按需要组织AS，不能只凭公司名字判断数量。</p>
+<p><strong>IGP</strong> 是域内路由协议，主要在AS内工作；域间路由处理AS之间的可达性和策略。</p>
 <table>
 <thead>
 <tr>
@@ -1118,16 +1183,18 @@ ACK：服务器确认租约与参数
 <td>AS路径与策略，使用TCP 179</td>
 </tr>
 </tbody></table>
+<p>例如校园网络由统一管理策略控制，可作为一个 AS 的例子；校园内部计算路由属于域内问题，常由 IGP 处理。校园与运营网络之间交换前缀则涉及域间策略，需考虑对方 AS 与通告规则。AS 不是把所有使用同一 IP 前缀的设备简单打包。</p>
 <a id="k5.9.2"></a>
 <h3>5.9.2 OSPF与区域</h3>
 <p>链路状态需要维护拓扑，大网中不宜让所有细节无限扩散。OSPF 用邻接交换建立数据库，再通过区域组织规模与计算范围。</p>
 <p>OSPF用Hello发现邻居，通过数据库描述、链路状态请求、更新和确认交换信息，再算最短路径。</p>
-<p><strong>区域</strong>把大型网络的路由信息组织成多个部分，减少各处需要维护的规模；骨干区域是Area 0。链路成本可与带宽有关，但参考值可配置，不是固定的历史默认数值。</p>
+<p><strong>区域</strong> 把大型网络的路由信息组织成多个部分，减少各处需要维护的规模；骨干区域是Area 0。链路成本可与带宽有关，但参考值可配置，不是固定的历史默认数值。</p>
 <p>周期刷新是维护信息有效性，拓扑变化也能触发通告。多条等代价路径可以参与转发，具体认证和策略依配置而定。</p>
+<p>例如把大型网络划成区域 0 和区域 1，区域 1 的路由器维护本区域链路状态并计算路径，区域边界路由器连接相应区域。邻居先用 Hello 发现彼此，再交换数据库描述、请求与更新以同步信息；区域组织控制拓扑信息范围，不是给数据包新增一种目的地址。</p>
 <a id="k5.9.3"></a>
 <h3>5.9.3 BGP与路径向量</h3>
 <p>跨运营网络的可达性不能只靠域内最短路径决定。BGP 在前缀之外携带路径属性，使设备能结合 AS 路径和策略决定采用哪条通告。</p>
-<p>BGP通告可达前缀以及路径属性。<strong>AS_PATH</strong>记录所经过的AS，看到自己的AS可识别相应环路。</p>
+<p>BGP通告可达前缀以及路径属性。<strong>AS_PATH</strong> 记录所经过的AS，看到自己的AS可识别相应环路。</p>
 <p>BGP会考虑管理和商业策略，不能仅用“跳数最少”解释所有选路。TCP负责消息可靠传输，不保证通告本身在业务策略上正确。</p>
 <p>公共首部19 B：Marker 16 B、Length 2 B、Type 1 B。</p>
 <table>
@@ -1158,40 +1225,44 @@ ACK：服务器确认租约与参数
 <td>请求重新通告相应信息</td>
 </tr>
 </tbody></table>
+<p>例如 AS 甲收到到某前缀的通告，AS_PATH 为“乙、丙”，表示该通告描述的路径经过这些 AS。若甲又收到 AS_PATH 已含甲自己的通告，可据此识别 AS 级环路。即使另一条路径经过的 AS 更少，甲也可能因管理策略选择不同出口，不能只按跳数作最终决定。</p>
 <a id="k5.9.4"></a>
 <h3>5.9.4 路由器内部结构</h3>
 <p>路由算法形成规则之后，每个包仍要被接收、查表、搬运和排队。把计算规则与执行转发分开，才能解释路由器为何会在出口争用时拥塞。</p>
-<p><strong>控制平面</strong>运行路由协议、计算并维护转发信息；<strong>数据平面</strong>按照已有规则快速转发实际分组。</p>
+<p><strong>控制平面</strong> 运行路由协议、计算并维护转发信息；<strong>数据平面</strong> 按照已有规则快速转发实际分组。</p>
 <pre><code class="language-text">输入端口 → 交换结构 → 输出端口
 接收、查表    内部搬运    排队、调度、发送
 </code></pre>
 <p>交换结构可基于内存、总线或交叉开关。多个输入争同一个出口时仍要排队，即使内部很快也不能提高该出口容量。</p>
-<p><strong>队首阻塞</strong>指队首分组等待繁忙出口，挡住后面本可送往空闲出口的分组。路由表可含较多控制信息，转发表可为快速查询另行组织。</p>
+<p><strong>队首阻塞</strong> 指队首分组等待繁忙出口，挡住后面本可送往空闲出口的分组。路由表可含较多控制信息，转发表可为快速查询另行组织。</p>
+<p>例如路由协议先算出“到某前缀走端口 2”，这是控制平面形成规则；一个包到达后按这条规则由输入端口搬到输出端口 2，是数据平面执行转发。若多个输入同时争用端口 2，仍可能排队，控制与转发分离不会消除物理容量限制。</p>
 <a id="c5-10"></a>
 <h2>5.10 SDN、MPLS 与段路由：控制位置和转发依据怎样变化</h2>
 <p>普通前缀转发难以直接表达所有业务策略。SDN 调整控制的组织方式，MPLS 使用标签，段路由表达一组有序动作。它们回答的角度不同，可在实际设计中组合，不是三种完全互斥的网络层。</p>
 <a id="k5.10.1"></a>
 <h3>5.10.1 SDN的控制与转发分离</h3>
-<p><strong>SDN</strong>让控制逻辑通过可编程接口管理转发设备。控制器具有逻辑上的集中视角，物理上可由多个节点实现。</p>
+<p>每台设备自行表达策略时，跨设备一致管理较困难。可把控制逻辑与逐包执行分开，由控制系统下发转发规则。</p>
+<p><strong>SDN</strong> 让控制逻辑通过可编程接口管理转发设备。控制器具有逻辑上的集中视角，物理上可由多个节点实现。</p>
 <ul>
-<li><strong>北向接口</strong>：应用向控制系统描述需求或策略。</li>
-<li><strong>南向接口</strong>：控制系统向设备下发规则、获取状态。</li>
-<li><strong>流表规则</strong>：按地址、端口等匹配，执行转发、丢弃、修改或上送等动作。</li>
+<li><strong>北向接口</strong> ：应用向控制系统描述需求或策略。</li>
+<li><strong>南向接口</strong> ：控制系统向设备下发规则、获取状态。</li>
+<li><strong>流表规则</strong> ：按地址、端口等匹配，执行转发、丢弃、修改或上送等动作。</li>
 </ul>
 <p>理解例子：新流到达，设备没有匹配规则时按配置通知控制器；控制器计算策略并装规则，后续数据由设备直接处理。</p>
 <p>不是每个数据包都经过控制器，也不是所有SDN采用同一南向协议。控制器可用性、一致性和规则规模仍需设计，分离控制没有消除队列与容量限制。</p>
+<p>例如应用要求把某类流量送往出口乙，通过北向接口把需求交给控制系统；控制器再经南向接口向交换设备安装匹配与动作规则。后续包在设备中命中规则后直接转发，不必每个包都先送控制器。逻辑集中不代表只能有一台物理控制主机。</p>
 <a id="k5.10.2"></a>
 <h3>5.10.2 MPLS标签转发</h3>
 <p>相同类别的包可以在入口先确定转发处理，核心再按较短的标签查表。标签转发省去每一步重新表达完整业务分类，但仍要先建立映射与路径。</p>
-<p><strong>MPLS，多协议标签交换</strong>在相应网络内按短标签转发。入口压入标签，中间换标签，出口按规则弹出。</p>
-<p><strong>FEC，转发等价类</strong>是采用相同转发处理的一组分组；<strong>LSP，标签交换路径</strong>是按标签转发的路径。</p>
+<p><strong>MPLS，多协议标签交换</strong> 在相应网络内按短标签转发。入口压入标签，中间换标签，出口按规则弹出。</p>
+<p><strong>FEC，转发等价类</strong> 是采用相同转发处理的一组分组；<strong>LSP，标签交换路径</strong> 是按标签转发的路径。</p>
 <p>理解例子：入口给某类包标签100，中间节点根据标签查表，换为205并从指定出口发，出口移除标签。100与205可有局部意义，并非目的主机地址。</p>
 <p>标签栈项32位：Label 20位，TC 3位，S 1位，TTL 8位；TC是类别信息，S=1表示栈底。push、swap、pop分别指压入、交换、弹出。</p>
 <p>它可用于业务承载和流量工程，即按需求组织流量走向；路径仍需控制机制建立，标签不会自行知道全网路径。</p>
 <a id="k5.10.3"></a>
 <h3>5.10.3 段路由与SRv6</h3>
 <p>若希望一个包依次经过指定节点或执行一组动作，可以在入口表达有序段。需要分清普通中间转发与真正执行段行为的端点，才能正确推进列表。</p>
-<p><strong>段路由</strong>用有序段列表表达希望执行的节点或动作。<strong>SID</strong>是段标识，SRv6用IPv6地址形式表示它；<strong>SRH</strong>是携带段列表的路由扩展首部。</p>
+<p><strong>段路由</strong> 用有序段列表表达希望执行的节点或动作。<strong>SID</strong> 是段标识，SRv6用IPv6地址形式表示它；<strong>SRH</strong> 是携带段列表的路由扩展首部。</p>
 <p>普通IPv6中间路由器按当前目的地址转发；执行相应SID行为的段端点，才推进下一段。</p>
 <p>理解例子：希望依次执行A、B、C，SRH反向索引保存<code>[C,B,A]</code>。</p>
 <pre><code class="language-text">开始：Segments Left=2，当前目的A
@@ -1199,7 +1270,7 @@ A执行段行为：减为1，目的改B
 B执行段行为：减为0，目的改C
 </code></pre>
 <p>不能每经过一个普通中间路由器就减Segments Left。SID可表示节点或函数，实际行为由SID定义，不把上例套为所有行为的完整处理流程。</p>
-<p><strong>Last Entry</strong>是最后一个列表索引，3项时是2，不是3。SRH还含Next Header、长度、Routing Type、标志、Tag等。</p>
+<p><strong>Last Entry</strong> 是最后一个列表索引，3项时是2，不是3。SRH还含Next Header、长度、Routing Type、标志、Tag等。</p>
 <p>IPv6的Next Header=43指出路由扩展首部，SRH内Routing Type=4进一步识别SRH。段列表一般不是每执行一段就删除一项，也不记录全部实际中间节点。<a href="https://datatracker.ietf.org/doc/html/rfc8754">RFC 8754</a></p>
 <a id="c5-11"></a>
 <h2>5.11 综合应用</h2>
@@ -1388,7 +1459,7 @@ B执行段行为：减为0，目的改C
 <p>选择一项查看用途、计算方法与适用条件，再回正文核对完整推导。</p>
 <div class="quickbox"><label for="quick-select">选择速查项</label><select id="quick-select"></select><div id="quick-card" class="quickcard" aria-live="polite"></div></div>
 
-<div class="footerlinks"><a href="04_数据链路层.html">← 上一章：数据链路层</a><a href="06_传输层.html">下一章：传输层 →</a></div></article></main><script>window.CHAPTER={"chapter":5,"name":"网络层","file":"05_网络层.md","title":"第5章 网络层：从目的地址推导下一跳、分片与路由","toc":[{"id":"c5-0","title":"5.0 共同场景与符号"},{"id":"c5-1","title":"5.1 网络层服务：跨网络交付与下一跳"},{"id":"c5-2","title":"5.2 IPv4 地址规划：主机属于哪个地址块"},{"id":"c5-3","title":"5.3 逐跳转发与辅助协议：IP 和 MAC 分别指谁"},{"id":"c5-4","title":"5.4 IPv4 首部、MTU 与分片：尺寸变化怎样计算"},{"id":"c5-5","title":"5.5 DHCP 与 NAT：配置和映射有什么生命周期"},{"id":"c5-6","title":"5.6 路由算法：邻居距离与全网拓扑怎样选路"},{"id":"c5-7","title":"5.7 资源控制：排队、死锁、整形与 QoS"},{"id":"c5-8","title":"5.8 IPv6：地址、邻居发现与过渡怎样配合"},{"id":"c5-9","title":"5.9 互联网路由与路由器结构"},{"id":"c5-10","title":"5.10 SDN、MPLS 与段路由：控制位置和转发依据怎样变化"},{"id":"c5-11","title":"5.11 综合应用"},{"id":"c5-12","title":"5.12 自测与答案"},{"id":"c5-13","title":"5.13 排错与复习"},{"id":"c5-14","title":"5.14 分类速查"}],"stages":[{"name":"学习准备","task":"认清场景、对象与计数边界","ids":["c5-0"]},{"name":"地址与逐跳处理","task":"从配置推导出口、邻居和包大小","ids":["c5-1","c5-2","c5-3","c5-4","c5-5"]},{"name":"路径与资源","task":"理解选路、收敛和容量条件","ids":["c5-6","c5-7"]},{"name":"扩展与进阶","task":"辨认 IPv6、域间路由与新型转发","ids":["c5-8","c5-9","c5-10"]},{"name":"练习与复习","task":"组合推导、独立作答与排错","ids":["c5-11","c5-12","c5-13","c5-14"]}],"quick":[["子网计算","地址规划","判断同网与容量","网络=IP AND 掩码；总数=2^(32−p)","/29 有 8 编码、通常 6 主机","/31、/32 与特殊地址单独处理",1],["最长前缀与 ARP","逐跳处理","选择出口并找到本链路邻居","最长匹配前缀；ARP 解析下一跳","远端 S 的 IP 不变，首跳 MAC 指 R","ARP 缓存不是全网 IP-MAC 表",2],["IPv4 分片","包尺寸","把过大可分片包放入出口 MTU","载荷上限=floor((MTU−H)/8)×8","2000 B 经 700 MTU 得 680、680、620","偏移以 8 B 计；DF 与原 MF 必须检查",3],["DHCP 租约与 NAPT 映射","配置状态","提供地址与回程端点还原","DORA；地址端口映射表","外部 :40001 还原内网 :50000","期限、策略、校验和改写分别检查",4],["DV 与 Dijkstra","路由算法","依据邻居距离或拓扑求路径","min_v(c+D_v)；最小暂定结点后松弛","A→B→C→D 总成本 4","明确更新轮次；Dijkstra 边权非负",5],["令牌桶","流量整形","允许受控突发并限制长期速率","A(t)≤b+rt","b=2 MB、r=1 MB/s，1 s 许可≤3 MB","许可仍受物理出口与实际到达约束",6],["IPv6 邻居与尺寸","协议机制","配置邻居、发现路由并处理过大包","ICMPv6 RS/RA/NS/NA；源端分片","EUI-64 只翻 U/L 位","不是所有接口标识都从 MAC 生成",7],["SDN/MPLS/SRv6","进阶转发","分别组织控制、标签与有序段","流表；push/swap/pop；SID/SRH","普通中间路由器不推进 Segments Left","按版本和具体 SID 行为判断",9],["静态丢弃路由","路由配置","防止不存在的汇总子网落入默认回路","实际更具体前缀转发；汇总范围其余丢弃",".3/24 不存在时 /22 丢弃优于 /0 回传","按正确汇总设计，不代表所有配置自动无环",2],["VPN 隧道与 NAT","互连机制","借公共网络连接内部网并分清封装与改写","内层原包+外层隧道端点；NAT 地址转换","10.1.0.3→10.2.0.3 装入公共端点包","封装、安全机制、MTU 开销按所用协议",4]],"quick_id":"c5-14","synthesis_id":"c5-11","source_module_count":32,"retained_core_chars":13108,"new_chars":25960};</script><script>
+<div class="footerlinks"><a href="04_数据链路层.html">← 上一章：数据链路层</a><a href="06_传输层.html">下一章：传输层 →</a></div></article></main><script>window.CHAPTER={"chapter":5,"name":"网络层","file":"05_网络层.md","title":"第5章 网络层：从目的地址推导下一跳、分片与路由","toc":[{"id":"c5-0","title":"5.0 共同场景与符号\r"},{"id":"c5-1","title":"5.1 网络层服务：跨网络交付与下一跳\r"},{"id":"c5-2","title":"5.2 IPv4 地址规划：主机属于哪个地址块\r"},{"id":"c5-3","title":"5.3 逐跳转发与辅助协议：IP 和 MAC 分别指谁\r"},{"id":"c5-4","title":"5.4 IPv4 首部、MTU 与分片：尺寸变化怎样计算\r"},{"id":"c5-5","title":"5.5 DHCP 与 NAT：配置和映射有什么生命周期\r"},{"id":"c5-6","title":"5.6 路由算法：邻居距离与全网拓扑怎样选路\r"},{"id":"c5-7","title":"5.7 资源控制：排队、死锁、整形与 QoS\r"},{"id":"c5-8","title":"5.8 IPv6：地址、邻居发现与过渡怎样配合\r"},{"id":"c5-9","title":"5.9 互联网路由与路由器结构\r"},{"id":"c5-10","title":"5.10 SDN、MPLS 与段路由：控制位置和转发依据怎样变化\r"},{"id":"c5-11","title":"5.11 综合应用\r"},{"id":"c5-12","title":"5.12 自测与答案\r"},{"id":"c5-13","title":"5.13 排错与复习\r"},{"id":"c5-14","title":"5.14 分类速查\r"}],"stages":[{"name":"学习准备","task":"认清场景、对象与计数边界","ids":["c5-0"]},{"name":"地址与逐跳处理","task":"从配置推导出口、邻居和包大小","ids":["c5-1","c5-2","c5-3","c5-4","c5-5"]},{"name":"路径与资源","task":"理解选路、收敛和容量条件","ids":["c5-6","c5-7"]},{"name":"扩展与进阶","task":"辨认 IPv6、域间路由与新型转发","ids":["c5-8","c5-9","c5-10"]},{"name":"练习与复习","task":"组合推导、独立作答与排错","ids":["c5-11","c5-12","c5-13","c5-14"]}],"quick":[["子网计算","地址规划","判断同网与容量","网络=IP AND 掩码；总数=2^(32−p)","/29 有 8 编码、通常 6 主机","/31、/32 与特殊地址单独处理",1],["最长前缀与 ARP","逐跳处理","选择出口并找到本链路邻居","最长匹配前缀；ARP 解析下一跳","远端 S 的 IP 不变，首跳 MAC 指 R","ARP 缓存不是全网 IP-MAC 表",2],["IPv4 分片","包尺寸","把过大可分片包放入出口 MTU","载荷上限=floor((MTU−H)/8)×8","2000 B 经 700 MTU 得 680、680、620","偏移以 8 B 计；DF 与原 MF 必须检查",3],["DHCP 租约与 NAPT 映射","配置状态","提供地址与回程端点还原","DORA；地址端口映射表","外部 :40001 还原内网 :50000","期限、策略、校验和改写分别检查",4],["DV 与 Dijkstra","路由算法","依据邻居距离或拓扑求路径","min_v(c+D_v)；最小暂定结点后松弛","A→B→C→D 总成本 4","明确更新轮次；Dijkstra 边权非负",5],["令牌桶","流量整形","允许受控突发并限制长期速率","A(t)≤b+rt","b=2 MB、r=1 MB/s，1 s 许可≤3 MB","许可仍受物理出口与实际到达约束",6],["IPv6 邻居与尺寸","协议机制","配置邻居、发现路由并处理过大包","ICMPv6 RS/RA/NS/NA；源端分片","EUI-64 只翻 U/L 位","不是所有接口标识都从 MAC 生成",7],["SDN/MPLS/SRv6","进阶转发","分别组织控制、标签与有序段","流表；push/swap/pop；SID/SRH","普通中间路由器不推进 Segments Left","按版本和具体 SID 行为判断",9],["静态丢弃路由","路由配置","防止不存在的汇总子网落入默认回路","实际更具体前缀转发；汇总范围其余丢弃",".3/24 不存在时 /22 丢弃优于 /0 回传","按正确汇总设计，不代表所有配置自动无环",2],["VPN 隧道与 NAT","互连机制","借公共网络连接内部网并分清封装与改写","内层原包+外层隧道端点；NAT 地址转换","10.1.0.3→10.2.0.3 装入公共端点包","封装、安全机制、MTU 开销按所用协议",4]],"quick_id":"c5-14","synthesis_id":"c5-11","source_module_count":32,"retained_core_chars":13108,"new_chars":25960};</script><script>
 const $$=(s,r=document)=>[...r.querySelectorAll(s)];
 const menu=document.getElementById('menu-button');
 const setNav=v=>{document.body.classList.toggle('nav-open',v);menu.setAttribute('aria-expanded',String(v))};
@@ -1422,4 +1493,103 @@ if(window.CHAPTER){
   prev.addEventListener('click',()=>{index--;showStep()});next.addEventListener('click',()=>{index++;showStep()});showStep();
  }
 }
-</script></body></html>
+</script><script>(function runtime(){
+ 'use strict';
+ const article=document.querySelector('article'),toggle=document.getElementById('chapter-search-toggle');
+ if(!article||!toggle)return;
+ const BLOCK='h1,h2,h3,h4,p,li,th,td,pre,.formula,summary';
+ const EXCLUDE='button,input,textarea,select,script,style,svg,.wave-mobile-hint,.quickbox,.stepbox,.footerlinks,.chapter-search-ui';
+ const fold=s=>s.replace(/[A-Z]/g,c=>c.toLowerCase());
+ const normalize=s=>s.replace(/\s+/g,' ').trim();
+ const panel=document.createElement('dialog');panel.id='chapter-search-dialog';panel.className='chapter-search-dialog chapter-search-ui';panel.setAttribute('aria-labelledby','chapter-search-title');
+ panel.innerHTML=`<header class="chapter-search-head"><h2 id="chapter-search-title">搜索本章</h2><button type="button" class="chapter-search-close" aria-label="收起搜索">关闭</button></header><form class="chapter-search-form"><label for="chapter-search-input">关键词</label><div class="chapter-search-fields"><input id="chapter-search-input" type="search" maxlength="120" autocomplete="off" spellcheck="false" placeholder="例如：光纤、差分、8N1"><button type="submit">定位</button></div><p class="chapter-search-help" id="chapter-search-help">搜索正文、表格、代码和折叠答案；速查与分步演示以原文为准。英文不区分大小写，按原样匹配。Enter 下一处，Shift+Enter 上一处；Ctrl+K 打开搜索，Esc 收起。</p></form><p class="chapter-search-status" role="status" aria-live="polite"></p><div class="chapter-search-results" aria-label="搜索结果"></div>`;
+ const input=panel.querySelector('input');input.setAttribute('aria-describedby','chapter-search-help');
+ const resultList=panel.querySelector('.chapter-search-results'),status=panel.querySelector('.chapter-search-status');
+ const dock=document.createElement('div');dock.className='chapter-search-dock chapter-search-ui';dock.hidden=true;dock.setAttribute('role','group');dock.setAttribute('aria-label','本章搜索定位');
+ function button(text,fn){const b=document.createElement('button');b.type='button';b.textContent=text;b.addEventListener('click',fn);return b}
+ const previous=button('上一处',()=>move(-1)),next=button('下一处',()=>move(1)),counter=document.createElement('span');counter.className='chapter-search-counter';counter.setAttribute('role','status');counter.setAttribute('aria-live','polite');
+ dock.append(previous,counter,next,button('搜索',showPanel),button('清除',()=>{input.value='';runSearch();toggle.focus()}));document.body.append(panel,dock);
+ let blocks=[],hits=[],active=-1,query='',timer,composing=false,shown=50;
+ // Use a per-block text index to match across inline bold/code without replacing HTML.
+ function indexBlock(el){
+  const walker=document.createTreeWalker(el,NodeFilter.SHOW_TEXT,{acceptNode(n){const p=n.parentElement;return p&&!p.closest(EXCLUDE)&&p.closest(BLOCK)===el?NodeFilter.FILTER_ACCEPT:NodeFilter.FILTER_REJECT}});
+  let raw='',nodes=[],node;while((node=walker.nextNode())){nodes.push({node,start:raw.length,end:raw.length+node.length});raw+=node.data}
+  let text='',starts=[],ends=[];
+  for(let i=0;i<raw.length;){const at=i;if(/\s/.test(raw[i])){while(i<raw.length&&/\s/.test(raw[i]))i++;text+=' ';starts.push(at);ends.push(i)}else{text+=raw[i];starts.push(i);ends.push(i+1);i++}}
+  if(text.startsWith(' ')){text=text.slice(1);starts.shift();ends.shift()}if(text.endsWith(' ')){text=text.slice(0,-1);starts.pop();ends.pop()}
+  return {text,starts,ends,nodes};
+ }
+ function scan(){
+  let section='learning-nav',heading='学习导航';blocks=[];
+  for(const el of article.querySelectorAll('a[id],'+BLOCK)){
+   if(el.matches('a[id]')){section=el.id;continue}if(el.closest(EXCLUDE))continue;
+   if(/^H[1-4]$/.test(el.tagName))heading=normalize(el.textContent);
+   const index=indexBlock(el);if(index.text)blocks.push({el,section,heading,index});
+  }
+ }
+ function unmark(){for(const mark of article.querySelectorAll('mark.chapter-search-hit'))mark.replaceWith(...mark.childNodes);article.normalize()}
+ function paint(){
+  const ranges=new Map();
+  for(const [i,hit] of hits.entries()){
+   hit.marks=[];const ix=hit.block.index,a=ix.starts[hit.start],z=ix.ends[hit.end-1];
+   for(const part of ix.nodes){const start=Math.max(a,part.start)-part.start,end=Math.min(z,part.end)-part.start;if(start>=end)continue;if(!ranges.has(part.node))ranges.set(part.node,[]);ranges.get(part.node).push({start,end,i})}
+  }
+  for(const [node,parts] of ranges){
+   parts.sort((a,b)=>a.start-b.start);const fragment=document.createDocumentFragment();let at=0;
+   for(const p of parts){if(p.start>at)fragment.append(document.createTextNode(node.data.slice(at,p.start)));const mark=document.createElement('mark');mark.className='chapter-search-hit';mark.textContent=node.data.slice(p.start,p.end);mark.dataset.searchIndex=String(p.i);hits[p.i].marks.push(mark);fragment.append(mark);at=p.end}
+   if(at<node.length)fragment.append(document.createTextNode(node.data.slice(at)));node.replaceWith(fragment);
+  }
+ }
+ function updateCounter(){counter.textContent=active<0?'共 '+hits.length+' 处':(active+1)+' / '+hits.length;previous.disabled=next.disabled=!hits.length;dock.hidden=!hits.length;document.body.classList.toggle('chapter-search-has-results',!!hits.length)}
+ function renderResults(){
+  resultList.replaceChildren();
+  if(!query||!hits.length){const p=document.createElement('p');p.className='chapter-search-empty';p.textContent=query?'试试更短的关键词，或检查名称与拼写。':'输入关键词，即可列出所在小节和原文摘录。';resultList.append(p);return}
+  for(let i=0;i<Math.min(shown,hits.length);i++){
+   const h=hits[i],text=h.block.index.text,start=Math.max(0,h.start-36),end=Math.min(text.length,h.end+62);
+   const item=button('',()=>choose(i));item.className='chapter-search-result';item.dataset.searchIndex=String(i);if(i===active)item.setAttribute('aria-current','true');
+   const title=document.createElement('span');title.className='chapter-search-result-title';title.textContent='第 '+(i+1)+' 处 · '+h.block.heading;
+   const snippet=document.createElement('span');snippet.className='chapter-search-snippet';snippet.append(document.createTextNode((start?'…':'')+text.slice(start,h.start)));const mark=document.createElement('mark');mark.textContent=text.slice(h.start,h.end);snippet.append(mark,document.createTextNode(text.slice(h.end,end)+(end<text.length?'…':'')));item.append(title,snippet);resultList.append(item);
+  }
+  if(shown<hits.length){const more=button('再显示 '+Math.min(50,hits.length-shown)+' 条结果',()=>{shown+=50;renderResults()});more.className='chapter-search-more';resultList.append(more)}
+ }
+ function runSearch(){
+  clearTimeout(timer);const value=normalize(input.value);if(value===query)return;
+  unmark();scan();query=value;hits=[];active=-1;shown=50;
+  if(query){const needle=fold(query);for(const b of blocks){const text=fold(b.index.text);let at=0;while((at=text.indexOf(needle,at))!==-1){hits.push({block:b,start:at,end:at+needle.length});at+=needle.length}}paint()}
+  status.textContent=!query?'输入关键词搜索本章。':hits.length?'找到 '+hits.length+' 处匹配。点击结果定位，或按 Enter。':'没有找到“'+query+'”。';
+  updateCounter();renderResults();
+ }
+ function showPanel(){
+  if(document.body.classList.contains('nav-open'))document.getElementById('menu-button')?.click();
+  if(!panel.open)panel.showModal();toggle.setAttribute('aria-expanded','true');if(active>=shown){shown=Math.ceil((active+1)/50)*50;renderResults()}input.focus();input.select();
+ }
+ function closePanel(){if(panel.open)panel.close();toggle.setAttribute('aria-expanded','false')}
+ function choose(i){
+  if(!hits.length)return;active=(i+hits.length)%hits.length;const hit=hits[active];
+  for(const mark of article.querySelectorAll('.chapter-search-current'))mark.classList.remove('chapter-search-current');for(const mark of hit.marks)mark.classList.add('chapter-search-current');
+  for(let p=hit.block.el;p&&p!==article;p=p.parentElement)if(p.tagName==='DETAILS')p.open=true;
+  closePanel();updateCounter();renderResults();
+  const mark=hit.marks[0];if(mark)mark.scrollIntoView({block:'center',inline:'center',behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth'});
+  const old=hit.block.el.getAttribute('tabindex');if(old===null){hit.block.el.tabIndex=-1;hit.block.el.addEventListener('blur',()=>hit.block.el.removeAttribute('tabindex'),{once:true})}hit.block.el.focus({preventScroll:true});
+  if(hit.block.section&&document.getElementById(hit.block.section)){try{history.replaceState(null,'','#'+encodeURIComponent(hit.block.section))}catch(e){/* Some local-file viewers restrict history; scrolling still works. */}}
+ }
+ function move(direction){runSearch();if(hits.length)choose(active<0?(direction>0?0:hits.length-1):active+direction)}
+ toggle.addEventListener('click',showPanel);panel.querySelector('.chapter-search-close').addEventListener('click',closePanel);
+ panel.addEventListener('close',()=>toggle.setAttribute('aria-expanded','false'));
+ panel.addEventListener('click',e=>{if(e.target!==panel)return;const r=panel.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)closePanel()});
+ panel.querySelector('form').addEventListener('submit',e=>{e.preventDefault();if(!composing)move(1)});
+ input.addEventListener('compositionstart',()=>{composing=true;clearTimeout(timer)});input.addEventListener('compositionend',()=>{composing=false;clearTimeout(timer);timer=setTimeout(runSearch,100)});
+ input.addEventListener('input',e=>{if(composing||e.isComposing)return;clearTimeout(timer);timer=setTimeout(runSearch,100)});
+ input.addEventListener('keydown',e=>{if(e.key==='Enter'&&e.shiftKey&&!e.isComposing){e.preventDefault();move(-1)}});
+ document.addEventListener('keydown',e=>{
+  if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='k'){e.preventDefault();e.stopImmediatePropagation();showPanel()}
+  else if(e.key==='Escape'&&panel.open&&!e.isComposing&&!composing){e.preventDefault();e.stopImmediatePropagation();closePanel()}
+  else if(e.key==='Tab'&&panel.open){
+   const focusables=[...panel.querySelectorAll('button,input,a[href],[tabindex]')].filter(el=>!el.disabled&&el.tabIndex>=0&&el.getClientRects().length);
+   const first=focusables[0],last=focusables.at(-1);
+   if(e.shiftKey&&(document.activeElement===first||!panel.contains(document.activeElement))){e.preventDefault();last?.focus()}
+   else if(!e.shiftKey&&(document.activeElement===last||!panel.contains(document.activeElement))){e.preventDefault();first?.focus()}
+  }
+ },true);
+ scan();status.textContent='输入关键词搜索本章。';renderResults();toggle.disabled=false;
+})();</script><script>(function(){const s=document.getElementById('reading-theme');s.value=document.documentElement.dataset.theme;s.addEventListener('change',()=>{document.documentElement.dataset.theme=s.value;try{localStorage.setItem('network-reading-theme',s.value)}catch(e){}})})();</script></body></html>

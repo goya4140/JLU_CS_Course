@@ -1,10 +1,60 @@
-<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>第1章 概论：一次网络访问中设备与协议怎样分工</title><style>
+<!doctype html><html lang="zh-CN"><head><script>(function(){let t;try{t=localStorage.getItem('network-reading-theme')}catch(e){}if(t!=='light'&&t!=='dark')t=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';document.documentElement.dataset.theme=t})()</script><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>第1章 概论：一次网络访问中设备与协议怎样分工</title><style>
 :root{--ink:#20334a;--muted:#63748a;--accent:#17666c;--light:#e9f4f1;--line:#d9e4e9;--paper:#fff;--back:#f5f8fa;color-scheme:light}*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--back);color:var(--ink);font:16px/1.85 'Segoe UI','Microsoft YaHei',sans-serif}a{color:var(--accent);text-underline-offset:4px}a:hover{color:#10494e}button,select{font:inherit}button{cursor:pointer}a:focus-visible,button:focus-visible,select:focus-visible,summary:focus-visible{outline:3px solid #d78b21;outline-offset:3px}aside{position:fixed;inset:0 auto 0 0;width:292px;overflow-y:auto;background:#f0f5f6;border-right:1px solid var(--line);padding:28px 18px 28px 24px;z-index:30}.brand{font-size:21px;font-weight:700;line-height:1.5}.subbrand{font-size:13px;color:var(--muted);margin:8px 0 22px}.navgroup{margin:22px 0}.navgroup h2{font-size:12px;font-weight:600;letter-spacing:.06em;color:#75858e;margin:0 0 8px;border:0;padding:0}.navgroup p{font-size:11px;line-height:1.5;color:#7a8796;margin:0 0 8px}.navlink{display:block;padding:8px 11px;margin:4px 0;border-radius:7px;color:#3c5366;text-decoration:none;font-size:13px;line-height:1.6;border-left:3px solid transparent}.navlink:hover{background:#e2edee}.navlink.active{color:#0c5f62;border-color:var(--accent);background:#dcefed;font-weight:600}.asidefoot{font-size:12px;color:var(--muted);border-top:1px solid var(--line);padding-top:18px}main{margin-left:292px;min-width:0}.toolbar{position:sticky;top:0;z-index:20;background:#ffffffed;border-bottom:1px solid var(--line);height:55px;display:flex;align-items:center;gap:16px;padding:0 32px;font-size:12px;color:var(--muted);backdrop-filter:blur(8px)}.toolbar .spacer{flex:1}.toolbar a{text-decoration:none}.menubtn{display:none;border:1px solid #acbec8;background:white;border-radius:5px;padding:4px 12px;color:var(--ink)}article{max-width:1120px;margin:0 auto;padding:50px 58px 90px;background:white;min-height:100vh}h1{font-size:30px;line-height:1.55;letter-spacing:.01em;margin:0 0 24px}h2{font-size:24px;line-height:1.6;margin:62px 0 22px;padding-bottom:14px;border-bottom:1px solid var(--line);scroll-margin-top:86px}h3{font-size:19px;line-height:1.7;margin:36px 0 14px;scroll-margin-top:86px}h4{font-size:16px;margin:26px 0 10px}p{margin:14px 0}blockquote{margin:22px 0 30px;padding:16px 22px;border-left:4px solid var(--accent);background:#f1f7f6;color:#3c5866;font-size:14px}blockquote p{margin:7px 0}.tablewrap{overflow-x:auto;max-width:100%;margin:22px 0;border:1px solid var(--line);border-radius:7px}table{width:100%;border-collapse:collapse;font-size:14px;line-height:1.75;min-width:500px}th,td{text-align:left;vertical-align:top;padding:12px 15px;border-bottom:1px solid #e1e9ee}th{background:#edf4f5;font-weight:600}tr:last-child td{border-bottom:0}tbody tr:nth-child(even){background:#fafcfd}td a{display:inline-block}pre{max-width:100%;overflow:auto;background:#f1f5f8;border:1px solid #dde6eb;border-radius:7px;padding:20px;font-size:13px;line-height:1.8}code{font-family:Consolas,'Courier New','Microsoft YaHei',monospace;background:#eef4f6;border-radius:3px;padding:2px 4px;overflow-wrap:anywhere}pre code{padding:0;background:transparent;white-space:pre;overflow-wrap:normal}li{margin:7px 0}ul,ol{padding-left:26px}details{border:1px solid #c6dadb;border-radius:8px;margin:24px 0;padding:14px 20px;background:#f8fbfb}summary{cursor:pointer;font-weight:600;color:#17666c}details[open] summary{border-bottom:1px solid var(--line);padding-bottom:12px;margin-bottom:20px}.formula{overflow-x:auto;padding:20px;text-align:center;white-space:nowrap;background:#f9fbfc;font-family:'Cambria Math','Times New Roman',serif;font-size:20px;margin:20px 0}.frac{display:inline-flex;flex-direction:column;vertical-align:middle;text-align:center;line-height:1.4;margin:0 4px}.frac>span:first-child{border-bottom:1px solid #63748a;padding:0 5px 3px}.frac>span:last-child{padding:3px 5px 0}.formula sup,.formula sub{font-size:.65em}.quickbox,.stepbox{margin:24px 0;padding:24px;border:1px solid #c3d9d8;border-radius:10px;background:#f3f9f8}.quickbox label{display:block;font-weight:600;margin-bottom:10px}.quickbox select{width:100%;padding:10px 12px;border:1px solid #9fbfbc;border-radius:6px;background:white;color:var(--ink)}.quickcard{margin-top:20px}.quickcard h3{margin:0 0 12px}.quickcard dl{display:grid;grid-template-columns:90px 1fr;gap:10px 18px;font-size:15px;margin:0}.quickcard dt{font-weight:600;color:#557275}.quickcard dd{margin:0}.stepbox h3{margin:0 0 10px}.stepnotes{font-size:13px;color:var(--muted)}.stepbuttons{display:flex;flex-wrap:wrap;gap:6px;margin:16px 0}.stepbuttons button{border:1px solid #a8c6c4;background:white;color:#436366;border-radius:50%;width:35px;height:35px;font-size:13px}.stepbuttons button.active{background:var(--accent);color:white}.stepdisplay{background:white;border-radius:8px;padding:18px 20px;min-height:145px}.stepdisplay h4{margin:0 0 12px}.stepdisplay dl{margin:0;display:grid;grid-template-columns:140px 1fr;gap:9px 18px}.stepdisplay dt{font-weight:600}.stepdisplay dd{margin:0}.stepcontrols{display:flex;gap:10px;align-items:center;margin-top:16px}.stepcontrols button{border:1px solid #a7c6c3;padding:6px 16px;border-radius:5px;background:white;color:var(--accent)}button:disabled{cursor:default;opacity:.4}.stepcount{font-size:13px;color:var(--muted)}.chaptercards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin:28px 0}.chaptercard{display:block;border:1px solid var(--line);border-radius:10px;background:#f9fcfc;padding:22px;text-decoration:none}.chaptercard strong{display:block;font-size:21px;color:var(--ink);margin-bottom:10px}.chaptercard span{display:block;font-size:14px;line-height:1.7;color:#647a89}.footerlinks{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;border-top:1px solid var(--line);margin-top:64px;padding-top:24px}.footerlinks a{text-decoration:none}hr{border:0;border-top:1px solid var(--line);margin:35px 0}.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)}[id]{scroll-margin-top:86px}.topjump{color:#6b7e8e;font-size:13px}
 @media(max-width:1100px){aside{width:255px;padding:24px 15px}main{margin-left:255px}article{padding:38px 32px 70px}h1{font-size:27px}.toolbar{padding:0 24px}}
 @media(max-width:860px){aside{width:min(320px,87vw);transform:translateX(-100%);transition:transform .18s;box-shadow:12px 0 30px #1233}.nav-open aside{transform:translateX(0)}main{margin-left:0}.menubtn{display:block}.toolbar{padding:0 15px;gap:12px}.toolbar .desktop-only{display:none}article{padding:28px 20px 64px}h1{font-size:24px}h2{font-size:21px;margin-top:48px}h3{font-size:18px}body{font-size:15px}table{font-size:13px}th,td{padding:9px 12px}.quickbox,.stepbox{padding:17px}.quickcard dl,.stepdisplay dl{grid-template-columns:1fr;gap:3px}.quickcard dd,.stepdisplay dd{margin-bottom:12px}.chaptercards{grid-template-columns:1fr}.navshade{display:none;position:fixed;inset:0;background:#10283f55;z-index:25}.nav-open .navshade{display:block}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}aside{transition:none}}
 @media print{aside,.toolbar,.navshade,.stepbox{display:none}main{margin:0}article{max-width:none;padding:0}details{break-inside:avoid}table{min-width:0;font-size:10pt}h2{break-after:avoid}.tablewrap{overflow:visible}body{font-size:11pt}.quickbox select{display:none}.formula{white-space:normal}}
-</style></head><body><div class="navshade"></div><aside id="course-nav" aria-label="阶段分组学习目录"><div class="brand">计算机网络<br>学习资料</div><p class="subbrand">第 1 章 · 概论</p><nav><a class="navlink" href="#learning-nav">学习导航</a><section class="navgroup"><h2>学习准备</h2><p>认清场景、对象与计数边界</p><a class="navlink" href="#c1-0">1.0 共同场景与符号</a></section><section class="navgroup"><h2>基础对象</h2><p>认清设备、连线与分类</p><a class="navlink" href="#c1-1">1.1 网络对象</a><a class="navlink" href="#c1-2">1.2 连接关系与功能分类</a></section><section class="navgroup"><h2>通信分工</h2><p>区分层次、服务和封装</p><a class="navlink" href="#c1-3">1.3 分层与服务</a><a class="navlink" href="#c1-4">1.4 封装与连接</a></section><section class="navgroup"><h2>互连与背景</h2><p>建立协议族和标准的整体认识</p><a class="navlink" href="#c1-5">1.5 TCP/IP 与互连标准</a><a class="navlink" href="#c1-6">1.6 发展主线</a></section><section class="navgroup"><h2>性能判断</h2><p>分清性能指标的对象和量纲</p><a class="navlink" href="#c1-7">1.7 网络性能</a></section><section class="navgroup"><h2>练习与复习</h2><p>组合推导、独立作答与排错</p><a class="navlink" href="#c1-8">1.8 综合应用</a><a class="navlink" href="#c1-9">1.9 自测与答案</a><a class="navlink" href="#c1-10">1.10 排错与复习</a><a class="navlink" href="#c1-11">1.11 分类速查</a></section></nav><p class="asidefoot">先看前提与对象，再推导中间过程。速查只显示当前选项，完整解释可返回正文。<br><a href="00_学习导航.html">全课程入口</a></p></aside><main><div class="toolbar"><button class="menubtn" id="menu-button" aria-expanded="false" aria-controls="course-nav">目录</button><a href="../index.html#/">课程资料站</a><a href="00_学习导航.html">课程导航</a><span class="desktop-only">概论</span><span class="spacer"></span><a href="01_概论.md">Markdown</a><span class="desktop-only">离线阅读</span></div><article><h1>第1章 概论：一次网络访问中设备与协议怎样分工</h1>
+
+.chapter-search-toggle{font:inherit;border:1px solid #b1cecb;border-radius:6px;background:#f1f8f6;color:#155e63;padding:4px 12px;white-space:nowrap}.chapter-search-dialog{position:fixed;inset:70px 18px auto auto;margin:0;width:min(620px,calc(100vw - 36px));max-width:none;max-height:calc(100vh - 90px);max-height:calc(100dvh - 90px);border:1px solid #bfd5d2;border-radius:12px;padding:0;background:#fff;color:#20334a;box-shadow:0 16px 65px #102e4033;font:14px/1.7 'Segoe UI','Microsoft YaHei',sans-serif}.chapter-search-dialog::backdrop{background:#102e4055}.chapter-search-dialog[open]{display:flex;flex-direction:column}.chapter-search-head{display:flex;gap:14px;align-items:center;padding:17px 20px;border-bottom:1px solid #d9e4e9}.chapter-search-head h2{font-size:20px;line-height:1.5;margin:0;padding:0;border:0;flex:1}.chapter-search-ui button{font:inherit;cursor:pointer}.chapter-search-close{border:1px solid #b6cccb;border-radius:5px;background:white;color:#17666c;padding:3px 10px}.chapter-search-form{padding:14px 20px 4px}.chapter-search-form label{display:block;font-weight:600;font-size:13px;margin-bottom:7px}.chapter-search-fields{display:flex;gap:8px}.chapter-search-fields input{min-width:0;flex:1;border:1px solid #a9c7c1;border-radius:6px;padding:9px 11px;font:16px/1.5 'Segoe UI','Microsoft YaHei',sans-serif;color:#20334a;background:white}.chapter-search-fields button{border:1px solid #17666c;border-radius:6px;background:#17666c;color:white;padding:8px 15px;white-space:nowrap}.chapter-search-help{margin:9px 0 0;font-size:12px;color:#63748a;line-height:1.7}.chapter-search-status{margin:10px 20px;font-size:13px;color:#4b6e70}.chapter-search-results{overflow-y:auto;overscroll-behavior:contain;min-height:0;padding:0 13px 16px;flex:1}.chapter-search-result{display:block;width:100%;text-align:left;border:1px solid #d7e4e2;border-radius:7px;background:#fff;margin:7px 0;padding:11px 13px;color:#20334a;overflow-wrap:anywhere}.chapter-search-result:hover{background:#f0f8f5;border-color:#80b2aa}.chapter-search-result[aria-current="true"]{border-color:#17666c;background:#edf7f3}.chapter-search-result-title{display:block;font-size:12px;color:#17666c;font-weight:600;margin-bottom:5px}.chapter-search-snippet{display:block;font-size:13px}.chapter-search-snippet mark{background:#fff0a8;color:inherit;padding:0}.chapter-search-more{display:block;width:100%;border:1px solid #bfd4cf;border-radius:6px;background:#f4f9f7;color:#17666c;padding:8px;margin-top:12px}.chapter-search-empty{margin:16px 8px;color:#63748a;font-size:13px}.chapter-search-dock{position:fixed;bottom:18px;left:calc(50% + 146px);transform:translateX(-50%);max-width:calc(100vw - 24px);display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;z-index:35;border:1px solid #bdd3ce;border-radius:9px;background:#fffffffa;box-shadow:0 4px 24px #102e4026;padding:9px 12px;color:#20334a;font-size:13px}.chapter-search-dock[hidden]{display:none}.chapter-search-dock button{border:1px solid #b2cdc5;border-radius:5px;padding:4px 9px;background:#f5faf7;color:#17666c;white-space:nowrap}.chapter-search-counter{min-width:60px;text-align:center;font-variant-numeric:tabular-nums}.chapter-search-ui :focus-visible,.chapter-search-toggle:focus-visible{outline:3px solid #d78b21;outline-offset:2px}mark.chapter-search-hit{color:inherit;background:#fff0a8;padding:0;border-radius:2px;box-decoration-break:clone;-webkit-box-decoration-break:clone}mark.chapter-search-hit.chapter-search-current{background:#ffc66b;outline:2px solid #be7114;outline-offset:1px}.chapter-search-has-results article{padding-bottom:170px}
+@media(max-width:1100px){.chapter-search-dock{left:calc(50% + 127.5px)}}
+@media(max-width:860px){.chapter-search-dialog{inset:65px 12px auto;width:calc(100vw - 24px);max-height:calc(100vh - 80px);max-height:calc(100dvh - 80px)}.chapter-search-dock{left:50%;bottom:12px;width:max-content;gap:6px;padding:8px}.chapter-search-head{padding:14px 16px}.chapter-search-form{padding:12px 16px 4px}.chapter-search-status{margin:9px 16px}.chapter-search-results{padding:0 10px 12px}.chapter-search-fields button{padding:8px 11px}.chapter-search-toggle{padding:4px 10px}}
+@media print{.chapter-search-ui,.chapter-search-toggle{display:none!important}mark.chapter-search-hit{background:transparent;outline:none}.chapter-search-has-results article{padding-bottom:0}}
+</style><style>
+.theme-control{display:inline-flex;align-items:center;gap:5px;white-space:nowrap;color:var(--ink)}
+.theme-control select{font:inherit;color:var(--ink);background:var(--paper);border:1px solid var(--line);border-radius:5px;padding:4px 6px}
+.theme-control select:focus-visible{outline:3px solid #d78b21;outline-offset:2px}
+.toolbar{height:auto;min-height:55px;flex-wrap:wrap;padding-top:8px;padding-bottom:8px}
+:root[data-theme=dark]{color-scheme:dark;--ink:#e1eaf3;--muted:#a6b6c9;--accent:#83d5cf;--light:#223f40;--line:#45576a;--paper:#18232f;--back:#111b25}
+[data-theme=dark] article,[data-theme=dark] .stepdisplay,[data-theme=dark] button,[data-theme=dark] select,[data-theme=dark] input{background:var(--paper);color:var(--ink);border-color:var(--line)}
+[data-theme=dark] aside,[data-theme=dark] .toolbar{background:#1b2937;color:var(--muted)}
+[data-theme=dark] .navlink{color:#c4d7e5}[data-theme=dark] .navlink:hover{background:#2b414d}[data-theme=dark] .navlink.active{background:#254846;color:#a4eee7}
+[data-theme=dark] .navgroup h2,[data-theme=dark] .navgroup p,[data-theme=dark] .chaptercard span{color:var(--muted)}
+[data-theme=dark] a:hover{color:#b4f2eb}
+[data-theme=dark] th{background:#293d4c}[data-theme=dark] tbody tr:nth-child(even){background:#1e303d}[data-theme=dark] td,[data-theme=dark] th{border-color:var(--line)}
+[data-theme=dark] pre,[data-theme=dark] code,[data-theme=dark] .formula{background:#22313f;color:var(--ink);border-color:var(--line)}[data-theme=dark] pre code{background:transparent}
+[data-theme=dark] blockquote,[data-theme=dark] details,[data-theme=dark] .quickbox,[data-theme=dark] .stepbox,[data-theme=dark] .chaptercard{background:#20363c;color:var(--ink);border-color:#4b7074}
+[data-theme=dark] summary,[data-theme=dark] .quickcard dt{color:var(--accent)}
+[data-theme=dark] .stepbuttons button.active{background:#83d5cf;color:#142f32}
+[data-theme=dark] .chapter-search-dialog,[data-theme=dark] .chapter-search-dock,[data-theme=dark] .chapter-search-result{background:#1b2937;color:var(--ink);border-color:var(--line)}
+[data-theme=dark] .chapter-search-result:hover,[data-theme=dark] .chapter-search-result[aria-current=true]{background:#2a484a;border-color:var(--accent)}
+[data-theme=dark] .chapter-search-result-title,[data-theme=dark] .chapter-search-status{color:var(--accent)}
+[data-theme=dark] .chapter-search-help,[data-theme=dark] .chapter-search-empty{color:var(--muted)}
+[data-theme=dark] mark.chapter-search-hit,[data-theme=dark] .chapter-search-snippet mark{color:#ffedaf;background:#665217}
+[data-theme=dark] mark.chapter-search-current{color:#fff3da;background:#8b4a0b;outline-color:#ffc778}
+/* Waveform drawings use semantic fixed colors; map the whole drawing together. */
+[data-theme=dark] svg{filter:invert(.88) hue-rotate(165deg)}
+[data-theme=dark] .wave-card{background:#20313d;border-color:var(--line)}
+[data-theme=dark] .wave-title,[data-theme=dark] .wave-readout{color:var(--accent)}
+[data-theme=dark] .wave-readout{background:#294447}
+[data-theme=dark] .wave-caption,[data-theme=dark] .wave-legend,[data-theme=dark] .wave-mobile-hint{color:var(--muted)}
+[data-theme=dark] .wave-legend span:before{background:#83d5cf}
+[data-theme=dark] .wave-legend .amber:before{background:#dfb16c}
+[data-theme=dark] .wave-legend .gray:before{background:#b3c4ce}
+@media(max-width:860px){.toolbar{gap:8px;padding-left:12px;padding-right:12px}.theme-control{font-size:12px}h2,h3{scroll-margin-top:115px}}
+@media print{
+ :root[data-theme]{color-scheme:light;--ink:#17212b;--muted:#425363;--accent:#155d63;--line:#b9c4ce;--paper:#fff;--back:#fff}
+ .theme-control{display:none!important}
+ html[data-theme] body,html[data-theme] article,html[data-theme] pre,html[data-theme] code,html[data-theme] blockquote,html[data-theme] details,html[data-theme] .formula,html[data-theme] .quickbox,html[data-theme] .quickcard,html[data-theme] .stepbox,html[data-theme] .stepdisplay,html[data-theme] th,html[data-theme] tr{background:white!important;color:#17212b!important}
+ html[data-theme] svg{filter:none!important}html[data-theme] summary,html[data-theme] .quickcard dt{color:#155d63!important}
+ html[data-theme] .wave-card,html[data-theme] .wave-readout{background:white!important;color:#17212b!important}
+ html[data-theme] .wave-title,html[data-theme] .wave-caption,html[data-theme] .wave-legend{color:#17212b!important}
+}
+</style></head><body><div class="navshade"></div><aside id="course-nav" aria-label="阶段分组学习目录"><div class="brand">计算机网络<br>学习资料</div><p class="subbrand">第 1 章 · 概论</p><nav><a class="navlink" href="#learning-nav">学习导航</a><section class="navgroup"><h2>学习准备</h2><p>认清场景、对象与计数边界</p><a class="navlink" href="#c1-0">1.0 共同场景与符号
+</a></section><section class="navgroup"><h2>基础对象</h2><p>认清设备、连线与分类</p><a class="navlink" href="#c1-1">1.1 网络对象</a><a class="navlink" href="#c1-2">1.2 连接关系与功能分类</a></section><section class="navgroup"><h2>通信分工</h2><p>区分层次、服务和封装</p><a class="navlink" href="#c1-3">1.3 分层与服务</a><a class="navlink" href="#c1-4">1.4 封装与连接</a></section><section class="navgroup"><h2>互连与背景</h2><p>建立协议族和标准的整体认识</p><a class="navlink" href="#c1-5">1.5 TCP/IP 与互连标准</a><a class="navlink" href="#c1-6">1.6 发展主线</a></section><section class="navgroup"><h2>性能判断</h2><p>分清性能指标的对象和量纲</p><a class="navlink" href="#c1-7">1.7 网络性能</a></section><section class="navgroup"><h2>练习与复习</h2><p>组合推导、独立作答与排错</p><a class="navlink" href="#c1-8">1.8 综合应用
+</a><a class="navlink" href="#c1-9">1.9 自测与答案
+</a><a class="navlink" href="#c1-10">1.10 排错与复习
+</a><a class="navlink" href="#c1-11">1.11 分类速查
+</a></section></nav><p class="asidefoot">先看前提与对象，再推导中间过程。速查只显示当前选项，完整解释可返回正文。<br><a href="00_学习导航.html">全课程入口</a></p></aside><main><div class="toolbar"><button class="menubtn" id="menu-button" aria-expanded="false" aria-controls="course-nav">目录</button><a href="../index.html#/">课程资料站</a><a href="00_学习导航.html">课程导航</a><span class="desktop-only">概论</span><span class="spacer"></span><label class="theme-control">外观 <select id="reading-theme" aria-label="阅读配色"><option value="light">白天</option><option value="dark">夜间</option></select></label><button type="button" id="chapter-search-toggle" class="chapter-search-toggle" aria-haspopup="dialog" aria-expanded="false" aria-controls="chapter-search-dialog" disabled>搜索</button><a href="01_概论.md">Markdown</a><span class="desktop-only">离线阅读</span></div><article><h1>第1章 概论：一次网络访问中设备与协议怎样分工</h1>
 <p>电脑已经连上校园网，为什么有时仍打不开课程资料？一次查询既需要沿途设备搬运数据，也需要服务器程序理解请求。本章沿着这次查询，先认清设备和连接关系，再说明协议怎样分工、数据怎样逐层封装。</p>
 <a id="learning-nav"></a>
 <h2>学习导航</h2>
@@ -92,7 +142,8 @@
 <p>A 插上网线以后，仍需要有人把数据送到 S，也需要 S 上的程序读懂查询。先分清主机、链路和中间设备，才能解释“已连接”与“服务可用”的区别。</p>
 <a id="k1.1.1"></a>
 <h3>1.1.1 计算机网络、主机与互联网</h3>
-<p><strong>计算机网络</strong>是具有独立处理能力的设备通过通信链路互连、按照共同规则交换数据和共享资源的系统。</p>
+<p>两台电脑都能独立工作，但只有连线还不能交换可理解的数据。还要约定通信规则，并让提供内容与请求内容的程序配合。</p>
+<p><strong>计算机网络</strong> 是具有独立处理能力的设备通过通信链路互连、按照共同规则交换数据和共享资源的系统。</p>
 <p>“独立”指设备有自己的处理能力；“互连”不仅要有线缆或无线信号，还要有共同的通信规则。两个人通上电话，如果语言和交流规则完全不通，仍无法完成沟通。</p>
 <table>
 <thead>
@@ -123,9 +174,11 @@
 <td>校园网与运营商网络互连</td>
 </tr>
 </tbody></table>
-<p><strong>服务器</strong>是提供服务的主机，<strong>客户</strong>是请求服务的一方。这是工作角色，一台机器也可以同时承担两种角色。</p>
+<p><strong>服务器</strong> 是提供服务的主机，<strong>客户</strong> 是请求服务的一方。这是工作角色，一台机器也可以同时承担两种角色。</p>
+<p>例如电脑甲向服务器乙请求一个文件：甲、乙都是主机，连接它们的网线是链路；乙提供文件时是服务器，甲请求文件时是客户。乙若再向另一台机器请求备份，同一台乙又充当客户，因此客户与服务器是角色。</p>
 <a id="k1.1.2"></a>
 <h3>1.1.2 用校园网理解设备分工</h3>
+<p>一条访问路径可能经过多种设备。先逐个判断谁负责接入、谁负责转送、谁负责执行访问策略，才能定位失败发生在哪里。</p>
 <pre><code class="language-text">电脑 ─────────────┐
                   ├─ 接入交换机 ─ 汇聚/核心设备 ─ 校内服务器
 手机 ─ 无线接入点 ┘                    │
@@ -133,13 +186,14 @@
 </code></pre>
 <p>这是功能示意，实际布线和设备组合可能不同。</p>
 <ul>
-<li><strong>网卡</strong>：让主机接入网络，收发链路上的数据。</li>
-<li><strong>交换机</strong>：在局域网内转发数据，连接多个终端。</li>
-<li><strong>无线接入点 AP</strong>：让无线终端接入局域网。</li>
-<li><strong>路由器</strong>：连接不同的IP网络，选择下一跳。</li>
-<li><strong>防火墙</strong>：按访问策略检查、放行或拒绝通信。</li>
+<li><strong>网卡</strong> ：让主机接入网络，收发链路上的数据。</li>
+<li><strong>交换机</strong> ：在局域网内转发数据，连接多个终端。</li>
+<li><strong>无线接入点 AP</strong> ：让无线终端接入局域网。</li>
+<li><strong>路由器</strong> ：连接不同的IP网络，选择下一跳。</li>
+<li><strong>防火墙</strong> ：按访问策略检查、放行或拒绝通信。</li>
 </ul>
-<p>查询成绩时，网络负责传递请求与响应，服务器上的应用负责解释学号、查询成绩。<strong>连接上Wi-Fi，只能说明获得了无线接入，不保证校园出口和目标网站也正常。</strong></p>
+<p>查询成绩时，网络负责传递请求与响应，服务器上的应用负责解释学号、查询成绩。<strong>连接上Wi-Fi，只能说明获得了无线接入，不保证校园出口和目标网站也正常。</strong> </p>
+<p>例如手机经 AP 访问另一个 IP 网络的资料服务器：无线网卡收发无线信号，AP 提供接入，交换机转发本地帧，路由器选择跨网下一跳，防火墙按策略决定是否放行。最后由服务器程序读取文件，沿途设备不会代替它查文件内容。</p>
 <a id="c1-2"></a>
 <h2>1.2 连接关系与功能分类：怎样扩大网络</h2>
 <p>两台设备可直接接线，增加到几十台时，线路数量、故障影响和共享成本就成为问题。拓扑回答怎样连接；资源子网与通信子网回答承担什么工作；范围和介质则是另外的分类角度。</p>
@@ -186,19 +240,21 @@
 </tr>
 </tbody></table>
 <p>分布式强调“在哪些系统上处理”，并行强调“是否同时处理”，两者可以重合。可靠性和可扩展性需要具体设计，不能仅靠“联网”自动获得。</p>
+<p>例如两名学生向同一打印机提交文档，文档在网络中移动体现数据通信，使用同一打印机体现资源共享。若两台计算机各算一半数据，是分布式处理；两半同时算才又具有并行性。另设备用服务器并在故障时切换，才体现可靠性设计；增加服务器分担更多请求，才体现扩展能力。</p>
 <a id="k1.2.2"></a>
 <h3>1.2.2 资源子网与通信子网</h3>
 <p>查询由服务器处理，请求却由链路和转发设备搬运。为了分清这两类工作，可以把同一网络按功能划成相互配合的两部分。</p>
 <p>传统教材按功能把网络分成：</p>
 <ul>
-<li><strong>资源子网</strong>：负责处理数据和提供资源，例如主机、服务器、数据库。</li>
-<li><strong>通信子网</strong>：负责传递数据，例如链路、中间转发设备。</li>
+<li><strong>资源子网</strong> ：负责处理数据和提供资源，例如主机、服务器、数据库。</li>
+<li><strong>通信子网</strong> ：负责传递数据，例如链路、中间转发设备。</li>
 </ul>
 <p>它们是同一个网络中相互配合的功能部分。一台设备可能同时具有处理和转发能力，不能按机箱外观简单分类。</p>
+<p>例如电脑通过交换机访问文件服务器：电脑与服务器承担数据使用、保存和处理，属于资源部分；交换机和连接链路承担传递，属于通信部分。这里按职责划分，同一机箱若兼做路由与文件服务，应分别分析它的两项功能。</p>
 <a id="k1.2.3"></a>
 <h3>1.2.3 六类拓扑</h3>
 <p>设备一多，怎样连线会直接影响线路数量和故障范围。用结点与连线画出连接关系，就能比较不同方案，这种关系称为拓扑。</p>
-<p><strong>拓扑</strong>描述结点与链路的连接关系。学习时要同时看连接方式和故障影响。</p>
+<p><strong>拓扑</strong> 描述结点与链路的连接关系。学习时要同时看连接方式和故障影响。</p>
 <table>
 <thead>
 <tr>
@@ -245,23 +301,25 @@ B──中心──C       D──C                A  B  C
     │
     D
 </code></pre>
-<p><strong>完全网状</strong>要求任意两台设备都有直接链路；部分网状只连接部分结点对；是否具有足够冗余，还要检查具体连线。n台设备完全互连的链路数为：</p>
+<p><strong>完全网状</strong> 要求任意两台设备都有直接链路；部分网状只连接部分结点对；是否具有足够冗余，还要检查具体连线。n台设备完全互连的链路数为：</p>
 <div class="formula" role="math" aria-label="L=\frac{n(n-1)}{2}">L=<span class="frac"><span>n(n-1)</span><span>2</span></span></div>
 
 
 <p><strong>理解例子：</strong> 6 台设备，每台连另外 5 台，先把每台相邻链路数相加，得到 30；每条链路从两端各数了一次，所以共有 15 条。若每条直连链路单独占一个接口，每台需 5 个接口。</p>
-<p>还要区分：<strong>物理拓扑</strong>描述实际连线，<strong>逻辑拓扑</strong>描述数据使用链路的关系。集线器接线像星状，但终端仍共享介质；交换机也可以星状接线，却能分端口转发。仅看形状无法判断通信方式。</p>
+<p>还要区分：<strong>物理拓扑</strong> 描述实际连线，<strong>逻辑拓扑</strong> 描述数据使用链路的关系。集线器接线像星状，但终端仍共享介质；交换机也可以星状接线，却能分端口转发。仅看形状无法判断通信方式。</p>
+<p>用三个终端甲、乙、丙比较：星状都接中心 S；总线都接同一主干；环状首尾成圈；树状经分支逐级接向上层；全网状直接连甲乙、乙丙、甲丙三条线；混合拓扑可让两个星状区域再以主干相连。断开星状的甲接入线只隔离甲；中心 S 故障则影响该星状内所有终端，故障范围来自连接关系。</p>
 <a id="k1.2.4"></a>
 <h3>1.2.4 接入、汇聚与核心</h3>
 <p>把整栋楼所有终端直接接到同一台设备上，端口和管理规模会很快增大。园区设计通常把直接接终端、集中楼层流量和连接多个区域的工作分开。</p>
 <p>园区网常按三个角色组织设备：</p>
 <ul>
-<li><strong>接入层</strong>：直接连接电脑、无线接入点等终端。</li>
-<li><strong>汇聚层</strong>：集中多个接入设备的流量，执行相应策略。</li>
-<li><strong>核心层</strong>：为多个区域提供高速互连。</li>
+<li><strong>接入层</strong> ：直接连接电脑、无线接入点等终端。</li>
+<li><strong>汇聚层</strong> ：集中多个接入设备的流量，执行相应策略。</li>
+<li><strong>核心层</strong> ：为多个区域提供高速互连。</li>
 </ul>
 <p>例如楼层接入交换机接楼宇汇聚设备，再接园区核心。小网络可以合并汇聚和核心功能。</p>
 <p>双上联可提供冗余，但要配合避免环路和选择可用路径的机制。接入、汇聚、核心是设计角色，不对应OSI的三个协议层。</p>
+<p>例如两间教室的电脑分别接到各自接入交换机，两台接入设备再接楼宇汇聚设备，楼宇汇聚再连校园核心。教室增加一台电脑先消耗接入端口；跨楼宇访问还经过核心。这里的层次是园区组网角色，不能与 OSI 协议层次混为一谈。</p>
 <a id="k1.2.5"></a>
 <h3>1.2.5 按范围与介质分类</h3>
 <p>“覆盖多远”和“用什么介质”回答不同问题。描述校园网时先选定分类角度，才能理解它为何既是局域网，又可以同时包含有线与无线部分。</p>
@@ -296,6 +354,7 @@ B──中心──C       D──C                A  B  C
 </tbody></table>
 <p>这些范围是典型概念，不存在适合所有技术的统一公里分界线。</p>
 <p>“有线/无线”是另一种分类：局域网可以有线也可以无线，广域通信也能使用无线链路。覆盖范围、介质、管理主体是不同维度。</p>
+<p>例如手机与耳机组成个人范围的 PAN，教室设备组成 LAN；多个城区站点可由 MAN 连接，跨省站点由 WAN 互连。教室 LAN 内电脑用网线、手机用无线，两者仍可属于同一局域网。范围与介质是两个分类角度，范围名称没有统一的精确公里分界。</p>
 <h3>同一网络可以同时拥有多个分类标签</h3>
 <p>设一个教学楼内 20 台电脑通过双绞线接入中心交换机。按范围它是 LAN，按介质它是有线网络，按物理连接它是星状，按设备功能又包含资源和通信两部分。四个判断互不排斥。</p>
 <p>若 20 台全互连，先算每台要接 19 条线，再除以每条线被两端重复计数的 2，得到 190 条。星状仅需 20 条终端上联，但中心成为关键故障点。线路减少没有自动带来冗余，需要另行设计备用路径。</p>
@@ -305,7 +364,7 @@ B──中心──C       D──C                A  B  C
 <a id="k1.3.1"></a>
 <h3>1.3.1 协议及其三要素</h3>
 <p>请求能到达还不够，双方还要知道字段怎样排列、各字段表示什么、先做哪一步。把这些共同规则写清楚，程序才可能互相理解。</p>
-<p><strong>协议</strong>是通信双方共同遵守的规则。它不仅规定消息长什么样，也规定怎样解释、何时发送。</p>
+<p><strong>协议</strong> 是通信双方共同遵守的规则。它不仅规定消息长什么样，也规定怎样解释、何时发送。</p>
 <table>
 <thead>
 <tr>
@@ -330,13 +389,13 @@ B──中心──C       D──C                A  B  C
 <td>先发请求，再返回响应</td>
 </tr>
 </tbody></table>
-<p><strong>体系结构</strong>描述网络怎样分层，以及各层的功能和协议。<strong>实现</strong>是执行这些规则的软件与硬件。不同系统可以采用不同实现，只要外部行为满足共同协议，就能互通。</p>
+<p><strong>体系结构</strong> 描述网络怎样分层，以及各层的功能和协议。<strong>实现</strong> 是执行这些规则的软件与硬件。不同系统可以采用不同实现，只要外部行为满足共同协议，就能互通。</p>
 <a id="k1.3.2"></a>
 <h3>1.3.2 为什么分层</h3>
 <p>一次通信需要表达业务、找目标、选路径、组织数据、传输信号。分层把这些问题分开处理，让每层通过明确接口使用下层能力。</p>
 <p>例如浏览器不必直接决定网线上用多大电压；换成无线接入，只要下层仍提供所需服务，应用通常不必改写。</p>
 <p>分层的原则是职责明确、相近功能放在一起、接口尽量简单、层数适当。它也有首部和处理开销，不能认为层数越多越好。</p>
-<p><strong>对等实体</strong>是两端同层的处理模块，例如两台主机中的TCP模块。它们按同一协议进行逻辑通信，实际数据仍要向下经过本机各层、通过介质，再向上到对端。</p>
+<p><strong>对等实体</strong> 是两端同层的处理模块，例如两台主机中的TCP模块。它们按同一协议进行逻辑通信，实际数据仍要向下经过本机各层、通过介质，再向上到对端。</p>
 <a id="k1.3.3"></a>
 <h3>1.3.3 OSI七层及其通信范围</h3>
 <p>分开职责以后，还需要一套共同的位置名称，才能说明某个功能由哪一层负责。OSI 把通信任务组织为七层，下面同时比较每层处理的对象和作用范围。</p>
@@ -385,12 +444,12 @@ B──中心──C       D──C                A  B  C
 <td>应用消息</td>
 </tr>
 </tbody></table>
-<p>先记住三种范围：链路层关注<strong>相邻结点</strong>；网络层关注<strong>跨网络到达目标</strong>；传输层关注<strong>两端应用端点</strong>。</p>
+<p>先记住三种范围：链路层关注<strong>相邻结点</strong> ；网络层关注<strong>跨网络到达目标</strong> ；传输层关注<strong>两端应用端点</strong> 。</p>
 <p>“可靠传输”不是每一层、每一种协议都提供的保证。例如UDP不提供自身的确认重传；链路层检测到错误，也不意味着一定能自动修复。</p>
 <a id="k1.3.4"></a>
 <h3>1.3.4 物理层与数据链路层</h3>
 <p>线路上恢复出 0、1，只解决了最底层的传送问题；接收方还要知道哪些比特属于同一份数据。物理层与链路层分别处理信号传输和帧的组织。</p>
-<p>一个<strong>比特</strong>是0或1，一个<strong>字节</strong>通常是8比特。物理层通过电、光或无线信号让接收端恢复这些比特。</p>
+<p>一个<strong>比特</strong> 是0或1，一个<strong>字节</strong> 通常是8比特。物理层通过电、光或无线信号让接收端恢复这些比特。</p>
 <table>
 <thead>
 <tr>
@@ -415,18 +474,19 @@ B──中心──C       D──C                A  B  C
 <td>控制信号和操作的先后关系</td>
 </tr>
 </tbody></table>
-<p>数据链路层把连续比特组织成<strong>帧</strong>，使接收方知道一份链路数据的边界，这叫<strong>成帧</strong>。它还可按协议提供差错检测、流量控制和链路管理。</p>
-<p><strong>差错控制</strong>关注数据是否损坏、丢失或重复；<strong>流量控制</strong>关注接收方是否来得及处理。两者解决的问题不同。</p>
+<p>数据链路层把连续比特组织成<strong>帧</strong> ，使接收方知道一份链路数据的边界，这叫<strong>成帧</strong> 。它还可按协议提供差错检测、流量控制和链路管理。</p>
+<p><strong>差错控制</strong> 关注数据是否损坏、丢失或重复；<strong>流量控制</strong> 关注接收方是否来得及处理。两者解决的问题不同。</p>
+<p>例如两台相邻设备约定每微秒采样一次电平，接收出 0101，这是物理传输；再按帧格式识别地址、数据边界和校验，这是链路处理。插头形状属于机械特性，电平范围属于电气特性，引脚用途属于功能特性，先请求再允许发送的次序属于规程特性。</p>
 <a id="k1.3.5"></a>
 <h3>1.3.5 网络层与传输层</h3>
 <p>一帧只能解决当前链路上的传送。请求还要跨网络找到服务器，并在服务器里交给正确程序，因此需要区分主机地址、逐跳转发和应用端点。</p>
-<p><strong>IP地址</strong>用于网络层寻址。路由器根据目的地址和转发表选择出口，让分组逐跳接近目标。</p>
+<p><strong>IP地址</strong> 用于网络层寻址。路由器根据目的地址和转发表选择出口，让分组逐跳接近目标。</p>
 <ul>
-<li><strong>路由选择</strong>：形成“到某个目标应走哪条方向”的信息。</li>
-<li><strong>转发</strong>：收到一个具体分组后，按表把它从相应出口发出去。</li>
-<li><strong>拥塞</strong>：到达的数据超过网络传输或处理能力，导致排队，严重时丢包。</li>
+<li><strong>路由选择</strong> ：形成“到某个目标应走哪条方向”的信息。</li>
+<li><strong>转发</strong> ：收到一个具体分组后，按表把它从相应出口发出去。</li>
+<li><strong>拥塞</strong> ：到达的数据超过网络传输或处理能力，导致排队，严重时丢包。</li>
 </ul>
-<p>分组到达服务器后，还要交给正确程序。<strong>进程</strong>是运行中的程序实例；<strong>端口</strong>是传输层区分通信端点的编号，例如网页和邮件服务使用不同的端点。</p>
+<p>分组到达服务器后，还要交给正确程序。<strong>进程</strong> 是运行中的程序实例；<strong>端口</strong> 是传输层区分通信端点的编号，例如网页和邮件服务使用不同的端点。</p>
 <p>IP地址、端口和物理插口分别属于不同概念。“数据报”也不能单独决定层次：UDP与IP都使用这个名称，要结合协议判断。</p>
 <a id="k1.3.6"></a>
 <h3>1.3.6 会话、表示与应用</h3>
@@ -468,7 +528,8 @@ B──中心──C       D──C                A  B  C
 </tr>
 </tbody></table>
 <p>设备“工作在某层”通常指主要处理判断达到的层次。路由器仍要用链路层和物理层收发数据。</p>
-<p>主机设置中的<strong>默认网关</strong>通常是默认下一跳路由器，并不一定承担应用协议翻译。交换机端口是物理连接位置，TCP/UDP端口是软件通信编号。</p>
+<p>主机设置中的<strong>默认网关</strong> 通常是默认下一跳路由器，并不一定承担应用协议翻译。交换机端口是物理连接位置，TCP/UDP端口是软件通信编号。</p>
+<p>例如甲经交换机和路由器向远端乙发包：交换机用目的 MAC 判断本地端口，路由器用目的 IP 判断下一跳。若改用集线器，它只向其他端口传播信号；若网关需把一种应用消息转换成另一种格式，就已涉及相应上层协议，不能只按设备名称断定层次。</p>
 <a id="k1.3.8"></a>
 <h3>1.3.8 协议、服务与接口</h3>
 <p>浏览器调用本机 TCP，与本机 TCP 按规则联系对端 TCP，是两种方向的关系。下面分别给规则、提供的能力和使用入口命名，避免把一次本地调用当成远程执行。</p>
@@ -505,13 +566,14 @@ B──中心──C       D──C                A  B  C
 <p>每层都需要自己的地址或控制信息，而下层不能凭空猜出这些信息。封装把本层规则带到对端；连接说明双方是否先维护一段持续状态，两者应分别理解。</p>
 <a id="k1.4.1"></a>
 <h3>1.4.1 封装与数据单元</h3>
-<p><strong>封装</strong>是给上层数据加本层控制信息，<strong>解封装</strong>是接收时处理并去除这些信息。</p>
+<p>应用只提供正文，沿途设备却需要地址、类型等额外信息才能处理。必须把这些控制信息与正文组织在一起，并在接收端按层次取出。</p>
+<p><strong>封装</strong> 是给上层数据加本层控制信息，<strong>解封装</strong> 是接收时处理并去除这些信息。</p>
 <pre><code class="language-text">应用消息
 TCP首部 | 应用消息
 IP首部  | TCP首部 | 应用消息
 链路首部 | IP首部 | TCP首部 | 应用消息 | 链路尾部
 </code></pre>
-<p><strong>首部</strong>是放在前面的控制信息，<strong>尾部</strong>是放在后面的控制信息；<strong>载荷</strong>是本层承载的数据。某层的首部到下一层眼中，通常就成为载荷的一部分。</p>
+<p><strong>首部</strong> 是放在前面的控制信息，<strong>尾部</strong> 是放在后面的控制信息；<strong>载荷</strong> 是本层承载的数据。某层的首部到下一层眼中，通常就成为载荷的一部分。</p>
 <table>
 <thead>
 <tr>
@@ -566,7 +628,7 @@ IP数据报：      140 B
 <a id="k1.4.2"></a>
 <h3>1.4.2 面向连接与无连接</h3>
 <p>逐层封装说明了数据的样子，但没有说明发送前双方是否已经保存一轮通信的状态。先区分是否建立连接，再单独判断是否确认、是否重传。</p>
-<p><strong>面向连接服务</strong>先建立双方的逻辑状态，再交换数据，最后释放。<strong>无连接服务</strong>允许独立发送数据单元，不先建立持续连接。</p>
+<p><strong>面向连接服务</strong> 先建立双方的逻辑状态，再交换数据，最后释放。<strong>无连接服务</strong> 允许独立发送数据单元，不先建立持续连接。</p>
 <table>
 <thead>
 <tr>
@@ -591,7 +653,8 @@ IP数据报：      140 B
 <td>一份请求触发业务响应；这种方式可使用面向连接或无连接的传输服务</td>
 </tr>
 </tbody></table>
-<p>**是否建立连接、是否可靠，是两个维度。**逻辑连接也不意味着独占线路。收到一次确认或业务响应，不能据此断定底层建立了连接。</p>
+<p><strong>是否建立连接、是否可靠，是两个维度。</strong> 逻辑连接也不意味着独占线路。收到一次确认或业务响应，不能据此断定底层建立了连接。</p>
+<p>例如甲用 TCP 向乙传文件，先握手再传数据，双方保存连接状态；甲发一个独立 IP 数据报时，IP 不先为这次发送建立网络层连接。另设应用发出一条查询后收到响应，只能说明发生了请求/响应，不能由此推出底层一定用了 TCP。</p>
 <h3>把长度结果放回整体</h3>
 <p>沿用应用 100 B、TCP 20 B、IPv4 20 B、以太网首尾 18 B 的独立算例。对链路层而言，140 B IP 数据报是载荷；对 IP 而言，120 B TCP 报文段是载荷。算得 158 B 的对象是 MAC 帧。A 发出后，原应用内容仍是 100 B；控制信息不意味着修改了应用文件。</p>
 <p>到达 R 时，R 去掉当前链路的首尾，在下一链路重新加首尾。本例不含 NAT、分片、隧道，不能推断每跳首部完全不变：例如 IPv4 TTL 会递减，首部校验和随之更新。</p>
@@ -631,6 +694,7 @@ IP数据报：      140 B
 </tr>
 </tbody></table>
 <p>四层与五层主要是组织方式不同，五层把底层的链路处理与信号传输分开。OSI协议栈没有成为互联网的主流协议栈，但七层模型仍有分析和教学价值。</p>
+<p>例如浏览器通过 TCP/IP 在以太网上发送请求：教学五层分别列应用、传输、网络、链路、物理；四层模型把最后两层合称网络接口层。实际发送仍需要成帧和信号传输，合并层名并未省掉这两项工作。</p>
 <a id="k1.5.2"></a>
 <h3>1.5.2 IP沙漏结构</h3>
 <p>上层业务很多，底层介质也很多；若每两种组合都单独适配，互连会十分复杂。IP 在中间提供共同的寻址与交付接口，使多种上下层能够组合。</p>
@@ -640,10 +704,12 @@ IP数据报：      140 B
               IP
     以太网 / Wi-Fi / PPP等
 </code></pre>
-<p>上层不必为每种介质各设计一套应用；下层也可接入不同网络。这对应课件的“IP over everything”和“Everything over IP”。</p>
-<p>IP提供<strong>尽力而为</strong>的交付：网络尝试送达，但不承诺不丢失、不乱序。需要可靠传输时，可由两端使用TCP等机制补充。网络核心仍需要路由表、邻居信息和队列，不能把“简单网络”理解成完全没有状态。</p>
+<p>上层不必为每种介质各设计一套应用；下层也可接入不同网络。这对应“IP over everything”和“Everything over IP”两种概括：IP 适配多种下层，上层业务共同使用 IP。</p>
+<p>IP提供<strong>尽力而为</strong> 的交付：网络尝试送达，但不承诺不丢失、不乱序。需要可靠传输时，可由两端使用TCP等机制补充。网络核心仍需要路由表、邻居信息和队列，不能把“简单网络”理解成完全没有状态。</p>
+<p>例如同一个 HTTP 请求可由 TCP/IP 经以太网传送，也可由 TCP/IP 经 Wi-Fi 传送。应用与 TCP 不必分别为每种介质定义一套跨网地址；IP 在两者中间提供共同层次。但若一个 IP 包丢失，仍须由端点的恢复机制处理，IP 的共同接口不附带必达承诺。</p>
 <a id="k1.5.3"></a>
 <h3>1.5.3 TCP/IP协议族</h3>
+<p>访问一个资源往往需要多种协议配合，不能把协议族理解成只有名字中的两个成员。按当前任务辨认协议，才知道问题该交给哪一部分。</p>
 <p>TCP/IP是协议族，不只包含TCP与IP。这里先认清用途，具体格式在后续章节学习。</p>
 <table>
 <thead>
@@ -710,12 +776,14 @@ IP数据报：      140 B
 </tr>
 </tbody></table>
 <p>ARP直接承载于以太网帧，不装在IP包内；ICMP、IGMP则由IP承载。图中画得接近不代表封装关系相同。</p>
+<p>例如浏览器先用 DNS 查网站地址，再用 HTTP 表达资源请求，经典 HTTP/1.1 场景由 TCP 承载字节、IP 负责跨网交付。发邮件则用 SMTP 转交，读邮箱可用 POP；下载文件可用 FTP。它们解决的任务不同，不是必须依次执行的固定清单。</p>
 <a id="k1.5.4"></a>
 <h3>1.5.4 IETF与RFC</h3>
 <p>不同实现要互通，需要能查到共同规则。查阅互联网协议文档时，还得分清它是标准、实验说明还是信息材料，不能只凭一个编号判断效力。</p>
-<p><strong>RFC</strong>是按编号发布的技术文档系列，包括标准规范、最佳实践、信息性和实验性文档等。RFC不全是标准，也不是编号越大就自动取代较小编号。</p>
+<p><strong>RFC</strong> 是按编号发布的技术文档系列，包括标准规范、最佳实践、信息性和实验性文档等。RFC不全是标准，也不是编号越大就自动取代较小编号。</p>
 <p>阅读时先看主题、状态，以及是否标明更新（Updates）或取代（Obsoletes）其他文档。</p>
 <p>课件组织缩写用于辨认角色：ISOC是互联网协会；IAB关注互联网体系结构；IETF推进工程规范；IESG负责相应技术管理与标准流程；IRTF关注较长期研究，IRSG协调研究工作。WG是工作组，RG是研究组。它们不是数据包转发的层级。具体机构安排可能调整，不把课件组织图当作当前完整架构。</p>
+<p>例如读到一份说明实验性机制的 RFC，不能仅因有 RFC 编号就认定所有设备必须实现它。应看状态和更新关系；一份明确写明取代旧文档的新文档，才为相应旧规则提供替代依据。IETF 组织协议工程讨论，RFC 则是发布文档的系列名称。</p>
 <a id="k1.5.5"></a>
 <h3>1.5.5 标准化组织</h3>
 <p>标准让不同厂商采用共同约定。形状相同的插头还需要电气特性、编码、速率和协议相容，才能实际通信。</p>
@@ -764,11 +832,13 @@ IP数据报：      140 B
 </tr>
 </tbody></table>
 <p>ISO是组织名，OSI是模型名。ANSI不是政府“标准局”，官方将其介绍为协调自愿标准体系的私人非营利机构。<a href="https://www.ansi.org/about/introduction">ANSI官方介绍</a></p>
+<p>例如采购的两个以太网接口要互通，需要匹配相应 IEEE 802.3 规则；分析七层职责时则可使用与 ISO 有关的 OSI 模型。电信接口资料可见 ITU-T，电工或电子领域资料可见 IEC、IEEE，互联网协议文档常见 IETF/RFC。组织名帮助找规则，并不直接说明一个接口的速率。</p>
 <a id="c1-6"></a>
 <h2>1.6 发展主线：标准与共享怎样形成规模</h2>
 <p>前面已经看见共享链路与统一规则的作用，再读发展史就能理解每一步解决的规模问题。遇到资料中不同的日期或缩写，结合具体来源辨认其含义。</p>
 <a id="k1.6.1"></a>
 <h3>1.6.1 发展的主线</h3>
+<p>联网规模扩大时，变化的不只是设备数量，还包括计算在哪里完成、资源怎样共享、不同网络怎样协作。按这些问题看发展过程，比孤立记年代更容易理解。</p>
 <table>
 <thead>
 <tr>
@@ -798,13 +868,15 @@ IP数据报：      140 B
 <td>通信规模扩大，不必全部采用同一种设备</td>
 </tr>
 </tbody></table>
-<p><strong>分组交换</strong>把长消息切成较小的数据块，让多个用户的数据交替通过链路。它能提高共享效率；有备用路径和恢复机制时，也能降低局部故障的影响。它本身不能保证永不断网。</p>
+<p><strong>分组交换</strong> 把长消息切成较小的数据块，让多个用户的数据交替通过链路。它能提高共享效率；有备用路径和恢复机制时，也能降低局部故障的影响。它本身不能保证永不断网。</p>
 <p>课件用ARPANET说明早期分组交换实践。较稳妥的时间表述是：1969年建立，到年底形成四节点网络。课件文字中的“11月”与配图“DEC 1969”不一致，不能把前者当作四节点完成时间的确定证据。<a href="https://www.internetsociety.org/internet/history-internet/brief-history-internet/">Internet Society：互联网简史</a></p>
+<p>例如十名用户轮流使用同一主机，是共享中心计算能力；改为两台能各自运行程序的计算机交换文件，就转向独立计算机互连；再把多个采用共同协议的网络接起来，才形成跨网协作。三个阶段改变的是资源组织与互连关系。</p>
 <a id="k1.6.2"></a>
 <h3>1.6.2 互联网怎样扩大</h3>
-<p><strong>ISP</strong>是互联网服务提供者，提供接入或网络间转接等服务。校园网可经运营商接入外部网络，各运营网络还会互相连接。</p>
-<p>早期可以用“接入网—区域网—骨干网”理解层次。互联网进一步发展为多个运营网络通过转接和对等互联共同提供可达性的系统：<strong>没有一台掌管所有通信的互联网总服务器，也不是严格的一棵树。</strong></p>
-<p>课件还提到：</p>
+<p>一个校园接上互联网后，还需要其他管理者的网络愿意继续转送。理解网络之间怎样合作，才能解释互联网为什么没有一个统一的中心转发设备。</p>
+<p><strong>ISP</strong> 是互联网服务提供者，提供接入或网络间转接等服务。校园网可经运营商接入外部网络，各运营网络还会互相连接。</p>
+<p>早期可以用“接入网—区域网—骨干网”理解层次。互联网进一步发展为多个运营网络通过转接和对等互联共同提供可达性的系统：<strong>没有一台掌管所有通信的互联网总服务器，也不是严格的一棵树。</strong> </p>
+<p>还可按角色辨认下面的名称：</p>
 <table>
 <thead>
 <tr>
@@ -842,6 +914,7 @@ IP数据报：      140 B
 </tr>
 </tbody></table>
 <p>这些名称涉及不同层次，不能都当成局域网标准。第7页的“SAGES”未给出全称，现有材料不足以确认，暂不作为确定名称背诵。</p>
+<p>例如校园经运营网络甲访问运营网络乙的服务器：甲可通过转接网络获得到乙的可达性，也可能与乙直接对等互联。请求并不必经一台全球总服务器；不同网络的连接和策略共同决定可达路径。</p>
 <a id="c1-7"></a>
 <h2>1.7 网络性能：怎样判断快慢与利用程度</h2>
 <p>接入与分层说明了通信怎样完成，但“快不快”仍需明确统计对象。下面分别说明常用指标测量的对象，并用小例比较它们的含义。</p>
@@ -1043,16 +1116,16 @@ IP数据报：      140 B
 <li>D. 传输层</li>
 </ul>
 <h4>正确答案</h4>
-<p><strong>D. 传输层</strong></p>
+<p><strong>D. 传输层</strong> </p>
 <h4>详细解析</h4>
 <p>传输层负责为不同主机中的应用进程提供端到端通信服务。TCP 通过接收窗口、滑动窗口等机制，使发送方根据接收方的处理能力调整发送速度，从而实现端到端的流量控制。</p>
 <p>数据链路层也可能进行流量控制，但它控制的是相邻结点之间的一段链路，属于点到点或逐跳控制，不是源主机到目的主机之间的端到端控制。</p>
 <h4>知识点详解</h4>
 <ul>
-<li><strong>物理层</strong>：传输原始比特，不负责端到端流量控制。</li>
-<li><strong>数据链路层</strong>：负责相邻结点之间的成帧、差错检测和介质访问，某些协议可进行链路级流量控制。</li>
-<li><strong>网络层</strong>：负责逻辑寻址、路由选择和分组转发。</li>
-<li><strong>传输层</strong>：负责应用进程之间的端到端通信，可提供可靠传输、流量控制和拥塞控制。</li>
+<li><strong>物理层</strong> ：传输原始比特，不负责端到端流量控制。</li>
+<li><strong>数据链路层</strong> ：负责相邻结点之间的成帧、差错检测和介质访问，某些协议可进行链路级流量控制。</li>
+<li><strong>网络层</strong> ：负责逻辑寻址、路由选择和分组转发。</li>
+<li><strong>传输层</strong> ：负责应用进程之间的端到端通信，可提供可靠传输、流量控制和拥塞控制。</li>
 </ul>
 <h4>易错点</h4>
 <p>流量控制需要区分作用范围：数据链路层的流量控制面向相邻结点，传输层的流量控制面向通信两端。</p>
@@ -1067,7 +1140,7 @@ IP数据报：      140 B
 <li>D. 支持不同协议的实体</li>
 </ul>
 <h4>正确答案</h4>
-<p><strong>A. 相邻层实体</strong></p>
+<p><strong>A. 相邻层实体</strong> </p>
 <h4>详细解析</h4>
 <p>服务数据单元 SDU（Service Data Unit）是通过层间接口在相邻层之间传递的数据。上层把 SDU 交给下层，下层加入本层协议控制信息 PCI 后，形成该层的协议数据单元 PDU。</p>
 <p>对等层实体之间逻辑交换的是 PDU，而不是 SDU。因此，题目中的“服务数据单元”对应相邻层实体之间的信息交换。</p>
@@ -1076,10 +1149,10 @@ IP数据报：      140 B
 <pre><code class="language-text">本层 PDU = 上层交付的 SDU + 本层添加的 PCI
 </code></pre>
 <ul>
-<li><strong>SDU</strong>：上层通过服务接口交给本层处理的数据。</li>
-<li><strong>PCI</strong>：本层为实现协议功能而添加的控制信息，例如首部中的地址、序号和类型字段。</li>
-<li><strong>PDU</strong>：本层实体与对端同层实体进行逻辑通信时使用的数据单位。</li>
-<li><strong>SAP</strong>：相邻层之间访问服务的逻辑位置或标识。</li>
+<li><strong>SDU</strong> ：上层通过服务接口交给本层处理的数据。</li>
+<li><strong>PCI</strong> ：本层为实现协议功能而添加的控制信息，例如首部中的地址、序号和类型字段。</li>
+<li><strong>PDU</strong> ：本层实体与对端同层实体进行逻辑通信时使用的数据单位。</li>
+<li><strong>SAP</strong> ：相邻层之间访问服务的逻辑位置或标识。</li>
 </ul>
 <h4>易错点</h4>
 <p>“对等层之间使用协议，垂直相邻层之间使用服务”是区分 PDU 和 SDU 的关键。PDU 对应对等层，SDU 对应相邻层。</p>
@@ -1094,7 +1167,7 @@ IP数据报：      140 B
 <li>D. 传输层</li>
 </ul>
 <h4>正确答案</h4>
-<p><strong>D. 传输层</strong></p>
+<p><strong>D. 传输层</strong> </p>
 <h4>详细解析</h4>
 <p>在分层体系结构中，每一层都使用下一层提供的服务，并向上一层提供服务。会话层的下一层是传输层，因此传输层为会话层提供服务。</p>
 <p>表示层位于会话层之上，它使用会话层提供的服务，并向应用层提供服务，所以不能选表示层。</p>
@@ -1122,7 +1195,7 @@ IP数据报：      140 B
 <li>D. 传输层</li>
 </ul>
 <h4>正确答案</h4>
-<p><strong>A. 数据链路层</strong></p>
+<p><strong>A. 数据链路层</strong> </p>
 <h4>详细解析</h4>
 <p>数据链路层把网络层交付的分组封装成帧，在帧中加入链路层首部和尾部，然后通过物理层发送。帧是数据链路层的协议数据单元。</p>
 <h4>知识点详解</h4>
@@ -1167,13 +1240,13 @@ IP数据报：      140 B
 <li>D. 传输层</li>
 </ul>
 <h4>正确答案</h4>
-<p><strong>D. 传输层</strong></p>
+<p><strong>D. 传输层</strong> </p>
 <h4>详细解析</h4>
 <p>物理层和数据链路层主要处理相邻结点之间的传输，网络层通过多个中间结点把分组逐跳送往目的主机。传输层位于通信子网与高层应用之间，为源端和目的端的应用进程提供端到端服务。因此，从 OSI 模型底部向上看，传输层是第一个端到端层次。</p>
 <h4>知识点详解</h4>
 <ul>
-<li><strong>点到点或逐跳通信</strong>：关注一段链路或相邻网络结点之间的传输。</li>
-<li><strong>端到端通信</strong>：关注源主机上的进程与目的主机上的进程之间的整体通信。</li>
+<li><strong>点到点或逐跳通信</strong> ：关注一段链路或相邻网络结点之间的传输。</li>
+<li><strong>端到端通信</strong> ：关注源主机上的进程与目的主机上的进程之间的整体通信。</li>
 <li>传输层通过端口号实现进程的复用和分用，并可根据协议提供可靠交付、流量控制等功能。</li>
 </ul>
 <h4>易错点</h4>
@@ -1189,14 +1262,14 @@ IP数据报：      140 B
 <li>D. 分组交换网</li>
 </ul>
 <h4>正确答案</h4>
-<p><strong>D. 分组交换网</strong></p>
+<p><strong>D. 分组交换网</strong> </p>
 <h4>详细解析</h4>
 <p>ARPANET 是早期采用分组交换技术的计算机网络，也是互联网发展的重要基础。分组交换把较长的数据划分为较小的分组，每个分组携带必要的控制信息，由网络中的交换结点采用存储转发方式进行传输。</p>
 <h4>知识点详解</h4>
 <ul>
-<li><strong>电路交换</strong>：通信前建立专用通路，通信期间独占相关资源，典型应用是传统电话网。</li>
-<li><strong>报文交换</strong>：以完整报文为单位进行存储转发，对结点存储空间要求较高。</li>
-<li><strong>分组交换</strong>：把报文拆分为多个较小分组，便于共享链路，提高突发数据业务的传输效率。</li>
+<li><strong>电路交换</strong> ：通信前建立专用通路，通信期间独占相关资源，典型应用是传统电话网。</li>
+<li><strong>报文交换</strong> ：以完整报文为单位进行存储转发，对结点存储空间要求较高。</li>
+<li><strong>分组交换</strong> ：把报文拆分为多个较小分组，便于共享链路，提高突发数据业务的传输效率。</li>
 </ul>
 <h4>易错点</h4>
 <p>ARPANET 的代表性技术特征是分组交换。它并不为每对通信主机长期建立一条独占电路。</p>
@@ -1211,7 +1284,7 @@ IP数据报：      140 B
 <li>D. 以上都对</li>
 </ul>
 <h4>正确答案</h4>
-<p><strong>B. 数据与控制信息的结构和格式</strong></p>
+<p><strong>B. 数据与控制信息的结构和格式</strong> </p>
 <h4>详细解析</h4>
 <p>协议的语法说明数据和控制信息采用怎样的结构、字段怎样排列、字段长度是多少以及采用什么编码格式。通信双方只有遵守相同语法，才能正确识别收到的数据。</p>
 <h4>知识点详解</h4>
@@ -1249,14 +1322,14 @@ IP数据报：      140 B
 <li>D. 终端接收并显示财务报表，此过程仅涉及资源子网，与通信子网无任何关联</li>
 </ul>
 <h4>正确答案</h4>
-<p><strong>C</strong></p>
+<p><strong>C</strong> </p>
 <h4>详细解析</h4>
 <p>路由器和通信链路属于通信子网的主要组成部分。路由器根据网络层地址进行路由选择和分组转发，把查询请求从分支机构网络送往总部网络，因此 C 正确。</p>
 <p>A 中的终端属于资源子网。B 中权限验证、数据库查询和报表提取属于信息处理与服务功能，应由资源子网中的服务器和应用完成。D 中终端的显示工作属于资源子网功能，但报表到达终端之前仍必须经过通信子网，不能说与通信子网无任何关联。</p>
 <h4>知识点详解</h4>
 <ul>
-<li><strong>资源子网</strong>：由主机、终端、服务器及应用系统等组成，负责数据处理、资源共享和网络服务。</li>
-<li><strong>通信子网</strong>：由通信链路和交换设备等组成，负责数据传输、分组转发和路由选择。</li>
+<li><strong>资源子网</strong> ：由主机、终端、服务器及应用系统等组成，负责数据处理、资源共享和网络服务。</li>
+<li><strong>通信子网</strong> ：由通信链路和交换设备等组成，负责数据传输、分组转发和路由选择。</li>
 </ul>
 <p>这种划分强调功能。实际设备可能同时承担多种功能，不能只凭设备名称机械判断。</p>
 <h4>易错点</h4>
@@ -1272,7 +1345,7 @@ IP数据报：      140 B
 <li>D. 环状拓扑</li>
 </ul>
 <h4>正确答案</h4>
-<p><strong>B. 网状拓扑</strong></p>
+<p><strong>B. 网状拓扑</strong> </p>
 <h4>详细解析</h4>
 <p>网状拓扑在结点之间提供多条连接路径。在全网状结构中，任意两个结点之间都可以具有直接的点到点链路；部分网状是否能绕过某条故障链路，要看它是否提供相应备用路径；仅有“网状”名称不能证明所有单链路故障都可恢复。因此，网状拓扑具有较强的可靠性、健壮性和容错能力，适合题设中成本不敏感、重视连接冗余的场景。拓扑本身不能提供加密或访问控制，题目中的“高安全性”仍需其他机制落实。</p>
 <h4>知识点详解</h4>
@@ -1318,7 +1391,7 @@ IP数据报：      140 B
 <li>D. IGMP</li>
 </ul>
 <h4>正确答案</h4>
-<p><strong>A、B、D</strong></p>
+<p><strong>A、B、D</strong> </p>
 <h4>详细解析</h4>
 <p>按照本课程的分层口径，ARP、ICMP 和 IGMP 都作为网络层相关协议学习。DNS 为应用程序提供域名解析服务，属于应用层协议。</p>
 <h4>知识点详解</h4>
@@ -1364,7 +1437,7 @@ IP数据报：      140 B
 <li>D. 传输层</li>
 </ul>
 <h4>正确答案</h4>
-<p><strong>A、B、C</strong></p>
+<p><strong>A、B、C</strong> </p>
 <h4>详细解析</h4>
 <p>TCP/IP 模型没有分别设置会话层和表示层，而是把 OSI 模型中应用层、表示层和会话层的功能统一放入 TCP/IP 应用层。因此应选择 A、B、C。</p>
 <p>OSI 的传输层和 TCP/IP 的传输层大体对应，所以 D 不属于 TCP/IP 应用层的对应范围。</p>
@@ -1405,7 +1478,7 @@ IP数据报：      140 B
 <li>B. 错</li>
 </ul>
 <h4>正确答案</h4>
-<p><strong>B. 错</strong></p>
+<p><strong>B. 错</strong> </p>
 <h4>详细解析</h4>
 <p>题目把封装方向说反了。发送数据时，网络层把分组交给数据链路层；数据链路层把这个分组作为载荷，并加入帧首部和帧尾部，形成数据帧。因此通常是一个数据帧封装一个网络层分组。</p>
 <h4>知识点详解</h4>
@@ -1432,15 +1505,15 @@ IP数据报：      140 B
 <li>B. 错</li>
 </ul>
 <h4>正确答案</h4>
-<p><strong>A. 对</strong></p>
+<p><strong>A. 对</strong> </p>
 <h4>详细解析</h4>
 <p>服务访问点 SAP（Service Access Point）是上层实体访问下层服务的逻辑位置或标识，可以看作相邻层之间的逻辑接口。上层通过 SAP 调用下层提供的服务。</p>
 <h4>知识点详解</h4>
 <p>在分层模型中，需要区分三个概念：</p>
 <ul>
-<li><strong>协议</strong>：规定对等实体之间通信的规则。</li>
-<li><strong>服务</strong>：下层向相邻上层提供的功能。</li>
-<li><strong>接口或 SAP</strong>：相邻层之间访问服务的位置和方式。</li>
+<li><strong>协议</strong> ：规定对等实体之间通信的规则。</li>
+<li><strong>服务</strong> ：下层向相邻上层提供的功能。</li>
+<li><strong>接口或 SAP</strong> ：相邻层之间访问服务的位置和方式。</li>
 </ul>
 <p>协议描述水平方向的逻辑通信，服务和接口描述垂直方向的层间关系。</p>
 <h4>易错点</h4>
@@ -1454,7 +1527,7 @@ IP数据报：      140 B
 <li>B. 错</li>
 </ul>
 <h4>正确答案</h4>
-<p><strong>A. 对</strong></p>
+<p><strong>A. 对</strong> </p>
 <h4>详细解析</h4>
 <p>相邻层之间通过接口交互，接口上的服务访问位置或标识称为服务访问点 SAP。上层实体通过 SAP 使用下层实体提供的服务，因此题目表述正确。</p>
 <h4>知识点详解</h4>
@@ -1479,7 +1552,7 @@ IP数据报：      140 B
 <li>B. 错</li>
 </ul>
 <h4>正确答案</h4>
-<p><strong>B. 错</strong></p>
+<p><strong>B. 错</strong> </p>
 <h4>详细解析</h4>
 <p>TCP/IP 体系常被描述为“沙漏形”或“漏斗形”结构。上层可以运行 HTTP、DNS、SMTP 等多种应用协议，下层可以使用以太网、无线局域网和光纤等多种网络技术，而中间由统一的 IP 协议完成互连。因此，最窄处是 IP 协议，不是 TCP 协议。</p>
 <h4>知识点详解</h4>
@@ -1541,7 +1614,7 @@ IP数据报：      140 B
 <p>选择一项查看用途、计算方法与适用条件，再回正文核对完整推导。</p>
 <div class="quickbox"><label for="quick-select">选择速查项</label><select id="quick-select"></select><div id="quick-card" class="quickcard" aria-live="polite"></div></div>
 
-<div class="footerlinks"><a href="00_学习导航.html">← 课程导航</a><a href="02_数据通信基础.html">下一章：数据通信基础 →</a></div></article></main><script>window.CHAPTER={"chapter":1,"name":"概论","file":"01_概论.md","title":"第1章 概论：一次网络访问中设备与协议怎样分工","toc":[{"id":"c1-0","title":"1.0 共同场景与符号"},{"id":"c1-1","title":"1.1 网络对象：请求到底由谁处理"},{"id":"c1-2","title":"1.2 连接关系与功能分类：怎样扩大网络"},{"id":"c1-3","title":"1.3 分层与服务：把复杂通信拆成职责"},{"id":"c1-4","title":"1.4 封装与连接：数据逐层变成什么"},{"id":"c1-5","title":"1.5 TCP/IP 与互连标准：怎样跨不同网络合作"},{"id":"c1-6","title":"1.6 发展主线：标准与共享怎样形成规模"},{"id":"c1-7","title":"1.7 网络性能：怎样判断快慢与利用程度"},{"id":"c1-8","title":"1.8 综合应用"},{"id":"c1-9","title":"1.9 自测与答案"},{"id":"c1-10","title":"1.10 排错与复习"},{"id":"c1-11","title":"1.11 分类速查"}],"stages":[{"name":"学习准备","task":"认清场景、对象与计数边界","ids":["c1-0"]},{"name":"基础对象","task":"认清设备、连线与分类","ids":["c1-1","c1-2"]},{"name":"通信分工","task":"区分层次、服务和封装","ids":["c1-3","c1-4"]},{"name":"互连与背景","task":"建立协议族和标准的整体认识","ids":["c1-5","c1-6"]},{"name":"性能判断","task":"分清性能指标的对象和量纲","ids":["c1-7"]},{"name":"练习与复习","task":"组合推导、独立作答与排错","ids":["c1-8","c1-9","c1-10","c1-11"]}],"quick":[["网络拓扑","连接模型","评估连线与故障影响","完全网状 L=n(n−1)/2","6 台得 15 条","每条无向链路计一次",1],["协议、服务、接口","层次关系","分清横向通信与纵向调用","同层协议；下层服务；本机接口","TCP 给应用字节流服务","接口调用不是跨网远程调用",2],["封装","处理流程","携带每层控制信息","PDU=PCI+SDU（简单模型）","100 B 应用形成 158 B MAC 帧","需查选项、分段、填充及计数边界",3],["OSI 与 TCP/IP","参考模型","解释功能组织","七层、四层、教学五层","OSI 上三层常归 TCP/IP 应用层","模型对应不是软件模块一一对应",4],["连接与可靠性","服务属性","判断建立状态与交付保证","先建立状态；是否确认重传另看","无连接也可逐消息确认","两种属性不能互相推出",3],["时延与带宽积","性能指标","估计在途数据规模","R×所选时延","100 Mbit/s、单程5 ms 得62500 B","注明单程或 RTT，不等同下载吞吐",6]],"quick_id":"c1-11","synthesis_id":"c1-8","source_module_count":24,"retained_core_chars":8393,"new_chars":24758};</script><script>
+<div class="footerlinks"><a href="00_学习导航.html">← 课程导航</a><a href="02_数据通信基础.html">下一章：数据通信基础 →</a></div></article></main><script>window.CHAPTER={"chapter":1,"name":"概论","file":"01_概论.md","title":"第1章 概论：一次网络访问中设备与协议怎样分工","toc":[{"id":"c1-0","title":"1.0 共同场景与符号\r"},{"id":"c1-1","title":"1.1 网络对象：请求到底由谁处理\r"},{"id":"c1-2","title":"1.2 连接关系与功能分类：怎样扩大网络\r"},{"id":"c1-3","title":"1.3 分层与服务：把复杂通信拆成职责\r"},{"id":"c1-4","title":"1.4 封装与连接：数据逐层变成什么\r"},{"id":"c1-5","title":"1.5 TCP/IP 与互连标准：怎样跨不同网络合作\r"},{"id":"c1-6","title":"1.6 发展主线：标准与共享怎样形成规模\r"},{"id":"c1-7","title":"1.7 网络性能：怎样判断快慢与利用程度\r"},{"id":"c1-8","title":"1.8 综合应用\r"},{"id":"c1-9","title":"1.9 自测与答案\r"},{"id":"c1-10","title":"1.10 排错与复习\r"},{"id":"c1-11","title":"1.11 分类速查\r"}],"stages":[{"name":"学习准备","task":"认清场景、对象与计数边界","ids":["c1-0"]},{"name":"基础对象","task":"认清设备、连线与分类","ids":["c1-1","c1-2"]},{"name":"通信分工","task":"区分层次、服务和封装","ids":["c1-3","c1-4"]},{"name":"互连与背景","task":"建立协议族和标准的整体认识","ids":["c1-5","c1-6"]},{"name":"性能判断","task":"分清性能指标的对象和量纲","ids":["c1-7"]},{"name":"练习与复习","task":"组合推导、独立作答与排错","ids":["c1-8","c1-9","c1-10","c1-11"]}],"quick":[["网络拓扑","连接模型","评估连线与故障影响","完全网状 L=n(n−1)/2","6 台得 15 条","每条无向链路计一次",1],["协议、服务、接口","层次关系","分清横向通信与纵向调用","同层协议；下层服务；本机接口","TCP 给应用字节流服务","接口调用不是跨网远程调用",2],["封装","处理流程","携带每层控制信息","PDU=PCI+SDU（简单模型）","100 B 应用形成 158 B MAC 帧","需查选项、分段、填充及计数边界",3],["OSI 与 TCP/IP","参考模型","解释功能组织","七层、四层、教学五层","OSI 上三层常归 TCP/IP 应用层","模型对应不是软件模块一一对应",4],["连接与可靠性","服务属性","判断建立状态与交付保证","先建立状态；是否确认重传另看","无连接也可逐消息确认","两种属性不能互相推出",3],["时延与带宽积","性能指标","估计在途数据规模","R×所选时延","100 Mbit/s、单程5 ms 得62500 B","注明单程或 RTT，不等同下载吞吐",6]],"quick_id":"c1-11","synthesis_id":"c1-8","source_module_count":24,"retained_core_chars":8393,"new_chars":24758};</script><script>
 const $$=(s,r=document)=>[...r.querySelectorAll(s)];
 const menu=document.getElementById('menu-button');
 const setNav=v=>{document.body.classList.toggle('nav-open',v);menu.setAttribute('aria-expanded',String(v))};
@@ -1575,4 +1648,103 @@ if(window.CHAPTER){
   prev.addEventListener('click',()=>{index--;showStep()});next.addEventListener('click',()=>{index++;showStep()});showStep();
  }
 }
-</script></body></html>
+</script><script>(function runtime(){
+ 'use strict';
+ const article=document.querySelector('article'),toggle=document.getElementById('chapter-search-toggle');
+ if(!article||!toggle)return;
+ const BLOCK='h1,h2,h3,h4,p,li,th,td,pre,.formula,summary';
+ const EXCLUDE='button,input,textarea,select,script,style,svg,.wave-mobile-hint,.quickbox,.stepbox,.footerlinks,.chapter-search-ui';
+ const fold=s=>s.replace(/[A-Z]/g,c=>c.toLowerCase());
+ const normalize=s=>s.replace(/\s+/g,' ').trim();
+ const panel=document.createElement('dialog');panel.id='chapter-search-dialog';panel.className='chapter-search-dialog chapter-search-ui';panel.setAttribute('aria-labelledby','chapter-search-title');
+ panel.innerHTML=`<header class="chapter-search-head"><h2 id="chapter-search-title">搜索本章</h2><button type="button" class="chapter-search-close" aria-label="收起搜索">关闭</button></header><form class="chapter-search-form"><label for="chapter-search-input">关键词</label><div class="chapter-search-fields"><input id="chapter-search-input" type="search" maxlength="120" autocomplete="off" spellcheck="false" placeholder="例如：光纤、差分、8N1"><button type="submit">定位</button></div><p class="chapter-search-help" id="chapter-search-help">搜索正文、表格、代码和折叠答案；速查与分步演示以原文为准。英文不区分大小写，按原样匹配。Enter 下一处，Shift+Enter 上一处；Ctrl+K 打开搜索，Esc 收起。</p></form><p class="chapter-search-status" role="status" aria-live="polite"></p><div class="chapter-search-results" aria-label="搜索结果"></div>`;
+ const input=panel.querySelector('input');input.setAttribute('aria-describedby','chapter-search-help');
+ const resultList=panel.querySelector('.chapter-search-results'),status=panel.querySelector('.chapter-search-status');
+ const dock=document.createElement('div');dock.className='chapter-search-dock chapter-search-ui';dock.hidden=true;dock.setAttribute('role','group');dock.setAttribute('aria-label','本章搜索定位');
+ function button(text,fn){const b=document.createElement('button');b.type='button';b.textContent=text;b.addEventListener('click',fn);return b}
+ const previous=button('上一处',()=>move(-1)),next=button('下一处',()=>move(1)),counter=document.createElement('span');counter.className='chapter-search-counter';counter.setAttribute('role','status');counter.setAttribute('aria-live','polite');
+ dock.append(previous,counter,next,button('搜索',showPanel),button('清除',()=>{input.value='';runSearch();toggle.focus()}));document.body.append(panel,dock);
+ let blocks=[],hits=[],active=-1,query='',timer,composing=false,shown=50;
+ // Use a per-block text index to match across inline bold/code without replacing HTML.
+ function indexBlock(el){
+  const walker=document.createTreeWalker(el,NodeFilter.SHOW_TEXT,{acceptNode(n){const p=n.parentElement;return p&&!p.closest(EXCLUDE)&&p.closest(BLOCK)===el?NodeFilter.FILTER_ACCEPT:NodeFilter.FILTER_REJECT}});
+  let raw='',nodes=[],node;while((node=walker.nextNode())){nodes.push({node,start:raw.length,end:raw.length+node.length});raw+=node.data}
+  let text='',starts=[],ends=[];
+  for(let i=0;i<raw.length;){const at=i;if(/\s/.test(raw[i])){while(i<raw.length&&/\s/.test(raw[i]))i++;text+=' ';starts.push(at);ends.push(i)}else{text+=raw[i];starts.push(i);ends.push(i+1);i++}}
+  if(text.startsWith(' ')){text=text.slice(1);starts.shift();ends.shift()}if(text.endsWith(' ')){text=text.slice(0,-1);starts.pop();ends.pop()}
+  return {text,starts,ends,nodes};
+ }
+ function scan(){
+  let section='learning-nav',heading='学习导航';blocks=[];
+  for(const el of article.querySelectorAll('a[id],'+BLOCK)){
+   if(el.matches('a[id]')){section=el.id;continue}if(el.closest(EXCLUDE))continue;
+   if(/^H[1-4]$/.test(el.tagName))heading=normalize(el.textContent);
+   const index=indexBlock(el);if(index.text)blocks.push({el,section,heading,index});
+  }
+ }
+ function unmark(){for(const mark of article.querySelectorAll('mark.chapter-search-hit'))mark.replaceWith(...mark.childNodes);article.normalize()}
+ function paint(){
+  const ranges=new Map();
+  for(const [i,hit] of hits.entries()){
+   hit.marks=[];const ix=hit.block.index,a=ix.starts[hit.start],z=ix.ends[hit.end-1];
+   for(const part of ix.nodes){const start=Math.max(a,part.start)-part.start,end=Math.min(z,part.end)-part.start;if(start>=end)continue;if(!ranges.has(part.node))ranges.set(part.node,[]);ranges.get(part.node).push({start,end,i})}
+  }
+  for(const [node,parts] of ranges){
+   parts.sort((a,b)=>a.start-b.start);const fragment=document.createDocumentFragment();let at=0;
+   for(const p of parts){if(p.start>at)fragment.append(document.createTextNode(node.data.slice(at,p.start)));const mark=document.createElement('mark');mark.className='chapter-search-hit';mark.textContent=node.data.slice(p.start,p.end);mark.dataset.searchIndex=String(p.i);hits[p.i].marks.push(mark);fragment.append(mark);at=p.end}
+   if(at<node.length)fragment.append(document.createTextNode(node.data.slice(at)));node.replaceWith(fragment);
+  }
+ }
+ function updateCounter(){counter.textContent=active<0?'共 '+hits.length+' 处':(active+1)+' / '+hits.length;previous.disabled=next.disabled=!hits.length;dock.hidden=!hits.length;document.body.classList.toggle('chapter-search-has-results',!!hits.length)}
+ function renderResults(){
+  resultList.replaceChildren();
+  if(!query||!hits.length){const p=document.createElement('p');p.className='chapter-search-empty';p.textContent=query?'试试更短的关键词，或检查名称与拼写。':'输入关键词，即可列出所在小节和原文摘录。';resultList.append(p);return}
+  for(let i=0;i<Math.min(shown,hits.length);i++){
+   const h=hits[i],text=h.block.index.text,start=Math.max(0,h.start-36),end=Math.min(text.length,h.end+62);
+   const item=button('',()=>choose(i));item.className='chapter-search-result';item.dataset.searchIndex=String(i);if(i===active)item.setAttribute('aria-current','true');
+   const title=document.createElement('span');title.className='chapter-search-result-title';title.textContent='第 '+(i+1)+' 处 · '+h.block.heading;
+   const snippet=document.createElement('span');snippet.className='chapter-search-snippet';snippet.append(document.createTextNode((start?'…':'')+text.slice(start,h.start)));const mark=document.createElement('mark');mark.textContent=text.slice(h.start,h.end);snippet.append(mark,document.createTextNode(text.slice(h.end,end)+(end<text.length?'…':'')));item.append(title,snippet);resultList.append(item);
+  }
+  if(shown<hits.length){const more=button('再显示 '+Math.min(50,hits.length-shown)+' 条结果',()=>{shown+=50;renderResults()});more.className='chapter-search-more';resultList.append(more)}
+ }
+ function runSearch(){
+  clearTimeout(timer);const value=normalize(input.value);if(value===query)return;
+  unmark();scan();query=value;hits=[];active=-1;shown=50;
+  if(query){const needle=fold(query);for(const b of blocks){const text=fold(b.index.text);let at=0;while((at=text.indexOf(needle,at))!==-1){hits.push({block:b,start:at,end:at+needle.length});at+=needle.length}}paint()}
+  status.textContent=!query?'输入关键词搜索本章。':hits.length?'找到 '+hits.length+' 处匹配。点击结果定位，或按 Enter。':'没有找到“'+query+'”。';
+  updateCounter();renderResults();
+ }
+ function showPanel(){
+  if(document.body.classList.contains('nav-open'))document.getElementById('menu-button')?.click();
+  if(!panel.open)panel.showModal();toggle.setAttribute('aria-expanded','true');if(active>=shown){shown=Math.ceil((active+1)/50)*50;renderResults()}input.focus();input.select();
+ }
+ function closePanel(){if(panel.open)panel.close();toggle.setAttribute('aria-expanded','false')}
+ function choose(i){
+  if(!hits.length)return;active=(i+hits.length)%hits.length;const hit=hits[active];
+  for(const mark of article.querySelectorAll('.chapter-search-current'))mark.classList.remove('chapter-search-current');for(const mark of hit.marks)mark.classList.add('chapter-search-current');
+  for(let p=hit.block.el;p&&p!==article;p=p.parentElement)if(p.tagName==='DETAILS')p.open=true;
+  closePanel();updateCounter();renderResults();
+  const mark=hit.marks[0];if(mark)mark.scrollIntoView({block:'center',inline:'center',behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth'});
+  const old=hit.block.el.getAttribute('tabindex');if(old===null){hit.block.el.tabIndex=-1;hit.block.el.addEventListener('blur',()=>hit.block.el.removeAttribute('tabindex'),{once:true})}hit.block.el.focus({preventScroll:true});
+  if(hit.block.section&&document.getElementById(hit.block.section)){try{history.replaceState(null,'','#'+encodeURIComponent(hit.block.section))}catch(e){/* Some local-file viewers restrict history; scrolling still works. */}}
+ }
+ function move(direction){runSearch();if(hits.length)choose(active<0?(direction>0?0:hits.length-1):active+direction)}
+ toggle.addEventListener('click',showPanel);panel.querySelector('.chapter-search-close').addEventListener('click',closePanel);
+ panel.addEventListener('close',()=>toggle.setAttribute('aria-expanded','false'));
+ panel.addEventListener('click',e=>{if(e.target!==panel)return;const r=panel.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)closePanel()});
+ panel.querySelector('form').addEventListener('submit',e=>{e.preventDefault();if(!composing)move(1)});
+ input.addEventListener('compositionstart',()=>{composing=true;clearTimeout(timer)});input.addEventListener('compositionend',()=>{composing=false;clearTimeout(timer);timer=setTimeout(runSearch,100)});
+ input.addEventListener('input',e=>{if(composing||e.isComposing)return;clearTimeout(timer);timer=setTimeout(runSearch,100)});
+ input.addEventListener('keydown',e=>{if(e.key==='Enter'&&e.shiftKey&&!e.isComposing){e.preventDefault();move(-1)}});
+ document.addEventListener('keydown',e=>{
+  if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='k'){e.preventDefault();e.stopImmediatePropagation();showPanel()}
+  else if(e.key==='Escape'&&panel.open&&!e.isComposing&&!composing){e.preventDefault();e.stopImmediatePropagation();closePanel()}
+  else if(e.key==='Tab'&&panel.open){
+   const focusables=[...panel.querySelectorAll('button,input,a[href],[tabindex]')].filter(el=>!el.disabled&&el.tabIndex>=0&&el.getClientRects().length);
+   const first=focusables[0],last=focusables.at(-1);
+   if(e.shiftKey&&(document.activeElement===first||!panel.contains(document.activeElement))){e.preventDefault();last?.focus()}
+   else if(!e.shiftKey&&(document.activeElement===last||!panel.contains(document.activeElement))){e.preventDefault();first?.focus()}
+  }
+ },true);
+ scan();status.textContent='输入关键词搜索本章。';renderResults();toggle.disabled=false;
+})();</script><script>(function(){const s=document.getElementById('reading-theme');s.value=document.documentElement.dataset.theme;s.addEventListener('change',()=>{document.documentElement.dataset.theme=s.value;try{localStorage.setItem('network-reading-theme',s.value)}catch(e){}})})();</script></body></html>

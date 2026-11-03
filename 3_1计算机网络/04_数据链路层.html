@@ -1,10 +1,61 @@
-<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>第4章 数据链路层：识别帧边界、按协议恢复并控制局域网转发</title><style>
+<!doctype html><html lang="zh-CN"><head><script>(function(){let t;try{t=localStorage.getItem('network-reading-theme')}catch(e){}if(t!=='light'&&t!=='dark')t=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';document.documentElement.dataset.theme=t})()</script><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>第4章 数据链路层：识别帧边界、按协议恢复并控制局域网转发</title><style>
 :root{--ink:#20334a;--muted:#63748a;--accent:#17666c;--light:#e9f4f1;--line:#d9e4e9;--paper:#fff;--back:#f5f8fa;color-scheme:light}*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--back);color:var(--ink);font:16px/1.85 'Segoe UI','Microsoft YaHei',sans-serif}a{color:var(--accent);text-underline-offset:4px}a:hover{color:#10494e}button,select{font:inherit}button{cursor:pointer}a:focus-visible,button:focus-visible,select:focus-visible,summary:focus-visible{outline:3px solid #d78b21;outline-offset:3px}aside{position:fixed;inset:0 auto 0 0;width:292px;overflow-y:auto;background:#f0f5f6;border-right:1px solid var(--line);padding:28px 18px 28px 24px;z-index:30}.brand{font-size:21px;font-weight:700;line-height:1.5}.subbrand{font-size:13px;color:var(--muted);margin:8px 0 22px}.navgroup{margin:22px 0}.navgroup h2{font-size:12px;font-weight:600;letter-spacing:.06em;color:#75858e;margin:0 0 8px;border:0;padding:0}.navgroup p{font-size:11px;line-height:1.5;color:#7a8796;margin:0 0 8px}.navlink{display:block;padding:8px 11px;margin:4px 0;border-radius:7px;color:#3c5366;text-decoration:none;font-size:13px;line-height:1.6;border-left:3px solid transparent}.navlink:hover{background:#e2edee}.navlink.active{color:#0c5f62;border-color:var(--accent);background:#dcefed;font-weight:600}.asidefoot{font-size:12px;color:var(--muted);border-top:1px solid var(--line);padding-top:18px}main{margin-left:292px;min-width:0}.toolbar{position:sticky;top:0;z-index:20;background:#ffffffed;border-bottom:1px solid var(--line);height:55px;display:flex;align-items:center;gap:16px;padding:0 32px;font-size:12px;color:var(--muted);backdrop-filter:blur(8px)}.toolbar .spacer{flex:1}.toolbar a{text-decoration:none}.menubtn{display:none;border:1px solid #acbec8;background:white;border-radius:5px;padding:4px 12px;color:var(--ink)}article{max-width:1120px;margin:0 auto;padding:50px 58px 90px;background:white;min-height:100vh}h1{font-size:30px;line-height:1.55;letter-spacing:.01em;margin:0 0 24px}h2{font-size:24px;line-height:1.6;margin:62px 0 22px;padding-bottom:14px;border-bottom:1px solid var(--line);scroll-margin-top:86px}h3{font-size:19px;line-height:1.7;margin:36px 0 14px;scroll-margin-top:86px}h4{font-size:16px;margin:26px 0 10px}p{margin:14px 0}blockquote{margin:22px 0 30px;padding:16px 22px;border-left:4px solid var(--accent);background:#f1f7f6;color:#3c5866;font-size:14px}blockquote p{margin:7px 0}.tablewrap{overflow-x:auto;max-width:100%;margin:22px 0;border:1px solid var(--line);border-radius:7px}table{width:100%;border-collapse:collapse;font-size:14px;line-height:1.75;min-width:500px}th,td{text-align:left;vertical-align:top;padding:12px 15px;border-bottom:1px solid #e1e9ee}th{background:#edf4f5;font-weight:600}tr:last-child td{border-bottom:0}tbody tr:nth-child(even){background:#fafcfd}td a{display:inline-block}pre{max-width:100%;overflow:auto;background:#f1f5f8;border:1px solid #dde6eb;border-radius:7px;padding:20px;font-size:13px;line-height:1.8}code{font-family:Consolas,'Courier New','Microsoft YaHei',monospace;background:#eef4f6;border-radius:3px;padding:2px 4px;overflow-wrap:anywhere}pre code{padding:0;background:transparent;white-space:pre;overflow-wrap:normal}li{margin:7px 0}ul,ol{padding-left:26px}details{border:1px solid #c6dadb;border-radius:8px;margin:24px 0;padding:14px 20px;background:#f8fbfb}summary{cursor:pointer;font-weight:600;color:#17666c}details[open] summary{border-bottom:1px solid var(--line);padding-bottom:12px;margin-bottom:20px}.formula{overflow-x:auto;padding:20px;text-align:center;white-space:nowrap;background:#f9fbfc;font-family:'Cambria Math','Times New Roman',serif;font-size:20px;margin:20px 0}.frac{display:inline-flex;flex-direction:column;vertical-align:middle;text-align:center;line-height:1.4;margin:0 4px}.frac>span:first-child{border-bottom:1px solid #63748a;padding:0 5px 3px}.frac>span:last-child{padding:3px 5px 0}.formula sup,.formula sub{font-size:.65em}.quickbox,.stepbox{margin:24px 0;padding:24px;border:1px solid #c3d9d8;border-radius:10px;background:#f3f9f8}.quickbox label{display:block;font-weight:600;margin-bottom:10px}.quickbox select{width:100%;padding:10px 12px;border:1px solid #9fbfbc;border-radius:6px;background:white;color:var(--ink)}.quickcard{margin-top:20px}.quickcard h3{margin:0 0 12px}.quickcard dl{display:grid;grid-template-columns:90px 1fr;gap:10px 18px;font-size:15px;margin:0}.quickcard dt{font-weight:600;color:#557275}.quickcard dd{margin:0}.stepbox h3{margin:0 0 10px}.stepnotes{font-size:13px;color:var(--muted)}.stepbuttons{display:flex;flex-wrap:wrap;gap:6px;margin:16px 0}.stepbuttons button{border:1px solid #a8c6c4;background:white;color:#436366;border-radius:50%;width:35px;height:35px;font-size:13px}.stepbuttons button.active{background:var(--accent);color:white}.stepdisplay{background:white;border-radius:8px;padding:18px 20px;min-height:145px}.stepdisplay h4{margin:0 0 12px}.stepdisplay dl{margin:0;display:grid;grid-template-columns:140px 1fr;gap:9px 18px}.stepdisplay dt{font-weight:600}.stepdisplay dd{margin:0}.stepcontrols{display:flex;gap:10px;align-items:center;margin-top:16px}.stepcontrols button{border:1px solid #a7c6c3;padding:6px 16px;border-radius:5px;background:white;color:var(--accent)}button:disabled{cursor:default;opacity:.4}.stepcount{font-size:13px;color:var(--muted)}.chaptercards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin:28px 0}.chaptercard{display:block;border:1px solid var(--line);border-radius:10px;background:#f9fcfc;padding:22px;text-decoration:none}.chaptercard strong{display:block;font-size:21px;color:var(--ink);margin-bottom:10px}.chaptercard span{display:block;font-size:14px;line-height:1.7;color:#647a89}.footerlinks{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;border-top:1px solid var(--line);margin-top:64px;padding-top:24px}.footerlinks a{text-decoration:none}hr{border:0;border-top:1px solid var(--line);margin:35px 0}.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)}[id]{scroll-margin-top:86px}.topjump{color:#6b7e8e;font-size:13px}
 @media(max-width:1100px){aside{width:255px;padding:24px 15px}main{margin-left:255px}article{padding:38px 32px 70px}h1{font-size:27px}.toolbar{padding:0 24px}}
 @media(max-width:860px){aside{width:min(320px,87vw);transform:translateX(-100%);transition:transform .18s;box-shadow:12px 0 30px #1233}.nav-open aside{transform:translateX(0)}main{margin-left:0}.menubtn{display:block}.toolbar{padding:0 15px;gap:12px}.toolbar .desktop-only{display:none}article{padding:28px 20px 64px}h1{font-size:24px}h2{font-size:21px;margin-top:48px}h3{font-size:18px}body{font-size:15px}table{font-size:13px}th,td{padding:9px 12px}.quickbox,.stepbox{padding:17px}.quickcard dl,.stepdisplay dl{grid-template-columns:1fr;gap:3px}.quickcard dd,.stepdisplay dd{margin-bottom:12px}.chaptercards{grid-template-columns:1fr}.navshade{display:none;position:fixed;inset:0;background:#10283f55;z-index:25}.nav-open .navshade{display:block}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}aside{transition:none}}
 @media print{aside,.toolbar,.navshade,.stepbox{display:none}main{margin:0}article{max-width:none;padding:0}details{break-inside:avoid}table{min-width:0;font-size:10pt}h2{break-after:avoid}.tablewrap{overflow:visible}body{font-size:11pt}.quickbox select{display:none}.formula{white-space:normal}}
-</style></head><body><div class="navshade"></div><aside id="course-nav" aria-label="阶段分组学习目录"><div class="brand">计算机网络<br>学习资料</div><p class="subbrand">第 4 章 · 数据链路层</p><nav><a class="navlink" href="#learning-nav">学习导航</a><section class="navgroup"><h2>学习准备</h2><p>认清场景、对象与计数边界</p><a class="navlink" href="#c4-0">4.0 共同场景与符号</a></section><section class="navgroup"><h2>成帧与恢复</h2><p>把连续比特变成可控制的一次交付</p><a class="navlink" href="#c4-1">4.1 帧边界与链路组织</a><a class="navlink" href="#c4-2">4.2 可靠传输与窗口</a></section><section class="navgroup"><h2>协议与共享</h2><p>区分协议字段、有线与无线访问</p><a class="navlink" href="#c4-3">4.3 HDLC、PPP 与 LLC/MAC</a><a class="navlink" href="#c4-4">4.4 共享信道与以太网</a><a class="navlink" href="#c4-5">4.5 无线竞争</a></section><section class="navgroup"><h2>局域网组网</h2><p>学会查表、无环转发与广播隔离</p><a class="navlink" href="#c4-6">4.6 交换学习与生成树</a><a class="navlink" href="#c4-7">4.7 VLAN</a></section><section class="navgroup"><h2>练习与复习</h2><p>组合推导、独立作答与排错</p><a class="navlink" href="#c4-8">4.8 综合应用</a><a class="navlink" href="#c4-9">4.9 自测与答案</a><a class="navlink" href="#c4-10">4.10 排错与复习</a><a class="navlink" href="#c4-11">4.11 分类速查</a></section></nav><p class="asidefoot">先看前提与对象，再推导中间过程。速查只显示当前选项，完整解释可返回正文。<br><a href="00_学习导航.html">全课程入口</a></p></aside><main><div class="toolbar"><button class="menubtn" id="menu-button" aria-expanded="false" aria-controls="course-nav">目录</button><a href="../index.html#/">课程资料站</a><a href="00_学习导航.html">课程导航</a><span class="desktop-only">数据链路层</span><span class="spacer"></span><a href="04_数据链路层.md">Markdown</a><span class="desktop-only">离线阅读</span></div><article><h1>第4章 数据链路层：识别帧边界、按协议恢复并控制局域网转发</h1>
+
+.chapter-search-toggle{font:inherit;border:1px solid #b1cecb;border-radius:6px;background:#f1f8f6;color:#155e63;padding:4px 12px;white-space:nowrap}.chapter-search-dialog{position:fixed;inset:70px 18px auto auto;margin:0;width:min(620px,calc(100vw - 36px));max-width:none;max-height:calc(100vh - 90px);max-height:calc(100dvh - 90px);border:1px solid #bfd5d2;border-radius:12px;padding:0;background:#fff;color:#20334a;box-shadow:0 16px 65px #102e4033;font:14px/1.7 'Segoe UI','Microsoft YaHei',sans-serif}.chapter-search-dialog::backdrop{background:#102e4055}.chapter-search-dialog[open]{display:flex;flex-direction:column}.chapter-search-head{display:flex;gap:14px;align-items:center;padding:17px 20px;border-bottom:1px solid #d9e4e9}.chapter-search-head h2{font-size:20px;line-height:1.5;margin:0;padding:0;border:0;flex:1}.chapter-search-ui button{font:inherit;cursor:pointer}.chapter-search-close{border:1px solid #b6cccb;border-radius:5px;background:white;color:#17666c;padding:3px 10px}.chapter-search-form{padding:14px 20px 4px}.chapter-search-form label{display:block;font-weight:600;font-size:13px;margin-bottom:7px}.chapter-search-fields{display:flex;gap:8px}.chapter-search-fields input{min-width:0;flex:1;border:1px solid #a9c7c1;border-radius:6px;padding:9px 11px;font:16px/1.5 'Segoe UI','Microsoft YaHei',sans-serif;color:#20334a;background:white}.chapter-search-fields button{border:1px solid #17666c;border-radius:6px;background:#17666c;color:white;padding:8px 15px;white-space:nowrap}.chapter-search-help{margin:9px 0 0;font-size:12px;color:#63748a;line-height:1.7}.chapter-search-status{margin:10px 20px;font-size:13px;color:#4b6e70}.chapter-search-results{overflow-y:auto;overscroll-behavior:contain;min-height:0;padding:0 13px 16px;flex:1}.chapter-search-result{display:block;width:100%;text-align:left;border:1px solid #d7e4e2;border-radius:7px;background:#fff;margin:7px 0;padding:11px 13px;color:#20334a;overflow-wrap:anywhere}.chapter-search-result:hover{background:#f0f8f5;border-color:#80b2aa}.chapter-search-result[aria-current="true"]{border-color:#17666c;background:#edf7f3}.chapter-search-result-title{display:block;font-size:12px;color:#17666c;font-weight:600;margin-bottom:5px}.chapter-search-snippet{display:block;font-size:13px}.chapter-search-snippet mark{background:#fff0a8;color:inherit;padding:0}.chapter-search-more{display:block;width:100%;border:1px solid #bfd4cf;border-radius:6px;background:#f4f9f7;color:#17666c;padding:8px;margin-top:12px}.chapter-search-empty{margin:16px 8px;color:#63748a;font-size:13px}.chapter-search-dock{position:fixed;bottom:18px;left:calc(50% + 146px);transform:translateX(-50%);max-width:calc(100vw - 24px);display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;z-index:35;border:1px solid #bdd3ce;border-radius:9px;background:#fffffffa;box-shadow:0 4px 24px #102e4026;padding:9px 12px;color:#20334a;font-size:13px}.chapter-search-dock[hidden]{display:none}.chapter-search-dock button{border:1px solid #b2cdc5;border-radius:5px;padding:4px 9px;background:#f5faf7;color:#17666c;white-space:nowrap}.chapter-search-counter{min-width:60px;text-align:center;font-variant-numeric:tabular-nums}.chapter-search-ui :focus-visible,.chapter-search-toggle:focus-visible{outline:3px solid #d78b21;outline-offset:2px}mark.chapter-search-hit{color:inherit;background:#fff0a8;padding:0;border-radius:2px;box-decoration-break:clone;-webkit-box-decoration-break:clone}mark.chapter-search-hit.chapter-search-current{background:#ffc66b;outline:2px solid #be7114;outline-offset:1px}.chapter-search-has-results article{padding-bottom:170px}
+@media(max-width:1100px){.chapter-search-dock{left:calc(50% + 127.5px)}}
+@media(max-width:860px){.chapter-search-dialog{inset:65px 12px auto;width:calc(100vw - 24px);max-height:calc(100vh - 80px);max-height:calc(100dvh - 80px)}.chapter-search-dock{left:50%;bottom:12px;width:max-content;gap:6px;padding:8px}.chapter-search-head{padding:14px 16px}.chapter-search-form{padding:12px 16px 4px}.chapter-search-status{margin:9px 16px}.chapter-search-results{padding:0 10px 12px}.chapter-search-fields button{padding:8px 11px}.chapter-search-toggle{padding:4px 10px}}
+@media print{.chapter-search-ui,.chapter-search-toggle{display:none!important}mark.chapter-search-hit{background:transparent;outline:none}.chapter-search-has-results article{padding-bottom:0}}
+</style><style>
+.theme-control{display:inline-flex;align-items:center;gap:5px;white-space:nowrap;color:var(--ink)}
+.theme-control select{font:inherit;color:var(--ink);background:var(--paper);border:1px solid var(--line);border-radius:5px;padding:4px 6px}
+.theme-control select:focus-visible{outline:3px solid #d78b21;outline-offset:2px}
+.toolbar{height:auto;min-height:55px;flex-wrap:wrap;padding-top:8px;padding-bottom:8px}
+:root[data-theme=dark]{color-scheme:dark;--ink:#e1eaf3;--muted:#a6b6c9;--accent:#83d5cf;--light:#223f40;--line:#45576a;--paper:#18232f;--back:#111b25}
+[data-theme=dark] article,[data-theme=dark] .stepdisplay,[data-theme=dark] button,[data-theme=dark] select,[data-theme=dark] input{background:var(--paper);color:var(--ink);border-color:var(--line)}
+[data-theme=dark] aside,[data-theme=dark] .toolbar{background:#1b2937;color:var(--muted)}
+[data-theme=dark] .navlink{color:#c4d7e5}[data-theme=dark] .navlink:hover{background:#2b414d}[data-theme=dark] .navlink.active{background:#254846;color:#a4eee7}
+[data-theme=dark] .navgroup h2,[data-theme=dark] .navgroup p,[data-theme=dark] .chaptercard span{color:var(--muted)}
+[data-theme=dark] a:hover{color:#b4f2eb}
+[data-theme=dark] th{background:#293d4c}[data-theme=dark] tbody tr:nth-child(even){background:#1e303d}[data-theme=dark] td,[data-theme=dark] th{border-color:var(--line)}
+[data-theme=dark] pre,[data-theme=dark] code,[data-theme=dark] .formula{background:#22313f;color:var(--ink);border-color:var(--line)}[data-theme=dark] pre code{background:transparent}
+[data-theme=dark] blockquote,[data-theme=dark] details,[data-theme=dark] .quickbox,[data-theme=dark] .stepbox,[data-theme=dark] .chaptercard{background:#20363c;color:var(--ink);border-color:#4b7074}
+[data-theme=dark] summary,[data-theme=dark] .quickcard dt{color:var(--accent)}
+[data-theme=dark] .stepbuttons button.active{background:#83d5cf;color:#142f32}
+[data-theme=dark] .chapter-search-dialog,[data-theme=dark] .chapter-search-dock,[data-theme=dark] .chapter-search-result{background:#1b2937;color:var(--ink);border-color:var(--line)}
+[data-theme=dark] .chapter-search-result:hover,[data-theme=dark] .chapter-search-result[aria-current=true]{background:#2a484a;border-color:var(--accent)}
+[data-theme=dark] .chapter-search-result-title,[data-theme=dark] .chapter-search-status{color:var(--accent)}
+[data-theme=dark] .chapter-search-help,[data-theme=dark] .chapter-search-empty{color:var(--muted)}
+[data-theme=dark] mark.chapter-search-hit,[data-theme=dark] .chapter-search-snippet mark{color:#ffedaf;background:#665217}
+[data-theme=dark] mark.chapter-search-current{color:#fff3da;background:#8b4a0b;outline-color:#ffc778}
+/* Waveform drawings use semantic fixed colors; map the whole drawing together. */
+[data-theme=dark] svg{filter:invert(.88) hue-rotate(165deg)}
+[data-theme=dark] .wave-card{background:#20313d;border-color:var(--line)}
+[data-theme=dark] .wave-title,[data-theme=dark] .wave-readout{color:var(--accent)}
+[data-theme=dark] .wave-readout{background:#294447}
+[data-theme=dark] .wave-caption,[data-theme=dark] .wave-legend,[data-theme=dark] .wave-mobile-hint{color:var(--muted)}
+[data-theme=dark] .wave-legend span:before{background:#83d5cf}
+[data-theme=dark] .wave-legend .amber:before{background:#dfb16c}
+[data-theme=dark] .wave-legend .gray:before{background:#b3c4ce}
+@media(max-width:860px){.toolbar{gap:8px;padding-left:12px;padding-right:12px}.theme-control{font-size:12px}h2,h3{scroll-margin-top:115px}}
+@media print{
+ :root[data-theme]{color-scheme:light;--ink:#17212b;--muted:#425363;--accent:#155d63;--line:#b9c4ce;--paper:#fff;--back:#fff}
+ .theme-control{display:none!important}
+ html[data-theme] body,html[data-theme] article,html[data-theme] pre,html[data-theme] code,html[data-theme] blockquote,html[data-theme] details,html[data-theme] .formula,html[data-theme] .quickbox,html[data-theme] .quickcard,html[data-theme] .stepbox,html[data-theme] .stepdisplay,html[data-theme] th,html[data-theme] tr{background:white!important;color:#17212b!important}
+ html[data-theme] svg{filter:none!important}html[data-theme] summary,html[data-theme] .quickcard dt{color:#155d63!important}
+ html[data-theme] .wave-card,html[data-theme] .wave-readout{background:white!important;color:#17212b!important}
+ html[data-theme] .wave-title,html[data-theme] .wave-caption,html[data-theme] .wave-legend{color:#17212b!important}
+}
+</style></head><body><div class="navshade"></div><aside id="course-nav" aria-label="阶段分组学习目录"><div class="brand">计算机网络<br>学习资料</div><p class="subbrand">第 4 章 · 数据链路层</p><nav><a class="navlink" href="#learning-nav">学习导航</a><section class="navgroup"><h2>学习准备</h2><p>认清场景、对象与计数边界</p><a class="navlink" href="#c4-0">4.0 共同场景与符号
+</a></section><section class="navgroup"><h2>成帧与恢复</h2><p>把连续比特变成可控制的一次交付</p><a class="navlink" href="#c4-1">4.1 帧边界与链路组织
+</a><a class="navlink" href="#c4-2">4.2 可靠传输与窗口</a></section><section class="navgroup"><h2>协议与共享</h2><p>区分协议字段、有线与无线访问</p><a class="navlink" href="#c4-3">4.3 HDLC、PPP 与 LLC/MAC</a><a class="navlink" href="#c4-4">4.4 共享信道与以太网</a><a class="navlink" href="#c4-5">4.5 无线竞争</a></section><section class="navgroup"><h2>局域网组网</h2><p>学会查表、无环转发与广播隔离</p><a class="navlink" href="#c4-6">4.6 交换学习与生成树</a><a class="navlink" href="#c4-7">4.7 VLAN</a></section><section class="navgroup"><h2>练习与复习</h2><p>组合推导、独立作答与排错</p><a class="navlink" href="#c4-8">4.8 综合应用
+</a><a class="navlink" href="#c4-9">4.9 自测与答案
+</a><a class="navlink" href="#c4-10">4.10 排错与复习
+</a><a class="navlink" href="#c4-11">4.11 分类速查
+</a></section></nav><p class="asidefoot">先看前提与对象，再推导中间过程。速查只显示当前选项，完整解释可返回正文。<br><a href="00_学习导航.html">全课程入口</a></p></aside><main><div class="toolbar"><button class="menubtn" id="menu-button" aria-expanded="false" aria-controls="course-nav">目录</button><a href="../index.html#/">课程资料站</a><a href="00_学习导航.html">课程导航</a><span class="desktop-only">数据链路层</span><span class="spacer"></span><label class="theme-control">外观 <select id="reading-theme" aria-label="阅读配色"><option value="light">白天</option><option value="dark">夜间</option></select></label><button type="button" id="chapter-search-toggle" class="chapter-search-toggle" aria-haspopup="dialog" aria-expanded="false" aria-controls="chapter-search-dialog" disabled>搜索</button><a href="04_数据链路层.md">Markdown</a><span class="desktop-only">离线阅读</span></div><article><h1>第4章 数据链路层：识别帧边界、按协议恢复并控制局域网转发</h1>
 <p>相邻设备收到连续比特后，怎样认出一帧，怎样发现损坏，又怎样在共享线路上轮流发送？本章承接编码、CRC 和时延，先研究帧边界与按协议恢复，再把帧放进以太网、无线网络和交换网络，分析实际转发范围。</p>
 <a id="learning-nav"></a>
 <h2>学习导航</h2>
@@ -92,7 +143,7 @@
 <p>线路只提供连续比特，B 首先要知道哪一段是一份完整帧；数据恰好含边界标志时又不能误截断。建立、结束和发送权的控制属于链路组织，与填充防误认边界的任务不同。</p>
 <a id="k4.1.1"></a>
 <h3>4.1.1 链路、帧与服务</h3>
-<p>物理层提供比特传输，链路层把比特组织成<strong>帧</strong>，在当前链路上交给相邻结点。跨网络选择路径是网络层的工作。</p>
+<p>物理层提供比特传输，链路层把比特组织成<strong>帧</strong> ，在当前链路上交给相邻结点。跨网络选择路径是网络层的工作。</p>
 <pre><code class="language-text">帧首部 | 网络层数据等有效载荷 | 帧尾部
 </code></pre>
 <p>首部可有地址、类型、序号，尾部可有校验信息。每一跳的介质与格式可以不同，路由器跨链路时会重新封装。</p>
@@ -101,7 +152,7 @@
 <tr>
 <th>服务类型</th>
 <th>特点</th>
-<th>课件中的理解</th>
+<th>对应实例</th>
 </tr>
 </thead>
 <tbody><tr>
@@ -121,9 +172,11 @@
 </tr>
 </tbody></table>
 <p>检出损坏后不交给上层，并不等于保证一定送达，也不能消除校验漏检。可靠性要看具体协议。</p>
+<p>例如甲经路由器 R 向乙传一个 IP 包：甲先把包放进发给 R 的链路帧；R 接收后取出 IP 包，再按下一条链路格式重新成帧。相邻两跳的帧不同，所承载的网络层通信仍属于甲到乙的传送。</p>
 <a id="k4.1.2"></a>
 <h3>4.1.2 成帧与透明传输</h3>
-<p><strong>成帧</strong>是让接收方识别“一帧从哪里开始、在哪里结束”。<strong>透明传输</strong>是允许数据包含与控制标志相同的值，而不被误当作控制。</p>
+<p>接收端连续看到比特时，既要分开不同帧，也不能把正文中的特殊值误当成结束标记。边界识别与数据转义因此必须一起约定。</p>
+<p><strong>成帧</strong> 是让接收方识别“一帧从哪里开始、在哪里结束”。<strong>透明传输</strong> 是允许数据包含与控制标志相同的值，而不被误当作控制。</p>
 <table>
 <thead>
 <tr>
@@ -194,15 +247,16 @@
 </tr>
 </tbody></table>
 <p>并行需要协调各线到达时刻，不意味着任何距离和接口下都更快。异步也不是无时序要求，字符内部仍按共同速率采样。</p>
-<p><strong>位同步</strong>确定在哪个时刻读比特，<strong>帧同步</strong>确定哪些比特属于同一帧。</p>
+<p><strong>位同步</strong> 确定在哪个时刻读比特，<strong>帧同步</strong> 确定哪些比特属于同一帧。</p>
+<p>例如甲乙以两条方向独立的通道同时发送，每条通道把比特依次送出：这可以同时是点到点、全双工、串行。若接收端在每个起始位后按约定间隔采样，是字符内的位同步；认出整帧起止则是帧同步，两者定位的对象不同。</p>
 <a id="k4.1.4"></a>
 <h3>4.1.4 链路管理与询问应答</h3>
 <p>定界解决了一帧怎样识别，还需要约定双方是否就绪、何时轮到谁发送、何时结束。下面用传统询问应答规程说明这些控制动作。</p>
-<p>链路管理协调建立、维持、结束以及发送权。课件中的ENQ为询问，ACK为肯定响应，NAK为否定响应，EOT表示本次传输结束。</p>
+<p>链路管理协调建立、维持、结束以及发送权。传统规程中的 ENQ 为询问，ACK为肯定响应，NAK为否定响应，EOT表示本次传输结束。</p>
 <p>点到点场景：A询问能否发送，B就绪则确认，随后传数据。多点主从场景还要指明对象：</p>
 <ul>
-<li><strong>Poll，轮询</strong>：主站询问某从站有没有数据要发。</li>
-<li><strong>Select，选择</strong>：主站通知某从站准备接收自己发来的数据。</li>
+<li><strong>Poll，轮询</strong> ：主站询问某从站有没有数据要发。</li>
+<li><strong>Select，选择</strong> ：主站通知某从站准备接收自己发来的数据。</li>
 </ul>
 <p>这是传统控制规程的例子，不要求每个链路都发送这些名称的控制消息。</p>
 <h3>填充前后究竟改变了什么</h3>
@@ -212,6 +266,7 @@
 <p>仅检测损坏还不够：A 不知道 B 是否收到，确认也会丢失，重发又可能产生重复。序号、确认、计时器与缓存必须一起工作。长延迟下需要流水，但扩大窗口还必须防止序号回绕造成旧新混淆。</p>
 <a id="k4.2.1"></a>
 <h3>4.2.1 差错控制、流量控制与ARQ</h3>
+<p>损坏、丢失和接收过慢会产生不同现象，只增加一种校验无法解决全部问题。先识别失败类型，再决定是检查、重传、去重还是限速。</p>
 <table>
 <thead>
 <tr>
@@ -240,12 +295,14 @@
 <td>限制发送量、通告窗口等流量控制</td>
 </tr>
 </tbody></table>
-<p><strong>ARQ，自动重传请求</strong>通过确认和重传恢复丢失或错误数据，不一定有显式NAK；肯定确认加超时也可工作。CRC负责检测，重传负责恢复。</p>
+<p><strong>ARQ，自动重传请求</strong> 通过确认和重传恢复丢失或错误数据，不一定有显式NAK；肯定确认加超时也可工作。CRC负责检测，重传负责恢复。</p>
 <p>如果线路完全无错，发送100帧/s、接收只能处理10帧/s，仍会缓存溢出。这是流量控制问题，不能只靠检错解决。</p>
+<p>例如甲发序号 0 的帧，乙检出损坏后丢弃；甲等不到有效确认而重发。若乙正确收到后只有确认丢失，甲仍可能重发，乙就需按序号识别旧副本并避免再次交付。校验、重传与去重分别解决不同环节的问题。</p>
 <a id="k4.2.2"></a>
 <h3>4.2.2 停止等待ARQ</h3>
+<p>如果发完就忘记原帧，丢失后便无从恢复。最简单的办法是每次只保留一帧未确认数据，等反馈后才继续，并用序号避免重传造成重复交付。</p>
 <p>发送一帧后，等待确认再发下一帧。发送方保存副本并启动计时器；超时未获有效确认就重传。</p>
-<p>本节统一采用：<strong>ACK n表示下一帧期待n</strong>。序号在0、1间交替。</p>
+<p>本节统一采用：<strong>ACK n表示下一帧期待n</strong> 。序号在0、1间交替。</p>
 <ol>
 <li>A发DATA0，保存副本并计时。</li>
 <li>B正确收到期待的DATA0，交付一次，改为期待1，回复ACK1。</li>
@@ -284,7 +341,7 @@
 <a id="k4.2.3"></a>
 <h3>4.2.3 停等利用率与有效数据率</h3>
 <p>停等能恢复丢失，但发送方会花时间等待反馈。把发送、传播、处理和确认逐项排进一个周期，才能比较线路忙了多久与真正交付了多少有效数据。</p>
-<p>按课件两端处理时间相同的模型：</p>
+<p>采用两端处理时间相同的模型：</p>
 <div class="formula" role="math" aria-label="t_W=t_I+2t_P+2t_{Proc}+t_S">t<sub>W</sub>=t<sub>I</sub>+2t<sub>P</sub>+2t<sub>Proc</sub>+t<sub>S</sub></div>
 
 
@@ -321,7 +378,7 @@
 </tr>
 </tbody></table>
 <p>发送利用率<code>U=t_I/t_W</code>；有效数据率<code>G=N/t_W</code>。利用率计入帧里的控制位，不能直接等同有效数据占比。</p>
-<p><strong>课件例题：</strong> R=10 Mbit/s，帧200 bit，有效数据160 bit，ACK 40 bit；距离200 m，传播速度200 m/μs，每端处理1 μs。</p>
+<p><strong>例题：</strong> R=10 Mbit/s，帧200 bit，有效数据160 bit，ACK 40 bit；距离200 m，传播速度200 m/μs，每端处理1 μs。</p>
 <pre><code class="language-text">t_I = 200/10 = 20 μs
 t_P = 200/200 = 1 μs
 t_S = 40/10 = 4 μs
@@ -332,16 +389,17 @@ G   = 160/28 ≈ 5.714 Mbit/s
 <p>若每次尝试独立失败概率为p，而且成功、失败均按相同周期计时，平均尝试次数为<code>1/(1−p)</code>，相应效率可乘<code>1−p</code>。实际失败要等待更长超时的场景，不能直接用此式当精确结果。</p>
 <a id="k4.2.4"></a>
 <h3>4.2.4 滑动窗口与累计确认</h3>
-<p>停等一次只能有一帧未确认，长距离上容易闲等。<strong>滑动窗口</strong>允许连续发送多帧，限制最多多少帧未获确认。</p>
-<p><strong>发送窗口</strong>包括已发未确认和仍允许发送的序号；确认到达后，左边界推进，新的序号进入窗口。</p>
-<p><strong>累计ACK n</strong>表示n之前的帧已经连续收到。例：先发0、1、2、3，收到ACK3就确认0～2，3仍未确认。重复ACK3不会再次确认三帧。</p>
+<p>停等一次只能有一帧未确认，长距离上容易闲等。<strong>滑动窗口</strong> 允许连续发送多帧，限制最多多少帧未获确认。</p>
+<p><strong>发送窗口</strong> 包括已发未确认和仍允许发送的序号；确认到达后，左边界推进，新的序号进入窗口。</p>
+<p><strong>累计ACK n</strong> 表示n之前的帧已经连续收到。例：先发0、1、2、3，收到ACK3就确认0～2，3仍未确认。重复ACK3不会再次确认三帧。</p>
 <p>无错、等长帧的简化利用率为：</p>
 <div class="formula" role="math" aria-label="U=\min\left(1,\frac{Wt_I}{t_W}\right)">U=min(1,<span class="frac"><span>Wt<sub>I</sub></span><span>t<sub>W</sub></span></span>)</div>
 
 
 <p>W是窗口帧数。填满发送机会需要<code>W≥ceil(t_W/t_I)</code>，ceil表示向上取整。</p>
 <p><strong>理解例子：</strong> 发送一帧1 ms，往返传播8 ms，ACK和处理忽略，t_W=9 ms。W=4时利用率4/9；W至少9时才可能连续发送。</p>
-<p><strong>带宽时延积</strong><code>R×RTT</code>表示一个往返时间内可发送的比特数，帮助估计需要多少在途数据。RTT是往返时间；计算时要说明是否包含发送与处理时间。</p>
+<p><strong>带宽时延积</strong> <code>R×RTT</code>表示一个往返时间内可发送的比特数，帮助估计需要多少在途数据。RTT是往返时间；计算时要说明是否包含发送与处理时间。</p>
+<p>另取比特率 1 Mbit/s、往返时间 20 ms 且忽略其他开销的链路，带宽时延积为 1000000×0.020=20000 bit，即 2500 B。它表示一个往返时间内可送出的数据量，可用于估计所需在途量；不是传播时延本身，也不是线路缓存的必然容量。</p>
 <a id="k4.2.5"></a>
 <h3>4.2.5 GBN：回退N</h3>
 <p>允许流水后，一帧丢失会使后面的帧先到。若接收端只保留下一期待帧，发送端就必须从缺口起重新发送后续未确认帧，这就是回退 N 的取舍。</p>
@@ -357,7 +415,7 @@ G   = 160/28 ≈ 5.714 Mbit/s
 <h3>4.2.6 SR：选择重传</h3>
 <p>回退重发会浪费已经正确传过的后续帧。若接收方先缓存窗口内的乱序帧，再分别反馈，就可以只补缺失部分，但必须管理更多状态并限制窗口。</p>
 <p>SR允许缓存接收窗口内的乱序帧，按帧记录接收与确认情况，只重传丢失或损坏部分。</p>
-<p>仍以2丢失为例：接收方保留正确的3，发送方只重发2；2到达后把2、3按序交付。代价是更多缓存和状态管理。最后一帧丢失也可能没有后续数据暴露缺口，因此仍需要定时恢复。</p>
+<p>接收方可保留正确的乱序帧，缺失帧到达后再按序交付。代价是更多缓存和状态管理。最后一帧丢失也可能没有后续数据暴露缺口，因此仍需要定时恢复。</p>
 <p>为了区分旧副本与新一轮数据：</p>
 <div class="formula" role="math" aria-label="W_{send}+W_{recv}\le M">W<sub>send</sub>+W<sub>recv</sub>≤ M</div>
 
@@ -393,6 +451,7 @@ G   = 160/28 ≈ 5.714 Mbit/s
 </tr>
 </tbody></table>
 <p>窗口限制采用本章简化模型；具体协议还需要防止旧帧长期存活、正确处理序号回绕。</p>
+<p>独立看一次发送：甲依次发送序号 0、1、2、3 的帧，其中 2 丢失；采用 SR 的乙先保存收到的 3，待重传的 2 到达后再按顺序交付 2、3。乙保存的是已收到但暂不能按序交付的数据，甲不必因此把正确的 3 再发一次。</p>
 <a id="k4.2.7"></a>
 <h3>4.2.7 有错流水模型与题设冲突</h3>
 <p>前面的无错利用率没有计入恢复代价。有错时需明确窗口是否足够、失败怎样重发，再选相应效率模型；同一道题的传播条件也必须自洽。</p>
@@ -460,7 +519,7 @@ G   = 160/28 ≈ 5.714 Mbit/s
 <p>SR 缓存了乱序数据，仍可保证按序交付。确认策略和计时器安排应按所用协议说明，不把这张状态表当作 TCP 的完整实现。</p>
 <h3>为什么窗口上限会影响实际性能</h3>
 <p>若 t_I=1 ms、t_W=9 ms，要填满链路需窗口至少 9。3 位序号下 GBN 最多 7、等窗口 SR 最多 4，所以两者在此配置都无法达到无错满利用率。分别最多约 7/9 和 4/9。增加到 4 位时序号上限变大，但 SR 的 8 仍不足 9；不能只检查带宽时延积，不检查序号空间。</p>
-<h3>讲义原题：从利用率反推帧长</h3>
+<h3>例题：从利用率反推帧长</h3>
 <p>参考：讲义 PDF 第 347 页。停等，R=3 kbit/s，单程传播 200 ms，忽略 ACK 发送与处理，要求利用率 40%。令数据帧发送时间为 t=L/R，则：</p>
 <p><code>0.4=t/(t+0.4 s)</code>，两边乘分母得到 <code>0.4t+0.16= t</code>，故 <code>t=0.16/0.6=0.266666… s</code>；帧长 <code>3000×0.266666…=800 bit</code>。</p>
 <p>逆代回去，周期 0.666666… s，利用率 0.266666…/0.666666…=0.4。结果是帧的总位数，题目没有另给有效数据字段，不能据此确定净数据位数。</p>
@@ -470,7 +529,8 @@ G   = 160/28 ≈ 5.714 Mbit/s
 <p>已经知道确认和管理要做什么，还需要把动作写成对方可解释的字段。HDLC 控制域、PPP 的协议字段、LLC 的服务访问标识属于不同协议结构，不能将“有 FCS”推成“都提供重传”。</p>
 <a id="k4.3.1"></a>
 <h3>4.3.1 HDLC站点与工作方式</h3>
-<p><strong>HDLC</strong>是面向比特的数据链路控制协议。主站发命令，从站响应，复合站兼具两种角色。</p>
+<p>同一条链路上的设备未必拥有相同的发起权限。需要先约定谁能发命令、谁在什么条件下响应，才能解释控制帧交换。</p>
+<p><strong>HDLC</strong> 是面向比特的数据链路控制协议。主站发命令，从站响应，复合站兼具两种角色。</p>
 <table>
 <thead>
 <tr>
@@ -492,6 +552,7 @@ G   = 160/28 ≈ 5.714 Mbit/s
 </tr>
 </tbody></table>
 <p>非平衡配置有主从关系，平衡配置通常由两个复合站组成，对称配置组合双向主从角色。这里的“异步”不是起始位、停止位式的异步字符格式。</p>
+<p>例如主站甲与从站乙采用 NRM，乙有数据也要先等甲许可；改用 ARM，乙可主动发起发送但仍受主从管理；若甲乙都是复合站且采用 ABM，双方地位对等，可分别发命令和响应。这些差别是发送权规则，不是字符是否带起始位。</p>
 <a id="k4.3.2"></a>
 <h3>4.3.2 HDLC帧格式与三类帧</h3>
 <p>双方已经选定站点角色，接下来要让接收方从帧中辨认数据、确认或管理动作。HDLC 把这些信息放入地址、控制和数据等字段。</p>
@@ -522,9 +583,9 @@ G   = 160/28 ≈ 5.714 Mbit/s
 <td>功能码</td>
 </tr>
 </tbody></table>
-<p><strong>捎带确认</strong>指发自己的数据时，顺便在首部确认对方的数据，减少单独确认帧。</p>
+<p><strong>捎带确认</strong> 指发自己的数据时，顺便在首部确认对方的数据，减少单独确认帧。</p>
 <p>课件基本控制域为8位，I帧的N(S)、N(R)各3位；按课件排版为<code>0 | N(S) | P/F | N(R)</code>。S帧以<code>10</code>标识，U帧以<code>11</code>标识。读实际字节时还要确认传输位序，不能将排版左右直接当作整数高低位。</p>
-<p><strong>P/F</strong>在命令中为Poll，请求响应；在响应中为Final，表示对轮询的最终响应。它不能一概解释成“没有更多数据”。</p>
+<p><strong>P/F</strong> 在命令中为Poll，请求响应；在响应中为Final，表示对轮询的最终响应。它不能一概解释成“没有更多数据”。</p>
 <a id="k4.3.3"></a>
 <h3>4.3.3 HDLC监督与管理帧</h3>
 <p>控制域标明是监督帧还不够，接收方还需要分清“已经确认但接收忙”和“要求重发”。把状态与下一期待序号一起读，才能推出发送方的下一步。</p>
@@ -569,28 +630,30 @@ G   = 160/28 ≈ 5.714 Mbit/s
 <td>帧拒绝、交换标识、无编号信息</td>
 </tr>
 </tbody></table>
-<p>课件对等交互可以读成：SABM/UA建立；I帧交换并通过N(R)捎带确认；RR单独确认；DISC/UA断开。解读时结合方向、命令/响应和P/F，不能只记帧名。</p>
+<p>一次对等交互可以组织为：SABM/UA建立；I帧交换并通过N(R)捎带确认；RR单独确认；DISC/UA断开。解读时结合方向、命令/响应和P/F，不能只记帧名。</p>
 <a id="k4.3.4"></a>
 <h3>4.3.4 PPP：点到点协议</h3>
 <p>点到点两端除了传网络层数据，还要先协商链路参数与网络层配置。PPP 用不同协议字段区分这些阶段；有检错字段不意味着用户数据会被自动重传。</p>
-<p>PPP提供点到点链路封装与配置。<strong>LCP</strong>是链路控制协议，用于建立、测试、协商链路；<strong>NCP</strong>是网络控制协议族，用于配置相应网络层参数。</p>
+<p>PPP提供点到点链路封装与配置。<strong>LCP</strong> 是链路控制协议，用于建立、测试、协商链路；<strong>NCP</strong> 是网络控制协议族，用于配置相应网络层参数。</p>
 <pre><code class="language-text">物理链路可用 → LCP协商 → 按需认证 → NCP配置 → 传网络层数据
 </code></pre>
-<p>默认未压缩的课件格式：</p>
+<p>采用未进行字段压缩的格式：</p>
 <pre><code class="language-text">Flag 1B | Address 1B | Control 1B | Protocol 2B | 数据 | FCS 2B | Flag 1B
  7E          FF           03
 </code></pre>
 <p>Protocol标识上层，如0x0021为IPv4、0x8021为IPCP、0xC021为LCP、0xC023为PAP。IPCP是IPv4控制协议，PAP是认证协议之一。</p>
 <p>基本PPP检错但不为数据帧提供确认重传；FCS不是反码校验和。MRU是允许接收的数据单元大小，MTU是允许发送的数据单元大小，要结合具体封装与协商理解。</p>
 <p>异步封装中，0x7E转义为<code>7D 5E</code>，0x7D为<code>7D 5D</code>；接收端逆变换。面向比特的同步封装可采用比特填充，所以“PPP总是字节填充”过于笼统。<a href="https://www.rfc-editor.org/rfc/rfc1662">RFC 1662</a></p>
+<p>例如甲乙建立 PPP 链路时，先用 LCP 协商链路参数，再由相应 NCP 配置网络层相关参数；随后以协议字段标明载荷是 IPv4 等数据。接收端发现 FCS 不匹配可丢弃帧，但 PPP 本身不会因此自动把那一份用户载荷重传回来。</p>
 <a id="k4.3.5"></a>
 <h3>4.3.5 IEEE 802、LLC与MAC</h3>
 <p>把链路层功能全部混在一起，容易误以为每种局域网都采用同一控制格式。IEEE 802 的子层划分将逻辑服务与介质访问分开，具体封装还要看所用帧格式。</p>
-<p>IEEE 802的链路层常按两个子层描述：<strong>LLC，逻辑链路控制</strong>提供逻辑服务接口；<strong>MAC，介质访问控制</strong>负责介质访问和链路寻址等。</p>
+<p>IEEE 802的链路层常按两个子层描述：<strong>LLC，逻辑链路控制</strong> 提供逻辑服务接口；<strong>MAC，介质访问控制</strong> 负责介质访问和链路寻址等。</p>
 <pre><code class="language-text">网络层数据 → LLC数据单元 → MAC帧
 </code></pre>
 <p>LLC中的DSAP、SSAP是目的、源服务访问点，不是IP地址或TCP端口。控制域借鉴I/S/U帧思路；课件LLC的I/S控制域为16位、序号可为7位，不能照搬HDLC基本8位格式。</p>
 <p>802.3关联以太网，802.11关联无线局域网，802.1关联桥接等。Ethernet II通常直接通过类型字段标识上层，不要求一定增加传统LLC首部。</p>
+<p>例如一种使用 LLC 的封装把网络层数据加上服务访问点和控制信息，再交给 MAC 加链路地址。接收端先按 MAC 帧处理，再由 LLC 的访问点识别对应逻辑服务。相比之下，Ethernet II 可直接以类型字段指明 IPv4；不能给每种以太帧都强加同一个 LLC 首部。</p>
 <h3>从一帧的字段读出动作</h3>
 <p>在基本 HDLC 交互中，A 发 I 帧 N(S)=2、N(R)=5。前者编号 A 此次发送的数据；后者捎带确认反方向已连续收到 0～4，下一期待 5。这两个数属于不同方向，不是“数据帧 2 被确认到 5”。若 B 暂时没有接收空间，可用 RNR 报告状态；其 N(R) 的确认含义与“接收忙”作用需要同时读。</p>
 <p>对 PPP 帧看到 Protocol=0x8021，应判断为 IPCP 配置交换，不能当成 IPv4 用户数据 0x0021。字段值决定当前载荷的解释，不从帧外观猜业务阶段。</p>
@@ -631,17 +694,17 @@ G   = 160/28 ≈ 5.714 Mbit/s
 <td>在竞争与协调之间折中</td>
 </tr>
 </tbody></table>
-<p><strong>ALOHA</strong>有帧就发，冲突后重试；<strong>分槽ALOHA</strong>只在规定时槽边界开始发送，减少部分重叠机会。<strong>CSMA</strong>先侦听信道，后文解释其不同规则。</p>
-<p>课件的协调例子：</p>
+<p><strong>ALOHA</strong> 有帧就发，冲突后重试；<strong>分槽ALOHA</strong> 只在规定时槽边界开始发送，减少部分重叠机会。<strong>CSMA</strong> 先侦听信道，后文解释其不同规则。</p>
+<p>几种协调方式可以这样理解：</p>
 <ul>
-<li><strong>位图预约</strong>：每站有自己的预约位，声明是否有数据，再按次序发送。8站中1、3、7置位，则按1、3、7发送。</li>
-<li><strong>令牌传递</strong>：只有拿到代表发送权的令牌才能发送。</li>
-<li><strong>二进制倒计数</strong>：按优先级位仲裁。若1占优势，编号0010、0100、1001、1010同时竞争，逐位淘汰后1010胜出；介质必须支持这种仲裁。</li>
-<li><strong>自适应树遍历</strong>：发生冲突后，把竞争者分成更小组逐级尝试。这里的树是争用组织，不要求设备按树接线。</li>
+<li><strong>位图预约</strong> ：每站有自己的预约位，声明是否有数据，再按次序发送。8站中1、3、7置位，则按1、3、7发送。</li>
+<li><strong>令牌传递</strong> ：只有拿到代表发送权的令牌才能发送。</li>
+<li><strong>二进制倒计数</strong> ：按优先级位仲裁。若1占优势，编号0010、0100、1001、1010同时竞争，逐位淘汰后1010胜出；介质必须支持这种仲裁。</li>
+<li><strong>自适应树遍历</strong> ：发生冲突后，把竞争者分成更小组逐级尝试。这里的树是争用组织，不要求设备按树接线。</li>
 </ul>
 <a id="k4.4.2"></a>
 <h3>4.4.2 CSMA：先听再发</h3>
-<p>共享介质上同时发送可能发生<strong>冲突</strong>，即信号重叠，无法按预期接收。<strong>CSMA，载波侦听多路访问</strong>要求发送前先听信道。</p>
+<p>共享介质上同时发送可能发生<strong>冲突</strong> ，即信号重叠，无法按预期接收。<strong>CSMA，载波侦听多路访问</strong> 要求发送前先听信道。</p>
 <table>
 <thead>
 <tr>
@@ -668,9 +731,10 @@ G   = 160/28 ≈ 5.714 Mbit/s
 </tbody></table>
 <p>多个等待者在信道刚空闲时一起抢发，是1-坚持可能的问题。非坚持减少同步抢发，也可能让信道空闲一段时间。</p>
 <p>传播需要时间，A这里听到空闲，不表示远处B没有刚开始发送，因此先听不能完全避免冲突。</p>
+<p>例如甲、乙都在等信道从忙变闲：1-坚持可能让二者同时立即发送；非坚持让各自先随机等候再侦听；在 p-坚持适用的时槽模型中，p=0.5 表示空闲槽各自以一半概率尝试。即使甲听到空闲，远处乙的新信号还未传来，甲仍可能与乙碰撞。</p>
 <a id="k4.4.3"></a>
 <h3>4.4.3 CSMA/CD与最短帧</h3>
-<p><strong>CD，冲突检测</strong>让站点边发送边检测。发现冲突后发送干扰信号，停止本次帧，随机等待后重试。这用于共享、半双工以太网；全双工交换链路不使用这套冲突检测。</p>
+<p><strong>CD，冲突检测</strong> 让站点边发送边检测。发现冲突后发送干扰信号，停止本次帧，随机等待后重试。这用于共享、半双工以太网；全双工交换链路不使用这套冲突检测。</p>
 <p>设最远两端单程传播时间为τ。A开始发，B在A信号将到达前也开始发，冲突影响还需传回A；最坏约2τ才能知道。</p>
 <p>为了在发送期间发现冲突：</p>
 <div class="formula" role="math" aria-label="L/R\ge2\tau,\qquad L_{min}\ge2\tau R">L/R≥2τ,   L<sub>min</sub>≥2τ R</div>
@@ -700,7 +764,7 @@ G   = 160/28 ≈ 5.714 Mbit/s
 </code></pre>
 <p>帧长64～1518 B。物理层前导码7 B、帧起始定界符SFD 1 B，不计入上述MAC帧长；帧间间隔也不计入。</p>
 <p>不足46 B的数据需要填充。<strong>理解例子：</strong> 以太网/IPv4的ARP内容为28 B，补18 B数据填充，再加18 B首尾，得到64 B。</p>
-<p>Ethernet II用<strong>EtherType，类型字段</strong>标识上层；传统802.3格式用该位置表示长度：</p>
+<p>Ethernet II用<strong>EtherType，类型字段</strong> 标识上层；传统802.3格式用该位置表示长度：</p>
 <table>
 <thead>
 <tr>
@@ -724,9 +788,9 @@ G   = 160/28 ≈ 5.714 Mbit/s
 <p>常见类型0x0800为IPv4，0x0806为ARP，0x86DD为IPv6，0x8100为VLAN标签标识。</p>
 <p>MAC地址通常48位，写作<code>02:00:00:00:00:01</code>。首字节最低位区分个体/组，次低位区分全局/本地管理；全FF为广播。</p>
 <ul>
-<li><strong>单播</strong>：指定单个接收对象。</li>
-<li><strong>多播</strong>：发送给一组成员。</li>
-<li><strong>广播</strong>：发送给当前广播范围内所有相应接收者。</li>
+<li><strong>单播</strong> ：指定单个接收对象。</li>
+<li><strong>多播</strong> ：发送给一组成员。</li>
+<li><strong>广播</strong> ：发送给当前广播范围内所有相应接收者。</li>
 </ul>
 <p>MAC可以被软件修改或采用随机化，不能当作不可变的设备身份。FCS失败通常丢弃，普通以太网MAC不提供TCP式确认重传。带标签、巨帧等扩展不能机械套基本1518 B上限。</p>
 <a id="k4.4.6"></a>
@@ -765,7 +829,8 @@ G   = 160/28 ≈ 5.714 Mbit/s
 </tr>
 </tbody></table>
 <p>课件第145～151页的年份与速率表反映制作时期背景，不当作当前市场占比或产品推荐。</p>
-<h3>讲义原题：帧长改变怎样约束网络跨距</h3>
+<p>例如一条面向两站点的 E-Line 业务可约定时延与带宽指标，这份约定属于 SLA；为敏感业务安排优先级属于 QoS；检查链路故障属于 OAM。多站点二层互联可用 E-LAN 模型理解。OIF、MEF 是相关行业组织，既不是线路上的字段，也不是与 QoS 并列的转发算法。</p>
+<h3>例题：帧长改变怎样约束网络跨距</h3>
 <p>参考：讲义 PDF 第 514 页。共享 CSMA/CD 模型，R=1 Gbit/s、v=200000 km/s=2×10⁸ m/s。把最小帧长减少 800 bit，希望仍能检测最远处的冲突。</p>
 <p>从 <code>L_min≥2dR/v</code> 得距离上限 <code>d_max=L_min v/(2R)</code>。减少 800 bit 使上限减少 <code>800×(2×10⁸)/(2×10⁹)=80 m</code>。这是理想模型中的跨距上限变化，不是允许按该估计违反实际布线标准。全双工链路不采用同样的冲突检测约束。</p>
 <a id="c4-5"></a>
@@ -773,8 +838,9 @@ G   = 160/28 ≈ 5.714 Mbit/s
 <p>A 能听见空闲，不代表 B 的接收位置也没有别人的信号；本机发射还可能淹没远端信号。无线用确认、退避和预约降低失败影响，多个地址则区分当前无线接收者与最终目的。</p>
 <a id="k4.5.1"></a>
 <h3>4.5.1 WLAN架构与无线物理技术</h3>
-<p><strong>WLAN</strong>是无线局域网，802.11是相关MAC与物理层协议族；Wi-Fi是围绕这些技术的产业及认证名称。</p>
-<p><strong>BSS，基本服务集</strong>是基本的无线组网单元。基础设施BSS通过AP连接分布系统；独立BSS不依赖同样的AP架构。多个BSS可组成更大服务范围。</p>
+<p>有无线信号只说明存在一种传输方式，还需要组织哪些站点属于同一服务单元、怎样共享无线介质。组网对象与物理传输技术应分别理解。</p>
+<p><strong>WLAN</strong> 是无线局域网，802.11是相关MAC与物理层协议族；Wi-Fi是围绕这些技术的产业及认证名称。</p>
+<p><strong>BSS，基本服务集</strong> 是基本的无线组网单元。基础设施BSS通过AP连接分布系统；独立BSS不依赖同样的AP架构。多个BSS可组成更大服务范围。</p>
 <table>
 <thead>
 <tr>
@@ -808,22 +874,23 @@ G   = 160/28 ≈ 5.714 Mbit/s
 </tr>
 </tbody></table>
 <p>课件比较802.11b的11 Mbit/s与a/g的54 Mbit/s等标称值。物理速率要扣竞争、首部、确认、重传等开销，不能直接等于应用吞吐量。</p>
+<p>例如两部手机连接同一个 AP，形成基础设施 BSS；增加另一 AP 可扩展覆盖。若用 OFDM，是把数据分配给正交子载波；用 MIMO 则还利用多天线的空间维度，二者可以组合。FHSS 按规则跳换频率，DSSS 用码序列展开信号；DCF 的竞争与 PCF 的协调描述访问办法，不能与这些物理技术当成互斥选项。</p>
 <a id="k4.5.2"></a>
 <h3>4.5.2 CSMA/CA、帧间隔与退避</h3>
 <p>无线发送时，本机发射信号远强于远端信号，可靠检测碰撞较困难；而发送方听到的情况，也不一定等于接收方处的情况。</p>
-<p><strong>CA，冲突避免</strong>通过侦听、等待和随机退避降低碰撞机会，不能保证完全无冲突。</p>
-<p><strong>IFS</strong>是帧间隔。经典课件模型中：</p>
+<p><strong>CA，冲突避免</strong> 通过侦听、等待和随机退避降低碰撞机会，不能保证完全无冲突。</p>
+<p><strong>IFS</strong> 是帧间隔。经典课件模型中：</p>
 <pre><code class="language-text">SIFS &lt; PIFS &lt; DIFS
 短响应如ACK、CTS等待SIFS，优先于等较长间隔的普通竞争。
 </code></pre>
 <p>典型单播交换：按信道状态和退避要求获得发送机会，发数据；接收方正确收到后等待SIFS回ACK；未获得ACK则按失败处理后重试。</p>
-<p><strong>退避计数</strong>按空闲时槽递减，信道忙就冻结。若抽到5，已经数过2槽，还剩3；别人发送时保留3，重新满足空闲条件后继续倒数。</p>
-<p><strong>竞争窗口CW</strong>限制随机计数范围，其最小、最大值依物理层和访问类别而定。课件固定“8槽到255”的数值不能套到全部802.11场景。ACK超时也不能证明一定发生碰撞，可能是数据或确认受到其他损失。</p>
+<p><strong>退避计数</strong> 按空闲时槽递减，信道忙就冻结。若抽到5，已经数过2槽，还剩3；别人发送时保留3，重新满足空闲条件后继续倒数。</p>
+<p><strong>竞争窗口CW</strong> 限制随机计数范围，其最小、最大值依物理层和访问类别而定。课件固定“8槽到255”的数值不能套到全部802.11场景。ACK超时也不能证明一定发生碰撞，可能是数据或确认受到其他损失。</p>
 <a id="k4.5.3"></a>
 <h3>4.5.3 802.11地址与虚拟侦听</h3>
 <p>无线站点经 AP 发数据时，当前无线接收者可能是 AP，最终接收者却是另一台主机。首部需要分别表达这些地址关系，还需携带序号和预约时间。</p>
 <p>802.11帧可含帧控制、持续期、多个地址、序号控制、数据和FCS。最多四个地址，用于区分无线当前收发者和最终源、目的。</p>
-<p><strong>DS</strong>是分布系统。To DS、From DS指示帧相对它的方向；<strong>BSSID</strong>是基本服务集标识。</p>
+<p><strong>DS</strong> 是分布系统。To DS、From DS指示帧相对它的方向；<strong>BSSID</strong> 是基本服务集标识。</p>
 <table>
 <thead>
 <tr>
@@ -864,13 +931,13 @@ G   = 160/28 ≈ 5.714 Mbit/s
 </tr>
 </tbody></table>
 <p>例如A经AP给B发送，无线第一跳接收者是AP，最终目的却是B，所以要分别表达。不同帧类型与扩展格式不同，不能说所有首部固定30 B。</p>
-<p>序号控制含12位序号和4位分片号，用于重复及分片处理。<strong>NAV，网络分配向量</strong>是站点根据持续期字段维护的本地预约忙时间，用于虚拟载波侦听，不是一根全网共同的锁线。</p>
+<p>序号控制含12位序号和4位分片号，用于重复及分片处理。<strong>NAV，网络分配向量</strong> 是站点根据持续期字段维护的本地预约忙时间，用于虚拟载波侦听，不是一根全网共同的锁线。</p>
 <a id="k4.5.4"></a>
 <h3>4.5.4 隐蔽站、暴露站与RTS/CTS</h3>
 <p>A 听不到 C，不表示 C 不会干扰 B 接收；反过来，听见别人也不一定必须停止另一条本可并行的通信。下面用接收位置区分隐蔽站与暴露站，再看短预约怎样缓解问题。</p>
-<p><strong>隐蔽站</strong>：A、C都能到B，却听不到彼此。A发给B时，C可能以为空闲也发送，冲突发生在B。</p>
-<p><strong>暴露站</strong>：B发给A，C想发给D；假如两次通信原本可互不干扰，C却因听到B而不必要地等待。</p>
-<p><strong>RTS</strong>是请求发送，<strong>CTS</strong>是允许发送，先用短控制帧预约后续交换：</p>
+<p><strong>隐蔽站</strong> ：A、C都能到B，却听不到彼此。A发给B时，C可能以为空闲也发送，冲突发生在B。</p>
+<p><strong>暴露站</strong> ：B发给A，C想发给D；假如两次通信原本可互不干扰，C却因听到B而不必要地等待。</p>
+<p><strong>RTS</strong> 是请求发送，<strong>CTS</strong> 是允许发送，先用短控制帧预约后续交换：</p>
 <pre><code class="language-text">A ─ RTS  → B
 A ← CTS  ─ B   听到预约的邻居设置NAV
 A ─ DATA → B
@@ -881,9 +948,10 @@ A ← ACK  ─ B
 <a id="k4.5.5"></a>
 <h3>4.5.5 WPAN、蓝牙与ZigBee</h3>
 <p>传感器的小消息与局域网的大文件对速率、耗电和休眠有不同要求。无线个域网的设计面向更小范围和特定业务，容量限制需要结合具体版本。</p>
-<p><strong>WPAN</strong>是无线个域网，服务个人或小范围设备。课件采用经典蓝牙微网模型说明设备互连，不能把该模型的角色和活跃设备限制推广到所有蓝牙版本。</p>
-<p><strong>ZigBee</strong>下层基于IEEE 802.15.4，上层提供网络组织与应用支持。低速、短时收发和休眠适合传感器、控制消息，不以高清视频为主要目标。</p>
+<p><strong>WPAN</strong> 是无线个域网，服务个人或小范围设备。课件采用经典蓝牙微网模型说明设备互连，不能把该模型的角色和活跃设备限制推广到所有蓝牙版本。</p>
+<p><strong>ZigBee</strong> 下层基于IEEE 802.15.4，上层提供网络组织与应用支持。低速、短时收发和休眠适合传感器、控制消息，不以高清视频为主要目标。</p>
 <p>课件“最多255个结点”缺少层次与配置条件，不作为统一容量上限；需要指定规范或授课说明才能确认。</p>
+<p>例如温度传感器每分钟只发送一个小读数，其余时间休眠，适合用低功耗短报文网络理解 ZigBee 的目标；手机与耳机互连可用蓝牙个域网理解。二者都在个人或小范围设备场景中工作，但不同协议、版本的角色数与容量不能相互照搬。</p>
 <h3>冻结退避与重抽退避不是同一步</h3>
 <p>站点抽到 7，空闲已倒数 3 槽，剩 4。此时别人开始发，本站冻结在 4；等别人交换完成并重新满足相应空闲间隔，再从 4 继续。若本站真正发送却未获 ACK，则按失败规则调整竞争窗口并重新抽数。仅听到别人发送不能写成自己发生了一次碰撞。</p>
 <a id="c4-6"></a>
@@ -892,7 +960,7 @@ A ← ACK  ─ B
 <a id="k4.6.1"></a>
 <h3>4.6.1 网桥、交换机与两个“域”</h3>
 <p>把共享网段接入交换机后，碰撞范围与广播范围会发生不同变化。先区分这两个“域”，才能判断增加端口或 VLAN 具体隔离了什么。</p>
-<p><strong>网桥</strong>按帧地址连接网段，二层交换机可视为多端口网桥。它解释帧并决定转发，区别于只再生信号的中继器。</p>
+<p><strong>网桥</strong> 按帧地址连接网段，二层交换机可视为多端口网桥。它解释帧并决定转发，区别于只再生信号的中继器。</p>
 <table>
 <thead>
 <tr>
@@ -913,9 +981,10 @@ A ← ACK  ─ B
 </tr>
 </tbody></table>
 <p>交换机连接多个端口，不表示每种流量组合都能同时满速；出口争用、缓存和交换容量仍可能限制吞吐量。</p>
+<p>例如四台主机分别接同一二层交换机的四个端口，每条全双工链路独立工作，不共用集线器式的碰撞域；若四端口仍在同一 VLAN，广播帧仍可向其余端口扩散。划成两个 VLAN 后，二层广播范围才被分成两组。</p>
 <a id="k4.6.2"></a>
 <h3>4.6.2 交换机怎样学习与转发</h3>
-<p><strong>MAC表</strong>记录“地址在哪个端口后面”。交换机从收到帧的<strong>源MAC与入端口</strong>学习，用<strong>目的MAC</strong>查表转发。</p>
+<p><strong>MAC表</strong> 记录“地址在哪个端口后面”。交换机从收到帧的<strong>源MAC与入端口</strong> 学习，用<strong>目的MAC</strong> 查表转发。</p>
 <table>
 <thead>
 <tr>
@@ -940,7 +1009,7 @@ A ← ACK  ─ B
 <td>按相应VLAN和组规则转发</td>
 </tr>
 </tbody></table>
-<p><strong>泛洪</strong>是复制到多个允许出口，未知单播的目的地址仍是单播，不能因为泛洪就叫广播帧。</p>
+<p><strong>泛洪</strong> 是复制到多个允许出口，未知单播的目的地址仍是单播，不能因为泛洪就叫广播帧。</p>
 <p>理解例子：A、B、C分别接端口1、2、3，表为空。</p>
 <ol>
 <li>A发B，从1进入：学A→1，B未知，发向2、3。</li>
@@ -950,8 +1019,8 @@ A ← ACK  ─ B
 <p>动态表项会老化；设备移动后，新源帧可更新表项。泛洪受VLAN和生成树端口状态限制，不是向所有物理端口无条件复制。</p>
 <a id="k4.6.3"></a>
 <h3>4.6.3 二层环路与STP</h3>
-<p>冗余连线可能形成环路。普通以太网帧没有IP式逐跳递减的TTL，广播和未知单播可能循环复制，造成<strong>广播风暴</strong>；同一源从不同端口反复出现，还会让MAC表来回变化。</p>
-<p><strong>STP，生成树协议</strong>通过逻辑阻塞部分冗余端口形成无环的活动拓扑，备用物理连线仍然存在。</p>
+<p>冗余连线可能形成环路。普通以太网帧没有IP式逐跳递减的TTL，广播和未知单播可能循环复制，造成<strong>广播风暴</strong> ；同一源从不同端口反复出现，还会让MAC表来回变化。</p>
+<p><strong>STP，生成树协议</strong> 通过逻辑阻塞部分冗余端口形成无环的活动拓扑，备用物理连线仍然存在。</p>
 <table>
 <thead>
 <tr>
@@ -976,7 +1045,7 @@ A ← ACK  ─ B
 <td>不转发普通数据</td>
 </tr>
 </tbody></table>
-<p><strong>Bridge ID</strong>是桥标识，包含优先级及地址等信息；<strong>BPDU</strong>是桥之间交换生成树信息的控制消息。</p>
+<p><strong>Bridge ID</strong> 是桥标识，包含优先级及地址等信息；<strong>BPDU</strong> 是桥之间交换生成树信息的控制消息。</p>
 <p>选根端口先比较到根的总代价，平局再依桥、端口标识等规则比较，不能简单认为“永远选本机最小端口”。</p>
 <p>理解例子：B1、B2、B3形成三角形，每条边代价10，标识B1&lt;B2&lt;B3。B1成根，B2、B3各选直连B1的口；B2—B3上两者到根代价同为10，B2标识较小，其端为指定端口，B3该侧阻塞。活动路径B2—B1—B3无环。</p>
 <p>分析更复杂的拓扑时，必须根据实际连线、链路代价和端口标识逐项比较。故障后还需要协议重新收敛，即各设备逐步达成新的转发选择。</p>
@@ -1018,9 +1087,9 @@ A ← ACK  ─ B
 <p>一台交换机连接多个部门时，不希望每个广播都到所有部门。VLAN 给帧确定逻辑归属，干道携带多个归属；跨 VLAN 的访问还需要三层处理，标签本身不会完成路由。</p>
 <a id="k4.7.1"></a>
 <h3>4.7.1 VLAN与跨VLAN通信</h3>
-<p><strong>VLAN，虚拟局域网</strong>把二层网络划为逻辑广播域。同VLAN可以跨多台交换机，不同VLAN通常需三层转发才能互通。</p>
+<p><strong>VLAN，虚拟局域网</strong> 把二层网络划为逻辑广播域。同VLAN可以跨多台交换机，不同VLAN通常需三层转发才能互通。</p>
 <p>按端口划分最直观：把端口归入VLAN10，接入的无标签帧按该规则归属。课件还列按MAC、协议、IP子网、应用识别的划分方式，识别和管理更复杂。</p>
-<p>连接交换机的<strong>干道链路</strong>可承载多个VLAN，需要携带或保留相应归属信息。802.1Q常插入4 B标签：</p>
+<p>连接交换机的<strong>干道链路</strong> 可承载多个VLAN，需要携带或保留相应归属信息。802.1Q常插入4 B标签：</p>
 <pre><code class="language-text">目的MAC | 源MAC | TPID 2B | TCI 2B | 原类型 | 数据 | FCS
 TPID常用0x8100
 TCI：PCP 3位 + DEI 1位 + VID 12位
@@ -1199,7 +1268,7 @@ TCI：PCP 3位 + DEI 1位 + VID 12位
 <p>选择一项查看用途、计算方法与适用条件，再回正文核对完整推导。</p>
 <div class="quickbox"><label for="quick-select">选择速查项</label><select id="quick-select"></select><div id="quick-card" class="quickcard" aria-live="polite"></div></div>
 
-<div class="footerlinks"><a href="03_物理层.html">← 上一章：物理层</a><a href="05_网络层.html">下一章：网络层 →</a></div></article></main><script>window.CHAPTER={"chapter":4,"name":"数据链路层","file":"04_数据链路层.md","title":"第4章 数据链路层：识别帧边界、按协议恢复并控制局域网转发","toc":[{"id":"c4-0","title":"4.0 共同场景与符号"},{"id":"c4-1","title":"4.1 帧边界与链路组织"},{"id":"c4-2","title":"4.2 可靠传输与窗口：丢失后怎样恢复一次交付"},{"id":"c4-3","title":"4.3 HDLC、PPP 与 LLC/MAC：机制怎样落到格式中"},{"id":"c4-4","title":"4.4 共享信道与以太网：先听为何仍会碰撞"},{"id":"c4-5","title":"4.5 无线竞争：接收端听到的情况为何不同"},{"id":"c4-6","title":"4.6 交换学习与生成树：怎样转发而不形成循环"},{"id":"c4-7","title":"4.7 VLAN：在同一设备上划分广播范围"},{"id":"c4-8","title":"4.8 综合应用"},{"id":"c4-9","title":"4.9 自测与答案"},{"id":"c4-10","title":"4.10 排错与复习"},{"id":"c4-11","title":"4.11 分类速查"}],"stages":[{"name":"学习准备","task":"认清场景、对象与计数边界","ids":["c4-0"]},{"name":"成帧与恢复","task":"把连续比特变成可控制的一次交付","ids":["c4-1","c4-2"]},{"name":"协议与共享","task":"区分协议字段、有线与无线访问","ids":["c4-3","c4-4","c4-5"]},{"name":"局域网组网","task":"学会查表、无环转发与广播隔离","ids":["c4-6","c4-7"]},{"name":"练习与复习","task":"组合推导、独立作答与排错","ids":["c4-8","c4-9","c4-10","c4-11"]}],"quick":[["透明传输","成帧","避免数据被误识别为边界","转义或五个连续 1 后补 0","01111110 内容填成 011111010","定界标志本身不填充",0],["停等周期与有效率","可靠传输","计算等待和有效数据率","t_W=t_I+2t_P+2t_Proc+t_S；G=N/t_W","课件 200 bit 帧得 28 μs 周期","失败周期更长时需另建模型",1],["GBN 与 SR 窗口","序号限制","避免旧帧被当新帧","GBN≤2ᵏ−1；等窗口 SR≤2ᵏ⁻¹","3 位得 7 与 4","还需保证旧副本不无限存活",1],["PPP 的控制阶段","链路协议","配置链路与网络层参数","LCP→按需认证→NCP→数据","IPCP 标识 0x8021","有 FCS 不等于内置重传",2],["碰撞检测与退避","介质访问","处理共享半双工竞争","L/R≥2τ；r∈[0,2^min(n,10)−1]","第 3 次 r=5 等 256 μs","全双工交换以太网不使用 CD",3],["CSMA/CA","无线访问","降低碰撞并反馈结果","侦听、间隔、退避、DATA/ACK","剩 4 槽遇忙冻结在 4","ACK 丢失不证明一定碰撞",4],["MAC 学习与转发","网桥","找到当前帧的允许出口","源+入端口学习，目的查表","空表 A→B 先泛洪，B 回 A 后学习","受 VLAN、端口状态与老化限制",5],["STP","活动拓扑","在冗余二层网络中避免转发环路","选根、比较到根代价、控制端口转发","三角形阻塞一侧冗余端口","保留物理备用连接，故障后还需收敛",5],["VLAN","广播范围","按逻辑归属限制二层广播","接入端口归属；干道携带 VLAN 信息","VLAN10 广播不进入 VLAN20","干道允许多个 VLAN 不等于提供跨 VLAN 路由",6]],"quick_id":"c4-11","synthesis_id":"c4-8","source_module_count":33,"retained_core_chars":13012,"new_chars":24094};</script><script>
+<div class="footerlinks"><a href="03_物理层.html">← 上一章：物理层</a><a href="05_网络层.html">下一章：网络层 →</a></div></article></main><script>window.CHAPTER={"chapter":4,"name":"数据链路层","file":"04_数据链路层.md","title":"第4章 数据链路层：识别帧边界、按协议恢复并控制局域网转发","toc":[{"id":"c4-0","title":"4.0 共同场景与符号\r"},{"id":"c4-1","title":"4.1 帧边界与链路组织\r"},{"id":"c4-2","title":"4.2 可靠传输与窗口：丢失后怎样恢复一次交付\r"},{"id":"c4-3","title":"4.3 HDLC、PPP 与 LLC/MAC：机制怎样落到格式中\r"},{"id":"c4-4","title":"4.4 共享信道与以太网：先听为何仍会碰撞\r"},{"id":"c4-5","title":"4.5 无线竞争：接收端听到的情况为何不同\r"},{"id":"c4-6","title":"4.6 交换学习与生成树：怎样转发而不形成循环\r"},{"id":"c4-7","title":"4.7 VLAN：在同一设备上划分广播范围\r"},{"id":"c4-8","title":"4.8 综合应用\r"},{"id":"c4-9","title":"4.9 自测与答案\r"},{"id":"c4-10","title":"4.10 排错与复习\r"},{"id":"c4-11","title":"4.11 分类速查\r"}],"stages":[{"name":"学习准备","task":"认清场景、对象与计数边界","ids":["c4-0"]},{"name":"成帧与恢复","task":"把连续比特变成可控制的一次交付","ids":["c4-1","c4-2"]},{"name":"协议与共享","task":"区分协议字段、有线与无线访问","ids":["c4-3","c4-4","c4-5"]},{"name":"局域网组网","task":"学会查表、无环转发与广播隔离","ids":["c4-6","c4-7"]},{"name":"练习与复习","task":"组合推导、独立作答与排错","ids":["c4-8","c4-9","c4-10","c4-11"]}],"quick":[["透明传输","成帧","避免数据被误识别为边界","转义或五个连续 1 后补 0","01111110 内容填成 011111010","定界标志本身不填充",0],["停等周期与有效率","可靠传输","计算等待和有效数据率","t_W=t_I+2t_P+2t_Proc+t_S；G=N/t_W","课件 200 bit 帧得 28 μs 周期","失败周期更长时需另建模型",1],["GBN 与 SR 窗口","序号限制","避免旧帧被当新帧","GBN≤2ᵏ−1；等窗口 SR≤2ᵏ⁻¹","3 位得 7 与 4","还需保证旧副本不无限存活",1],["PPP 的控制阶段","链路协议","配置链路与网络层参数","LCP→按需认证→NCP→数据","IPCP 标识 0x8021","有 FCS 不等于内置重传",2],["碰撞检测与退避","介质访问","处理共享半双工竞争","L/R≥2τ；r∈[0,2^min(n,10)−1]","第 3 次 r=5 等 256 μs","全双工交换以太网不使用 CD",3],["CSMA/CA","无线访问","降低碰撞并反馈结果","侦听、间隔、退避、DATA/ACK","剩 4 槽遇忙冻结在 4","ACK 丢失不证明一定碰撞",4],["MAC 学习与转发","网桥","找到当前帧的允许出口","源+入端口学习，目的查表","空表 A→B 先泛洪，B 回 A 后学习","受 VLAN、端口状态与老化限制",5],["STP","活动拓扑","在冗余二层网络中避免转发环路","选根、比较到根代价、控制端口转发","三角形阻塞一侧冗余端口","保留物理备用连接，故障后还需收敛",5],["VLAN","广播范围","按逻辑归属限制二层广播","接入端口归属；干道携带 VLAN 信息","VLAN10 广播不进入 VLAN20","干道允许多个 VLAN 不等于提供跨 VLAN 路由",6]],"quick_id":"c4-11","synthesis_id":"c4-8","source_module_count":33,"retained_core_chars":13012,"new_chars":24094};</script><script>
 const $$=(s,r=document)=>[...r.querySelectorAll(s)];
 const menu=document.getElementById('menu-button');
 const setNav=v=>{document.body.classList.toggle('nav-open',v);menu.setAttribute('aria-expanded',String(v))};
@@ -1233,4 +1302,103 @@ if(window.CHAPTER){
   prev.addEventListener('click',()=>{index--;showStep()});next.addEventListener('click',()=>{index++;showStep()});showStep();
  }
 }
-</script></body></html>
+</script><script>(function runtime(){
+ 'use strict';
+ const article=document.querySelector('article'),toggle=document.getElementById('chapter-search-toggle');
+ if(!article||!toggle)return;
+ const BLOCK='h1,h2,h3,h4,p,li,th,td,pre,.formula,summary';
+ const EXCLUDE='button,input,textarea,select,script,style,svg,.wave-mobile-hint,.quickbox,.stepbox,.footerlinks,.chapter-search-ui';
+ const fold=s=>s.replace(/[A-Z]/g,c=>c.toLowerCase());
+ const normalize=s=>s.replace(/\s+/g,' ').trim();
+ const panel=document.createElement('dialog');panel.id='chapter-search-dialog';panel.className='chapter-search-dialog chapter-search-ui';panel.setAttribute('aria-labelledby','chapter-search-title');
+ panel.innerHTML=`<header class="chapter-search-head"><h2 id="chapter-search-title">搜索本章</h2><button type="button" class="chapter-search-close" aria-label="收起搜索">关闭</button></header><form class="chapter-search-form"><label for="chapter-search-input">关键词</label><div class="chapter-search-fields"><input id="chapter-search-input" type="search" maxlength="120" autocomplete="off" spellcheck="false" placeholder="例如：光纤、差分、8N1"><button type="submit">定位</button></div><p class="chapter-search-help" id="chapter-search-help">搜索正文、表格、代码和折叠答案；速查与分步演示以原文为准。英文不区分大小写，按原样匹配。Enter 下一处，Shift+Enter 上一处；Ctrl+K 打开搜索，Esc 收起。</p></form><p class="chapter-search-status" role="status" aria-live="polite"></p><div class="chapter-search-results" aria-label="搜索结果"></div>`;
+ const input=panel.querySelector('input');input.setAttribute('aria-describedby','chapter-search-help');
+ const resultList=panel.querySelector('.chapter-search-results'),status=panel.querySelector('.chapter-search-status');
+ const dock=document.createElement('div');dock.className='chapter-search-dock chapter-search-ui';dock.hidden=true;dock.setAttribute('role','group');dock.setAttribute('aria-label','本章搜索定位');
+ function button(text,fn){const b=document.createElement('button');b.type='button';b.textContent=text;b.addEventListener('click',fn);return b}
+ const previous=button('上一处',()=>move(-1)),next=button('下一处',()=>move(1)),counter=document.createElement('span');counter.className='chapter-search-counter';counter.setAttribute('role','status');counter.setAttribute('aria-live','polite');
+ dock.append(previous,counter,next,button('搜索',showPanel),button('清除',()=>{input.value='';runSearch();toggle.focus()}));document.body.append(panel,dock);
+ let blocks=[],hits=[],active=-1,query='',timer,composing=false,shown=50;
+ // Use a per-block text index to match across inline bold/code without replacing HTML.
+ function indexBlock(el){
+  const walker=document.createTreeWalker(el,NodeFilter.SHOW_TEXT,{acceptNode(n){const p=n.parentElement;return p&&!p.closest(EXCLUDE)&&p.closest(BLOCK)===el?NodeFilter.FILTER_ACCEPT:NodeFilter.FILTER_REJECT}});
+  let raw='',nodes=[],node;while((node=walker.nextNode())){nodes.push({node,start:raw.length,end:raw.length+node.length});raw+=node.data}
+  let text='',starts=[],ends=[];
+  for(let i=0;i<raw.length;){const at=i;if(/\s/.test(raw[i])){while(i<raw.length&&/\s/.test(raw[i]))i++;text+=' ';starts.push(at);ends.push(i)}else{text+=raw[i];starts.push(i);ends.push(i+1);i++}}
+  if(text.startsWith(' ')){text=text.slice(1);starts.shift();ends.shift()}if(text.endsWith(' ')){text=text.slice(0,-1);starts.pop();ends.pop()}
+  return {text,starts,ends,nodes};
+ }
+ function scan(){
+  let section='learning-nav',heading='学习导航';blocks=[];
+  for(const el of article.querySelectorAll('a[id],'+BLOCK)){
+   if(el.matches('a[id]')){section=el.id;continue}if(el.closest(EXCLUDE))continue;
+   if(/^H[1-4]$/.test(el.tagName))heading=normalize(el.textContent);
+   const index=indexBlock(el);if(index.text)blocks.push({el,section,heading,index});
+  }
+ }
+ function unmark(){for(const mark of article.querySelectorAll('mark.chapter-search-hit'))mark.replaceWith(...mark.childNodes);article.normalize()}
+ function paint(){
+  const ranges=new Map();
+  for(const [i,hit] of hits.entries()){
+   hit.marks=[];const ix=hit.block.index,a=ix.starts[hit.start],z=ix.ends[hit.end-1];
+   for(const part of ix.nodes){const start=Math.max(a,part.start)-part.start,end=Math.min(z,part.end)-part.start;if(start>=end)continue;if(!ranges.has(part.node))ranges.set(part.node,[]);ranges.get(part.node).push({start,end,i})}
+  }
+  for(const [node,parts] of ranges){
+   parts.sort((a,b)=>a.start-b.start);const fragment=document.createDocumentFragment();let at=0;
+   for(const p of parts){if(p.start>at)fragment.append(document.createTextNode(node.data.slice(at,p.start)));const mark=document.createElement('mark');mark.className='chapter-search-hit';mark.textContent=node.data.slice(p.start,p.end);mark.dataset.searchIndex=String(p.i);hits[p.i].marks.push(mark);fragment.append(mark);at=p.end}
+   if(at<node.length)fragment.append(document.createTextNode(node.data.slice(at)));node.replaceWith(fragment);
+  }
+ }
+ function updateCounter(){counter.textContent=active<0?'共 '+hits.length+' 处':(active+1)+' / '+hits.length;previous.disabled=next.disabled=!hits.length;dock.hidden=!hits.length;document.body.classList.toggle('chapter-search-has-results',!!hits.length)}
+ function renderResults(){
+  resultList.replaceChildren();
+  if(!query||!hits.length){const p=document.createElement('p');p.className='chapter-search-empty';p.textContent=query?'试试更短的关键词，或检查名称与拼写。':'输入关键词，即可列出所在小节和原文摘录。';resultList.append(p);return}
+  for(let i=0;i<Math.min(shown,hits.length);i++){
+   const h=hits[i],text=h.block.index.text,start=Math.max(0,h.start-36),end=Math.min(text.length,h.end+62);
+   const item=button('',()=>choose(i));item.className='chapter-search-result';item.dataset.searchIndex=String(i);if(i===active)item.setAttribute('aria-current','true');
+   const title=document.createElement('span');title.className='chapter-search-result-title';title.textContent='第 '+(i+1)+' 处 · '+h.block.heading;
+   const snippet=document.createElement('span');snippet.className='chapter-search-snippet';snippet.append(document.createTextNode((start?'…':'')+text.slice(start,h.start)));const mark=document.createElement('mark');mark.textContent=text.slice(h.start,h.end);snippet.append(mark,document.createTextNode(text.slice(h.end,end)+(end<text.length?'…':'')));item.append(title,snippet);resultList.append(item);
+  }
+  if(shown<hits.length){const more=button('再显示 '+Math.min(50,hits.length-shown)+' 条结果',()=>{shown+=50;renderResults()});more.className='chapter-search-more';resultList.append(more)}
+ }
+ function runSearch(){
+  clearTimeout(timer);const value=normalize(input.value);if(value===query)return;
+  unmark();scan();query=value;hits=[];active=-1;shown=50;
+  if(query){const needle=fold(query);for(const b of blocks){const text=fold(b.index.text);let at=0;while((at=text.indexOf(needle,at))!==-1){hits.push({block:b,start:at,end:at+needle.length});at+=needle.length}}paint()}
+  status.textContent=!query?'输入关键词搜索本章。':hits.length?'找到 '+hits.length+' 处匹配。点击结果定位，或按 Enter。':'没有找到“'+query+'”。';
+  updateCounter();renderResults();
+ }
+ function showPanel(){
+  if(document.body.classList.contains('nav-open'))document.getElementById('menu-button')?.click();
+  if(!panel.open)panel.showModal();toggle.setAttribute('aria-expanded','true');if(active>=shown){shown=Math.ceil((active+1)/50)*50;renderResults()}input.focus();input.select();
+ }
+ function closePanel(){if(panel.open)panel.close();toggle.setAttribute('aria-expanded','false')}
+ function choose(i){
+  if(!hits.length)return;active=(i+hits.length)%hits.length;const hit=hits[active];
+  for(const mark of article.querySelectorAll('.chapter-search-current'))mark.classList.remove('chapter-search-current');for(const mark of hit.marks)mark.classList.add('chapter-search-current');
+  for(let p=hit.block.el;p&&p!==article;p=p.parentElement)if(p.tagName==='DETAILS')p.open=true;
+  closePanel();updateCounter();renderResults();
+  const mark=hit.marks[0];if(mark)mark.scrollIntoView({block:'center',inline:'center',behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth'});
+  const old=hit.block.el.getAttribute('tabindex');if(old===null){hit.block.el.tabIndex=-1;hit.block.el.addEventListener('blur',()=>hit.block.el.removeAttribute('tabindex'),{once:true})}hit.block.el.focus({preventScroll:true});
+  if(hit.block.section&&document.getElementById(hit.block.section)){try{history.replaceState(null,'','#'+encodeURIComponent(hit.block.section))}catch(e){/* Some local-file viewers restrict history; scrolling still works. */}}
+ }
+ function move(direction){runSearch();if(hits.length)choose(active<0?(direction>0?0:hits.length-1):active+direction)}
+ toggle.addEventListener('click',showPanel);panel.querySelector('.chapter-search-close').addEventListener('click',closePanel);
+ panel.addEventListener('close',()=>toggle.setAttribute('aria-expanded','false'));
+ panel.addEventListener('click',e=>{if(e.target!==panel)return;const r=panel.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)closePanel()});
+ panel.querySelector('form').addEventListener('submit',e=>{e.preventDefault();if(!composing)move(1)});
+ input.addEventListener('compositionstart',()=>{composing=true;clearTimeout(timer)});input.addEventListener('compositionend',()=>{composing=false;clearTimeout(timer);timer=setTimeout(runSearch,100)});
+ input.addEventListener('input',e=>{if(composing||e.isComposing)return;clearTimeout(timer);timer=setTimeout(runSearch,100)});
+ input.addEventListener('keydown',e=>{if(e.key==='Enter'&&e.shiftKey&&!e.isComposing){e.preventDefault();move(-1)}});
+ document.addEventListener('keydown',e=>{
+  if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='k'){e.preventDefault();e.stopImmediatePropagation();showPanel()}
+  else if(e.key==='Escape'&&panel.open&&!e.isComposing&&!composing){e.preventDefault();e.stopImmediatePropagation();closePanel()}
+  else if(e.key==='Tab'&&panel.open){
+   const focusables=[...panel.querySelectorAll('button,input,a[href],[tabindex]')].filter(el=>!el.disabled&&el.tabIndex>=0&&el.getClientRects().length);
+   const first=focusables[0],last=focusables.at(-1);
+   if(e.shiftKey&&(document.activeElement===first||!panel.contains(document.activeElement))){e.preventDefault();last?.focus()}
+   else if(!e.shiftKey&&(document.activeElement===last||!panel.contains(document.activeElement))){e.preventDefault();first?.focus()}
+  }
+ },true);
+ scan();status.textContent='输入关键词搜索本章。';renderResults();toggle.disabled=false;
+})();</script><script>(function(){const s=document.getElementById('reading-theme');s.value=document.documentElement.dataset.theme;s.addEventListener('change',()=>{document.documentElement.dataset.theme=s.value;try{localStorage.setItem('network-reading-theme',s.value)}catch(e){}})})();</script></body></html>
