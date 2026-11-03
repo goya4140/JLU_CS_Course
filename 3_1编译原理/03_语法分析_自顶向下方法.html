@@ -1,5 +1,59 @@
-<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="source-sha256" content="6c57a146bd67c8d93515b6f9b8575f930d07f1df986aa2c7eba02cb40b78c8a0"><title>第3章 语法分析：从文法规则到自顶向下分析器 · 学习资料</title><style>:root{--paper:#fbfaf7;--surface:#fff;--ink:#253341;--muted:#5c6b75;--line:#d5dfdd;--teal:#156b62;--soft:#edf6f1;--font:17px;--scroll-offset:90px}*{box-sizing:border-box}html{scroll-behavior:auto;scroll-padding-top:var(--scroll-offset)}body{margin:0;background:var(--paper);color:var(--ink);font-family:'Microsoft YaHei','PingFang SC',system-ui,sans-serif;font-size:var(--font);line-height:1.85}a{color:var(--teal);text-underline-offset:3px}a:hover{color:#173f75}button,select{font:inherit}button{cursor:pointer}button,select{border:1px solid #b9cbc5;border-radius:7px;padding:7px 11px;background:#fff;color:var(--ink)}button:hover{background:var(--soft)}button:focus-visible,select:focus-visible,a:focus-visible{outline:3px solid #81cbb8;outline-offset:3px}.skip{position:absolute;top:-80px;left:12px;z-index:50;background:#fff;padding:8px}.skip:focus{top:8px}.sidebar{position:fixed;inset:0 auto 0 0;width:270px;padding:23px 18px;background:#f0f4f0;border-right:1px solid var(--line);overflow:auto;z-index:30;overscroll-behavior:contain}.brand{font-size:21px;font-weight:700}.brand small{display:block;font-size:12px;font-weight:400;color:var(--muted)}.sidebar nav a{display:block;color:var(--ink);text-decoration:none;padding:8px 10px;margin:3px 0;border-radius:6px;font-size:14px;line-height:1.6}.sidebar nav a:hover{background:#dcebe3}.sidebar nav a.active,.sidebar nav a.active:hover{background:var(--teal);color:white}.sidebar select{width:100%;font-size:13px}.nav-tip{font-size:12px;color:var(--muted);margin:14px 0}.shell{margin-left:270px;overflow-anchor:none}.topbar{position:sticky;top:0;background:rgba(251,250,247,.98);padding:12px 26px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:12px;z-index:20}.topbar-title{font-size:13px;color:var(--muted)}.toolbar{display:flex;gap:7px;flex-wrap:wrap}.toolbar button{font-size:13px}.menu{display:none}main{max-width:1120px;margin:auto;padding:30px 44px 80px;min-width:0}h1{font-size:32px;line-height:1.5;margin:14px 0 25px}h2{font-size:25px;line-height:1.5;padding:0 0 11px;border-bottom:1px solid var(--line);margin:44px 0 23px}h3{font-size:21px;line-height:1.55;margin:29px 0 16px}h4{font-size:18px;line-height:1.6;margin:22px 0 13px}p{margin:14px 0}li{margin:7px 0}ul,ol{padding-left:1.6em}blockquote{margin:20px 0;padding:5px 18px;border-left:3px solid #a8c6bb;background:#f0f3ef;color:#53655e;font-size:14px}blockquote p{margin:8px 0}hr{border:0;border-top:1px solid var(--line);margin:32px 0}code{font-family:Consolas,'Cascadia Code',monospace;font-size:.9em;background:#eef1ed;padding:2px 5px;border-radius:4px;overflow-wrap:anywhere}pre{background:#18313d;color:#e8f0f0;border-radius:9px;padding:19px;line-height:1.65;overflow-x:auto;max-width:100%;font-size:14px}pre code{background:none;padding:0;color:inherit;white-space:pre;overflow-wrap:normal}table{border-collapse:collapse;width:100%;font-size:15px}th{background:#eaf3ee;text-align:left}td,th{padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:top}tbody tr:nth-child(even){background:#f6f9f6}.table-scroll{overflow-x:auto;border:1px solid var(--line);border-radius:8px;margin:17px 0;max-width:100%}.table-scroll td{min-width:80px}.source-note{font-size:13px;color:var(--muted)}.learning-figure{padding:23px;border:1px solid #b4cfc2;border-radius:12px;background:var(--soft);margin:25px 0}.learning-figure h4{margin:0 0 8px;font-size:20px}.fig-intro{font-size:14px;color:var(--muted)}.learning-figure label{display:block;margin-top:15px;font-size:14px;font-weight:700}.learning-figure select{margin-top:7px;width:100%;min-height:44px;font-size:15px}.fig-output{margin-top:16px}.flow{display:flex;gap:10px;align-items:stretch;flex-wrap:wrap}.flow-node{flex:1 1 150px;border:1px solid #bfd2c9;border-radius:8px;background:#fff;padding:13px;min-width:0}.flow-node strong{display:block;color:var(--teal)}.flow-node p{font-size:14px;margin:8px 0}.flow-arrow{align-self:center;color:var(--teal);font-size:24px}.fig-note{padding:10px 14px;border-left:3px solid var(--teal);background:#fff;font-size:14px;margin:15px 0 0}.svg-scroll{overflow-x:auto;max-width:100%}.svg-scroll svg{display:block;max-width:100%;height:auto}.ref-area{min-height:calc(100vh - var(--scroll-offset));margin-top:24px}.ref-picker{padding:22px;border-radius:12px;background:var(--soft);border:1px solid #b4cfc2}.ref-picker label{display:block;font-weight:700;margin-bottom:10px}.ref-picker select{width:100%;font-size:15px;min-height:46px}.ref-panel{margin-top:18px;background:#fff;border:1px solid var(--line);padding:20px;border-radius:9px}.ref-panel[hidden]{display:none}.ref-panel h3{margin:0;font-size:24px}.ref-panel h4{font-size:16px;margin:18px 0 8px}.ref-kind{font-size:13px;color:var(--teal)}.result{padding:10px 15px;border-left:3px solid var(--teal);background:var(--soft)}.copy{display:block;margin:5px 0 0 auto;font-size:12px;padding:4px 8px}.code-wrap{margin:20px 0}.code-wrap pre{margin-bottom:0}.foot{font-size:13px;color:var(--muted);border-top:1px solid var(--line);padding-top:23px;margin-top:30px}details{border:1px solid var(--line);padding:12px;border-radius:8px;margin:15px 0}summary{cursor:pointer;font-weight:700}@media(max-width:900px){.sidebar{transform:translateX(-100%)}body.nav-open .sidebar{transform:translateX(0);top:60px}.shell{margin-left:0}.menu{display:inline-block}.topbar-title{display:none}.topbar{padding:10px 14px}main{padding:23px 18px 65px}h1{font-size:27px}h2{font-size:23px}.learning-figure,.ref-picker{padding:16px}.flow{flex-direction:column}.flow-arrow{transform:rotate(90deg)}.ref-panel{padding:15px}}@media print{.sidebar,.topbar,.toolbar,.copy,.skip{display:none!important}.shell{margin:0}main{padding:0;max-width:none}body{background:#fff;font-size:11pt}.ref-area{min-height:0}.ref-picker select{display:none}pre{white-space:pre-wrap;background:#f3f5f4;color:#111}.learning-figure{break-inside:avoid}.table-scroll{overflow:visible}a{color:inherit}}@media print{.svg-scroll{overflow:visible}.svg-scroll svg{min-width:0!important;width:100%!important;height:auto!important}}.sidebar{width:266px;background:#f1f4f1;padding:27px 19px;overflow-y:auto}.brand{font-size:21px;font-weight:700;letter-spacing:.03em;margin-bottom:5px}.brand small{font-size:12px;font-weight:400;color:var(--muted);letter-spacing:.1em}.sidebar .sub{font-size:13px;color:var(--muted);margin:5px 0 21px}.sidebar nav a{font-size:14px;line-height:1.5;padding:9px 11px;margin:3px 0;border-radius:6px}.sidebar nav a:hover{background:#e0ece6;color:#174d43}.sidebar nav a.active,.sidebar nav a.active:hover{background:var(--teal);color:#fff}.nav-group{font-size:12px;color:var(--muted);margin:18px 11px 6px;letter-spacing:.08em}.sidebar-footer{margin-top:24px;font-size:12px;color:var(--muted)}.shell{margin-left:266px}@media(max-width:900px){.shell{margin-left:0}}
-h2,h3,h4,[id]{scroll-margin-top:0}.stepper{background:#edf6f1;border:1px solid #b4cfc2;border-radius:12px;padding:22px;margin:24px 0}.stepper h3{margin:0 0 12px}.step-tools{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:15px 0}.step-tools input{width:200px;min-height:40px}.step-card{background:white;padding:18px;border-radius:8px;border:1px solid var(--line)}.step-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}.step-field{border:1px solid #d6e5dd;padding:12px;border-radius:7px;overflow-wrap:anywhere}.step-field strong{display:block;font-size:13px;color:var(--teal)}.step-field p{margin:7px 0 0}.progress-track{display:flex;gap:4px;margin:10px 0}.progress-track span{height:5px;flex:1;border-radius:3px;background:#c8d8d0}.progress-track span.done{background:var(--teal)}.step-count{font-variant-numeric:tabular-nums}.chapter-links{display:flex;gap:15px;justify-content:space-between;border-top:1px solid var(--line);padding-top:25px;margin-top:35px}.ref-area{min-height:0}.ref-panel h4{margin:12px 0 4px}.reading-meta{font-size:13px;color:var(--muted)}summary:focus-visible,input:focus-visible{outline:3px solid #81cbb8;outline-offset:3px}button:disabled{opacity:.5;cursor:default}.quick-select{width:100%}.overview-card{border:1px solid var(--line);background:white;border-radius:9px;padding:18px;margin:14px 0}.overview-card h3{margin-top:0}.sidebar nav a.external{background:#e4eee7}.nav-shade{display:none}@media(max-width:900px){body.nav-open .nav-shade{display:block;position:fixed;inset:60px 0 0 266px;background:#25334155;z-index:25}.stepper{padding:15px}.step-tools input{width:150px}.step-grid{grid-template-columns:1fr}.sidebar{max-width:85vw}.step-field{padding:10px}}@media print{.step-tools,.progress-track,.chapter-links{display:none}.step-card{break-inside:avoid}body.nav-open .nav-shade{display:none}}main{overflow-x:clip}article{min-width:0;max-width:100%}.table-scroll,pre{contain:inline-size}p,li,h1,h2,h3,h4{overflow-wrap:anywhere}</style></head><body><a class="skip" href="#article">跳到正文</a><aside class="sidebar" aria-label="章节目录"><div class="brand"><small>COMPILER / CHAPTER 03</small>第3章 语法分析：从文法规则到自顶向下分析器</div><p class="sub">完整讲解 · 分步推导 · 离线阅读</p><nav><a href="#navigation">学习导航</a><div class="nav-group">准备 · Token与记号</div><a href="#ch03-s01">1. 语法分析要解决什么问题</a><a href="#ch03-s02">2. 符号与记号入门</a><div class="nav-group">基础 · 文法与结构</div><a href="#ch03-s03">3. 文法与文法分类</a><a href="#ch03-s04">4. 从语言要求写出文法</a><a href="#ch03-s05">5. 推导、句型、句子与归约</a><a href="#ch03-s06">6. 语法树、短语、简单短语与句柄</a><a href="#ch03-s07">7. 二义性文法</a><a href="#ch03-s08">8. 文法等价变换</a><div class="nav-group">应用 · 预测与递归下降</div><a href="#ch03-s09">9. 自顶向下分析与回溯</a><a href="#ch03-s10">10. FIRST、FOLLOW、PREDICT 集</a><a href="#ch03-s11">11. LL(1) 文法与预测分析表</a><a href="#ch03-s12">12. 表驱动分析的完整过程</a><a href="#ch03-s13">13. 递归下降分析</a><div class="nav-group">进阶 · 集合练习</div><a href="#ch03-s14">14. 课件集合计算与 LL(1) 练习</a><div class="nav-group">综合应用 · 完整解题</div><a href="#ch03-s15">15. 综合应用：历年题的文法变换、集合与分析全过程</a><a href="#ch03-s16">16. 作业回查：有左公共前缀与有 LL(1) 冲突是不同问题</a><div class="nav-group">练习与复习 · 回查、自测和速查</div><a href="#ch03-s17">17. 知识联系与复习</a><a href="#ch03-s18">18. 自测与答案：从独立计算到错误定位</a><a href="#ch03-s19">19. 排错与复习</a><a href="#ch03-s20">20. 末尾速查表</a><div class="nav-group">全课程</div><a class="external" href="00_学习导航.html">全课程学习导航</a></nav><div class="sidebar-footer">先看问题与条件，再跟踪推导和例题</div></aside><div class="nav-shade"></div><div class="shell"><header class="topbar"><span class="topbar-title">第3章 语法分析：从文法规则到自顶向下分析器</span><div class="toolbar"><button id="menu" class="menu" aria-label="打开或收起目录" aria-expanded="false">目录</button><button data-font="-1" aria-label="减小正文字号">字号 −</button><button data-font="1" aria-label="增大正文字号">字号 ＋</button><button id="print">打印 / 保存 PDF</button></div></header><main><article id="article"><h1>第3章 语法分析：从文法规则到自顶向下分析器</h1>
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="source-sha256" content="f6d39d81e53a9e364a43f141875a1b7df12ba9929a2bd116b246f46248e4f4e7"><title>第3章 语法分析：从文法规则到自顶向下分析器 · 学习资料</title><script>(function () {
+  'use strict';
+  let saved;
+  try { saved = localStorage.getItem('compiler-reading-theme-v1'); } catch (_) {}
+  const theme = saved === 'light' || saved === 'dark' ? saved
+    : (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+  document.documentElement.dataset.readerTheme = theme;
+})();
+</script><style>:root{--paper:#fbfaf7;--surface:#fff;--ink:#253341;--muted:#5c6b75;--line:#d5dfdd;--teal:#156b62;--soft:#edf6f1;--font:17px;--scroll-offset:90px}*{box-sizing:border-box}html{scroll-behavior:auto;scroll-padding-top:var(--scroll-offset)}body{margin:0;background:var(--paper);color:var(--ink);font-family:'Microsoft YaHei','PingFang SC',system-ui,sans-serif;font-size:var(--font);line-height:1.85}a{color:var(--teal);text-underline-offset:3px}a:hover{color:#173f75}button,select{font:inherit}button{cursor:pointer}button,select{border:1px solid #b9cbc5;border-radius:7px;padding:7px 11px;background:#fff;color:var(--ink)}button:hover{background:var(--soft)}button:focus-visible,select:focus-visible,a:focus-visible{outline:3px solid #81cbb8;outline-offset:3px}.skip{position:absolute;top:-80px;left:12px;z-index:50;background:#fff;padding:8px}.skip:focus{top:8px}.sidebar{position:fixed;inset:0 auto 0 0;width:270px;padding:23px 18px;background:#f0f4f0;border-right:1px solid var(--line);overflow:auto;z-index:30;overscroll-behavior:contain}.brand{font-size:21px;font-weight:700}.brand small{display:block;font-size:12px;font-weight:400;color:var(--muted)}.sidebar nav a{display:block;color:var(--ink);text-decoration:none;padding:8px 10px;margin:3px 0;border-radius:6px;font-size:14px;line-height:1.6}.sidebar nav a:hover{background:#dcebe3}.sidebar nav a.active,.sidebar nav a.active:hover{background:var(--teal);color:white}.sidebar select{width:100%;font-size:13px}.nav-tip{font-size:12px;color:var(--muted);margin:14px 0}.shell{margin-left:270px;overflow-anchor:none}.topbar{position:sticky;top:0;background:rgba(251,250,247,.98);padding:12px 26px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:12px;z-index:20}.topbar-title{font-size:13px;color:var(--muted)}.toolbar{display:flex;gap:7px;flex-wrap:wrap}.toolbar button{font-size:13px}.menu{display:none}main{max-width:1120px;margin:auto;padding:30px 44px 80px;min-width:0}h1{font-size:32px;line-height:1.5;margin:14px 0 25px}h2{font-size:25px;line-height:1.5;padding:0 0 11px;border-bottom:1px solid var(--line);margin:44px 0 23px}h3{font-size:21px;line-height:1.55;margin:29px 0 16px}h4{font-size:18px;line-height:1.6;margin:22px 0 13px}p{margin:14px 0}li{margin:7px 0}ul,ol{padding-left:1.6em}blockquote{margin:20px 0;padding:5px 18px;border-left:3px solid #a8c6bb;background:#f0f3ef;color:#53655e;font-size:14px}blockquote p{margin:8px 0}hr{border:0;border-top:1px solid var(--line);margin:32px 0}code{font-family:Consolas,'Cascadia Code',monospace;font-size:.9em;background:#eef1ed;padding:2px 5px;border-radius:4px;overflow-wrap:anywhere}pre{background:#18313d;color:#e8f0f0;border-radius:9px;padding:19px;line-height:1.65;overflow-x:auto;max-width:100%;font-size:14px}pre code{background:none;padding:0;color:inherit;white-space:pre;overflow-wrap:normal}table{border-collapse:collapse;width:100%;font-size:15px}th{background:#eaf3ee;text-align:left}td,th{padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:top}tbody tr:nth-child(even){background:#f6f9f6}.table-scroll{overflow-x:auto;border:1px solid var(--line);border-radius:8px;margin:17px 0;max-width:100%}.table-scroll td{min-width:80px}.source-note{font-size:13px;color:var(--muted)}.learning-figure{padding:23px;border:1px solid #b4cfc2;border-radius:12px;background:var(--soft);margin:25px 0}.learning-figure h4{margin:0 0 8px;font-size:20px}.fig-intro{font-size:14px;color:var(--muted)}.learning-figure label{display:block;margin-top:15px;font-size:14px;font-weight:700}.learning-figure select{margin-top:7px;width:100%;min-height:44px;font-size:15px}.fig-output{margin-top:16px}.flow{display:flex;gap:10px;align-items:stretch;flex-wrap:wrap}.flow-node{flex:1 1 150px;border:1px solid #bfd2c9;border-radius:8px;background:#fff;padding:13px;min-width:0}.flow-node strong{display:block;color:var(--teal)}.flow-node p{font-size:14px;margin:8px 0}.flow-arrow{align-self:center;color:var(--teal);font-size:24px}.fig-note{padding:10px 14px;border-left:3px solid var(--teal);background:#fff;font-size:14px;margin:15px 0 0}.svg-scroll{overflow-x:auto;max-width:100%}.svg-scroll svg{display:block;max-width:100%;height:auto}.ref-area{min-height:calc(100vh - var(--scroll-offset));margin-top:24px}.ref-picker{padding:22px;border-radius:12px;background:var(--soft);border:1px solid #b4cfc2}.ref-picker label{display:block;font-weight:700;margin-bottom:10px}.ref-picker select{width:100%;font-size:15px;min-height:46px}.ref-panel{margin-top:18px;background:#fff;border:1px solid var(--line);padding:20px;border-radius:9px}.ref-panel[hidden]{display:none}.ref-panel h3{margin:0;font-size:24px}.ref-panel h4{font-size:16px;margin:18px 0 8px}.ref-kind{font-size:13px;color:var(--teal)}.result{padding:10px 15px;border-left:3px solid var(--teal);background:var(--soft)}.copy{display:block;margin:5px 0 0 auto;font-size:12px;padding:4px 8px}.code-wrap{margin:20px 0}.code-wrap pre{margin-bottom:0}.foot{font-size:13px;color:var(--muted);border-top:1px solid var(--line);padding-top:23px;margin-top:30px}details{border:1px solid var(--line);padding:12px;border-radius:8px;margin:15px 0}summary{cursor:pointer;font-weight:700}@media(max-width:900px){.sidebar{transform:translateX(-100%)}body.nav-open .sidebar{transform:translateX(0);top:60px}.shell{margin-left:0}.menu{display:inline-block}.topbar-title{display:none}.topbar{padding:10px 14px}main{padding:23px 18px 65px}h1{font-size:27px}h2{font-size:23px}.learning-figure,.ref-picker{padding:16px}.flow{flex-direction:column}.flow-arrow{transform:rotate(90deg)}.ref-panel{padding:15px}}@media print{.sidebar,.topbar,.toolbar,.copy,.skip{display:none!important}.shell{margin:0}main{padding:0;max-width:none}body{background:#fff;font-size:11pt}.ref-area{min-height:0}.ref-picker select{display:none}pre{white-space:pre-wrap;background:#f3f5f4;color:#111}.learning-figure{break-inside:avoid}.table-scroll{overflow:visible}a{color:inherit}}@media print{.svg-scroll{overflow:visible}.svg-scroll svg{min-width:0!important;width:100%!important;height:auto!important}}.sidebar{width:266px;background:#f1f4f1;padding:27px 19px;overflow-y:auto}.brand{font-size:21px;font-weight:700;letter-spacing:.03em;margin-bottom:5px}.brand small{font-size:12px;font-weight:400;color:var(--muted);letter-spacing:.1em}.sidebar .sub{font-size:13px;color:var(--muted);margin:5px 0 21px}.sidebar nav a{font-size:14px;line-height:1.5;padding:9px 11px;margin:3px 0;border-radius:6px}.sidebar nav a:hover{background:#e0ece6;color:#174d43}.sidebar nav a.active,.sidebar nav a.active:hover{background:var(--teal);color:#fff}.nav-group{font-size:12px;color:var(--muted);margin:18px 11px 6px;letter-spacing:.08em}.sidebar-footer{margin-top:24px;font-size:12px;color:var(--muted)}.shell{margin-left:266px}@media(max-width:900px){.shell{margin-left:0}}
+#sql-reference{min-height:calc(100vh - var(--scroll-offset,90px))}
+.table-scroll{max-width:100%;overflow-x:auto;margin:18px 0;border:1px solid var(--line);border-radius:8px}.table-scroll table{width:100%;border-collapse:collapse}.table-scroll td,.table-scroll th{min-width:85px;vertical-align:top}.table-scroll pre{white-space:pre-wrap}article h2,article h3,article h4{scroll-margin-top:var(--scroll-offset,90px)}.course-home{display:block;font-size:13px;padding:8px 11px;margin-bottom:12px}.chapter-turns{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;margin-top:34px;padding-top:20px;border-top:1px solid var(--line)}.chapter-turns a{font-size:14px}.sidebar-footer{font-size:12px;color:var(--muted);margin-top:24px}article>p:first-of-type{font-size:1.04em}.noscript-note{padding:12px;border-left:3px solid var(--teal)}@media(max-width:600px){.table-scroll table{min-width:520px}.table-scroll{font-size:14px}pre{max-width:100%;overflow-x:auto}article{min-width:0}}@media print{.table-scroll table{min-width:0}.chapter-turns{display:none}}
+
+h2,h3,h4,[id]{scroll-margin-top:0}.stepper{background:#edf6f1;border:1px solid #b4cfc2;border-radius:12px;padding:22px;margin:24px 0}.stepper h3{margin:0 0 12px}.step-tools{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:15px 0}.step-tools input{width:200px;min-height:40px}.step-card{background:white;padding:18px;border-radius:8px;border:1px solid var(--line)}.step-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}.step-field{border:1px solid #d6e5dd;padding:12px;border-radius:7px;overflow-wrap:anywhere}.step-field strong{display:block;font-size:13px;color:var(--teal)}.step-field p{margin:7px 0 0}.progress-track{display:flex;gap:4px;margin:10px 0}.progress-track span{height:5px;flex:1;border-radius:3px;background:#c8d8d0}.progress-track span.done{background:var(--teal)}.step-count{font-variant-numeric:tabular-nums}.chapter-links{display:flex;gap:15px;justify-content:space-between;border-top:1px solid var(--line);padding-top:25px;margin-top:35px}.ref-area{min-height:0}.ref-panel h4{margin:12px 0 4px}.reading-meta{font-size:13px;color:var(--muted)}summary:focus-visible,input:focus-visible{outline:3px solid #81cbb8;outline-offset:3px}button:disabled{opacity:.5;cursor:default}.quick-select{width:100%}.overview-card{border:1px solid var(--line);background:white;border-radius:9px;padding:18px;margin:14px 0}.overview-card h3{margin-top:0}.sidebar nav a.external{background:#e4eee7}.nav-shade{display:none}@media(max-width:900px){body.nav-open .nav-shade{display:block;position:fixed;inset:60px 0 0 266px;background:#25334155;z-index:25}.stepper{padding:15px}.step-tools input{width:150px}.step-grid{grid-template-columns:1fr}.sidebar{max-width:85vw}.step-field{padding:10px}}@media print{.step-tools,.progress-track,.chapter-links{display:none}.step-card{break-inside:avoid}body.nav-open .nav-shade{display:none}}main{overflow-x:clip}article{min-width:0;max-width:100%}.table-scroll,pre{contain:inline-size}p,li,h1,h2,h3,h4{overflow-wrap:anywhere}.chapter-search-panel[hidden],.chapter-search-results[hidden]{display:none!important}.chapter-search-panel{position:sticky;top:var(--reader-topbar-height,60px);z-index:21;background:#f4f8f3;border-bottom:1px solid #b9cbc5;padding:12px 26px;max-width:100%;font-size:14px;line-height:1.6}.chapter-search-form{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:7px;align-items:center}.chapter-search-form label{grid-column:1/-1;font-weight:700}.chapter-search-form input{min-width:0;width:100%;border:1px solid #7e9d90;border-radius:7px;padding:7px 10px;background:#fff;color:var(--ink);font:inherit;min-height:40px}.chapter-search-panel button{font-size:13px;min-height:36px;padding:6px 9px}.chapter-search-controls{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin-top:9px}.chapter-search-controls [role=status]{margin-right:auto;overflow-wrap:anywhere}.chapter-search-help{margin:8px 0 0;border:0;padding:0;font-size:12px;color:var(--muted)}.chapter-search-help summary{font-weight:400}.chapter-search-help p{margin:6px 0}.chapter-search-help[open]{max-height:20vh;overflow:auto}.chapter-search-results{margin-top:9px;border-top:1px solid var(--line);padding-top:8px;max-height:32vh;overflow:auto;overscroll-behavior:contain}.chapter-search-pages{display:flex;align-items:center;gap:7px;flex-wrap:wrap;font-size:12px}.chapter-search-pages span{margin-right:auto}.chapter-search-results ol{margin:5px 0;padding:0;list-style:none}.chapter-search-results li{margin:4px 0}.chapter-search-result{display:block;text-align:left;width:100%;white-space:normal;overflow-wrap:anywhere;background:#fff}.chapter-search-result strong{display:block;font-size:13px;color:var(--teal)}.chapter-search-result span{display:block;font-size:13px;line-height:1.65;margin-top:3px}.chapter-search-result[aria-current=true]{border-color:var(--teal);background:#e5f1e8}.chapter-search-result mark{background:#ffe69a;color:inherit;padding:0}mark.chapter-search-hit{background:#ffe38a;color:inherit;padding:0;border-radius:2px;outline:1px solid #ba8a11;scroll-margin-top:var(--scroll-offset,90px)}.chapter-search-form input:focus-visible,.chapter-search-panel summary:focus-visible,mark.chapter-search-hit:focus-visible{outline:3px solid #438f7e;outline-offset:3px}@media(max-width:900px){.chapter-search-panel{padding:10px 14px}body.nav-open .sidebar,body.nav-open .nav-shade{top:var(--reader-topbar-height,60px)}}@media(max-width:480px){.chapter-search-controls{gap:5px}.chapter-search-controls [role=status]{flex-basis:100%;font-size:13px}.chapter-search-controls button{flex:1 1 auto}.chapter-search-results{max-height:28vh}}@media print{.chapter-search-panel{display:none!important}mark.chapter-search-hit{background:transparent;color:inherit;outline:none}}
+.chapter-search-panel{max-height:calc(100vh - var(--reader-topbar-height,60px));max-height:calc(100dvh - var(--reader-topbar-height,60px));overflow-y:auto;overscroll-behavior:contain}
+:root[data-reader-theme]{color-scheme:light;--reader-sidebar:#f1f4f1;--reader-topbar:rgba(251,250,247,.98);--reader-hover:#e0ece6;--reader-hover-ink:#174d43;--reader-active-ink:#fff;--reader-external:#e4eee7;--reader-code:#eef1ed;--reader-pre:#18313d;--reader-pre-ink:#e8f0f0;--reader-th:#eaf3ee;--reader-row:#f6f9f6;--reader-panel-border:#b4cfc2;--reader-progress:#c8d8d0;--reader-search:#f4f8f3;--reader-current:#e5f1e8;--reader-link-hover:#173f75}
+:root[data-reader-theme="dark"]{color-scheme:dark;--paper:#141c22;--surface:#1d2830;--ink:#e3eaf0;--muted:#aab9c2;--line:#40515c;--teal:#83d8be;--soft:#233b3b;--reader-sidebar:#18242c;--reader-topbar:rgba(20,28,34,.98);--reader-hover:#2a4145;--reader-hover-ink:#b4ecd9;--reader-active-ink:#10231e;--reader-external:#23363d;--reader-code:#2a3943;--reader-pre:#0e171e;--reader-pre-ink:#dce8ef;--reader-th:#253b43;--reader-row:#19262e;--reader-panel-border:#46606a;--reader-progress:#3b515a;--reader-search:#1b2b33;--reader-current:#2a4145;--reader-link-hover:#b2e7ff}
+.reading-theme{display:inline-flex;align-items:center;gap:6px;font-size:13px;white-space:nowrap}.reading-theme select{font-size:13px;min-height:36px;cursor:pointer}
+:root[data-reader-theme] .sidebar{background:var(--reader-sidebar)}
+:root[data-reader-theme] .topbar{background:var(--reader-topbar)}
+:root[data-reader-theme] button,:root[data-reader-theme] select,:root[data-reader-theme] .chapter-search-form input{background:var(--surface);color:var(--ink);border-color:var(--line)}
+:root[data-reader-theme] button:hover{background:var(--soft)}
+:root[data-reader-theme] a:hover{color:var(--reader-link-hover)}
+:root[data-reader-theme] .sidebar nav a:hover{background:var(--reader-hover);color:var(--reader-hover-ink)}
+:root[data-reader-theme] .sidebar nav a.active,:root[data-reader-theme] .sidebar nav a.active:hover{background:var(--teal);color:var(--reader-active-ink)}
+:root[data-reader-theme] .sidebar nav a.external{background:var(--reader-external)}
+:root[data-reader-theme] .sidebar nav a.external.active{background:var(--teal)}
+:root[data-reader-theme] code{background:var(--reader-code)}
+:root[data-reader-theme] pre{background:var(--reader-pre);color:var(--reader-pre-ink)}
+:root[data-reader-theme] pre code{background:none;color:inherit}
+:root[data-reader-theme] th{background:var(--reader-th)}
+:root[data-reader-theme] tbody tr:nth-child(even){background:var(--reader-row)}
+:root[data-reader-theme] .ref-panel,:root[data-reader-theme] .step-card,:root[data-reader-theme] .overview-card,:root[data-reader-theme] .flow-node,:root[data-reader-theme] .fig-note,:root[data-reader-theme] .skip{background:var(--surface)}
+:root[data-reader-theme] .stepper,:root[data-reader-theme] .ref-picker,:root[data-reader-theme] .learning-figure{background:var(--soft);border-color:var(--reader-panel-border)}
+:root[data-reader-theme] .step-field{border-color:var(--line)}
+:root[data-reader-theme] .progress-track span{background:var(--reader-progress)}
+:root[data-reader-theme] .progress-track span.done{background:var(--teal)}
+:root[data-reader-theme] blockquote{background:var(--soft);color:var(--muted);border-color:var(--teal)}
+:root[data-reader-theme] .chapter-search-panel{background:var(--reader-search);border-color:var(--line)}
+:root[data-reader-theme] .chapter-search-result[aria-current=true]{background:var(--reader-current);border-color:var(--teal)}
+:root[data-reader-theme="dark"] mark.chapter-search-hit,:root[data-reader-theme="dark"] .chapter-search-result mark{background:#6b5013;color:#fff3c4;outline-color:#e8c86b}
+:root[data-reader-theme="dark"] ::selection{background:#386c73;color:#fff}
+@media print{
+ :root[data-reader-theme]{color-scheme:light;--paper:#fff;--surface:#fff;--ink:#111;--muted:#444;--line:#bbb;--teal:#175b50;--soft:#f2f5f3;--reader-code:#eee;--reader-pre:#f3f5f4;--reader-pre-ink:#111;--reader-th:#eaf0ec;--reader-row:#f7f7f7;--reader-panel-border:#aaa;--reader-progress:#ccc;--reader-active-ink:#fff}
+ :root[data-reader-theme] body{background:#fff;color:#111}
+ :root[data-reader-theme] .reading-theme{display:none!important}
+ :root[data-reader-theme] mark.chapter-search-hit{background:transparent;color:inherit;outline:none}
+}
+</style></head><body><a class="skip" href="#article">跳到正文</a><aside class="sidebar" aria-label="章节目录"><div class="brand"><small>COMPILER / CHAPTER 03</small>第3章 语法分析：从文法规则到自顶向下分析器</div><p class="sub">完整讲解 · 分步推导 · 离线阅读</p><nav><a href="#navigation">学习导航</a><div class="nav-group">准备 · Token与记号</div><a href="#ch03-s01">1. 语法分析要解决什么问题</a><a href="#ch03-s02">2. 符号与记号入门</a><div class="nav-group">基础 · 文法与结构</div><a href="#ch03-s03">3. 文法与文法分类</a><a href="#ch03-s04">4. 从语言要求写出文法</a><a href="#ch03-s05">5. 推导、句型、句子与归约</a><a href="#ch03-s06">6. 语法树、短语、简单短语与句柄</a><a href="#ch03-s07">7. 二义性文法</a><a href="#ch03-s08">8. 文法等价变换</a><div class="nav-group">应用 · 预测与递归下降</div><a href="#ch03-s09">9. 自顶向下分析与回溯</a><a href="#ch03-s10">10. FIRST、FOLLOW、PREDICT 集</a><a href="#ch03-s11">11. LL(1) 文法与预测分析表</a><a href="#ch03-s12">12. 表驱动分析的完整过程</a><a href="#ch03-s13">13. 递归下降：局部对应与完整程序练习</a><div class="nav-group">进阶 · 集合练习</div><a href="#ch03-s14">14. 集合计算与 LL(1) 练习</a><div class="nav-group">综合应用 · 完整解题</div><a href="#ch03-s15">15. 综合应用：历年题的文法变换、集合与分析全过程</a><a href="#ch03-s16">16. 作业回查：有左公共前缀与有 LL(1) 冲突是不同问题</a><div class="nav-group">练习与复习 · 回查、自测和速查</div><a href="#ch03-s17">17. 知识联系与复习</a><a href="#ch03-s18">18. 自测与答案：从独立计算到错误定位</a><a href="#ch03-s19">19. 排错与复习</a><a href="#ch03-s20">20. 末尾速查表</a><div class="nav-group">全课程</div><a class="external" href="00_学习导航.html">全课程学习导航</a></nav><div class="sidebar-footer">先看问题与条件，再跟踪推导和例题</div></aside><div class="nav-shade"></div><div class="shell"><header class="topbar"><span class="topbar-title">第3章 语法分析：从文法规则到自顶向下分析器</span><div class="toolbar"><button id="menu" class="menu" aria-label="打开或收起目录" aria-expanded="false">目录</button><button data-font="-1" aria-label="减小正文字号">字号 −</button><button data-font="1" aria-label="增大正文字号">字号 ＋</button><label class="reading-theme" for="reading-theme">外观<select id="reading-theme" aria-label="阅读模式"><option value="light">白天</option><option value="dark">夜间</option></select></label><button id="chapter-search-toggle" type="button" aria-expanded="false" aria-controls="chapter-search-panel">搜索</button><button id="print">打印 / 保存 PDF</button></div></header><section id="chapter-search-panel" class="chapter-search-panel" aria-label="本章关键词搜索" hidden>
+  <form id="chapter-search-form" class="chapter-search-form" role="search">
+    <label for="chapter-search-input">搜索本章</label><input id="chapter-search-input" type="search" placeholder="中文关键词或英文术语" autocomplete="off" spellcheck="false" aria-describedby="chapter-search-status"><button type="submit">查找</button><button id="chapter-search-clear" type="button">清除</button>
+  </form>
+  <div class="chapter-search-controls"><span id="chapter-search-status" role="status" aria-live="polite">请输入关键词</span><button id="chapter-search-prev" type="button" disabled>上一处</button><button id="chapter-search-next" type="button" disabled>下一处</button><button id="chapter-search-results-toggle" type="button" aria-expanded="false" aria-controls="chapter-search-results" disabled>展开结果</button><button id="chapter-search-close" type="button" aria-label="收起搜索，继续阅读">收起</button></div>
+  <details class="chapter-search-help"><summary>搜索范围与操作</summary><p>检索本章正文、表格、代码、折叠答案和全部速查项。目录与分步演示不重复计入，演示对应的正文仍可搜索。忽略关键词首尾空白，其余按文字原样匹配，英文不区分大小写；内部空格和符号也参与匹配。搜索完全离线，不上传关键词。</p><p>点击结果定位高亮，折叠内容会自动展开。Ctrl＋K 打开搜索；输入框内按 Enter 查找或跳到下一处，Shift＋Enter 跳到上一处；Esc 收起。清除会移除高亮，并恢复由搜索展开的折叠内容。浏览器的 Ctrl＋F 仍可使用。</p></details>
+  <div id="chapter-search-results" class="chapter-search-results" hidden><div class="chapter-search-pages"><span id="chapter-search-page-status"></span><button id="chapter-search-page-prev" type="button">前一页</button><button id="chapter-search-page-next" type="button">后一页</button></div><ol id="chapter-search-list"></ol></div>
+</section>
+<main><article id="article"><h1>第3章 语法分析：从文法规则到自顶向下分析器</h1>
 <p>词法分析已经把源程序拆成 Token，接下来要判断这些 Token 能否组成表达式、语句等合法结构。先用文法规定结构，再用推导和语法树解释组成关系，最后学习怎样凭当前 Token 选择产生式，并用分析表或递归函数识别输入。</p>
 <p><a id="navigation"></a></p>
 <h2>学习导航</h2>
@@ -24,12 +78,12 @@ h2,h3,h4,[id]{scroll-margin-top:0}.stepper{background:#edf6f1;border:1px solid #
 <tr>
 <td>应用 · 预测与递归下降</td>
 <td>怎样根据当前 Token 选择规则，判断选择是否唯一，再用表或函数执行分析？</td>
-<td><a href="#ch03-s09">9. 自顶向下分析与回溯</a>、<a href="#ch03-s10">10. FIRST、FOLLOW、PREDICT 集</a>、<a href="#ch03-s11">11. LL(1) 文法与预测分析表</a>、<a href="#ch03-s12">12. 表驱动分析的完整过程</a>、<a href="#ch03-s13">13. 递归下降分析</a></td>
+<td><a href="#ch03-s09">9. 自顶向下分析与回溯</a>、<a href="#ch03-s10">10. FIRST、FOLLOW、PREDICT 集</a>、<a href="#ch03-s11">11. LL(1) 文法与预测分析表</a>、<a href="#ch03-s12">12. 表驱动分析的完整过程</a>、<a href="#ch03-s13">13. 递归下降：局部对应与完整程序练习</a></td>
 </tr>
 <tr>
 <td>进阶 · 集合练习</td>
 <td>可空符号、循环依赖和候选式冲突出现时，怎样完整计算并定位问题？</td>
-<td><a href="#ch03-s14">14. 课件集合计算与 LL(1) 练习</a></td>
+<td><a href="#ch03-s14">14. 集合计算与 LL(1) 练习</a></td>
 </tr>
 <tr>
 <td>综合应用 · 完整解题</td>
@@ -51,10 +105,10 @@ h2,h3,h4,[id]{scroll-margin-top:0}.stepper{background:#edf6f1;border:1px solid #
 <p>例如源程序片段：</p>
 <pre><code class="language-text">x = y + 3;
 </code></pre>
-<p>词法分析器可以给出以下 <strong>Token 序列</strong>。Token 是词法分析得到的一个单词记录，通常含有类别、原文或属性、源代码位置：</p>
+<p>词法分析器可以给出以下 <strong>Token 序列</strong> 。Token 是词法分析得到的一个单词记录，通常含有类别、原文或属性、源代码位置：</p>
 <pre><code class="language-text">ID(x)  ASSIGN  ID(y)  PLUS  NUM(3)  SEMICOLON
 </code></pre>
-<p>语法分析器主要根据类别判断它是否符合“标识符、赋值号、表达式、分号”的排列规则，并识别其中的赋值语句、表达式等语法成分。Token 的具体名称随实现而变，课件常用 <code>id</code> 或 <code>i</code> 代表标识符这一类别。</p>
+<p>语法分析器主要根据类别判断它是否符合“标识符、赋值号、表达式、分号”的排列规则，并识别其中的赋值语句、表达式等语法成分。Token 的具体名称随实现而变，本章用 <code>id</code> 或 <code>i</code> 代表标识符这一类别。</p>
 <pre><code class="language-text">源程序字符 → 词法分析 → Token 序列 → 语法分析 → 语法结构
                                                    ↓
                                            为语义分析、代码生成做准备
@@ -86,15 +140,15 @@ h2,h3,h4,[id]{scroll-margin-top:0}.stepper{background:#edf6f1;border:1px solid #
 </tr>
 </tbody></table></div>
 <p>具体语言可能在不同阶段报告同一类问题。这里的重点是区分“单词”“结构”“含义”这三个层次，不能认为语法分析成功就表示程序完全正确。</p>
-<p>课件列出的语法错误包括：</p>
+<p>常见的语法错误包括：</p>
 <ul>
-<li><strong>开始或后继单词错误</strong>：表达式开头不能出现的单词，或表达式结束后接了不允许的单词。</li>
-<li><strong>标识符、常量的位置错误</strong>：要求标识符的位置出现了其他类别的 Token，例如结构体成员名位置出现运算符。涉及类型是否合法的问题还可能需要语义检查。</li>
-<li><strong>配对错误</strong>：圆括号、方括号、花括号或条件语句的结构不完整。</li>
-<li><strong>分隔符错误</strong>：缺少赋值号，参数表、表达式表中的逗号或分号用错。</li>
+<li><strong>开始或后继单词错误</strong> ：表达式开头不能出现的单词，或表达式结束后接了不允许的单词。</li>
+<li><strong>标识符、常量的位置错误</strong> ：要求标识符的位置出现了其他类别的 Token，例如结构体成员名位置出现运算符。涉及类型是否合法的问题还可能需要语义检查。</li>
+<li><strong>配对错误</strong> ：圆括号、方括号、花括号或条件语句的结构不完整。</li>
+<li><strong>分隔符错误</strong> ：缺少赋值号，参数表、表达式表中的逗号或分号用错。</li>
 </ul>
 <h3>1.3 为什么发现一个错误后还要恢复</h3>
-<p>如果遇到第一个错误就停止，学生每次只能修一个问题。编译器通常尝试恢复到可继续分析的状态，再报告后面的错误。但恢复不当会造成 <strong>伪错误</strong>：后续代码本来正确，却因为前面的错误使分析器失去正确位置而被误报。</p>
+<p>如果遇到第一个错误就停止，学生每次只能修一个问题。编译器通常尝试恢复到可继续分析的状态，再报告后面的错误。但恢复不当会造成 <strong>伪错误</strong> ：后续代码本来正确，却因为前面的错误使分析器失去正确位置而被误报。</p>
 <div class="table-scroll"><table>
 <thead>
 <tr>
@@ -125,7 +179,8 @@ h2,h3,h4,[id]{scroll-margin-top:0}.stepper{background:#edf6f1;border:1px solid #
 </tr>
 </tbody></table></div>
 <p>“同步记号”是能帮助分析器重新对齐结构的输入符号，例如语句结束的分号。</p>
-<p>课件把全局纠正概括为理论研究方法。本章只介绍其思想，不据此断言现今所有错误修复技术都处于理论阶段。</p>
+<p>全局纠正把恢复看作寻找合适修改的问题，本节用它比较恢复策略；实际诊断与修复还取决于代价定义和实现。</p>
+<p>以 <code>Stmt→id &#39;=&#39; Expr &#39;;&#39;</code> 为例，输入 <code>id &#39;=&#39; &#39;;&#39;</code> 在应开始 Expr 的位置遇到分号。恐慌恢复可报告“缺少表达式”，以分号同步，再读下一条语句；这不把原语句判为合法。错误产生式也可专门识别 <code>id &#39;=&#39; &#39;;&#39;</code> 并报告漏项。若采用全局纠正，必须先规定插入、删除、替换的代价，再寻找满足文法且总代价最小的修改；不同代价或多个同成本方案都可能改变建议。</p>
 <p><a id="ch03-s02"></a>
 <a id="二符号与记号入门"></a>
 <a id="符号与记号入门"></a></p>
@@ -208,7 +263,7 @@ h2,h3,h4,[id]{scroll-margin-top:0}.stepper{background:#edf6f1;border:1px solid #
 <tr>
 <td><code>A → α</code></td>
 <td>一条产生式</td>
-<td>规定 A 可以由 α 组成，课件也写作 <code>A ::= α</code></td>
+<td>规定 A 可以由 α 组成，也可写作 <code>A ::= α</code></td>
 </tr>
 <tr>
 <td><code>A → α | β</code></td>
@@ -249,7 +304,7 @@ h2,h3,h4,[id]{scroll-margin-top:0}.stepper{background:#edf6f1;border:1px solid #
 <h2>3. 文法与文法分类</h2>
 <p>语法分析器要判断 <code>id+id*id</code> 合法而 <code>id+*id</code> 不合法，需要一套可以机械执行的结构规则。仅说“这是一个表达式”不够：表达式可以嵌套括号，长度也没有固定上限。因此要用有限条规则描述这些结构，这就是引入文法的目的。先看一个表达式文法，再认识它的组成和分类。</p>
 <h3>3.1 文法是一组生成规则</h3>
-<p><strong>文法（Grammar）</strong>用有限条规则精确描述哪些符号串属于一种语言。例如：</p>
+<p><strong>文法（Grammar）</strong> 用有限条规则精确描述哪些符号串属于一种语言。例如：</p>
 <pre><code class="language-text">E → E + T | T
 T → T * F | F
 F → ( E ) | id
@@ -263,7 +318,7 @@ F → ( E ) | id
 <p>递归规则使有限的文法能够描述任意长的表达式。对有限的 CFG，如果完全没有递归，展开深度会有上限，生成的句子集合也会有限；要描述无限多、长度无上限的程序，需要能够持续增加结构并最终结束的递归。仅仅出现 <code>S→S|a</code> 这样的循环并不会产生无限多个不同句子。</p>
 <h3>3.2 文法四元组</h3>
 <p>要把刚才的规则交给分析器，还需要说明：哪些符号能继续展开，哪些就是最终输入，以及从哪个符号开始。四元组把这些信息连同规则一起明确下来，避免只看到字母却不知道它们各自的身份。</p>
-<p>沿用课件的排列顺序，文法写成：</p>
+<p>采用本章的排列顺序，文法写成：</p>
 <pre><code class="language-text">G = (VN, VT, S, P)
 </code></pre>
 <p>这是把文法的四个组成部分放在一起的有序组合。</p>
@@ -296,25 +351,26 @@ F → ( E ) | id
 <td>上述所有规则</td>
 </tr>
 </tbody></table></div>
-<p><strong>非终结符</strong>表示一种尚需展开的语法结构。<strong>终结符</strong>表示最终输入中的基本符号，不能再被文法规则展开。课件称它们为“非终极符”和“终极符”，含义相同。</p>
+<p><strong>非终结符</strong> 表示一种尚需展开的语法结构。<strong>终结符</strong> 表示最终输入中的基本符号，不能再被文法规则展开。这里称它们为“非终极符”和“终极符”，含义相同。</p>
 <p>整个文法的符号集合为：</p>
 <pre><code class="language-text">V = VN ∪ VT
 VN ∩ VT = ∅
 </code></pre>
 <p>第一行表示文法符号由两类符号组成。第二行表示同一个符号不能同时既是终结符又是非终结符。</p>
 <p>一般文法的产生式形式是 <code>α → β</code>，其中 <code>α ∈ V+</code> 且至少含一个非终结符，<code>β ∈ V*</code>。这表示左部必须非空并含有可替换的结构，右部允许为空。在本章主要讨论的上下文无关文法中，左部进一步限定为一个非终结符。</p>
-<p><strong>记号说明：</strong>有些教材写作 <code>G=(VN,VT,P,S)</code>。两种排列都能使用，但各位置含义不能混淆；本章记作 <code>G=(VN,VT,S,P)</code>。</p>
+<p><strong>记号说明：</strong> 有些教材写作 <code>G=(VN,VT,P,S)</code>。两种排列都能使用，但各位置含义不能混淆；本章记作 <code>G=(VN,VT,S,P)</code>。</p>
+<p>独立小例：规则只有S→ab，开始符S，则按本章顺序G=({S},{a,b},S,{S→ab})。S是唯一非终结符，a、b是终结符；使用规则后得到句子ab。四个字段分别提供符号类别、起点和替换规则。</p>
 <h3>3.3 候选式与文法简写</h3>
 <p>同一种结构往往有几种组成方式，例如因子既可以是 id，也可以是括号表达式。为集中呈现这些选择，可以把左部相同的规则合写；后面分析器选择的正是其中某个右部。</p>
 <pre><code class="language-text">S → aAd | abcd | aSd
 A → bAc | bc
 </code></pre>
-<p><code>aAd、abcd、aSd</code> 是 S 的三个 <strong>候选式</strong>，也就是替换 S 时可以选择的三种右部。</p>
-<p>对于本章的上下文无关文法，可以从左部确定非终结符集合：<code>VN={S,A}</code>。出现在右部、又不属于该集合的符号是终结符：<code>VT={a,b,c,d}</code>。如无另外声明，课件默认第一条规则左部是开始符号。</p>
+<p><code>aAd、abcd、aSd</code> 是 S 的三个 <strong>候选式</strong> ，也就是替换 S 时可以选择的三种右部。</p>
+<p>对于本章的上下文无关文法，可以从左部确定非终结符集合：<code>VN={S,A}</code>。出现在右部、又不属于该集合的符号是终结符：<code>VT={a,b,c,d}</code>。如无另外声明，本章默认第一条规则左部是开始符号。</p>
 <p>不要只凭“大写字母”判断符号类型。大小写是一种书写惯例，最终以文法的定义为准。也不能把这一套从左部辨认符号的方法原封不动用于任意 0 型文法，因为一般文法左部可以含终结符。</p>
 <h3>3.4 乔姆斯基文法分类</h3>
 <p>上一章的有限自动机可以识别单词，但有限状态不足以记录任意深度的括号嵌套。不同结构需要不同的描述能力和识别手段，文法分类帮助我们判断一套规则允许表达什么，以及本章为什么主要使用上下文无关文法。</p>
-<p>分类依据是 <strong>每条产生式受到什么限制</strong>。从 0 型到 3 型，限制逐渐增加，能够描述的语言范围逐渐缩小。</p>
+<p>分类依据是 <strong>每条产生式受到什么限制</strong> 。从 0 型到 3 型，限制逐渐增加，能够描述的语言范围逐渐缩小。</p>
 <div class="table-scroll"><table>
 <thead>
 <tr>
@@ -349,41 +405,43 @@ A → bAc | bc
 <td>有限自动机</td>
 </tr>
 </tbody></table></div>
-<p><strong>上下文有关</strong>可以这样理解：<code>αAβ→αγβ</code> 允许在左右环境 α、β 存在时把 A 换成 γ，并保留这些环境。<strong>上下文无关</strong>表示只要出现 A，就能按 <code>A→γ</code> 替换，不必检查 A 的左右邻居。</p>
+<p><strong>上下文有关</strong> 可以这样理解：<code>αAβ→αγβ</code> 允许在左右环境 α、β 存在时把 A 换成 γ，并保留这些环境。<strong>上下文无关</strong> 表示只要出现 A，就能按 <code>A→γ</code> 替换，不必检查 A 的左右邻居。</p>
 <p>“右线性”的非终结符位于右部最右端，“左线性”的非终结符位于最左端。例如 <code>S→0S|0</code> 是右线性文法。</p>
 <p>四种识别模型的直观差别是它们的记忆能力：有限自动机只有有限状态；下推自动机额外有一个栈；线性有界自动机使用与输入长度成比例的工作空间；图灵机采用一般的读写带。这里用于理解分类对应关系，不要求在本章实现它们。</p>
 <p>在通常对空串作统一处理的语言分类中：</p>
 <pre><code class="language-text">正则语言 ⊂ 上下文无关语言 ⊂ 上下文有关语言 ⊂ 0 型语言
 </code></pre>
 <p><code>⊂</code> 表示前一种语言类包含在后一种语言类中，而且后一类还有前一类表达不了的语言。分类时通常回答“满足的最严格类型”，并检查所有产生式。</p>
-<p><strong>空串约定。</strong>非缩短的 1 型规则通常不能生成 ε。为了允许空串，常单独允许 <code>S→ε</code>，同时要求 S 不出现在任何产生式右部。正则文法也有允许适当空产生式的扩展约定。因此，课件的包含图应理解为语言类的层级，不能忽略空串约定，把每条含 ε 的 CFG 规则都机械地判成非缩短规则。左右线性规则也不能任意混用后仍直接称为正则文法。</p>
+<p><strong>空串约定。</strong> 非缩短的 1 型规则通常不能生成 ε。为了允许空串，常单独允许 <code>S→ε</code>，同时要求 S 不出现在任何产生式右部。正则文法也有允许适当空产生式的扩展约定。因此，语言类的包含层级不能代替对空串约定的检查；不能把每条含 ε 的 CFG 规则都机械地判成非缩短规则。左右线性规则也不能任意混用后仍直接称为正则文法。</p>
+<p>逐条检查的例子：<code>A→aB</code> 符合右线性形式；<code>S→aSb|ab</code> 的每条左部都是单个非终结符，属于 2 型文法，但中间的 S 使第一条不符合线性形式，它生成 a、b 数量相等的 <code>aⁿbⁿ(n≥1)</code>。局部规则 <code>aAb→acb</code> 保留 a、b 环境，长度不缩短，可用于说明 1 型替换；规则 <code>AB→A</code> 则会缩短且左部不是单个非终结符，只符合一般 0 型的限制。最后两项只是在比较单条规则，判断一份完整文法时仍需逐条检查全部规则及空串约定。</p>
 <h3>3.5 在编译器中的用途</h3>
 <p>正则文法适合描述标识符、数字等单词结构，与上一章的正则表达式、有限自动机相联系。上下文无关文法适合描述表达式、语句、嵌套括号等程序结构。本课程后续若无说明，“文法”通常指 CFG。</p>
-<p>课件提到用上下文有关文法描述语义，可理解为类型、声明等约束依赖上下文。实际编译器通常用符号表和语义分析过程检查这些约束，并不意味着必须构造一个 1 型文法来实现语义分析。</p>
+<p>类型、声明等语义约束依赖上下文。实际编译器通常用符号表和语义分析过程检查这些约束，并不意味着必须构造一个 1 型文法来实现语义分析。</p>
+<p>小例子：标识符规则<code>L(L|D)*</code>只需记录字符类别，有限状态即可；文法<code>S→(S)|a</code>则允许任意深度的括号，如((a))，分析时要记住尚未闭合的层次。二者分别体现词法模式与嵌套语法的任务。</p>
 <p><a id="ch03-s04"></a>
 <a id="从语言要求写出文法"></a>
 <a id="四从语言要求写出文法"></a></p>
 <h2>4. 从语言要求写出文法</h2>
-<p>现在反过来练习：已知哪些串应当合法，怎样写出恰好生成这些串的规则？困难在于既要生成所有合格串，又不能多生成不合格串。下面用课件 06 的例题，逐一把顺序、重复次数和数量关系转换为递归规则与结束规则。</p>
+<p>现在反过来练习：已知哪些串应当合法，怎样写出恰好生成这些串的规则？困难在于既要生成所有合格串，又不能多生成不合格串。下面用例题，逐一把顺序、重复次数和数量关系转换为递归规则与结束规则。</p>
 <h3>4.1 相同数量的 a 与 b</h3>
 <p>要求生成：</p>
 <pre><code class="language-text">L = {aⁿbⁿ | n ≥ 1}
 </code></pre>
 <p>花括号表示集合，竖线表示“满足条件”。它包含 <code>ab、aabb、aaabbb、…</code>，所有 a 在前，所有 b 在后，数量相等且至少各一个。</p>
-<p>课件文法：</p>
+<p>本例文法：</p>
 <pre><code class="language-text">S → aSb | ab
 </code></pre>
 <p>每次用 <code>aSb</code>，左边增加一个 a，右边同时增加一个 b。最后用 <code>ab</code> 结束：</p>
 <pre><code class="language-text">S ⇒ aSb ⇒ aaSbb ⇒ aaabbb
 </code></pre>
-<p>这是 2 型文法。<code>aSb</code> 的非终结符 S 在两个终结符之间，不符合课件的左线性或右线性形式。</p>
+<p>这是 2 型文法。<code>aSb</code> 的非终结符 S 在两个终结符之间，不符合左线性或右线性形式。</p>
 <h3>4.2 一个或多个 0</h3>
 <pre><code class="language-text">S → 0S | 0
 L = {0ⁿ | n ≥ 1}
 </code></pre>
 <p>递归规则增加一个 0，结束规则生成最后一个 0：<code>S⇒0S⇒00S⇒000</code>。它符合右线性形式，是 3 型文法。</p>
 <h3>4.3 b 的数量等于 a 与 c 的数量之和</h3>
-<p>课件要求：</p>
+<p>要求：</p>
 <pre><code class="language-text">L = {aⁿbᵐcᵏ | m=n+k, n≥1, m&gt;1, k≥1}
 </code></pre>
 <p>把 b 分为两组：第一组与 a 配对，第二组与 c 配对。</p>
@@ -397,25 +455,25 @@ B → bc | bBc
 <p>A 生成 <code>aⁿbⁿ</code>，B 生成 <code>bᵏcᵏ</code>，连接后中间两组 b 合并。例如 n=2、k=1 时：</p>
 <pre><code class="language-text">S ⇒ AB ⇒ aAbB ⇒ aabbB ⇒ aabbbc
 </code></pre>
-<p><strong>思考题 1：若 n、m、k 都允许为 0，且仍要求 m=n+k。</strong></p>
+<p><strong>思考题 1：若 n、m、k 都允许为 0，且仍要求 m=n+k。</strong> </p>
 <pre><code class="language-text">S → AB
 A → aAb | ε
 B → bBc | ε
 </code></pre>
 <p>允许 A、B 分别取空串，所以既能生成 ε，也能生成仅有 <code>aⁿbⁿ</code> 或仅有 <code>bᵏcᵏ</code> 的情况。</p>
-<p><strong>思考题 2：若 n≥0、m≥1、k≥1。</strong></p>
+<p><strong>思考题 2：若 n≥0、m≥1、k≥1。</strong> </p>
 <pre><code class="language-text">S → AB
 A → aAb | ε
 B → bBc | bc
 </code></pre>
 <p>A 可以为空，B 必须至少生成 <code>bc</code>。因为 k≥1，所以 m=n+k 自动满足 m≥1。</p>
 <h3>4.4 十进制整数与前导零</h3>
-<p>课件给出的文法实际上描述“至少一个数字组成的非负十进制表示”，不含正负号：</p>
+<p>下面给出的文法实际上描述“至少一个数字组成的非负十进制表示”，不含正负号：</p>
 <pre><code class="language-text">N → D | ND
 D → 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9
 </code></pre>
 <p>N 生成一位或多位数字：<code>N⇒ND⇒NDD⇒DDD⇒1DD⇒12D⇒123</code>，其中把不同 D 依次替换成 1、2、3。这份文法允许 <code>00、012</code> 等前导零形式。</p>
-<p><strong>能否直接写 <code>N→D+</code>？</strong>普通 CFG 中，右部是明确的文法符号串，<code>+</code> 不能自动表示“重复一次以上”。只有先声明采用扩展 BNF（在产生式记法中增加重复、可选等简写的形式）等带重复记号的写法，才能把 <code>D+</code> 理解为一个或多个 D；否则它可能被读成符号 D 后面接一个加号。</p>
+<p><strong>能否直接写 <code>N→D+</code>？</strong> 普通 CFG 中，右部是明确的文法符号串，<code>+</code> 不能自动表示“重复一次以上”。只有先声明采用扩展 BNF（在产生式记法中增加重复、可选等简写的形式）等带重复记号的写法，才能把 <code>D+</code> 理解为一个或多个 D；否则它可能被读成符号 D 后面接一个加号。</p>
 <p>如果只有整数 0 可以以 0 开头：</p>
 <pre><code class="language-text">N → 0 | BR
 B → 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9
@@ -424,8 +482,8 @@ D → 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9
 </code></pre>
 <p>B 保证多位数首位非零，R 允许后面有零个或多个任意数字。<code>0、7、100</code> 合法，<code>00、012</code> 不合法。</p>
 <h3>4.5 标识符</h3>
-<p>课件的标识符规则是“以小写字母开头，后面接零个或多个小写字母或数字”。这里不擅自加入大写字母、下划线等其他语言中的规则。</p>
-<p>课件的第一种分解：</p>
+<p>本例的标识符规则是“以小写字母开头，后面接零个或多个小写字母或数字”。这里不擅自加入大写字母、下划线等其他语言中的规则。</p>
+<p>第一种分解：</p>
 <pre><code class="language-text">I → L | LS
 S → T | ST
 T → L | D
@@ -474,10 +532,10 @@ D → B | 0
 </code></pre>
 <p>所以 <code>S⇒+aab</code>，也有 <code>S⇒*aab</code>。<code>S⇒*S</code> 是零步推导，不能因此直接声称 <code>S⇒+S</code>。</p>
 <h3>5.3 句型、句子、语言</h3>
-<p><strong>句型</strong>是从开始符号推导出来的任意符号串，允许仍含非终结符：</p>
+<p><strong>句型</strong> 是从开始符号推导出来的任意符号串，允许仍含非终结符：</p>
 <pre><code class="language-text">S ⇒* β，β ∈ V*  ⇒  β 是文法的句型
 </code></pre>
-<p><strong>句子</strong>是只含终结符的句型。<strong>语言</strong>是全部句子的集合：</p>
+<p><strong>句子</strong> 是只含终结符的句型。<strong>语言</strong> 是全部句子的集合：</p>
 <pre><code class="language-text">L(G) = {w | S ⇒* w，w ∈ VT*}
 </code></pre>
 <p>即从 S 出发可以得到、并且已经全部由终结符组成的串。</p>
@@ -485,10 +543,10 @@ D → B | 0
 <pre><code class="language-text">E ⇒ E+E ⇒ id+E ⇒ id+E*E ⇒ id+id*E ⇒ id+id*id
 </code></pre>
 <p>每一行都是句型，最后一行还是句子。E 本身也是句型，因为允许零步推导。<code>id+</code> 虽然只含终结符，但从这个文法不能推导得到，所以不是句子。</p>
-<p>课件用 <code>S⇒+w</code> 定义语言。在开始符号是非终结符、w 是纯终结符串的约定下，得到 w 至少要一步，所以与这里的 <code>⇒*</code> 写法一致。</p>
+<p>也可用 <code>S⇒+w</code> 定义语言：开始符号是非终结符而 w 是纯终结符串时，得到 w 至少要一步，所以这里的 <code>⇒*</code> 写法给出同一语言。</p>
 <h3>5.4 最左推导与最右推导</h3>
 <p>当中间结果含有多个非终结符时，下一步先展开哪一个也需要约定。固定展开顺序以后，才便于比较推导、组织分析程序，并说明下一章的归约究竟在撤销哪一步。</p>
-<p><strong>最左推导</strong>每一步替换当前最左边的非终结符，记为 <code>⇒lm</code>。<strong>最右推导</strong>每一步替换当前最右边的非终结符，记为 <code>⇒rm</code>，课件也称 <strong>规范推导</strong>。</p>
+<p><strong>最左推导</strong> 每一步替换当前最左边的非终结符，记为 <code>⇒lm</code>。<strong>最右推导</strong> 每一步替换当前最右边的非终结符，记为 <code>⇒rm</code>，也称 <strong>规范推导</strong> 。</p>
 <p>以下两种推导使用相同的表达式分组结构：</p>
 <pre><code class="language-text">最左推导：
 E ⇒lm E+E ⇒lm id+E ⇒lm id+E*E ⇒lm id+id*E ⇒lm id+id*id
@@ -499,7 +557,7 @@ E ⇒rm E+E ⇒rm E+E*E ⇒rm E+E*id ⇒rm E+id*id ⇒rm id+id*id
 <p>从最左推导得到的中间串叫左句型，从最右推导得到的中间串叫右句型或规范句型。每个句子都可以按某棵语法树得到相应的最左推导和最右推导，但任意中间句型不一定同时是左句型和右句型。</p>
 <p>不同的普通推导可能只是展开顺序不同，不能单凭“有两条普通推导”就判断二义性。</p>
 <h3>5.5 归约与两种分析方向</h3>
-<p><strong>归约</strong>是逆着推导，把产生式右部还原成左部。例如 <code>A→bc</code> 对应把当前串中合适位置的 bc 归约成 A。</p>
+<p><strong>归约</strong> 是逆着推导，把产生式右部还原成左部。例如 <code>A→bc</code> 对应把当前串中合适位置的 bc 归约成 A。</p>
 <pre><code class="language-text">S ⇒ aA ⇒ abc             推导
 abc → aA → S             逆向看这段过程，即归约
 </code></pre>
@@ -523,14 +581,14 @@ abc → aA → S             逆向看这段过程，即归约
 <td>下一章研究最右推导的逆过程，即规范归约</td>
 </tr>
 </tbody></table></div>
-<p>课件把规范归约也称为“最左归约”。这里的“最左”不能理解为随便挑最左侧看起来像右部的子串进行替换，正确归约需要识别句柄。</p>
+<p>规范归约有时也称“最左归约”。这里的“最左”不能理解为随便挑最左侧看起来像右部的子串进行替换，正确归约需要识别句柄。</p>
 <p><a id="ch03-s06"></a>
 <a id="六语法树短语简单短语与句柄"></a>
 <a id="语法树短语简单短语与句柄"></a></p>
 <h2>6. 语法树、短语、简单短语与句柄</h2>
 <p>推导序列记录了每次替换，却不容易一眼看出“谁由谁组成”。例如一个加法的右侧还包含乘法，把每一步都写成一长串符号，层次关系会被展开顺序掩盖。语法树专门保留这种组成关系；沿着子树还能找到可以整体看待或一步还原的片段。这些片段分别引出短语、简单短语和句柄，后者主要为下一章的归约分析作准备。</p>
 <h3>6.1 语法树怎样表示结构</h3>
-<p><strong>语法树</strong>把线性推导中的层次关系画出来。</p>
+<p><strong>语法树</strong> 把线性推导中的层次关系画出来。</p>
 <p>树最上面的起点叫根结点。某结点下一层相连的结点叫它的孩子，往下连续相连的结点叫后代；没有孩子的结点叫叶结点，有孩子的结点叫内部结点。</p>
 <ol>
 <li>根结点是开始符号。</li>
@@ -540,7 +598,7 @@ abc → aA → S             逆向看这段过程，即归约
 <li>叶结点从左到右读出当前句型，ε 对读出的串不贡献实际符号。</li>
 </ol>
 <p>树尚未展开完时，叶子可以含非终结符；完全展开得到句子时，叶子只含终结符和可能用于标记空产生式的 ε。</p>
-<p>课件 07 的 <code>(E)+id</code> 示例可以画成：</p>
+<p> <code>(E)+id</code> 示例可以画成：</p>
 <pre><code class="language-text">E
 ├─ E
 │  └─ T
@@ -555,24 +613,13 @@ abc → aA → S             逆向看这段过程，即归约
 </code></pre>
 <p>逐步构造时，每替换一个非终结符，就在相应结点下面按右部顺序添加孩子。树记录了“谁由谁组成”，却不强制规定左右两棵子树哪一棵先展开。</p>
 <h3>6.2 短语与简单短语</h3>
-<p>看清整棵树以后，还要判断句子中的哪一段确实对应一个完整语法成分。任意截取的连续子串未必有这种资格，下面用子树及其展开步数给出判断依据。</p>
-<p><strong>子树</strong>由树中的某一个结点及它的全部后代组成，不能只截取其中一部分孩子。只有一层孩子的子树，在课件中称为简单子树。</p>
-<p>若：</p>
-<pre><code class="language-text">S ⇒* αAδ，并且 A ⇒+ β
-</code></pre>
-<p>那么 β 是句型 <code>αβδ</code> 中 <strong>关于 A 的一个短语</strong>。通俗地说，这一段串曾经由同一个语法成分 A 整体展开得到。</p>
-<p>如果 A 只用一步便得到 β，即 <code>A⇒β</code>，则 β 是 <strong>简单短语</strong>，也叫 <strong>直接短语</strong>。</p>
-<p>在树上判断更方便：</p>
-<ul>
-<li>一棵以非终结符为根、实际展开过的子树，其叶子串是短语。</li>
-<li>若子树只有一层孩子，孩子全部是当前树的叶子，它的叶子串就是简单短语。</li>
-<li>不能任意截取一段连续字符就称为短语，必须有相应子树或推导依据。</li>
-</ul>
-<p>对 <code>E→E+E|E*E|id</code> 的一种树形，<code>id+id*id</code> 中的 <code>id*id</code> 是短语，因为一个 E 经多步生成了它；它不是简单短语，因为没有产生式 <code>E→id*id</code>。各个 <code>id</code> 可以是 <code>E→id</code> 直接得到的简单短语。</p>
+<p>短语要来自同一语法成分的完整展开，不能随意截取字符。</p>
+<p>小例子：文法<code>S→aB，B→bc</code>，开始符S。推导S⇒aB⇒abc，根S的整棵子树生成abc，B的子树生成bc。因此abc是关于S的短语，bc是关于B的短语；bc由B一步得到，又是简单短语。子串ab虽然连续，却没有对应的完整子树，所以不是本树中的短语。</p>
+<p>一般地，若S⇒*αAδ且A⇒+β，则这个位置上的β是关于A的短语；A⇒β只用一步时是简单短语。位置与产生它的语法成分都必须明确。</p>
 <h3>6.3 句柄与规范归约</h3>
 <p>一个串可能同时有多个简单短语。如果希望按最右推导的逆序还原，就必须确定本次究竟归约哪一处。句柄用来标记这一步应还原的位置和所用产生式，而不只是指出“哪里长得像某条规则的右部”。</p>
-<p>课件入门部分将 <strong>句柄</strong>概括为“最左简单短语”。做课件的树形题时，要找到最左简单子树，并标明其叶子串在句型中的位置。</p>
-<p><strong>严格定义的适用范围。</strong>在后续 LR 分析中，句柄定义在规范句型及其规范推导上：若</p>
+<p>简单短语由当前语法树的一层展开确定；句柄还要求这个位置对应规范推导最后一步。对任意一般句型，不能直接把最左简单短语称为 LR 句柄。先判断是否为规范句型，再指出产生式和具体位置。</p>
+<p><strong>严格定义的适用范围。</strong> 在后续 LR 分析中，句柄定义在规范句型及其规范推导上：若</p>
 <pre><code class="language-text">S ⇒rm* αAw ⇒rm αβw
 </code></pre>
 <p>则产生式 <code>A→β</code> 及 β 在 <code>αβw</code> 中的这个出现位置构成句柄，w 是纯终结符串。将这一次 β 归约成 A，才能准确撤销规范推导的最后一步。这里不仅要知道“子串是什么”，还要知道“是哪一次出现、用哪条规则归约”。<a href="https://cs.nyu.edu/~gottlieb/courses/compilers/lectures/lecture-06.html">定义核对：纽约大学编译课程</a>。</p>
@@ -586,84 +633,10 @@ B → e | eB
 </code></pre>
 <p><code>ab</code> 与 <code>e</code> 都是简单短语，句柄是位置在 <code>c</code> 后面的 <code>ab</code>，对应 <code>A→ab</code>。正确的第一次规范归约是 <code>cabdef</code> 归约成 <code>cAdef</code>。</p>
 <p>短语可能不止一个，简单短语也可能不止一个。无二义性文法的规范句型除初始开始符号等边界情况外，其规范归约的下一步句柄唯一。</p>
-<h3>6.4 课件例题：<code>(T+id)*id+F</code></h3>
-<p>使用分层表达式文法：</p>
-<pre><code class="language-text">E → E+T | T
-T → T*F | F
-F → (E) | id
-</code></pre>
-<p>课件写作 <code>(T+i)*i+F</code>，这里统一用 id。它是句型，因为存在：</p>
-<pre><code class="language-text">E ⇒ E+T ⇒ T+T ⇒ T*F+T ⇒ F*F+T
-  ⇒ (E)*F+T ⇒ (E+T)*F+T ⇒ (T+T)*F+T
-  ⇒ (T+F)*F+T ⇒ (T+id)*F+T
-  ⇒ (T+id)*id+T ⇒ (T+id)*id+F
-</code></pre>
-<p>这是一般推导，不是每步都替换最左或最右非终结符。</p>
-<pre><code class="language-text">E
-├─ E
-│  └─ T
-│     ├─ T
-│     │  └─ F
-│     │     ├─ (
-│     │     ├─ E
-│     │     │  ├─ E
-│     │     │  │  └─ T        ← 未展开的 T
-│     │     │  ├─ +
-│     │     │  └─ T
-│     │     │     └─ F
-│     │     │        └─ id    ← 第一个 id
-│     │     └─ )
-│     ├─ *
-│     └─ F
-│        └─ id               ← 第二个 id
-├─ +
-└─ T
-   └─ F                     ← 未展开的 F
-</code></pre>
-<p>按课件对不同子串位置的列举口径，短语有 8 项：</p>
-<div class="table-scroll"><table>
-<thead>
-<tr>
-<th>短语</th>
-<th>一条产生它的语法成分或路径</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><code>(T+id)*id+F</code></td>
-<td>根 E 的整棵子树</td>
-</tr>
-<tr>
-<td><code>(T+id)*id</code></td>
-<td>左边 E 或其下面 T 的子树</td>
-</tr>
-<tr>
-<td><code>(T+id)</code></td>
-<td>左因子 F 的子树</td>
-</tr>
-<tr>
-<td><code>T+id</code></td>
-<td>括号内 E 的子树</td>
-</tr>
-<tr>
-<td>括号内的 T</td>
-<td>内部 <code>E→T</code></td>
-</tr>
-<tr>
-<td>第一个 id</td>
-<td>内部 <code>F→id</code>，也可经 T 多步得到</td>
-</tr>
-<tr>
-<td>第二个 id</td>
-<td>外部乘法右因子 <code>F→id</code></td>
-</tr>
-<tr>
-<td>最后的 F</td>
-<td>最右边 <code>T→F</code></td>
-</tr>
-</tbody></table></div>
-<p>简单短语是括号内的 T、两个不同位置的 id、末尾的 F。按课件“最左简单短语”的答题口径，句柄答 <strong>括号内的 T</strong>。</p>
-<p><strong>范围提醒：</strong>这个未完全展开的句型并不是最右推导可到达的规范句型。右端 F 仍未展开时，最右推导无法继续展开它左侧的 E。因此，上述“句柄 T”应作为课件树形题的口径理解，不能直接当作严格 LR 句柄的例子。</p>
-<p>课件 06 的另一道题 <code>(T+id)*F+id</code> 同样是句型：将对应树中的乘法右因子保留为 F，把最右项展开为 id 即可。其短语为整个串、<code>(T+id)*F</code>、<code>(T+id)</code>、<code>T+id</code>、括号内 T 以及两个不同位置的 id；简单短语是括号内 T 和两个 id。按课件口径，句柄仍答括号内 T。乘法位置的 F 本身没有通过父结点的一步独立生成，不能只因它是叶子就把它列为简单短语。</p>
+<h3>6.4 两个规则的小树怎样找短语</h3>
+<p>本题只用文法<code>T→(N)，N→n</code>，开始符T，终结符为(、)、n。推导T⇒(N)⇒(n)。</p>
+<p>整串(n)由T经两步得到，是关于T的短语；n由N一步得到，是简单短语。左括号本身只是T那条规则中的终结符，不能因为它是叶子就称为由某个非终结符独立生成的短语。</p>
+<p>这棵树可写成T的孩子为(、N、)，N的孩子为n。当前最右推导最后一步是N→n，逆向撤销时归约中间的n。较长表达式中的位置辨析另放综合练习。</p>
 <p><a id="ch03-s07"></a>
 <a id="七二义性文法"></a>
 <a id="二义性文法"></a>
@@ -671,7 +644,7 @@ F → (E) | id
 <h2>7. 二义性文法</h2>
 <p>输入能够由文法生成，只说明至少找到了一种结构。若同一个 <code>id+id*id</code> 还可以按两种结构解释，后续求值和代码生成就可能采用不同运算顺序。因此，除了能否生成，还要检查结构是否唯一；二义性描述的就是这个问题。</p>
 <h3>7.1 什么叫二义性</h3>
-<p>若一个文法中存在 <strong>同一个句子对应两棵不同语法树</strong>，文法就是二义性文法。等价地，同一个句子存在两个不同的最左推导，或两个不同的最右推导。</p>
+<p>若一个文法中存在 <strong>同一个句子对应两棵不同语法树</strong> ，文法就是二义性文法。等价地，同一个句子存在两个不同的最左推导，或两个不同的最右推导。</p>
 <p>证明二义性需要一个纯终结符句子作反例。只写出一个含非终结符的句型，或只给出两条展开次序不同的普通推导，都不充分。</p>
 <h3>7.2 运算优先级和结合性</h3>
 <pre><code class="language-text">E → E+E | E*E | id
@@ -697,10 +670,10 @@ T → T*F | F
 F → (E) | id
 </code></pre>
 <p>T 在成为 E 的一个加法操作数前，可以先组成完整乘法，所以乘法优先级高于加法。括号在 F 中重新引入 E，使括号里能有完整表达式。</p>
-<p><strong>结合性</strong>描述同优先级运算怎样分组。<code>E→E+T</code> 把多次加法形成左侧嵌套，因此表达 <code>id+id+id</code> 的左结合结构。对减法等运算，左右结合会直接影响结果，不能只考虑优先级。</p>
+<p><strong>结合性</strong> 描述同优先级运算怎样分组。<code>E→E+T</code> 把多次加法形成左侧嵌套，因此表达 <code>id+id+id</code> 的左结合结构。对减法等运算，左右结合会直接影响结果，不能只考虑优先级。</p>
 <h3>7.3 悬空 else</h3>
 <p>这种结构不唯一也会出现在条件语句中：两个 if 嵌套但只有一个 else 时，文法必须说明 else 归谁，否则两个分支解释都可能成立。</p>
-<p>课件文法的核心部分为：</p>
+<p>考察下面的文法：</p>
 <pre><code class="language-text">Stm → if Exp then Stm else Stm
     | if Exp then Stm
     | 其他语句
@@ -716,14 +689,14 @@ F → (E) | id
 <p>给分析器加消歧规则能够确定解释，但原来那份裸文法仍有二义性。提取 <code>if Exp then Stm</code> 公共前缀，也不会自动解决 else 的归属。</p>
 <p>若语言提供 <code>begin…end</code> 或 <code>{…}</code> 组成复合语句，可以显式包住内层 if，使后面的 else 归属于外层。应按具体语言的语句和分号规则书写，不能仅靠缩进改变没有缩进语法的语言的解释。</p>
 <h3>7.4 经验反例、一般判定与二义性的利用</h3>
-<p>课件给出 <code>S→SS|a</code> 的经验例子。使用句子 <code>aaa</code> 才能完整证明：</p>
+<p>对 <code>S→SS|a</code>，使用句子 <code>aaa</code> 可以完整证明二义性：</p>
 <pre><code class="language-text">左结合：S ⇒ SS ⇒ SSS ⇒ aSS ⇒ aaS ⇒ aaa
 右结合：S ⇒ SS ⇒ aS ⇒ aSS ⇒ aaS ⇒ aaa
 </code></pre>
 <p>两条都是最左推导，分别对应 <code>(aa)a</code> 和 <code>a(aa)</code>。类似地，<code>S→S+S|a</code> 的句子 <code>a+a+a</code> 有两种结合结构。单独的 <code>S→S+S</code> 没有终结规则，不能据此保证存在句子，更不能单独证明二义性。</p>
-<p>不存在能对任意 CFG 总是终止并正确判断二义性的通用算法，这叫 <strong>不可判定</strong>。它不等于“某个具体文法不能证明”：一个明确反例即可证明有二义性，而某些结构清晰的文法可以证明无二义性。<a href="https://www.cs.cornell.edu/courses/cs381/2005su/Handouts/Ambiguity.pdf">理论核对：康奈尔大学文法讲义</a>。</p>
-<p>课件也讨论保留简单的二义性文法，再增加优先级、结合性等规则。这样有时能减少文法或分析器描述的复杂度；“二义性文法一定状态少、一定更快”不是普遍结论，具体效果取决于实现。这也不能绕开本章 LL(1) 的唯一选择要求。</p>
-<h3>7.5 课件练习：W 与 V 怎样分配 b</h3>
+<p>不存在能对任意 CFG 总是终止并正确判断二义性的通用算法，这叫 <strong>不可判定</strong> 。它不等于“某个具体文法不能证明”：一个明确反例即可证明有二义性，而某些结构清晰的文法可以证明无二义性。<a href="https://www.cs.cornell.edu/courses/cs381/2005su/Handouts/Ambiguity.pdf">理论核对：康奈尔大学文法讲义</a>。</p>
+<p>也可保留简单的二义性文法，再额外规定优先级、结合性等消歧规则。这样有时能减少文法或分析器描述的复杂度；“二义性文法一定状态少、一定更快”不是普遍结论，具体效果取决于实现。这也不能绕开本章 LL(1) 的唯一选择要求。</p>
+<h3>7.5 练习：W 与 V 怎样分配 b</h3>
 <pre><code class="language-text">Z → WV
 W → aB | aW | a
 B → b | bB
@@ -731,7 +704,7 @@ V → bV | dD
 D → d | dD
 </code></pre>
 <p>W 可以生成至少一个 a，后面可接至少一个 b，也可以完全不接 b；V 可以生成零个或多个 b，后面必须有至少两个 d。串中间的 b 可能分配给 W，也可能分配给 V。</p>
-<p><strong>课件写“abbd 有两棵语法树”，但该串只含一个 d，无法由 V→dD、D→d|dD 生成。</strong>无法验证课件是否原本打算修改某条规则；以下按题给规则，用 <code>abbdd</code> 证明二义性。</p>
+<p>按上面规则，V 至少产生两个 d，所以 <code>abbd</code> 不能生成。下面使用可生成的 <code>abbdd</code>，分别把两个 b 分配给 W 或 V 的前部，构造两种不同结构来证明二义性。</p>
 <pre><code class="language-text">推导一：所有 b 由 V 生成
 Z ⇒ WV ⇒ aV ⇒ abV ⇒ abbV ⇒ abbdD ⇒ abbdd
 
@@ -746,11 +719,11 @@ Z ⇒ WV ⇒ aBV ⇒ abV ⇒ abbV ⇒ abbdD ⇒ abbdd
 <h2>8. 文法等价变换</h2>
 <p>文法能够正确描述语言，还不代表按它编写的预测分析器容易执行。比如 <code>A→ab|ac</code> 看到 a 时暂时分不出候选式；<code>E→E+T|T</code> 若直接写成递归调用，又可能在读取输入前反复调用 E。文法变换尝试在保留合法句子集合的前提下调整规则，分别缓解选式困难和左递归问题。这里先看改写思路，第 9—11 节再完整说明预测分析和最终判定条件。</p>
 <h3>8.1 等价保持的是什么</h3>
-<p>两份文法 G₁、G₂ <strong>等价</strong>表示 <code>L(G₁)=L(G₂)</code>，即它们生成的终结符句子集合相同。等价不要求非终结符名称、推导过程、语法树形状完全相同。</p>
+<p>两份文法 G₁、G₂ <strong>等价</strong> 表示 <code>L(G₁)=L(G₂)</code>，即它们生成的终结符句子集合相同。等价不要求非终结符名称、推导过程、语法树形状完全相同。</p>
 <p>本章改写文法是为了让自顶向下分析更容易选择规则。语言保持不变，树形却可能改变，后续语义动作也可能需要调整。</p>
 <h3>8.2 提取左公共前缀</h3>
 <p>对 <code>A→ab|ac</code>，两个选择都先读 a，真正能区分分支的是后面的 b 或 c。我们可以把共同部分先识别掉，再把选择推迟到剩余部分。这就是下面提取前缀的改写思路。</p>
-<p>若同一非终结符的几个候选式开头相同，这一段称为 <strong>左公共前缀</strong>，也叫左公因子。</p>
+<p>若同一非终结符的几个候选式开头相同，这一段称为 <strong>左公共前缀</strong> ，也叫左公因子。</p>
 <pre><code class="language-text">A → αβ₁ | αβ₂ | … | αβₙ | γ₁ | … | γₘ
 </code></pre>
 <p>其中相关候选式共享非空前缀 α，不相关候选式 γ 保留。引入新的非终结符 A&#39;：</p>
@@ -762,7 +735,7 @@ A&#39; → β₁ | β₂ | … | βₙ
 A&#39; → b | c
 </code></pre>
 <p>先读 a，读完后再决定是 b 还是 c，相当于把分支决定推迟。若 <code>A→ab|a</code>，第二个候选式的剩余部分为空，必须写成 <code>A&#39;→b|ε</code>。</p>
-<p>课件例子：</p>
+<p>例如：</p>
 <pre><code class="language-text">变换前：                    变换后：
 A → aB | aC | aD           A  → aA&#39;
 B → bB | bD | c           A&#39; → B | C | D
@@ -831,7 +804,7 @@ A&#39; → αA&#39; | ε
 A&#39; → α₁A&#39; | … | αₘA&#39; | ε
 </code></pre>
 <p>每一个 β 都要带 A&#39;，每一个 α 都去掉原来开头的 A，并接上 A&#39;。ε 允许停止重复，不能遗漏。</p>
-<p>课件的表达式文法变换：</p>
+<p>表达式文法变换：</p>
 <pre><code class="language-text">E → E+T | T       α=+T，β=T
 T → T*F | F      α=*F，β=F
 F → (E) | id
@@ -847,14 +820,14 @@ F  → (E) | id
 <p>若存在 <code>A→A</code>，不能把 α=ε 机械套入公式，否则新规则仍有循环。若没有 β 分支，也不能凭空添加一个能产生新句子的结束规则。对含可空符号造成的隐藏左递归，应继续检查，不能只检查右部的第一个书写符号。</p>
 <h3>8.5 消除间接左递归：完整例题</h3>
 <p>只检查 <code>A→Aα</code> 会漏掉经其他非终结符绕回自己的情况。下面先用代入把这种绕行显露为直接左递归，再使用上一小节的变换公式。</p>
-<p>课件文法：</p>
+<p>本例文法：</p>
 <pre><code class="language-text">S → Qc | c
 Q → Rb | b
 R → Sa | a
 </code></pre>
 <p>存在：<code>S⇒Qc⇒Rbc⇒Sabc</code>，S 回到了最左端，属于间接左递归。</p>
 <p>算法思路是先把非终结符排序为 <code>A₁、A₂、…、Aₙ</code>。处理 Aᵢ 时，对每个 j&lt;i，把 <strong>右部以 Aⱼ 开头</strong> 的规则 <code>Aᵢ→Aⱼγ</code> 换成 Aⱼ 的各个候选式接 γ，然后消除 Aᵢ 的直接左递归。</p>
-<p>只替换右部开头的较早非终结符，不要求“右部所有位置都只能出现排序靠后的非终结符”。课件对这点的文字概括应按这个实际算法理解。</p>
+<p>只替换右部开头的较早非终结符，不要求“右部所有位置都只能出现排序靠后的非终结符”；替换位置由下面的算法条件确定。</p>
 <p>按 S、Q、R 排序：</p>
 <ol>
 <li>S 的候选式开头为 Q、c，没有更早的非终结符，不替换。</li>
@@ -873,9 +846,9 @@ R  → bcaR&#39; | caR&#39; | aR&#39;
 R&#39; → bcaR&#39; | ε
 </code></pre>
 <p>改变排序可能得到不同的等价文法。变换后要检查是否还有左递归，必要时处理无用符号或产生式。无用符号指从开始符号到不了，或不能最终生成终结符串的符号。</p>
-<p><strong>适用条件：</strong>标准的排序代入算法通常先假设原文法无空产生式、无 <code>A⇒+A</code> 形式的循环。遇到这些情况要先作适当预处理，并保留原语言中的空串情况，不能把本例步骤当作适用于所有 CFG 的无条件保证。<a href="https://www.cs.csustan.edu/~xliang/Courses2/CS4300-23F/NewLectureSlides/PDF/CH04REC-A.pdf">算法前提参考：加州州立大学编译课程</a>。</p>
+<p><strong>适用条件：</strong> 标准的排序代入算法通常先假设原文法无空产生式、无 <code>A⇒+A</code> 形式的循环。遇到这些情况要先作适当预处理，并保留原语言中的空串情况，不能把本例步骤当作适用于所有 CFG 的无条件保证。<a href="https://www.cs.csustan.edu/~xliang/Courses2/CS4300-23F/NewLectureSlides/PDF/CH04REC-A.pdf">算法前提参考：加州州立大学编译课程</a>。</p>
 <h3>8.6 同时提取前缀与消除左递归</h3>
-<p>课件练习：</p>
+<p>练习：</p>
 <pre><code class="language-text">A → bAbB | bABb | aB
 B → BaA | ab | ε
 </code></pre>
@@ -891,21 +864,21 @@ B&#39; → aAB&#39; | ε
 <p>这仍不保证 LL(1)：<code>A&#39;→bB</code> 以 b 开头，而 B 可以为空，因此 <code>A&#39;→Bb</code> 也可先产生 b。这两个候选式的 PREDICT 都会包含 b，必须继续检查。</p>
 <h3>8.7 增加拓广产生式</h3>
 <p>另一种改写服务于下一章的 LR 分析：分析器需要一个单独的起始规则，明确标记“整个原开始结构已经识别完成”。为此可以在原开始符号上方再加一层入口，这不会改变原文法生成的句子。</p>
-<p><strong>拓广文法</strong>在原开始符号 S 上面加一个全新的开始符号 Z：</p>
+<p><strong>拓广文法</strong> 在原开始符号 S 上面加一个全新的开始符号 Z：</p>
 <pre><code class="language-text">原文法：S → aSd | bS | c
 
 拓广后：Z → S
         S → aSd | bS | c
 </code></pre>
 <p>Z 不出现在任何产生式右部，并且只有 <code>Z→S</code> 这一条起始规则。新文法仍生成同一语言，因为 <code>Z⇒S</code> 后就回到原文法。</p>
-<p>课件在本章介绍该变换，主要为下一章 LR 分析准备。它让分析器有一个明确的整体完成标志：识别完一个 S，即完成新开始符号 Z 的识别。这里的“唯一开始符”应理解为新增开始符有唯一的起始产生式且不出现在右部；任何文法定义本来就指定一个开始符号。</p>
+<p>该变换为下一章 LR 分析准备。它让分析器有一个明确的整体完成标志：识别完一个 S，即完成新开始符号 Z 的识别。这里的“唯一开始符”应理解为新增开始符有唯一的起始产生式且不出现在右部；任何文法定义本来就指定一个开始符号。</p>
 <p><a id="ch03-s09"></a>
 <a id="九自顶向下分析与回溯"></a>
 <a id="自顶向下分析与回溯"></a></p>
 <h2>9. 自顶向下分析与回溯</h2>
 <p>前面已经会从文法生成句子，现在输入串已经给定，目标变成寻找一个与它一致的推导。每次遇到多个候选式，分析器都要作选择；随意选错后可能需要回退重试。先用小例子观察这种困难，再讨论怎样利用当前输入提前排除不合适的分支。</p>
 <h3>9.1 从开始符号寻找输入的最左推导</h3>
-<p>给定输入 <code>abcd</code>，使用课件文法：</p>
+<p>给定输入 <code>abcd</code>，使用本例文法：</p>
 <pre><code class="language-text">Z → aBd
 B → bB | b | c | d
 </code></pre>
@@ -921,8 +894,8 @@ B → bB | b | c | d
 <pre><code class="language-text">Z ⇒ aBd ⇒ abd
 </code></pre>
 <p>输入能够成功识别。</p>
-<p><strong>回溯</strong>就是保存选择前的分析状态；分支失败后，恢复输入位置、待分析结构及相关状态，换另一个候选式。只恢复输入指针而不恢复其他分析状态，可能导致错误结果。分支多时会重复分析，效率较低，朴素实现还必须防止左递归引起的无限展开。</p>
-<p>课件的另一个例子：</p>
+<p><strong>回溯</strong> 就是保存选择前的分析状态；分支失败后，恢复输入位置、待分析结构及相关状态，换另一个候选式。只恢复输入指针而不恢复其他分析状态，可能导致错误结果。分支多时会重复分析，效率较低，朴素实现还必须防止左递归引起的无限展开。</p>
+<p>另一个例子：</p>
 <pre><code class="language-text">S → Ay | BAy
 A → aA | a
 B → xB | x
@@ -931,14 +904,14 @@ B → xB | x
 <pre><code class="language-text">S ⇒ BAy ⇒ xAy ⇒ xay
 </code></pre>
 <h3>9.3 确定分析与向前看</h3>
-<p><strong>向前看符号（lookahead）</strong>是当前尚未处理的第一个输入 Token。查看它不等于立刻消耗它，只有成功匹配终结符时才前进。</p>
+<p><strong>向前看符号（lookahead）</strong> 是当前尚未处理的第一个输入 Token。查看它不等于立刻消耗它，只有成功匹配终结符时才前进。</p>
 <p>若改用：</p>
 <pre><code class="language-text">Z → aBd
 B → bB | c | d
 </code></pre>
 <p>B 的三个候选式分别只能以 b、c、d 开头，因此看到 b 就选 bB，看到 c 就选 c，看到 d 就选 d，无需尝试其他分支。</p>
 <p>此时 <code>abcd</code> 合法，而 <code>abd</code> 不合法。文法修改使 B 不再能只生成一个 b，因而不能把这个结论套回上一份带 <code>B→b</code> 的文法。</p>
-<p>确定分析的核心是：<strong>同一非终结符的不同候选式，应有互不重叠的选择条件。</strong>后面用 FIRST、FOLLOW、PREDICT 集精确表达这些条件。</p>
+<p>确定分析的核心是：<strong>同一非终结符的不同候选式，应有互不重叠的选择条件。</strong> 后面用 FIRST、FOLLOW、PREDICT 集精确表达这些条件。</p>
 <p><a id="ch03-s10"></a>
 <a id="firstfollowpredict-集"></a>
 <a id="十firstfollowpredict-集"></a>
@@ -975,6 +948,7 @@ B → bB | c | d
 </tr>
 </tbody></table></div>
 <p>可以把三个集合的分工记为：FIRST 看“这一部分怎么开头”，FOLLOW 看“这一部分结束后接什么”，PREDICT 看“现在选哪个分支”。真正做题时仍要按规则计算。</p>
+<p>小例子：文法S→Ab，A→a|ε，S为开始符。FIRST(A)={a,ε}说明A可从a开始或消失；FOLLOW(A)={b}说明A完成后紧接b；PREDICT(A→ε)={b}说明看到b时让A取空。三个集合对着同一小题回答不同问题。</p>
 <h3>10.2 FIRST 的定义</h3>
 <p>对符号串 α：</p>
 <pre><code class="language-text">FIRST(α) = {a ∈ VT | α ⇒* aγ，γ 为某个文法符号串}
@@ -982,7 +956,7 @@ B → bB | c | d
 </code></pre>
 <p>第一部分收集所有可能在开头出现的终结符；第二部分只有在 α 能完全变空时才加入 ε。</p>
 <p>若 <code>A→aB|b|ε</code>，则 <code>FIRST(A)={a,b,ε}</code>。它没有说 A 只能生成一个符号，只是在记录可能的开头。</p>
-<p><strong>可空（nullable）</strong>表示一个符号或符号串能经过零步或多步推导成为 ε。<code>A→B、B→ε</code> 也让 A 可空，因此不能只找书写形式为 <code>A→ε</code> 的规则。</p>
+<p><strong>可空（nullable）</strong> 表示一个符号或符号串能经过零步或多步推导成为 ε。<code>A→B、B→ε</code> 也让 A 可空，因此不能只找书写形式为 <code>A→ε</code> 的规则。</p>
 <p>形式语言可以包含 ε，例如第 4.3 节允许 n=k=0 的语言。不能将“实际源程序里没有一个名叫 ε 的 Token”误解成“任何形式语言都不含空串”。</p>
 <h3>10.3 FIRST 的计算规则与迭代</h3>
 <ol>
@@ -993,7 +967,7 @@ B → bB | c | d
 <li>所有 Xᵢ 都可空时，才把 ε 加入右部的 FIRST；右部本来为空时也加入 ε。</li>
 <li>对全部规则重复更新，直到所有集合不再增加元素。</li>
 </ol>
-<p>第 6 步称为 <strong>迭代到不动点</strong>：某个集合先算出新元素，另一个集合下一轮才可能受它影响，所以一次扫描往往不够。集合只增加元素，元素总数有限，最终会稳定。</p>
+<p>第 6 步称为 <strong>迭代到不动点</strong> ：某个集合先算出新元素，另一个集合下一轮才可能受它影响，所以一次扫描往往不够。集合只增加元素，元素总数有限，最终会稳定。</p>
 <p>符号串计算可以记为：</p>
 <pre><code class="language-text">对 α=X₁X₂…Xₙ：
 先收集 FIRST(X₁)−{ε}；
@@ -1006,6 +980,7 @@ B → bB | c | d
 <pre><code class="language-text">FIRST(α) = ⋃ⱼ₌₁ⁱ⁻¹ (FIRST(Xⱼ)−{ε}) ∪ FIRST(Xᵢ)
 </code></pre>
 <p><code>⋃</code> 表示把指定范围内的多个集合逐个取并集。前 i−1 项可能消失，所以要去掉它们各自的 ε，再加入实际可能出现的开头；第 i 项不能消失，扫描到这里便停止。</p>
+<p>小例子：按顺序处理S→A、A→B、B→b，各FIRST初值为空。第一轮只有B得到b；下一轮b传到A，再一轮传到S，稳定后均为{b}。若只扫描一遍就停止，会漏掉S和A的开头信息。</p>
 <h3>10.4 FIRST 的完整表达式例题</h3>
 <p>后续统一使用文法：</p>
 <pre><code class="language-text">(1) E  → TE&#39;
@@ -1053,7 +1028,7 @@ B → bB | c | d
 <td><code>{id, (}</code></td>
 </tr>
 </tbody></table></div>
-<p>课件还要求对符号串计算：</p>
+<p>再计算下面符号串的集合：</p>
 <div class="table-scroll"><table>
 <thead>
 <tr>
@@ -1093,6 +1068,7 @@ B → bB | c | d
 <p>第一部分表示某个句型中 A 的右边紧接着 a；第二部分表示 A 有可能出现在整个句型末尾，因此它结束后可以就是输入结束。</p>
 <p>FOLLOW 是全局上下文信息，需要从开始符号 S 出发考虑。它不表示“产生式左部 A 后面书面上写了什么”，也不表示 FIRST(A)。</p>
 <p><code>FOLLOW(S)</code> 一开始包含 #，但不一定只有 #。开始符号若出现在别的规则右部中，还可能得到其他后继符号。</p>
+<p>小例子：文法S→pAq，A→a|ε，S为开始符。A生成的部分结束后一定紧接q，因此FOLLOW(A)={q}；即使A取空，q仍留在输入中。它与FIRST(A)={a,ε}记录的是不同位置。</p>
 <h3>10.6 FOLLOW 的计算规则</h3>
 <p>先令所有 FOLLOW 为空，再将 # 加入开始符号的 FOLLOW。对每条：</p>
 <pre><code class="language-text">B → αAβ
@@ -1107,18 +1083,20 @@ B → bB | c | d
 <li>A 后面本来还有 β，所以 β 可能出现的开头就是 A 的后继。</li>
 <li>如果 β 可以全部消失，A 就处在 B 所生成部分的末尾，B 后面允许出现的符号也就允许出现在 A 后面。</li>
 </ul>
-<p>当 A 位于右部末尾时，β=ε，所以必定需要传递 FOLLOW(B)。重复处理全部规则，直到不再出现新元素。<strong>任何一轮都不能把 ε 放入 FOLLOW。</strong></p>
+<p>当 A 位于右部末尾时，β=ε，所以必定需要传递 FOLLOW(B)。重复处理全部规则，直到不再出现新元素。<strong>任何一轮都不能把 ε 放入 FOLLOW。</strong> </p>
+<p>小例子：文法S→AB，A→a，B→b|ε，S为开始符。由A后面的B把b加入FOLLOW(A)；B可空，再把FOLLOW(S)中的#传给A，得{b,#}。B在末尾，FOLLOW(B)={#}，两者都不加入ε。</p>
 <h3>10.7 FOLLOW 的完整表达式例题</h3>
+<p>本题完整文法为 E→TE&#39;，E&#39;→+TE&#39;|ε，T→FT&#39;，T&#39;→*FT&#39;|ε，F→id|(E)，开始符E。id是一个Token，#是输入结束记号。</p>
 <p>从 <code>FOLLOW(E)={#}</code> 起步，逐条看规则。</p>
-<p><strong>由 <code>F→(E)</code>：</strong>E 后面是终结符 <code>)</code>，因此 <code>)</code> 加入 FOLLOW(E)：</p>
+<p><strong>由 <code>F→(E)</code>：</strong> E 后面是终结符 <code>)</code>，因此 <code>)</code> 加入 FOLLOW(E)：</p>
 <pre><code class="language-text">FOLLOW(E) = {), #}
 </code></pre>
-<p><strong>由 <code>E→TE&#39;</code>：</strong>T 后面是 E&#39;，E&#39; 的 FIRST 去掉 ε 后只有 +；E&#39; 又可以为空，所以 T 还继承 FOLLOW(E)。E&#39; 在右部末尾，也继承 FOLLOW(E)：</p>
+<p><strong>由 <code>E→TE&#39;</code>：</strong> T 后面是 E&#39;，E&#39; 的 FIRST 去掉 ε 后只有 +；E&#39; 又可以为空，所以 T 还继承 FOLLOW(E)。E&#39; 在右部末尾，也继承 FOLLOW(E)：</p>
 <pre><code class="language-text">FOLLOW(T)  至少包含 {+, ), #}
 FOLLOW(E&#39;) 至少包含 {), #}
 </code></pre>
 <p><code>E&#39;→+TE&#39;</code> 给出相同类型的传递，没有额外元素。</p>
-<p><strong>由 <code>T→FT&#39;</code>：</strong>F 后面是 T&#39;，可以先看到 *；T&#39; 可空，所以 F 还继承 FOLLOW(T)。T&#39; 在末尾，继承 FOLLOW(T)：</p>
+<p><strong>由 <code>T→FT&#39;</code>：</strong> F 后面是 T&#39;，可以先看到 *；T&#39; 可空，所以 F 还继承 FOLLOW(T)。T&#39; 在末尾，继承 FOLLOW(T)：</p>
 <pre><code class="language-text">FOLLOW(F)  至少包含 {*, +, ), #}
 FOLLOW(T&#39;) 至少包含 {+, ), #}
 </code></pre>
@@ -1153,8 +1131,9 @@ FOLLOW(T&#39;) 至少包含 {+, ), #}
 </tbody></table></div>
 <p>直观上，一个因子 F 完成后，可以继续乘法，也可以结束这个项去做加法，或结束括号、结束整个输入。</p>
 <h3>10.8 PREDICT 的定义与理由</h3>
+<p>本题完整文法为 E→TE&#39;，E&#39;→+TE&#39;|ε，T→FT&#39;，T&#39;→*FT&#39;|ε，F→id|(E)，开始符E。id是一个Token，#是输入结束记号。</p>
 <p>FIRST 和 FOLLOW 分别提供开头与后继信息，分析器真正需要的却是“眼前这个 Token 是否允许选择某一条规则”。把两类信息按右部能否为空组合起来，就得到每条产生式的选择集合。</p>
-<p><strong>PREDICT 集</strong>属于某一条产生式，不是某个非终结符的整体集合。课件备注也称“期望符集”或“展望符集”，有些教材称它为 SELECT 集。</p>
+<p><strong>PREDICT 集</strong> 属于某一条产生式，不是某个非终结符的整体集合。它也称“期望符集”或“展望符集”，有些教材称为 SELECT 集。</p>
 <pre><code class="language-text">若 ε ∉ FIRST(α)：
     PREDICT(A→α) = FIRST(α)
 
@@ -1223,13 +1202,14 @@ FOLLOW(T&#39;) 至少包含 {+, ), #}
 </tr>
 </tbody></table></div>
 <p>例如正在分析 E&#39; 时，看到 + 应继续读加法部分；看到 ) 或 # 则选择 ε，表示这一段加法部分结束。这时不消耗 ) 或 #，留给调用方或整体结束检查。</p>
+<p>独立小例：S→Ac，A→d|ε，开始符S。A→d的选择集为{d}，A→ε取FOLLOW(A)={c}；看到c时A不读取输入，留下c给S的后半部分匹配。</p>
 <p><a id="ch03-s11"></a>
 <a id="ll1-文法与预测分析表"></a>
 <a id="十一ll1-文法与预测分析表"></a>
 <a id="ref-LL"></a></p>
 <h2>11. LL(1) 文法与预测分析表</h2>
 <p>现在已经有了各条规则的 PREDICT 集，下一步要判断：分析器能否只查看当前尚未匹配的一个 Token，就确定该用哪条规则，而不必试错回溯？<strong>LL(1) 文法正是适合这种单 Token 预测分析的一类文法。</strong> 它描述的是文法具备的性质；LL(1) 预测分析则利用这种性质识别输入，构造相应的最左推导。</p>
-<p>例如第 10 节的表达式文法中，正在处理 E&#39; 时，看到 + 就继续加法，看到 ) 或输入结束标志 # 就让 E&#39; 取空。同一时刻不会有两个分支都要求处理眼前的符号，分析器便可以确定地往下执行。若两个分支都能在同一个 Token 上被选择，就要先处理冲突，不能随意挑一个。</p>
+<p>先看一个新的小例子：开始符号S，规则S→aB、B→b|ε。处理B时，看到b就选B→b，看到输入结束标志#就选B→ε；因此ab#和a#都能接受。两个分支不争用同一个当前Token，分析器可以确定地往下执行。若两个分支都要求处理同一个Token，就要先处理冲突，不能随意挑一个。</p>
 <p>本节先解释 LL(1) 名称与唯一选择的条件，再把选择结果整理成预测分析表：行表示当前待展开的非终结符，列表示当前输入符号，表格直接给出规则。第 12 节用这张表执行完整分析；第 13 节把相同选择条件写成递归函数。</p>
 <h3>11.1 LL(1) 名字的含义</h3>
 <ul>
@@ -1238,11 +1218,12 @@ FOLLOW(T&#39;) 至少包含 {+, ), #}
 <li>1：只向前看一个尚未匹配的 Token 来决定采用哪个候选式。</li>
 </ul>
 <p>LL(k) 表示最多向前看 k 个符号，LL(1) 是它的特例。1 指一次选择所需的观察长度，不表示整个过程只读一个 Token，也不表示一条产生式右部只能有一个符号。</p>
+<p>小例子：S→aA|b、A→c，开始符S。当前输入a就选择aA，b就选择b；分析器从左向右读，每次只看一个Token。展开A时仍需匹配c，选对S的分支不等于已接受全串。</p>
 <h3>11.2 LL(1) 判定条件</h3>
 <p>对任意非终结符 A 的任意两条不同产生式 <code>A→α</code>、<code>A→β</code>，要求：</p>
 <pre><code class="language-text">PREDICT(A→α) ∩ PREDICT(A→β) = ∅
 </code></pre>
-<p>这叫 <strong>两两不相交</strong>：同一个当前输入符号不能同时要求选择两个候选式。只比较左部相同的产生式；不同非终结符的 PREDICT 可以重叠，因为分析器已经知道当前要分析的是哪个非终结符。</p>
+<p>这叫 <strong>两两不相交</strong> ：同一个当前输入符号不能同时要求选择两个候选式。只比较左部相同的产生式；不同非终结符的 PREDICT 可以重叠，因为分析器已经知道当前要分析的是哪个非终结符。</p>
 <p>对表达式文法，只需检查：</p>
 <pre><code class="language-text">E&#39; 的两个候选式：{+} 与 {),#} 不相交
 T&#39; 的两个候选式：{*} 与 {+,),#} 不相交
@@ -1268,7 +1249,7 @@ A → b | ε
 A → b | ε
 </code></pre>
 <p><code>FOLLOW(A)={b}</code>，所以 <code>PREDICT(A→b)={b}</code>，<code>PREDICT(A→ε)={b}</code>。看到 b 时，无法知道应把它读作 A 的内容，还是把 A 取空后留给 S 后面的 b。</p>
-<p><strong>课件表述的边界：</strong>非空公共前缀若能够生成非空终结符前缀，通常会使一个 Token 的选择冲突。但若公共前缀只能为空，例如 <code>S→Aa|Ab、A→ε</code>，两个 S 分支仍分别由 a、b 唯一选择。因此最终应以 PREDICT 是否相交为准，不以候选式字面开头是否相同替代正式判定。</p>
+<p><strong>判定边界：</strong> 非空公共前缀若能够生成非空终结符前缀，通常会使一个 Token 的选择冲突。但若公共前缀只能为空，例如 <code>S→Aa|Ab、A→ε</code>，两个 S 分支仍分别由 a、b 唯一选择。因此最终应以 PREDICT 是否相交为准，不以候选式字面开头是否相同替代正式判定。</p>
 <p>LL(1) 文法给出的预测选择唯一，因而不会出现同一句子的两棵不同语法树。反过来，无二义性文法不一定是 LL(1)，因为唯一结构也可能需要观察更多输入才能确定。</p>
 <h3>11.4 表驱动分析器的四个组成部分</h3>
 <p>判定文法满足 LL(1) 后，还要把“选择唯一”落实为程序。程序既需要知道输入读到哪里，也需要记住还有哪些结构待识别；分析表保存选式结果，驱动程序负责协调这些信息。</p>
@@ -1296,9 +1277,9 @@ A → b | ε
 <td>反复执行查表替换、终结符匹配及结束、错误处理</td>
 </tr>
 </tbody></table></div>
-<p><strong>栈</strong>是一种后进先出的结构。<code>push</code> 表示压入栈顶，<code>pop</code> 表示弹出栈顶。以下各栈按“左端为栈底、右端为栈顶”书写。</p>
+<p><strong>栈</strong> 是一种后进先出的结构。<code>push</code> 表示压入栈顶，<code>pop</code> 表示弹出栈顶。以下各栈按“左端为栈底、右端为栈顶”书写。</p>
 <h3>11.5 LL(1) 分析表的定义</h3>
-<p>表记作 M，课件也使用 T 或 LL。行是非终结符，列是终结符及结束标志 #：</p>
+<p>表记作 M，也可记作 T 或 LL。行是非终结符，列是终结符及结束标志 #：</p>
 <pre><code class="language-text">M : VN × (VT ∪ {#}) → P ∪ {Error}
 </code></pre>
 <p><code>×</code> 表示笛卡尔积，即所有“一个行符号、一个列符号”的组合。此处 P 是产生式集合，不是 PREDICT 的简写。每个格子存放一条规则或 Error。</p>
@@ -1307,15 +1288,26 @@ A → b | ε
 M[A,a] = Error    若没有对应产生式
 </code></pre>
 <p>若构表时一个格子需要放两条不同规则，表示该文法不是 LL(1)，不能任意保留一条后仍把它称为这份文法的正确 LL(1) 表。</p>
-<p>课件的表定义把列范围简写为 VT，而实际表中有 #。严格写法应包含 <code>VT∪{#}</code>，这样空产生式在输入结束处的选式也有对应表项。</p>
-<h3>11.6 分析表的构造步骤</h3>
+<p>列范围必须写为 <code>VT∪{#}</code>，这样空产生式在输入结束处的选式也有对应表项。</p>
+<h3>11.6 分析表的构造步骤与完整练习</h3>
+<p>先看构表的小例子：开始S，规则S→a|b。两条规则的选择集为{a}、{b}，所以M[S,a]填S→a，M[S,b]填S→b，M[S,#]为Error。</p>
+<p>下面再做完整表达式专项练习。开始符E，id是一个Token，#是输入结束记号；编号当场列全：</p>
+<pre><code class="language-text">(1) E  → TE&#39;
+(2) E&#39; → +TE&#39;
+(3) E&#39; → ε
+(4) T  → FT&#39;
+(5) T&#39; → *FT&#39;
+(6) T&#39; → ε
+(7) F  → id
+(8) F  → (E)
+</code></pre>
 <ol>
 <li>为全部产生式计算 PREDICT。</li>
 <li>对每条 <code>A→α</code>，对所有 <code>a∈PREDICT(A→α)</code> 填入 <code>M[A,a]=A→α</code>。</li>
 <li>检查是否有表项冲突。</li>
 <li>其他表项设为 Error。</li>
 </ol>
-<p>表达式文法的完整表如下，数字对应第 10.4 节的产生式编号：</p>
+<p>下面是完整表达式专项练习的分析表；数字对应本小节开头当场列出的产生式编号：</p>
 <div class="table-scroll"><table>
 <thead>
 <tr>
@@ -1375,13 +1367,14 @@ M[A,a] = Error    若没有对应产生式
 </tr>
 </tbody></table></div>
 <p>例如 <code>M[T&#39;,+]=T&#39;→ε</code> 的意思是“看到 +，乘法部分已经结束”。它不表示 + 被 ε 匹配掉。+ 仍留在输入中，随后由加法部分匹配。</p>
+<p>微型构表题：文法S→a|b，开始符S，分别编号1、2。PREDICT为{a}、{b}，故M[S,a]=1、M[S,b]=2，M[S,#]=Error。一个格只填一个规则，表项直接对应选择证据。</p>
 <p><a id="ch03-s12"></a>
 <a id="十二表驱动分析的完整过程"></a>
 <a id="表驱动分析的完整过程"></a></p>
 <h2>12. 表驱动分析的完整过程</h2>
 <p>分析表已经回答“遇到非终结符时用哪条规则”，但完整识别还需要安排展开顺序、匹配输入，并判断何时结束。本节用符号栈保存待识别部分，用输入位置记录已匹配的进度，将二者连成替换、匹配、成功、出错四类动作。先看每一步如何改变状态，再跟踪一份合法输入和一份错误输入。</p>
 <h3>12.1 分析格局与四类动作</h3>
-<p><strong>分析格局</strong>由“当前符号栈、当前未处理输入”组成：</p>
+<p><strong>分析格局</strong> 由“当前符号栈、当前未处理输入”组成：</p>
 <pre><code class="language-text">初始格局：(#S, a₁a₂…aₙ#)
 一般格局：(#Xₘ…X₂X₁, aᵢ…aₙ#)
 </code></pre>
@@ -1415,10 +1408,10 @@ M[A,a] = Error    若没有对应产生式
 <td>报错，停止或启动恢复</td>
 </tr>
 </tbody></table></div>
-<p><strong>为什么逆序压栈？</strong>假设用 <code>E→TE&#39;</code>，下一步应先处理 T。因为最后压进去的符号先出来，所以先压 E&#39;，再压 T，栈写成 <code># E&#39; T</code>，最右端 T 正好处在栈顶。</p>
+<p><strong>为什么逆序压栈？</strong> 假设用 <code>E→TE&#39;</code>，下一步应先处理 T。因为最后压进去的符号先出来，所以先压 E&#39;，再压 T，栈写成 <code># E&#39; T</code>，最右端 T 正好处在栈顶。</p>
 <p>选择空产生式时，只弹出左部非终结符，不压入任何符号，也不前进输入。ε 本身不会入栈。</p>
 <h3>12.2 通用驱动程序</h3>
-<p>下面用课件 09 第 15 页的驱动算法连接四类动作。其中分析表记为 T，与前文的 M 是同一个对象；步骤使用 <code>if / then / else / goto</code> 表达判断和转向。</p>
+<p>下面用驱动算法连接四类动作。其中分析表记为 T，与前文的 M 是同一个对象；步骤使用 <code>if / then / else / goto</code> 表达判断和转向。</p>
 <pre><code class="language-text">[1] Stack := empty; Push(#); Push(S);
 [2] Read(a);
 [3] 若当前格局是 (#, #)，则成功结束；否则转下一步；
@@ -1432,9 +1425,10 @@ M[A,a] = Error    若没有对应产生式
         else Error;
 </code></pre>
 <p>按这段算法，<code>Read(a)</code> 使 a 成为当前输入；匹配成功后才再读一个 Token。<code>Pop(1)</code> 弹出一个符号，<code>Push(Yn, ..., Y1)</code> 先压 Yn、最后压 Y1，使右部最左边的 Y1 成为下一次栈顶。空产生式的右部长度为 0，因此不压入任何符号。</p>
-<p>课件以 Error 表示出错处理。阅读本章轨迹时，遇到不匹配或查到 Error 就记录错误位置，不继续按正常路径推导；错误恢复只需了解第 1.3 节介绍的基本思想。栈顶只剩 # 而输入尚未结束时，同样不能接受。</p>
+<p>算法中以 Error 表示出错处理。阅读本章轨迹时，遇到不匹配或查到 Error 就记录错误位置，不继续按正常路径推导；错误恢复只需了解第 1.3 节介绍的基本思想。栈顶只剩 # 而输入尚未结束时，同样不能接受。</p>
 <p>该驱动程序本身不写死 E、T 等规则。更换文法后，重新构造表并设置开始符号，就能复用驱动程序。这正是表驱动法的主要便利。这里的 # 由输入接口在真正结尾提供，不能把输入中间的普通字符自行解释为结束标志。</p>
 <h3>12.3 完整分析 <code>id+id*id</code></h3>
+<p>本题完整文法为 E→TE&#39;，E&#39;→+TE&#39;|ε，T→FT&#39;，T&#39;→*FT&#39;|ε，F→id|(E)，开始符E。id是一个Token，#是输入结束记号。</p>
 <p>每行记录执行动作 <strong>之前</strong> 的栈和输入，右端是栈顶。空格只帮助区分符号，<code>id</code> 和 <code>E&#39;</code> 各算一个符号。</p>
 <div class="table-scroll"><table>
 <thead>
@@ -1556,7 +1550,8 @@ M[A,a] = Error    若没有对应产生式
 </code></pre>
 <p>已经匹配的终结符会从分析栈中弹出，但仍保留在这条完整推导的已完成前缀中。因此“整个推导句型”与“尚未完成部分的栈”不能直接画等号。</p>
 <h3>12.4 完整定位错误 <code>id+id*+id</code></h3>
-<p>课件的错误输入在 * 后面接了 +，缺少一个因子。前面步骤仍与正确输入相似：</p>
+<p>本题完整文法为 E→TE&#39;，E&#39;→+TE&#39;|ε，T→FT&#39;，T&#39;→*FT&#39;|ε，F→id|(E)，开始符E。id是一个Token，#是输入结束记号。</p>
+<p>下面的错误输入在 * 后面接了 +，缺少一个因子。前面步骤仍与正确输入相似：</p>
 <div class="table-scroll"><table>
 <thead>
 <tr>
@@ -1646,14 +1641,14 @@ M[A,a] = Error    若没有对应产生式
 </tr>
 </tbody></table></div>
 <p>在第 13 步，程序期待因子 F。F 只能由 id 或左括号开头，因此可以报告“乘号后需要标识符或带括号的表达式，却遇到加号”。分析器报告的是当前文法能够确定的结构错误，不能据此猜测学生究竟想补哪个操作数。</p>
-<h3>12.5 课件的小例子：<code>ace</code> 与 <code>acb</code></h3>
-<p>课件 09 的文法为：</p>
+<h3>12.5 小例子：<code>ace</code> 与 <code>acb</code></h3>
+<p>文法为：</p>
 <pre><code class="language-text">Z → aBe | Bd
 B → bB | cK
 D → d
 K → ε
 </code></pre>
-<p>其中 D 不被开始符号 Z 引用，是不可达的非终结符。保留它可以对照原课件，但不会参与从 Z 出发的分析。</p>
+<p>其中 D 不被开始符号 Z 引用，是不可达的非终结符；它的规则虽可单独计算集合，却不会参与从 Z 出发的输入分析。</p>
 <pre><code class="language-text">PREDICT(Z→aBe)={a}      PREDICT(Z→Bd)={b,c}
 PREDICT(B→bB)={b}       PREDICT(B→cK)={c}
 PREDICT(D→d)={d}        PREDICT(K→ε)={d,e}
@@ -1703,7 +1698,7 @@ PREDICT(D→d)={d}        PREDICT(K→ε)={d,e}
 <td>成功</td>
 </tr>
 </tbody></table></div>
-<p>对 <code>acb</code>，匹配 a、c 后栈为 <code># e K</code>，输入为 <code>b #</code>。严格按 PREDICT 查表，<code>M[K,b]=Error</code>，此处已经能够报错。课件示意图将 K 取空后显示 e 与 b 不匹配，同样表明输入非法，但规范表驱动程序会在查 K 这一行时更早发现错误。</p>
+<p>对 <code>acb</code>，匹配 a、c 后栈为 <code># e K</code>，输入为 <code>b #</code>。严格按 PREDICT 查表，<code>M[K,b]=Error</code>，此处已经能够报错。此时不能擅自令 K 取空，继续到 e 与 b 比较；规范表驱动程序就在查 K 这一行时报错。</p>
 <h3>12.6 分析表中的错误处理信息</h3>
 <p>Error 格子可以存放不同的错误编号，再由编号调用相应提示或恢复过程。例如 F 行遇到 +、* 时报告“缺少因子”，期待右括号却遇到 # 时报告“可能缺少右括号”。</p>
 <p>错误恢复的基本策略见第 1.3 节。本章分析轨迹主要练习发现并定位错误，不要求额外实现恢复程序。</p>
@@ -1712,10 +1707,10 @@ PREDICT(D→d)={d}        PREDICT(K→ε)={d,e}
 <a id="十三递归下降分析"></a>
 <a id="递归下降分析"></a>
 <a id="ref-递归"></a></p>
-<h2>13. 递归下降分析</h2>
+<h2>13. 递归下降：局部对应与完整程序练习</h2>
 <p>上一节用一张表和一个显式栈管理推导。手写分析器时，还可以把“识别表达式”“识别项”“识别因子”分别写成函数，让一个函数调用另一个函数去完成子结构。这样，文法的组成关系就直接体现在程序调用关系中。这种实现称为递归下降；本章讲的是用相同 PREDICT 条件作唯一选择、不带回溯的预测版本。</p>
 <h3>13.1 一个非终结符对应一个函数</h3>
-<p><strong>递归下降法</strong>把文法的识别任务拆成一组函数：要识别非终结符 A，就调用 A 对应的函数；函数内部按候选式识别各个组成部分。</p>
+<p><strong>递归下降法</strong> 把文法的识别任务拆成一组函数：要识别非终结符 A，就调用 A 对应的函数；函数内部按候选式识别各个组成部分。</p>
 <p>对右部 <code>X₁X₂…Xₙ</code>，按从左到右顺序处理：</p>
 <div class="table-scroll"><table>
 <thead>
@@ -1738,11 +1733,12 @@ PREDICT(D→d)={d}        PREDICT(K→ε)={d,e}
 </tr>
 </tbody></table></div>
 <p>文法的嵌套和递归变成函数的嵌套和递归调用，分析从开始符号向下展开，因此称为递归下降。</p>
+<p>小例子：文法S→aB、B→b，输入ab#。识别S的函数先匹配a，再调用识别B的函数匹配b，最后检查#。这里只有两个结构与两个函数的对应，不必先阅读整套表达式程序。</p>
 <h3>13.2 while 语句例子</h3>
-<p>课件规则：</p>
+<p>本例规则：</p>
 <pre><code class="language-text">While_Stm → while Exp do Stm
 </code></pre>
-<p><strong>类 C 伪代码（课件 10 第 3 页）：</strong></p>
+<p><strong>类 C 伪代码：</strong> </p>
 <pre><code class="language-text">void While_Stm()
 {
     Match(while);       // 匹配终结符 while
@@ -1756,7 +1752,7 @@ PREDICT(D→d)={d}        PREDICT(K→ε)={d,e}
 <p>若候选式有两种：</p>
 <pre><code class="language-text">While_Stm → while Exp do Stm | do Stm while Exp
 </code></pre>
-<p>课件第 4 页据此增加 <code>if / else if / else</code> 分支：</p>
+<p>有多个候选式时，据此增加 <code>if / else if / else</code> 分支：</p>
 <pre><code class="language-text">void While_Stm()
 {
     if (token == while) {
@@ -1776,7 +1772,7 @@ PREDICT(D→d)={d}        PREDICT(K→ε)={d,e}
 </code></pre>
 <p>进入函数前，token 已保存当前输入符号。看到 while 选第一种，看到 do 选第二种，其他开头进入 error 分支。两条右部分别以 while、do 开头，PREDICT 互不重叠；每组花括号中的操作按该候选式从左到右执行。</p>
 <h3>13.3 通用构造方法与主程序</h3>
-<p>对 <code>A→β₁|…|βₙ</code>，课件 10 第 7 页使用下面的构造模板。<strong>这是课件的数学伪代码</strong>：其中有 <code>if / then / else</code>、集合属于符号和 θ 记号，不属于某一种可直接执行的编程语言。每一层 else 接到下一候选式判断。</p>
+<p>对 <code>A→β₁|…|βₙ</code>，使用下面的构造模板。<strong>这是描述构造方法的数学伪代码</strong> ：其中有 <code>if / then / else</code>、集合属于符号和 θ 记号，不属于某一种可直接执行的编程语言。每一层 else 接到下一候选式判断。</p>
 <pre><code class="language-text">void A()
 {
     if token ∈ Predict(A→β₁) then θ(β₁) else
@@ -1787,13 +1783,13 @@ PREDICT(D→d)={d}        PREDICT(K→ε)={d,e}
 }
 </code></pre>
 <p>θ(βᵢ) 表示“按顺序识别右部 βᵢ”，θ 是用于描述代码构造的记号，不要求运行时真的调用名为 θ 的函数。若 <code>βᵢ=X₁…Xₙ</code>，就依次为 X₁ 到 Xₙ 生成匹配、函数调用或空操作，具体对应见第 13.1 节。<code>...</code> 省略了其余候选式分支；每个 <code>else</code> 接下一个判断，所有候选都不适用时才进入 error。</p>
-<p>程序包括当前 Token 变量、每个非终结符的识别函数、取 Token 的函数、Match 函数和调用开始符号的主程序。课件 10 第 6 页用下面的伪代码说明 Match：</p>
+<p>程序包括当前 Token 变量、每个非终结符的识别函数、取 Token 的函数、Match 函数和调用开始符号的主程序。用下面的伪代码说明 Match：</p>
 <pre><code class="language-text">Match(&#39;a&#39;):
     if (token == &#39;a&#39;) ReadToken();
     else error();
 </code></pre>
 <p><code>ReadToken()</code> 更新当前 token。当前符号等于期待的 a 时，Match 才读取下一项；否则进入错误分支，不能继续按匹配成功处理。</p>
-<p>课件第 8 页的主程序如下，S 是当前文法的开始符号：</p>
+<p>主程序如下，S 是当前文法的开始符号：</p>
 <pre><code class="language-text">void main()
 {
     ReadToken();
@@ -1801,14 +1797,14 @@ PREDICT(D→d)={d}        PREDICT(K→ε)={d,e}
     Match(&#39;#&#39;);
 }
 </code></pre>
-<p>首次 <code>ReadToken()</code> 发生在调用 S 之前；<code>Match(&#39;#&#39;)</code> 是结束检查，不能省略。S 识别完自己的结构，并不保证整个输入已经结束。课件未给出 error 的完整实现；错误后的路径不能当作成功分析；错误恢复策略见 1.3。</p>
-<p>本课程的 <strong>不带回溯、看一个 Token 的预测递归下降</strong>要求与 LL(1) 相同，即同一非终结符不同产生式的 PREDICT 两两不相交。广义递归下降也有带回溯或更多向前看等实现，因此“递归下降法”这个大类不能在所有语境下都等同于 LL(1)。</p>
+<p>首次 <code>ReadToken()</code> 发生在调用 S 之前；<code>Match(&#39;#&#39;)</code> 是结束检查，不能省略。S 识别完自己的结构，并不保证整个输入已经结束。下面伪代码未定义 error 的恢复动作；错误后的路径不能当作成功分析；错误恢复策略见 1.3。</p>
+<p>本课程的 <strong>不带回溯、看一个 Token 的预测递归下降</strong> 要求与 LL(1) 相同，即同一非终结符不同产生式的 PREDICT 两两不相交。广义递归下降也有带回溯或更多向前看等实现，因此“递归下降法”这个大类不能在所有语境下都等同于 LL(1)。</p>
 <h3>13.4 小文法与调用过程</h3>
-<p>课件文法：</p>
+<p>本例文法：</p>
 <pre><code class="language-text">Z → aBa
 B → bB | c
 </code></pre>
-<p><strong>对应的识别函数（课件 10 第 9 页）：</strong></p>
+<p><strong>对应的识别函数：</strong> </p>
 <pre><code class="language-text">void Z()
 {
     if (token == &#39;a&#39;) {
@@ -1843,9 +1839,10 @@ void main()
 <p>Z 只有看到 a 才进入整个正常处理块，否则调用 error(1)。B 看到 b 时先匹配一个 b，再递归识别余下部分；看到 c 时匹配 c 并结束这一层调用；其他输入进入 error(2)。</p>
 <p>对正确输入 <code>abbca#</code>：主程序先读入 a；Z 匹配 a，B 连续匹配两个 b 并递归调用，在 c 处选择结束分支，逐层返回，Z 最后匹配 a，主程序检查 #。</p>
 <p>不要把本例与前面 <code>Z→aBd</code> 混在一起，二者最后期待的终结符不同。</p>
-<h3>13.5 表达式的课件递归下降程序</h3>
-<p>前面已经看到一条规则怎样变成识别函数。下面把课件 10 第 10—14 页分散展示的五个函数集中起来，对照每个候选式怎样选择、哪些地方继续匹配、哪些地方结束返回。</p>
-<p><strong>类 C 伪代码：</strong>i 与前文的 id 都表示标识符 Token。<code>E&#39;</code>、<code>T&#39;</code> 是与非终结符对应的函数名，<code>skip</code> 表示空操作；这些是伪代码记法，下面的写法不能直接作为 C 程序编译。</p>
+<h3>13.5 表达式的递归下降程序</h3>
+<p>本题完整文法为 E→TE&#39;，E&#39;→+TE&#39;|ε，T→FT&#39;，T&#39;→*FT&#39;|ε，F→id|(E)，开始符E。id是一个Token，#是输入结束记号。</p>
+<p>前面已经看到一条规则怎样变成识别函数。下面把分散展示的五个函数集中起来，对照每个候选式怎样选择、哪些地方继续匹配、哪些地方结束返回。</p>
+<p><strong>类 C 伪代码：</strong> i 与前文的 id 都表示标识符 Token。<code>E&#39;</code>、<code>T&#39;</code> 是与非终结符对应的函数名，<code>skip</code> 表示空操作；这些是伪代码记法，下面的写法不能直接作为 C 程序编译。</p>
 <pre><code class="language-text">void E()
 {
     if (token == &#39;i&#39; || token == &#39;(&#39;) {
@@ -1914,7 +1911,7 @@ int main()
 </code></pre>
 <p>这五个函数分别识别表达式、加法尾部、项、乘法尾部和因子。每个判断都能回到第 10.8 节的 PREDICT 集：例如 E&#39; 看到 + 时继续识别加法，只在 ) 或 # 上选择空产生式；T&#39; 只在 +、) 或 # 上结束。<code>skip</code> 表示不执行任何匹配，当前输入保持不动，随后本次函数调用结束。接下来沿调用顺序跟踪输入。</p>
 <h3>13.6 正确输入和错误输入的调用路径</h3>
-<p>课件 10 第 15—16 页使用 <code>i+i*i#</code> 和 <code>i+i*+i#</code> 展示成功与出错。这里的 i 与第 12 节的 id 表示同一标识符 Token 类别；下面沿用课件函数名 E&#39;、T&#39;，用文字树说明执行过程。</p>
+<p>使用 <code>i+i*i#</code> 和 <code>i+i*+i#</code> 展示成功与出错。这里的 i 与第 12 节的 id 表示同一标识符 Token 类别；下面用函数名 E&#39;、T&#39;，用文字树说明执行过程。</p>
 <p>对正确输入 <code>i+i*i#</code>：</p>
 <pre><code class="language-text">E()
 ├─ T()
@@ -1934,7 +1931,7 @@ main：最后 Match(&#39;#&#39;)，成功
 </code></pre>
 <p>对错误输入 <code>i+i*+i#</code>，第二个 T 中的 T&#39; 匹配乘号后调用 F。F 看到 +，不属于它的合法开头 <code>{i,(}</code>，于是进入 <code>error(5)</code>。这与第 12.4 节表驱动分析查到 <code>M[F,+]=Error</code> 是同一个判断。</p>
 <h3>13.7 为什么 ε 分支不能直接写成 else</h3>
-<p>课件 E&#39; 的空分支写成 <code>else if (token == &#39;)&#39; || token == &#39;#&#39;)</code>，后面还保留 <code>else error(2)</code>。这两部分作用不同：前者表示当前加法尾部可以合法结束，后者表示当前输入不符合任何候选式。若把它们合并成“不是 + 就直接取空”，就会让错误输入也返回。</p>
+<p>E&#39; 的空分支写成 <code>else if (token == &#39;)&#39; || token == &#39;#&#39;)</code>，后面还保留 <code>else error(2)</code>。这两部分作用不同：前者表示当前加法尾部可以合法结束，后者表示当前输入不符合任何候选式。若把它们合并成“不是 + 就直接取空”，就会让错误输入也返回。</p>
 <p>T&#39; 同理。例如输入 <code>i i</code>，第一个 i 后面又出现 i，不是乘法的继续符，也不是项的合法后继，因此应在 T&#39; 中进入 <code>error(4)</code>。空产生式表示当前结构可以结束，不表示其余任何输入都可以忽略；主程序最后仍须检查 #。</p>
 <h3>13.8 表驱动与递归下降的关系</h3>
 <div class="table-scroll"><table>
@@ -1976,14 +1973,14 @@ main：最后 Match(&#39;#&#39;)，成功
 <td>相同</td>
 </tr>
 </tbody></table></div>
-<p>课件强调递归下降构造简单，但文法改变时程序也需要变动；表驱动法主要改表。不能只凭“函数调用较多”断言实际递归下降程序一定更慢，性能还与具体实现有关。</p>
+<p>需要注意递归下降构造简单，但文法改变时程序也需要变动；表驱动法主要改表。不能只凭“函数调用较多”断言实际递归下降程序一定更慢，性能还与具体实现有关。</p>
 <p>这些函数用于识别输入是否符合文法，不直接计算表达式值。文法变换不自动保留求值顺序的问题，见第 18 节第 4 题。</p>
 <p><a id="ch03-s14"></a>
 <a id="十四课件集合计算与-ll1-练习"></a>
 <a id="课件集合计算与-ll1-练习"></a></p>
-<h2>14. 课件集合计算与 LL(1) 练习</h2>
-<p>前面的表达式例题结构比较整齐，下面用课件 08—10 的练习检查三个容易出错的环节：多个符号连续可空时怎样继续求 FIRST，集合相互依赖时怎样迭代，以及 PREDICT 相交时怎样给出具体冲突。建议每题先独立计算，再核对表格与解释。课件 06—07 的构造、短语、二义性和变换练习已分别放在第 4、6、7、8 节。</p>
-<h3>14.1 课件 08 练习 1：不含空串的基本文法</h3>
+<h2>14. 集合计算与 LL(1) 练习</h2>
+<p>前面的表达式例题结构比较整齐，下面用练习检查三个容易出错的环节：多个符号连续可空时怎样继续求 FIRST，集合相互依赖时怎样迭代，以及 PREDICT 相交时怎样给出具体冲突。建议每题先独立计算，再核对表格与解释。构造、短语、二义性和变换练习已分别放在第 4、6、7、8 节。</p>
+<h3>14.1 练习 1：不含空串的基本文法</h3>
 <pre><code class="language-text">Z → aBd
 B → bB | c | d
 </code></pre>
@@ -2036,7 +2033,7 @@ B → bB | c | d
 </tr>
 </tbody></table></div>
 <p>FOLLOW(B) 的 d 来自 Z→aBd；B→bB 中末尾的 B 只继承 FOLLOW(B)，不增加新元素。B 的三个候选式 PREDICT 两两不相交，因此文法是 LL(1)。</p>
-<h3>14.2 课件 08 练习 2：前面多个符号可以为空</h3>
+<h3>14.2 练习 2：前面多个符号可以为空</h3>
 <pre><code class="language-text">S → ABc
 A → a | ε
 B → b | ε
@@ -2096,15 +2093,15 @@ B → b | ε
 </tr>
 </tbody></table></div>
 <p>同一左部的集合无交集，文法是 LL(1)。它生成的语言只有 <code>{abc,ac,bc,c}</code>。例如识别 c 时，A、B 先后取空，输入 c 一直不动，最后才由 S 右部的终结符 c 匹配。</p>
-<h3>14.3 课件 08 练习 3：有循环依赖的集合</h3>
+<h3>14.3 练习 3：有循环依赖的集合</h3>
 <pre><code class="language-text">S → MH | a
 H → LSc | ε
 K → dML | ε
 L → eHf
 M → K | bLM
 </code></pre>
-<p><strong>先找可空符号：</strong>H、K 直接可空；M→K，所以 M 可空；S→MH，所以 S 可空；L 以 e 开头且末尾有 f，不可空。</p>
-<p><strong>FIRST 传播：</strong>K 以 d 开头或为空，M 以 b、d 开头或为空；L 以 e 开头，因此 H 以 e 开头或为空；MH 在 M 取空时能以 e 开头，二者都取空时可空，所以 S 的 FIRST 还包括 e 和 ε。</p>
+<p><strong>先找可空符号：</strong> H、K 直接可空；M→K，所以 M 可空；S→MH，所以 S 可空；L 以 e 开头且末尾有 f，不可空。</p>
+<p><strong>FIRST 传播：</strong> K 以 d 开头或为空，M 以 b、d 开头或为空；L 以 e 开头，因此 H 以 e 开头或为空；MH 在 M 取空时能以 e 开头，二者都取空时可空，所以 S 的 FIRST 还包括 e 和 ε。</p>
 <div class="table-scroll"><table>
 <thead>
 <tr>
@@ -2195,8 +2192,8 @@ M → K | bLM
 </tbody></table></div>
 <p>S→MH、M→K 的右部都可以推导为空，因此 PREDICT 中包含相应 FOLLOW。PREDICT(S→MH) 中的 c 和 # 就来自 FOLLOW(S)，不能仅凭 FIRST(MH) 找到它们。</p>
 <p>按相同左部比较，全部候选式的 PREDICT 两两不相交，所以这份文法是 LL(1)。符号相互引用不等于一定存在左递归，本例相关递归路径在回到同一非终结符前会出现阻止左递归的终结符。</p>
-<h3>14.4 课件 09：判断两份括号文法</h3>
-<p><strong>文法一：</strong></p>
+<h3>14.4 ：判断两份括号文法</h3>
+<p><strong>文法一：</strong> </p>
 <pre><code class="language-text">S  → (SS&#39; | ε
 S&#39; → ) | ε
 </code></pre>
@@ -2245,7 +2242,7 @@ S&#39; → ) | ε
 </tr>
 </tbody></table></div>
 <p>S&#39; 的两个分支在右括号上冲突，因此不是 LL(1)。看到 ) 时，无法决定由本层 S&#39; 消耗它，还是本层取空、让外层处理它。</p>
-<p><strong>文法二：</strong></p>
+<p><strong>文法二：</strong> </p>
 <pre><code class="language-text">S  → (S | S&#39;
 S&#39; → (S&#39;) | ε
 </code></pre>
@@ -2294,7 +2291,7 @@ S&#39; → (S&#39;) | ε
 </tr>
 </tbody></table></div>
 <p>S 的两个分支在左括号上冲突，所以也不是 LL(1)。本题再次说明：候选式的第一个书写符号一个是终结符、一个是非终结符，也可能产生相同的实际输入开头。</p>
-<h3>14.5 课件 09：构造另一张 LL(1) 表</h3>
+<h3>14.5 ：构造另一张 LL(1) 表</h3>
 <pre><code class="language-text">(1) S → aBc
 (2) S → bAB
 (3) A → aAb
@@ -2364,14 +2361,14 @@ PREDICT(5)={b}       PREDICT(6)={c,#}
 </tr>
 </tbody></table></div>
 <p>没有格子需要两条规则，所以文法是 LL(1)。注意 S 与 A 都可以在 a 列填规则，它们处于不同行，不构成冲突。</p>
-<h3>14.6 课件 10：判断能否用预测递归下降</h3>
+<h3>14.6 ：判断能否用预测递归下降</h3>
 <pre><code class="language-text">S → AB | bC
 A → ε | b
 B → ε | aD
 C → AD | b
 D → aS | c
 </code></pre>
-<p><strong>FIRST 的迭代：</strong>A、B 先得到 ε；A、S、C 中以 b 开头的分支贡献 b；B、D 得到 a，D 得到 c。A 可空使 C→AD 可以直接以 D 的 a、c 开头；A、B 都可空使 S 可空。</p>
+<p><strong>FIRST 的迭代：</strong> A、B 先得到 ε；A、S、C 中以 b 开头的分支贡献 b；B、D 得到 a，D 得到 c。A 可空使 C→AD 可以直接以 D 的 a、c 开头；A、B 都可空使 S 可空。</p>
 <div class="table-scroll"><table>
 <thead>
 <tr>
@@ -2459,10 +2456,96 @@ D → aS | c
 <pre><code class="language-text">PREDICT(S→AB) ∩ PREDICT(S→bC) = {b}
 PREDICT(C→AD) ∩ PREDICT(C→b)  = {b}
 </code></pre>
-<p>所以它不是 LL(1)，不能直接按本章方式构造不带回溯的预测递归下降程序。课件最后一页未单列 D 的两条 PREDICT，这里补齐，避免把未列出的候选式漏检。</p>
+<p>所以它不是 LL(1)，不能直接按本章方式构造不带回溯的预测递归下降程序。包括 D 在内的所有候选式都必须检查，不能只检验开始符号。</p>
+<h3>14.7 短语与规范句型的综合辨析</h3>
+<p>使用分层表达式文法：</p>
+<pre><code class="language-text">E → E+T | T
+T → T*F | F
+F → (E) | id
+</code></pre>
+<p>考察 <code>(T+id)*id+F</code>，id 是一个标识符 Token。它是句型，因为存在：</p>
+<pre><code class="language-text">E ⇒ E+T ⇒ T+T ⇒ T*F+T ⇒ F*F+T
+  ⇒ (E)*F+T ⇒ (E+T)*F+T ⇒ (T+T)*F+T
+  ⇒ (T+F)*F+T ⇒ (T+id)*F+T
+  ⇒ (T+id)*id+T ⇒ (T+id)*id+F
+</code></pre>
+<p>这是一般推导，不是每步都替换最左或最右非终结符。</p>
+<pre><code class="language-text">E
+├─ E
+│  └─ T
+│     ├─ T
+│     │  └─ F
+│     │     ├─ (
+│     │     ├─ E
+│     │     │  ├─ E
+│     │     │  │  └─ T        ← 未展开的 T
+│     │     │  ├─ +
+│     │     │  └─ T
+│     │     │     └─ F
+│     │     │        └─ id    ← 第一个 id
+│     │     └─ )
+│     ├─ *
+│     └─ F
+│        └─ id               ← 第二个 id
+├─ +
+└─ T
+   └─ F                     ← 未展开的 F
+</code></pre>
+<p>区分相同文字的不同出现位置，短语有 8 项：</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>短语</th>
+<th>一条产生它的语法成分或路径</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>(T+id)*id+F</code></td>
+<td>根 E 的整棵子树</td>
+</tr>
+<tr>
+<td><code>(T+id)*id</code></td>
+<td>左边 E 或其下面 T 的子树</td>
+</tr>
+<tr>
+<td><code>(T+id)</code></td>
+<td>左因子 F 的子树</td>
+</tr>
+<tr>
+<td><code>T+id</code></td>
+<td>括号内 E 的子树</td>
+</tr>
+<tr>
+<td>括号内的 T</td>
+<td>内部 <code>E→T</code></td>
+</tr>
+<tr>
+<td>第一个 id</td>
+<td>内部 <code>F→id</code>，也可经 T 多步得到</td>
+</tr>
+<tr>
+<td>第二个 id</td>
+<td>外部乘法右因子 <code>F→id</code></td>
+</tr>
+<tr>
+<td>最后的 F</td>
+<td>最右边 <code>T→F</code></td>
+</tr>
+</tbody></table></div>
+<p>简单短语是括号内的 T、两个不同位置的 id、末尾的 F；最左简单短语是括号内的 T。这个结论来自上面的树，尚不能据此给出严格 LR 句柄。</p>
+<p><strong>适用范围。</strong> 这个未完全展开的句型不是最右推导可到达的规范句型。右端 F 仍未展开时，最右推导无法继续展开它左侧的 E。因此这里回答短语、简单短语及其位置，不给它指定严格 LR 句柄。</p>
+<p>再比较 <code>(T+id)*F+id</code>。它的短语为整个串、<code>(T+id)*F</code>、<code>(T+id)</code>、<code>T+id</code>、括号内 T 以及两个不同位置的 id；简单短语是括号内 T 和两个 id。乘法右因子的 F 尚未展开，其父结点采用 <code>T→T*F</code>，不能只因 F 是叶子便把它列为简单短语。</p>
+<p>它也不是规范句型：乘法右因子 F 尚未展开，最右推导就不能继续展开它左侧的 T 来产生括号。因此两个原例均可用于分析短语和简单短语，但不能直接给出严格 LR 句柄。</p>
+<p>要观察真正的句柄，改看 <code>(T+id)*id+id</code>：它右边的两个因子已经展开为终结符 id，存在如下最右推导：</p>
+<pre><code class="language-text">E ⇒rm E+T ⇒rm E+F ⇒rm E+id ⇒rm T+id
+  ⇒rm T*F+id ⇒rm T*id+id ⇒rm F*id+id
+  ⇒rm (E)*id+id ⇒rm (E+T)*id+id ⇒rm (E+F)*id+id
+  ⇒rm (E+id)*id+id ⇒rm (T+id)*id+id
+</code></pre>
+<p>最后一步是括号内的 <code>E→T</code>，所以这个规范句型的严格句柄就是括号内这一次 T，归约它会还原为 <code>(E+id)*id+id</code>。关键变化不是最左简单短语换了位置，而是右侧结构已经满足规范推导的顺序要求。外形相近的句型必须分别验证。</p>
 <p><a id="ch03-s15"></a>
 <a id="综合应用历年题的文法变换集合与分析全过程"></a></p>
-<h2>15. 综合应用：历年题的文法变换、集合与分析全过程</h2><div class="stepper" aria-label="分步图解"><h3>aabdde的LL(1)栈变化</h3><p class="fig-intro">使用正文历年题改写文法及1—6规则。栈底左、栈顶右；展开不读输入，匹配才读。</p><div class="progress-track" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div><div class="step-tools"><button id="step-prev">上一步</button><label for="step-range">推导步骤</label><input id="step-range" type="range" min="0" max="14" value="0"><button id="step-next">下一步</button><span id="step-count" class="step-count"></span></div><div id="step-panel" class="step-card" aria-live="polite"></div><details><summary>完整轨迹（适合打印与连续核对）</summary><div class="table-scroll"><table><thead><tr><th>符号栈</th><th>剩余输入</th><th>本步动作</th></tr></thead><tbody><tr><td># A</td><td>a a b d d e #</td><td>1: A→a C</td></tr><tr><td># C a</td><td>a a b d d e #</td><td>匹配 a</td></tr><tr><td># C</td><td>a b d d e #</td><td>2: C→A B e</td></tr><tr><td># e B A</td><td>a b d d e #</td><td>1: A→a C</td></tr><tr><td># e B C a</td><td>a b d d e #</td><td>匹配 a</td></tr><tr><td># e B C</td><td>b d d e #</td><td>3: C→ε</td></tr><tr><td># e B</td><td>b d d e #</td><td>4: B→b D</td></tr><tr><td># e D b</td><td>b d d e #</td><td>匹配 b</td></tr><tr><td># e D</td><td>d d e #</td><td>5: D→d D</td></tr><tr><td># e D d</td><td>d d e #</td><td>匹配 d</td></tr><tr><td># e D</td><td>d e #</td><td>5: D→d D</td></tr><tr><td># e D d</td><td>d e #</td><td>匹配 d</td></tr><tr><td># e D</td><td>e #</td><td>6: D→ε</td></tr><tr><td># e</td><td>e #</td><td>匹配 e</td></tr><tr><td>#</td><td>#</td><td>接受</td></tr></tbody></table></div></details></div>
+<h2>15. 综合应用：历年题的文法变换、集合与分析全过程</h2>
 <p>前面分别学习了变换、集合计算和驱动。实际做题必须让这些结果使用同一份文法：先编号变换后的规则，再用这套规则计算集合、填写表、模拟输入。若表来自另一种改写，虽然语言可能相同，规则号和栈动作也不能混用。</p>
 <h3>15.1 先变换，再检查选择条件</h3>
 <p>来源：期末题第 3 页第四题。原文法 A→aABe|a、B→Bd|b。A 的两项同以 a 开头，先提取左公共因子；B 有直接左递归，消去后得到：</p>
@@ -2590,7 +2673,7 @@ PREDICT(C→AD) ∩ PREDICT(C→b)  = {b}
 <td>—</td>
 </tr>
 </tbody></table></div>
-<h3>15.3 aabdde 的完整分析过程</h3>
+<h3>15.3 aabdde 的完整分析过程</h3><div class="stepper" aria-label="分步图解"><h3>aabdde的LL(1)栈变化</h3><p class="fig-intro">使用正文历年题改写文法及1—6规则。栈底左、栈顶右；展开不读输入，匹配才读。</p><div class="progress-track" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div><div class="step-tools"><button id="step-prev">上一步</button><label for="step-range">推导步骤</label><input id="step-range" type="range" min="0" max="14" value="0"><button id="step-next">下一步</button><span id="step-count" class="step-count"></span></div><div id="step-panel" class="step-card" aria-live="polite"></div><details><summary>完整轨迹（适合打印与连续核对）</summary><div class="table-scroll"><table><thead><tr><th>符号栈</th><th>剩余输入</th><th>本步动作</th></tr></thead><tbody><tr><td># A</td><td>a a b d d e #</td><td>1: A→a C</td></tr><tr><td># C a</td><td>a a b d d e #</td><td>匹配 a</td></tr><tr><td># C</td><td>a b d d e #</td><td>2: C→A B e</td></tr><tr><td># e B A</td><td>a b d d e #</td><td>1: A→a C</td></tr><tr><td># e B C a</td><td>a b d d e #</td><td>匹配 a</td></tr><tr><td># e B C</td><td>b d d e #</td><td>3: C→ε</td></tr><tr><td># e B</td><td>b d d e #</td><td>4: B→b D</td></tr><tr><td># e D b</td><td>b d d e #</td><td>匹配 b</td></tr><tr><td># e D</td><td>d d e #</td><td>5: D→d D</td></tr><tr><td># e D d</td><td>d d e #</td><td>匹配 d</td></tr><tr><td># e D</td><td>d e #</td><td>5: D→d D</td></tr><tr><td># e D d</td><td>d e #</td><td>匹配 d</td></tr><tr><td># e D</td><td>e #</td><td>6: D→ε</td></tr><tr><td># e</td><td>e #</td><td>匹配 e</td></tr><tr><td>#</td><td>#</td><td>接受</td></tr></tbody></table></div></details></div>
 <p>栈底在左，栈顶在右；展开时右部逆序入栈。</p>
 <div class="table-scroll"><table>
 <thead>
@@ -2752,8 +2835,8 @@ PREDICT(C→AD) ∩ PREDICT(C→b)  = {b}
 </tr>
 </tbody></table></div>
 <p>因此，按题给规则得到答案 AD。D 中每次递归前先匹配 a、b 或 c；这些规则的递归符号后还有 e，属于嵌套结构，不能仅因能够预测分析就称为严格的右递归。</p>
-<p><strong>教学反例：</strong><code>S→Aa|b、A→b|ε</code> 已没有左递归，S 的两项也没有相同的字面首文法符号。但 FIRST(Aa)={a,b} 与 FIRST(b)={b} 相交，所以在 b 上仍不能一次选定。问题来自 A 可先生成 b，而不是排版上的首符是否相同。</p>
-<p><strong>二义反例与推导顺序对照：</strong>对期末题 <code>S→S*S|S+S|(S)|a</code>，串 <code>a+a*a</code> 既可解释为 <code>a+(a*a)</code>，又可解释为 <code>(a+a)*a</code>，根操作分别是+与*，树不同，故文法二义。对无二义文法中独立的左右子树，先展开左子树或先展开右子树只是推导顺序不同，可能仍是同一棵树。</p>
+<p><strong>教学反例：</strong> <code>S→Aa|b、A→b|ε</code> 已没有左递归，S 的两项也没有相同的字面首文法符号。但 FIRST(Aa)={a,b} 与 FIRST(b)={b} 相交，所以在 b 上仍不能一次选定。问题来自 A 可先生成 b，而不是排版上的首符是否相同。</p>
+<p><strong>二义反例与推导顺序对照：</strong> 对期末题 <code>S→S*S|S+S|(S)|a</code>，串 <code>a+a*a</code> 既可解释为 <code>a+(a*a)</code>，又可解释为 <code>(a+a)*a</code>，根操作分别是+与*，树不同，故文法二义。对无二义文法中独立的左右子树，先展开左子树或先展开右子树只是推导顺序不同，可能仍是同一棵树。</p>
 <p>判断的依据是每个候选式的完整 PREDICT 集，不能只看右部第一个书写符号。</p>
 <p><a id="ch03-s17"></a>
 <a id="课件例题回查与知识路线"></a></p>
@@ -2777,7 +2860,7 @@ PREDICT：每条规则的选择条件
   ├─ 是：构造 LL(1) 表，或写预测递归下降函数
   └─ 否：定位冲突，尝试适当变换或换分析方法
 </code></pre>
-<p>拓广产生式与短语、句柄也为下一章的自底向上分析作准备。它们虽然不全是构造 LL(1) 表的必要步骤，仍属于本章课件涉及的知识。</p>
+<p>拓广产生式与短语、句柄也为下一章的自底向上分析作准备。它们补充了对文法结构与归约位置的理解，不全是构造 LL(1) 表的必要步骤。</p>
 <h3>17.2 做题步骤速查</h3>
 <div class="table-scroll"><table>
 <thead>
@@ -2859,7 +2942,7 @@ PREDICT：每条规则的选择条件
 <p><strong>3. <code>E→TE&#39;</code> 与 <code>E⇒TE&#39;</code> 有什么区别？</strong> 前者是一条文法规则，后者表示实际使用该规则完成了一步推导。</p>
 <p><strong>4. 能把两个同名非终结符一次都替换掉吗？</strong> CFG 的一步推导只替换一次出现。替换两个至少记为两步。</p>
 <p><strong>5. 为什么普通推导不唯一不等于文法二义？</strong> 同一棵树中，互不依赖的分支可以按不同顺序展开。二义性要求同一句子有不同结构，或不同最左/最右推导。</p>
-<p><strong>6. 短语一定只含终结符吗？</strong> 不一定。当前句型中未完全展开的结构，也可以形成含非终结符的短语，例如课件题里的 T+id。</p>
+<p><strong>6. 短语一定只含终结符吗？</strong> 不一定。当前句型中未完全展开的结构，也可以形成含非终结符的短语，例如本例的 T+id。</p>
 <p><strong>7. 句柄能只按“某段恰好等于规则右部”寻找吗？</strong> 不能。严格句柄要撤销规范推导的最后一步，必须考虑产生式、出现位置和规范句型的结构。</p>
 <p><strong>8. 左递归为什么让普通递归下降卡住？</strong> 函数在消耗输入前就再次调用自身，反复进入相同状态。要改写文法或采用能够处理左递归的其他方法。</p>
 <p><strong>9. <code>FIRST(ABC)</code> 能否直接等于 <code>FIRST(A)</code>？</strong> 只有 A 不可空时才可直接这样处理。A 可空就继续看 B，A、B 都可空还要看 C。</p>
@@ -2967,7 +3050,7 @@ PREDICT：每条规则的选择条件
 <h2>20. 末尾速查表</h2>
 <p>需要回忆规则时，先按用途找到对应条目，再核对条件与例子；需要完整推导时返回对应正文。</p>
 <div class="ref-picker"><label for="quick-select">选择一个概念或方法，查看含义、形式、例子、结果和前提</label><select id="quick-select" class="quick-select"><option value="0">CFG</option><option value="1">二义性</option><option value="2">消左递归</option><option value="3">FIRST</option><option value="4">FOLLOW</option><option value="5">PREDICT与LL(1)表</option><option value="6">递归下降</option></select><div id="quick-panel" class="ref-panel" aria-live="polite"></div></div>
-</article><div class="chapter-links"><a href="02_词法分析.html">← 第2章 词法分析</a><a href="04_语法分析_自底向上方法.html">第4章 语法分析：自底向上分析方法 →</a></div></main></div><script type="application/json" id="diagram-data">{"title":"aabdde的LL(1)栈变化","premise":"使用正文历年题改写文法及1—6规则。栈底左、栈顶右；展开不读输入，匹配才读。","fields":["符号栈","剩余输入","本步动作"],"rows":[["# A","a a b d d e #","1: A→a C"],["# C a","a a b d d e #","匹配 a"],["# C","a b d d e #","2: C→A B e"],["# e B A","a b d d e #","1: A→a C"],["# e B C a","a b d d e #","匹配 a"],["# e B C","b d d e #","3: C→ε"],["# e B","b d d e #","4: B→b D"],["# e D b","b d d e #","匹配 b"],["# e D","d d e #","5: D→d D"],["# e D d","d d e #","匹配 d"],["# e D","d e #","5: D→d D"],["# e D d","d e #","匹配 d"],["# e D","e #","6: D→ε"],["# e","e #","匹配 e"],["#","#","接受"]]}</script><script type="application/json" id="quick-data">[{"name":"CFG","kind":"生成规则系统","meaning":"表达嵌套语法","form":"G=(VN,VT,S,P)，A→α","notice":"左部为单一非终结符；","example":"S→aSb|ε产生aⁿbⁿ（n≥0）","link":"\u003ca href=\"#ref-%E6%96%87%E6%B3%95\">文法分类\u003c/a>"},{"name":"二义性","kind":"文法性质","meaning":"检查结构是否唯一","form":"同一句子有两棵不同树","notice":"比较最左推导或树；","example":"a+a*a有两种根操作","link":"\u003ca href=\"#ref-%E4%BA%8C%E4%B9%89\">二义文法\u003c/a>"},{"name":"消左递归","kind":"文法变换","meaning":"避免尚未读入输入就重复展开自身","form":"A→Aα|β改成A→βA&#39;、A&#39;→αA&#39;|ε","notice":"α非空，有非左递归结束分支，变换后仍需检查间接和可空前缀导致的左递归；","example":"E→E+T|T改为E→TE&#39;、E&#39;→+TE&#39;|ε","link":"\u003ca href=\"#ref-%E5%8F%98%E6%8D%A2\">文法变换\u003c/a>"},{"name":"FIRST","kind":"串的首符信息","meaning":"决定候选如何开始","form":"逐项穿过可空前缀","notice":"可含ε；","example":"A→a|ε、B→b|ε时，FIRST(AB)={a,b,ε}","link":"\u003ca href=\"#ref-%E9%9B%86%E5%90%88\">三个集合\u003c/a>"},{"name":"FOLLOW","kind":"非终结符后继信息","meaning":"确定空候选何时结束","form":"右部后缀FIRST去ε；后缀可空时再传入左部FOLLOW","notice":"不含ε；","example":"S→AB、A→a|ε、B→b|ε且S为开始符时，FOLLOW(A)={b,#}","link":"\u003ca href=\"#ref-%E9%9B%86%E5%90%88\">三个集合\u003c/a>"},{"name":"PREDICT与LL(1)表","kind":"候选选择条件及实现","meaning":"仅凭当前一个输入符号选规则","form":"FIRST(α)去ε，可空时并FOLLOW(A)","notice":"同左部两两不交；","example":"历年题C在b上选ε，b仍留给后续结构","link":"\u003ca href=\"#ref-LL\">预测分析表\u003c/a>"},{"name":"递归下降","kind":"驱动实现方式","meaning":"用函数实现非终结符","form":"非终结符→函数，终结符→匹配","notice":"本章预测版本要求LL(1)；一般递归下降可含回溯","example":"用法：非终结符→函数，终结符→匹配。本章预测版本要求LL(1)；一般递归下降可含回溯","link":"\u003ca href=\"#ref-%E9%80%92%E5%BD%92\">递归下降\u003c/a>"}]</script><script>
+</article><div class="chapter-links"><a href="02_词法分析.html">← 第2章 词法分析</a><a href="04_语法分析_自底向上方法.html">第4章 语法分析：自底向上分析方法 →</a></div></main></div><script type="application/json" id="diagram-data">{"title":"aabdde的LL(1)栈变化","premise":"使用正文历年题改写文法及1—6规则。栈底左、栈顶右；展开不读输入，匹配才读。","fields":["符号栈","剩余输入","本步动作"],"rows":[["# A","a a b d d e #","1: A→a C"],["# C a","a a b d d e #","匹配 a"],["# C","a b d d e #","2: C→A B e"],["# e B A","a b d d e #","1: A→a C"],["# e B C a","a b d d e #","匹配 a"],["# e B C","b d d e #","3: C→ε"],["# e B","b d d e #","4: B→b D"],["# e D b","b d d e #","匹配 b"],["# e D","d d e #","5: D→d D"],["# e D d","d d e #","匹配 d"],["# e D","d e #","5: D→d D"],["# e D d","d e #","匹配 d"],["# e D","e #","6: D→ε"],["# e","e #","匹配 e"],["#","#","接受"]]}</script><script type="application/json" id="quick-data">[{"name":"CFG","kind":"生成规则系统","meaning":"表达嵌套语法","form":"G=(VN,VT,S,P)，A→α","notice":"开始符号和符号集合须给齐；","example":"G的非终结符{S}、终结符{a,b}、规则S→ab、开始S，唯一句子为ab。","link":"\u003ca href=\"#ref-%E6%96%87%E6%B3%95\">文法分类\u003c/a>"},{"name":"二义性","kind":"文法性质","meaning":"检查结构是否唯一","form":"同一句子有两棵不同树","notice":"两棵不同结构树才是二义证据；","example":"E→E+E|E\u003cem>E|n中n+n\u003c/em>n可按n+(n*n)或(n+n)*n分组，故文法有二义性。","link":"\u003ca href=\"#ref-%E4%BA%8C%E4%B9%89\">二义文法\u003c/a>"},{"name":"消左递归","kind":"文法变换","meaning":"避免尚未读入输入就重复展开自身","form":"A→Aα|β改成A→βA&#39;、A&#39;→αA&#39;|ε","notice":"按右递归改写并保留空分支；","example":"A→Aa|b改为A→bR、R→aR|ε；两者都生成b后接零个或多个a。","link":"\u003ca href=\"#ref-%E5%8F%98%E6%8D%A2\">文法变换\u003c/a>"},{"name":"FIRST","kind":"串的首符信息","meaning":"决定候选如何开始","form":"逐项穿过可空前缀","notice":"遇可空前缀须继续向后求；","example":"S→Ab，A→a|ε，则FIRST(Ab)={a,b}，不含ε。","link":"\u003ca href=\"#ref-%E9%9B%86%E5%90%88\">三个集合\u003c/a>"},{"name":"FOLLOW","kind":"非终结符后继信息","meaning":"确定空候选何时结束","form":"右部后缀FIRST去ε；后缀可空时再传入左部FOLLOW","notice":"FOLLOW不含ε；","example":"开始S，规则S→Ac、A→a|ε，A后面只能接c，所以FOLLOW(A)={c}。","link":"\u003ca href=\"#ref-%E9%9B%86%E5%90%88\">三个集合\u003c/a>"},{"name":"PREDICT与LL(1)表","kind":"候选选择条件及实现","meaning":"仅凭当前一个输入符号选规则","form":"FIRST(α)去ε，可空时并FOLLOW(A)","notice":"可空候选式使用左部FOLLOW；","example":"开始S，S→Ac、A→a|ε，A两候选的PREDICT为{a}和{c}，表M[A,a]填A→a，M[A,c]填A→ε。","link":"\u003ca href=\"#ref-LL\">预测分析表\u003c/a>"},{"name":"递归下降","kind":"驱动实现方式","meaning":"用函数实现非终结符","form":"非终结符→函数，终结符→匹配","notice":"递归函数也要检查输入结束；","example":"只有S→ab时，函数S先匹配a再匹配b；驱动最后匹配#，接受ab#，拒绝aba#。","link":"\u003ca href=\"#ref-%E9%80%92%E5%BD%92\">递归下降\u003c/a>"}]</script><script>
 const links=[...document.querySelectorAll('nav a[href^="#"]')];
 const headings=links.map(a=>document.getElementById(a.hash.slice(1))).filter(Boolean);
 let scheduled=false;
@@ -2978,5 +3061,209 @@ document.querySelectorAll('[data-font]').forEach(b=>b.addEventListener('click',(
 const diagram=JSON.parse(document.getElementById('diagram-data').textContent);let step=0;
 function showStep(){if(!diagram)return;const row=diagram.rows[step];const panel=document.getElementById('step-panel');panel.replaceChildren();const grid=document.createElement('div');grid.className='step-grid';diagram.fields.forEach((field,i)=>{const cell=document.createElement('div');cell.className='step-field';const strong=document.createElement('strong');strong.textContent=field;const p=document.createElement('p');p.textContent=row[i];cell.append(strong,p);grid.append(cell);});panel.append(grid);document.getElementById('step-count').textContent=(step+1)+' / '+diagram.rows.length;document.getElementById('step-range').value=step;document.getElementById('step-prev').disabled=step===0;document.getElementById('step-next').disabled=step===diagram.rows.length-1;document.querySelectorAll('.progress-track span').forEach((s,i)=>s.classList.toggle('done',i<=step));}
 if(diagram){document.getElementById('step-prev').addEventListener('click',()=>{step=Math.max(0,step-1);showStep();});document.getElementById('step-next').addEventListener('click',()=>{step=Math.min(diagram.rows.length-1,step+1);showStep();});document.getElementById('step-range').addEventListener('input',e=>{step=Number(e.target.value);showStep();});showStep();}
-const quick=document.getElementById('quick-select');if(quick){const items=JSON.parse(document.getElementById('quick-data').textContent);function showQuick(){const r=items[Number(quick.value)];const panel=document.getElementById('quick-panel');panel.innerHTML='<h3>'+r.name+'</h3><p class="ref-kind">'+r.kind+'</p><h4>含义与用途</h4><p>'+r.meaning+'</p><h4>基本形式</h4><p>'+r.form+'</p><h4>学习例子与结果</h4><p class="result">'+r.example+'</p><h4>注意点与前提</h4><p>'+r.notice+'</p><p>'+r.link+'</p>';}quick.addEventListener('change',showQuick);showQuick();}markNavigation();
+function quickMarkup(r){return '<h3>'+r.name+'</h3><p class="ref-kind">'+r.kind+'</p><h4>含义与用途</h4><p>'+r.meaning+'</p><h4>基本形式</h4><p>'+r.form+'</p><h4>学习例子与结果</h4><p class="result">'+r.example+'</p><h4>注意点与前提</h4><p>'+r.notice+'</p><p>'+r.link+'</p>';}
+const quick=document.getElementById('quick-select');if(quick){const items=JSON.parse(document.getElementById('quick-data').textContent);function showQuick(){const r=items[Number(quick.value)];document.getElementById('quick-panel').innerHTML=quickMarkup(r);}quick.addEventListener('change',showQuick);showQuick();}markNavigation();
+(function () {
+  'use strict';
+  const $ = name => document.getElementById('chapter-search-' + name);
+  const panel = $('panel'), article = document.getElementById('article');
+  if (!panel || !article) return;
+  const blockTags = 'h1,h2,h3,h4,h5,h6,p,li,pre,td,th,summary,dt,dd,blockquote';
+  const ignored = '.stepper,.ref-picker,button,input,select,textarea,script,style,[data-search-ignore]';
+  const sectionIds = new Set([...document.querySelectorAll('nav a[href^="#"]')].map(a => a.hash.slice(1)));
+  const quickSelect = document.getElementById('quick-select'), quickPanel = document.getElementById('quick-panel');
+  const quickItems = JSON.parse(document.getElementById('quick-data')?.textContent || '[]');
+  const fold = text => text.replace(/[A-Z]/g, c => c.toLowerCase());
+  const pageSize = 40;
+  let matches = [], active = -1, page = 0, query = '', timer = null;
+  let resultsOpen = false, automaticQuick = false, originalQuick = null;
+  const openedDetails = new Set();
+
+  function measure() {
+    const top = Math.max(60, Math.ceil(document.querySelector('.topbar').getBoundingClientRect().height));
+    const height = panel.hidden ? 0 : Math.ceil(panel.getBoundingClientRect().height);
+    document.documentElement.style.setProperty('--reader-topbar-height', top + 'px');
+    document.documentElement.style.setProperty('--scroll-offset', Math.max(90, top + height + 18) + 'px');
+  }
+  window.addEventListener('resize', measure);
+  if (typeof ResizeObserver !== 'undefined') {
+    const observer = new ResizeObserver(measure);
+    observer.observe(document.querySelector('.topbar')); observer.observe(panel);
+  }
+
+  // 对文字节点建立段内偏移，不把行内 strong/code 等格式当作检索边界。
+  function collect(root, quick = false, quickName = '') {
+    const blocks = [], walker = document.createTreeWalker(root, NodeFilter.SHOW_ELEMENT | NodeFilter.SHOW_TEXT);
+    let node, owner = null, currentBlock = null, pendingSection = '', section = 'article', mainTitle = '本章导读', subTitle = '';
+    while ((node = walker.nextNode())) {
+      const element = node.nodeType === Node.ELEMENT_NODE ? node : node.parentElement;
+      if (!element || element.closest(quick ? 'h4,button,input,select,script,style' : ignored)) continue;
+      if (node.nodeType === Node.ELEMENT_NODE) {
+        if (!quick) {
+          if (node.matches('a[id]') && sectionIds.has(node.id)) pendingSection = node.id;
+          if (node.matches('h2')) { section = node.id || pendingSection || 'article'; mainTitle = node.textContent.trim(); subTitle = ''; pendingSection = ''; }
+          if (node.matches('h3')) subTitle = node.textContent.trim();
+        }
+        continue;
+      }
+      if (!node.data || (!quick && section === 'navigation')) continue;
+      const parent = element.closest(blockTags);
+      if (!parent || !root.contains(parent)) { owner = null; currentBlock = null; continue; }
+      const label = quick ? '末尾速查 › ' + quickName : mainTitle + (subTitle ? ' › ' + subTitle : '');
+      if (owner !== parent || !currentBlock || currentBlock.section !== section || currentBlock.label !== label) {
+        currentBlock = { el: parent, text: '', nodes: [], label, section }; blocks.push(currentBlock); owner = parent;
+      }
+      currentBlock.nodes.push({ node, start: currentBlock.text.length, end: currentBlock.text.length + node.data.length });
+      currentBlock.text += node.data;
+    }
+    return blocks.filter(b => b.text.trim());
+  }
+  function quickBlocks(index) {
+    const root = document.createElement('div'); root.innerHTML = quickMarkup(quickItems[index]);
+    const name = document.createElement('span'); name.innerHTML = quickItems[index].name;
+    return collect(root, true, name.textContent);
+  }
+  function find(blocks, source, item) {
+    const found = [], needle = fold(query);
+    blocks.forEach((block, blockIndex) => {
+      const text = fold(block.text); let start = text.indexOf(needle);
+      while (start !== -1) {
+        const end = start + query.length;
+        found.push({ source, item, blockIndex, start, end, text: block.text, label: block.label });
+        start = text.indexOf(needle, end);
+      }
+    });
+    return found;
+  }
+  function removeMarks() {
+    const parents = new Set();
+    article.querySelectorAll('mark.chapter-search-hit').forEach(mark => { parents.add(mark.parentNode); mark.replaceWith(document.createTextNode(mark.textContent)); });
+    parents.forEach(parent => parent.normalize());
+  }
+  function restoreDetails() { openedDetails.forEach(details => { if (details.isConnected) details.open = false; }); openedDetails.clear(); }
+  function restoreQuick() {
+    if (originalQuick !== null && quickSelect) {
+      automaticQuick = true; quickSelect.value = originalQuick; quickSelect.dispatchEvent(new Event('change')); automaticQuick = false;
+    }
+    originalQuick = null;
+  }
+  function setOpen(open, focusInput = false) {
+    panel.hidden = !open; $('toggle').setAttribute('aria-expanded', String(open));
+    if (open && typeof closeMenu === 'function') closeMenu();
+    measure();
+    if (focusInput) $('input').focus();
+  }
+  function text(tag, value) { const element = document.createElement(tag); element.textContent = value; return element; }
+  function state() {
+    $('prev').disabled = $('next').disabled = !matches.length;
+    $('results-toggle').disabled = !matches.length;
+    $('status').textContent = !query ? '请输入关键词' : !matches.length ? '没有找到匹配内容' : active < 0 ? '找到 ' + matches.length + ' 处，选择结果定位' : '第 ' + (active + 1) + ' / ' + matches.length + ' 处';
+    $('results').hidden = !resultsOpen || !matches.length;
+    $('results-toggle').setAttribute('aria-expanded', String(! $('results').hidden));
+    $('results-toggle').textContent = resultsOpen && matches.length ? '收起结果' : '展开结果';
+    measure();
+  }
+  function renderResults() {
+    const list = $('list'); list.replaceChildren();
+    const start = page * pageSize, end = Math.min(start + pageSize, matches.length);
+    $('page-status').textContent = matches.length ? '显示 ' + (start + 1) + '—' + end + '，共 ' + matches.length + ' 处' : '';
+    $('page-prev').disabled = page === 0; $('page-next').disabled = end >= matches.length;
+    for (let i = start; i < end; i++) {
+      const match = matches[i], item = document.createElement('li'), button = document.createElement('button');
+      button.type = 'button'; button.className = 'chapter-search-result';
+      if (i === active) button.setAttribute('aria-current', 'true');
+      button.append(text('strong', (i + 1) + '. ' + match.label));
+      const excerpt = document.createElement('span'), left = Math.max(0, match.start - 35), right = Math.min(match.text.length, match.end + 55);
+      excerpt.append(document.createTextNode((left ? '…' : '') + match.text.slice(left, match.start)));
+      excerpt.append(text('mark', match.text.slice(match.start, match.end)));
+      excerpt.append(document.createTextNode(match.text.slice(match.end, right) + (right < match.text.length ? '…' : '')));
+      button.append(excerpt); button.addEventListener('click', () => activate(i, true)); item.append(button); list.append(item);
+    }
+  }
+  function search() {
+    clearTimeout(timer); timer = null; removeMarks(); restoreDetails(); restoreQuick();
+    query = $('input').value.trim(); active = -1; page = 0; matches = [];
+    if (query) {
+      matches = find(collect(article), 'body');
+      if (typeof quickMarkup === 'function') quickItems.forEach((_, index) => { matches.push(...find(quickBlocks(index), 'quick', index)); });
+    }
+    resultsOpen = !!matches.length; renderResults(); state();
+  }
+  function activate(index, focusMatch = false) {
+    if (!matches.length) return;
+    index = (index + matches.length) % matches.length;
+    removeMarks(); const match = matches[index]; let block;
+    if (match.source === 'quick') {
+      if (!quickSelect || !quickPanel) return;
+      if (originalQuick === null) originalQuick = quickSelect.value;
+      automaticQuick = true; quickSelect.value = String(match.item); quickSelect.dispatchEvent(new Event('change')); automaticQuick = false;
+      const name = document.createElement('span'); name.innerHTML = quickItems[match.item].name;
+      block = collect(quickPanel, true, name.textContent)[match.blockIndex];
+    } else block = collect(article)[match.blockIndex];
+    // 动态正文如有改动，重建结果；不按旧字符位置猜测。
+    if (!block || block.text !== match.text) { search(); $('status').textContent = '正文已变化，结果已刷新，请重新选择。'; return; }
+    for (let parent = block.el; parent && parent !== article; parent = parent.parentElement) {
+      if (parent.tagName === 'DETAILS' && !parent.open) { openedDetails.add(parent); parent.open = true; }
+    }
+    const marks = [];
+    for (const part of block.nodes) {
+      if (part.end <= match.start || part.start >= match.end) continue;
+      const begin = Math.max(0, match.start - part.start), end = Math.min(part.node.length, match.end - part.start);
+      const fragment = document.createDocumentFragment();
+      if (begin) fragment.append(document.createTextNode(part.node.data.slice(0, begin)));
+      const mark = text('mark', part.node.data.slice(begin, end)); mark.className = 'chapter-search-hit'; fragment.append(mark); marks.push(mark);
+      if (end < part.node.length) fragment.append(document.createTextNode(part.node.data.slice(end)));
+      part.node.replaceWith(fragment);
+    }
+    active = index; page = Math.floor(index / pageSize); resultsOpen = false; renderResults(); state();
+    const first = marks[0];
+    if (first) {
+      first.tabIndex = -1; if (focusMatch) first.focus({ preventScroll: true });
+      first.scrollIntoView({ block: 'start', inline: 'nearest', behavior: 'auto' });
+      requestAnimationFrame(() => { measure(); if (typeof markNavigation === 'function') markNavigation(); });
+    }
+  }
+  function ensureQuery() { if (timer !== null || $('input').value.trim() !== query) search(); }
+  function clear() {
+    clearTimeout(timer); timer = null; $('input').value = ''; search(); $('input').focus();
+  }
+  $('toggle').addEventListener('click', () => setOpen(panel.hidden, panel.hidden));
+  $('close').addEventListener('click', () => { setOpen(false); $('toggle').focus(); });
+  $('clear').addEventListener('click', clear);
+  $('form').addEventListener('submit', event => { event.preventDefault(); ensureQuery(); if (matches.length) activate(active < 0 ? 0 : active + 1); });
+  $('input').addEventListener('input', () => { clearTimeout(timer); timer = setTimeout(search, 160); });
+  $('input').addEventListener('keydown', event => {
+    if (event.key === 'Enter' && event.shiftKey) { event.preventDefault(); ensureQuery(); if (matches.length) activate(active < 0 ? matches.length - 1 : active - 1); }
+  });
+  $('prev').addEventListener('click', () => { ensureQuery(); if (matches.length) activate(active < 0 ? matches.length - 1 : active - 1); });
+  $('next').addEventListener('click', () => { ensureQuery(); if (matches.length) activate(active < 0 ? 0 : active + 1); });
+  $('results-toggle').addEventListener('click', () => { resultsOpen = !resultsOpen; renderResults(); state(); });
+  $('page-prev').addEventListener('click', () => { if (page > 0) page--; renderResults(); measure(); });
+  $('page-next').addEventListener('click', () => { if ((page + 1) * pageSize < matches.length) page++; renderResults(); measure(); });
+  $('panel').querySelector('details').addEventListener('toggle', measure);
+  document.addEventListener('keydown', event => {
+    if ((event.ctrlKey || event.metaKey) && !event.altKey && event.key.toLowerCase() === 'k') { event.preventDefault(); setOpen(true, true); $('input').select(); }
+    if (event.key === 'Escape' && !panel.hidden) { setOpen(false); $('toggle').focus(); }
+  });
+  document.getElementById('menu').addEventListener('click', () => { if (document.body.classList.contains('nav-open')) setOpen(false); });
+  quickSelect?.addEventListener('change', () => {
+    if (!automaticQuick) {
+      originalQuick = null;
+      if (active >= 0 && matches[active].source === 'quick') { active = -1; renderResults(); state(); }
+    }
+  });
+  measure(); state();
+})();
+(function () {
+  'use strict';
+  const select = document.getElementById('reading-theme');
+  if (!select) return;
+  select.value = document.documentElement.dataset.readerTheme;
+  select.addEventListener('change', function () {
+    const theme = select.value;
+    if (theme !== 'light' && theme !== 'dark') return;
+    document.documentElement.dataset.readerTheme = theme;
+    try { localStorage.setItem('compiler-reading-theme-v1', theme); } catch (_) {}
+  });
+})();
 </script></body></html>

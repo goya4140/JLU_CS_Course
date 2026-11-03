@@ -1,5 +1,59 @@
-<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="source-sha256" content="efa0a18eb2da4f1bf88810081f603320c6b599bd2f0c214e8b2dc638f3a7d3c4"><title>第8章 中间代码优化 · 学习资料</title><style>:root{--paper:#fbfaf7;--surface:#fff;--ink:#253341;--muted:#5c6b75;--line:#d5dfdd;--teal:#156b62;--soft:#edf6f1;--font:17px;--scroll-offset:90px}*{box-sizing:border-box}html{scroll-behavior:auto;scroll-padding-top:var(--scroll-offset)}body{margin:0;background:var(--paper);color:var(--ink);font-family:'Microsoft YaHei','PingFang SC',system-ui,sans-serif;font-size:var(--font);line-height:1.85}a{color:var(--teal);text-underline-offset:3px}a:hover{color:#173f75}button,select{font:inherit}button{cursor:pointer}button,select{border:1px solid #b9cbc5;border-radius:7px;padding:7px 11px;background:#fff;color:var(--ink)}button:hover{background:var(--soft)}button:focus-visible,select:focus-visible,a:focus-visible{outline:3px solid #81cbb8;outline-offset:3px}.skip{position:absolute;top:-80px;left:12px;z-index:50;background:#fff;padding:8px}.skip:focus{top:8px}.sidebar{position:fixed;inset:0 auto 0 0;width:270px;padding:23px 18px;background:#f0f4f0;border-right:1px solid var(--line);overflow:auto;z-index:30;overscroll-behavior:contain}.brand{font-size:21px;font-weight:700}.brand small{display:block;font-size:12px;font-weight:400;color:var(--muted)}.sidebar nav a{display:block;color:var(--ink);text-decoration:none;padding:8px 10px;margin:3px 0;border-radius:6px;font-size:14px;line-height:1.6}.sidebar nav a:hover{background:#dcebe3}.sidebar nav a.active,.sidebar nav a.active:hover{background:var(--teal);color:white}.sidebar select{width:100%;font-size:13px}.nav-tip{font-size:12px;color:var(--muted);margin:14px 0}.shell{margin-left:270px;overflow-anchor:none}.topbar{position:sticky;top:0;background:rgba(251,250,247,.98);padding:12px 26px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:12px;z-index:20}.topbar-title{font-size:13px;color:var(--muted)}.toolbar{display:flex;gap:7px;flex-wrap:wrap}.toolbar button{font-size:13px}.menu{display:none}main{max-width:1120px;margin:auto;padding:30px 44px 80px;min-width:0}h1{font-size:32px;line-height:1.5;margin:14px 0 25px}h2{font-size:25px;line-height:1.5;padding:0 0 11px;border-bottom:1px solid var(--line);margin:44px 0 23px}h3{font-size:21px;line-height:1.55;margin:29px 0 16px}h4{font-size:18px;line-height:1.6;margin:22px 0 13px}p{margin:14px 0}li{margin:7px 0}ul,ol{padding-left:1.6em}blockquote{margin:20px 0;padding:5px 18px;border-left:3px solid #a8c6bb;background:#f0f3ef;color:#53655e;font-size:14px}blockquote p{margin:8px 0}hr{border:0;border-top:1px solid var(--line);margin:32px 0}code{font-family:Consolas,'Cascadia Code',monospace;font-size:.9em;background:#eef1ed;padding:2px 5px;border-radius:4px;overflow-wrap:anywhere}pre{background:#18313d;color:#e8f0f0;border-radius:9px;padding:19px;line-height:1.65;overflow-x:auto;max-width:100%;font-size:14px}pre code{background:none;padding:0;color:inherit;white-space:pre;overflow-wrap:normal}table{border-collapse:collapse;width:100%;font-size:15px}th{background:#eaf3ee;text-align:left}td,th{padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:top}tbody tr:nth-child(even){background:#f6f9f6}.table-scroll{overflow-x:auto;border:1px solid var(--line);border-radius:8px;margin:17px 0;max-width:100%}.table-scroll td{min-width:80px}.source-note{font-size:13px;color:var(--muted)}.learning-figure{padding:23px;border:1px solid #b4cfc2;border-radius:12px;background:var(--soft);margin:25px 0}.learning-figure h4{margin:0 0 8px;font-size:20px}.fig-intro{font-size:14px;color:var(--muted)}.learning-figure label{display:block;margin-top:15px;font-size:14px;font-weight:700}.learning-figure select{margin-top:7px;width:100%;min-height:44px;font-size:15px}.fig-output{margin-top:16px}.flow{display:flex;gap:10px;align-items:stretch;flex-wrap:wrap}.flow-node{flex:1 1 150px;border:1px solid #bfd2c9;border-radius:8px;background:#fff;padding:13px;min-width:0}.flow-node strong{display:block;color:var(--teal)}.flow-node p{font-size:14px;margin:8px 0}.flow-arrow{align-self:center;color:var(--teal);font-size:24px}.fig-note{padding:10px 14px;border-left:3px solid var(--teal);background:#fff;font-size:14px;margin:15px 0 0}.svg-scroll{overflow-x:auto;max-width:100%}.svg-scroll svg{display:block;max-width:100%;height:auto}.ref-area{min-height:calc(100vh - var(--scroll-offset));margin-top:24px}.ref-picker{padding:22px;border-radius:12px;background:var(--soft);border:1px solid #b4cfc2}.ref-picker label{display:block;font-weight:700;margin-bottom:10px}.ref-picker select{width:100%;font-size:15px;min-height:46px}.ref-panel{margin-top:18px;background:#fff;border:1px solid var(--line);padding:20px;border-radius:9px}.ref-panel[hidden]{display:none}.ref-panel h3{margin:0;font-size:24px}.ref-panel h4{font-size:16px;margin:18px 0 8px}.ref-kind{font-size:13px;color:var(--teal)}.result{padding:10px 15px;border-left:3px solid var(--teal);background:var(--soft)}.copy{display:block;margin:5px 0 0 auto;font-size:12px;padding:4px 8px}.code-wrap{margin:20px 0}.code-wrap pre{margin-bottom:0}.foot{font-size:13px;color:var(--muted);border-top:1px solid var(--line);padding-top:23px;margin-top:30px}details{border:1px solid var(--line);padding:12px;border-radius:8px;margin:15px 0}summary{cursor:pointer;font-weight:700}@media(max-width:900px){.sidebar{transform:translateX(-100%)}body.nav-open .sidebar{transform:translateX(0);top:60px}.shell{margin-left:0}.menu{display:inline-block}.topbar-title{display:none}.topbar{padding:10px 14px}main{padding:23px 18px 65px}h1{font-size:27px}h2{font-size:23px}.learning-figure,.ref-picker{padding:16px}.flow{flex-direction:column}.flow-arrow{transform:rotate(90deg)}.ref-panel{padding:15px}}@media print{.sidebar,.topbar,.toolbar,.copy,.skip{display:none!important}.shell{margin:0}main{padding:0;max-width:none}body{background:#fff;font-size:11pt}.ref-area{min-height:0}.ref-picker select{display:none}pre{white-space:pre-wrap;background:#f3f5f4;color:#111}.learning-figure{break-inside:avoid}.table-scroll{overflow:visible}a{color:inherit}}@media print{.svg-scroll{overflow:visible}.svg-scroll svg{min-width:0!important;width:100%!important;height:auto!important}}.sidebar{width:266px;background:#f1f4f1;padding:27px 19px;overflow-y:auto}.brand{font-size:21px;font-weight:700;letter-spacing:.03em;margin-bottom:5px}.brand small{font-size:12px;font-weight:400;color:var(--muted);letter-spacing:.1em}.sidebar .sub{font-size:13px;color:var(--muted);margin:5px 0 21px}.sidebar nav a{font-size:14px;line-height:1.5;padding:9px 11px;margin:3px 0;border-radius:6px}.sidebar nav a:hover{background:#e0ece6;color:#174d43}.sidebar nav a.active,.sidebar nav a.active:hover{background:var(--teal);color:#fff}.nav-group{font-size:12px;color:var(--muted);margin:18px 11px 6px;letter-spacing:.08em}.sidebar-footer{margin-top:24px;font-size:12px;color:var(--muted)}.shell{margin-left:266px}@media(max-width:900px){.shell{margin-left:0}}
-h2,h3,h4,[id]{scroll-margin-top:0}.stepper{background:#edf6f1;border:1px solid #b4cfc2;border-radius:12px;padding:22px;margin:24px 0}.stepper h3{margin:0 0 12px}.step-tools{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:15px 0}.step-tools input{width:200px;min-height:40px}.step-card{background:white;padding:18px;border-radius:8px;border:1px solid var(--line)}.step-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}.step-field{border:1px solid #d6e5dd;padding:12px;border-radius:7px;overflow-wrap:anywhere}.step-field strong{display:block;font-size:13px;color:var(--teal)}.step-field p{margin:7px 0 0}.progress-track{display:flex;gap:4px;margin:10px 0}.progress-track span{height:5px;flex:1;border-radius:3px;background:#c8d8d0}.progress-track span.done{background:var(--teal)}.step-count{font-variant-numeric:tabular-nums}.chapter-links{display:flex;gap:15px;justify-content:space-between;border-top:1px solid var(--line);padding-top:25px;margin-top:35px}.ref-area{min-height:0}.ref-panel h4{margin:12px 0 4px}.reading-meta{font-size:13px;color:var(--muted)}summary:focus-visible,input:focus-visible{outline:3px solid #81cbb8;outline-offset:3px}button:disabled{opacity:.5;cursor:default}.quick-select{width:100%}.overview-card{border:1px solid var(--line);background:white;border-radius:9px;padding:18px;margin:14px 0}.overview-card h3{margin-top:0}.sidebar nav a.external{background:#e4eee7}.nav-shade{display:none}@media(max-width:900px){body.nav-open .nav-shade{display:block;position:fixed;inset:60px 0 0 266px;background:#25334155;z-index:25}.stepper{padding:15px}.step-tools input{width:150px}.step-grid{grid-template-columns:1fr}.sidebar{max-width:85vw}.step-field{padding:10px}}@media print{.step-tools,.progress-track,.chapter-links{display:none}.step-card{break-inside:avoid}body.nav-open .nav-shade{display:none}}main{overflow-x:clip}article{min-width:0;max-width:100%}.table-scroll,pre{contain:inline-size}p,li,h1,h2,h3,h4{overflow-wrap:anywhere}</style></head><body><a class="skip" href="#article">跳到正文</a><aside class="sidebar" aria-label="章节目录"><div class="brand"><small>COMPILER / CHAPTER 08</small>第8章 中间代码优化</div><p class="sub">完整讲解 · 分步推导 · 离线阅读</p><nav><a href="#navigation">学习导航</a><div class="nav-group">准备 · 语义与控制流</div><a href="#ch08-s01">1. 为什么优化以及优化的边界</a><a href="#ch08-s02">2. 优化种类与层次</a><a href="#ch08-s03">3. 基本块与程序流图</a><div class="nav-group">基础 · 常量与公共表达式</div><a href="#ch08-s04">4. 常表达式节省与常量传播</a><a href="#ch08-s05">5. 公共表达式与值编码</a><a href="#ch08-s06">6. 值编码算法的完整例题</a><div class="nav-group">应用 · 循环外提</div><a href="#ch08-s07">7. 循环不变式外提</a><a href="#ch08-s08">8. 外提时必须检查的问题</a><a href="#ch08-s09">9. 多层循环外提</a><div class="nav-group">组合 · 三项优化练习</div><a href="#ch08-s10">10. 三种优化的综合练习</a><a href="#ch08-s11">11. 数组条件语句练习</a><div class="nav-group">综合应用 · 完整解题</div><a href="#ch08-s12">12. 综合应用：历年题三项优化如何各自发挥作用</a><a href="#ch08-s13">13. 优化事实的适用范围</a><div class="nav-group">练习与复习 · 回查、自测和速查</div><a href="#ch08-s14">14. 知识联系与复习</a><a href="#ch08-s15">15. 自测与答案</a><a href="#ch08-s16">16. 排错与复习</a><a href="#ch08-s17">17. 末尾速查表</a><div class="nav-group">全课程</div><a class="external" href="00_学习导航.html">全课程学习导航</a></nav><div class="sidebar-footer">先看问题与条件，再跟踪推导和例题</div></aside><div class="nav-shade"></div><div class="shell"><header class="topbar"><span class="topbar-title">第8章 中间代码优化</span><div class="toolbar"><button id="menu" class="menu" aria-label="打开或收起目录" aria-expanded="false">目录</button><button data-font="-1" aria-label="减小正文字号">字号 −</button><button data-font="1" aria-label="增大正文字号">字号 ＋</button><button id="print">打印 / 保存 PDF</button></div></header><main><article id="article"><h1>第8章 中间代码优化：怎样在保持语义的前提下减少重复工作</h1>
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="source-sha256" content="f7b589caa36de36937396e850c3b5e91edc594b7cd7174fc96b08cb05ee25f67"><title>第8章 中间代码优化 · 学习资料</title><script>(function () {
+  'use strict';
+  let saved;
+  try { saved = localStorage.getItem('compiler-reading-theme-v1'); } catch (_) {}
+  const theme = saved === 'light' || saved === 'dark' ? saved
+    : (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+  document.documentElement.dataset.readerTheme = theme;
+})();
+</script><style>:root{--paper:#fbfaf7;--surface:#fff;--ink:#253341;--muted:#5c6b75;--line:#d5dfdd;--teal:#156b62;--soft:#edf6f1;--font:17px;--scroll-offset:90px}*{box-sizing:border-box}html{scroll-behavior:auto;scroll-padding-top:var(--scroll-offset)}body{margin:0;background:var(--paper);color:var(--ink);font-family:'Microsoft YaHei','PingFang SC',system-ui,sans-serif;font-size:var(--font);line-height:1.85}a{color:var(--teal);text-underline-offset:3px}a:hover{color:#173f75}button,select{font:inherit}button{cursor:pointer}button,select{border:1px solid #b9cbc5;border-radius:7px;padding:7px 11px;background:#fff;color:var(--ink)}button:hover{background:var(--soft)}button:focus-visible,select:focus-visible,a:focus-visible{outline:3px solid #81cbb8;outline-offset:3px}.skip{position:absolute;top:-80px;left:12px;z-index:50;background:#fff;padding:8px}.skip:focus{top:8px}.sidebar{position:fixed;inset:0 auto 0 0;width:270px;padding:23px 18px;background:#f0f4f0;border-right:1px solid var(--line);overflow:auto;z-index:30;overscroll-behavior:contain}.brand{font-size:21px;font-weight:700}.brand small{display:block;font-size:12px;font-weight:400;color:var(--muted)}.sidebar nav a{display:block;color:var(--ink);text-decoration:none;padding:8px 10px;margin:3px 0;border-radius:6px;font-size:14px;line-height:1.6}.sidebar nav a:hover{background:#dcebe3}.sidebar nav a.active,.sidebar nav a.active:hover{background:var(--teal);color:white}.sidebar select{width:100%;font-size:13px}.nav-tip{font-size:12px;color:var(--muted);margin:14px 0}.shell{margin-left:270px;overflow-anchor:none}.topbar{position:sticky;top:0;background:rgba(251,250,247,.98);padding:12px 26px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:12px;z-index:20}.topbar-title{font-size:13px;color:var(--muted)}.toolbar{display:flex;gap:7px;flex-wrap:wrap}.toolbar button{font-size:13px}.menu{display:none}main{max-width:1120px;margin:auto;padding:30px 44px 80px;min-width:0}h1{font-size:32px;line-height:1.5;margin:14px 0 25px}h2{font-size:25px;line-height:1.5;padding:0 0 11px;border-bottom:1px solid var(--line);margin:44px 0 23px}h3{font-size:21px;line-height:1.55;margin:29px 0 16px}h4{font-size:18px;line-height:1.6;margin:22px 0 13px}p{margin:14px 0}li{margin:7px 0}ul,ol{padding-left:1.6em}blockquote{margin:20px 0;padding:5px 18px;border-left:3px solid #a8c6bb;background:#f0f3ef;color:#53655e;font-size:14px}blockquote p{margin:8px 0}hr{border:0;border-top:1px solid var(--line);margin:32px 0}code{font-family:Consolas,'Cascadia Code',monospace;font-size:.9em;background:#eef1ed;padding:2px 5px;border-radius:4px;overflow-wrap:anywhere}pre{background:#18313d;color:#e8f0f0;border-radius:9px;padding:19px;line-height:1.65;overflow-x:auto;max-width:100%;font-size:14px}pre code{background:none;padding:0;color:inherit;white-space:pre;overflow-wrap:normal}table{border-collapse:collapse;width:100%;font-size:15px}th{background:#eaf3ee;text-align:left}td,th{padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:top}tbody tr:nth-child(even){background:#f6f9f6}.table-scroll{overflow-x:auto;border:1px solid var(--line);border-radius:8px;margin:17px 0;max-width:100%}.table-scroll td{min-width:80px}.source-note{font-size:13px;color:var(--muted)}.learning-figure{padding:23px;border:1px solid #b4cfc2;border-radius:12px;background:var(--soft);margin:25px 0}.learning-figure h4{margin:0 0 8px;font-size:20px}.fig-intro{font-size:14px;color:var(--muted)}.learning-figure label{display:block;margin-top:15px;font-size:14px;font-weight:700}.learning-figure select{margin-top:7px;width:100%;min-height:44px;font-size:15px}.fig-output{margin-top:16px}.flow{display:flex;gap:10px;align-items:stretch;flex-wrap:wrap}.flow-node{flex:1 1 150px;border:1px solid #bfd2c9;border-radius:8px;background:#fff;padding:13px;min-width:0}.flow-node strong{display:block;color:var(--teal)}.flow-node p{font-size:14px;margin:8px 0}.flow-arrow{align-self:center;color:var(--teal);font-size:24px}.fig-note{padding:10px 14px;border-left:3px solid var(--teal);background:#fff;font-size:14px;margin:15px 0 0}.svg-scroll{overflow-x:auto;max-width:100%}.svg-scroll svg{display:block;max-width:100%;height:auto}.ref-area{min-height:calc(100vh - var(--scroll-offset));margin-top:24px}.ref-picker{padding:22px;border-radius:12px;background:var(--soft);border:1px solid #b4cfc2}.ref-picker label{display:block;font-weight:700;margin-bottom:10px}.ref-picker select{width:100%;font-size:15px;min-height:46px}.ref-panel{margin-top:18px;background:#fff;border:1px solid var(--line);padding:20px;border-radius:9px}.ref-panel[hidden]{display:none}.ref-panel h3{margin:0;font-size:24px}.ref-panel h4{font-size:16px;margin:18px 0 8px}.ref-kind{font-size:13px;color:var(--teal)}.result{padding:10px 15px;border-left:3px solid var(--teal);background:var(--soft)}.copy{display:block;margin:5px 0 0 auto;font-size:12px;padding:4px 8px}.code-wrap{margin:20px 0}.code-wrap pre{margin-bottom:0}.foot{font-size:13px;color:var(--muted);border-top:1px solid var(--line);padding-top:23px;margin-top:30px}details{border:1px solid var(--line);padding:12px;border-radius:8px;margin:15px 0}summary{cursor:pointer;font-weight:700}@media(max-width:900px){.sidebar{transform:translateX(-100%)}body.nav-open .sidebar{transform:translateX(0);top:60px}.shell{margin-left:0}.menu{display:inline-block}.topbar-title{display:none}.topbar{padding:10px 14px}main{padding:23px 18px 65px}h1{font-size:27px}h2{font-size:23px}.learning-figure,.ref-picker{padding:16px}.flow{flex-direction:column}.flow-arrow{transform:rotate(90deg)}.ref-panel{padding:15px}}@media print{.sidebar,.topbar,.toolbar,.copy,.skip{display:none!important}.shell{margin:0}main{padding:0;max-width:none}body{background:#fff;font-size:11pt}.ref-area{min-height:0}.ref-picker select{display:none}pre{white-space:pre-wrap;background:#f3f5f4;color:#111}.learning-figure{break-inside:avoid}.table-scroll{overflow:visible}a{color:inherit}}@media print{.svg-scroll{overflow:visible}.svg-scroll svg{min-width:0!important;width:100%!important;height:auto!important}}.sidebar{width:266px;background:#f1f4f1;padding:27px 19px;overflow-y:auto}.brand{font-size:21px;font-weight:700;letter-spacing:.03em;margin-bottom:5px}.brand small{font-size:12px;font-weight:400;color:var(--muted);letter-spacing:.1em}.sidebar .sub{font-size:13px;color:var(--muted);margin:5px 0 21px}.sidebar nav a{font-size:14px;line-height:1.5;padding:9px 11px;margin:3px 0;border-radius:6px}.sidebar nav a:hover{background:#e0ece6;color:#174d43}.sidebar nav a.active,.sidebar nav a.active:hover{background:var(--teal);color:#fff}.nav-group{font-size:12px;color:var(--muted);margin:18px 11px 6px;letter-spacing:.08em}.sidebar-footer{margin-top:24px;font-size:12px;color:var(--muted)}.shell{margin-left:266px}@media(max-width:900px){.shell{margin-left:0}}
+#sql-reference{min-height:calc(100vh - var(--scroll-offset,90px))}
+.table-scroll{max-width:100%;overflow-x:auto;margin:18px 0;border:1px solid var(--line);border-radius:8px}.table-scroll table{width:100%;border-collapse:collapse}.table-scroll td,.table-scroll th{min-width:85px;vertical-align:top}.table-scroll pre{white-space:pre-wrap}article h2,article h3,article h4{scroll-margin-top:var(--scroll-offset,90px)}.course-home{display:block;font-size:13px;padding:8px 11px;margin-bottom:12px}.chapter-turns{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;margin-top:34px;padding-top:20px;border-top:1px solid var(--line)}.chapter-turns a{font-size:14px}.sidebar-footer{font-size:12px;color:var(--muted);margin-top:24px}article>p:first-of-type{font-size:1.04em}.noscript-note{padding:12px;border-left:3px solid var(--teal)}@media(max-width:600px){.table-scroll table{min-width:520px}.table-scroll{font-size:14px}pre{max-width:100%;overflow-x:auto}article{min-width:0}}@media print{.table-scroll table{min-width:0}.chapter-turns{display:none}}
+
+h2,h3,h4,[id]{scroll-margin-top:0}.stepper{background:#edf6f1;border:1px solid #b4cfc2;border-radius:12px;padding:22px;margin:24px 0}.stepper h3{margin:0 0 12px}.step-tools{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:15px 0}.step-tools input{width:200px;min-height:40px}.step-card{background:white;padding:18px;border-radius:8px;border:1px solid var(--line)}.step-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}.step-field{border:1px solid #d6e5dd;padding:12px;border-radius:7px;overflow-wrap:anywhere}.step-field strong{display:block;font-size:13px;color:var(--teal)}.step-field p{margin:7px 0 0}.progress-track{display:flex;gap:4px;margin:10px 0}.progress-track span{height:5px;flex:1;border-radius:3px;background:#c8d8d0}.progress-track span.done{background:var(--teal)}.step-count{font-variant-numeric:tabular-nums}.chapter-links{display:flex;gap:15px;justify-content:space-between;border-top:1px solid var(--line);padding-top:25px;margin-top:35px}.ref-area{min-height:0}.ref-panel h4{margin:12px 0 4px}.reading-meta{font-size:13px;color:var(--muted)}summary:focus-visible,input:focus-visible{outline:3px solid #81cbb8;outline-offset:3px}button:disabled{opacity:.5;cursor:default}.quick-select{width:100%}.overview-card{border:1px solid var(--line);background:white;border-radius:9px;padding:18px;margin:14px 0}.overview-card h3{margin-top:0}.sidebar nav a.external{background:#e4eee7}.nav-shade{display:none}@media(max-width:900px){body.nav-open .nav-shade{display:block;position:fixed;inset:60px 0 0 266px;background:#25334155;z-index:25}.stepper{padding:15px}.step-tools input{width:150px}.step-grid{grid-template-columns:1fr}.sidebar{max-width:85vw}.step-field{padding:10px}}@media print{.step-tools,.progress-track,.chapter-links{display:none}.step-card{break-inside:avoid}body.nav-open .nav-shade{display:none}}main{overflow-x:clip}article{min-width:0;max-width:100%}.table-scroll,pre{contain:inline-size}p,li,h1,h2,h3,h4{overflow-wrap:anywhere}.chapter-search-panel[hidden],.chapter-search-results[hidden]{display:none!important}.chapter-search-panel{position:sticky;top:var(--reader-topbar-height,60px);z-index:21;background:#f4f8f3;border-bottom:1px solid #b9cbc5;padding:12px 26px;max-width:100%;font-size:14px;line-height:1.6}.chapter-search-form{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:7px;align-items:center}.chapter-search-form label{grid-column:1/-1;font-weight:700}.chapter-search-form input{min-width:0;width:100%;border:1px solid #7e9d90;border-radius:7px;padding:7px 10px;background:#fff;color:var(--ink);font:inherit;min-height:40px}.chapter-search-panel button{font-size:13px;min-height:36px;padding:6px 9px}.chapter-search-controls{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin-top:9px}.chapter-search-controls [role=status]{margin-right:auto;overflow-wrap:anywhere}.chapter-search-help{margin:8px 0 0;border:0;padding:0;font-size:12px;color:var(--muted)}.chapter-search-help summary{font-weight:400}.chapter-search-help p{margin:6px 0}.chapter-search-help[open]{max-height:20vh;overflow:auto}.chapter-search-results{margin-top:9px;border-top:1px solid var(--line);padding-top:8px;max-height:32vh;overflow:auto;overscroll-behavior:contain}.chapter-search-pages{display:flex;align-items:center;gap:7px;flex-wrap:wrap;font-size:12px}.chapter-search-pages span{margin-right:auto}.chapter-search-results ol{margin:5px 0;padding:0;list-style:none}.chapter-search-results li{margin:4px 0}.chapter-search-result{display:block;text-align:left;width:100%;white-space:normal;overflow-wrap:anywhere;background:#fff}.chapter-search-result strong{display:block;font-size:13px;color:var(--teal)}.chapter-search-result span{display:block;font-size:13px;line-height:1.65;margin-top:3px}.chapter-search-result[aria-current=true]{border-color:var(--teal);background:#e5f1e8}.chapter-search-result mark{background:#ffe69a;color:inherit;padding:0}mark.chapter-search-hit{background:#ffe38a;color:inherit;padding:0;border-radius:2px;outline:1px solid #ba8a11;scroll-margin-top:var(--scroll-offset,90px)}.chapter-search-form input:focus-visible,.chapter-search-panel summary:focus-visible,mark.chapter-search-hit:focus-visible{outline:3px solid #438f7e;outline-offset:3px}@media(max-width:900px){.chapter-search-panel{padding:10px 14px}body.nav-open .sidebar,body.nav-open .nav-shade{top:var(--reader-topbar-height,60px)}}@media(max-width:480px){.chapter-search-controls{gap:5px}.chapter-search-controls [role=status]{flex-basis:100%;font-size:13px}.chapter-search-controls button{flex:1 1 auto}.chapter-search-results{max-height:28vh}}@media print{.chapter-search-panel{display:none!important}mark.chapter-search-hit{background:transparent;color:inherit;outline:none}}
+.chapter-search-panel{max-height:calc(100vh - var(--reader-topbar-height,60px));max-height:calc(100dvh - var(--reader-topbar-height,60px));overflow-y:auto;overscroll-behavior:contain}
+:root[data-reader-theme]{color-scheme:light;--reader-sidebar:#f1f4f1;--reader-topbar:rgba(251,250,247,.98);--reader-hover:#e0ece6;--reader-hover-ink:#174d43;--reader-active-ink:#fff;--reader-external:#e4eee7;--reader-code:#eef1ed;--reader-pre:#18313d;--reader-pre-ink:#e8f0f0;--reader-th:#eaf3ee;--reader-row:#f6f9f6;--reader-panel-border:#b4cfc2;--reader-progress:#c8d8d0;--reader-search:#f4f8f3;--reader-current:#e5f1e8;--reader-link-hover:#173f75}
+:root[data-reader-theme="dark"]{color-scheme:dark;--paper:#141c22;--surface:#1d2830;--ink:#e3eaf0;--muted:#aab9c2;--line:#40515c;--teal:#83d8be;--soft:#233b3b;--reader-sidebar:#18242c;--reader-topbar:rgba(20,28,34,.98);--reader-hover:#2a4145;--reader-hover-ink:#b4ecd9;--reader-active-ink:#10231e;--reader-external:#23363d;--reader-code:#2a3943;--reader-pre:#0e171e;--reader-pre-ink:#dce8ef;--reader-th:#253b43;--reader-row:#19262e;--reader-panel-border:#46606a;--reader-progress:#3b515a;--reader-search:#1b2b33;--reader-current:#2a4145;--reader-link-hover:#b2e7ff}
+.reading-theme{display:inline-flex;align-items:center;gap:6px;font-size:13px;white-space:nowrap}.reading-theme select{font-size:13px;min-height:36px;cursor:pointer}
+:root[data-reader-theme] .sidebar{background:var(--reader-sidebar)}
+:root[data-reader-theme] .topbar{background:var(--reader-topbar)}
+:root[data-reader-theme] button,:root[data-reader-theme] select,:root[data-reader-theme] .chapter-search-form input{background:var(--surface);color:var(--ink);border-color:var(--line)}
+:root[data-reader-theme] button:hover{background:var(--soft)}
+:root[data-reader-theme] a:hover{color:var(--reader-link-hover)}
+:root[data-reader-theme] .sidebar nav a:hover{background:var(--reader-hover);color:var(--reader-hover-ink)}
+:root[data-reader-theme] .sidebar nav a.active,:root[data-reader-theme] .sidebar nav a.active:hover{background:var(--teal);color:var(--reader-active-ink)}
+:root[data-reader-theme] .sidebar nav a.external{background:var(--reader-external)}
+:root[data-reader-theme] .sidebar nav a.external.active{background:var(--teal)}
+:root[data-reader-theme] code{background:var(--reader-code)}
+:root[data-reader-theme] pre{background:var(--reader-pre);color:var(--reader-pre-ink)}
+:root[data-reader-theme] pre code{background:none;color:inherit}
+:root[data-reader-theme] th{background:var(--reader-th)}
+:root[data-reader-theme] tbody tr:nth-child(even){background:var(--reader-row)}
+:root[data-reader-theme] .ref-panel,:root[data-reader-theme] .step-card,:root[data-reader-theme] .overview-card,:root[data-reader-theme] .flow-node,:root[data-reader-theme] .fig-note,:root[data-reader-theme] .skip{background:var(--surface)}
+:root[data-reader-theme] .stepper,:root[data-reader-theme] .ref-picker,:root[data-reader-theme] .learning-figure{background:var(--soft);border-color:var(--reader-panel-border)}
+:root[data-reader-theme] .step-field{border-color:var(--line)}
+:root[data-reader-theme] .progress-track span{background:var(--reader-progress)}
+:root[data-reader-theme] .progress-track span.done{background:var(--teal)}
+:root[data-reader-theme] blockquote{background:var(--soft);color:var(--muted);border-color:var(--teal)}
+:root[data-reader-theme] .chapter-search-panel{background:var(--reader-search);border-color:var(--line)}
+:root[data-reader-theme] .chapter-search-result[aria-current=true]{background:var(--reader-current);border-color:var(--teal)}
+:root[data-reader-theme="dark"] mark.chapter-search-hit,:root[data-reader-theme="dark"] .chapter-search-result mark{background:#6b5013;color:#fff3c4;outline-color:#e8c86b}
+:root[data-reader-theme="dark"] ::selection{background:#386c73;color:#fff}
+@media print{
+ :root[data-reader-theme]{color-scheme:light;--paper:#fff;--surface:#fff;--ink:#111;--muted:#444;--line:#bbb;--teal:#175b50;--soft:#f2f5f3;--reader-code:#eee;--reader-pre:#f3f5f4;--reader-pre-ink:#111;--reader-th:#eaf0ec;--reader-row:#f7f7f7;--reader-panel-border:#aaa;--reader-progress:#ccc;--reader-active-ink:#fff}
+ :root[data-reader-theme] body{background:#fff;color:#111}
+ :root[data-reader-theme] .reading-theme{display:none!important}
+ :root[data-reader-theme] mark.chapter-search-hit{background:transparent;color:inherit;outline:none}
+}
+</style></head><body><a class="skip" href="#article">跳到正文</a><aside class="sidebar" aria-label="章节目录"><div class="brand"><small>COMPILER / CHAPTER 08</small>第8章 中间代码优化</div><p class="sub">完整讲解 · 分步推导 · 离线阅读</p><nav><a href="#navigation">学习导航</a><div class="nav-group">准备 · 语义与控制流</div><a href="#ch08-s01">1. 为什么优化以及优化的边界</a><a href="#ch08-s02">2. 优化种类与层次</a><a href="#ch08-s03">3. 基本块与程序流图</a><div class="nav-group">基础 · 常量与公共表达式</div><a href="#ch08-s04">4. 常表达式节省与常量传播</a><a href="#ch08-s05">5. 公共表达式与值编码</a><a href="#ch08-s06">6. 值编码算法的完整例题</a><div class="nav-group">应用 · 循环外提</div><a href="#ch08-s07">7. 循环不变式外提</a><a href="#ch08-s08">8. 外提时必须检查的问题</a><a href="#ch08-s09">9. 多层循环外提</a><div class="nav-group">组合 · 三项优化练习</div><a href="#ch08-s10">10. 三种优化的综合练习</a><a href="#ch08-s11">11. 数组条件语句练习</a><div class="nav-group">综合应用 · 完整解题</div><a href="#ch08-s12">12. 综合应用：历年题三项优化如何各自发挥作用</a><a href="#ch08-s13">13. 优化事实的适用范围</a><div class="nav-group">练习与复习 · 回查、自测和速查</div><a href="#ch08-s14">14. 知识联系与复习</a><a href="#ch08-s15">15. 自测与答案</a><a href="#ch08-s16">16. 排错与复习</a><a href="#ch08-s17">17. 末尾速查表</a><div class="nav-group">全课程</div><a class="external" href="00_学习导航.html">全课程学习导航</a></nav><div class="sidebar-footer">先看问题与条件，再跟踪推导和例题</div></aside><div class="nav-shade"></div><div class="shell"><header class="topbar"><span class="topbar-title">第8章 中间代码优化</span><div class="toolbar"><button id="menu" class="menu" aria-label="打开或收起目录" aria-expanded="false">目录</button><button data-font="-1" aria-label="减小正文字号">字号 −</button><button data-font="1" aria-label="增大正文字号">字号 ＋</button><label class="reading-theme" for="reading-theme">外观<select id="reading-theme" aria-label="阅读模式"><option value="light">白天</option><option value="dark">夜间</option></select></label><button id="chapter-search-toggle" type="button" aria-expanded="false" aria-controls="chapter-search-panel">搜索</button><button id="print">打印 / 保存 PDF</button></div></header><section id="chapter-search-panel" class="chapter-search-panel" aria-label="本章关键词搜索" hidden>
+  <form id="chapter-search-form" class="chapter-search-form" role="search">
+    <label for="chapter-search-input">搜索本章</label><input id="chapter-search-input" type="search" placeholder="中文关键词或英文术语" autocomplete="off" spellcheck="false" aria-describedby="chapter-search-status"><button type="submit">查找</button><button id="chapter-search-clear" type="button">清除</button>
+  </form>
+  <div class="chapter-search-controls"><span id="chapter-search-status" role="status" aria-live="polite">请输入关键词</span><button id="chapter-search-prev" type="button" disabled>上一处</button><button id="chapter-search-next" type="button" disabled>下一处</button><button id="chapter-search-results-toggle" type="button" aria-expanded="false" aria-controls="chapter-search-results" disabled>展开结果</button><button id="chapter-search-close" type="button" aria-label="收起搜索，继续阅读">收起</button></div>
+  <details class="chapter-search-help"><summary>搜索范围与操作</summary><p>检索本章正文、表格、代码、折叠答案和全部速查项。目录与分步演示不重复计入，演示对应的正文仍可搜索。忽略关键词首尾空白，其余按文字原样匹配，英文不区分大小写；内部空格和符号也参与匹配。搜索完全离线，不上传关键词。</p><p>点击结果定位高亮，折叠内容会自动展开。Ctrl＋K 打开搜索；输入框内按 Enter 查找或跳到下一处，Shift＋Enter 跳到上一处；Esc 收起。清除会移除高亮，并恢复由搜索展开的折叠内容。浏览器的 Ctrl＋F 仍可使用。</p></details>
+  <div id="chapter-search-results" class="chapter-search-results" hidden><div class="chapter-search-pages"><span id="chapter-search-page-status"></span><button id="chapter-search-page-prev" type="button">前一页</button><button id="chapter-search-page-next" type="button">后一页</button></div><ol id="chapter-search-list"></ol></div>
+</section>
+<main><article id="article"><h1>第8章 中间代码优化：怎样在保持语义的前提下减少重复工作</h1>
 <p>逐结构生成的中间代码可能反复计算相同的常量、表达式和数组地址。优化要减少这些工作，同时保留原来的结果和执行行为。本章先划清基本块与路径边界，再学习常量传播、公共表达式节省和循环不变式外提。</p>
 <p><a id="navigation"></a></p>
 <h2>学习导航</h2>
@@ -28,7 +82,7 @@ h2,h3,h4,[id]{scroll-margin-top:0}.stepper{background:#edf6f1;border:1px solid #
 </tr>
 <tr>
 <td>组合 · 三项优化练习</td>
-<td>在课件数组例中依次完成分块、折叠、复用与外提。</td>
+<td>在数组例中依次完成分块、折叠、复用与外提。</td>
 <td><a href="#ch08-s10">10. 三种优化的综合练习</a>、<a href="#ch08-s11">11. 数组条件语句练习</a></td>
 </tr>
 <tr>
@@ -47,12 +101,13 @@ h2,h3,h4,[id]{scroll-margin-top:0}.stepper{background:#edf6f1;border:1px solid #
 <a id="为什么优化以及优化的边界"></a></p>
 <h2>1. 为什么优化以及优化的边界</h2>
 <h3>1.1 优化要解决什么问题</h3>
-<p>中间代码生成优先保证翻译清楚、正确，常产生乘 1、减 0、重复计算地址等指令。<strong>代码优化</strong>是在保持程序语义的前提下，改变表示或执行安排，使时间、空间或其他目标更好。语义包括结果、可观察的赋值和输入输出、语言要求的求值顺序等，不能只比较某一个最终整数。</p>
+<p>中间代码生成优先保证翻译清楚、正确，常产生乘 1、减 0、重复计算地址等指令。<strong>代码优化</strong> 是在保持程序语义的前提下，改变表示或执行安排，使时间、空间或其他目标更好。语义包括结果、可观察的赋值和输入输出、语言要求的求值顺序等，不能只比较某一个最终整数。</p>
 <p>例如同一基本块中 <code>t1=b*c; t2=b*c</code>，若 b、c 未变且乘法是可重复的纯运算，可用 t1 替代第二次结果。若两条之间有 <code>b:=b+1</code>，第二个乘积可能不同，就不能替代。</p>
 <p>“优化”不保证得到全局最优程序：编译器在分析成本、运行收益和代码大小之间取舍。无法证明变换正确时，应保留代码。不要把“不知道会不会改变”视为“肯定不变”。</p>
 <h3>1.2 编译时间与运行时间分别计算</h3>
 <p>设优化多花编译时间 ΔC，每次运行节省 ΔR，运行 N 次，则总时间变化约为 <code>ΔC−N·ΔR</code>。这是帮助理解的成本模型，不是所有程序的统一性能公式：还要考虑缓存、代码大小、目标设备等。</p>
-<p>课件强调一次编译、多次执行的收益，并举实时控制、导航和嵌入式资源受限等教学背景。硬件相关需求也可能要求对关键代码人工分析；这些例子说明优化有使用场景，不能推出“手写汇编总比编译器快”。课件关于全局优化昂贵、特殊需求才采用的说法反映本课程选择的教学范围，不作为所有现代编译器的现状判断。</p>
+<p>一次编译、多次执行时，运行成本的节省可能抵消额外编译成本。实时控制关心响应时间，嵌入式程序还可能受空间限制，因而不能只数源代码行数。分析复杂度、代码质量和编译时间需要一起权衡；这里主要展开三种基础优化，不据此概括实际编译器的全部能力。</p>
+<p>设优化多花编译时间 2 秒，每次运行少花 0.01 秒。运行 1000 次时，总时间变化为 <code>2−1000×0.01=−8秒</code>，即总共节省 8 秒；若只运行 100 次，则 <code>2−100×0.01=1秒</code>，总时间反而增加 1 秒。比较时编译成本只计一次，运行收益按实际次数累计。这个估算忽略其他资源，只用于解释收益条件。</p>
 <p><a id="ch08-s02"></a>
 <a id="二优化种类与层次"></a>
 <a id="优化种类与层次"></a></p>
@@ -83,8 +138,9 @@ h2,h3,h4,[id]{scroll-margin-top:0}.stepper{background:#edf6f1;border:1px solid #
 <td>保留寄存器中的结果，减少内存读写</td>
 </tr>
 </tbody></table></div>
-<p>从作用范围看，<strong>局部优化</strong>在一个基本块内分析；<strong>循环优化</strong>利用多次重复执行的结构；<strong>全局优化</strong>跨基本块传播信息。三者是范围上的区分，与“常量折叠”等变换种类不能混为同一维度。</p>
-<h3>2.2 课件列出的优化种类</h3>
+<p>从作用范围看，<strong>局部优化</strong> 在一个基本块内分析；<strong>循环优化</strong> 利用多次重复执行的结构；<strong>全局优化</strong> 跨基本块传播信息。三者是范围上的区分，与“常量折叠”等变换种类不能混为同一维度。</p>
+<p>小例子：IR层可把整数2+3算成5；目标机若支持给寄存器加1的专用指令，指令层又可选择该指令。这是不同阶段的选择，不能把“某目标机少一条指令”当作所有IR都适用的数学规则。</p>
+<h3>2.2 优化种类与学习重点</h3>
 <div class="table-scroll"><table>
 <thead>
 <tr>
@@ -149,14 +205,14 @@ h2,h3,h4,[id]{scroll-margin-top:0}.stepper{background:#edf6f1;border:1px solid #
 <td>合并方式取决于所分析的信息；要确定唯一常量，相关路径必须同值</td>
 </tr>
 </tbody></table></div>
-<p>课件重点讲常表达式节省、公共表达式节省和循环不变式外提，其余介绍基本思想，没有给出完整算法。下面也按这个深度区别展开。</p>
+<p>本章重点展开常表达式节省、公共表达式节省和循环不变式外提；先用下面的小例区分其他优化的目标，再学习这三种方法的完整过程。</p>
 <h3>2.3 运算强度削减与临时空间的例子</h3>
 <p>原循环 <code>for j:=1 to 100 do A[j]:=3*j+10</code>，第一次值为 13，每轮增加 3，可变成：</p>
 <pre><code class="language-text">m:=13;
 for j:=1 to 100 do begin A[j]:=m; m:=m+3 end
 </code></pre>
 <p>这里把每轮乘法变为累加；若 m 是新临时量，额外最后一次更新不影响用户对象。变换是否划算由目标机代价决定，不能假定每种目标机都没有乘法指令。</p>
-<p><strong>活跃/存活</strong>表示某个当前值以后还会被使用，且使用之前未被新定义覆盖。t1 的最后一次使用在第 4 条，t2 首次定义在第 5 条，那么两者可能共享位置；若 t1 后面又使用，不能仅因“临时量通常只使用一次”就共享。多分支程序不能只看文本先后，还要看执行路径。</p>
+<p><strong>活跃/存活</strong> 表示某个当前值以后还会被使用，且使用之前未被新定义覆盖。t1 的最后一次使用在第 4 条，t2 首次定义在第 5 条，那么两者可能共享位置；若 t1 后面又使用，不能仅因“临时量通常只使用一次”就共享。多分支程序不能只看文本先后，还要看执行路径。</p>
 <p><a id="ch08-s03"></a>
 <a id="三基本块与程序流图"></a>
 <a id="基本块与程序流图"></a>
@@ -164,9 +220,10 @@ for j:=1 to 100 do begin A[j]:=m; m:=m+3 end
 <h2>3. 基本块与程序流图</h2>
 <h3>3.1 为什么要划分基本块</h3>
 <p>局部优化想顺着代码记录当前事实，但跳转可能从中间进入，使前面得出的事实不成立。先切出只能从开头进入、按顺序执行的片段，才能安全地限定局部分析范围。</p>
-<p><strong>基本块</strong>是一段连续的中间代码，只能从第一条进入，只能在最后一条转出；在通常控制流模型下，块内顺序执行。一个入口、一个结束位置不等于只有一个后继块：末尾条件跳转可以分别到真、假两个后继。</p>
+<p><strong>基本块</strong> 是一段连续的中间代码，只能从第一条进入，只能在最后一条转出；在通常控制流模型下，块内顺序执行。一个入口、一个结束位置不等于只有一个后继块：末尾条件跳转可以分别到真、假两个后继。</p>
 <p><code>x:=10; L: y:=x+1</code> 若别处能在 <code>x:=20</code> 后跳到 L，就不能认定 y 一定为 11。把 L 划为新块的入口，局部算法就不会误用仅在前一路径成立的 x=10。</p>
-<h3>3.2 课件的四条划分规则</h3>
+<p>小例子：直线代码a:=1；b:=a+2；write(b)没有中途入口或跳转，可作为一个基本块。若另一处能直接跳到第二条，则第二条必须成为新块入口，否则“a已经为1”的入口假设不再可靠。</p>
+<h3>3.2 本章的四条划分规则</h3>
 <ol>
 <li>整个序列第一条为入口。</li>
 <li>转移性四元式结束当前块，下一条开始新块。</li>
@@ -174,126 +231,10 @@ for j:=1 to 100 do begin A[j]:=m; m:=m+3 end
 <li>对地址引用型对象的赋值作为块的出口，随后开始新块。</li>
 </ol>
 <p>转移性四元式包括 JMP、CALL、RETURN、ENDPROC、ENDFUNC、THEN、ELSE、DO、ENDWHILE。定位性四元式包括 LABEL、ENTRY、WHILE、ENDIF。若同时承担定位与转移，按转移处理。连续标记或程序末尾不应据此造出不存在的空指令。</p>
-<p>第 4 条是课件为处理<strong>别名</strong>采取的保守规则：别名是不同访问方式可能指向同一对象。例如 <code>b:=5; *p:=10; x:=b</code>，若 p 指向 b，最后 x=10。间接写并非所有基本块定义都必然要求的边界，但本课程用分块加失效处理简化局部优化；仅分块还不够，跨块传播时也不能沿用未经证明仍有效的 b=5。</p>
-<h3>3.3 20 条四元式划分为 8 块</h3>
-<p>课件 18 第 20—22 页源程序：</p>
-<pre><code class="language-text">y:=1;
-L: if A and B then x:=0 else y:=0;
-x:=x+1; y:=y−1;
-while x+y&gt;0 do x:=x−1;
-z:=0
-</code></pre>
-<p>x、y 为非引用型整数形参。A、B 的求值规则另由源语言确定，这个例题按课件的布尔 AND 表示。</p>
-<div class="table-scroll"><table>
-<thead>
-<tr>
-<th>编号</th>
-<th>四元式</th>
-<th>基本块</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>1</td>
-<td>(ASSIG,1,-,y)</td>
-<td>B1</td>
-</tr>
-<tr>
-<td>2</td>
-<td>(LABEL,-,-,L)</td>
-<td>B2</td>
-</tr>
-<tr>
-<td>3</td>
-<td>(AND,A,B,t0)</td>
-<td>B2</td>
-</tr>
-<tr>
-<td>4</td>
-<td>(THEN,t0,-,-)</td>
-<td>B2</td>
-</tr>
-<tr>
-<td>5</td>
-<td>(ASSIG,0,-,x)</td>
-<td>B3</td>
-</tr>
-<tr>
-<td>6</td>
-<td>(ELSE,-,-,-)</td>
-<td>B3</td>
-</tr>
-<tr>
-<td>7</td>
-<td>(ASSIG,0,-,y)</td>
-<td>B4</td>
-</tr>
-<tr>
-<td>8</td>
-<td>(ENDIF,-,-,-)</td>
-<td>B5</td>
-</tr>
-<tr>
-<td>9</td>
-<td>(ADDI,x,1,t1)</td>
-<td>B5</td>
-</tr>
-<tr>
-<td>10</td>
-<td>(ASSIG,t1,-,x)</td>
-<td>B5</td>
-</tr>
-<tr>
-<td>11</td>
-<td>(SUBI,y,1,t2)</td>
-<td>B5</td>
-</tr>
-<tr>
-<td>12</td>
-<td>(ASSIG,t2,-,y)</td>
-<td>B5</td>
-</tr>
-<tr>
-<td>13</td>
-<td>(WHILE,-,-,-)</td>
-<td>B6</td>
-</tr>
-<tr>
-<td>14</td>
-<td>(ADDI,x,y,t3)</td>
-<td>B6</td>
-</tr>
-<tr>
-<td>15</td>
-<td>(GT,t3,0,t4)</td>
-<td>B6</td>
-</tr>
-<tr>
-<td>16</td>
-<td>(DO,t4,-,-)</td>
-<td>B6</td>
-</tr>
-<tr>
-<td>17</td>
-<td>(SUBI,x,1,t5)</td>
-<td>B7</td>
-</tr>
-<tr>
-<td>18</td>
-<td>(ASSIG,t5,-,x)</td>
-<td>B7</td>
-</tr>
-<tr>
-<td>19</td>
-<td>(ENDWHILE,-,-,-)</td>
-<td>B7</td>
-</tr>
-<tr>
-<td>20</td>
-<td>(ASSIG,0,-,z)</td>
-<td>B8</td>
-</tr>
-</tbody></table></div>
-<p><strong>程序流图/控制流图 CFG</strong>以基本块为结点，以可能的执行转移为有向边。此例边为：B1→B2；B2 真→B3、假→B4；B3→B5、B4→B5；B5→B6；B6 真→B7、假→B8；B7→B6。B7 的回边指向重新求条件的 B6，不是直接跳到循环体开头。课件仅要求理解这种图的含义。</p>
+<p>第 4 条是为处理<strong>别名</strong> 采取的保守规则：别名是不同访问方式可能指向同一对象。例如 <code>b:=5; *p:=10; x:=b</code>，若 p 指向 b，最后 x=10。间接写并非所有基本块定义都必然要求的边界，但本课程用分块加失效处理简化局部优化；仅分块还不够，跨块传播时也不能沿用未经证明仍有效的 b=5。</p>
+<h3>3.3 四条语句划成三个基本块</h3>
+<p>小例子：只有四条编号语句，a:int，c:bool：1是a:=1；2是“若c则跳4”；3是a:=2；4是write(a)。</p>
+<p>入口为1、条件转移后的3、转移目标4，因此分块为B1=[1,2]、B2=[3]、B3=[4]。B1真时到B3、假时到B2，B2再到B3。c为真输出1，为假输出2；不能把只有在一条路径上执行的a:=2当作全部路径的事实。</p>
 <p><a id="ch08-s04"></a>
 <a id="四常表达式节省与常量传播"></a>
 <a id="常表达式节省与常量传播"></a>
@@ -301,18 +242,19 @@ z:=0
 <h2>4. 常表达式节省与常量传播</h2>
 <p>有些运算的输入在编译时已知，不必等运行时再算；但变量又可能被重新赋值。常量传播记录“当前位置确定的值”，折叠据此完成已知计算，遇到改写则更新或撤销事实。</p>
 <h3>4.1 两件相关但不同的工作</h3>
-<p><strong>常量折叠</strong>是把已知常量的运算直接算出，例如 2+3→5。<strong>常量传播</strong>是把已知为常量的变量使用替换为那个常量，例如 a:=2 后的 b:=a+3 改为 b:=2+3。课件统称常表达式节省，两者通常配合进行。</p>
-<p><strong>ConstDef 常量定值表</strong>记录 <code>(变量,常量值)</code>，含义是“在当前扫描位置，这个变量确定等于该常量”。它记录的是当前位置的事实，不是这个名字一生的属性。</p>
+<p><strong>常量折叠</strong> 是把已知常量的运算直接算出，例如 2+3→5。<strong>常量传播</strong> 是把已知为常量的变量使用替换为那个常量，例如 a:=2 后的 b:=a+3 改为 b:=2+3。本章将它们合称常表达式节省，两者通常配合进行。</p>
+<p><strong>ConstDef 常量定值表</strong> 记录 <code>(变量,常量值)</code>，含义是“在当前扫描位置，这个变量确定等于该常量”。它记录的是当前位置的事实，不是这个名字一生的属性。</p>
 <h3>4.2 局部算法与适用条件</h3>
 <ol>
 <li>块入口置 ConstDef 为空；除非已有可靠的入口分析结果，不能把上一块的表直接带入。</li>
-<li>只替换当前指令<strong>读取的操作数</strong>，不要把赋值目标 b 替换为常量。</li>
+<li>只替换当前指令<strong>读取的操作数</strong> ，不要把赋值目标 b 替换为常量。</li>
 <li>若纯运算两个输入已知且按目标语义可以安全计算，登记结果常量。</li>
 <li><code>ASSIG A→B</code>：A 常量则登记/更新 B；A 未知则使 B 原有的常量登记失效。</li>
 <li>任何对一个名字的新定义都必须更新其事实；调用和间接写使可能受影响的登记失效。</li>
 <li>继续扫描到块结束。</li>
 </ol>
-<p>课件第 26 页说折叠后删除运算。实现时必须保证所有结果使用都已替换，或改成 <code>ASSIG 常量→结果</code>。若结果在块外仍被使用，就要保留/补上必要定值；“表里知道值”不能代替运行时对象里存有值。除零、目标整数溢出、浮点舍入等不明时，不能按任意精度数学结果直接删除原计算。</p>
+<p>折叠后若要删除原运算，实现时必须保证所有结果使用都已替换，或改成 <code>ASSIG 常量→结果</code>。若结果在块外仍被使用，就要保留/补上必要定值；“表里知道值”不能代替运行时对象里存有值。除零、目标整数溢出、浮点舍入等不明时，不能按任意精度数学结果直接删除原计算。</p>
+<p>例如块 B₁ 末尾为 <code>t=2+3; goto B₂</code>，B₂ 的第一项是 <code>write(t)</code>。在 B₁ 内把 2+3 算成 5 以后，若只删除运算，运行时 t 仍可能是旧值。保守做法将它改为 <code>t=5</code>，使 B₂ 仍读到 5；只有另已证明并改写所有后续使用为常量 5，才可连定值一起删除。常量表是编译期事实，不能替代程序实际需要的存储更新。</p>
 <h3>4.3 m=10 的例题</h3>
 <p>入口条件明确给出 m 总为 10：</p>
 <pre><code class="language-text">a:=m+10; b:=a+m; c:=a+b−d
@@ -325,7 +267,7 @@ z:=0
 </code></pre>
 <p>若未给入口 m=10，不能仅凭例题旁的某次输入这么折叠。</p>
 <h3>4.4 重新赋值使常量事实失效</h3>
-<p>课件例：<code>a:=1; b:=a+1; a:=x; c:=b+5</code>。</p>
+<p>本例：<code>a:=1; b:=a+1; a:=x; c:=b+5</code>。</p>
 <div class="table-scroll"><table>
 <thead>
 <tr>
@@ -366,18 +308,9 @@ z:=0
 </tr>
 </tbody></table></div>
 <p>a:=x 不会让已经存入 b 的 2 随之变成 x+1；赋值复制的是当时的值。优化结果是 <code>a:=1; b:=2; a:=x; c:=7</code>，进一步能否删 a:=1 需要无用定义分析，不能混在常量传播里凭感觉删掉。</p>
-<h3>4.5 课件习题的完整解答</h3>
-<pre><code class="language-text">i:=1; j:=i*(i+1); k:=2*(i+j); j:=n; k:=k+j
-</code></pre>
-<p>前半段 i=1，i+1=2，所以 j=2；i+j=3，所以 k=6。j:=n 后 j 未知，不能继续用旧 j=2，也不能把最后 k 算为 8：</p>
-<pre><code class="language-text">(ASSIG,1,-,i)
-(ASSIG,2,-,j)
-(ASSIG,6,-,k)
-(ASSIG,n,-,j)
-(ADDI,6,j,t4)
-(ASSIG,t4,-,k)
-</code></pre>
-<p>课件第 29 页保留 <code>(ADDI,k,j,t4)</code> 也正确；本写法进一步把当时仍为常量的 k 传播为 6。假如 n=9，最终 k=15，可直接验证没有误用旧 j。</p>
+<h3>4.5 两个操作完成传播与折叠</h3>
+<p>小例子：一个基本块入口无已知常量，依次执行<code>u=2*4; v=u+1</code>，运算按无溢出整数规则。第一步登记u=8；第二步先把读取的u替换为8，再算v=9。若v在块外仍要使用，输出中至少保留给v定值9的操作。</p>
+<p>这里替换的是读取u的位置，不把赋值目标v换成数字9。</p>
 <p><a id="ch08-s05"></a>
 <a id="五公共表达式与值编码"></a>
 <a id="公共表达式与值编码"></a>
@@ -385,17 +318,18 @@ z:=0
 <h2>5. 公共表达式与值编码</h2>
 <p>操作数未知时不能常量折叠，却仍可能确定两次计算使用了相同的值。要跨过复制和重赋值识别这种相同，需跟踪当前值的身份，而不只是比较变量名。</p>
 <h3>5.1 名字相同不等于值相同</h3>
-<p><strong>公共表达式</strong>是两个运算在相应位置使用相同的操作、相同的操作数值，且复用前一结果可保持语义。对 <code>(ω1,a,b,t1)</code> 与 <code>(ω2,c,d,t2)</code>，课件条件是 ω1=ω2、V(a)=V(c)、V(b)=V(d)，V 表示执行到各位置时的值。</p>
+<p><strong>公共表达式</strong> 是两个运算在相应位置使用相同的操作、相同的操作数值，且复用前一结果可保持语义。对 <code>(ω1,a,b,t1)</code> 与 <code>(ω2,c,d,t2)</code>，条件是 ω1=ω2、V(a)=V(c)、V(b)=V(d)，V 表示执行到各位置时的值。</p>
 <p><code>x:=a*b; a:=1; y:=a*b</code> 形式相同，操作数 a 已改变，不一定公共。<code>x:=a*b; c:=a; y:=c*b</code> 名字不同，c、a 当前值相同，可能公共。对于内存读取，还要确认被读对象没有被间接写或调用修改。</p>
 <h3>5.2 值编码记录“现在的值”</h3>
-<p><strong>值编码/值编号 VN</strong>用编号代表一个已识别的值，不必知道它实际是多少。μ(x) 表示 x 当前值的编号；μ 是映射符号，不是相乘。</p>
+<p><strong>值编码/值编号 VN</strong> 用编号代表一个已识别的值，不必知道它实际是多少。μ(x) 表示 x 当前值的编号；μ 是映射符号，不是相乘。</p>
 <ul>
 <li>同一个常量复用同一编号，不同常量用不同编号。</li>
 <li>不同变量可以共享编号，例如 <code>d:=b</code> 后 μ(d)=μ(b)。</li>
 <li>一个变量新定义后，后续使用要采用它的新编号；若新定义只是复制已有值，复用该值编号，而不是强行每次都创造新值。</li>
 <li>运算 <code>(ω,A,B,t)</code> 的输入查找键为 <code>(ω,μ(A),μ(B))</code>，结果得到 μ(t)。操作键还应体现类型和相关模式，不能混同整数加法与实数加法。</li>
 </ul>
-<p>课件把 <code>(ω,μ(A),μ(B),μ(t))</code> 称为四元式<strong>映象码</strong>。查找公共表达式时必须先按前三项查已有表达式，再决定结果编号；若先给每个结果分配全新号再要求四项完全相同，就永远匹配不到。</p>
+<p>这里把 <code>(ω,μ(A),μ(B),μ(t))</code> 称为四元式<strong>映象码</strong> 。查找公共表达式时必须先按前三项查已有表达式，再决定结果编号；若先给每个结果分配全新号再要求四项完全相同，就永远匹配不到。</p>
+<p>小例子：本块入口给a当前值编号1，执行b:=a后令μ(b)=1；随后a:=7，则a取得常量7对应的新编号，b仍是旧编号1。编号1只是相同值标签，不是数值1；复制发生后也不要求b随a自动变化。</p>
 <h3>5.3 三张表各解决什么问题</h3>
 <div class="table-scroll"><table>
 <thead>
@@ -421,7 +355,33 @@ z:=0
 <td>把后续使用改到保留的结果</td>
 </tr>
 </tbody></table></div>
-<p>若 t2 的运算被省，PAIR[t2]=t1，后续 <code>t3=t1+t2</code> 改为 t3=t1+t1。课件有的表按 <code>(保留者,被替代者)</code> 排列，阅读时先看含义，不按两个名字的排版猜替换方向。</p>
+<p>若 t2 的运算被省，PAIR[t2]=t1，后续 <code>t3=t1+t2</code> 改为 t3=t1+t1。也可能按 <code>(保留者,被替代者)</code> 排列，阅读时先看含义，不按两个名字的排版猜替换方向。</p>
+<p>例如依次遇到 <code>t1=b*c</code>、<code>t2=b*c</code>，入口时 b、c 的值号分别为 1、2，乘法结果分配值号 3。扫描第二条时的关系为：</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>表</th>
+<th>本例需要保存的完整关系</th>
+<th>实际使用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>值号表</td>
+<td>b→1，c→2，t1→3，t2→3</td>
+<td>两次乘法的输入值号相同</td>
+</tr>
+<tr>
+<td>表达式表</td>
+<td>(MULTI,1,2)→(值号3，代表t1)</td>
+<td>查到已经计算过的结果</td>
+</tr>
+<tr>
+<td>PAIR</td>
+<td>被替代的 t2→保留的 t1</td>
+<td>后续 <code>t3=t1+t2</code> 改为 <code>t3=t1+t1</code></td>
+</tr>
+</tbody></table></div>
+<p>值号表示“此时相同的值”，代表名表示“运行时从哪里复用该值”，PAIR 表示“哪些使用要改写”。若此后 b 被重新定值，则 b 要取得新值号，不能再用旧表达式键命中原乘法。</p>
 <p><a id="ch08-s06"></a>
 <a id="值编码算法的完整例题"></a>
 <a id="六值编码算法的完整例题"></a></p>
@@ -430,91 +390,13 @@ z:=0
 <h3>6.1 按四元式扫描的算法</h3>
 <p>块入口三表为空。逐条扫描，先通过 PAIR 替换读取的临时量，取得输入值编号；运算键已有且代表仍有效则省运算，结果共享旧编号并建立替换；否则分配新结果编号，保留代码并登记。复制赋值令目标共享源当前编号；目标原来的映射随之更新。</p>
 <p>代表必须仍保存那个值。若把 <code>x=a*b</code> 的 x 当代表，随后 x 被覆盖，就不能继续用 x 替代旧乘积；应使用未被覆盖的临时量，或使该代表失效。间接内存写和未知调用同样要使可能受影响的可用表达式失效。PAIR 替换的是读取使用，不应把一次新的结果定义错误地改写到旧临时量上。</p>
-<h3>6.2 九条代码、五条结果</h3>
-<p>源程序为 <code>a:=b*c+b*c; d:=b; e:=d*c+b*c</code>。入口 b、c 分别编号 1、2：</p>
-<div class="table-scroll"><table>
-<thead>
-<tr>
-<th>序号</th>
-<th>原四元式</th>
-<th>输入键或赋值编号</th>
-<th>处理结果</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>1</td>
-<td>(MULTI,b,c,t1)</td>
-<td>(*,1,2)→3</td>
-<td>保留，μ(t1)=3</td>
-</tr>
-<tr>
-<td>2</td>
-<td>(MULTI,b,c,t2)</td>
-<td>(*,1,2) 已有</td>
-<td>省，t2→t1，μ(t2)=3</td>
-</tr>
-<tr>
-<td>3</td>
-<td>(ADDI,t1,t2,t3)</td>
-<td>(+,3,3)→4</td>
-<td>保留 ADDI t1,t1→t3</td>
-</tr>
-<tr>
-<td>4</td>
-<td>(ASSIG,t3,-,a)</td>
-<td>μ(a)=4</td>
-<td>保留</td>
-</tr>
-<tr>
-<td>5</td>
-<td>(ASSIG,b,-,d)</td>
-<td>μ(d)=1</td>
-<td>保留</td>
-</tr>
-<tr>
-<td>6</td>
-<td>(MULTI,d,c,t4)</td>
-<td>(*,1,2) 已有</td>
-<td>省，t4→t1</td>
-</tr>
-<tr>
-<td>7</td>
-<td>(MULTI,b,c,t5)</td>
-<td>(*,1,2) 已有</td>
-<td>省，t5→t1</td>
-</tr>
-<tr>
-<td>8</td>
-<td>(ADDI,t4,t5,t6)</td>
-<td>(+,3,3) 已有</td>
-<td>省，t6→t3</td>
-</tr>
-<tr>
-<td>9</td>
-<td>(ASSIG,t6,-,e)</td>
-<td>μ(e)=4</td>
-<td>保留 ASSIG t3→e</td>
-</tr>
-</tbody></table></div>
-<p>最终：</p>
-<pre><code class="language-text">(MULTI,b,c,t1)
-(ADDI,t1,t1,t3)
-(ASSIG,t3,-,a)
-(ASSIG,b,-,d)
-(ASSIG,t3,-,e)
-</code></pre>
-<p>例如 b=2、c=3，前后均 a=e=12、d=2。编号 3 只是代表 b*c 的值，并不表示乘积等于整数 3。</p>
-<h3>6.3 什么时候同一个 b*c 不能继续省</h3>
-<p>课件另一例入口已知 e=b、f=c：</p>
-<pre><code class="language-text">t:=b*c;
-e:=b*c+e*f;
-c:=b*c+10;
-d:=b*c+d
-</code></pre>
-<p>第二句右边求值时 e、f 还是入口值，故两个乘积都等于 t，变为 e:=t+t。第三句右边 b、c 尚未改变，变为 c:=t+10。第四句 c 已被第三句改写，保留 d:=b*c+d。优化后：</p>
-<pre><code class="language-text">t:=b*c; e:=t+t; c:=t+10; d:=b*c+d
-</code></pre>
-<p>该入口关系是例题给定前提，不应在任意程序中假设 e=b、f=c。</p>
+<p>小例子：块内只有<code>t1=x+y; t2=x+y</code>，入口μ(x)=1、μ(y)=2，x/y不变。扫描第一条登记键(ADDI,1,2)的代表t1；第二条查到同键，令PAIR[t2]=t1并省第二次加法。查键在先，给新结果编号在后。</p>
+<h3>6.2 三次运算怎样减少为两次</h3>
+<p>小例子：同一基本块中依次计算<code>u=a*b; v=a*b; w=u+v</code>，a、b在中间没有改变，u也没有被覆盖，乘法纯且无异常。</p>
+<p>保留第一次乘法，让v共享u的值，最后一步改为w=u+u。三次运算变两次；若a=2、b=3，u=6、w=12。u只是本题临时代表，不能在u已被其他赋值覆盖后继续用它。</p>
+<h3>6.3 一次改值足以使旧表达式失效</h3>
+<p>小例子：先算<code>t=p*q</code>，随后<code>q=q+1</code>，再算<code>u=p*q</code>。输入p=2、q=3时，t=6，更新后q=4，u应为8。第二次乘法输入的q已经换值，不能因拼写仍是p*q而把u改成t。</p>
+<p>值编号必须随新定义更新；同名字不保证是同一个当前值。</p>
 <p><a id="ch08-s07"></a>
 <a id="七循环不变式外提"></a>
 <a id="循环不变式外提"></a>
@@ -522,53 +404,20 @@ d:=b*c+d
 <h2>7. 循环不变式外提</h2>
 <p>局部公共表达式节省只避免同一块内重复计算；循环中的同一表达式还可能每轮重算。若其值不随本层循环改变且移动安全，就可在进入循环前计算一次。</p>
 <h3>7.1 变量不变与表达式不变</h3>
-<p><strong>循环不变量</strong>是在某一循环执行期间不被改变的量。<strong>循环不变式</strong>是每次求值得到相同结果的表达式。课件采用便于实现的充分条件：两个操作数都是循环不变量，则纯运算结果不变。它不覆盖所有数学恒等情形，例如 i−i 在 i 变化时也可能恒为 0，但不是本算法重点。</p>
-<p><strong>外提</strong>把计算移到本层循环入口之前，使每次进入这一层循环只算一次。<code>while k&lt;10 do begin A[k]:=b*c; k:=k+1 end</code> 若 b、c 未变且写数组不会别名修改它们，可先 t:=b*c，再每轮写 t。移动的是计算，不是把每轮必要的数组赋值删除。</p>
+<p><strong>循环不变量</strong> 是在某一循环执行期间不被改变的量。<strong>循环不变式</strong> 是每次求值得到相同结果的表达式。这里采用便于实现的充分条件：两个操作数都是循环不变量，则纯运算结果不变。它不覆盖所有数学恒等情形，例如 i−i 在 i 变化时也可能恒为 0，但不是本算法重点。</p>
+<p><strong>外提</strong> 把计算移到本层循环入口之前，使每次进入这一层循环只算一次。<code>while k&lt;10 do begin A[k]:=b*c; k:=k+1 end</code> 若 b、c 未变且写数组不会别名修改它们，可先 t:=b*c，再每轮写 t。移动的是计算，不是把每轮必要的数组赋值删除。</p>
 <h3>7.2 找到循环边界</h3>
-<p>结构化 IR 可利用 WHILE、DO、ENDWHILE 标记，借助栈配对嵌套循环。WHILE 是重新计算条件的入口，DO 分开条件与循环体，ENDWHILE 是回边。也可以从 CFG 分析循环结构，适用于不只由这些标记组成的控制流，但课件不展开完整图算法。</p>
+<p>结构化 IR 可利用 WHILE、DO、ENDWHILE 标记，借助栈配对嵌套循环。WHILE 是重新计算条件的入口，DO 分开条件与循环体，ENDWHILE 是回边。也可以从 CFG 分析循环结构，适用于不只由这些标记组成的控制流，本章先采用有配对标记的结构化 IR。</p>
 <p>外提位置应在该循环的入口之前，通常称循环前置区；不能放到条件计算之后而让回边重新执行它。</p>
+<p>小例子：结构化IR为WHILE；LT i,2→b；DO b；i:=i+1；ENDWHILE。回边必须回到WHILE之后重新比较i，退出目标在ENDWHILE之后。前置区位于WHILE之前，放在DO之后仍会每轮执行，不能算外提。</p>
 <h3>7.3 LoopDef 两遍扫描</h3>
-<p><strong>LoopDef 循环定值表</strong>记录循环中被定义、可能改变的名字。第一遍扫描该循环相关代码，包括每次重算的条件与体内语句：运算结果 t 入表，ASSIG 的目标入表，考虑调用和间接写的影响。</p>
+<p><strong>LoopDef 循环定值表</strong> 记录循环中被定义、可能改变的名字。第一遍扫描该循环相关代码，包括每次重算的条件与体内语句：运算结果 t 入表，ASSIG 的目标入表，考虑调用和间接写的影响。</p>
 <p>第二遍按依赖顺序扫描纯运算 <code>(ω,A,B,t)</code>：若 A、B 不在 LoopDef，且移动安全，则外提，并从表中移去 t。这样后续依赖 t 的运算也可能外提。常量天然不在表中。若程序顺序不能暴露所有依赖，可重复扫描到无新变化。</p>
 <p>从 LoopDef 移去 t 表示 t 已在循环外计算，不表示可以随意移去用户变量的赋值。算法还假定结果临时量不会被循环内其他定义覆盖，表达式没有未分析的内存读取副作用。</p>
-<h3>7.4 从公共表达式节省到外提的完整例</h3>
-<p>课件源程序：</p>
-<pre><code class="language-text">i:=1;
-while i&lt;=100 do begin
-  z:=i*k*5;
-  a:=2*k+2*k*2;
-  i:=i+1
-end
-</code></pre>
-<p>先做块内公共表达式节省：第二个 2*k 重用 t4，得到循环内：</p>
-<pre><code class="language-text">(LE,i,100,t1)          条件
-(MULTI,i,k,t2)
-(MULTI,t2,5,t3)
-(ASSIG,t3,-,z)
-(MULTI,2,k,t4)
-(MULTI,t4,2,t6)
-(ADDI,t4,t6,t7)
-(ASSIG,t7,-,a)
-(ADDI,i,1,t8)
-(ASSIG,t8,-,i)
-</code></pre>
-<p>LoopDef={t1,t2,t3,z,t4,t6,t7,a,t8,i}。k 未定值：2*k 外提，移去 t4；t4*2 外提，移去 t6；t4+t6 外提，移去 t7。i 在表中，所以 i*k、比较和 i+1 都留下。最终：</p>
-<pre><code class="language-text">(ASSIG,1,-,i)
-(MULTI,2,k,t4)
-(MULTI,t4,2,t6)
-(ADDI,t4,t6,t7)
-(WHILE,-,-,-)
-(LE,i,100,t1)
-(DO,t1,-,-)
-(MULTI,i,k,t2)
-(MULTI,t2,5,t3)
-(ASSIG,t3,-,z)
-(ASSIG,t7,-,a)
-(ADDI,i,1,t8)
-(ASSIG,t8,-,i)
-(ENDWHILE,-,-,-)
-</code></pre>
-<p>a 的赋值仍每轮执行。课件 19 第 18 页将 t7 的运算排成乘法，依据源式和第 16—17 页应为加法，因此应使用 ADDI。若 k=3，a 每轮为 18，结束 z=1500、i=101；把 t7 误作乘法会得到 72。</p>
+<p>小例：循环体为 <code>t1=x*2; t2=t1+j; j=j+1</code>，x 在循环中不变，整数运算按无异常的教学规则处理。第一遍得 <code>LoopDef={t1,t2,j}</code>；第二遍遇 t1，x 与常量 2 均不在表内，可在进入循环前计算 t1，并从表中移去 t1。再看 t2，虽然 t1 已不在表内，j 仍在，所以 t2 留在循环；j 的更新也保留。若入口 x=3、j=1，两轮分别得到 t2=7、8，而 t1 始终为 6。</p>
+<h3>7.4 一次外提怎样保留每轮赋值</h3>
+<p>小例子：循环初值i=0，条件i&lt;2，体内执行<code>out:=k*2; i:=i+1</code>。k在入循环前由输入得到3，循环内不变；整数乘法按本例数值不会产生异常，out每轮必须赋值。</p>
+<p>可在进入循环前计算临时t=k<em>2=6，两轮分别执行out:=t和i递增。乘法从两次变一次，但out的两次写入仍在循环体内。若直接把out:=k</em>2整条用户赋值移走，零次循环时也会新增一次写入，语义可能改变。</p>
 <p><a id="ch08-s08"></a>
 <a id="八外提时必须检查的问题"></a>
 <a id="外提时必须检查的问题"></a>
@@ -576,24 +425,15 @@ end
 <h2>8. 外提时必须检查的问题</h2>
 <p>“每次算出来一样”还不足以允许提前计算：原来可能不执行的运算，移动后会执行；间接写也可能改变所读内容。下面分别检查这些会改变语义的情况。</p>
 <h3>8.1 有调用或间接写的循环</h3>
-<p>课件备注把没有未知调用、没有地址引用型赋值的循环称为“良型”，对其他“非良型”循环保守地不做外提。理由是 <code>x+y</code> 的 x、y 即使没有出现在显式赋值目标中，也可能被 <code>f()</code> 或 <code>*p:=…</code> 修改。</p>
-<p>这是课堂算法的限制；若进一步证明调用不修改相关量，或数组写与标量对象不重叠，可以有条件优化。后面的数组寻址例是在明确“数组与下标标量互不别名”的前提下讨论可移动的地址计算，不能一边采用全循环保守禁用规则，一边无条件声称数组写循环可以照样外提。</p>
+<p>本章的整循环保守规则把没有未知调用、没有地址引用型赋值的循环称为“良型”，对其他“非良型”循环不做外提。理由是 <code>x+y</code> 的 x、y 即使没有出现在显式赋值目标中，也可能被 <code>f()</code> 或 <code>*p:=…</code> 修改。</p>
+<p>这是课堂算法的限制；若进一步证明调用不修改相关量，或数组写与标量对象不重叠，可以有条件优化。数组写只有在明确“写入不会改变候选操作数”等前提下，才能讨论可移动的地址计算，不能一边采用全循环保守禁用规则，一边无条件声称数组写循环可以照样外提。</p>
+<p>小例子：循环体有<code>*p:=9</code>，候选不变式是x+1。如果p可能指向x，写入就可能改变x，不能因没有出现“x:=”而判断x不变；证明p不会指向x后，才可能继续讨论这个候选。</p>
 <h3>8.2 地址固定，内容仍然变化</h3>
-<p><code>while E do A[3]:=A[3]+1</code> 中 A[3] 地址固定，元素值每轮增加。以 A 下界 1、int 大小 1 为例：</p>
-<pre><code class="language-text">(SUBI,3,1,t0)
-(MULTI,t0,1,t1)
-(AADD,A,t1,t2)       求写入地址
-(SUBI,3,1,t3)
-(MULTI,t3,1,t4)
-(AADD,A,t4,t5)       求读取地址
-(ADDI,t5,1,t6)      读地址里的当前值，再加 1
-(ASSIG,t6,-,t2)     写回
-</code></pre>
-<p>可合并相同的地址计算，地址运算也可能外提；读取 A[3] 加 1 的运算不能仅因 t5 的地址不变就外提。若 t5 用于另一次 AADD，读取的是地址值本身，需要按地址运算的依赖判断。这正是 ARG 的直接/间接属性影响优化的地方。</p>
-<p>课件第 21 页末尾的赋值字段排列有误；按源程序应把 t6 写到 t2 所指对象，正确方向为 <code>(ASSIG,t6,-,t2)</code>。</p>
+<p>小例子：数组cell只有下标0这一个整数，首址100，每元素1单位，初值cell[0]=2。循环恰好执行两次，每次cell[0]:=cell[0]+1。</p>
+<p>两次目标地址都是100，可以复用地址计算；对象内容却依次2→3→4。如果把“读旧值再加1”也移到循环外，只算出3并每轮写3，最后就错误地得到3而非4。地址不变与内容不变是两个条件。</p>
 <h3>8.3 非必经代码、除法与零次循环</h3>
 <p><code>if y&lt;&gt;0 then x:=1/y</code> 中，即使 y 在循环中不变，也不能直接把除法提到判断之前：y=0 时原来跳过除法，外提后却先除零。函数调用、异常、溢出检查、非法内存读取也可能出现相同问题。</p>
-<p>课件用两种策略比较：把所有不变式外提，或只外提必经的不变式。若 100 轮每轮只需一个代价 50 的分支表达式，原来约 5000 运算单位；预先算两个约花 100，再每轮赋值约 100，总计约 200。这个例子说明可能省时，却不能把安全条件省略。循环执行 0 次时，预先算两项成为多余计算，甚至可能新增异常。</p>
+<p>这里用两种策略比较：把所有不变式外提，或只外提必经的不变式。若 100 轮每轮只需一个代价 50 的分支表达式，原来约 5000 运算单位；预先算两个约花 100，再每轮赋值约 100，总计约 200。这个例子说明可能省时，却不能把安全条件省略。循环执行 0 次时，预先算两项成为多余计算，甚至可能新增异常。</p>
 <p>对于新临时变量上的纯、无异常计算，提前一次可能只影响成本；对用户对象赋值，零次循环原来不写，外提后写一次，会改变语义。因此本课程算法不外提用户赋值，也通常保留除法。更强分析可能证明特定移动正确，但不属于这套简化算法的默认结论。</p>
 <p><a id="ch08-s09"></a>
 <a id="九多层循环外提"></a>
@@ -602,56 +442,26 @@ end
 <p>嵌套循环中，不变是相对于某一层而言的。表达式移出内层后，外层变量仍可能改变，因此每向外移动一层都要重新检查依赖。</p>
 <h3>9.1 从内向外逐层判断</h3>
 <p>一个表达式可以对内层不变，对外层变化。例如 i*j 对 k 循环不变，对 j 循环却变化。应先处理最内层，向外提一层后重新判断，而不是直接提到全部循环外。</p>
-<p>每层 LoopDef 可用栈保存。<strong>逻辑上外层的可能定值集合必须包含内层造成的改变</strong>，否则会误判内层写过的变量在外层不变。课件提到实现中可分层存表，是一种存储组织方法，不能理解为忽略内层效果。实际分析外层时需合并相关信息或以其他方式查询它。</p>
-<h3>9.2 三维数组例的原代码</h3>
-<p>A:[0..9,0..9,0..9]int，int 大小 1。i、j、k 分别从 0 到 9：</p>
-<pre><code class="language-text">for i:=0 to 9 do
-  for j:=0 to 9 do
-    for k:=0 to 9 do A[i,j,k]:=i*j*k
-</code></pre>
-<p>行优先跨度 100、10、1。省略循环控制部分，内体 12 条为：</p>
-<pre><code class="language-text">1  (SUBI,i,0,t1)
-2  (MULTI,t1,100,t2)
-3  (AADD,A,t2,t3)
-4  (SUBI,j,0,t4)
-5  (MULTI,t4,10,t5)
-6  (AADD,t3,t5,t6)
-7  (SUBI,k,0,t7)
-8  (MULTI,t7,1,t8)
-9  (AADD,t6,t8,t9)
-10 (MULTI,i,j,t10)
-11 (MULTI,t10,k,t11)
-12 (ASSIG,t11,-,t9)
-</code></pre>
-<p>以下按数组与下标标量不重叠、数组基址固定、地址运算本身无副作用的教学前提分析。若程序采用带异常的边界检查，移动检查还需另外证明安全。</p>
-<h3>9.3 第一次：提到 k 循环之前</h3>
-<p>k 层初始定值集合含 k、t1…t11，数组对象被写另行作为内存影响处理。1 的 i 不变，可提；2 依赖已提的 t1，可提；3 依赖固定基址和 t2，可提；4—6 依赖 j 和此前结果，可提；10 的 i、j 也不变。7—9、11 依赖 k，保留；12 是每次必要写入，保留。</p>
-<pre><code class="language-text">for i
-  for j
-    执行 1、2、3、4、5、6、10
-    for k
-      执行 7、8、9、11、12
-</code></pre>
-<p>已外提结果需登记到 j 层相应的定义信息中，以便继续分析。</p>
-<h3>9.4 第二次：提到 j 循环之前</h3>
-<p>j 层中 j 会变化，i 在该层不变。1—3 只依赖 i 和 A，可继续外提；4—6、10 依赖 j，留下：</p>
-<pre><code class="language-text">for i
-  执行 1、2、3
-  for j
-    执行 4、5、6、10
-    for k
-      执行 7、8、9、11、12
-</code></pre>
-<p>最外层 i 变化，1—3 不能再提。原来 1—3 各执行 1000 次，现各 10 次；4—6、10 各从 1000 次降到 100 次。仍须做 1000 次元素写入。再代数化简可以省掉减 0、乘 1，但这是另一项优化，不应混淆两次外提的依赖过程。</p>
+<p>每层 LoopDef 可用栈保存。<strong>逻辑上外层的可能定值集合必须包含内层造成的改变</strong> ，否则会误判内层写过的变量在外层不变。实现中可以分层存表，但这只是存储组织方式，不能忽略内层效果；分析外层时仍需合并相关信息或以其他方式查询它。</p>
+<h3>9.2 两个循环中的不变范围</h3>
+<p>本小题只有外层i和内层j，i依次为1、2，每轮内层j依次为0、1、2。表达式为i*2+j。</p>
+<p>i=1那轮，i<em>2恒为2，而整个表达式依次为2、3、4。可把i</em>2移到本轮j循环之前，不能把整个i*2+j一起移走。到下一轮i=2，要重新算出4，不能沿用上一轮的2。</p>
+<h3>9.3 只移动行首地址的一小步</h3>
+<p>独立小题：a是下界0的2×3整数数组，元素宽1，首址100；外层i从0到1，内层j从0到2，访问a[i][j]。</p>
+<p>行优先地址为100+i<em>3+j。对一次固定i，行首100+i</em>3不依赖j，可在进入j循环前计算：i=0行首100，i=1行首103；最终再加当前j。不能把与j相关的最后一次加法也当作行首计算移出。</p>
+<h3>9.4 再外提一层时重新判断</h3>
+<p>独立小题：两层循环变量分别i、j，循环体求t=c*2，再求u=t+j。c在两层循环中都不变，运行值为4，所有计算纯且无异常。</p>
+<p>先对j层看，c*2可移到每轮j之前；再对i层看，c也不变，因此还能移到整个i循环之前，只算一次t=8。u含j，应留在内层。每向外一层都重新检查依赖，而不是看到一次“不变”就直接移到最外面。</p>
 <h3>9.5 矩阵乘法为何收益明显</h3>
-<p><code>c[i,j]:=c[i,j]+a[i,k]*b[k,j]</code> 的三层循环中，a 第 i 行基址与 j、k 无关；c[i,j] 的地址与 k 无关。可以复用或外提相关<strong>地址计算</strong>，却不能把 c[i,j] 的当前值固定到 k 循环外，因为它每轮积累新的乘积；a[i,k]、b[k,j] 的元素选择依赖 k，也要相应处理。这解释了课件强调数组寻址是重要优化对象。</p>
+<p><code>c[i,j]:=c[i,j]+a[i,k]*b[k,j]</code> 的三层循环中，a 第 i 行基址与 j、k 无关；c[i,j] 的地址与 k 无关。可以复用或外提相关<strong>地址计算</strong> ，却不能把 c[i,j] 的当前值固定到 k 循环外，因为它每轮积累新的乘积；a[i,k]、b[k,j] 的元素选择依赖 k，也要相应处理。地址表达式的重复求值较多，因此数组寻址是值得检查的优化对象。</p>
+<p>若 c 按行优先、每行 4 个元素、每元素 1 单位、下界 0、首地址 100，则固定 i=1、j=2 时，<code>c[i,j]</code> 的地址恒为 <code>100+1×4+2=106</code>。内层 k 从 0 变到 1，这个地址仍是 106；但若 c[1,2] 初值 10，两次乘积分别为 6、9，累加后依次写回 16、25。能提出去的是地址 106 的计算，不能把每次要读的累加值始终当成初值 10，否则会错误得到 19。</p>
 <p><a id="ch08-s10"></a>
 <a id="三种优化的综合练习"></a>
 <a id="十三种优化的综合练习"></a></p>
 <h2>10. 三种优化的综合练习</h2>
-<p>下面固定课件的一份原始 IR，依次分块、做常量与公共表达式节省，再检查可外提项。每一步都保留其输入版本，便于区分是哪种方法产生了变化。</p>
+<p>下面从一份完整的原始 IR 出发，依次分块、做常量与公共表达式节省，再检查可外提项。每一步都保留其输入版本，便于区分是哪种方法产生了变化。</p>
 <h3>10.1 源程序与前提</h3>
-<p>课件 19 第 29—34 页：A:[1..100]int，所有标量为 int，大小 1：</p>
+<p>本例声明 A:[1..100]int，所有标量为 int，大小均为 1 教学单位：</p>
 <pre><code class="language-text">a:=0;
 j:=(a+1)*5;
 while j&lt;100 do begin
@@ -802,7 +612,7 @@ end
 <p>B1 中 a=0、t1=1、t2=5，改为 a:=0、j:=5。B3 的下标 3 是常量：t4=2、t5=2，所以保留 <code>(AADD,A,2,t6)</code>。不能把 a 在 B3 也替换为 0，循环回边会带来已更新的 a。</p>
 <p>B5 中两个 x*y 的输入值相同，保留 t9，省 t10，把除法改为 <code>(DIVI,t9,5,t11)</code>。这一步只在 B5 内成立，不需要跨分支猜测先前是否算过乘积。</p>
 <h3>10.4 外提与最终 20 条代码</h3>
-<p>折叠和节省后 LoopDef 包含 t3、t6、t7、a、t8、k、t9、t11、t12、t13、j。t6 只是固定 A[3] 地址，可提；t9=x*y 在这些前提下是纯不变计算，可提。a+t6 在 ARG 意义下读取 A[3] 并使用变化的 a，保留。按课件保守策略除法及其依赖的加法留在 else 内；两条 k 赋值和 a、j 赋值也都保留。</p>
+<p>折叠和节省后 LoopDef 包含 t3、t6、t7、a、t8、k、t9、t11、t12、t13、j。t6 只是固定 A[3] 地址，可提；t9=x*y 在这些前提下是纯不变计算，可提。a+t6 在 ARG 意义下读取 A[3] 并使用变化的 a，保留。按本章保守策略除法及其依赖的加法留在 else 内；两条 k 赋值和 a、j 赋值也都保留。</p>
 <pre><code class="language-text">1  (ASSIG,0,-,a)
 2  (ASSIG,5,-,j)
 3  (AADD,A,2,t6)
@@ -824,36 +634,390 @@ end
 19 (ASSIG,t13,-,j)
 20 (ENDWHILE,-,-,-)
 </code></pre>
-<p>除数 5 在这个特定例中不是零，更强的安全分析可以讨论继续外提除法；上面保留它是遵循课件策略，不是断言任何除法都不可移动。若整数乘法有可观察的溢出异常，提前求 x*y 也必须另行证明不新增异常。</p>
+<p>除数 5 在这个特定例中不是零，更强的安全分析可以讨论继续外提除法；上面保留它是遵循本例保守策略，不是断言任何除法都不可移动。若整数乘法有可观察的溢出异常，提前求 x*y 也必须另行证明不新增异常。</p>
 <p>例如 A[3]=1、x=2、y=5，循环 j=5…99 共 95 次，结束 j=100、a=95，后半程 k=10+10/5=12。原始与最终代码在同一整数语义下应一致。若运行次数改变或 a 一直被当作 0，就说明变换有误。</p>
+<h3>10.5 九条代码到五条结果的值号综合练习</h3>
+<p>源程序为 <code>a:=b*c+b*c; d:=b; e:=d*c+b*c</code>。入口 b、c 分别编号 1、2：</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>序号</th>
+<th>原四元式</th>
+<th>输入键或赋值编号</th>
+<th>处理结果</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>(MULTI,b,c,t1)</td>
+<td>(*,1,2)→3</td>
+<td>保留，μ(t1)=3</td>
+</tr>
+<tr>
+<td>2</td>
+<td>(MULTI,b,c,t2)</td>
+<td>(*,1,2) 已有</td>
+<td>省，t2→t1，μ(t2)=3</td>
+</tr>
+<tr>
+<td>3</td>
+<td>(ADDI,t1,t2,t3)</td>
+<td>(+,3,3)→4</td>
+<td>保留 ADDI t1,t1→t3</td>
+</tr>
+<tr>
+<td>4</td>
+<td>(ASSIG,t3,-,a)</td>
+<td>μ(a)=4</td>
+<td>保留</td>
+</tr>
+<tr>
+<td>5</td>
+<td>(ASSIG,b,-,d)</td>
+<td>μ(d)=1</td>
+<td>保留</td>
+</tr>
+<tr>
+<td>6</td>
+<td>(MULTI,d,c,t4)</td>
+<td>(*,1,2) 已有</td>
+<td>省，t4→t1</td>
+</tr>
+<tr>
+<td>7</td>
+<td>(MULTI,b,c,t5)</td>
+<td>(*,1,2) 已有</td>
+<td>省，t5→t1</td>
+</tr>
+<tr>
+<td>8</td>
+<td>(ADDI,t4,t5,t6)</td>
+<td>(+,3,3) 已有</td>
+<td>省，t6→t3</td>
+</tr>
+<tr>
+<td>9</td>
+<td>(ASSIG,t6,-,e)</td>
+<td>μ(e)=4</td>
+<td>保留 ASSIG t3→e</td>
+</tr>
+</tbody></table></div>
+<p>最终：</p>
+<pre><code class="language-text">(MULTI,b,c,t1)
+(ADDI,t1,t1,t3)
+(ASSIG,t3,-,a)
+(ASSIG,b,-,d)
+(ASSIG,t3,-,e)
+</code></pre>
+<p>例如 b=2、c=3，前后均 a=e=12、d=2。编号 3 只是代表 b*c 的值，并不表示乘积等于整数 3。</p>
+<h3>10.6 多次重定义与公共表达式综合练习</h3>
+<p>另一例入口已知 e=b、f=c：</p>
+<pre><code class="language-text">t:=b*c;
+e:=b*c+e*f;
+c:=b*c+10;
+d:=b*c+d
+</code></pre>
+<p>第二句右边求值时 e、f 还是入口值，故两个乘积都等于 t，变为 e:=t+t。第三句右边 b、c 尚未改变，变为 c:=t+10。第四句 c 已被第三句改写，保留 d:=b*c+d。优化后：</p>
+<pre><code class="language-text">t:=b*c; e:=t+t; c:=t+10; d:=b*c+d
+</code></pre>
+<p>该入口关系是例题给定前提，不应在任意程序中假设 e=b、f=c。</p>
+<h3>10.7 公共表达式节省到循环外提的完整练习</h3>
+<p>本例源程序：</p>
+<pre><code class="language-text">i:=1;
+while i&lt;=100 do begin
+  z:=i*k*5;
+  a:=2*k+2*k*2;
+  i:=i+1
+end
+</code></pre>
+<p>先做块内公共表达式节省：第二个 2*k 重用 t4，得到循环内：</p>
+<pre><code class="language-text">(LE,i,100,t1)          条件
+(MULTI,i,k,t2)
+(MULTI,t2,5,t3)
+(ASSIG,t3,-,z)
+(MULTI,2,k,t4)
+(MULTI,t4,2,t6)
+(ADDI,t4,t6,t7)
+(ASSIG,t7,-,a)
+(ADDI,i,1,t8)
+(ASSIG,t8,-,i)
+</code></pre>
+<p>LoopDef={t1,t2,t3,z,t4,t6,t7,a,t8,i}。k 未定值：2*k 外提，移去 t4；t4*2 外提，移去 t6；t4+t6 外提，移去 t7。i 在表中，所以 i*k、比较和 i+1 都留下。最终：</p>
+<pre><code class="language-text">(ASSIG,1,-,i)
+(MULTI,2,k,t4)
+(MULTI,t4,2,t6)
+(ADDI,t4,t6,t7)
+(WHILE,-,-,-)
+(LE,i,100,t1)
+(DO,t1,-,-)
+(MULTI,i,k,t2)
+(MULTI,t2,5,t3)
+(ASSIG,t3,-,z)
+(ASSIG,t7,-,a)
+(ADDI,i,1,t8)
+(ASSIG,t8,-,i)
+(ENDWHILE,-,-,-)
+</code></pre>
+<p>a 的赋值仍每轮执行。t7 来自源式的加法，故操作码必须是 ADDI；若误写 MULTI，就改变了源程序含义。若 k=3，a 每轮为 18，结束 z=1500、i=101；把 t7 误作乘法会得到 72。</p>
+<h3>10.9 二十条四元式的完整分块练习</h3>
+<p>源程序：</p>
+<pre><code class="language-text">y:=1;
+L: if A and B then x:=0 else y:=0;
+x:=x+1; y:=y−1;
+while x+y&gt;0 do x:=x−1;
+z:=0
+</code></pre>
+<p>x、y 为非引用型整数形参。A、B 的求值规则另由源语言确定，这个例题按本例的布尔 AND 表示。</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>编号</th>
+<th>四元式</th>
+<th>基本块</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>(ASSIG,1,-,y)</td>
+<td>B1</td>
+</tr>
+<tr>
+<td>2</td>
+<td>(LABEL,-,-,L)</td>
+<td>B2</td>
+</tr>
+<tr>
+<td>3</td>
+<td>(AND,A,B,t0)</td>
+<td>B2</td>
+</tr>
+<tr>
+<td>4</td>
+<td>(THEN,t0,-,-)</td>
+<td>B2</td>
+</tr>
+<tr>
+<td>5</td>
+<td>(ASSIG,0,-,x)</td>
+<td>B3</td>
+</tr>
+<tr>
+<td>6</td>
+<td>(ELSE,-,-,-)</td>
+<td>B3</td>
+</tr>
+<tr>
+<td>7</td>
+<td>(ASSIG,0,-,y)</td>
+<td>B4</td>
+</tr>
+<tr>
+<td>8</td>
+<td>(ENDIF,-,-,-)</td>
+<td>B5</td>
+</tr>
+<tr>
+<td>9</td>
+<td>(ADDI,x,1,t1)</td>
+<td>B5</td>
+</tr>
+<tr>
+<td>10</td>
+<td>(ASSIG,t1,-,x)</td>
+<td>B5</td>
+</tr>
+<tr>
+<td>11</td>
+<td>(SUBI,y,1,t2)</td>
+<td>B5</td>
+</tr>
+<tr>
+<td>12</td>
+<td>(ASSIG,t2,-,y)</td>
+<td>B5</td>
+</tr>
+<tr>
+<td>13</td>
+<td>(WHILE,-,-,-)</td>
+<td>B6</td>
+</tr>
+<tr>
+<td>14</td>
+<td>(ADDI,x,y,t3)</td>
+<td>B6</td>
+</tr>
+<tr>
+<td>15</td>
+<td>(GT,t3,0,t4)</td>
+<td>B6</td>
+</tr>
+<tr>
+<td>16</td>
+<td>(DO,t4,-,-)</td>
+<td>B6</td>
+</tr>
+<tr>
+<td>17</td>
+<td>(SUBI,x,1,t5)</td>
+<td>B7</td>
+</tr>
+<tr>
+<td>18</td>
+<td>(ASSIG,t5,-,x)</td>
+<td>B7</td>
+</tr>
+<tr>
+<td>19</td>
+<td>(ENDWHILE,-,-,-)</td>
+<td>B7</td>
+</tr>
+<tr>
+<td>20</td>
+<td>(ASSIG,0,-,z)</td>
+<td>B8</td>
+</tr>
+</tbody></table></div>
+<p><strong>程序流图/控制流图 CFG</strong> 以基本块为结点，以可能的执行转移为有向边。此例边为：B1→B2；B2 真→B3、假→B4；B3→B5、B4→B5；B5→B6；B6 真→B7、假→B8；B7→B6。B7 的回边指向重新求条件的 B6，不是直接跳到循环体开头。例如重新判断循环条件必须经过 B6，优化后的跳转仍应保留这条控制关系。</p>
+<h3>10.10 常量传播的完整多步练习</h3>
+<pre><code class="language-text">i:=1; j:=i*(i+1); k:=2*(i+j); j:=n; k:=k+j
+</code></pre>
+<p>前半段 i=1，i+1=2，所以 j=2；i+j=3，所以 k=6。j:=n 后 j 未知，不能继续用旧 j=2，也不能把最后 k 算为 8：</p>
+<pre><code class="language-text">(ASSIG,1,-,i)
+(ASSIG,2,-,j)
+(ASSIG,6,-,k)
+(ASSIG,n,-,j)
+(ADDI,6,j,t4)
+(ASSIG,t4,-,k)
+</code></pre>
+<p>此处当 k 仍为常量 6 时，既可保留 <code>(ADDI,k,j,t4)</code>，也可进一步把 k 传播为 6；后者减少一次变量读取。假如 n=9，最终 k=15，可直接验证没有误用旧 j。</p>
+<h3>10.11 固定数组地址与变化元素内容的IR练习</h3>
+<p><code>while E do A[3]:=A[3]+1</code> 中 A[3] 地址固定，元素值每轮增加。以 A 下界 1、int 大小 1 为例：</p>
+<pre><code class="language-text">(SUBI,3,1,t0)
+(MULTI,t0,1,t1)
+(AADD,A,t1,t2)       求写入地址
+(SUBI,3,1,t3)
+(MULTI,t3,1,t4)
+(AADD,A,t4,t5)       求读取地址
+(ADDI,t5,1,t6)      读地址里的当前值，再加 1
+(ASSIG,t6,-,t2)     写回
+</code></pre>
+<p>可合并相同的地址计算，地址运算也可能外提；读取 A[3] 加 1 的运算不能仅因 t5 的地址不变就外提。若 t5 用于另一次 AADD，读取的是地址值本身，需要按地址运算的依赖判断。这正是 ARG 的直接/间接属性影响优化的地方。</p>
+<p>按源语句，最后应把 t6 写到 t2 所指对象，因此方向为 <code>(ASSIG,t6,-,t2)</code>；不能交换源值与目标地址字段。</p>
+<h3>10.8 三维数组的两层外提综合练习</h3>
+<h4>9.2 三维数组例的原代码</h4>
+<p>A:[0..9,0..9,0..9]int，int 大小 1。i、j、k 分别从 0 到 9：</p>
+<pre><code class="language-text">for i:=0 to 9 do
+  for j:=0 to 9 do
+    for k:=0 to 9 do A[i,j,k]:=i*j*k
+</code></pre>
+<p>行优先跨度 100、10、1。省略循环控制部分，内体 12 条为：</p>
+<pre><code class="language-text">1  (SUBI,i,0,t1)
+2  (MULTI,t1,100,t2)
+3  (AADD,A,t2,t3)
+4  (SUBI,j,0,t4)
+5  (MULTI,t4,10,t5)
+6  (AADD,t3,t5,t6)
+7  (SUBI,k,0,t7)
+8  (MULTI,t7,1,t8)
+9  (AADD,t6,t8,t9)
+10 (MULTI,i,j,t10)
+11 (MULTI,t10,k,t11)
+12 (ASSIG,t11,-,t9)
+</code></pre>
+<p>以下按数组与下标标量不重叠、数组基址固定、地址运算本身无副作用的教学前提分析。若程序采用带异常的边界检查，移动检查还需另外证明安全。</p>
+<h4>9.3 第一次：提到 k 循环之前</h4>
+<p>k 层初始定值集合含 k、t1…t11，数组对象被写另行作为内存影响处理。1 的 i 不变，可提；2 依赖已提的 t1，可提；3 依赖固定基址和 t2，可提；4—6 依赖 j 和此前结果，可提；10 的 i、j 也不变。7—9、11 依赖 k，保留；12 是每次必要写入，保留。</p>
+<pre><code class="language-text">for i
+  for j
+    执行 1、2、3、4、5、6、10
+    for k
+      执行 7、8、9、11、12
+</code></pre>
+<p>已外提结果需登记到 j 层相应的定义信息中，以便继续分析。</p>
+<h4>9.4 第二次：提到 j 循环之前</h4>
+<p>j 层中 j 会变化，i 在该层不变。1—3 只依赖 i 和 A，可继续外提；4—6、10 依赖 j，留下：</p>
+<pre><code class="language-text">for i
+  执行 1、2、3
+  for j
+    执行 4、5、6、10
+    for k
+      执行 7、8、9、11、12
+</code></pre>
+<p>最外层 i 变化，1—3 不能再提。原来 1—3 各执行 1000 次，现各 10 次；4—6、10 各从 1000 次降到 100 次。仍须做 1000 次元素写入。再代数化简可以省掉减 0、乘 1，但这是另一项优化，不应混淆两次外提的依赖过程。</p>
 <p><a id="ch08-s11"></a>
 <a id="十一数组条件语句练习"></a>
 <a id="数组条件语句练习"></a></p>
 <h2>11. 数组条件语句练习</h2>
-<p>两个分支即使出现相同寻址表达式，也不保证执行后一个时已经执行过前一个。这个课件小题用来检查“同块可复用”与“跨路径不一定可用”的边界。</p>
+<p>两个分支即使出现相同寻址表达式，也不保证执行后一个时已经执行过前一个。这个小题用来检查“同块可复用”与“跨路径不一定可用”的边界。</p>
 <h3>11.1 同一分支内复用左、右地址</h3>
-<p>课件 19 第 35 页：A:[1..100]int，<code>if j=1 then A[j]:=A[j]+1 else A[j]:=j+1</code>。每个分支内可用下列地址计算：</p>
+<p>设 A:[1..100]int，语句为 <code>if j=1 then A[j]:=A[j]+1 else A[j]:=j+1</code>。每个分支内可用下列地址计算：</p>
 <pre><code class="language-text">(SUBI,j,1,u)
 (MULTI,u,1,v)
 (AADD,A,v,p)
 </code></pre>
 <p>真分支的左、右 A[j] 地址相同，计算一次 p 即可，再 <code>(ADDI,p,1,t)</code>、<code>(ASSIG,t,-,p)</code>。读旧元素和写新元素仍是两种操作。假分支求 p 后 <code>(ADDI,j,1,s)</code>、<code>(ASSIG,s,-,p)</code>。</p>
 <h3>11.2 为什么不能直接跨两个分支替换</h3>
-<p>两个分支是不同基本块。到假分支时没有执行真分支，不能直接用真分支中才定义的 p；局部 UsableExpr 在新块清空。若要把共同地址计算安排在分支之前，需要额外的跨块移动分析，并验证新执行的计算安全。</p>
-<p>同样，知道真分支入口条件 j=1 是一种路径信息分析，不是从空表开始的局部常量算法自然就能获得的信息。不能把假分支的 j 也替换成 1。</p>
+<p>小例子：同一个if的真分支计算u=a+b，假分支计算v=a+b，a、b是入口已存在的整数且不改变。选择假分支时没有执行真分支，所以u尚未由本次代码定值；不能直接把假分支改成v=u。</p>
+<p>若想在if之前计算一次新临时t=a+b，让两支分别使用t，需要证明提前计算安全，并明确它不是“在各块入口清空信息”的纯局部复用。两条分支的合流事实必须对所有进入路径成立。</p>
 <p><a id="ch08-s12"></a>
 <a id="综合应用历年题三项优化如何各自发挥作用"></a></p>
-<h2>12. 综合应用：历年题三项优化如何各自发挥作用</h2><div class="stepper" aria-label="分步图解"><h3>三项优化分别改了什么</h3><p class="fig-intro">使用正文原题IR。局部事实不跨未知调用；外提提供严格保守与已知对象细化两种口径。</p><div class="progress-track" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span></div><div class="step-tools"><button id="step-prev">上一步</button><label for="step-range">推导步骤</label><input id="step-range" type="range" min="0" max="5" value="0"><button id="step-next">下一步</button><span id="step-count" class="step-count"></span></div><div id="step-panel" class="step-card" aria-live="polite"></div><details><summary>完整轨迹（适合打印与连续核对）</summary><div class="table-scroll"><table><thead><tr><th>方法</th><th>原内容</th><th>前提</th><th>结果</th></tr></thead><tbody><tr><td>常表达节省</td><td>i=2；t8=5*i</td><td>二者在同一基本块</td><td>传参直接用10；CALL后不默认沿用i=2</td></tr><tr><td>公共子表达式</td><td>t2=20*b；t4=20*b</td><td>同一真分支块，b未改变</td><td>省第二乘法，t5=t3+t2</td></tr><tr><td>地址常量折叠</td><td>(10-0)*500</td><td>维度、下界、元素大小已知</td><td>行位移5000，保留地址加</td></tr><tr><td>严格课程外提</td><td>循环含数组间接写</td><td>套非良性循环全部不外提规则</td><td>地址加及5*i保留循环内</td></tr><tr><td>细化的外提</td><td>行地址a+5000及5*i</td><td>证明a与i/j不别名、操作无新增异常</td><td>移到WHILE前；j相关操作、数组写和除法仍在循环</td></tr><tr><td>执行核对</td><td>给定i=2、j起20</td><td>仅验证原题特定路径</td><td>两口径均j终500，480次写入20…499；未确认教师判分口径</td></tr></tbody></table></div></details></div>
-<p><strong>来源：</strong>期末题第六题第2问。使用第7章综合例的原IR、临时编号和ENTRY布局。本节只做题目要求的常表达节省、局部公共表达式节省和循环不变式外提；不把全局传播、代数约分或存储槽压缩悄悄混入结果。</p>
-<h3>12.1 第一步：只传播当前范围能够证明的常量</h3>
+<h2>12. 综合应用：历年题三项优化如何各自发挥作用</h2>
+<p><strong>来源：</strong> 期末题第六题第2问。本节给出同题完整的原 IR、临时编号与 ENTRY 布局。本节只做题目要求的常表达节省、局部公共表达式节省和循环不变式外提；不把全局传播、代数约分或存储槽压缩悄悄混入结果。</p>
+<p>本例输入条件补齐如下：f1 的参数 a 是指向整数的指针，b 是整数值形参；局部 c 先赋 10。若 <code>*a&gt;=10</code>，返回 <code>20*b/c+20*b</code>，否则返回 <code>20*b/c</code>。main 的 a 为 <code>int a[100][500]</code>，i、j 为整数；先令 i=2，再令 <code>j=f1(&amp;i,5*i)</code>，随后在 <code>j&lt;500</code> 时反复执行 <code>a[10][j]=10*j/(5*i);j=j+1</code>。int、地址、临时量各占 1 教学单位，无对齐，数组按行优先、下界 0；main.a 与 f1.a 是不同声明。</p>
+<details><summary>本题完整输入：39 条未优化四元式（展开后可逐条重算）</summary>
+
+<pre><code class="language-text">01 (ENTRY,Lf1,off+10,0)
+02 (ASSIG,10,-,c)
+03 (GE,*a,10,t1)
+04 (THEN,t1,-,-)
+05 (MULTI,20,b,t2)
+06 (DIVI,t2,c,t3)
+07 (MULTI,20,b,t4)
+08 (ADDI,t3,t4,t5)
+09 (RETURN,-,-,t5)
+10 (ELSE,-,-,-)
+11 (MULTI,20,b,t6)
+12 (DIVI,t6,c,t7)
+13 (RETURN,-,-,t7)
+14 (ENDIF,-,-,-)
+15 (ENDFUNC,-,-,-)
+16 (ENTRY,Lmain,off+50015,0)
+17 (ASSIG,2,-,i)
+18 (MULTI,5,i,t8)
+19 (VARACT,i,off,1)
+20 (VALACT,t8,off+1,1)
+21 (CALL,Lf1,true,t9)
+22 (ASSIG,t9,-,j)
+23 (WHILE,-,-,-)
+24 (LT,j,500,t10)
+25 (DO,t10,-,-)
+26 (SUBI,10,0,t11)
+27 (MULTI,t11,500,t12)
+28 (AADD,a,t12,t13)
+29 (SUBI,j,0,t14)
+30 (MULTI,t14,1,t15)
+31 (AADD,t13,t15,t16)
+32 (MULTI,10,j,t17)
+33 (MULTI,5,i,t18)
+34 (DIVI,t17,t18,t19)
+35 (ASSIG,t19,-,t16)
+36 (ADDI,j,1,t20)
+37 (ASSIG,t20,-,j)
+38 (ENDWHILE,-,-,-)
+39 (ENDPROC,-,-,-)
+</code></pre>
+</details>
+
+<p><code>off</code> 表示管理区之后参数／局部区的起点；<code>a</code> 在 main 中作数组基址，在 f1 中作指针值，<code>*a</code> 读取所指整数。AADD 的结果作地址使用，后续 ASSIG 对该目标间接写。符号与参数布局的完整来历可回看<a href="07_%E4%B8%AD%E9%97%B4%E4%BB%A3%E7%A0%81%E7%94%9F%E6%88%90.html#ch07-s13">第七章同题的声明与帧布局</a>，本节计算直接以上列输入为准。</p>
+<h3>12.1 第一步：只传播当前范围能够证明的常量</h3><div class="stepper" aria-label="分步图解"><h3>三项优化分别改了什么</h3><p class="fig-intro">使用正文给出的39条原始IR。局部事实不跨未知调用；外提分别说明保守与已知对象细化规则。</p><div class="progress-track" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span></div><div class="step-tools"><button id="step-prev">上一步</button><label for="step-range">推导步骤</label><input id="step-range" type="range" min="0" max="5" value="0"><button id="step-next">下一步</button><span id="step-count" class="step-count"></span></div><div id="step-panel" class="step-card" aria-live="polite"></div><details><summary>完整轨迹（适合打印与连续核对）</summary><div class="table-scroll"><table><thead><tr><th>方法</th><th>原内容</th><th>前提</th><th>结果</th></tr></thead><tbody><tr><td>常表达节省</td><td>i=2；t8=5*i</td><td>二者在同一基本块</td><td>传参直接用10；CALL后不默认沿用i=2</td></tr><tr><td>公共子表达式</td><td>t2=20*b；t4=20*b</td><td>同一真分支块，b未改变</td><td>省第二乘法，t5=t3+t2</td></tr><tr><td>地址常量折叠</td><td>(10-0)*500</td><td>维度、下界、元素大小已知</td><td>行位移5000，保留地址加</td></tr><tr><td>保守外提方案</td><td>循环含数组间接写</td><td>套非良性循环全部不外提规则</td><td>地址加及5*i保留循环内</td></tr><tr><td>细化的外提</td><td>行地址a+5000及5*i</td><td>证明a与i/j不别名、操作无新增异常</td><td>移到WHILE前；j相关操作、数组写和除法仍在循环</td></tr><tr><td>执行核对</td><td>给定i=2、j起20</td><td>仅验证原题特定路径</td><td>两方案均j终500，480次写入20…499；结论适用于所列教学模型</td></tr></tbody></table></div></details></div>
 <p>f1进入条件前c=10，但按严格“每基本块入口ConstDef清空”的局部算法，真/假分支入口不能直接继承前块c=10。因此可以有两种明确口径：严格局部版保留分支DIVI的c；若题目允许这个必经赋值跨分支传播，才把两处c替换成10。后者是有依据的扩展，不把它叫纯块内传播。</p>
-<p>main中i=2与t8=5*i在同一块，可得到t8=10，传参VALACT改为10。CALL结束基本块；返回后进入循环的基本块不能仅照搬调用前i=2，未知调用可能经指针改写i。原f1的代码可证明只读*a，但这是过程间事实，超出课件最简单局部算法。</p>
+<p>main中i=2与t8=5*i在同一块，可得到t8=10，传参VALACT改为10。CALL结束基本块；返回后进入循环的基本块不能仅照搬调用前i=2，未知调用可能经指针改写i。原f1的代码可证明只读*a，但这是过程间事实，超出这里只扫描单个基本块的局部算法。</p>
 <p>循环体的t11=10-0、t12=t11*500、t14=j-0、t15=t14*1分别看类型和局部规则：前两项可常量折叠为5000位移。后两项的减0、乘1属于代数化简，题目只指定三项时可保留它们，不能把不同方法名称混在一起。</p>
 <h3>12.2 第二步：公共表达式只在同一基本块内复用</h3>
 <p>真分支中t2=20*b与t4=20*b之间b没有改变，两次乘法相同，去掉t4计算，t5改为t3+t2。假分支t6=20*b与真分支t2分属不同路径；不进行全局可用表达式分析时，不可用真分支的t2代替假分支t6。</p>
 <p>同理main调用前的5*i与循环内5*i跨CALL和循环入口，不属于局部公共子表达式节省。若要复用必须证明i不变、代表结果仍可用并满足路径条件，不能仅比较源文本。</p>
-<h3>12.3 第三步：区分课程保守禁令与可证明安全的细化</h3>
-<p>课件19第19—21页给保守规则：“循环体有间接变量赋值或过/函调用”时，整个非良性循环不做外提。原题循环有数组元素的间接写，严格机械套这条规则，会让第三项外提没有可用结果；与此同时原题明确要求做循环不变式外提。两者的判分口径需要教师确认，不能隐藏这个张力。</p>
+<h3>12.3 第三步：区分整循环保守规则与逐项安全分析</h3>
+<p>先说明采用哪一种分析规则。保守方案：只要循环体含有间接写或调用，就不对整个循环做外提；本题有数组元素间接写，采用该方案时没有外提项，结果停在前两步的局部优化。细化方案：逐项证明内存写的目标与候选操作数是否可能重合，并检查提前执行的安全性，证明通过的计算才可外提。下面明确按细化方案继续，不能一边使用整循环禁令，一边声称同样规则允许外提。题目若限定了分析规则，应按其限定作答。</p>
 <p>若允许根据已知对象细化别名判断：数组a与局部i、j是不同声明，数组元素写不修改i/j或数组基址；第10行地址t13=base(a)+5000不依赖j，可提到WHILE之前。5*i中i循环内没有改变，也可外提；除法仍依照课程保守规则留在循环内。循环可能零次时，提前计算地址和无异常的整数乘法必须不引入可观察副作用；真实C整数溢出语义未知时仍需证明，而本题给定i=2这一执行路径是安全的。</p>
 <h3>12.4 细化口径下的完整结果</h3>
 <p>以下保留c的跨块使用和原有临时槽布局，只在主循环上采用上述已知对象细化。ENTRY大小与第7章相同，表示不做临时存储槽压缩。严格课程保守版只需把第21、22两条移回循环体对应使用前，其他部分一致。</p>
@@ -958,7 +1122,7 @@ end
 <ol>
 <li>不能。b=3仍成立，a=n后a旧常量失效，c=3+n。把a仍当1会错，赋值不会让已保存b自动同步变化。</li>
 <li>一般不能。x新定义后其值编号改变；若能够额外证明旧x也是3，才可能判断相同，不凭同名字确认。</li>
-<li>不能。若k≤0，原来不求除法，提前计算可能在d=0时引入新错误；课件保守策略直接不外提除法。若另有全路径非零、安全执行证明，则属于更细的优化规则。</li>
+<li>不能。若k≤0，原来不求除法，提前计算可能在d=0时引入新错误；本章保守策略直接不外提除法。若另有全路径非零、安全执行证明，则属于更细的优化规则。</li>
 <li>不能。假分支使 x=2，随后 y=5；只沿用真分支的 x=1 会改错另一条路径。两路都成立的事实才可在汇合后使用。</li>
 </ol>
 <p><a id="ch08-s16"></a>
@@ -1008,7 +1172,7 @@ end
 <a id="末尾速查表"></a></p>
 <h2>17. 末尾速查表</h2>
 <div class="ref-picker"><label for="quick-select">选择一个概念或方法，查看含义、形式、例子、结果和前提</label><select id="quick-select" class="quick-select"><option value="0">基本块/CFG</option><option value="1">常量折叠/传播</option><option value="2">值编码VN</option><option value="3">LoopDef</option><option value="4">外提安全条件</option><option value="5">事实适用范围</option></select><div id="quick-panel" class="ref-panel" aria-live="polite"></div></div>
-</article><div class="chapter-links"><a href="07_中间代码生成.html">← 第7章 中间代码生成</a><a href="09_目标代码生成.html">第9章 目标代码生成 →</a></div></main></div><script type="application/json" id="diagram-data">{"title":"三项优化分别改了什么","premise":"使用正文原题IR。局部事实不跨未知调用；外提提供严格保守与已知对象细化两种口径。","fields":["方法","原内容","前提","结果"],"rows":[["常表达节省","i=2；t8=5*i","二者在同一基本块","传参直接用10；CALL后不默认沿用i=2"],["公共子表达式","t2=20*b；t4=20*b","同一真分支块，b未改变","省第二乘法，t5=t3+t2"],["地址常量折叠","(10-0)*500","维度、下界、元素大小已知","行位移5000，保留地址加"],["严格课程外提","循环含数组间接写","套非良性循环全部不外提规则","地址加及5*i保留循环内"],["细化的外提","行地址a+5000及5*i","证明a与i/j不别名、操作无新增异常","移到WHILE前；j相关操作、数组写和除法仍在循环"],["执行核对","给定i=2、j起20","仅验证原题特定路径","两口径均j终500，480次写入20…499；未确认教师判分口径"]]}</script><script type="application/json" id="quick-data">[{"name":"基本块/CFG","kind":"控制流组织","meaning":"限定顺序事实与路径关系","form":"入口/出口切块，可能转移连边","notice":"课程间接写规则保守；","example":"WHILE条件块是回边目的","link":"\u003ca href=\"#ref-%E5%9D%97\">基本块\u003c/a>"},{"name":"常量折叠/传播","kind":"值优化","meaning":"把已知计算前移到编译时","form":"当前ConstDef替读操作数，计算常量结果","notice":"重定义/调用需失效；","example":"i=2后5*i得10","link":"\u003ca href=\"#ref-%E5%B8%B8%E9%87%8F\">常量\u003c/a>"},{"name":"值编码VN","kind":"局部等价信息","meaning":"识别不同名字的同一当前值","form":"键=(OP,VN(a),VN(b))","notice":"代表仍有效且内存未变；","example":"d=b后d*c可与b*c共用","link":"\u003ca href=\"#ref-VN\">值编码\u003c/a>"},{"name":"LoopDef","kind":"循环定值集合","meaning":"找候选不变式","form":"先收定义，再按依赖外提","notice":"还须检查异常和别名；","example":"j改变，5*i候选不变","link":"\u003ca href=\"#ref-%E5%BE%AA%E7%8E%AF\">循环外提\u003c/a>"},{"name":"外提安全条件","kind":"变换适用条件","meaning":"防止提前执行改变行为","form":"无副作用/异常、值不变、路径安全","notice":"不变不等于可移；","example":"零次循环外的1/d会新增除零","link":"\u003ca href=\"#ref-%E5%AE%89%E5%85%A8\">外提边界\u003c/a>"},{"name":"事实适用范围","kind":"优化的判断条件","meaning":"防止跨路径误用局部结论","form":"先确认在哪些路径、时点成立","notice":"不能任选一条分支；","example":"x可能1或2时y不能固定成4","link":"\u003ca href=\"#ref-%E6%95%B0%E6%8D%AE%E6%B5%81\">适用范围\u003c/a>"}]</script><script>
+</article><div class="chapter-links"><a href="07_中间代码生成.html">← 第7章 中间代码生成</a><a href="09_目标代码生成.html">第9章 目标代码生成 →</a></div></main></div><script type="application/json" id="diagram-data">{"title":"三项优化分别改了什么","premise":"使用正文给出的39条原始IR。局部事实不跨未知调用；外提分别说明保守与已知对象细化规则。","fields":["方法","原内容","前提","结果"],"rows":[["常表达节省","i=2；t8=5*i","二者在同一基本块","传参直接用10；CALL后不默认沿用i=2"],["公共子表达式","t2=20*b；t4=20*b","同一真分支块，b未改变","省第二乘法，t5=t3+t2"],["地址常量折叠","(10-0)*500","维度、下界、元素大小已知","行位移5000，保留地址加"],["保守外提方案","循环含数组间接写","套非良性循环全部不外提规则","地址加及5*i保留循环内"],["细化的外提","行地址a+5000及5*i","证明a与i/j不别名、操作无新增异常","移到WHILE前；j相关操作、数组写和除法仍在循环"],["执行核对","给定i=2、j起20","仅验证原题特定路径","两方案均j终500，480次写入20…499；结论适用于所列教学模型"]]}</script><script type="application/json" id="quick-data">[{"name":"基本块/CFG","kind":"控制流组织","meaning":"限定顺序事实与路径关系","form":"入口/出口切块，可能转移连边","notice":"入口包括跳转目标和跳转后继；","example":"1:a=1；2:if c goto 4；3:a=2；4:write a，分成[1,2]、[3]、[4]三个基本块。","link":"\u003ca href=\"#ref-%E5%9D%97\">基本块\u003c/a>"},{"name":"常量折叠/传播","kind":"值优化","meaning":"把已知计算前移到编译时","form":"当前ConstDef替读操作数，计算常量结果","notice":"仅在已证明取值时传播；","example":"同一直线块u=2*4；v=u+1，中间无其它写入，则依次化为u=8、v=9。","link":"\u003ca href=\"#ref-%E5%B8%B8%E9%87%8F\">常量\u003c/a>"},{"name":"值编码VN","kind":"局部等价信息","meaning":"识别不同名字的同一当前值","form":"键=(OP,VN(a),VN(b))","notice":"相同名字被重新赋值会改变值号；","example":"p=2、q=3时t=p\u003cem>q为6，随后q=4，新的p\u003c/em>q为8，不能复用旧t。","link":"\u003ca href=\"#ref-VN\">值编码\u003c/a>"},{"name":"LoopDef","kind":"循环定值集合","meaning":"找候选不变式","form":"先收定义，再按依赖外提","notice":"循环中可能写到的对象必须计入；","example":"while(i&lt;2){x=k+1;i=i+1;}无调用或间接写，LoopDef={x,i}，k不在其中。","link":"\u003ca href=\"#ref-%E5%BE%AA%E7%8E%AF\">循环外提\u003c/a>"},{"name":"外提安全条件","kind":"变换适用条件","meaning":"防止提前执行改变行为","form":"无副作用/异常、值不变、路径安全","notice":"还须保持副作用、异常和零次执行语义；","example":"整数k在循环中不变且k\u003cem>2可安全计算，可先算临时t=k\u003c/em>2，但循环内out=t的写入仍应留在循环内。","link":"\u003ca href=\"#ref-%E5%AE%89%E5%85%A8\">外提边界\u003c/a>"},{"name":"事实适用范围","kind":"优化的判断条件","meaning":"防止跨路径误用局部结论","form":"先确认在哪些路径、时点成立","notice":"汇合处要合并所有可达路径；","example":"if c then x=1 else x=2；y=x+3，则y可能4或5，不能仅凭真分支把y恒替为4。","link":"\u003ca href=\"#ref-%E6%95%B0%E6%8D%AE%E6%B5%81\">适用范围\u003c/a>"}]</script><script>
 const links=[...document.querySelectorAll('nav a[href^="#"]')];
 const headings=links.map(a=>document.getElementById(a.hash.slice(1))).filter(Boolean);
 let scheduled=false;
@@ -1019,5 +1183,209 @@ document.querySelectorAll('[data-font]').forEach(b=>b.addEventListener('click',(
 const diagram=JSON.parse(document.getElementById('diagram-data').textContent);let step=0;
 function showStep(){if(!diagram)return;const row=diagram.rows[step];const panel=document.getElementById('step-panel');panel.replaceChildren();const grid=document.createElement('div');grid.className='step-grid';diagram.fields.forEach((field,i)=>{const cell=document.createElement('div');cell.className='step-field';const strong=document.createElement('strong');strong.textContent=field;const p=document.createElement('p');p.textContent=row[i];cell.append(strong,p);grid.append(cell);});panel.append(grid);document.getElementById('step-count').textContent=(step+1)+' / '+diagram.rows.length;document.getElementById('step-range').value=step;document.getElementById('step-prev').disabled=step===0;document.getElementById('step-next').disabled=step===diagram.rows.length-1;document.querySelectorAll('.progress-track span').forEach((s,i)=>s.classList.toggle('done',i<=step));}
 if(diagram){document.getElementById('step-prev').addEventListener('click',()=>{step=Math.max(0,step-1);showStep();});document.getElementById('step-next').addEventListener('click',()=>{step=Math.min(diagram.rows.length-1,step+1);showStep();});document.getElementById('step-range').addEventListener('input',e=>{step=Number(e.target.value);showStep();});showStep();}
-const quick=document.getElementById('quick-select');if(quick){const items=JSON.parse(document.getElementById('quick-data').textContent);function showQuick(){const r=items[Number(quick.value)];const panel=document.getElementById('quick-panel');panel.innerHTML='<h3>'+r.name+'</h3><p class="ref-kind">'+r.kind+'</p><h4>含义与用途</h4><p>'+r.meaning+'</p><h4>基本形式</h4><p>'+r.form+'</p><h4>学习例子与结果</h4><p class="result">'+r.example+'</p><h4>注意点与前提</h4><p>'+r.notice+'</p><p>'+r.link+'</p>';}quick.addEventListener('change',showQuick);showQuick();}markNavigation();
+function quickMarkup(r){return '<h3>'+r.name+'</h3><p class="ref-kind">'+r.kind+'</p><h4>含义与用途</h4><p>'+r.meaning+'</p><h4>基本形式</h4><p>'+r.form+'</p><h4>学习例子与结果</h4><p class="result">'+r.example+'</p><h4>注意点与前提</h4><p>'+r.notice+'</p><p>'+r.link+'</p>';}
+const quick=document.getElementById('quick-select');if(quick){const items=JSON.parse(document.getElementById('quick-data').textContent);function showQuick(){const r=items[Number(quick.value)];document.getElementById('quick-panel').innerHTML=quickMarkup(r);}quick.addEventListener('change',showQuick);showQuick();}markNavigation();
+(function () {
+  'use strict';
+  const $ = name => document.getElementById('chapter-search-' + name);
+  const panel = $('panel'), article = document.getElementById('article');
+  if (!panel || !article) return;
+  const blockTags = 'h1,h2,h3,h4,h5,h6,p,li,pre,td,th,summary,dt,dd,blockquote';
+  const ignored = '.stepper,.ref-picker,button,input,select,textarea,script,style,[data-search-ignore]';
+  const sectionIds = new Set([...document.querySelectorAll('nav a[href^="#"]')].map(a => a.hash.slice(1)));
+  const quickSelect = document.getElementById('quick-select'), quickPanel = document.getElementById('quick-panel');
+  const quickItems = JSON.parse(document.getElementById('quick-data')?.textContent || '[]');
+  const fold = text => text.replace(/[A-Z]/g, c => c.toLowerCase());
+  const pageSize = 40;
+  let matches = [], active = -1, page = 0, query = '', timer = null;
+  let resultsOpen = false, automaticQuick = false, originalQuick = null;
+  const openedDetails = new Set();
+
+  function measure() {
+    const top = Math.max(60, Math.ceil(document.querySelector('.topbar').getBoundingClientRect().height));
+    const height = panel.hidden ? 0 : Math.ceil(panel.getBoundingClientRect().height);
+    document.documentElement.style.setProperty('--reader-topbar-height', top + 'px');
+    document.documentElement.style.setProperty('--scroll-offset', Math.max(90, top + height + 18) + 'px');
+  }
+  window.addEventListener('resize', measure);
+  if (typeof ResizeObserver !== 'undefined') {
+    const observer = new ResizeObserver(measure);
+    observer.observe(document.querySelector('.topbar')); observer.observe(panel);
+  }
+
+  // 对文字节点建立段内偏移，不把行内 strong/code 等格式当作检索边界。
+  function collect(root, quick = false, quickName = '') {
+    const blocks = [], walker = document.createTreeWalker(root, NodeFilter.SHOW_ELEMENT | NodeFilter.SHOW_TEXT);
+    let node, owner = null, currentBlock = null, pendingSection = '', section = 'article', mainTitle = '本章导读', subTitle = '';
+    while ((node = walker.nextNode())) {
+      const element = node.nodeType === Node.ELEMENT_NODE ? node : node.parentElement;
+      if (!element || element.closest(quick ? 'h4,button,input,select,script,style' : ignored)) continue;
+      if (node.nodeType === Node.ELEMENT_NODE) {
+        if (!quick) {
+          if (node.matches('a[id]') && sectionIds.has(node.id)) pendingSection = node.id;
+          if (node.matches('h2')) { section = node.id || pendingSection || 'article'; mainTitle = node.textContent.trim(); subTitle = ''; pendingSection = ''; }
+          if (node.matches('h3')) subTitle = node.textContent.trim();
+        }
+        continue;
+      }
+      if (!node.data || (!quick && section === 'navigation')) continue;
+      const parent = element.closest(blockTags);
+      if (!parent || !root.contains(parent)) { owner = null; currentBlock = null; continue; }
+      const label = quick ? '末尾速查 › ' + quickName : mainTitle + (subTitle ? ' › ' + subTitle : '');
+      if (owner !== parent || !currentBlock || currentBlock.section !== section || currentBlock.label !== label) {
+        currentBlock = { el: parent, text: '', nodes: [], label, section }; blocks.push(currentBlock); owner = parent;
+      }
+      currentBlock.nodes.push({ node, start: currentBlock.text.length, end: currentBlock.text.length + node.data.length });
+      currentBlock.text += node.data;
+    }
+    return blocks.filter(b => b.text.trim());
+  }
+  function quickBlocks(index) {
+    const root = document.createElement('div'); root.innerHTML = quickMarkup(quickItems[index]);
+    const name = document.createElement('span'); name.innerHTML = quickItems[index].name;
+    return collect(root, true, name.textContent);
+  }
+  function find(blocks, source, item) {
+    const found = [], needle = fold(query);
+    blocks.forEach((block, blockIndex) => {
+      const text = fold(block.text); let start = text.indexOf(needle);
+      while (start !== -1) {
+        const end = start + query.length;
+        found.push({ source, item, blockIndex, start, end, text: block.text, label: block.label });
+        start = text.indexOf(needle, end);
+      }
+    });
+    return found;
+  }
+  function removeMarks() {
+    const parents = new Set();
+    article.querySelectorAll('mark.chapter-search-hit').forEach(mark => { parents.add(mark.parentNode); mark.replaceWith(document.createTextNode(mark.textContent)); });
+    parents.forEach(parent => parent.normalize());
+  }
+  function restoreDetails() { openedDetails.forEach(details => { if (details.isConnected) details.open = false; }); openedDetails.clear(); }
+  function restoreQuick() {
+    if (originalQuick !== null && quickSelect) {
+      automaticQuick = true; quickSelect.value = originalQuick; quickSelect.dispatchEvent(new Event('change')); automaticQuick = false;
+    }
+    originalQuick = null;
+  }
+  function setOpen(open, focusInput = false) {
+    panel.hidden = !open; $('toggle').setAttribute('aria-expanded', String(open));
+    if (open && typeof closeMenu === 'function') closeMenu();
+    measure();
+    if (focusInput) $('input').focus();
+  }
+  function text(tag, value) { const element = document.createElement(tag); element.textContent = value; return element; }
+  function state() {
+    $('prev').disabled = $('next').disabled = !matches.length;
+    $('results-toggle').disabled = !matches.length;
+    $('status').textContent = !query ? '请输入关键词' : !matches.length ? '没有找到匹配内容' : active < 0 ? '找到 ' + matches.length + ' 处，选择结果定位' : '第 ' + (active + 1) + ' / ' + matches.length + ' 处';
+    $('results').hidden = !resultsOpen || !matches.length;
+    $('results-toggle').setAttribute('aria-expanded', String(! $('results').hidden));
+    $('results-toggle').textContent = resultsOpen && matches.length ? '收起结果' : '展开结果';
+    measure();
+  }
+  function renderResults() {
+    const list = $('list'); list.replaceChildren();
+    const start = page * pageSize, end = Math.min(start + pageSize, matches.length);
+    $('page-status').textContent = matches.length ? '显示 ' + (start + 1) + '—' + end + '，共 ' + matches.length + ' 处' : '';
+    $('page-prev').disabled = page === 0; $('page-next').disabled = end >= matches.length;
+    for (let i = start; i < end; i++) {
+      const match = matches[i], item = document.createElement('li'), button = document.createElement('button');
+      button.type = 'button'; button.className = 'chapter-search-result';
+      if (i === active) button.setAttribute('aria-current', 'true');
+      button.append(text('strong', (i + 1) + '. ' + match.label));
+      const excerpt = document.createElement('span'), left = Math.max(0, match.start - 35), right = Math.min(match.text.length, match.end + 55);
+      excerpt.append(document.createTextNode((left ? '…' : '') + match.text.slice(left, match.start)));
+      excerpt.append(text('mark', match.text.slice(match.start, match.end)));
+      excerpt.append(document.createTextNode(match.text.slice(match.end, right) + (right < match.text.length ? '…' : '')));
+      button.append(excerpt); button.addEventListener('click', () => activate(i, true)); item.append(button); list.append(item);
+    }
+  }
+  function search() {
+    clearTimeout(timer); timer = null; removeMarks(); restoreDetails(); restoreQuick();
+    query = $('input').value.trim(); active = -1; page = 0; matches = [];
+    if (query) {
+      matches = find(collect(article), 'body');
+      if (typeof quickMarkup === 'function') quickItems.forEach((_, index) => { matches.push(...find(quickBlocks(index), 'quick', index)); });
+    }
+    resultsOpen = !!matches.length; renderResults(); state();
+  }
+  function activate(index, focusMatch = false) {
+    if (!matches.length) return;
+    index = (index + matches.length) % matches.length;
+    removeMarks(); const match = matches[index]; let block;
+    if (match.source === 'quick') {
+      if (!quickSelect || !quickPanel) return;
+      if (originalQuick === null) originalQuick = quickSelect.value;
+      automaticQuick = true; quickSelect.value = String(match.item); quickSelect.dispatchEvent(new Event('change')); automaticQuick = false;
+      const name = document.createElement('span'); name.innerHTML = quickItems[match.item].name;
+      block = collect(quickPanel, true, name.textContent)[match.blockIndex];
+    } else block = collect(article)[match.blockIndex];
+    // 动态正文如有改动，重建结果；不按旧字符位置猜测。
+    if (!block || block.text !== match.text) { search(); $('status').textContent = '正文已变化，结果已刷新，请重新选择。'; return; }
+    for (let parent = block.el; parent && parent !== article; parent = parent.parentElement) {
+      if (parent.tagName === 'DETAILS' && !parent.open) { openedDetails.add(parent); parent.open = true; }
+    }
+    const marks = [];
+    for (const part of block.nodes) {
+      if (part.end <= match.start || part.start >= match.end) continue;
+      const begin = Math.max(0, match.start - part.start), end = Math.min(part.node.length, match.end - part.start);
+      const fragment = document.createDocumentFragment();
+      if (begin) fragment.append(document.createTextNode(part.node.data.slice(0, begin)));
+      const mark = text('mark', part.node.data.slice(begin, end)); mark.className = 'chapter-search-hit'; fragment.append(mark); marks.push(mark);
+      if (end < part.node.length) fragment.append(document.createTextNode(part.node.data.slice(end)));
+      part.node.replaceWith(fragment);
+    }
+    active = index; page = Math.floor(index / pageSize); resultsOpen = false; renderResults(); state();
+    const first = marks[0];
+    if (first) {
+      first.tabIndex = -1; if (focusMatch) first.focus({ preventScroll: true });
+      first.scrollIntoView({ block: 'start', inline: 'nearest', behavior: 'auto' });
+      requestAnimationFrame(() => { measure(); if (typeof markNavigation === 'function') markNavigation(); });
+    }
+  }
+  function ensureQuery() { if (timer !== null || $('input').value.trim() !== query) search(); }
+  function clear() {
+    clearTimeout(timer); timer = null; $('input').value = ''; search(); $('input').focus();
+  }
+  $('toggle').addEventListener('click', () => setOpen(panel.hidden, panel.hidden));
+  $('close').addEventListener('click', () => { setOpen(false); $('toggle').focus(); });
+  $('clear').addEventListener('click', clear);
+  $('form').addEventListener('submit', event => { event.preventDefault(); ensureQuery(); if (matches.length) activate(active < 0 ? 0 : active + 1); });
+  $('input').addEventListener('input', () => { clearTimeout(timer); timer = setTimeout(search, 160); });
+  $('input').addEventListener('keydown', event => {
+    if (event.key === 'Enter' && event.shiftKey) { event.preventDefault(); ensureQuery(); if (matches.length) activate(active < 0 ? matches.length - 1 : active - 1); }
+  });
+  $('prev').addEventListener('click', () => { ensureQuery(); if (matches.length) activate(active < 0 ? matches.length - 1 : active - 1); });
+  $('next').addEventListener('click', () => { ensureQuery(); if (matches.length) activate(active < 0 ? 0 : active + 1); });
+  $('results-toggle').addEventListener('click', () => { resultsOpen = !resultsOpen; renderResults(); state(); });
+  $('page-prev').addEventListener('click', () => { if (page > 0) page--; renderResults(); measure(); });
+  $('page-next').addEventListener('click', () => { if ((page + 1) * pageSize < matches.length) page++; renderResults(); measure(); });
+  $('panel').querySelector('details').addEventListener('toggle', measure);
+  document.addEventListener('keydown', event => {
+    if ((event.ctrlKey || event.metaKey) && !event.altKey && event.key.toLowerCase() === 'k') { event.preventDefault(); setOpen(true, true); $('input').select(); }
+    if (event.key === 'Escape' && !panel.hidden) { setOpen(false); $('toggle').focus(); }
+  });
+  document.getElementById('menu').addEventListener('click', () => { if (document.body.classList.contains('nav-open')) setOpen(false); });
+  quickSelect?.addEventListener('change', () => {
+    if (!automaticQuick) {
+      originalQuick = null;
+      if (active >= 0 && matches[active].source === 'quick') { active = -1; renderResults(); state(); }
+    }
+  });
+  measure(); state();
+})();
+(function () {
+  'use strict';
+  const select = document.getElementById('reading-theme');
+  if (!select) return;
+  select.value = document.documentElement.dataset.readerTheme;
+  select.addEventListener('change', function () {
+    const theme = select.value;
+    if (theme !== 'light' && theme !== 'dark') return;
+    document.documentElement.dataset.readerTheme = theme;
+    try { localStorage.setItem('compiler-reading-theme-v1', theme); } catch (_) {}
+  });
+})();
 </script></body></html>

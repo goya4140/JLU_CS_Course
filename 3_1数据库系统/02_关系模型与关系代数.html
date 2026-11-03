@@ -1,8 +1,55 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>第2单元 关系模型与关系代数 · 图解学习版</title><style>:root{--paper:#fbfaf7;--surface:#fff;--ink:#253341;--muted:#5c6b75;--line:#d5dfdd;--teal:#156b62;--soft:#edf6f1;--font:17px;--scroll-offset:90px}*{box-sizing:border-box}html{scroll-behavior:auto;scroll-padding-top:var(--scroll-offset)}body{margin:0;background:var(--paper);color:var(--ink);font-family:'Microsoft YaHei','PingFang SC',system-ui,sans-serif;font-size:var(--font);line-height:1.85}a{color:var(--teal);text-underline-offset:3px}a:hover{color:#173f75}button,select{font:inherit}button{cursor:pointer}button,select{border:1px solid #b9cbc5;border-radius:7px;padding:7px 11px;background:#fff;color:var(--ink)}button:hover{background:var(--soft)}button:focus-visible,select:focus-visible,a:focus-visible{outline:3px solid #81cbb8;outline-offset:3px}.skip{position:absolute;top:-80px;left:12px;z-index:50;background:#fff;padding:8px}.skip:focus{top:8px}.sidebar{position:fixed;inset:0 auto 0 0;width:270px;padding:23px 18px;background:#f0f4f0;border-right:1px solid var(--line);overflow:auto;z-index:30;overscroll-behavior:contain}.brand{font-size:21px;font-weight:700}.brand small{display:block;font-size:12px;font-weight:400;color:var(--muted)}.sidebar nav a{display:block;color:var(--ink);text-decoration:none;padding:8px 10px;margin:3px 0;border-radius:6px;font-size:14px;line-height:1.6}.sidebar nav a:hover{background:#dcebe3}.sidebar nav a.active,.sidebar nav a.active:hover{background:var(--teal);color:white}.sidebar select{width:100%;font-size:13px}.nav-tip{font-size:12px;color:var(--muted);margin:14px 0}.shell{margin-left:270px;overflow-anchor:none}.topbar{position:sticky;top:0;background:rgba(251,250,247,.98);padding:12px 26px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:12px;z-index:20}.topbar-title{font-size:13px;color:var(--muted)}.toolbar{display:flex;gap:7px;flex-wrap:wrap}.toolbar button{font-size:13px}.menu{display:none}main{max-width:1120px;margin:auto;padding:30px 44px 80px;min-width:0}h1{font-size:32px;line-height:1.5;margin:14px 0 25px}h2{font-size:25px;line-height:1.5;padding:0 0 11px;border-bottom:1px solid var(--line);margin:44px 0 23px}h3{font-size:21px;line-height:1.55;margin:29px 0 16px}h4{font-size:18px;line-height:1.6;margin:22px 0 13px}p{margin:14px 0}li{margin:7px 0}ul,ol{padding-left:1.6em}blockquote{margin:20px 0;padding:5px 18px;border-left:3px solid #a8c6bb;background:#f0f3ef;color:#53655e;font-size:14px}blockquote p{margin:8px 0}hr{border:0;border-top:1px solid var(--line);margin:32px 0}code{font-family:Consolas,'Cascadia Code',monospace;font-size:.9em;background:#eef1ed;padding:2px 5px;border-radius:4px;overflow-wrap:anywhere}pre{background:#18313d;color:#e8f0f0;border-radius:9px;padding:19px;line-height:1.65;overflow-x:auto;max-width:100%;font-size:14px}pre code{background:none;padding:0;color:inherit;white-space:pre;overflow-wrap:normal}table{border-collapse:collapse;width:100%;font-size:15px}th{background:#eaf3ee;text-align:left}td,th{padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:top}tbody tr:nth-child(even){background:#f6f9f6}.table-scroll{overflow-x:auto;border:1px solid var(--line);border-radius:8px;margin:17px 0;max-width:100%}.table-scroll td{min-width:80px}.source-note{font-size:13px;color:var(--muted)}.learning-figure{padding:23px;border:1px solid #b4cfc2;border-radius:12px;background:var(--soft);margin:25px 0}.learning-figure h4{margin:0 0 8px;font-size:20px}.fig-intro{font-size:14px;color:var(--muted)}.learning-figure label{display:block;margin-top:15px;font-size:14px;font-weight:700}.learning-figure select{margin-top:7px;width:100%;min-height:44px;font-size:15px}.fig-output{margin-top:16px}.flow{display:flex;gap:10px;align-items:stretch;flex-wrap:wrap}.flow-node{flex:1 1 150px;border:1px solid #bfd2c9;border-radius:8px;background:#fff;padding:13px;min-width:0}.flow-node strong{display:block;color:var(--teal)}.flow-node p{font-size:14px;margin:8px 0}.flow-arrow{align-self:center;color:var(--teal);font-size:24px}.fig-note{padding:10px 14px;border-left:3px solid var(--teal);background:#fff;font-size:14px;margin:15px 0 0}.svg-scroll{overflow-x:auto;max-width:100%}.svg-scroll svg{display:block;max-width:100%;height:auto}.ref-area{min-height:calc(100vh - var(--scroll-offset));margin-top:24px}.ref-picker{padding:22px;border-radius:12px;background:var(--soft);border:1px solid #b4cfc2}.ref-picker label{display:block;font-weight:700;margin-bottom:10px}.ref-picker select{width:100%;font-size:15px;min-height:46px}.ref-panel{margin-top:18px;background:#fff;border:1px solid var(--line);padding:20px;border-radius:9px}.ref-panel[hidden]{display:none}.ref-panel h3{margin:0;font-size:24px}.ref-panel h4{font-size:16px;margin:18px 0 8px}.ref-kind{font-size:13px;color:var(--teal)}.result{padding:10px 15px;border-left:3px solid var(--teal);background:var(--soft)}.copy{display:block;margin:5px 0 0 auto;font-size:12px;padding:4px 8px}.code-wrap{margin:20px 0}.code-wrap pre{margin-bottom:0}.foot{font-size:13px;color:var(--muted);border-top:1px solid var(--line);padding-top:23px;margin-top:30px}details{border:1px solid var(--line);padding:12px;border-radius:8px;margin:15px 0}summary{cursor:pointer;font-weight:700}@media(max-width:900px){.sidebar{transform:translateX(-100%)}body.nav-open .sidebar{transform:translateX(0);top:60px}.shell{margin-left:0}.menu{display:inline-block}.topbar-title{display:none}.topbar{padding:10px 14px}main{padding:23px 18px 65px}h1{font-size:27px}h2{font-size:23px}.learning-figure,.ref-picker{padding:16px}.flow{flex-direction:column}.flow-arrow{transform:rotate(90deg)}.ref-panel{padding:15px}}@media print{.sidebar,.topbar,.toolbar,.copy,.skip{display:none!important}.shell{margin:0}main{padding:0;max-width:none}body{background:#fff;font-size:11pt}.ref-area{min-height:0}.ref-picker select{display:none}pre{white-space:pre-wrap;background:#f3f5f4;color:#111}.learning-figure{break-inside:avoid}.table-scroll{overflow:visible}a{color:inherit}}@media print{.svg-scroll{overflow:visible}.svg-scroll svg{min-width:0!important;width:100%!important;height:auto!important}}.sidebar{width:266px;background:#f1f4f1;padding:27px 19px;overflow-y:auto}.brand{font-size:21px;font-weight:700;letter-spacing:.03em;margin-bottom:5px}.brand small{font-size:12px;font-weight:400;color:var(--muted);letter-spacing:.1em}.sidebar .sub{font-size:13px;color:var(--muted);margin:5px 0 21px}.sidebar nav a{font-size:14px;line-height:1.5;padding:9px 11px;margin:3px 0;border-radius:6px}.sidebar nav a:hover{background:#e0ece6;color:#174d43}.sidebar nav a.active,.sidebar nav a.active:hover{background:var(--teal);color:#fff}.nav-group{font-size:12px;color:var(--muted);margin:18px 11px 6px;letter-spacing:.08em}.sidebar-footer{margin-top:24px;font-size:12px;color:var(--muted)}.shell{margin-left:266px}@media(max-width:900px){.shell{margin-left:0}}
+<html lang="zh-CN"><head><script id="study-theme-init">(()=>{let t;try{t=localStorage.getItem('jlu-database-reading-theme');}catch{}if(t!=='light'&&t!=='dark'){t=window.matchMedia&&matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';}document.documentElement.dataset.theme=t;})();</script><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>第2单元 关系模型与关系代数 · 图解学习版</title><style>:root{--paper:#fbfaf7;--surface:#fff;--ink:#253341;--muted:#5c6b75;--line:#d5dfdd;--teal:#156b62;--soft:#edf6f1;--font:17px;--scroll-offset:90px}*{box-sizing:border-box}html{scroll-behavior:auto;scroll-padding-top:var(--scroll-offset)}body{margin:0;background:var(--paper);color:var(--ink);font-family:'Microsoft YaHei','PingFang SC',system-ui,sans-serif;font-size:var(--font);line-height:1.85}a{color:var(--teal);text-underline-offset:3px}a:hover{color:#173f75}button,select{font:inherit}button{cursor:pointer}button,select{border:1px solid #b9cbc5;border-radius:7px;padding:7px 11px;background:#fff;color:var(--ink)}button:hover{background:var(--soft)}button:focus-visible,select:focus-visible,a:focus-visible{outline:3px solid #81cbb8;outline-offset:3px}.skip{position:absolute;top:-80px;left:12px;z-index:50;background:#fff;padding:8px}.skip:focus{top:8px}.sidebar{position:fixed;inset:0 auto 0 0;width:270px;padding:23px 18px;background:#f0f4f0;border-right:1px solid var(--line);overflow:auto;z-index:30;overscroll-behavior:contain}.brand{font-size:21px;font-weight:700}.brand small{display:block;font-size:12px;font-weight:400;color:var(--muted)}.sidebar nav a{display:block;color:var(--ink);text-decoration:none;padding:8px 10px;margin:3px 0;border-radius:6px;font-size:14px;line-height:1.6}.sidebar nav a:hover{background:#dcebe3}.sidebar nav a.active,.sidebar nav a.active:hover{background:var(--teal);color:white}.sidebar select{width:100%;font-size:13px}.nav-tip{font-size:12px;color:var(--muted);margin:14px 0}.shell{margin-left:270px;overflow-anchor:none}.topbar{position:sticky;top:0;background:rgba(251,250,247,.98);padding:12px 26px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:12px;z-index:20}.topbar-title{font-size:13px;color:var(--muted)}.toolbar{display:flex;gap:7px;flex-wrap:wrap}.toolbar button{font-size:13px}.menu{display:none}main{max-width:1120px;margin:auto;padding:30px 44px 80px;min-width:0}h1{font-size:32px;line-height:1.5;margin:14px 0 25px}h2{font-size:25px;line-height:1.5;padding:0 0 11px;border-bottom:1px solid var(--line);margin:44px 0 23px}h3{font-size:21px;line-height:1.55;margin:29px 0 16px}h4{font-size:18px;line-height:1.6;margin:22px 0 13px}p{margin:14px 0}li{margin:7px 0}ul,ol{padding-left:1.6em}blockquote{margin:20px 0;padding:5px 18px;border-left:3px solid #a8c6bb;background:#f0f3ef;color:#53655e;font-size:14px}blockquote p{margin:8px 0}hr{border:0;border-top:1px solid var(--line);margin:32px 0}code{font-family:Consolas,'Cascadia Code',monospace;font-size:.9em;background:#eef1ed;padding:2px 5px;border-radius:4px;overflow-wrap:anywhere}pre{background:#18313d;color:#e8f0f0;border-radius:9px;padding:19px;line-height:1.65;overflow-x:auto;max-width:100%;font-size:14px}pre code{background:none;padding:0;color:inherit;white-space:pre;overflow-wrap:normal}table{border-collapse:collapse;width:100%;font-size:15px}th{background:#eaf3ee;text-align:left}td,th{padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:top}tbody tr:nth-child(even){background:#f6f9f6}.table-scroll{overflow-x:auto;border:1px solid var(--line);border-radius:8px;margin:17px 0;max-width:100%}.table-scroll td{min-width:80px}.source-note{font-size:13px;color:var(--muted)}.learning-figure{padding:23px;border:1px solid #b4cfc2;border-radius:12px;background:var(--soft);margin:25px 0}.learning-figure h4{margin:0 0 8px;font-size:20px}.fig-intro{font-size:14px;color:var(--muted)}.learning-figure label{display:block;margin-top:15px;font-size:14px;font-weight:700}.learning-figure select{margin-top:7px;width:100%;min-height:44px;font-size:15px}.fig-output{margin-top:16px}.flow{display:flex;gap:10px;align-items:stretch;flex-wrap:wrap}.flow-node{flex:1 1 150px;border:1px solid #bfd2c9;border-radius:8px;background:#fff;padding:13px;min-width:0}.flow-node strong{display:block;color:var(--teal)}.flow-node p{font-size:14px;margin:8px 0}.flow-arrow{align-self:center;color:var(--teal);font-size:24px}.fig-note{padding:10px 14px;border-left:3px solid var(--teal);background:#fff;font-size:14px;margin:15px 0 0}.svg-scroll{overflow-x:auto;max-width:100%}.svg-scroll svg{display:block;max-width:100%;height:auto}.ref-area{min-height:calc(100vh - var(--scroll-offset));margin-top:24px}.ref-picker{padding:22px;border-radius:12px;background:var(--soft);border:1px solid #b4cfc2}.ref-picker label{display:block;font-weight:700;margin-bottom:10px}.ref-picker select{width:100%;font-size:15px;min-height:46px}.ref-panel{margin-top:18px;background:#fff;border:1px solid var(--line);padding:20px;border-radius:9px}.ref-panel[hidden]{display:none}.ref-panel h3{margin:0;font-size:24px}.ref-panel h4{font-size:16px;margin:18px 0 8px}.ref-kind{font-size:13px;color:var(--teal)}.result{padding:10px 15px;border-left:3px solid var(--teal);background:var(--soft)}.copy{display:block;margin:5px 0 0 auto;font-size:12px;padding:4px 8px}.code-wrap{margin:20px 0}.code-wrap pre{margin-bottom:0}.foot{font-size:13px;color:var(--muted);border-top:1px solid var(--line);padding-top:23px;margin-top:30px}details{border:1px solid var(--line);padding:12px;border-radius:8px;margin:15px 0}summary{cursor:pointer;font-weight:700}@media(max-width:900px){.sidebar{transform:translateX(-100%)}body.nav-open .sidebar{transform:translateX(0);top:60px}.shell{margin-left:0}.menu{display:inline-block}.topbar-title{display:none}.topbar{padding:10px 14px}main{padding:23px 18px 65px}h1{font-size:27px}h2{font-size:23px}.learning-figure,.ref-picker{padding:16px}.flow{flex-direction:column}.flow-arrow{transform:rotate(90deg)}.ref-panel{padding:15px}}@media print{.sidebar,.topbar,.toolbar,.copy,.skip{display:none!important}.shell{margin:0}main{padding:0;max-width:none}body{background:#fff;font-size:11pt}.ref-area{min-height:0}.ref-picker select{display:none}pre{white-space:pre-wrap;background:#f3f5f4;color:#111}.learning-figure{break-inside:avoid}.table-scroll{overflow:visible}a{color:inherit}}@media print{.svg-scroll{overflow:visible}.svg-scroll svg{min-width:0!important;width:100%!important;height:auto!important}}.sidebar{width:266px;background:#f1f4f1;padding:27px 19px;overflow-y:auto}.brand{font-size:21px;font-weight:700;letter-spacing:.03em;margin-bottom:5px}.brand small{font-size:12px;font-weight:400;color:var(--muted);letter-spacing:.1em}.sidebar .sub{font-size:13px;color:var(--muted);margin:5px 0 21px}.sidebar nav a{font-size:14px;line-height:1.5;padding:9px 11px;margin:3px 0;border-radius:6px}.sidebar nav a:hover{background:#e0ece6;color:#174d43}.sidebar nav a.active,.sidebar nav a.active:hover{background:var(--teal);color:#fff}.nav-group{font-size:12px;color:var(--muted);margin:18px 11px 6px;letter-spacing:.08em}.sidebar-footer{margin-top:24px;font-size:12px;color:var(--muted)}.shell{margin-left:266px}@media(max-width:900px){.shell{margin-left:0}}
 #sql-reference{min-height:calc(100vh - var(--scroll-offset,90px))}
 .table-scroll{max-width:100%;overflow-x:auto;margin:18px 0;border:1px solid var(--line);border-radius:8px}.table-scroll table{width:100%;border-collapse:collapse}.table-scroll td,.table-scroll th{min-width:85px;vertical-align:top}.table-scroll pre{white-space:pre-wrap}article h2,article h3,article h4{scroll-margin-top:var(--scroll-offset,90px)}.course-home{display:block;font-size:13px;padding:8px 11px;margin-bottom:12px}.chapter-turns{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;margin-top:34px;padding-top:20px;border-top:1px solid var(--line)}.chapter-turns a{font-size:14px}.sidebar-footer{font-size:12px;color:var(--muted);margin-top:24px}article>p:first-of-type{font-size:1.04em}.noscript-note{padding:12px;border-left:3px solid var(--teal)}@media(max-width:600px){.table-scroll table{min-width:520px}.table-scroll{font-size:14px}pre{max-width:100%;overflow-x:auto}article{min-width:0}}@media print{.table-scroll table{min-width:0}.chapter-turns{display:none}}
-</style><meta name="source-sha256" content="70f4f0eb2d393e37a7e9e5b8e53495d17def0aeebd6cb2bc1060915e4020d26c"></head><body><a class="skip" href="#article">跳到正文</a><aside class="sidebar" aria-label="章节目录"><div class="brand"><small>DATABASE / UNIT 02</small>关系模型与关系代数</div><p class="sub">理解 · 例题 · 自测</p><a class="course-home" href="00_%E5%AD%A6%E4%B9%A0%E5%AF%BC%E8%88%AA.html">返回课程学习导航</a><nav><a href="#ch02-navigation">学习导航</a><div class="nav-group">准备 · 表与规则</div><a href="#ch02-s004">1. 从学生选课业务认识关系模型</a><a href="#ch02-s011">2. 域、原子性与空值</a><a href="#ch02-s015">3. 为什么需要码</a><a href="#ch02-s021">4. 查询语言与公式的读法</a><div class="nav-group">运算 · 筛选与组合</div><a href="#ch02-s024">5. 六种基本关系代数运算</a><a href="#ch02-s041">6. 附加关系代数运算</a><a href="#ch02-s057">7. 扩展关系代数运算</a><div class="nav-group">表达 · 从题意到条件</div><a href="#ch02-s072">8. 怎样把一句题意写成表达式</a><a href="#ch02-s076">9. 元组关系演算</a><a href="#ch02-s080">10. 域关系演算与安全表达式</a><div class="nav-group">练习与复习</div><a href="#ch02-s083">11. 常见易错点：用具体原因自查</a><a href="#ch02-s084">12. 本单元模拟题：从读题到结果</a><a href="#ch02-s097">13. 自拟自测题（非模拟 PPT 原题）</a><a href="#ch02-s102">14. 复习清单与思维导图</a><a href="#ch02-relations">15. 表运算、条件和连接名称怎样分层理解</a><a href="#ch02-reference">16. 本章概念与方法速查</a></nav><div class="sidebar-footer">先推导例子，再对照答案。<br>可用键盘选择目录与图解选项。</div></aside><div class="shell"><header class="topbar"><span class="topbar-title">第2单元 关系模型与关系代数</span><div class="toolbar"><button id="menu" class="menu" aria-label="打开或收起目录" aria-expanded="false">目录</button><button data-font="-1" aria-label="减小正文字号">字号 −</button><button data-font="1" aria-label="增大正文字号">字号 ＋</button><button id="print">打印 / 保存 PDF</button></div></header><main><article id="article"><h1>第2单元 关系模型与关系代数</h1>
+</style><meta name="source-sha256" content="fd569534f0bd4eaed8e1dc45ba052dc27d7e2258fb979dc90c8dfe329758809a"><style id="study-theme-style">:root{color-scheme:light}
+.theme-control{display:inline-flex;align-items:center;gap:6px;font-size:13px;white-space:nowrap}
+.theme-control select{font:inherit;max-width:90px;padding:7px}
+html[data-theme=dark]{color-scheme:dark;--paper:#151c23;--surface:#1c2730;--ink:#e3ebef;--muted:#b3c3cc;--line:#465964;--teal:#80d8c3;--soft:#213b36}
+html[data-theme=dark] body{background:var(--paper);color:var(--ink)}
+html[data-theme=dark] .sidebar,html[data-theme=dark] .topbar{background:#1b2730;color:var(--ink)}
+html[data-theme=dark] :is(button,select,input,.flow-node,.fig-note,.ref-panel,.card,.course-card){background:var(--surface);color:var(--ink);border-color:var(--line)}
+html[data-theme=dark] :is(button:hover,.sidebar nav a:hover){background:#29463f;color:#e8fff6}
+html[data-theme=dark] .sidebar nav a.active{background:#80d8c3;color:#102921}
+html[data-theme=dark] a:hover{color:#c1e2ff}
+html[data-theme=dark] :is(th,blockquote,.learning-figure,.ref-picker,.result){background:#213b36;color:var(--ink);border-color:#527568}
+html[data-theme=dark] tbody tr:nth-child(even){background:#1c2b33}
+html[data-theme=dark] code{background:#293a43;color:#e7f4f6}
+html[data-theme=dark] pre,html[data-theme=dark] pre code{background:#0e1820;color:#e7f4f6}
+html[data-theme=dark] :is(.source-note,.fig-intro,.ref-kind,.sidebar-footer,.topbar-title,.nav-group,.foot,.nav-tip){color:var(--muted)}
+html[data-theme=dark] #chapter-search{background:#213b36;border-color:#527568}
+html[data-theme=dark] #chapter-search :is(summary,#chapter-search-status){color:#a5e8d7}
+html[data-theme=dark] #chapter-search input,html[data-theme=dark] #chapter-search .chapter-search-results button{background:#1c2730;color:#e3ebef;border-color:#607c77}
+html[data-theme=dark] #chapter-search .chapter-search-results span{color:#bdccd4}
+html[data-theme=dark] #chapter-search button[aria-current=true]{background:#345b4e;border-color:#a5e8d7}
+html[data-theme=dark] .chapter-search-dock{background:#243a34;color:#eef6f3;border-color:#80b5a3}
+html[data-theme=dark] mark[data-chapter-search]{background:#eedb77;color:#192218}
+html[data-theme=dark] mark.chapter-search-current{background:#ffbe63;color:#201609;outline-color:#ffebae}
+html[data-theme=dark] .skip{background:#1c2730;color:#80d8c3}
+html[data-theme=dark] :is(.syntax-line,.logic-flow>div,.balance-stage,.rollup-nodes>div,.window-anatomy span,.ref-result){background:#213b36;color:var(--ink)}
+html[data-theme=dark] :is(.dynamic-note.blocked,.noscript-note){background:#463b22;color:#ffe3a5}
+html[data-theme=dark] .truth.yes{background:#254b36;color:#b8f2ca}
+html[data-theme=dark] .truth.no{background:#522f30;color:#ffd0ca}
+html[data-theme=dark] .truth.unknown{background:#403254;color:#e5d2ff}
+html[data-theme=dark] .step-flow button[aria-pressed=true]{background:#80d8c3;color:#102921}
+html[data-theme=dark] .step-flow button span{background:#344c45;color:#def6ec}
+html[data-theme=dark] .syntax-line :is(.sql-key,.sql-string,.sql-num){color:inherit}
+html[data-theme=dark] :focus-visible{outline-color:#94e5cc}
+/* SVG 图内保留颜色之间的区别，并让白底图适合暗色页面。 */
+html[data-theme=dark] .svg-scroll svg{filter:invert(.88) hue-rotate(180deg)}
+@media(max-width:600px){.theme-control{font-size:12px}.toolbar{align-items:center}.theme-control select{min-height:36px}}
+@media(max-width:900px){.toolbar{min-width:0;max-width:100%}.topbar{flex-wrap:wrap}.topbar-label{display:none}.shell{overflow-x:clip}}
+@media print{
+ html[data-theme]{color-scheme:light;--paper:#fff;--surface:#fff;--ink:#111;--muted:#444;--line:#bbb;--teal:#154f47;--soft:#f2f5f3}
+ .theme-control{display:none!important}
+ html[data-theme=dark] body,html[data-theme=dark] :is(th,blockquote,.learning-figure,.ref-picker,.result,.flow-node,.fig-note,.ref-panel,.card,.course-card){background:#fff;color:#111}
+ html[data-theme=dark] tbody tr:nth-child(even){background:#f6f6f6}
+ html[data-theme=dark] :is(pre,pre code,code){background:#f2f2f2;color:#111}
+ html[data-theme=dark] .svg-scroll svg{filter:none}
+ html[data-theme=dark] :is(.syntax-line,.logic-flow>div,.balance-stage,.rollup-nodes>div,.window-anatomy span,.ref-result,.truth.yes,.truth.no,.truth.unknown,.dynamic-note.blocked,.noscript-note){background:#f5f5f5;color:#111}
+ html[data-theme=dark] a,html[data-theme=dark] :is(.source-note,.fig-intro,.ref-kind,.foot){color:#333}
+}
+</style></head><body><a class="skip" href="#article">跳到正文</a><aside class="sidebar" aria-label="章节目录"><div class="brand"><small>DATABASE / UNIT 02</small>关系模型与关系代数</div><p class="sub">理解 · 例题 · 自测</p><a class="course-home" href="00_%E5%AD%A6%E4%B9%A0%E5%AF%BC%E8%88%AA.html">返回课程学习导航</a><nav><a href="#ch02-navigation">学习导航</a><div class="nav-group">准备 · 表与规则</div><a href="#ch02-s004">1. 从学生选课业务认识关系模型</a><a href="#ch02-s011">2. 域、原子性与空值</a><a href="#ch02-s015">3. 为什么需要码</a><a href="#ch02-s021">4. 查询语言与公式的读法</a><div class="nav-group">运算 · 筛选与组合</div><a href="#ch02-s024">5. 六种基本关系代数运算</a><a href="#ch02-s041">6. 附加关系代数运算</a><a href="#ch02-s057">7. 扩展关系代数运算</a><div class="nav-group">表达 · 从题意到条件</div><a href="#ch02-s072">8. 怎样把一句题意写成表达式</a><a href="#ch02-s076">9. 元组关系演算</a><a href="#ch02-s080">10. 域关系演算与安全表达式</a><div class="nav-group">练习与复习</div><a href="#ch02-s083">11. 常见易错点：用具体原因自查</a><a href="#ch02-s084">12. 本单元模拟题：从读题到结果</a><a href="#ch02-s097">13. 自拟自测题（非模拟 PPT 原题）</a><a href="#ch02-s102">14. 复习清单与思维导图</a><a href="#ch02-relations">15. 表运算、条件和连接名称怎样分层理解</a><a href="#ch02-reference">16. 本章概念与方法速查</a></nav><div class="sidebar-footer">先推导例子，再对照答案。<br>可用键盘选择目录与图解选项。</div></aside><div class="shell"><header class="topbar"><span class="topbar-title">第2单元 关系模型与关系代数</span><div class="toolbar"><label class="theme-control" for="study-theme">阅读配色 <select id="study-theme" aria-label="阅读配色"><option value="light">白天</option><option value="dark">夜间</option></select></label><button id="menu" class="menu" aria-label="打开或收起目录" aria-expanded="false">目录</button><button data-font="-1" aria-label="减小正文字号">字号 −</button><button data-font="1" aria-label="增大正文字号">字号 ＋</button><button id="print">打印 / 保存 PDF</button></div></header><main><article id="article"><h1>第2单元 关系模型与关系代数</h1>
 <p>学生、课程和选课信息已经分表保存。怎样准确指出要找的行、需要的列，以及不同表之间的对应关系？本章先认清关系模型中的对象与规则，再用关系代数一步步得到查询结果。</p>
 <!-- toc:start -->
 <h2 id="ch02-navigation">学习导航</h2>
@@ -344,6 +391,7 @@
 <p><strong>唯一标识</strong>的意思是：拿到这个值或这组值，至多对应一个对象。在本例的业务规则中，学号可以唯一标识学生；姓名虽然在当前四行里没有重复，学校却没有保证以后永不重名，因此不能据此把姓名认定为唯一标识。</p>
 <p>数据库把用于唯一标识一行的一组属性称为<strong>码</strong>，也常称为“键”。</p>
 <h3 id="ch02-s017">3.2 超码：这组属性足以区分行</h3>
+<p>给学生表 <code>student(SID,name)</code>，两行为 <code>(S8,小江)</code>、<code>(S9,小江)</code>，并规定学号永不重复。给 SID=S8 只找到第一人，给 SID=S8 且 name=小江也只找到第一人，所以 SID、SID 与 name 的组合都是超码；只给 name=小江却找到两人，姓名不是超码。</p>
 <p>看学生表：</p>
 <ul>
 <li>只给出 <code>SID=S1</code>，就能确定是小林这一行，所以属性集合 <code>{SID}</code> 是一个<strong>超码</strong>。</li>
@@ -356,6 +404,7 @@
 <p>如果集合 B 中的每个元素都在集合 A 中，就说 B 是 A 的<strong>子集</strong>；B 还比 A 少一些元素时，叫<strong>真子集</strong>。例如 <code>{SID}</code> 是 <code>{SID,name}</code> 的真子集。因此“候选码的任何真子集都不是超码”，就是“再删属性就不够用了”。</p>
 <p>在本例的规则下，<code>{SID}</code> 是学生表的候选码；<code>{SID,name}</code> 不是候选码。</p>
 <h3 id="ch02-s019">3.4 主码与复合码</h3>
+<p>给选课表 <code>enroll(SID,CID)</code> 三行 <code>(S8,C7)</code>、<code>(S8,C8)</code>、<code>(S9,C7)</code>，规定每对学号和课程号只出现一次。SID 有重复，CID 也有重复，而 <code>(SID,CID)</code> 能区分三行且两列都不能去掉，所以它是复合候选码；选它作为表的主要标识，便是复合主码。</p>
 <p>一张表可能存在不止一种没有冗余的唯一标识方法。这些方法都可以是候选码；设计者从中选一个作为主要标识，称为<strong>主码</strong>或<strong>主键</strong>。</p>
 <p>主码可以由多个属性组成，这种码叫<strong>复合码</strong>。为什么有时必须用多个属性？看选课表：</p>
 <ul>
@@ -620,7 +669,7 @@
 <p>采用按属性名识别列的记法时，还应让对应列名一致，必要时用第 5.6 节的更名。</p>
 <p>本例两边都是“学号”这一列，满足要求。若左边是“学号、姓名”两列，右边只有“学号”一列，就不能直接并。即使学号和课程号都用字符串表示、形式上可能可比较，把它们并成一份“编号”名单也通常不符合题意：<strong>形式合法与业务有意义需要分别检查。</strong></p>
 <h3 id="ch02-s036">5.4 集合差 −：在第一份名单中，但不在第二份中</h3>
-<p>沿用刚才两份名单：R 是选 C1 的 S1、S2，S 是选 C2 的 S1、S3。学校现在想找“选了数据库，但没选程序设计的学生”。</p>
+<p>现给两张只有 SID 列的名单：R={S1,S2} 表示选 C1 的学生，S={S1,S3} 表示选 C2 的学生。学校要找“选了 C1，但没选 C2 的学生”，就要从第一份名单排除第二份名单已有的人。</p>
 <p>从 R 出发：S1 在 S 中出现，排除；S2 不在 S 中，保留。</p>
 <pre><code class="language-text">R − S
 </code></pre>
@@ -707,7 +756,7 @@
 <h4 id="ch02-s040">名字为什么会影响读题</h4>
 <p>某份名单的学号列叫 SID，另一份叫 student_no。两列都表示学号，但如果要统一比较，就需要先让名字对齐。另一个常见需求是让同一张表在公式中出现两次，并给两份副本不同的名字，以便说明“谁与谁比较”。</p>
 <p>更名用 <code>ρ</code> 表示，读作“柔”（rho）。它改变名称，不改变实际值。</p>
-<p>仍使用 R 中的 S1、S2，现在把关系名改为 eligible，把列名改为 student_no：</p>
+<p>现给一列关系 R(SID)，两行分别是 S1、S2；现在把关系名改为 eligible，把列名改为 student_no：</p>
 <pre><code class="language-text">ρ_{eligible(student_no)}(R)
 </code></pre>
 <p>逐项读：输入是 R；新关系名为 eligible，意思是“符合条件的名单”；括号内的 student_no 是新的列名。结果为：</p>
@@ -730,7 +779,7 @@
 <h2 id="ch02-s041">6. 附加关系代数运算</h2>
 <p>“附加”表示这些操作可以用基本运算表达，但单独命名后更容易读。它们同样属于课程重点。</p>
 <h3 id="ch02-s042">6.1 交 ∩：两份名单中都出现</h3>
-<p>学校想找“数据库和程序设计两门都选了”的学生。仍使用第 5.3 节的两份学号名单：</p>
+<p>学校想找“两门课都选了”的学生。当前独立给定两份只有 SID 列的名单：R 记录选 C1 的学生，S 记录选 C2 的学生，具体如下：</p>
 <div class="table-scroll"><table>
 <thead>
 <tr>
@@ -1157,6 +1206,7 @@
 <p>但是标准除运算的候选对象来自左侧配对表：本例的 takes 只出现 S1、S2、S3，所以空除数时返回这三人，不会自动带上从未选课的 S4。若题目要求以<strong>所有注册学生</strong>为候选者，应从 student 取候选名单，再用前面的“排除缺失者”思路计算。这不是符号细节，而是题目要求的对象范围不同。</p>
 <figure class="learning-figure" id="ch02-viz-division"><h4>“全部选过”逐步改成“没有缺课”</h4><p class="fig-intro">此图采用标准除法候选 S1/S2/S3，要求名单为 C1/C2；小吴没有出现在左侧配对中。</p><label for="ch02-viz-division-select">选择要观察的情形</label><select id="ch02-viz-division-select" aria-controls="ch02-viz-division-output"><option value="0">1. 列出应有组合</option><option value="1">2. 减去实际配对，找到缺项</option><option value="2">3. 去掉有缺项的候选者</option><option value="3">4. 要求名单为空：检查候选范围</option></select><div class="fig-output" id="ch02-viz-division-output" aria-live="polite"></div></figure>
 <h3 id="ch02-s056">6.5 赋值 ←：给中间结果取名</h3>
+<p>先独立看一个命名过程：输入 <code>enroll(SID,CID)={(S8,C7),(S9,C8)}</code>，写 <code>c7_students ← π_{SID}(σ_{CID='C7'}(enroll))</code>。选择先留下 <code>(S8,C7)</code>，投影得到只有 S8 的一列表，左侧名字就指这份结果。后续可引用 c7_students，原 enroll 的两行都没有被修改。</p>
 <p>除法公式已经比较长。为了避免反复抄写，我们可以给每一步的结果取一个名字：</p>
 <pre><code class="language-text">required_courses ← π_{CID}(σ_{dept='计算机'}(course))
 enrolled_pairs ← π_{SID,CID}(takes)
@@ -1380,6 +1430,7 @@ qualified_students ← enrolled_pairs ÷ required_courses
 </tbody></table>
 </div><p>course_count 是聚集之后才产生的列，不能在原 course 上直接用它做选择。这解释了为什么必须先统计、再筛统计结果。</p>
 <h3 id="ch02-s065">7.3 外连接：没有匹配项，也可以保留</h3>
+<p>当前独立输入为 <code>people(SID,name)={(S8,小江),(S9,小叶)}</code>、<code>enroll(SID,CID)={(S8,C7)}</code>。内连接只有 <code>(S8,小江,C7)</code>；左外连接另保留 <code>(S9,小叶,NULL)</code>，表示小叶没有配对记录。这不是新增一条选课，也不能把补出的 NULL 当成课程编号。</p>
 <h4 id="ch02-s066">背景：学校不想漏掉没选课的学生</h4>
 <p>前面的 <code>student ⋈ takes</code> 只有四行选课结果，小吴 S4 被排除了，因为他没有匹配的选课记录。这种只保留成功配对的连接，通常也叫<strong>内连接</strong>。</p>
 <p>现在学校需要“全部学生的选课情况，包括没选课的学生”。我们仍然按 SID 匹配，但找不到右侧选课记录时，也要给左侧学生保留一行。这样的操作叫<strong>左外连接</strong>：</p>
@@ -1735,6 +1786,7 @@ student ⋈ takes ⋈ course_info
 <h2 id="ch02-s076">9. 元组关系演算</h2>
 <p>前面用一串运算说明怎样得到答案。现在换一个角度：能不能直接规定答案必须满足哪些条件？元组关系演算让变量代表一整行，再用条件约束它。这种改变的是表达方式，不是把同一批学生换成另一种数据。</p>
 <h3 id="ch02-s077">9.1 先说答案的条件，再学符号</h3>
+<p>若当前 <code>student(SID,name,dept)</code> 只有 <code>(S8,小江,计算机)</code>、<code>(S9,小叶,历史)</code>，要求取计算机系学生整行。令 t 分别代表这两行，条件 <code>t∈student ∧ t[dept]='计算机'</code> 只让第一行通过，所以收集出的集合只有 <code>(S8,小江,计算机)</code>。t 是一整行，t[dept] 才是该行的一个属性值。</p>
 <p>还是查询“计算机系的全部学生记录”。用普通话说，答案应该包含这样的行：</p>
 <blockquote>
 <p>这行必须来自 student，而且这一行的 dept 必须是“计算机”。</p>
@@ -1794,6 +1846,7 @@ student ⋈ takes ⋈ course_info
 </div><p>它与选择公式得到同一张结果表。两者的区别在表达方式：选择公式指定运算，演算公式列出结果必须满足的条件。</p>
 <p>教材写成 <code>{t | P(t)}</code> 时，<code>P(t)</code> 就是“关于 t 的判断条件”的通用名字，不是另一个需要查找的数据表。</p>
 <h3 id="ch02-s078">9.2 “存在一条记录”怎样写</h3>
+<p>若学生表只有 S8、S9，选课表 <code>takes(SID,CID)</code> 只有 <code>(S8,C7)</code>，要找至少选过 C7 的学生。对 S8 可找到同学号且课程为 C7 的记录 u，存在条件为真；对 S9 找不到，条件为假。这里的“存在”只要求找到一条见证，不要求所有选课行都属于这名学生。</p>
 <p>学校想找出至少选了数据库 C1 的学生，并返回完整学生资料。普通话条件是：</p>
 <blockquote>
 <p>学生 t 属于 student，并且能在 takes 中找到某一行 u；u 的学号与 t 相同，课程号为 C1。</p>
@@ -1861,6 +1914,7 @@ student ⋈ takes ⋈ course_info
 </tbody></table>
 </div><p>t 决定返回哪一行，称为<strong>自由变量</strong>；u 被 <code>∃</code> 引入，只在相关条件中用于寻找证据，称为<strong>受约束变量</strong>。这里不返回 u 的选课行，而是返回对应的 t 学生行。</p>
 <h3 id="ch02-s079">9.3 “所有”与“不存在反例”</h3>
+<p>给要求课程集 <code>{C7,C8}</code>、学生集 <code>{S8,S9}</code>，实际选课对为 <code>{(S8,C7),(S8,C8),(S9,C7)}</code>。逐项检查：S8 对两门课都有记录，因此通过；S9 缺 C8，因此不通过。“两门都选了”和“不存在一门要求课程没选”在这份输入上得到同一结果 <code>{S8}</code>。</p>
 <p>把要求说成“对每门计算机系课程，都存在这名学生的一条选课”，可写成下面的有界量词示意。量词后的 <code>c∈course</code>、<code>u∈takes</code> 说明候选记录来自哪里；<code>⇒</code> 表示仅在左侧条件成立时要求右侧成立。</p>
 <pre><code class="language-text">{ t | t∈student ∧ ∀c∈course (
     c[dept]='计算机' ⇒ ∃u∈takes (
@@ -1875,6 +1929,7 @@ student ⋈ takes ⋈ course_info
 <h2 id="ch02-s080">10. 域关系演算与安全表达式</h2>
 <p>如果只想返回姓名，可以让变量分别代表学号、姓名、系，而不必每次用变量代表整行。这就是域关系演算的出发点。无论选哪种演算，还要把变量范围限制在与数据库有关的值中，避免产生无限、与业务无关的答案。</p>
 <h3 id="ch02-s081">10.1 每个变量只代表一个格子的值</h3>
+<p>给 <code>student(SID,name,dept)</code> 两行 <code>(S8,小江,计算机)</code>、<code>(S9,小叶,历史)</code>。用 s、n、d 分别取一行的学号、姓名、系名；条件 <code>&lt;s,n,d&gt;∈student ∧ d='计算机'</code> 只允许 <code>&lt;S8,小江,计算机&gt;</code>。三个变量共同拼出输出行，却各自只代表一个值。</p>
 <p>元组关系演算用 t 代表整行。<strong>域关系演算</strong>改用多个变量，各自代表某个属性值。</p>
 <p>仍查询计算机系学生的全部资料。令 s 代表学号，n 代表姓名，d 代表所在系；这些小写字母是变量名，和前面某份名单 S 的名字没有关系。</p>
 <pre><code class="language-text">{ &lt;s,n,d&gt; | &lt;s,n,d&gt; ∈ student ∧ d='计算机' }
@@ -2818,4 +2873,232 @@ qualified ← enrolled_pairs ÷ required_courses
 <h2 id="ch02-reference">16. 本章概念与方法速查</h2>
 <p>选择一个条目，查看用途、写法、例子、结果和适用条件；需要完整推导时可返回正文。</p><div class="ref-area"><div class="ref-picker"><label for="ref-select">选择要查的概念或方法</label><select id="ref-select" aria-controls="ref-panel"><option value="">请选择一个条目</option><option value="关系、属性、元组">关系、属性、元组</option><option value="域、原子值、NULL">域、原子值、NULL</option><option value="超码、候选码、主码">超码、候选码、主码</option><option value="外码与参照完整性">外码与参照完整性</option><option value="选择 σ">选择 σ</option><option value="投影 π">投影 π</option><option value="并、交、差">并、交、差</option><option value="笛卡尔积 ×">笛卡尔积 ×</option><option value="更名 ρ 与赋值 ←">更名 ρ 与赋值 ←</option><option value="θ 连接与等值连接">θ 连接与等值连接</option><option value="自然连接">自然连接</option><option value="除 ÷">除 ÷</option><option value="广义投影">广义投影</option><option value="分组聚集 γ">分组聚集 γ</option><option value="外连接">外连接</option><option value="NULL 的比较与统计">NULL 的比较与统计</option><option value="元组与域关系演算">元组与域关系演算</option><option value="存在、全称与安全范围">存在、全称与安全范围</option></select><p class="source-note">选中后显示用途、读法、例子、结果和注意点。完整总结表保存在 Markdown 版。</p><div id="ref-panel" class="ref-panel" aria-live="polite" hidden></div><noscript><p>请启用 JavaScript 使用选择菜单，或查看 Markdown 版的速查表。</p></noscript></div></div>
 
-</article><noscript><p class="noscript-note">交互图解和选择式速查需要 JavaScript；完整学习正文与速查表也可阅读对应的 Markdown 文件。</p></noscript><footer class="chapter-turns"><a href="01_%E6%95%B0%E6%8D%AE%E5%BA%93%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5.html">上一单元</a><a href="https://goya4140.github.io/JLU_CS_Course/#/3_1%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F/02_%E5%85%B3%E7%B3%BB%E6%A8%A1%E5%9E%8B%E4%B8%8E%E5%85%B3%E7%B3%BB%E4%BB%A3%E6%95%B0.md">Markdown 正文</a><a href="03_SQL%E8%AF%AD%E8%A8%80.html">下一单元</a></footer></main></div><script id="guide-data" type="application/json">{"figures":[{"id":"ch02-viz-operations","after":"ch02-s024","title":"同一份数据：筛行、选列与连接产生什么","intro":"每种操作都从正文原始数据独立出发。先比较输出的一行代表谁，再看行列变化。","type":"choices","options":[{"label":"选择：计算机系学生","meaning":"按系筛选，原三列保留。","headers":["SID","name","dept"],"rows":[["S1","小林","计算机"],["S3","小陈","计算机"]],"note":"两行分别是两位学生，不是删除其他学生。"},{"label":"投影：有哪些不同的系","meaning":"只留下系，重复结果合并。","headers":["dept"],"rows":[["计算机"],["数学"]],"note":"两行分别是两个系，不再对应原来的四位学生。"},{"label":"内连接：姓名加选课","meaning":"按学号配对，只留下成功配对。","headers":["SID","name","CID","score"],"rows":[["S1","小林","C1",80],["S1","小林","C2",90],["S2","小周","C1",70],["S3","小陈","C2",60]],"note":"一行是一次选课，小林两行，小吴没有匹配行。"},{"label":"左外连接：全部学生都要","meaning":"按学号配对，同时保留零选课者。","headers":["SID","name","CID","score"],"rows":[["S1","小林","C1",80],["S1","小林","C2",90],["S2","小周","C1",70],["S3","小陈","C2",60],["S4","小吴",null,null]],"note":"小吴的 NULL 表示没有匹配选课，不表示成绩为零。"}]},{"id":"ch02-viz-division","after":"ch02-s050","title":"“全部选过”逐步改成“没有缺课”","intro":"此图采用标准除法候选 S1/S2/S3，要求名单为 C1/C2；小吴没有出现在左侧配对中。","type":"choices","options":[{"label":"1. 列出应有组合","meaning":"每位候选者都与每门必选课配对。","headers":["SID","CID"],"rows":[["S1","C1"],["S1","C2"],["S2","C1"],["S2","C2"],["S3","C1"],["S3","C2"]],"note":"这是应有配对，不代表已经选过。"},{"label":"2. 减去实际配对，找到缺项","meaning":"真实存在的四对从应有的六对中去掉。","headers":["SID","缺少的 CID"],"rows":[["S2","C2"],["S3","C1"]],"note":"没有出现在这张缺项表中的 S1 才全选齐。"},{"label":"3. 去掉有缺项的候选者","meaning":"从 S1/S2/S3 中减掉 S2/S3。","headers":["SID"],"rows":[["S1"]],"note":"结果只有学号；需要姓名还要回学生表配对。"},{"label":"4. 要求名单为空：检查候选范围","meaning":"没有必选课，就没有缺课证据。","headers":["标准除法结果","以全部 student 为候选的结果"],"rows":[["S1、S2、S3","S1、S2、S3、S4"]],"note":"两种结果不同不是空名单规则矛盾，而是候选者来源不同。"}]}],"references":[{"name":"关系、属性、元组","kind":"数据对象层次","meaning":"关系是一批完整记录，属性描述一列，元组是一行。","usage":"先说一行代表什么，再读每列的值。","example":"student 的 S1、小林、计算机是一行学生记录。","result":"关系是记录集合，当前四位学生没有固定行序。","note":"纯关系模型不允许完整重复行，SQL 默认可能保留重复。","anchor":"ch02-s009"},{"name":"域、原子值、NULL","kind":"输入数据的规则","meaning":"域限制可用值，原子值按整体使用，NULL 表示缺少普通值。","usage":"检查允许填什么、是否把多项塞一格、缺值是什么意思。","example":"课程号 C1/C2 应各占一条选课，不塞进同一个课程号格。","result":"查询前提要与数据表达一致。","note":"属性原子性不等于事务原子性。","anchor":"ch02-s011"},{"name":"超码、候选码、主码","kind":"识别记录的规则","meaning":"先判断能否识别，再去除多余属性，再指定主要识别方式。","usage":"唯一性 → 无多余属性 → 从候选码选择主码。","example":"SID 是学生候选码；SID/name 有多余姓名。","result":"业务保证学号唯一，不靠当前样本猜唯一。","note":"最小指删属性后不再足够，不是所有候选码列数最少。","anchor":"ch02-s015"},{"name":"外码与参照完整性","kind":"跨表对应规则","meaning":"引用值必须找到合法对应，查询需另外写配对过程。","usage":"takes.SID → student.SID；takes.CID → course.CID。","example":"S2/C1/70 指向学生小周和数据库课程。","result":"不能登记不存在的 S9；同一学号可以被多条选课引用。","note":"外码不是自动连接，也不是引用列必须唯一。","anchor":"ch02-s020"},{"name":"选择 σ","kind":"一元表运算","meaning":"按条件筛行，保留原输入列。","usage":"σ_{条件}(关系)。","example":"σ_{dept=计算机}(student)。","result":"两名计算机系学生，仍有 SID/name/dept 三列。","note":"条件比较与表运算不是同一层次；不删除原表行。","anchor":"ch02-s025"},{"name":"投影 π","kind":"一元表运算","meaning":"留下所需列，并按输出完整行去重。","usage":"π_{列列表}(关系)。","example":"π_{dept}(student)。","result":"输出计算机、数学两行，不能再当成四位学生。","note":"投影可能丢掉后续筛选或连接需要的列。","anchor":"ch02-s029"},{"name":"并、交、差","kind":"两份同结构名单的运算","meaning":"分别找任一份有、两份都有、只在左份的人。","usage":"R∪S；R∩S；R−S。","example":"C1 为 S1/S2，C2 为 S1/S3。","result":"并为三人；交为 S1；左差为 S2。","note":"要求结构相容；差有方向，不是把编号相减。","anchor":"ch02-s033"},{"name":"笛卡尔积 ×","kind":"全部组合运算","meaning":"列出两边每行所有可能配对。","usage":"R×Q，行数为两边行数相乘。","example":"两名学生与两门课组成四对。","result":"组合 S2/C2 也会产生，即使 S2 实际没选 C2。","note":"可能配对不等于业务事实；同名列需明确区分。","anchor":"ch02-s037"},{"name":"更名 ρ 与赋值 ←","kind":"名称组织写法","meaning":"更名对齐或区分关系/列名，赋值命名中间结果。","usage":"ρ_{新关系名(新列名)}(r)；名字←表达式。","example":"把 course.dept 改称 course_dept 再与 student 连接。","result":"避免把学生系与课程系错误要求相等。","note":"只为当前表达式组织名称，不永久修改原表。","anchor":"ch02-s039"},{"name":"θ 连接与等值连接","kind":"按条件配对的表运算","meaning":"先定义怎样配对，再把符合条件的行组合起来。","usage":"r⋈_θs = σ_θ(r×s)。","example":"student.SID=takes.SID。","result":"四条选课各有姓名，小林对应两行。","note":"公式解释逻辑含义，不要求物理先生成全部组合。","anchor":"ch02-s043"},{"name":"自然连接","kind":"自动同名列匹配的连接","meaning":"所有同名属性相等，并合并对应同名列。","usage":"r⋈s，先列共同属性。","example":"student⋈course 会按 dept 匹配。","result":"得到本系可开课程配对，不能当成实际选课。","note":"不会自动识别主外码关系；无同名属性时是笛卡尔积。","anchor":"ch02-s047"},{"name":"除 ÷","kind":"全部要求覆盖查询","meaning":"每个候选者必须有要求名单中的每一项配对。","usage":"r(X,Y)÷s(Y)。","example":"takes 的 SID/CID 配对除以 C1/C2 名单。","result":"只有 S1 全部覆盖。","note":"候选 X 来自 r；空除数时不自动加入从未出现在 r 的 S4。","anchor":"ch02-s050"},{"name":"广义投影","kind":"计算输出值的扩展","meaning":"输出已有属性或用它们算出的值。","usage":"π_{SID,CID,(score+5)→adjusted_score}(takes)。","example":"80/90/70/60 各加 5。","result":"结果为 85/95/75/65，原成绩不变。","note":"列命名箭头和函数依赖箭头需要按所在语境区分。","anchor":"ch02-s058"},{"name":"分组聚集 γ","kind":"汇总运算","meaning":"按组分别计算数量、均值等。","usage":"γ_{分组列;计算→结果名}(关系)。","example":"course 按系算门数和平均学分。","result":"计算机 2 门/3.5，数学 1 门/5。","note":"结果的一行是统计组，不能随意附上组内某门课的名称。","anchor":"ch02-s060"},{"name":"外连接","kind":"保留未匹配者的连接","meaning":"成功配对正常输出，未匹配一侧用 NULL 补齐。","usage":"左 ⟕、右 ⟖、全 ⟗；同时明确配对规则。","example":"student 左外连接 takes。","result":"五行：四条选课加小吴的补空行。","note":"后续筛选仍可能去掉补空行；保留左表不等于行数不增加。","anchor":"ch02-s065"},{"name":"NULL 的比较与统计","kind":"扩展约定","meaning":"比较可能未知，列统计忽略缺值而不忽略零。","usage":"选择只留真；count(*) 数行，count(score) 数非空值。","example":"成绩通知 80、0、NULL。","result":"三行、两条已知成绩，均分 40。","note":"需说明采用 SQL 风格空值语义，不能冒充经典代数自带规则。","anchor":"ch02-s068"},{"name":"元组与域关系演算","kind":"两种声明式表达","meaning":"元组变量代表整行，域变量分别代表格子里的值。","usage":"{t | P(t)}；{\u003cs,n,d> | P(s,n,d)}。","example":"t 来自 student 且 t[dept]=计算机。","result":"与选择查询一样找到 S1/S3。","note":"变量从哪里来、哪个被返回、哪个被量词约束都要说明。","anchor":"ch02-s076"},{"name":"存在、全称与安全范围","kind":"条件及候选范围","meaning":"至少一个有证据、每个都满足，以及答案值有数据库来源。","usage":"∃：存在证据；∀：逐项要求；限定变量来自有限关系。","example":"t 为当前学生；每门计算机系课都要有匹配选课。","result":"只有小林通过；计算机系没课时，student 中全部学生没有缺项。","note":"不是看到所有就机械套除法；空名单时先确定候选者来自哪里。","anchor":"ch02-s079"}]}</script><script>(()=>{'use strict';const payload=JSON.parse(document.getElementById('guide-data').textContent);const byId=id=>document.getElementById(id);const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));const rows=(headers,data)=>'<div class="table-scroll"><table><thead><tr>'+headers.map(x=>'<th scope="col">'+esc(x)+'</th>').join('')+'</tr></thead><tbody>'+data.map(row=>'<tr>'+row.map(x=>'<td>'+esc(x===null?'NULL':x)+'</td>').join('')+'</tr>').join('')+'</tbody></table></div>';const flow=steps=>'<div class="flow">'+steps.map((s,i)=>(i?'<div class="flow-arrow" aria-hidden="true">→</div>':'')+'<div class="flow-node"><strong>'+esc(s[0])+'</strong><p>'+esc(s[1])+'</p></div>').join('')+'</div>';for(const fig of payload.figures){if(fig.type==='choices'){const select=byId(fig.id+'-select');const draw=()=>{const option=fig.options[Number(select.value)];byId(fig.id+'-output').innerHTML='<p>'+esc(option.meaning)+'</p>'+(option.flow?flow(option.flow):'')+(option.svg||'')+(option.headers?rows(option.headers,option.rows):'')+(option.note?'<p class="fig-note">'+esc(option.note)+'</p>':'');};select.addEventListener('change',draw);draw();}}const refSelect=byId('ref-select');const refPanel=byId('ref-panel');const drawRef=()=>{const item=payload.references.find(x=>x.name===refSelect.value);if(!item){refPanel.hidden=true;refPanel.replaceChildren();return;}refPanel.innerHTML='<h3>'+esc(item.name)+'</h3><p class="ref-kind">'+esc(item.kind)+'</p><h4>解决什么问题</h4><p>'+esc(item.meaning)+'</p><h4>怎样理解或使用</h4><p>'+esc(item.usage)+'</p><h4>学习例子</h4><p>'+esc(item.example)+'</p><h4>结果与理由</h4><p class="result">'+esc(item.result)+'</p><h4>注意点</h4><p>'+esc(item.note)+'</p><a href="#'+esc(item.anchor)+'">回到正文看完整解释</a>';refPanel.hidden=false;};refSelect.addEventListener('change',drawRef);drawRef();const entries=[...document.querySelectorAll('.sidebar nav a')].map(link=>({link,target:document.getElementById(link.hash.slice(1))})).filter(e=>e.target);const offset=()=>{const n=Math.ceil(document.querySelector('.topbar').getBoundingClientRect().height)+18;document.documentElement.style.setProperty('--scroll-offset',n+'px');return n;};const close=()=>{document.body.classList.remove('nav-open');byId('menu').setAttribute('aria-expanded','false');};const activate=e=>entries.forEach(x=>{const on=x===e;x.link.classList.toggle('active',on);if(on)x.link.setAttribute('aria-current','location');else x.link.removeAttribute('aria-current');});const current=()=>{const boundary=offset()+3;let active=entries[0];for(const entry of entries){if(entry.target.getBoundingClientRect().top<=boundary)active=entry;else break;}if(entries.length&&innerHeight+scrollY>=document.documentElement.scrollHeight-2&&entries[entries.length-1].target.getBoundingClientRect().top<innerHeight)active=entries[entries.length-1];if(active)activate(active);};const jump=(target,hash)=>{close();window.scrollTo({top:Math.max(0,target.getBoundingClientRect().top+scrollY-offset()),behavior:'auto'});if(location.hash!==hash)history.pushState(null,'',hash);current();};document.addEventListener('click',event=>{const link=event.target.closest('a[href^="#"]');if(!link||event.button!==0||event.ctrlKey||event.metaKey||event.shiftKey||event.altKey)return;const target=document.getElementById(link.hash.slice(1));if(target){event.preventDefault();jump(target,link.hash);}});byId('menu').addEventListener('click',()=>{const on=document.body.classList.toggle('nav-open');byId('menu').setAttribute('aria-expanded',String(on));});document.addEventListener('keydown',e=>{if(e.key==='Escape')close();});let pending=false;const schedule=()=>{if(!pending){pending=true;requestAnimationFrame(()=>{current();pending=false;});}};window.addEventListener('scroll',schedule,{passive:true});window.addEventListener('resize',schedule);window.addEventListener('hashchange',schedule);window.addEventListener('popstate',schedule);if(typeof ResizeObserver!=='undefined')new ResizeObserver(schedule).observe(document.querySelector('.topbar'));let font=17;document.querySelectorAll('[data-font]').forEach(b=>b.addEventListener('click',()=>{font=Math.max(15,Math.min(21,font+Number(b.dataset.font)));document.documentElement.style.setProperty('--font',font+'px');schedule();}));byId('print').addEventListener('click',()=>window.print());document.querySelectorAll('article pre code').forEach(code=>{const pre=code.parentElement;const wrap=document.createElement('div');wrap.className='code-wrap';pre.parentNode.insertBefore(wrap,pre);wrap.append(pre);const button=document.createElement('button');button.type='button';button.className='copy';button.textContent='复制';button.setAttribute('aria-label','复制本段示例');button.addEventListener('click',async()=>{try{await navigator.clipboard.writeText(code.textContent);button.textContent='已复制';}catch{const range=document.createRange();range.selectNodeContents(code);const selection=window.getSelection();selection.removeAllRanges();selection.addRange(range);button.textContent='已选中';}setTimeout(()=>button.textContent='复制',1500);});wrap.append(button);});current();})();</script></body></html>
+</article><noscript><p class="noscript-note">交互图解和选择式速查需要 JavaScript；完整学习正文与速查表也可阅读对应的 Markdown 文件。</p></noscript><footer class="chapter-turns"><a href="01_%E6%95%B0%E6%8D%AE%E5%BA%93%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5.html">上一单元</a><a href="https://goya4140.github.io/JLU_CS_Course/#/3_1%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F/02_%E5%85%B3%E7%B3%BB%E6%A8%A1%E5%9E%8B%E4%B8%8E%E5%85%B3%E7%B3%BB%E4%BB%A3%E6%95%B0.md">Markdown 正文</a><a href="03_SQL%E8%AF%AD%E8%A8%80.html">下一单元</a></footer></main></div><script id="guide-data" type="application/json">{"figures":[{"id":"ch02-viz-operations","after":"ch02-s024","title":"同一份数据：筛行、选列与连接产生什么","intro":"每种操作都从正文原始数据独立出发。先比较输出的一行代表谁，再看行列变化。","type":"choices","options":[{"label":"选择：计算机系学生","meaning":"按系筛选，原三列保留。","headers":["SID","name","dept"],"rows":[["S1","小林","计算机"],["S3","小陈","计算机"]],"note":"两行分别是两位学生，不是删除其他学生。"},{"label":"投影：有哪些不同的系","meaning":"只留下系，重复结果合并。","headers":["dept"],"rows":[["计算机"],["数学"]],"note":"两行分别是两个系，不再对应原来的四位学生。"},{"label":"内连接：姓名加选课","meaning":"按学号配对，只留下成功配对。","headers":["SID","name","CID","score"],"rows":[["S1","小林","C1",80],["S1","小林","C2",90],["S2","小周","C1",70],["S3","小陈","C2",60]],"note":"一行是一次选课，小林两行，小吴没有匹配行。"},{"label":"左外连接：全部学生都要","meaning":"按学号配对，同时保留零选课者。","headers":["SID","name","CID","score"],"rows":[["S1","小林","C1",80],["S1","小林","C2",90],["S2","小周","C1",70],["S3","小陈","C2",60],["S4","小吴",null,null]],"note":"小吴的 NULL 表示没有匹配选课，不表示成绩为零。"}]},{"id":"ch02-viz-division","after":"ch02-s050","title":"“全部选过”逐步改成“没有缺课”","intro":"此图采用标准除法候选 S1/S2/S3，要求名单为 C1/C2；小吴没有出现在左侧配对中。","type":"choices","options":[{"label":"1. 列出应有组合","meaning":"每位候选者都与每门必选课配对。","headers":["SID","CID"],"rows":[["S1","C1"],["S1","C2"],["S2","C1"],["S2","C2"],["S3","C1"],["S3","C2"]],"note":"这是应有配对，不代表已经选过。"},{"label":"2. 减去实际配对，找到缺项","meaning":"真实存在的四对从应有的六对中去掉。","headers":["SID","缺少的 CID"],"rows":[["S2","C2"],["S3","C1"]],"note":"没有出现在这张缺项表中的 S1 才全选齐。"},{"label":"3. 去掉有缺项的候选者","meaning":"从 S1/S2/S3 中减掉 S2/S3。","headers":["SID"],"rows":[["S1"]],"note":"结果只有学号；需要姓名还要回学生表配对。"},{"label":"4. 要求名单为空：检查候选范围","meaning":"没有必选课，就没有缺课证据。","headers":["标准除法结果","以全部 student 为候选的结果"],"rows":[["S1、S2、S3","S1、S2、S3、S4"]],"note":"两种结果不同不是空名单规则矛盾，而是候选者来源不同。"}]}],"references":[{"name":"关系、属性、元组","kind":"数据对象层次","meaning":"关系是一批完整记录，属性描述一列，元组是一行。","usage":"先说一行代表什么，再读每列的值。","example":"student 的 S1、小林、计算机是一行学生记录。","result":"关系是记录集合，当前四位学生没有固定行序。","note":"纯关系模型不允许完整重复行，SQL 默认可能保留重复。","anchor":"ch02-s009"},{"name":"域、原子值、NULL","kind":"输入数据的规则","meaning":"域限制可用值，原子值按整体使用，NULL 表示缺少普通值。","usage":"检查允许填什么、是否把多项塞一格、缺值是什么意思。","example":"课程号 C1/C2 应各占一条选课，不塞进同一个课程号格。","result":"查询前提要与数据表达一致。","note":"属性原子性不等于事务原子性。","anchor":"ch02-s011"},{"name":"超码、候选码、主码","kind":"识别记录的规则","meaning":"先判断能否识别，再去除多余属性，再指定主要识别方式。","usage":"唯一性 → 无多余属性 → 从候选码选择主码。","example":"SID 是学生候选码；SID/name 有多余姓名。","result":"业务保证学号唯一，不靠当前样本猜唯一。","note":"最小指删属性后不再足够，不是所有候选码列数最少。","anchor":"ch02-s015"},{"name":"外码与参照完整性","kind":"跨表对应规则","meaning":"引用值必须找到合法对应，查询需另外写配对过程。","usage":"takes.SID → student.SID；takes.CID → course.CID。","example":"S2/C1/70 指向学生小周和数据库课程。","result":"不能登记不存在的 S9；同一学号可以被多条选课引用。","note":"外码不是自动连接，也不是引用列必须唯一。","anchor":"ch02-s020"},{"name":"选择 σ","kind":"一元表运算","meaning":"按条件筛行，保留原输入列。","usage":"σ_{条件}(关系)。","example":"σ_{dept=计算机}(student)。","result":"两名计算机系学生，仍有 SID/name/dept 三列。","note":"条件比较与表运算不是同一层次；不删除原表行。","anchor":"ch02-s025"},{"name":"投影 π","kind":"一元表运算","meaning":"留下所需列，并按输出完整行去重。","usage":"π_{列列表}(关系)。","example":"π_{dept}(student)。","result":"输出计算机、数学两行，不能再当成四位学生。","note":"投影可能丢掉后续筛选或连接需要的列。","anchor":"ch02-s029"},{"name":"并、交、差","kind":"两份同结构名单的运算","meaning":"分别找任一份有、两份都有、只在左份的人。","usage":"R∪S；R∩S；R−S。","example":"C1 为 S1/S2，C2 为 S1/S3。","result":"并为三人；交为 S1；左差为 S2。","note":"要求结构相容；差有方向，不是把编号相减。","anchor":"ch02-s033"},{"name":"笛卡尔积 ×","kind":"全部组合运算","meaning":"列出两边每行所有可能配对。","usage":"R×Q，行数为两边行数相乘。","example":"两名学生与两门课组成四对。","result":"组合 S2/C2 也会产生，即使 S2 实际没选 C2。","note":"可能配对不等于业务事实；同名列需明确区分。","anchor":"ch02-s037"},{"name":"更名 ρ 与赋值 ←","kind":"名称组织写法","meaning":"更名对齐或区分关系/列名，赋值命名中间结果。","usage":"ρ_{新关系名(新列名)}(r)；名字←表达式。","example":"把 course.dept 改称 course_dept 再与 student 连接。","result":"避免把学生系与课程系错误要求相等。","note":"只为当前表达式组织名称，不永久修改原表。","anchor":"ch02-s039"},{"name":"θ 连接与等值连接","kind":"按条件配对的表运算","meaning":"先定义怎样配对，再把符合条件的行组合起来。","usage":"r⋈_θs = σ_θ(r×s)。","example":"student.SID=takes.SID。","result":"四条选课各有姓名，小林对应两行。","note":"公式解释逻辑含义，不要求物理先生成全部组合。","anchor":"ch02-s043"},{"name":"自然连接","kind":"自动同名列匹配的连接","meaning":"所有同名属性相等，并合并对应同名列。","usage":"r⋈s，先列共同属性。","example":"student⋈course 会按 dept 匹配。","result":"得到本系可开课程配对，不能当成实际选课。","note":"不会自动识别主外码关系；无同名属性时是笛卡尔积。","anchor":"ch02-s047"},{"name":"除 ÷","kind":"全部要求覆盖查询","meaning":"每个候选者必须有要求名单中的每一项配对。","usage":"r(X,Y)÷s(Y)。","example":"takes 的 SID/CID 配对除以 C1/C2 名单。","result":"只有 S1 全部覆盖。","note":"候选 X 来自 r；空除数时不自动加入从未出现在 r 的 S4。","anchor":"ch02-s050"},{"name":"广义投影","kind":"计算输出值的扩展","meaning":"输出已有属性或用它们算出的值。","usage":"π_{SID,CID,(score+5)→adjusted_score}(takes)。","example":"80/90/70/60 各加 5。","result":"结果为 85/95/75/65，原成绩不变。","note":"列命名箭头和函数依赖箭头需要按所在语境区分。","anchor":"ch02-s058"},{"name":"分组聚集 γ","kind":"汇总运算","meaning":"按组分别计算数量、均值等。","usage":"γ_{分组列;计算→结果名}(关系)。","example":"course 按系算门数和平均学分。","result":"计算机 2 门/3.5，数学 1 门/5。","note":"结果的一行是统计组，不能随意附上组内某门课的名称。","anchor":"ch02-s060"},{"name":"外连接","kind":"保留未匹配者的连接","meaning":"成功配对正常输出，未匹配一侧用 NULL 补齐。","usage":"左 ⟕、右 ⟖、全 ⟗；同时明确配对规则。","example":"student 左外连接 takes。","result":"五行：四条选课加小吴的补空行。","note":"后续筛选仍可能去掉补空行；保留左表不等于行数不增加。","anchor":"ch02-s065"},{"name":"NULL 的比较与统计","kind":"扩展约定","meaning":"比较可能未知，列统计忽略缺值而不忽略零。","usage":"选择只留真；count(*) 数行，count(score) 数非空值。","example":"成绩通知 80、0、NULL。","result":"三行、两条已知成绩，均分 40。","note":"需说明采用 SQL 风格空值语义，不能冒充经典代数自带规则。","anchor":"ch02-s068"},{"name":"元组与域关系演算","kind":"两种声明式表达","meaning":"元组变量代表整行，域变量分别代表格子里的值。","usage":"{t | P(t)}；{\u003cs,n,d> | P(s,n,d)}。","example":"t 来自 student 且 t[dept]=计算机。","result":"与选择查询一样找到 S1/S3。","note":"变量从哪里来、哪个被返回、哪个被量词约束都要说明。","anchor":"ch02-s076"},{"name":"存在、全称与安全范围","kind":"条件及候选范围","meaning":"至少一个有证据、每个都满足，以及答案值有数据库来源。","usage":"∃：存在证据；∀：逐项要求；限定变量来自有限关系。","example":"t 为当前学生；每门计算机系课都要有匹配选课。","result":"只有小林通过；计算机系没课时，student 中全部学生没有缺项。","note":"不是看到所有就机械套除法；空名单时先确定候选者来自哪里。","anchor":"ch02-s079"}]}</script><script>(()=>{'use strict';const payload=JSON.parse(document.getElementById('guide-data').textContent);const byId=id=>document.getElementById(id);const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));const rows=(headers,data)=>'<div class="table-scroll"><table><thead><tr>'+headers.map(x=>'<th scope="col">'+esc(x)+'</th>').join('')+'</tr></thead><tbody>'+data.map(row=>'<tr>'+row.map(x=>'<td>'+esc(x===null?'NULL':x)+'</td>').join('')+'</tr>').join('')+'</tbody></table></div>';const flow=steps=>'<div class="flow">'+steps.map((s,i)=>(i?'<div class="flow-arrow" aria-hidden="true">→</div>':'')+'<div class="flow-node"><strong>'+esc(s[0])+'</strong><p>'+esc(s[1])+'</p></div>').join('')+'</div>';for(const fig of payload.figures){if(fig.type==='choices'){const select=byId(fig.id+'-select');const draw=()=>{const option=fig.options[Number(select.value)];byId(fig.id+'-output').innerHTML='<p>'+esc(option.meaning)+'</p>'+(option.flow?flow(option.flow):'')+(option.svg||'')+(option.headers?rows(option.headers,option.rows):'')+(option.note?'<p class="fig-note">'+esc(option.note)+'</p>':'');};select.addEventListener('change',draw);draw();}}const refSelect=byId('ref-select');const refPanel=byId('ref-panel');const drawRef=()=>{const item=payload.references.find(x=>x.name===refSelect.value);if(!item){refPanel.hidden=true;refPanel.replaceChildren();return;}refPanel.innerHTML='<h3>'+esc(item.name)+'</h3><p class="ref-kind">'+esc(item.kind)+'</p><h4>解决什么问题</h4><p>'+esc(item.meaning)+'</p><h4>怎样理解或使用</h4><p>'+esc(item.usage)+'</p><h4>学习例子</h4><p>'+esc(item.example)+'</p><h4>结果与理由</h4><p class="result">'+esc(item.result)+'</p><h4>注意点</h4><p>'+esc(item.note)+'</p><a href="#'+esc(item.anchor)+'">回到正文看完整解释</a>';refPanel.hidden=false;};refSelect.addEventListener('change',drawRef);drawRef();const entries=[...document.querySelectorAll('.sidebar nav a')].map(link=>({link,target:document.getElementById(link.hash.slice(1))})).filter(e=>e.target);const offset=()=>{const n=Math.ceil(document.querySelector('.topbar').getBoundingClientRect().height)+18;document.documentElement.style.setProperty('--scroll-offset',n+'px');return n;};const close=()=>{document.body.classList.remove('nav-open');byId('menu').setAttribute('aria-expanded','false');};const activate=e=>entries.forEach(x=>{const on=x===e;x.link.classList.toggle('active',on);if(on)x.link.setAttribute('aria-current','location');else x.link.removeAttribute('aria-current');});const current=()=>{const boundary=offset()+3;let active=entries[0];for(const entry of entries){if(entry.target.getBoundingClientRect().top<=boundary)active=entry;else break;}if(entries.length&&innerHeight+scrollY>=document.documentElement.scrollHeight-2&&entries[entries.length-1].target.getBoundingClientRect().top<innerHeight)active=entries[entries.length-1];if(active)activate(active);};const jump=(target,hash)=>{close();window.scrollTo({top:Math.max(0,target.getBoundingClientRect().top+scrollY-offset()),behavior:'auto'});if(location.hash!==hash)history.pushState(null,'',hash);current();};document.addEventListener('click',event=>{const link=event.target.closest('a[href^="#"]');if(!link||event.button!==0||event.ctrlKey||event.metaKey||event.shiftKey||event.altKey)return;const target=document.getElementById(link.hash.slice(1));if(target){event.preventDefault();jump(target,link.hash);}});byId('menu').addEventListener('click',()=>{const on=document.body.classList.toggle('nav-open');byId('menu').setAttribute('aria-expanded',String(on));});document.addEventListener('keydown',e=>{if(e.key==='Escape')close();});let pending=false;const schedule=()=>{if(!pending){pending=true;requestAnimationFrame(()=>{current();pending=false;});}};window.addEventListener('scroll',schedule,{passive:true});window.addEventListener('resize',schedule);window.addEventListener('hashchange',schedule);window.addEventListener('popstate',schedule);if(typeof ResizeObserver!=='undefined')new ResizeObserver(schedule).observe(document.querySelector('.topbar'));let font=17;document.querySelectorAll('[data-font]').forEach(b=>b.addEventListener('click',()=>{font=Math.max(15,Math.min(21,font+Number(b.dataset.font)));document.documentElement.style.setProperty('--font',font+'px');schedule();}));byId('print').addEventListener('click',()=>window.print());document.querySelectorAll('article pre code').forEach(code=>{const pre=code.parentElement;const wrap=document.createElement('div');wrap.className='code-wrap';pre.parentNode.insertBefore(wrap,pre);wrap.append(pre);const button=document.createElement('button');button.type='button';button.className='copy';button.textContent='复制';button.setAttribute('aria-label','复制本段示例');button.addEventListener('click',async()=>{try{await navigator.clipboard.writeText(code.textContent);button.textContent='已复制';}catch{const range=document.createRange();range.selectNodeContents(code);const selection=window.getSelection();selection.removeAllRanges();selection.addRange(range);button.textContent='已选中';}setTimeout(()=>button.textContent='复制',1500);});wrap.append(button);});current();})();</script><!-- legacy-notes-cleanup:start -->
+
+<!-- legacy-notes-cleanup:end -->
+<!-- chapter-search:start -->
+<style id="chapter-search-style">
+#chapter-search{margin:0 0 32px;border:1px solid #b8cfc7;border-radius:9px;background:#f1f7f3;scroll-margin-top:110px;padding:12px 16px;font-size:14px}
+#chapter-search summary{cursor:pointer;font-weight:700;color:#135b54;min-height:30px}
+#chapter-search form{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:15px}
+#chapter-search label{font-weight:600}
+#chapter-search input{flex:1;min-width:140px;width:100%;font:inherit;font-size:16px;padding:9px 11px;border:1px solid #839e96;border-radius:6px;background:#fff;color:#24313e}
+#chapter-search p{font-size:13px;line-height:1.7;margin:12px 0}
+#chapter-search-status{font-weight:600;color:#185d52}
+#chapter-search .chapter-search-results{max-height:300px;overflow:auto;overscroll-behavior:contain;margin:0;padding-left:30px}
+#chapter-search .chapter-search-results button{display:block;width:100%;text-align:left;margin:5px 0;padding:9px 12px;background:#fff;white-space:normal;overflow-wrap:anywhere}
+#chapter-search .chapter-search-results strong,#chapter-search .chapter-search-results span{display:block}
+#chapter-search .chapter-search-results span{font-size:13px;font-weight:400;color:#43535b}
+#chapter-search button[aria-current=true]{border-color:#176c61;background:#e0efe9}
+.chapter-search-pages{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin-top:12px}
+.chapter-search-dock{position:fixed;bottom:14px;right:20px;z-index:35;display:flex;gap:7px;align-items:center;flex-wrap:wrap;max-width:calc(100vw - 30px);padding:9px 12px;border:1px solid #91b8a8;border-radius:9px;box-shadow:0 3px 18px #1232;background:#f2f8f4;color:#24313e;font-size:13px}
+.chapter-search-dock button{font-size:13px;min-height:36px}
+.chapter-search-dock span{font-variant-numeric:tabular-nums}
+.chapter-search-dock[hidden],.chapter-search-pages[hidden]{display:none}
+mark[data-chapter-search]{background:#ffec91;color:#24313e;padding:0;border-radius:2px;scroll-margin:130px 20px}
+mark.chapter-search-current{background:#ffc663;color:#172b36;outline:2px solid #9c5f0d;outline-offset:1px}
+#chapter-search :focus-visible,.chapter-search-dock :focus-visible{outline:3px solid #24877c;outline-offset:3px}
+#chapter-search button:disabled{opacity:.45;cursor:default}
+@media(max-width:600px){#chapter-search{padding:11px;margin-bottom:25px}#chapter-search label{width:100%}#chapter-search form{gap:6px}#chapter-search input{flex-basis:100%}#chapter-search .chapter-search-results{max-height:240px}.chapter-search-dock{bottom:8px;right:8px;max-width:calc(100vw - 16px);gap:5px;padding:7px}.chapter-search-dock button{padding:6px 8px}.chapter-search-dock span{min-width:45px}body:has(.chapter-search-dock:not([hidden])){padding-bottom:110px}}
+@media print{#chapter-search,.chapter-search-dock{display:none!important}mark[data-chapter-search]{background:none;color:inherit;outline:0}}
+</style>
+<script id="chapter-search-script">
+/* 离线章节搜索：从当前正文建立索引，不发送或保存关键词。 */
+(() => {
+  'use strict';
+  const article = document.querySelector('article');
+  if (!article || document.getElementById('chapter-search')) return;
+  const make = (tag, text, attrs = {}) => {
+    const el = document.createElement(tag);
+    if (text !== undefined) el.textContent = text;
+    for (const [key, value] of Object.entries(attrs)) el.setAttribute(key, value);
+    return el;
+  };
+  const button = (text, action) => {
+    const el = make('button', text, { type: 'button' });
+    el.addEventListener('click', action);
+    return el;
+  };
+  const box = make('section', undefined, { id: 'chapter-search', 'aria-label': '本章关键词搜索' });
+  const disclosure = make('details');
+  disclosure.append(make('summary', '搜索本章 · 中文 / English'));
+  const form = make('form', undefined, { role: 'search' });
+  const label = make('label', '关键词', { for: 'chapter-search-input' });
+  const input = make('input', undefined, { id: 'chapter-search-input', type: 'search', placeholder: '输入概念、术语或代码片段', autocomplete: 'off', 'aria-describedby': 'chapter-search-scope chapter-search-status' });
+  const submit = make('button', '搜索', { type: 'submit' });
+  const clearButton = button('清除', clear);
+  form.append(label, input, submit, clearButton);
+  const scope = make('p', '范围：本章正文、例子、表格、代码及折叠答案。交互图示与动态速查不重复计入，请检索对应正文。按原文匹配，英文不区分大小写；离线可用。Ctrl+K 打开，Enter 定位 / 下一处，Esc 清除。', { id: 'chapter-search-scope' });
+  const status = make('p', '输入关键词后搜索本章。', { id: 'chapter-search-status', role: 'status', 'aria-live': 'polite', 'aria-atomic': 'true' });
+  const results = make('ol', undefined, { class: 'chapter-search-results', 'aria-label': '匹配结果' });
+  const pages = make('div', undefined, { class: 'chapter-search-pages' });
+  const pageLabel = make('span');
+  const pagePrev = button('上一页结果', () => { page--; render(); });
+  const pageNext = button('下一页结果', () => { page++; render(); });
+  pages.append(pagePrev, pageLabel, pageNext);
+  pages.hidden = true;
+  disclosure.append(form, scope, status, results, pages);
+  box.append(disclosure);
+  article.before(box);
+  const dock = make('nav', undefined, { class: 'chapter-search-dock', 'aria-label': '搜索定位' });
+  dock.hidden = true;
+  const position = make('span', undefined, { role: 'status', 'aria-live': 'polite' });
+  dock.append(button('查看结果', openSearch), position, button('上一处', () => go(active < 0 ? hits.length - 1 : active - 1)), button('下一处', () => go(active + 1)), button('清除', clear));
+  document.body.append(dock);
+  const launch = button('搜索本章', openSearch);
+  launch.setAttribute('aria-controls', box.id);
+  document.querySelector('.toolbar')?.append(launch);
+  let hits = [], active = -1, page = 0, query = '', timer;
+  const pageSize = 20;
+  const excluded = 'script,style,noscript,button,select,option,input,textarea,nav,.learning-figure,.ref-area,.ref-picker,.ref-panel,.ref-hint,[aria-hidden="true"],[data-search-exclude]';
+  const blocks = 'h1,h2,h3,h4,h5,h6,p,li,pre,td,th,caption,dt,dd,summary,blockquote';
+
+  function unmark() {
+    const parents = new Set();
+    article.querySelectorAll('mark[data-chapter-search]').forEach(mark => {
+      parents.add(mark.parentNode);
+      mark.replaceWith(document.createTextNode(mark.textContent));
+    });
+    parents.forEach(parent => parent.normalize());
+  }
+  function clear() {
+    clearTimeout(timer);
+    unmark(); hits = []; active = -1; page = 0; query = ''; input.value = '';
+    results.replaceChildren(); pages.hidden = true; dock.hidden = true;
+    status.textContent = '已清除搜索与高亮，可继续阅读。';
+  }
+  function openSearch() {
+    disclosure.open = true;
+    box.scrollIntoView({ block: 'start' });
+    input.focus({ preventScroll: true });
+  }
+  function groups() {
+    const list = [];
+    let last = null;
+    const walk = node => {
+      if (node.nodeType === Node.ELEMENT_NODE) {
+        if (node.matches(excluded)) { last = null; return; }
+        for (const child of node.childNodes) walk(child);
+      } else if (node.nodeType === Node.TEXT_NODE && node.textContent) {
+        const block = node.parentElement.closest(blocks) || node.parentElement;
+        if (!node.textContent.trim() && !last) return;
+        if (!last || last.block !== block) {
+          last = { block, text: '', nodes: [] }; list.push(last);
+        }
+        last.nodes.push({ node, start: last.text.length });
+        last.text += node.textContent;
+      }
+    };
+    walk(article);
+    return list;
+  }
+  function search() {
+    clearTimeout(timer); unmark(); hits = []; active = -1; page = 0;
+    query = input.value.trim(); results.replaceChildren(); dock.hidden = true; pages.hidden = true;
+    if (!query) { status.textContent = '请输入非空关键词。'; return; }
+    const literal = query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const headings = [...article.querySelectorAll('h2,h3,h4')];
+    const edits = new Map();
+    for (const group of groups()) {
+      const re = new RegExp(literal, 'giu');
+      let found;
+      while ((found = re.exec(group.text))) {
+        const start = found.index, end = start + found[0].length;
+        let title = '本章正文';
+        for (const heading of headings) {
+          if (heading === group.block || (heading.compareDocumentPosition(group.nodes[0].node) & Node.DOCUMENT_POSITION_FOLLOWING)) title = heading.textContent.trim();
+          else break;
+        }
+        const from = Math.max(0, start - 32), to = Math.min(group.text.length, end + 48);
+        const hit = { title, excerpt: (from ? '…' : '') + group.text.slice(from, to) + (to < group.text.length ? '…' : ''), marks: [] };
+        const index = hits.push(hit) - 1;
+        for (const entry of group.nodes) {
+          const a = Math.max(0, start - entry.start), b = Math.min(entry.node.length, end - entry.start);
+          if (a < b) {
+            if (!edits.has(entry.node)) edits.set(entry.node, []);
+            edits.get(entry.node).push({ a, b, index });
+          }
+        }
+      }
+    }
+    for (const [node, ranges] of edits) {
+      const frag = document.createDocumentFragment();
+      let offset = 0;
+      for (const { a, b, index } of ranges) {
+        frag.append(document.createTextNode(node.data.slice(offset, a)));
+        const mark = make('mark', node.data.slice(a, b), { 'data-chapter-search': String(index) });
+        hits[index].marks.push(mark); frag.append(mark); offset = b;
+      }
+      frag.append(document.createTextNode(node.data.slice(offset))); node.replaceWith(frag);
+    }
+    status.textContent = hits.length ? `找到 ${hits.length} 处匹配。选择结果定位，或按 Enter 跳到第一处。` : `没有找到“${query}”。请尝试更短的关键词。`;
+    dock.hidden = !hits.length;
+    position.textContent = `共 ${hits.length} 处`;
+    render();
+  }
+  function render() {
+    results.replaceChildren();
+    const start = page * pageSize;
+    results.start = start + 1;
+    hits.slice(start, start + pageSize).forEach((hit, i) => {
+      const item = make('li');
+      const link = button('', () => go(start + i));
+      link.append(make('strong', hit.title), make('span', hit.excerpt));
+      link.setAttribute('aria-label', `${start + i + 1}. ${hit.title}：${hit.excerpt}`);
+      if (start + i === active) link.setAttribute('aria-current', 'true');
+      item.append(link); results.append(item);
+    });
+    pages.hidden = hits.length <= pageSize;
+    pageLabel.textContent = `第 ${page + 1} / ${Math.max(1, Math.ceil(hits.length / pageSize))} 页`;
+    pagePrev.disabled = page === 0;
+    pageNext.disabled = start + pageSize >= hits.length;
+  }
+  function go(index) {
+    if (!hits.length) return;
+    hits[active]?.marks.forEach(mark => mark.classList.remove('chapter-search-current'));
+    active = (index + hits.length) % hits.length;
+    const hit = hits[active];
+    hit.marks.forEach(mark => mark.classList.add('chapter-search-current'));
+    const mark = hit.marks[0];
+    for (let ancestor = mark.parentElement; ancestor; ancestor = ancestor.parentElement) {
+      if (ancestor.tagName === 'DETAILS') ancestor.open = true;
+    }
+    mark.setAttribute('tabindex', '-1');
+    mark.focus({ preventScroll: true });
+    mark.scrollIntoView({ block: 'center', inline: 'center', behavior: 'instant' });
+    position.textContent = `${active + 1} / ${hits.length}`;
+    page = Math.floor(active / pageSize); render();
+  }
+  input.addEventListener('input', () => { clearTimeout(timer); timer = setTimeout(search, 180); });
+  form.addEventListener('submit', event => {
+    event.preventDefault();
+    if (query !== input.value.trim() || !hits.length) search();
+    go(active + 1);
+  });
+  document.addEventListener('keydown', event => {
+    if ((event.ctrlKey || event.metaKey) && !event.altKey && event.key.toLowerCase() === 'k') {
+      event.preventDefault(); openSearch();
+    } else if (event.key === 'Escape' && (hits.length || box.contains(event.target))) {
+      clear();
+    }
+  });
+})();
+</script>
+<!-- chapter-search:end -->
+<script id="study-theme-script">(()=>{'use strict';
+ const select=document.getElementById('study-theme');
+ if(!select)return;
+ document.querySelector('.sidebar nav')?.addEventListener('click',event=>{
+  if(event.target.closest('a')){
+   document.body.classList.remove('nav-open');
+   document.getElementById('menu')?.setAttribute('aria-expanded','false');
+  }
+ });
+ select.value=document.documentElement.dataset.theme==='dark'?'dark':'light';
+ select.addEventListener('change',()=>{
+  const value=select.value==='dark'?'dark':'light';
+  document.documentElement.dataset.theme=value;
+  try{localStorage.setItem('jlu-database-reading-theme',value);}catch{}
+ });
+})();
+</script></body></html>

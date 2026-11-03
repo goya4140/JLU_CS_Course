@@ -1,5 +1,59 @@
-<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="source-sha256" content="70c959a408b4113c2bbf8cc4c90802185261cfbc8f346cd230859d24c961ef55"><title>第2章 词法分析 · 学习资料</title><style>:root{--paper:#fbfaf7;--surface:#fff;--ink:#253341;--muted:#5c6b75;--line:#d5dfdd;--teal:#156b62;--soft:#edf6f1;--font:17px;--scroll-offset:90px}*{box-sizing:border-box}html{scroll-behavior:auto;scroll-padding-top:var(--scroll-offset)}body{margin:0;background:var(--paper);color:var(--ink);font-family:'Microsoft YaHei','PingFang SC',system-ui,sans-serif;font-size:var(--font);line-height:1.85}a{color:var(--teal);text-underline-offset:3px}a:hover{color:#173f75}button,select{font:inherit}button{cursor:pointer}button,select{border:1px solid #b9cbc5;border-radius:7px;padding:7px 11px;background:#fff;color:var(--ink)}button:hover{background:var(--soft)}button:focus-visible,select:focus-visible,a:focus-visible{outline:3px solid #81cbb8;outline-offset:3px}.skip{position:absolute;top:-80px;left:12px;z-index:50;background:#fff;padding:8px}.skip:focus{top:8px}.sidebar{position:fixed;inset:0 auto 0 0;width:270px;padding:23px 18px;background:#f0f4f0;border-right:1px solid var(--line);overflow:auto;z-index:30;overscroll-behavior:contain}.brand{font-size:21px;font-weight:700}.brand small{display:block;font-size:12px;font-weight:400;color:var(--muted)}.sidebar nav a{display:block;color:var(--ink);text-decoration:none;padding:8px 10px;margin:3px 0;border-radius:6px;font-size:14px;line-height:1.6}.sidebar nav a:hover{background:#dcebe3}.sidebar nav a.active,.sidebar nav a.active:hover{background:var(--teal);color:white}.sidebar select{width:100%;font-size:13px}.nav-tip{font-size:12px;color:var(--muted);margin:14px 0}.shell{margin-left:270px;overflow-anchor:none}.topbar{position:sticky;top:0;background:rgba(251,250,247,.98);padding:12px 26px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:12px;z-index:20}.topbar-title{font-size:13px;color:var(--muted)}.toolbar{display:flex;gap:7px;flex-wrap:wrap}.toolbar button{font-size:13px}.menu{display:none}main{max-width:1120px;margin:auto;padding:30px 44px 80px;min-width:0}h1{font-size:32px;line-height:1.5;margin:14px 0 25px}h2{font-size:25px;line-height:1.5;padding:0 0 11px;border-bottom:1px solid var(--line);margin:44px 0 23px}h3{font-size:21px;line-height:1.55;margin:29px 0 16px}h4{font-size:18px;line-height:1.6;margin:22px 0 13px}p{margin:14px 0}li{margin:7px 0}ul,ol{padding-left:1.6em}blockquote{margin:20px 0;padding:5px 18px;border-left:3px solid #a8c6bb;background:#f0f3ef;color:#53655e;font-size:14px}blockquote p{margin:8px 0}hr{border:0;border-top:1px solid var(--line);margin:32px 0}code{font-family:Consolas,'Cascadia Code',monospace;font-size:.9em;background:#eef1ed;padding:2px 5px;border-radius:4px;overflow-wrap:anywhere}pre{background:#18313d;color:#e8f0f0;border-radius:9px;padding:19px;line-height:1.65;overflow-x:auto;max-width:100%;font-size:14px}pre code{background:none;padding:0;color:inherit;white-space:pre;overflow-wrap:normal}table{border-collapse:collapse;width:100%;font-size:15px}th{background:#eaf3ee;text-align:left}td,th{padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:top}tbody tr:nth-child(even){background:#f6f9f6}.table-scroll{overflow-x:auto;border:1px solid var(--line);border-radius:8px;margin:17px 0;max-width:100%}.table-scroll td{min-width:80px}.source-note{font-size:13px;color:var(--muted)}.learning-figure{padding:23px;border:1px solid #b4cfc2;border-radius:12px;background:var(--soft);margin:25px 0}.learning-figure h4{margin:0 0 8px;font-size:20px}.fig-intro{font-size:14px;color:var(--muted)}.learning-figure label{display:block;margin-top:15px;font-size:14px;font-weight:700}.learning-figure select{margin-top:7px;width:100%;min-height:44px;font-size:15px}.fig-output{margin-top:16px}.flow{display:flex;gap:10px;align-items:stretch;flex-wrap:wrap}.flow-node{flex:1 1 150px;border:1px solid #bfd2c9;border-radius:8px;background:#fff;padding:13px;min-width:0}.flow-node strong{display:block;color:var(--teal)}.flow-node p{font-size:14px;margin:8px 0}.flow-arrow{align-self:center;color:var(--teal);font-size:24px}.fig-note{padding:10px 14px;border-left:3px solid var(--teal);background:#fff;font-size:14px;margin:15px 0 0}.svg-scroll{overflow-x:auto;max-width:100%}.svg-scroll svg{display:block;max-width:100%;height:auto}.ref-area{min-height:calc(100vh - var(--scroll-offset));margin-top:24px}.ref-picker{padding:22px;border-radius:12px;background:var(--soft);border:1px solid #b4cfc2}.ref-picker label{display:block;font-weight:700;margin-bottom:10px}.ref-picker select{width:100%;font-size:15px;min-height:46px}.ref-panel{margin-top:18px;background:#fff;border:1px solid var(--line);padding:20px;border-radius:9px}.ref-panel[hidden]{display:none}.ref-panel h3{margin:0;font-size:24px}.ref-panel h4{font-size:16px;margin:18px 0 8px}.ref-kind{font-size:13px;color:var(--teal)}.result{padding:10px 15px;border-left:3px solid var(--teal);background:var(--soft)}.copy{display:block;margin:5px 0 0 auto;font-size:12px;padding:4px 8px}.code-wrap{margin:20px 0}.code-wrap pre{margin-bottom:0}.foot{font-size:13px;color:var(--muted);border-top:1px solid var(--line);padding-top:23px;margin-top:30px}details{border:1px solid var(--line);padding:12px;border-radius:8px;margin:15px 0}summary{cursor:pointer;font-weight:700}@media(max-width:900px){.sidebar{transform:translateX(-100%)}body.nav-open .sidebar{transform:translateX(0);top:60px}.shell{margin-left:0}.menu{display:inline-block}.topbar-title{display:none}.topbar{padding:10px 14px}main{padding:23px 18px 65px}h1{font-size:27px}h2{font-size:23px}.learning-figure,.ref-picker{padding:16px}.flow{flex-direction:column}.flow-arrow{transform:rotate(90deg)}.ref-panel{padding:15px}}@media print{.sidebar,.topbar,.toolbar,.copy,.skip{display:none!important}.shell{margin:0}main{padding:0;max-width:none}body{background:#fff;font-size:11pt}.ref-area{min-height:0}.ref-picker select{display:none}pre{white-space:pre-wrap;background:#f3f5f4;color:#111}.learning-figure{break-inside:avoid}.table-scroll{overflow:visible}a{color:inherit}}@media print{.svg-scroll{overflow:visible}.svg-scroll svg{min-width:0!important;width:100%!important;height:auto!important}}.sidebar{width:266px;background:#f1f4f1;padding:27px 19px;overflow-y:auto}.brand{font-size:21px;font-weight:700;letter-spacing:.03em;margin-bottom:5px}.brand small{font-size:12px;font-weight:400;color:var(--muted);letter-spacing:.1em}.sidebar .sub{font-size:13px;color:var(--muted);margin:5px 0 21px}.sidebar nav a{font-size:14px;line-height:1.5;padding:9px 11px;margin:3px 0;border-radius:6px}.sidebar nav a:hover{background:#e0ece6;color:#174d43}.sidebar nav a.active,.sidebar nav a.active:hover{background:var(--teal);color:#fff}.nav-group{font-size:12px;color:var(--muted);margin:18px 11px 6px;letter-spacing:.08em}.sidebar-footer{margin-top:24px;font-size:12px;color:var(--muted)}.shell{margin-left:266px}@media(max-width:900px){.shell{margin-left:0}}
-h2,h3,h4,[id]{scroll-margin-top:0}.stepper{background:#edf6f1;border:1px solid #b4cfc2;border-radius:12px;padding:22px;margin:24px 0}.stepper h3{margin:0 0 12px}.step-tools{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:15px 0}.step-tools input{width:200px;min-height:40px}.step-card{background:white;padding:18px;border-radius:8px;border:1px solid var(--line)}.step-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}.step-field{border:1px solid #d6e5dd;padding:12px;border-radius:7px;overflow-wrap:anywhere}.step-field strong{display:block;font-size:13px;color:var(--teal)}.step-field p{margin:7px 0 0}.progress-track{display:flex;gap:4px;margin:10px 0}.progress-track span{height:5px;flex:1;border-radius:3px;background:#c8d8d0}.progress-track span.done{background:var(--teal)}.step-count{font-variant-numeric:tabular-nums}.chapter-links{display:flex;gap:15px;justify-content:space-between;border-top:1px solid var(--line);padding-top:25px;margin-top:35px}.ref-area{min-height:0}.ref-panel h4{margin:12px 0 4px}.reading-meta{font-size:13px;color:var(--muted)}summary:focus-visible,input:focus-visible{outline:3px solid #81cbb8;outline-offset:3px}button:disabled{opacity:.5;cursor:default}.quick-select{width:100%}.overview-card{border:1px solid var(--line);background:white;border-radius:9px;padding:18px;margin:14px 0}.overview-card h3{margin-top:0}.sidebar nav a.external{background:#e4eee7}.nav-shade{display:none}@media(max-width:900px){body.nav-open .nav-shade{display:block;position:fixed;inset:60px 0 0 266px;background:#25334155;z-index:25}.stepper{padding:15px}.step-tools input{width:150px}.step-grid{grid-template-columns:1fr}.sidebar{max-width:85vw}.step-field{padding:10px}}@media print{.step-tools,.progress-track,.chapter-links{display:none}.step-card{break-inside:avoid}body.nav-open .nav-shade{display:none}}main{overflow-x:clip}article{min-width:0;max-width:100%}.table-scroll,pre{contain:inline-size}p,li,h1,h2,h3,h4{overflow-wrap:anywhere}</style></head><body><a class="skip" href="#article">跳到正文</a><aside class="sidebar" aria-label="章节目录"><div class="brand"><small>COMPILER / CHAPTER 02</small>第2章 词法分析</div><p class="sub">完整讲解 · 分步推导 · 离线阅读</p><nav><a href="#navigation">学习导航</a><div class="nav-group">准备 · 规则与串</div><a href="#ch02-s01">1. 词法分析要解决什么问题</a><a href="#ch02-s02">2. 符号、串与集合运算</a><a href="#ch02-s03">3. 正则表达式与正则集</a><a href="#ch02-s04">4. 从要求写正则表达式</a><div class="nav-group">基础 · 自动机识别</div><a href="#ch02-s05">5. 确定有限自动机 DFA</a><a href="#ch02-s06">6. 用 DFA 建模与描述单词</a><a href="#ch02-s07">7. 自动机的程序实现</a><a href="#ch02-s08">8. 非确定有限自动机 NFA</a><div class="nav-group">应用 · 转换与扫描</div><a href="#ch02-s09">9. 子集法确定化</a><a href="#ch02-s10">10. DFA 最小化</a><a href="#ch02-s11">11. 正则表达式与自动机相互转换</a><a href="#ch02-s12">12. 词法分析器的整体设计</a><a href="#ch02-s13">13. 连续扫描与边界处理</a><div class="nav-group">组合 · 课件综合练习</div><a href="#ch02-s14">14. 综合练习</a><div class="nav-group">综合应用 · 完整解题</div><a href="#ch02-s15">15. 综合应用：把性质描述语言从规则变成最简 DFA</a><a href="#ch02-s16">16. 作业中的难点：奇偶计数为何要允许字符交错</a><div class="nav-group">练习与复习 · 回查、自测和速查</div><a href="#ch02-s17">17. 知识联系与复习</a><a href="#ch02-s18">18. 自测与答案：分别检查语言、自动机与扫描器</a><a href="#ch02-s19">19. 排错与复习</a><a href="#ch02-s20">20. 末尾速查表</a><div class="nav-group">全课程</div><a class="external" href="00_学习导航.html">全课程学习导航</a></nav><div class="sidebar-footer">先看问题与条件，再跟踪推导和例题</div></aside><div class="nav-shade"></div><div class="shell"><header class="topbar"><span class="topbar-title">第2章 词法分析</span><div class="toolbar"><button id="menu" class="menu" aria-label="打开或收起目录" aria-expanded="false">目录</button><button data-font="-1" aria-label="减小正文字号">字号 −</button><button data-font="1" aria-label="增大正文字号">字号 ＋</button><button id="print">打印 / 保存 PDF</button></div></header><main><article id="article"><h1>第2章 词法分析：从单词规则到自动机与连续扫描</h1>
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="source-sha256" content="f2d055261ad577d51e3f4a84e818e0d5f91b5682f20d6b7abd69bb563274d5af"><title>第2章 词法分析 · 学习资料</title><script>(function () {
+  'use strict';
+  let saved;
+  try { saved = localStorage.getItem('compiler-reading-theme-v1'); } catch (_) {}
+  const theme = saved === 'light' || saved === 'dark' ? saved
+    : (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+  document.documentElement.dataset.readerTheme = theme;
+})();
+</script><style>:root{--paper:#fbfaf7;--surface:#fff;--ink:#253341;--muted:#5c6b75;--line:#d5dfdd;--teal:#156b62;--soft:#edf6f1;--font:17px;--scroll-offset:90px}*{box-sizing:border-box}html{scroll-behavior:auto;scroll-padding-top:var(--scroll-offset)}body{margin:0;background:var(--paper);color:var(--ink);font-family:'Microsoft YaHei','PingFang SC',system-ui,sans-serif;font-size:var(--font);line-height:1.85}a{color:var(--teal);text-underline-offset:3px}a:hover{color:#173f75}button,select{font:inherit}button{cursor:pointer}button,select{border:1px solid #b9cbc5;border-radius:7px;padding:7px 11px;background:#fff;color:var(--ink)}button:hover{background:var(--soft)}button:focus-visible,select:focus-visible,a:focus-visible{outline:3px solid #81cbb8;outline-offset:3px}.skip{position:absolute;top:-80px;left:12px;z-index:50;background:#fff;padding:8px}.skip:focus{top:8px}.sidebar{position:fixed;inset:0 auto 0 0;width:270px;padding:23px 18px;background:#f0f4f0;border-right:1px solid var(--line);overflow:auto;z-index:30;overscroll-behavior:contain}.brand{font-size:21px;font-weight:700}.brand small{display:block;font-size:12px;font-weight:400;color:var(--muted)}.sidebar nav a{display:block;color:var(--ink);text-decoration:none;padding:8px 10px;margin:3px 0;border-radius:6px;font-size:14px;line-height:1.6}.sidebar nav a:hover{background:#dcebe3}.sidebar nav a.active,.sidebar nav a.active:hover{background:var(--teal);color:white}.sidebar select{width:100%;font-size:13px}.nav-tip{font-size:12px;color:var(--muted);margin:14px 0}.shell{margin-left:270px;overflow-anchor:none}.topbar{position:sticky;top:0;background:rgba(251,250,247,.98);padding:12px 26px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:12px;z-index:20}.topbar-title{font-size:13px;color:var(--muted)}.toolbar{display:flex;gap:7px;flex-wrap:wrap}.toolbar button{font-size:13px}.menu{display:none}main{max-width:1120px;margin:auto;padding:30px 44px 80px;min-width:0}h1{font-size:32px;line-height:1.5;margin:14px 0 25px}h2{font-size:25px;line-height:1.5;padding:0 0 11px;border-bottom:1px solid var(--line);margin:44px 0 23px}h3{font-size:21px;line-height:1.55;margin:29px 0 16px}h4{font-size:18px;line-height:1.6;margin:22px 0 13px}p{margin:14px 0}li{margin:7px 0}ul,ol{padding-left:1.6em}blockquote{margin:20px 0;padding:5px 18px;border-left:3px solid #a8c6bb;background:#f0f3ef;color:#53655e;font-size:14px}blockquote p{margin:8px 0}hr{border:0;border-top:1px solid var(--line);margin:32px 0}code{font-family:Consolas,'Cascadia Code',monospace;font-size:.9em;background:#eef1ed;padding:2px 5px;border-radius:4px;overflow-wrap:anywhere}pre{background:#18313d;color:#e8f0f0;border-radius:9px;padding:19px;line-height:1.65;overflow-x:auto;max-width:100%;font-size:14px}pre code{background:none;padding:0;color:inherit;white-space:pre;overflow-wrap:normal}table{border-collapse:collapse;width:100%;font-size:15px}th{background:#eaf3ee;text-align:left}td,th{padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:top}tbody tr:nth-child(even){background:#f6f9f6}.table-scroll{overflow-x:auto;border:1px solid var(--line);border-radius:8px;margin:17px 0;max-width:100%}.table-scroll td{min-width:80px}.source-note{font-size:13px;color:var(--muted)}.learning-figure{padding:23px;border:1px solid #b4cfc2;border-radius:12px;background:var(--soft);margin:25px 0}.learning-figure h4{margin:0 0 8px;font-size:20px}.fig-intro{font-size:14px;color:var(--muted)}.learning-figure label{display:block;margin-top:15px;font-size:14px;font-weight:700}.learning-figure select{margin-top:7px;width:100%;min-height:44px;font-size:15px}.fig-output{margin-top:16px}.flow{display:flex;gap:10px;align-items:stretch;flex-wrap:wrap}.flow-node{flex:1 1 150px;border:1px solid #bfd2c9;border-radius:8px;background:#fff;padding:13px;min-width:0}.flow-node strong{display:block;color:var(--teal)}.flow-node p{font-size:14px;margin:8px 0}.flow-arrow{align-self:center;color:var(--teal);font-size:24px}.fig-note{padding:10px 14px;border-left:3px solid var(--teal);background:#fff;font-size:14px;margin:15px 0 0}.svg-scroll{overflow-x:auto;max-width:100%}.svg-scroll svg{display:block;max-width:100%;height:auto}.ref-area{min-height:calc(100vh - var(--scroll-offset));margin-top:24px}.ref-picker{padding:22px;border-radius:12px;background:var(--soft);border:1px solid #b4cfc2}.ref-picker label{display:block;font-weight:700;margin-bottom:10px}.ref-picker select{width:100%;font-size:15px;min-height:46px}.ref-panel{margin-top:18px;background:#fff;border:1px solid var(--line);padding:20px;border-radius:9px}.ref-panel[hidden]{display:none}.ref-panel h3{margin:0;font-size:24px}.ref-panel h4{font-size:16px;margin:18px 0 8px}.ref-kind{font-size:13px;color:var(--teal)}.result{padding:10px 15px;border-left:3px solid var(--teal);background:var(--soft)}.copy{display:block;margin:5px 0 0 auto;font-size:12px;padding:4px 8px}.code-wrap{margin:20px 0}.code-wrap pre{margin-bottom:0}.foot{font-size:13px;color:var(--muted);border-top:1px solid var(--line);padding-top:23px;margin-top:30px}details{border:1px solid var(--line);padding:12px;border-radius:8px;margin:15px 0}summary{cursor:pointer;font-weight:700}@media(max-width:900px){.sidebar{transform:translateX(-100%)}body.nav-open .sidebar{transform:translateX(0);top:60px}.shell{margin-left:0}.menu{display:inline-block}.topbar-title{display:none}.topbar{padding:10px 14px}main{padding:23px 18px 65px}h1{font-size:27px}h2{font-size:23px}.learning-figure,.ref-picker{padding:16px}.flow{flex-direction:column}.flow-arrow{transform:rotate(90deg)}.ref-panel{padding:15px}}@media print{.sidebar,.topbar,.toolbar,.copy,.skip{display:none!important}.shell{margin:0}main{padding:0;max-width:none}body{background:#fff;font-size:11pt}.ref-area{min-height:0}.ref-picker select{display:none}pre{white-space:pre-wrap;background:#f3f5f4;color:#111}.learning-figure{break-inside:avoid}.table-scroll{overflow:visible}a{color:inherit}}@media print{.svg-scroll{overflow:visible}.svg-scroll svg{min-width:0!important;width:100%!important;height:auto!important}}.sidebar{width:266px;background:#f1f4f1;padding:27px 19px;overflow-y:auto}.brand{font-size:21px;font-weight:700;letter-spacing:.03em;margin-bottom:5px}.brand small{font-size:12px;font-weight:400;color:var(--muted);letter-spacing:.1em}.sidebar .sub{font-size:13px;color:var(--muted);margin:5px 0 21px}.sidebar nav a{font-size:14px;line-height:1.5;padding:9px 11px;margin:3px 0;border-radius:6px}.sidebar nav a:hover{background:#e0ece6;color:#174d43}.sidebar nav a.active,.sidebar nav a.active:hover{background:var(--teal);color:#fff}.nav-group{font-size:12px;color:var(--muted);margin:18px 11px 6px;letter-spacing:.08em}.sidebar-footer{margin-top:24px;font-size:12px;color:var(--muted)}.shell{margin-left:266px}@media(max-width:900px){.shell{margin-left:0}}
+#sql-reference{min-height:calc(100vh - var(--scroll-offset,90px))}
+.table-scroll{max-width:100%;overflow-x:auto;margin:18px 0;border:1px solid var(--line);border-radius:8px}.table-scroll table{width:100%;border-collapse:collapse}.table-scroll td,.table-scroll th{min-width:85px;vertical-align:top}.table-scroll pre{white-space:pre-wrap}article h2,article h3,article h4{scroll-margin-top:var(--scroll-offset,90px)}.course-home{display:block;font-size:13px;padding:8px 11px;margin-bottom:12px}.chapter-turns{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;margin-top:34px;padding-top:20px;border-top:1px solid var(--line)}.chapter-turns a{font-size:14px}.sidebar-footer{font-size:12px;color:var(--muted);margin-top:24px}article>p:first-of-type{font-size:1.04em}.noscript-note{padding:12px;border-left:3px solid var(--teal)}@media(max-width:600px){.table-scroll table{min-width:520px}.table-scroll{font-size:14px}pre{max-width:100%;overflow-x:auto}article{min-width:0}}@media print{.table-scroll table{min-width:0}.chapter-turns{display:none}}
+
+h2,h3,h4,[id]{scroll-margin-top:0}.stepper{background:#edf6f1;border:1px solid #b4cfc2;border-radius:12px;padding:22px;margin:24px 0}.stepper h3{margin:0 0 12px}.step-tools{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:15px 0}.step-tools input{width:200px;min-height:40px}.step-card{background:white;padding:18px;border-radius:8px;border:1px solid var(--line)}.step-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}.step-field{border:1px solid #d6e5dd;padding:12px;border-radius:7px;overflow-wrap:anywhere}.step-field strong{display:block;font-size:13px;color:var(--teal)}.step-field p{margin:7px 0 0}.progress-track{display:flex;gap:4px;margin:10px 0}.progress-track span{height:5px;flex:1;border-radius:3px;background:#c8d8d0}.progress-track span.done{background:var(--teal)}.step-count{font-variant-numeric:tabular-nums}.chapter-links{display:flex;gap:15px;justify-content:space-between;border-top:1px solid var(--line);padding-top:25px;margin-top:35px}.ref-area{min-height:0}.ref-panel h4{margin:12px 0 4px}.reading-meta{font-size:13px;color:var(--muted)}summary:focus-visible,input:focus-visible{outline:3px solid #81cbb8;outline-offset:3px}button:disabled{opacity:.5;cursor:default}.quick-select{width:100%}.overview-card{border:1px solid var(--line);background:white;border-radius:9px;padding:18px;margin:14px 0}.overview-card h3{margin-top:0}.sidebar nav a.external{background:#e4eee7}.nav-shade{display:none}@media(max-width:900px){body.nav-open .nav-shade{display:block;position:fixed;inset:60px 0 0 266px;background:#25334155;z-index:25}.stepper{padding:15px}.step-tools input{width:150px}.step-grid{grid-template-columns:1fr}.sidebar{max-width:85vw}.step-field{padding:10px}}@media print{.step-tools,.progress-track,.chapter-links{display:none}.step-card{break-inside:avoid}body.nav-open .nav-shade{display:none}}main{overflow-x:clip}article{min-width:0;max-width:100%}.table-scroll,pre{contain:inline-size}p,li,h1,h2,h3,h4{overflow-wrap:anywhere}.chapter-search-panel[hidden],.chapter-search-results[hidden]{display:none!important}.chapter-search-panel{position:sticky;top:var(--reader-topbar-height,60px);z-index:21;background:#f4f8f3;border-bottom:1px solid #b9cbc5;padding:12px 26px;max-width:100%;font-size:14px;line-height:1.6}.chapter-search-form{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:7px;align-items:center}.chapter-search-form label{grid-column:1/-1;font-weight:700}.chapter-search-form input{min-width:0;width:100%;border:1px solid #7e9d90;border-radius:7px;padding:7px 10px;background:#fff;color:var(--ink);font:inherit;min-height:40px}.chapter-search-panel button{font-size:13px;min-height:36px;padding:6px 9px}.chapter-search-controls{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin-top:9px}.chapter-search-controls [role=status]{margin-right:auto;overflow-wrap:anywhere}.chapter-search-help{margin:8px 0 0;border:0;padding:0;font-size:12px;color:var(--muted)}.chapter-search-help summary{font-weight:400}.chapter-search-help p{margin:6px 0}.chapter-search-help[open]{max-height:20vh;overflow:auto}.chapter-search-results{margin-top:9px;border-top:1px solid var(--line);padding-top:8px;max-height:32vh;overflow:auto;overscroll-behavior:contain}.chapter-search-pages{display:flex;align-items:center;gap:7px;flex-wrap:wrap;font-size:12px}.chapter-search-pages span{margin-right:auto}.chapter-search-results ol{margin:5px 0;padding:0;list-style:none}.chapter-search-results li{margin:4px 0}.chapter-search-result{display:block;text-align:left;width:100%;white-space:normal;overflow-wrap:anywhere;background:#fff}.chapter-search-result strong{display:block;font-size:13px;color:var(--teal)}.chapter-search-result span{display:block;font-size:13px;line-height:1.65;margin-top:3px}.chapter-search-result[aria-current=true]{border-color:var(--teal);background:#e5f1e8}.chapter-search-result mark{background:#ffe69a;color:inherit;padding:0}mark.chapter-search-hit{background:#ffe38a;color:inherit;padding:0;border-radius:2px;outline:1px solid #ba8a11;scroll-margin-top:var(--scroll-offset,90px)}.chapter-search-form input:focus-visible,.chapter-search-panel summary:focus-visible,mark.chapter-search-hit:focus-visible{outline:3px solid #438f7e;outline-offset:3px}@media(max-width:900px){.chapter-search-panel{padding:10px 14px}body.nav-open .sidebar,body.nav-open .nav-shade{top:var(--reader-topbar-height,60px)}}@media(max-width:480px){.chapter-search-controls{gap:5px}.chapter-search-controls [role=status]{flex-basis:100%;font-size:13px}.chapter-search-controls button{flex:1 1 auto}.chapter-search-results{max-height:28vh}}@media print{.chapter-search-panel{display:none!important}mark.chapter-search-hit{background:transparent;color:inherit;outline:none}}
+.chapter-search-panel{max-height:calc(100vh - var(--reader-topbar-height,60px));max-height:calc(100dvh - var(--reader-topbar-height,60px));overflow-y:auto;overscroll-behavior:contain}
+:root[data-reader-theme]{color-scheme:light;--reader-sidebar:#f1f4f1;--reader-topbar:rgba(251,250,247,.98);--reader-hover:#e0ece6;--reader-hover-ink:#174d43;--reader-active-ink:#fff;--reader-external:#e4eee7;--reader-code:#eef1ed;--reader-pre:#18313d;--reader-pre-ink:#e8f0f0;--reader-th:#eaf3ee;--reader-row:#f6f9f6;--reader-panel-border:#b4cfc2;--reader-progress:#c8d8d0;--reader-search:#f4f8f3;--reader-current:#e5f1e8;--reader-link-hover:#173f75}
+:root[data-reader-theme="dark"]{color-scheme:dark;--paper:#141c22;--surface:#1d2830;--ink:#e3eaf0;--muted:#aab9c2;--line:#40515c;--teal:#83d8be;--soft:#233b3b;--reader-sidebar:#18242c;--reader-topbar:rgba(20,28,34,.98);--reader-hover:#2a4145;--reader-hover-ink:#b4ecd9;--reader-active-ink:#10231e;--reader-external:#23363d;--reader-code:#2a3943;--reader-pre:#0e171e;--reader-pre-ink:#dce8ef;--reader-th:#253b43;--reader-row:#19262e;--reader-panel-border:#46606a;--reader-progress:#3b515a;--reader-search:#1b2b33;--reader-current:#2a4145;--reader-link-hover:#b2e7ff}
+.reading-theme{display:inline-flex;align-items:center;gap:6px;font-size:13px;white-space:nowrap}.reading-theme select{font-size:13px;min-height:36px;cursor:pointer}
+:root[data-reader-theme] .sidebar{background:var(--reader-sidebar)}
+:root[data-reader-theme] .topbar{background:var(--reader-topbar)}
+:root[data-reader-theme] button,:root[data-reader-theme] select,:root[data-reader-theme] .chapter-search-form input{background:var(--surface);color:var(--ink);border-color:var(--line)}
+:root[data-reader-theme] button:hover{background:var(--soft)}
+:root[data-reader-theme] a:hover{color:var(--reader-link-hover)}
+:root[data-reader-theme] .sidebar nav a:hover{background:var(--reader-hover);color:var(--reader-hover-ink)}
+:root[data-reader-theme] .sidebar nav a.active,:root[data-reader-theme] .sidebar nav a.active:hover{background:var(--teal);color:var(--reader-active-ink)}
+:root[data-reader-theme] .sidebar nav a.external{background:var(--reader-external)}
+:root[data-reader-theme] .sidebar nav a.external.active{background:var(--teal)}
+:root[data-reader-theme] code{background:var(--reader-code)}
+:root[data-reader-theme] pre{background:var(--reader-pre);color:var(--reader-pre-ink)}
+:root[data-reader-theme] pre code{background:none;color:inherit}
+:root[data-reader-theme] th{background:var(--reader-th)}
+:root[data-reader-theme] tbody tr:nth-child(even){background:var(--reader-row)}
+:root[data-reader-theme] .ref-panel,:root[data-reader-theme] .step-card,:root[data-reader-theme] .overview-card,:root[data-reader-theme] .flow-node,:root[data-reader-theme] .fig-note,:root[data-reader-theme] .skip{background:var(--surface)}
+:root[data-reader-theme] .stepper,:root[data-reader-theme] .ref-picker,:root[data-reader-theme] .learning-figure{background:var(--soft);border-color:var(--reader-panel-border)}
+:root[data-reader-theme] .step-field{border-color:var(--line)}
+:root[data-reader-theme] .progress-track span{background:var(--reader-progress)}
+:root[data-reader-theme] .progress-track span.done{background:var(--teal)}
+:root[data-reader-theme] blockquote{background:var(--soft);color:var(--muted);border-color:var(--teal)}
+:root[data-reader-theme] .chapter-search-panel{background:var(--reader-search);border-color:var(--line)}
+:root[data-reader-theme] .chapter-search-result[aria-current=true]{background:var(--reader-current);border-color:var(--teal)}
+:root[data-reader-theme="dark"] mark.chapter-search-hit,:root[data-reader-theme="dark"] .chapter-search-result mark{background:#6b5013;color:#fff3c4;outline-color:#e8c86b}
+:root[data-reader-theme="dark"] ::selection{background:#386c73;color:#fff}
+@media print{
+ :root[data-reader-theme]{color-scheme:light;--paper:#fff;--surface:#fff;--ink:#111;--muted:#444;--line:#bbb;--teal:#175b50;--soft:#f2f5f3;--reader-code:#eee;--reader-pre:#f3f5f4;--reader-pre-ink:#111;--reader-th:#eaf0ec;--reader-row:#f7f7f7;--reader-panel-border:#aaa;--reader-progress:#ccc;--reader-active-ink:#fff}
+ :root[data-reader-theme] body{background:#fff;color:#111}
+ :root[data-reader-theme] .reading-theme{display:none!important}
+ :root[data-reader-theme] mark.chapter-search-hit{background:transparent;color:inherit;outline:none}
+}
+</style></head><body><a class="skip" href="#article">跳到正文</a><aside class="sidebar" aria-label="章节目录"><div class="brand"><small>COMPILER / CHAPTER 02</small>第2章 词法分析</div><p class="sub">完整讲解 · 分步推导 · 离线阅读</p><nav><a href="#navigation">学习导航</a><div class="nav-group">准备 · 规则与串</div><a href="#ch02-s01">1. 词法分析要解决什么问题</a><a href="#ch02-s02">2. 符号、串与集合运算</a><a href="#ch02-s03">3. 正则表达式与正则集</a><a href="#ch02-s04">4. 从要求写正则表达式</a><div class="nav-group">基础 · 自动机识别</div><a href="#ch02-s05">5. 确定有限自动机 DFA</a><a href="#ch02-s06">6. 用 DFA 建模与描述单词</a><a href="#ch02-s07">7. 自动机的程序实现</a><a href="#ch02-s08">8. 非确定有限自动机 NFA</a><div class="nav-group">应用 · 转换与扫描</div><a href="#ch02-s09">9. 子集法确定化</a><a href="#ch02-s10">10. DFA 最小化</a><a href="#ch02-s11">11. 正则表达式与自动机相互转换</a><a href="#ch02-s12">12. 词法分析器的整体设计</a><a href="#ch02-s13">13. 连续扫描与边界处理</a><div class="nav-group">组合 · 综合练习</div><a href="#ch02-s14">14. 综合练习</a><div class="nav-group">综合应用 · 完整解题</div><a href="#ch02-s15">15. 综合应用：把性质描述语言从规则变成最简 DFA</a><a href="#ch02-s16">16. 作业中的难点：奇偶计数为何要允许字符交错</a><div class="nav-group">练习与复习 · 回查、自测和速查</div><a href="#ch02-s17">17. 知识联系与复习</a><a href="#ch02-s18">18. 自测与答案：分别检查语言、自动机与扫描器</a><a href="#ch02-s19">19. 排错与复习</a><a href="#ch02-s20">20. 末尾速查表</a><div class="nav-group">全课程</div><a class="external" href="00_学习导航.html">全课程学习导航</a></nav><div class="sidebar-footer">先看问题与条件，再跟踪推导和例题</div></aside><div class="nav-shade"></div><div class="shell"><header class="topbar"><span class="topbar-title">第2章 词法分析</span><div class="toolbar"><button id="menu" class="menu" aria-label="打开或收起目录" aria-expanded="false">目录</button><button data-font="-1" aria-label="减小正文字号">字号 −</button><button data-font="1" aria-label="增大正文字号">字号 ＋</button><label class="reading-theme" for="reading-theme">外观<select id="reading-theme" aria-label="阅读模式"><option value="light">白天</option><option value="dark">夜间</option></select></label><button id="chapter-search-toggle" type="button" aria-expanded="false" aria-controls="chapter-search-panel">搜索</button><button id="print">打印 / 保存 PDF</button></div></header><section id="chapter-search-panel" class="chapter-search-panel" aria-label="本章关键词搜索" hidden>
+  <form id="chapter-search-form" class="chapter-search-form" role="search">
+    <label for="chapter-search-input">搜索本章</label><input id="chapter-search-input" type="search" placeholder="中文关键词或英文术语" autocomplete="off" spellcheck="false" aria-describedby="chapter-search-status"><button type="submit">查找</button><button id="chapter-search-clear" type="button">清除</button>
+  </form>
+  <div class="chapter-search-controls"><span id="chapter-search-status" role="status" aria-live="polite">请输入关键词</span><button id="chapter-search-prev" type="button" disabled>上一处</button><button id="chapter-search-next" type="button" disabled>下一处</button><button id="chapter-search-results-toggle" type="button" aria-expanded="false" aria-controls="chapter-search-results" disabled>展开结果</button><button id="chapter-search-close" type="button" aria-label="收起搜索，继续阅读">收起</button></div>
+  <details class="chapter-search-help"><summary>搜索范围与操作</summary><p>检索本章正文、表格、代码、折叠答案和全部速查项。目录与分步演示不重复计入，演示对应的正文仍可搜索。忽略关键词首尾空白，其余按文字原样匹配，英文不区分大小写；内部空格和符号也参与匹配。搜索完全离线，不上传关键词。</p><p>点击结果定位高亮，折叠内容会自动展开。Ctrl＋K 打开搜索；输入框内按 Enter 查找或跳到下一处，Shift＋Enter 跳到上一处；Esc 收起。清除会移除高亮，并恢复由搜索展开的折叠内容。浏览器的 Ctrl＋F 仍可使用。</p></details>
+  <div id="chapter-search-results" class="chapter-search-results" hidden><div class="chapter-search-pages"><span id="chapter-search-page-status"></span><button id="chapter-search-page-prev" type="button">前一页</button><button id="chapter-search-page-next" type="button">后一页</button></div><ol id="chapter-search-list"></ol></div>
+</section>
+<main><article id="article"><h1>第2章 词法分析：从单词规则到自动机与连续扫描</h1>
 <p>源码是一串连续字符，后面的分析却需要知道哪些是变量名、常量和运算符。本章先用正则表达式描述合法单词，再用自动机逐字符识别，最后处理连续扫描时的单词边界。</p>
 <p><a id="navigation"></a></p>
 <h2>学习导航</h2>
@@ -27,8 +81,8 @@ h2,h3,h4,[id]{scroll-margin-top:0}.stepper{background:#edf6f1;border:1px solid #
 <td><a href="#ch02-s09">9. 子集法确定化</a>、<a href="#ch02-s10">10. DFA 最小化</a>、<a href="#ch02-s11">11. 正则表达式与自动机相互转换</a>、<a href="#ch02-s12">12. 词法分析器的整体设计</a>、<a href="#ch02-s13">13. 连续扫描与边界处理</a></td>
 </tr>
 <tr>
-<td>组合 · 课件综合练习</td>
-<td>沿同一个课件表达式完成构造、确定化、化简和跟踪。</td>
+<td>组合 · 综合练习</td>
+<td>沿同一个表达式完成构造、确定化、化简和跟踪。</td>
 <td><a href="#ch02-s14">14. 综合练习</a></td>
 </tr>
 <tr>
@@ -48,11 +102,12 @@ h2,h3,h4,[id]{scroll-margin-top:0}.stepper{background:#edf6f1;border:1px solid #
 <h2>1. 词法分析要解决什么问题</h2>
 <h3>1.1 输入字符，输出单词信息</h3>
 <p>语法分析需要处理 if、变量名和运算符等单位，源码却是一串连续字符。第一步要把字符切成有类别的单词，同时留下名字和常量的信息，供后续阶段使用。</p>
-<p><strong>词法分析器（scanner/lexer）</strong>接收字符流，依据词法规则分离单词、产生 Token，并报告词法错误。<code>if(x&gt;10)y=x;</code> 应分成 <code>if、(、x、&gt;、10、)、y、=、x、;</code> 十个单词。</p>
-<p><strong>单词</strong>是语言规定的最小词法单位。x1 作为标识符时，x 与 1 不是这次出现的两个独立单词；10 是一个常数；x1&gt;0 还可分解成三个单词。<strong>词素（lexeme）</strong>是一次单词出现的实际拼写；<strong>Token</strong>是供后续阶段使用的数据，如 <code>&lt;id,x1&gt;</code>。不同词素可以属于同一类别。</p>
+<p><strong>词法分析器（scanner/lexer）</strong> 接收字符流，依据词法规则分离单词、产生 Token，并报告词法错误。<code>if(x&gt;10)y=x;</code> 应分成 <code>if、(、x、&gt;、10、)、y、=、x、;</code> 十个单词。</p>
+<p><strong>单词</strong> 是语言规定的最小词法单位。x1 作为标识符时，x 与 1 不是这次出现的两个独立单词；10 是一个常数；x1&gt;0 还可分解成三个单词。<strong>词素（lexeme）</strong> 是一次单词出现的实际拼写；<strong>Token</strong> 是供后续阶段使用的数据，如 <code>&lt;id,x1&gt;</code>。不同词素可以属于同一类别。</p>
 <h3>1.2 规则与实现</h3>
 <p>正则表达式描述“哪些串合法”，自动机提供“读字符时怎样判断”的操作模型。先精确定义规则，再编写程序，能减少凭零散条件分支漏掉边界的风险。</p>
-<p>转换算法保持的是<strong>语言相同</strong>，即接受的串集合相同，不要求状态名字、数量、布局相同。反过来，两张图长得像也不能代替等价性核对。</p>
+<p>转换算法保持的是<strong>语言相同</strong> ，即接受的串集合相同，不要求状态名字、数量、布局相同。反过来，两张图长得像也不能代替等价性核对。</p>
+<p>小例子：规则<code>ab*</code>表示a后跟零个或多个b，所以a、abb合法，ba非法。实现可以只记“尚未读a／已经读a／失败”三个阶段；规则描述合法串，状态与转移负责逐字符执行。</p>
 <p><a id="ch02-s02"></a>
 <a id="二符号串与集合运算"></a>
 <a id="符号串与集合运算"></a>
@@ -120,11 +175,11 @@ h2,h3,h4,[id]{scroll-margin-top:0}.stepper{background:#edf6f1;border:1px solid #
 <td>求余，例如 <code>8 mod 3=2</code></td>
 </tr>
 </tbody></table></div>
-<p><strong>字母表</strong>是非空、有穷的符号集合，如 <code>{a,b}</code> 或 <code>{0,1}</code>。符号也可抽象表示事件。这里的“符号集合”与语义阶段保存变量属性的符号表是不同对象。</p>
+<p><strong>字母表</strong> 是非空、有穷的符号集合，如 <code>{a,b}</code> 或 <code>{0,1}</code>。符号也可抽象表示事件。这里的“符号集合”与语义阶段保存变量属性的符号表是不同对象。</p>
 <h3>2.2 串、前后缀与子串</h3>
-<p><strong>符号串</strong>是符号构成的有穷序列，顺序和重复都重要：ab 与 ba 不同，aa 有两个位置。ε 不是一个输入字符，而是没有字符。</p>
+<p><strong>符号串</strong> 是符号构成的有穷序列，顺序和重复都重要：ab 与 ba 不同，aa 有两个位置。ε 不是一个输入字符，而是没有字符。</p>
 <p>若 <code>x=yz</code>，y 是前缀，z 是后缀；真前缀要求 z 非空，真后缀要求 y 非空。对 abc，前缀是 ε、a、ab、abc，真前缀不含 abc；后缀是 abc、bc、c、ε，真后缀不含 abc。</p>
-<p><strong>子串</strong>是连续的一段。abc 的子串按课件约定为 ε、a、b、c、ab、bc、abc，真子串排除自身。ac 跳过了 b，所以不是子串。采用只计非空子串的题目时，应另注约定。</p>
+<p><strong>子串</strong> 是连续的一段。abc 的子串按本章约定为 ε、a、b、c、ab、bc、abc，真子串排除自身。ac 跳过了 b，所以不是子串。采用只计非空子串的题目时，应另注约定。</p>
 <h3>2.3 连接、集合乘积与方幂</h3>
 <p>串连接把后一串接在前一串后面：<code>ab·c=abc</code>。不满足交换律；空串是连接单位，<code>xε=εx=x</code>。定义 <code>x⁰=ε</code>，因此 <code>(ab)³=ababab</code>，不是 aaabbb。</p>
 <p>串集合乘积定义为 <code>AB={xy | x∈A 且 y∈B}</code>。此处集合式中的竖线读作“满足条件”。取 <code>A={a,bc}</code>、<code>B={de,f}</code>，逐一组合得 <code>AB={ade,af,bcde,bcf}</code>，而 <code>BA={dea,debc,fa,fbc}</code>。</p>
@@ -133,7 +188,7 @@ h2,h3,h4,[id]{scroll-margin-top:0}.stepper{background:#edf6f1;border:1px solid #
 <pre><code class="language-text">A+ = A¹ ∪ A² ∪ A³ ∪ …
 A* = A⁰ ∪ A¹ ∪ A² ∪ … = {ε} ∪ A+
 </code></pre>
-<p><strong>正闭包</strong>允许选择一项或多项连接；<strong>星闭包</strong>还允许一项不选。若 <code>A={ab,cd}</code>，A+ 包含 ab、cd、abab、abcd、cdab 等，A* 还含 ε。每次拿整个 ab/cd，不能拆开块内字符。</p>
+<p><strong>正闭包</strong> 允许选择一项或多项连接；<strong>星闭包</strong> 还允许一项不选。若 <code>A={ab,cd}</code>，A+ 包含 ab、cd、abab、abcd、cdab 等，A* 还含 ε。每次拿整个 ab/cd，不能拆开块内字符。</p>
 <p>有限表达式借助“任意有限次重复”描述无限集合。不能无条件说 A+ 不含 ε：若 A 自身含 ε，一次选择它就得到 ε。例如 <code>{ε}+={ε}*</code>。</p>
 <p><a id="ch02-s03"></a>
 <a id="三正则表达式与正则集"></a>
@@ -142,7 +197,7 @@ A* = A⁰ ∪ A¹ ∪ A² ∪ … = {ε} ∪ A+
 <h2>3. 正则表达式与正则集</h2>
 <p>逐个列举合法标识符永远列不完，而“选一种、前后连接、重复若干次”就能把它们紧凑地写出来。正则表达式用这些操作描述一个完整的合法串集合。</p>
 <h3>3.1 递归定义</h3>
-<p><strong>正则表达式（RE）</strong>是串集合的描述工具；其表示的集合叫<strong>正则集</strong>，记为 L(r)。表达式是写法，语言是含义。</p>
+<p><strong>正则表达式（RE）</strong> 是串集合的描述工具；其表示的集合叫<strong>正则集</strong> ，记为 L(r)。表达式是写法，语言是含义。</p>
 <div class="table-scroll"><table>
 <thead>
 <tr>
@@ -183,7 +238,8 @@ A* = A⁰ ∪ A¹ ∪ A² ∪ … = {ε} ∪ A+
 <td><code>L(r)+</code>，一次或多次</td>
 </tr>
 </tbody></table></div>
-<p>只通过有限次使用这些规则得到的表达式才属于本章 RE。<strong>递归定义</strong>允许由较小表达式组合出较大表达式，也提供了后续构造 NFA 的分解路线。</p>
+<p>只通过有限次使用这些规则得到的表达式才属于本章 RE。<strong>递归定义</strong> 允许由较小表达式组合出较大表达式，也提供了后续构造 NFA 的分解路线。</p>
+<p>小例子：先由基本表达式a、b作选择得到(a|b)，再作星闭包得(a|b)*。这两个构造步骤说明递归定义怎样组合表达式；它接受ε和abba，但不接受含c的串。</p>
 <h3>3.2 优先级与例子</h3>
 <p>优先级为：括号 → 闭包 * / + → 连接 → 选择。因此 <code>ab*|c</code> 表示 a 后接零个或多个 b，或者单个 c；星号只作用于 b。</p>
 <div class="table-scroll"><table>
@@ -210,9 +266,9 @@ A* = A⁰ ∪ A¹ ∪ A² ∪ … = {ε} ∪ A+
 <td>所有 a/b 串，包括 ε</td>
 </tr>
 </tbody></table></div>
-<p>课件说运算左结合；连接与选择的同类运算也满足结合律，改变这类括号不会改变语言。</p>
+<p>这里约定运算左结合；连接与选择的同类运算也满足结合律，改变这类括号不会改变语言。</p>
 <h3>3.3 等价与性质</h3>
-<p><code>L(r)=L(s)</code> 时称 r、s <strong>等价</strong>，课件记作 r=s，表示含义相同，不是文本相同。</p>
+<p><code>L(r)=L(s)</code> 时称 r、s <strong>等价</strong> ，也记作 r=s，表示含义相同，不是文本相同。</p>
 <pre><code class="language-text">r|s = s|r                  选择交换律
 r|(s|t) = (r|s)|t         选择结合律
 r(st) = (rs)t             连接结合律
@@ -221,12 +277,12 @@ r(s|t) = rs|rt            左分配律
 rε = εr = r               连接单位律
 (r*)* = r*                星闭包幂等性
 </code></pre>
-<p>选择结合律应写为 <code>r|(s|t)=(r|s)|t</code>，两侧都不能漏选择符；课件 02 第 14 页漏写一处竖线。连接不满足交换律。<code>r|r=r、r|∅=r、r∅=∅r=∅</code> 可从集合意义验证。</p>
+<p>选择结合律为 <code>r|(s|t)=(r|s)|t</code>，两侧都不能漏选择符。连接不满足交换律。<code>r|r=r、r|∅=r、r∅=∅r=∅</code> 可从集合意义验证。</p>
 <p><code>a*a=aa*</code> 都表示至少一个 a；<code>b(ab)*=(ba)*b</code> 都表示从 b 起交替排列，例如 babab=(ba)(ba)b。证明应说明所有可能重复次数，不是仅试几个串。</p>
 <h3>3.4 局限与应用</h3>
-<p>RE 能描述任意长串，却不能用有限状态完整记录无界配对或嵌套。课件 <code>{αcα | α∈{a,b}*}</code> 要求两边任意长串完全相同；任意深度的正确括号要求记住未匹配层数，均不属于本章正则语言。</p>
+<p>RE 能描述任意长串，却不能用有限状态完整记录无界配对或嵌套。本例 <code>{αcα | α∈{a,b}*}</code> 要求两边任意长串完全相同；任意深度的正确括号要求记住未匹配层数，均不属于本章正则语言。</p>
 <p>限定最大长度或嵌套深度后可能可正则描述。一些软件所谓正则含反向引用等超出理论 RE 的扩展，不能混作相同模型。</p>
-<p>课件应用有查找替换、号码识别、安全检测、程序分析、爬虫。格式匹配不能保证内容真实或业务合法，应用仍需相应规则与后续检查。</p>
+<p>应用包括查找替换、号码识别、安全检测、程序分析、爬虫。格式匹配不能保证内容真实或业务合法，应用仍需相应规则与后续检查。</p>
 <p><a id="ch02-s04"></a>
 <a id="从要求写正则表达式"></a>
 <a id="四从要求写正则表达式"></a></p>
@@ -234,6 +290,7 @@ rε = εr = r               连接单位律
 <p>知道选择、连接和闭包的含义后，还要把题目的数量、顺序与禁止条件放到正确位置。下面先找能重复的块，再用最短串和反例检查是否多收或漏收。</p>
 <h3>4.1 两种思路</h3>
 <p>“宽泛→严格”从全部候选串逐步加约束；“基本元→所有串”找到可重复的合法块，再用闭包。最后检查空串、最短串、首尾限制与禁止结构。</p>
+<p>小例子：要求字母表{a,b}上“只有一个a，随后任意多个b”。先固定唯一的a，再接b*，得到ab*。a和abb满足；ba顺序错，aab则多了一个a。</p>
 <h3>4.2 无前导零的二进制偶数</h3>
 <p>全部合法二进制数字先写 <code>1(0|1)*|0</code>。非零偶数末位须为 0，得到 <code>1(0|1)*0|0</code>。0、10、100、110 合法；ε、00、01、11 不合法。只写 <code>(0|1)*0</code> 会接受前导零，只写前一项会漏 0。</p>
 <h3>4.3 含偶数个 x 的 x/y/z 串</h3>
@@ -268,7 +325,7 @@ rε = εr = r               连接单位律
 </tbody></table></div>
 <p>第二题 <code>(01|1)*</code> 多了 ε，<code>(01|1)*1</code> 漏了 01。最短合法串经常能检出表达式错误。</p>
 <h3>4.6 描述程序单词</h3>
-<p>L 表示英文字母，D 表示 0—9，D1 表示 1—9。课件教学规则为：</p>
+<p>L 表示英文字母，D 表示 0—9，D1 表示 1—9。本节教学语言的规则为：</p>
 <pre><code class="language-text">标识符：L(L|D)*
 整数：(+|-|ε)D1D* | 0
 实数：(+|-|ε)(D1D*|0).D*
@@ -284,11 +341,12 @@ rε = εr = r               连接单位律
 <h2>5. 确定有限自动机 DFA</h2>
 <p>正则表达式说明哪些串合法，却还没有给出逐字符识别时该记住什么。自动机把已读前缀的有关信息压缩成有限个状态，每读一个字符就更新一次状态。</p>
 <h3>5.1 五元组与完整性</h3>
-<p><strong>确定有限自动机（DFA）</strong>是 <code>M=(S,Σ,f,s0,Z)</code>：S 有限状态集、Σ 字母表、f 转移函数、s0 唯一初态、Z 接受集。状态概括当前已读前缀中对未来判断有用的信息。</p>
-<p>完整 DFA 有 <code>f:S×Σ→S</code>，每个状态/字符配对恰好有一个后继。课件图常省缺失边，采用部分 DFA：无定义转移立即拒绝。补非接受死态 X，所有缺边指向 X，X 对全部字符自环，即得到完整 DFA。</p>
+<p><strong>确定有限自动机（DFA）</strong> 是 <code>M=(S,Σ,f,s0,Z)</code>：S 有限状态集、Σ 字母表、f 转移函数、s0 唯一初态、Z 接受集。状态概括当前已读前缀中对未来判断有用的信息。</p>
+<p>完整 DFA 有 <code>f:S×Σ→S</code>，每个状态/字符配对恰好有一个后继。作图时可以省略缺失边，采用部分 DFA：无定义转移立即拒绝。补非接受死态 X，所有缺边指向 X，X 对全部字符自环，即得到完整 DFA。</p>
 <p>有限性指状态和字母表有限；确定性指初态唯一、转移唯一、无 ε 边。循环仍能接受无限个不同串。</p>
+<p>小例子：识别偶数个a，取S={E,O}、Σ={a}、初态E、接受集{E}，转移E-a→O、O-a→E。输入aa依次E→O→E接受；五元组每个组成部分都在这两条边与状态标记中有明确对应。</p>
 <h3>5.2 转换矩阵与转换图</h3>
-<p>课件例初态 0、接受态 2，仅有 <code>0-a→1、0-b→2、1-a→2</code>：</p>
+<p>本例初态 0、接受态 2，仅有 <code>0-a→1、0-b→2、1-a→2</code>：</p>
 <div class="table-scroll"><table>
 <thead>
 <tr>
@@ -323,33 +381,10 @@ rε = εr = r               连接单位律
 <td>否</td>
 </tr>
 </tbody></table></div>
-<p>其语言是 <code>{b,aa}</code>。图用结点表示状态、有向标字边表示转换、入口箭头表示初态、双圈表示接受态。课件也用 + 标初态、* 或 - 标接受态；它们是注记而非输入字符。</p>
+<p>其语言是 <code>{b,aa}</code>。图用结点表示状态、有向标字边表示转换、入口箭头表示初态、双圈表示接受态。也可用 + 标初态、* 或 - 标接受态；它们是注记而非输入字符。</p>
 <h3>5.3 接受要读完整串</h3>
-<p>读完全部输入后，状态在 Z 中才接受。aaa 在第二个 a 时已到 2，但第三个 a 进 X，最后拒绝。“终止状态”允许有出边，不表示首次进入就停机。</p>
-<div class="table-scroll"><table>
-<thead>
-<tr>
-<th>课件路径结构</th>
-<th>语言</th>
-<th>说明</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>初态接受，b 自环</td>
-<td>b*</td>
-<td>包括 ε</td>
-</tr>
-<tr>
-<td>先 a，再 b 自环</td>
-<td>ab*</td>
-<td>a 合法，ε 不合法</td>
-</tr>
-<tr>
-<td>先 aba，再 a/b 自环</td>
-<td><code>aba(a|b)*</code></td>
-<td>ab 太短，aabaa 前缀不符，abc 含非法字符</td>
-</tr>
-</tbody></table></div>
+<p>接受需要检查输入已经全部读完。</p>
+<p>小例子：字母表{a}，初态q0，终态q1，另有死态X；转移q0-a→q1、q1-a→X、X-a→X。输入a最终在q1接受；输入aa虽然中途到过q1，最后却在X拒绝。终态标记不表示一到那里就停止读后续字符。</p>
 <h3>5.4 四状态“相邻相同”例</h3>
 <div class="table-scroll"><table>
 <thead>
@@ -391,7 +426,8 @@ rε = εr = r               连接单位律
 <a id="用-dfa-建模与描述单词"></a></p>
 <h2>6. 用 DFA 建模与描述单词</h2>
 <h3>6.1 咖啡机的离散模型</h3>
-<p>课件以待机、待选择、冲调、待取、金额不足等作状态，投币、选择、超时、取咖啡等作事件，说明“当前阶段＋新事件→下一阶段”。真实金额、计时等须归入有限类别或另外保存，不能把任意实际系统无条件视为简单 DFA。</p>
+<p>本例以待机、待选择、冲调、待取、金额不足等作状态，投币、选择、超时、取咖啡等作事件，说明“当前阶段＋新事件→下一阶段”。真实金额、计时等须归入有限类别或另外保存，不能把任意实际系统无条件视为简单 DFA。</p>
+<p>取“金额已足”和“金额不足”两个有限类别。一次正常轨迹为：待机 —投足金额→ 待选择 —选择饮品→ 冲调 —制作完成→ 待取 —取走咖啡→ 待机。若投币后金额不足，则进入金额不足态，再补足金额才转到待选择；此时不能直接开始冲调。状态保存当前阶段，事件触发转换，具体币值累计可由另一个数据变量保存。</p>
 <h3>6.2 合法二进制数能被 3 整除</h3>
 <p>已经读的数值为 n，余数 r，追加位 b 后值为 2n+b，故 <code>r&#39;=(2r+b) mod 3</code>。只记余数 0、1、2；另外安排未读状态 S、单独零状态 Z0、死态 X 排除前导零和空串：</p>
 <div class="table-scroll"><table>
@@ -448,42 +484,45 @@ rε = εr = r               连接单位律
 <a id="七自动机的程序实现"></a>
 <a id="自动机的程序实现"></a></p>
 <h2>7. 自动机的程序实现</h2>
-<p>自动机已经给出状态与转移，还需要把“看当前字符、走一条边”落实成处理步骤。课件分别把边写进控制流程或保存到表中，用来比较两种实现组织方式。</p>
+<p>自动机已经给出状态与转移，还需要把“看当前字符、走一条边”落实成处理步骤。这里分别把边写进控制流程或保存到表中，用来比较两种实现组织方式。</p>
 <h3>7.1 直接转向法</h3>
-<p><strong>直接转向法</strong>把状态写成带标号的条件语句，把边写成跳转。下面是课件 03 第 22 页的非接受状态模板：</p>
+<p><strong>直接转向法</strong> 把状态写成带标号的条件语句，把边写成跳转。下面是非接受状态模板：</p>
 <pre><code class="language-text">Li: switch (CurrentChar) {
     case &#39;a&#39;: NextChar(); goto Lj;
     case &#39;b&#39;: NextChar(); goto Lk;
     default: Error();
 }
 </code></pre>
-<p>处于 i、当前字符为 a 时，先读下一个字符，再转到状态 j 的处理入口；b 同理。其他字符没有出边，调用 Error()。课件第 23 页在接受状态增加 EOF 对应的 Accept()，但未说明 Accept()/Error() 是否终止，不能把报错后继续执行正常处理作为默认行为。</p>
-<p>第 24 页用 <code>(a|b)*cc(a|b)*</code> 展示完整状态跳转：等待第一个 c、等待第二个 c、已读两个 c；最后一阶段仍可读 a/b，第三个 c 则不合法。直接转向适合小自动机，换图通常要改控制代码。</p>
+<p>处于 i、当前字符为 a 时，先读下一个字符，再转到状态 j 的处理入口；b 同理。其他字符没有出边，调用 Error()。接受状态还须在 EOF 时调用 Accept()；这段模板未定义 Accept()/Error() 的完整控制行为，跟踪时只到接受或首次报错，不默认报错后仍继续正常处理。</p>
+<p>对 <code>(a|b)*cc(a|b)*</code>，可以分成三个状态阶段：等待第一个 c、等待第二个 c、已读两个 c；最后一阶段仍可读 a/b，第三个 c 则不合法。直接转向适合小自动机，换图通常要改控制代码。</p>
 <h3>7.2 状态转换矩阵法</h3>
-<p>不把每条边展开成跳转，而是保存转换表 T，由同一套步骤反复查表。课件 03 第 25 页采用中文步骤说明，下面沿用其形式，统一字符箭头：</p>
+<p>不把每条边展开成跳转，而是保存转换表 T，由同一套步骤反复查表。处理步骤如下：</p>
 <ol>
 <li>当前状态 State 置为初始状态。</li>
 <li>读一个字符到 CurrentChar。</li>
 <li>若 CurrentChar 不是 EOF 且 T(State,CurrentChar) 不是 error，则令 <code>State=T(State,CurrentChar)</code>，读下一字符到 CurrentChar，重复第 3 步。</li>
 <li>若当前字符为 EOF 且 State 属于接受状态，则接受整个字符串；否则报错。</li>
 </ol>
-<p>这里的 error 表示表中没有合法转移；EOF 表示输入读完。空串直接检查初态是否接受，不能提前读出一个不存在的普通字符。换 DFA 主要换表，驱动步骤可复用。课件称直接转向为程序中心法，矩阵法为数据中心法；二者空间开销还取决于具体表的存储方式。</p>
+<p>这里的 error 表示表中没有合法转移；EOF 表示输入读完。空串直接检查初态是否接受，不能提前读出一个不存在的普通字符。换 DFA 主要换表，驱动步骤可复用。这里称直接转向为程序中心法，矩阵法为数据中心法；二者空间开销还取决于具体表的存储方式。</p>
+<p>本地小例：字母表{x}，初态0、唯一终态1，T[0,x]=1、T[1,x]=1。输入xx从0到1再到1，EOF时接受；空输入停在0拒绝。表只保存这两条边，通用驱动不因换了规则而改动循环步骤。</p>
 <h3>7.3 NFA 为何不能原样套单状态驱动</h3>
-<p>上述方法默认一次只处于一个状态。NFA 同一字符可能有多个后继，不能任选一个；可以确定化后驱动，也可保存状态集合直接模拟。课件“不能直接实现”指不能原封不动套此单状态算法，不是 NFA 无法用程序实现。</p>
+<p>上述方法默认一次只处于一个状态。NFA 同一字符可能有多个后继，不能任选一个；可以确定化后驱动，也可保存状态集合直接模拟。因此 NFA 不能原封不动套用上述单状态驱动，但可以由程序保存集合来实现。</p>
+<p>小例子：状态s读a可同时到p、q，仅q能再读b到终态f。输入ab存在成功分支s→q→f；若程序任意只保留p，就会误拒绝。需要保留{p,q}，不能任选一个后继。</p>
 <p><a id="ch02-s08"></a>
 <a id="八非确定有限自动机-nfa"></a>
 <a id="非确定有限自动机-nfa"></a></p>
 <h2>8. 非确定有限自动机 NFA</h2>
 <p>直接拼接多条单词规则时，同一前缀可能对应多个候选方向，还可能需要不读字符就进入另一个片段。NFA 允许把这些可能性一起保留下来，便于构造规则模型。</p>
 <h3>8.1 定义与接受条件</h3>
-<p>课件的含 ε、多初态 <strong>NFA</strong> 是 <code>M=(S,Σ,f,S0,Z)</code>，其中 <code>f:S×(Σ∪{ε})→2^S</code>，S0、Z 均为状态集合。后继可有零个、一个或多个；ε 边不消费字符。</p>
-<p>接受要求<strong>至少存在一条路径</strong>读完整个串并到接受态。其他分支失败不影响成功分支，也不要求所有路径成功。另一些教材采用单初态并将 ε-NFA 单列，可以通过加新初态和 ε 边相互转换。</p>
+<p>含 ε、多初态 <strong>NFA</strong> 是 <code>M=(S,Σ,f,S0,Z)</code>，其中 <code>f:S×(Σ∪{ε})→2^S</code>，S0、Z 均为状态集合。后继可有零个、一个或多个；ε 边不消费字符。</p>
+<p>接受要求<strong>至少存在一条路径</strong> 读完整个串并到接受态。其他分支失败不影响成功分支，也不要求所有路径成功。另一些教材采用单初态并将 ε-NFA 单列，可以通过加新初态和 ε 边相互转换。</p>
+<p>小例子：初态S、终态F，S读a分别到P和F，P没有后继。输入a有一条分支失败、一条在F成功，因此接受；“存在一条成功路径”不等于所有路径都成功。</p>
 <h3>8.2 以 01 结尾</h3>
 <p>s0 初态，s2 接受：s0 在 0/1 上自环，另有 <code>s0-0→s1、s1-1→s2</code>，s2 无出边。每遇 0，可继续等待或猜它是倒数第二位。1001 选择在最后一个 0 离开 s0，读末尾 1 到 s2，接受。过早选择的分支可能失败，但还有其他分支。</p>
 <p>语言为 <code>(0|1)*01</code>。末态无出边保证 01 在结尾，而非只在中间出现。整数的可选符号也可用 ε 分支表示不带符号，比逐个复制数字路径方便。</p>
-<h3>8.3 课件同页定义冲突</h3>
-<p>04 第 5 页函数文字给初态 <code>{s0,s1}</code>、接受态 <code>{s2}</code>，<code>s1-ε→s2</code>，且 s2 在 a/b 上自环。按该函数定义，初始便可到接受态，再读任意 a/b 串，因此语言为 <code>(a|b)*</code>，包括 ε。</p>
-<p>同页 s0 转换表与文字不一致，不能当作同一个已确定模型。这里以明确列出的函数解释多初态和 ε 接受；原页究竟拟以哪版为准，需要教师确认或修订。算法开始前必须先给出一致的转换定义。</p>
+<h3>8.3 多初态与 ε 接受的完整例子</h3>
+<p>给定状态 <code>{s0,s1,s2}</code>，字母表 <code>{a,b}</code>，初态集 <code>{s0,s1}</code>，接受态集 <code>{s2}</code>。非空转移完整列为：<code>f(s0,a)={s0,s1}</code>、<code>f(s0,b)={s2}</code>、<code>f(s1,ε)={s2}</code>、<code>f(s2,a)=f(s2,b)={s2}</code>；其余转移均为空集。</p>
+<p>初始闭包含 s2，所以空串接受。对任意非空 a/b 串，也可从 s1 不读字符地到 s2，再在 s2 读完整个串，因此语言为 <code>(a|b)*</code>。这里既不能只选 s0 而丢掉另一初态，也不能把 ε 当作需要读取的字符。</p>
 <p><a id="ch02-s09"></a>
 <a id="九子集法确定化"></a>
 <a id="子集法确定化"></a>
@@ -491,13 +530,9 @@ rε = εr = r               连接单位律
 <h2>9. 子集法确定化</h2>
 <p>NFA 可能同时有多条路径，而单状态驱动每步只能保存一个状态。把“当前所有可能的 NFA 状态”看成一个整体，就能让这个集合按输入唯一地转移，得到等价 DFA。</p>
 <h3>9.1 ε 闭包与字符转换</h3>
-<p><strong>ε 闭包</strong> <code>E(I)=ε_CLOSURE(I)</code> 收集从集合 I 出发，经零条或多条 ε 边可到的全部状态，必须包含 I 自身。把 I 入结果和待处理栈，不断加入尚未出现的 ε 后继，栈空结束。“已出现”集合防止 ε 环造成无限循环。</p>
-<p>课件例 <code>E({1})={1,2}</code>、<code>E({1,5})={1,2,5,6}</code>。计算闭包不能顺手走 a/b 边，它们需要输入。</p>
-<p><strong>move(I,a)</strong> 是 I 中各状态读一个 a 后的后继并集；然后再走 ε：</p>
-<pre><code class="language-text">move(I,a) = ∪q∈I f(q,a)
-Ia = E(move(I,a))
-</code></pre>
-<p>课件 <code>move({1,2},a)={4,5}</code>，再 <code>E({4,5})={2,4,5,6,7}</code>。先字符转换、再闭包，漏掉后一次闭包会漏成功分支。</p>
+<p>闭包只走不消耗输入的ε边，字符转换则恰好读一个字符，这两个步骤要分开。</p>
+<p>小例子：状态p、q、r，唯一ε边p→q，唯一字符边q-a→r，未列边为空。于是E({p})={p,q}；从{p,q}读a得到move({p,q},a)={r}；r没有ε边，所以再次求闭包仍是{r}。不能在初次闭包中就走到r，因为那需要消耗a。</p>
+<p>一般写作<code>Ia=E(move(I,a))</code>。E包含集合自身，并沿ε边反复扩展，记录已加入的状态可防止ε环导致重复处理。</p>
 <h3>9.2 算法与终止理由</h3>
 <p>把 NFA 的所有可能状态组成的集合看成 DFA 的一个状态：</p>
 <ol>
@@ -508,125 +543,37 @@ Ia = E(move(I,a))
 <li><code>I∩Z≠∅</code> 时 I 是接受态。</li>
 </ol>
 <p>含一个原接受态就够，因为 NFA 接受要求存在成功路径。若原有 n 状态，子集至多 2ⁿ 个，因此算法会停止；只构造实际可达子集，不必预先列出全部幂集。</p>
-<p>∅ 是完整 DFA 的死态，对所有字符仍到 ∅。课件省略空子集时是部分 DFA。集合排序不影响身份，不能把同一集合的不同排列当作新状态。</p>
-<h3>9.3 九状态课件例的确定化表</h3>
-<p>按课件 04 第 16 页明确表格命名：</p>
+<p>∅ 是完整 DFA 的死态，对所有字符仍到 ∅。省略空子集及相应边时就采用了部分 DFA 的约定。集合排序不影响身份，不能把同一集合的不同排列当作新状态。</p>
+<p>小例子：NFA初态u、终态v，只有u-a→v，字母表{a}，无ε边。确定化初态{u}，读a到{v}，再读a到∅，而∅继续读a仍到∅。共三个可达子集，其中只{v}接受；状态数有限，待处理队列最终清空。</p>
+<h3>9.3 用两个状态做一次完整确定化</h3>
+<p>小例子：NFA的状态为s、t，初态s，唯一终态t；字母表{a}，仅有<code>s-a→s</code>和<code>s-a→t</code>两条边，无ε边。</p>
+<p>确定化初态为A={s}，读a到B={s,t}；B读a仍到B。完整可达表是：</p>
 <div class="table-scroll"><table>
 <thead>
 <tr>
-<th>DFA 状态</th>
-<th>原集合</th>
+<th>子集名</th>
+<th>NFA状态集合</th>
 <th>a</th>
-<th>b</th>
 <th>接受？</th>
 </tr>
 </thead>
 <tbody><tr>
 <td>A</td>
-<td>{1,2}</td>
+<td>{s}</td>
 <td>B</td>
-<td>C</td>
-<td>否</td>
-</tr>
-<tr>
-<td>B</td>
-<td>{2,4,5,6,7}</td>
-<td>X</td>
-<td>D</td>
-<td>是</td>
-</tr>
-<tr>
-<td>C</td>
-<td>{3,8}</td>
-<td>E</td>
-<td>X</td>
-<td>否</td>
-</tr>
-<tr>
-<td>D</td>
-<td>{3,8,9}</td>
-<td>E</td>
-<td>X</td>
-<td>是</td>
-</tr>
-<tr>
-<td>E</td>
-<td>{9}</td>
-<td>X</td>
-<td>X</td>
-<td>是</td>
-</tr>
-<tr>
-<td>X</td>
-<td>∅</td>
-<td>X</td>
-<td>X</td>
-<td>否</td>
-</tr>
-</tbody></table></div>
-<p>处理 A 发现 B/C，处理 B 发现 D，处理 C/D 发现 E，补 X。按该表语言为 <code>{a,ab,aba,ba}</code>：aba 到 E 接受，abaa 再到 X 拒绝。接受标记依据课件结果表，不从文字抽取里不明确的原图圈线猜测。</p>
-<h3>9.4 x/y 练习的七个子集</h3>
-<div class="table-scroll"><table>
-<thead>
-<tr>
-<th>状态</th>
-<th>原集合</th>
-<th>a</th>
-<th>b</th>
-<th>接受？</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>A</td>
-<td>{x,5,1}</td>
-<td>B</td>
-<td>C</td>
 <td>否</td>
 </tr>
 <tr>
 <td>B</td>
-<td>{5,1,3}</td>
-<td>D</td>
-<td>C</td>
-<td>否</td>
-</tr>
-<tr>
-<td>C</td>
-<td>{5,1,4}</td>
+<td>{s,t}</td>
 <td>B</td>
-<td>E</td>
-<td>否</td>
-</tr>
-<tr>
-<td>D</td>
-<td>{5,1,3,2,6,y}</td>
-<td>D</td>
-<td>F</td>
-<td>是</td>
-</tr>
-<tr>
-<td>E</td>
-<td>{5,1,4,2,6,y}</td>
-<td>G</td>
-<td>E</td>
-<td>是</td>
-</tr>
-<tr>
-<td>F</td>
-<td>{5,1,4,6,y}</td>
-<td>G</td>
-<td>E</td>
-<td>是</td>
-</tr>
-<tr>
-<td>G</td>
-<td>{5,1,3,6,y}</td>
-<td>D</td>
-<td>F</td>
 <td>是</td>
 </tr>
 </tbody></table></div>
-<p>初态为 <code>E({x})={x,5,1}</code>，读 a 到 B，再 a 到 D；读 b 到 C，再 b 到 E。D—G 都含 y。它们任意 a/b 后继仍在这四接受态中，因此任意后缀均接受，后续可合并成一态，得到 5.4 的含 aa/bb 四状态模型。</p>
+<p>输入a或aa都到B接受，空串在A拒绝。子集包含t即接受，不要求集合中的每个状态都是终态。较长的九状态题集中在综合练习。</p>
+<h3>9.4 初态闭包也属于确定化的一步</h3>
+<p>小例子：初态1、终态3，边为1-ε→2、2-b→3，其他边为空。初始子集是{1,2}，不是只取{1}；读b后子集为{3}，可以接受。ε已经在闭包中处理，驱动过程中不额外读取一个“ε字符”。</p>
+<p>若字母表仅含b，再读一个b就到空子集拒绝。这一小例体现“初态也必须先求ε闭包”。</p>
 <p><a id="ch02-s10"></a>
 <a id="dfa-最小化"></a>
 <a id="十dfa-最小化"></a>
@@ -634,13 +581,14 @@ Ia = E(move(I,a))
 <h2>10. DFA 最小化</h2>
 <p>确定化可能产生多个状态，但有些状态对所有后续输入都作出相同判断。最小化找出并合并这些重复信息，在不改变接受语言的前提下减少状态。</p>
 <h3>10.1 等价看所有未来后缀</h3>
-<p>从 q1、q2 出发，对任意后缀 w 都同样接受或拒绝，则两状态<strong>等价</strong>；存在一个 w 让它们表现不同，则<strong>可区分</strong>，w 是证据。</p>
+<p>从 q1、q2 出发，对任意后缀 w 都同样接受或拒绝，则两状态<strong>等价</strong> ；存在一个 w 让它们表现不同，则<strong>可区分</strong> ，w 是证据。</p>
 <p>接受与非接受用 ε 区分；两个非接受态也可能被 a 区分。不同名字、不同入边不构成不等价证据；读 a 到不同结点也不足，因为两个后继可能等价。</p>
+<p>小例子：P、Q都不是终态，P-a→F，Q-a→X，其中F接受、X拒绝且自环。后缀a能区分P、Q；只看当前两者都拒绝是不够的。</p>
 <h3>10.2 无关状态与死态约定</h3>
-<p>课件将初态不可达，或不能再到接受态的状态称为无关状态。不可达状态从识别模型中去掉不影响语言；可达但无法接受的状态，完整 DFA 中应保留为统一的非接受死态。部分 DFA 可省略死态及相关边。</p>
+<p>这里将初态不可达，或不能再到接受态的状态称为无关状态。不可达状态从识别模型中去掉不影响语言；可达但无法接受的状态，完整 DFA 中应保留为统一的非接受死态。部分 DFA 可省略死态及相关边。</p>
 <p>所以部分最简三状态与完整最简四状态可能都正确，必须说明是否计死态。空语言的完整 DFA 也须一个非接受初态，不能化简成零状态。</p>
 <h3>10.3 状态分离法</h3>
-<p><strong>划分</strong>由互不相交且覆盖状态集的块组成。先分接受/非接受；对块内状态按各字符后继所属块细分，重复到稳定。</p>
+<p><strong>划分</strong> 由互不相交且覆盖状态集的块组成。先分接受/非接受；对块内状态按各字符后继所属块细分，重复到稳定。</p>
 <pre><code class="language-text">P0 = {Z, S\Z}，空块不计
 每轮：对每块内 q 计算签名
 signature(q)=(block(f(q,a1)),…,block(f(q,ak)))
@@ -648,141 +596,16 @@ signature(q)=(block(f(q,a1)),…,block(f(q,ak)))
 稳定后：每块合成一态，边指向后继的块
 </code></pre>
 <p>ai 枚举字母表，block(q) 是当前块编号。必须比较后继所属块，不是原状态编号。某后继块拆开后，前面暂时不可分的块又可能可分，所以不能只检查一轮。</p>
-<h3>10.4 八状态课件例</h3>
-<p>初分 <code>{1,2,3,5}/{4,6,7,8}</code>；第一块的 b 后继为 <code>3、4、3、7</code>，按非接受/接受拆成 <code>{1,3}</code> 与 <code>{2,5}</code>。接受块的 b 后继 <code>6、6、8、8</code> 仍属接受块。</p>
-<p>1/3 的 a 到 2，4/6/7/8 的 a 到 5。讲者备注说明 2 的 a 缺省失败；结合课件稳定块 <code>{2,5}</code>，采用该部分 DFA 口径得到：</p>
-<div class="table-scroll"><table>
-<thead>
-<tr>
-<th>商状态</th>
-<th>原块</th>
-<th>a</th>
-<th>b</th>
-<th>接受？</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>A</td>
-<td>{1,3}</td>
-<td>B</td>
-<td>A</td>
-<td>否</td>
-</tr>
-<tr>
-<td>B</td>
-<td>{2,5}</td>
-<td>X</td>
-<td>C</td>
-<td>否</td>
-</tr>
-<tr>
-<td>C</td>
-<td>{4,6,7,8}</td>
-<td>B</td>
-<td>C</td>
-<td>是</td>
-</tr>
-<tr>
-<td>X</td>
-<td>缺省拒绝态</td>
-<td>X</td>
-<td>X</td>
-<td>否</td>
-</tr>
-</tbody></table></div>
-<p>图中省略 X 时计三个有效态。这一结果以表中的缺边拒绝约定为前提；若 B 在 a 上另有合法转移，必须重新进行状态划分。</p>
-<h3>10.5 五状态练习</h3>
-<p>这一最小化练习的初态为 1，只有 5 为接受态。原图中 3、5 之间的 a 弧方向尚不能确定；下面按 5-a→3 的解释列出转移表，所有划分和结果都以此表为前提：</p>
-<div class="table-scroll"><table>
-<thead>
-<tr>
-<th>原状态</th>
-<th>a</th>
-<th>b</th>
-<th>接受？</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>→1</td>
-<td>3</td>
-<td>2</td>
-<td>否</td>
-</tr>
-<tr>
-<td>2</td>
-<td>3</td>
-<td>2</td>
-<td>否</td>
-</tr>
-<tr>
-<td>3</td>
-<td>3</td>
-<td>4</td>
-<td>否</td>
-</tr>
-<tr>
-<td>4</td>
-<td>3</td>
-<td>5</td>
-<td>否</td>
-</tr>
-<tr>
-<td>*5</td>
-<td>3</td>
-<td>2</td>
-<td>是</td>
-</tr>
-</tbody></table></div>
-<p>3 已有 a 自环，DFA 的同一状态读 a 不能再有另一后继，这支持把该弧解释为 5-a→3。但原图方向仍需确认；若转移定义不同，应从初始划分重新计算。</p>
-<p>备注给分离过程：</p>
-<pre><code class="language-text">{1,2,3,4}/{5}
-→ {1,2,3}/{4}/{5}
-→ {1,2}/{3}/{4}/{5}
-</code></pre>
-<p>第一轮 b 分出 4；第二轮 3 的 b 后继落在新块 <code>{4}</code>，1/2 的 b 仍落在同一非接受块，因此分出 3。1/2 的 a 都到 3，b 留在 <code>{1,2}</code>，可以合并。</p>
-<p>稳定划分为 <code>{1,2}/{3}/{4}/{5}</code>，四块的 a 后继都为 <code>{3}</code>，b 后继依次为 <code>{1,2}/{4}/{5}/{1,2}</code>。因此最小 DFA 完整表是：</p>
-<div class="table-scroll"><table>
-<thead>
-<tr>
-<th>商状态</th>
-<th>原块</th>
-<th>a</th>
-<th>b</th>
-<th>接受？</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>→A</td>
-<td>{1,2}</td>
-<td>B</td>
-<td>A</td>
-<td>否</td>
-</tr>
-<tr>
-<td>B</td>
-<td>{3}</td>
-<td>B</td>
-<td>C</td>
-<td>否</td>
-</tr>
-<tr>
-<td>C</td>
-<td>{4}</td>
-<td>B</td>
-<td>D</td>
-<td>否</td>
-</tr>
-<tr>
-<td>*D</td>
-<td>{5}</td>
-<td>B</td>
-<td>A</td>
-<td>是</td>
-</tr>
-</tbody></table></div>
-<p>该表所有字符转移已定义，无需额外死态。abb 走 A→B→C→D，接受；abbb 再到 A，拒绝。最短接受后缀分别是 A:abb、B:bb、C:b、D:ε，四态可区分，不能继续合并。</p>
+<p>小例子：字母表{a}，状态u、v非接受，f接受；u读a到v，v读a到f，f自环。初分{u,v}/{f}，比较a后继的块后拆成{u}/{v}/{f}。本例一轮达到稳定，更多状态时应继续检查到没有新分块。</p>
+<h3>10.4 三状态小例：合并与不可达删除</h3>
+<p>小例子：字母表{a}，初态P，唯一终态F；转移为P-a→Q、Q-a→Q、F-a→F。F从P不可达，接受串集合为空。划分先分{P,Q}/{F}；P、Q读a都落入{P,Q}，可以合并；去掉不可达F后，只剩一个非接受自环状态，仍识别空语言。</p>
+<p>这里区分了“状态等价合并”与“初态不可达删除”，不是凭状态名字相近进行合并。</p>
+<h3>10.5 三状态小例：用后继所在块分离</h3>
+<p>小例子：字母表{a}，初态A，终态C，转移A-a→B、B-a→C、C-a→C。初分{A,B}/{C}。A的a后继在非接受块，B的a后继在接受块，因此A、B必须拆开，最终三块。</p>
+<p>最短区分证据是后缀a：从A读a到B拒绝，从B读a到C接受。不能因A、B目前都不接受就直接合并。</p>
 <h3>10.6 扫描器还须按动作分组</h3>
 <p>普通识别器只关心接受/拒绝；扫描器还输出 Token。其初分应把返回不同类别或不同优先动作的接受态分开，再按后继细分，否则可能丢失单词类别。</p>
+<p>小例子：扫描器只识别单字母标识符x和单数字整数2。读x到终态I，动作返回id；读2到终态N，动作返回int。虽然I、N都接受，仍须分成不同初始组，否则合并后无法决定该返回哪一种Token。</p>
 <p><a id="ch02-s11"></a>
 <a id="十一正则表达式与自动机相互转换"></a>
 <a id="正则表达式与自动机相互转换"></a></p>
@@ -792,7 +615,8 @@ signature(q)=(block(f(q,a1)),…,block(f(q,ak)))
 <p>每个 RE 都有等价 NFA，每个 NFA 都有等价 RE，DFA 又是 NFA 特例，故它们描述同一类正则语言：<code>RE⇄NFA→DFA→最小DFA</code>。NFA 便于拼规则，DFA 便于单状态执行。</p>
 <h3>11.2 RE 到 NFA</h3>
 <p>为每个片段安排入口出口：ε 用 ε 边，∅ 不提供通路，字符 a 用一条 a 边；rs 串联两个片段；<code>r|s</code> 用新入口 ε 分叉、出口 ε 汇合；r* 允许跳过片段、进入并循环片段、最后退出。按表达式树递归，直到只剩字符和 ε 边。</p>
-<p>课件 <code>(a|b)*aa</code> 可简化为：0 在 a/b 自环，另有 <code>0-a→1、1-a→2</code>，2 接受。它在任意前段后猜最后两个 a 的位置；abaa 的成功路径最后两个 a 依次离开 0 到 1、2。</p>
+<p>本例 <code>(a|b)*aa</code> 可简化为：0 在 a/b 自环，另有 <code>0-a→1、1-a→2</code>，2 接受。它在任意前段后猜最后两个 a 的位置；abaa 的成功路径最后两个 a 依次离开 0 到 1、2。</p>
+<p>三种构造可用入口 s、出口 t 逐项对应。连接 <code>ab</code>：<code>s-a→u-b→t</code>，读 ab 到出口；选择 <code>a|b</code>：s 用两条 ε 边分到两个分支，分别读 a 或 b，再经 ε 汇入 t，所以只接受 a、b。闭包 <code>a*</code>：s 可用 ε 直接到 t，也可用 ε 进入读 a 的分支；分支末端用 ε 返回分支开头或到 t，所以接受 ε、a、aa 等。新入口和新出口由构造分配，ε 边负责拼接结构且不消费字符。</p>
 <h3>11.3 ε 边不能随意省</h3>
 <p><code>ab|d*</code> 只能是恰好 ab，或任意个 d。若 d 自环共享给 ab 的起点或终点，就可能错误接受 dab 或 abd。选择分支要隔离，闭包只循环自己的片段。</p>
 <p>独立片段中某 ε 边可简化，不代表放进复杂表达式后还能照样省掉。先使用通用构造，再确定化消除 ε，比凭直觉改连边可靠。</p>
@@ -801,9 +625,10 @@ signature(q)=(block(f(q,a1)),…,block(f(q,ak)))
 <pre><code class="language-text">Rij(new) = Rij(old) | Rik(old)(Rkk(old))*Rkj(old)
 </code></pre>
 <p>Rij 是 i→j 边标签，无边为 ∅。第一项保留不经 k 的路；第二项先到 k，在 k 循环零次或多次，再离开到 j。一次消除用同批旧标签计算，不能让中途更新混入。</p>
-<p>串联是连接、并行是选择、自环是闭包。最后 S→Z 标签即结果。课件 05 第 13—15 页中间两条路合为 ab|ba，后段为 a*b，再接开头 a，得到 <code>a(ab|ba)a*b</code>。不能把中段取星闭包，那会新增重复路径。</p>
+<p>串联对应连接，并行对应选择，自环对应闭包。消去中间状态后，S→Z 的标签就是结果。下面用一个完整边集说明：</p>
+<p>给定一个可逐步消状态的图：初态 S、接受态 Z，边为 <code>S-a→p、p-a→q、q-b→r、p-b→v、v-a→r、r-a→r、r-b→Z</code>，其余无边。消 q 得 p 到 r 的路径 ab，消 v 得另一条 ba，并联合为 <code>ab|ba</code>；r 的自环允许零个或多个 a，所以消 r 后 p 到 Z 的标签为 <code>(ab|ba)a*b</code>。最后接 S 到 p 的 a，结果是 <code>a(ab|ba)a*b</code>。输入 aabb 可取中段 ab、零次自环、末尾 b，接受；中段不能无条件重复。</p>
 <h3>11.5 <code>(a|b)(c|d)*(e|f)</code> 综合例</h3>
-<p>课件 NFA：0-a/b→1-ε→2，2 在 c/d 自环，2-ε→3-e/f→4，4 接受。确定化：</p>
+<p>给定 NFA：0-a/b→1-ε→2，2 在 c/d 自环，2-ε→3-e/f→4，4 接受。确定化：</p>
 <div class="table-scroll"><table>
 <thead>
 <tr>
@@ -863,12 +688,12 @@ signature(q)=(block(f(q,a1)),…,block(f(q,ak)))
 <h2>12. 词法分析器的整体设计</h2>
 <p>前面判断的是一个给定串是否属于某种语言，真正扫描源码还要连续返回不同类别的单词。现在要把各自动机、Token 编码和与语法分析器的接口放在同一流程中。</p>
 <h3>12.1 接口先确定</h3>
-<p>课件给独立一遍与调用子程序两种方式。独立扫描输出 Token 文件，语法分析再读取，便于观察阶段结果；调用式由语法分析每需要单词就调用 <code>nextToken()</code>，避免中间文件。两者都须约定 Token、EOF、错误和位置信息。</p>
+<p>扫描器可采用独立一遍与调用子程序两种方式。独立扫描输出 Token 文件，语法分析再读取，便于观察阶段结果；调用式由语法分析每需要单词就调用 <code>nextToken()</code>，避免中间文件。两者都须约定 Token、EOF、错误和位置信息。</p>
 <p>调用式需要在调用间保存读头，不能每次从文件头重扫；独立方式则要保存内容索引表，不能只传一个脱离表的索引数字。</p>
 <h3>12.2 单词分类与 Token</h3>
-<p>课件分保留字、标识符、常量、特殊符号，后者含运算符、界限符、格式符。类别取决于语言含义和后续分析需求。保留字是否禁止用于普通名字取决于语言；关键字与在所有上下文都保留的字也应区别。</p>
+<p>这里分保留字、标识符、常量、特殊符号，后者含运算符、界限符、格式符。类别取决于语言含义和后续分析需求。保留字是否禁止用于普通名字取决于语言；关键字与在所有上下文都保留的字也应区别。</p>
 <p>Token 常为 <code>&lt;种别,内容&gt;</code>，也可加入行列与范围。种别供语法使用，内容给语义提供名字或常量。保留字可每字一类，也可统一类并存拼写；标识符通常统一 id 类；常量可按类型分类。</p>
-<p>课件编码例：标识符类 1、常量类 2，内容为各自索引；保留字/特殊符号各有固定编号，内容为空。固定表预先建立，名字表与常量表随扫描新增。</p>
+<p>一种具体编码方案是：标识符类 1、常量类 2，内容为各自索引；保留字/特殊符号各有固定编号，内容为空。固定表预先建立，名字表与常量表随扫描新增。</p>
 <h3>12.3 <code>if(x&gt;10)y=x;</code> 的完整 Token 表</h3>
 <div class="table-scroll"><table>
 <thead>
@@ -940,7 +765,7 @@ signature(q)=(block(f(q,a1)),…,block(f(q,ak)))
 <h2>13. 连续扫描与边界处理</h2>
 <h3>13.1 最长匹配与优先级</h3>
 <p>源码中没有给每个单词预先划边界，例如 &gt; 后还可能接 =，if 后还可能接字母。扫描器必须继续尝试更长词素，并能回到最近一次合法边界，才能决定本次返回什么。</p>
-<p><strong>最长匹配</strong>在当前位置选最长合法词素。看到 &gt; 先记录候选，再试 =；看到 if 不能立即结束，因为后面的 x 可使整个 ifx 成为标识符。</p>
+<p><strong>最长匹配</strong> 在当前位置选最长合法词素。看到 &gt; 先记录候选，再试 =；看到 if 不能立即结束，因为后面的 x 可使整个 ifx 成为标识符。</p>
 <p>保存当前状态、读头及最近一次接受的位置和动作。一直试到无边，再回到最近接受位置，返回那段词素；多读的后续字符交给下一次扫描。</p>
 <p>同样长度再按优先级。例如 if 同时满足保留字与标识符，选择保留字；也可先识别完整标识符，再查保留字表。先按长度、后分类，避免把 ifx 错切为 if 与 x。</p>
 <h3>13.2 跟踪 <code>ifx&gt;=10</code></h3>
@@ -950,15 +775,17 @@ signature(q)=(block(f(q,a1)),…,block(f(q,ak)))
 <h3>13.3 数值与位置</h3>
 <p>识别出十进制数字字符后仍需数值转换；逐位可用 <code>v=10v+d</code>，d 为新数字值。还须按类型检查范围、格式和舍入。识别字符与得到可运算数值不是同一工作。</p>
 <p>空白和注释常不返回语法 Token，但要更新行列号。向前看与回退时位置也须恢复或以保存值计算。制表符、换行编码需要统一约定。</p>
+<p>例如扫描十进制 <code>207</code>，初值 value=0；依次读 2、0、7，按 <code>value←10×value+digit</code> 得到 <code>0→2→20→207</code>。digit 是字符对应的数值，不是字符编码。Token 的起始位置在读 2 时保存，扫描结束位置在 7 之后，供后续诊断定位。</p>
 <h3>13.4 注释、字符串与预处理</h3>
 <p>进入注释后按结束规则整体扫描，不能把其中中文逐个当非法标识符报错。字符串需要处理转义和未闭合；注释是否可嵌套由语言规定，任意深度嵌套不能直接由普通 RE 完整表达。</p>
 <p>C 的宏替换、#include 属于预处理安排。教学词法可以明确范围；真实实现要安排它们与扫描的关系。</p>
 <p><code>12e+q</code> 的错误范围取决于是否支持指数数字及诊断规则，可能整体报无效数字，也可能按规定合法前缀分词。最长匹配不能自动决定错误策略；必须保证不悄悄吞字符、诊断位置明确且有进展。</p>
+<p>例如教学语言允许双引号字符串和 <code>/*…*/</code> 注释时，<code>&quot;a+b&quot; /* + */ x</code> 应产生一个字符串 Token 和一个 id Token：字符串内的 + 属于字符串内容，注释内的 + 被跳过，都不能输出为加号 Token。进入字符串、注释状态后要按相应结束规则扫描；若直到 EOF 仍未闭合，则报告未闭合错误。转义字符是否支持、怎样解释，应由该语言的词法规则另行明确。</p>
 <p><a id="ch02-s14"></a>
 <a id="十四综合练习"></a>
 <a id="综合练习"></a></p>
 <h2>14. 综合练习</h2>
-<p>下面沿用课件综合题，把表达式分解、NFA、子集构造和最小化连续做完。每一步都使用上一阶段的明确转移定义，避免只凭图形相似判断正确。</p>
+<p>下面沿同一道综合题，把表达式分解、NFA、子集构造和最小化连续做完。每一步都使用上一阶段的明确转移定义，避免只凭图形相似判断正确。</p>
 <h3>14.1 分解 <code>a((a|b)*ab*a)b</code></h3>
 <p>语言为：开头 a、任意 a/b 段、a、任意个 b、a、结尾 b。最短 aaab。中段与后段共享 a/b，NFA 需要同时保留多个“后段开始位置”。</p>
 <p>取等价简洁 NFA：0 初态，4 接受；0-a→1；1 在 a/b 自环，另有 1-a→2；2 在 b 自环，2-a→3；3-b→4。未列边为空。</p>
@@ -996,7 +823,7 @@ signature(q)=(block(f(q,a1)),…,block(f(q,ak)))
 <td>∅</td>
 </tr>
 </tbody></table></div>
-<p>此图是题目语言的另一种构造，编号不强行对应课件原图。</p>
+<p>这个构造的状态身份由上列转移定义，下面再比较另一套编号的等价模型。</p>
 <h3>14.2 确定化的全部状态</h3>
 <div class="table-scroll"><table>
 <thead>
@@ -1052,7 +879,9 @@ signature(q)=(block(f(q,a1)),…,block(f(q,ak)))
 </tr>
 </tbody></table></div>
 <p>B 读 a：1→{1,2}、2→{3}，合成 C；C 读 b：1→1、2→2、3→4，合成 D；D 再读 b 则 4 分支消失，回 B。因此“曾接受”不能取代最后接受。</p>
-<h3>14.3 按课件原 ε-NFA 构造</h3>
+<h3>14.3 另一套 ε-NFA 的完整构造</h3>
+<p>为了复现这套状态编号，给定 NFA 初态 S、唯一接受态 Z；ε 边为 <code>A→F、F→D、E→F、E→G、G→C</code>；字符边为 <code>S-a→A、F-a→E、F-b→F、C-a→B、G-b→G、B-b→Z</code>；其余为空。状态名 S、A、F、D、E、G、C、B、Z 都是单独结点。</p>
+<p>读第一个 a 后得到 A，再沿 ε 到 F、D，故表中状态 1 是 <code>{A,F,D}</code>；从中读 a 得 E，ε 闭包补入 F、D、G、C，故到状态 2。只有子集含 Z 才接受。按同一规则逐行求得下表，再与第 14.1—14.2 节的构造比较语言。</p>
 <div class="table-scroll"><table>
 <thead>
 <tr>
@@ -1125,10 +954,335 @@ signature(q)=(block(f(q,a1)),…,block(f(q,ak)))
 <p>从接受/非接受开始，C 被 b 区分，B 被 a 指向 C 区分，A 被 a 指向 B 区分，P 再被 a 指向 A 区分，稳定后各态独立。</p>
 <p>各态最短接受后缀为 D:ε、C:b、B:ab、A:aab、P:aaab；X 无接受后缀。距离不同提供不等价证据。因此最简为五个有效态，完整六态。</p>
 <p>aaab：P→A→B→C→D，接受；aab 停 B 拒绝；aaabb 再从 D 到 B 拒绝。有限样例用于检查，构造和状态对应提供主要等价性依据。</p>
+<h3>14.5 九状态NFA的完整确定化练习</h3>
+<p>为把闭包和后面的确定化表连起来，本节统一采用下面这份完整 NFA 题设：状态为 1—9，字母表 <code>{a,b}</code>，初态 1，接受态 <code>{7,9}</code>；未列转移均为空。下面的边表是本例计算的定义，不要求读者从图中辨认箭头。</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>输入</th>
+<th>全部非空边</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>ε</td>
+<td>1→2，4→7，5→2，5→6</td>
+</tr>
+<tr>
+<td>a</td>
+<td>1→4，1→5，3→9，8→9</td>
+</tr>
+<tr>
+<td>b</td>
+<td>1→3，1→8，4→3，4→8，7→9</td>
+</tr>
+</tbody></table></div>
+<p>例如从 1 出发只走 ε 到 2 后就停止；从 5 出发还可到 2、6，均不能凭空走需要 a 或 b 的边。</p>
+<p>下面从上述完整边集计算可达子集，分别命名：</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>DFA 状态</th>
+<th>原集合</th>
+<th>a</th>
+<th>b</th>
+<th>接受？</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>A</td>
+<td>{1,2}</td>
+<td>B</td>
+<td>C</td>
+<td>否</td>
+</tr>
+<tr>
+<td>B</td>
+<td>{2,4,5,6,7}</td>
+<td>X</td>
+<td>D</td>
+<td>是</td>
+</tr>
+<tr>
+<td>C</td>
+<td>{3,8}</td>
+<td>E</td>
+<td>X</td>
+<td>否</td>
+</tr>
+<tr>
+<td>D</td>
+<td>{3,8,9}</td>
+<td>E</td>
+<td>X</td>
+<td>是</td>
+</tr>
+<tr>
+<td>E</td>
+<td>{9}</td>
+<td>X</td>
+<td>X</td>
+<td>是</td>
+</tr>
+<tr>
+<td>X</td>
+<td>∅</td>
+<td>X</td>
+<td>X</td>
+<td>否</td>
+</tr>
+</tbody></table></div>
+<p>处理 A 发现 B/C，处理 B 发现 D，处理 C/D 发现 E，补 X。接受子集含原 NFA 的 7 或 9，因此 B、D、E 接受，语言为 <code>{a,ab,aba,ba}</code>：aba 到 E 接受，abaa 再到 X 拒绝。</p>
+<h3>14.6 含aa或bb的七子集练习</h3>
+<p>本题字母表是 <code>{a,b}</code>，x、y 是状态名。完整定义为：初态 x，唯一接受态 y；ε 边为 <code>x→5、5→1、2→6、6→y</code>；字符边为 <code>5-a/b→5、1-a→3、1-b→4、3-a→2、4-b→2、6-a/b→6</code>，其余为空。于是初始闭包为 <code>{x,5,1}</code>。从中读 a 先得到 <code>{5,3}</code>，再沿 ε 补入 1，得到 <code>{5,1,3}</code>；下一次再读 a 会到 2，闭包又补入 6、y，进入接受子集。</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>状态</th>
+<th>原集合</th>
+<th>a</th>
+<th>b</th>
+<th>接受？</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>A</td>
+<td>{x,5,1}</td>
+<td>B</td>
+<td>C</td>
+<td>否</td>
+</tr>
+<tr>
+<td>B</td>
+<td>{5,1,3}</td>
+<td>D</td>
+<td>C</td>
+<td>否</td>
+</tr>
+<tr>
+<td>C</td>
+<td>{5,1,4}</td>
+<td>B</td>
+<td>E</td>
+<td>否</td>
+</tr>
+<tr>
+<td>D</td>
+<td>{5,1,3,2,6,y}</td>
+<td>D</td>
+<td>F</td>
+<td>是</td>
+</tr>
+<tr>
+<td>E</td>
+<td>{5,1,4,2,6,y}</td>
+<td>G</td>
+<td>E</td>
+<td>是</td>
+</tr>
+<tr>
+<td>F</td>
+<td>{5,1,4,6,y}</td>
+<td>G</td>
+<td>E</td>
+<td>是</td>
+</tr>
+<tr>
+<td>G</td>
+<td>{5,1,3,6,y}</td>
+<td>D</td>
+<td>F</td>
+<td>是</td>
+</tr>
+</tbody></table></div>
+<p>初态为 <code>E({x})={x,5,1}</code>，读 a 到 B，再 a 到 D；读 b 到 C，再 b 到 E。D—G 都含 y。它们任意 a/b 后继仍在这四接受态中，因此任意后缀均接受，后续可合并成一态，得到识别“含aa或bb”的四状态模型。</p>
+<h3>14.7 八状态DFA的完整划分练习</h3>
+<p>本例初态 1，接受态 <code>{4,6,7,8}</code>。为使划分能够独立复算，完整原始表如下；— 按缺边拒绝处理，也可全部补到死态 X。</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>状态</th>
+<th>a</th>
+<th>b</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>2</td>
+<td>3</td>
+</tr>
+<tr>
+<td>2</td>
+<td>—</td>
+<td>4</td>
+</tr>
+<tr>
+<td>3</td>
+<td>2</td>
+<td>3</td>
+</tr>
+<tr>
+<td>4</td>
+<td>5</td>
+<td>6</td>
+</tr>
+<tr>
+<td>5</td>
+<td>—</td>
+<td>7</td>
+</tr>
+<tr>
+<td>6</td>
+<td>5</td>
+<td>6</td>
+</tr>
+<tr>
+<td>7</td>
+<td>5</td>
+<td>8</td>
+</tr>
+<tr>
+<td>8</td>
+<td>5</td>
+<td>8</td>
+</tr>
+</tbody></table></div>
+<p>之后每次分块都依据这张表检查后继所在块，而不是依据状态编号相邻与否。</p>
+<p>初分 <code>{1,2,3,5}/{4,6,7,8}</code>；第一块的 b 后继为 <code>3、4、3、7</code>，按非接受/接受拆成 <code>{1,3}</code> 与 <code>{2,5}</code>。接受块的 b 后继 <code>6、6、8、8</code> 仍属接受块。</p>
+<p>按上表，1/3 的 a 到 2，4/6/7/8 的 a 到 5，2/5 的 a 缺边拒绝。继续检查每块在 a、b 上的后继，稳定后得到：</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>商状态</th>
+<th>原块</th>
+<th>a</th>
+<th>b</th>
+<th>接受？</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>A</td>
+<td>{1,3}</td>
+<td>B</td>
+<td>A</td>
+<td>否</td>
+</tr>
+<tr>
+<td>B</td>
+<td>{2,5}</td>
+<td>X</td>
+<td>C</td>
+<td>否</td>
+</tr>
+<tr>
+<td>C</td>
+<td>{4,6,7,8}</td>
+<td>B</td>
+<td>C</td>
+<td>是</td>
+</tr>
+<tr>
+<td>X</td>
+<td>缺省拒绝态</td>
+<td>X</td>
+<td>X</td>
+<td>否</td>
+</tr>
+</tbody></table></div>
+<p>图中省略 X 时计三个有效态。这一结果以表中的缺边拒绝约定为前提；若 B 在 a 上另有合法转移，必须重新进行状态划分。</p>
+<h3>14.8 五状态DFA的逐轮分离练习</h3>
+<p>这一最小化练习的完整题设如下：初态 1，只有 5 为接受态，所有转移均由下表给定。以下划分和结果只依赖这张表。</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>原状态</th>
+<th>a</th>
+<th>b</th>
+<th>接受？</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>→1</td>
+<td>3</td>
+<td>2</td>
+<td>否</td>
+</tr>
+<tr>
+<td>2</td>
+<td>3</td>
+<td>2</td>
+<td>否</td>
+</tr>
+<tr>
+<td>3</td>
+<td>3</td>
+<td>4</td>
+<td>否</td>
+</tr>
+<tr>
+<td>4</td>
+<td>3</td>
+<td>5</td>
+<td>否</td>
+</tr>
+<tr>
+<td>*5</td>
+<td>3</td>
+<td>2</td>
+<td>是</td>
+</tr>
+</tbody></table></div>
+<p>例如状态 3 读 a 仍到 3，状态 5 读 a 到 3，每个状态对每个输入都有唯一后继。修改转移题设会改变划分，不能仅保留旧答案。</p>
+<p>依据上述转移，分离过程为：</p>
+<pre><code class="language-text">{1,2,3,4}/{5}
+→ {1,2,3}/{4}/{5}
+→ {1,2}/{3}/{4}/{5}
+</code></pre>
+<p>第一轮 b 分出 4；第二轮 3 的 b 后继落在新块 <code>{4}</code>，1/2 的 b 仍落在同一非接受块，因此分出 3。1/2 的 a 都到 3，b 留在 <code>{1,2}</code>，可以合并。</p>
+<p>稳定划分为 <code>{1,2}/{3}/{4}/{5}</code>，四块的 a 后继都为 <code>{3}</code>，b 后继依次为 <code>{1,2}/{4}/{5}/{1,2}</code>。因此最小 DFA 完整表是：</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>商状态</th>
+<th>原块</th>
+<th>a</th>
+<th>b</th>
+<th>接受？</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>→A</td>
+<td>{1,2}</td>
+<td>B</td>
+<td>A</td>
+<td>否</td>
+</tr>
+<tr>
+<td>B</td>
+<td>{3}</td>
+<td>B</td>
+<td>C</td>
+<td>否</td>
+</tr>
+<tr>
+<td>C</td>
+<td>{4}</td>
+<td>B</td>
+<td>D</td>
+<td>否</td>
+</tr>
+<tr>
+<td>*D</td>
+<td>{5}</td>
+<td>B</td>
+<td>A</td>
+<td>是</td>
+</tr>
+</tbody></table></div>
+<p>该表所有字符转移已定义，无需额外死态。abb 走 A→B→C→D，接受；abbb 再到 A，拒绝。最短接受后缀分别是 A:abb、B:bb、C:b、D:ε，四态可区分，不能继续合并。</p>
 <p><a id="ch02-s15"></a>
 <a id="综合应用把性质描述语言从规则变成最简-dfa"></a></p>
-<h2>15. 综合应用：把性质描述语言从规则变成最简 DFA</h2><div class="stepper" aria-label="分步图解"><h3>PPIQQ的DFA识别轨迹</h3><p class="fig-intro">规则P*IQ+；A未读I，B已读I但缺Q，C接受，X为死态。读完整串后才判接受。</p><div class="progress-track" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span></div><div class="step-tools"><button id="step-prev">上一步</button><label for="step-range">推导步骤</label><input id="step-range" type="range" min="0" max="5" value="0"><button id="step-next">下一步</button><span id="step-count" class="step-count"></span></div><div id="step-panel" class="step-card" aria-live="polite"></div><details><summary>完整轨迹（适合打印与连续核对）</summary><div class="table-scroll"><table><thead><tr><th>读到的位置</th><th>新字符</th><th>当前状态</th><th>信息与结果</th></tr></thead><tbody><tr><td>0</td><td>尚未读</td><td>A</td><td>前缀ε，尚缺I和Q，不接受</td></tr><tr><td>1</td><td>P</td><td>A</td><td>允许继续前置条件，尚缺I</td></tr><tr><td>2</td><td>P</td><td>A</td><td>仍允许前置条件，尚缺I</td></tr><tr><td>3</td><td>I</td><td>B</td><td>唯一操作已经读完，必须至少再读一个Q</td></tr><tr><td>4</td><td>Q</td><td>C</td><td>已有一项后置条件；若现在结束可以接受</td></tr><tr><td>5</td><td>Q</td><td>C</td><td>全部输入已读完，末态C接受</td></tr></tbody></table></div></details></div>
-<p><strong>来源与前提：</strong>期末题第三题，字母表为 {P,I,Q}。P 是前置条件，可有零至多个；I 表示一项应用操作；Q 是后置条件，必须有一至多个。这里把题意中的“一步操作”解释为恰好一个 I，一串表示一条完整性质。原题未给多条性质的连接格式，不能擅自在整个表达式外再加星号。</p>
+<h2>15. 综合应用：把性质描述语言从规则变成最简 DFA</h2>
+<p><strong>来源与前提：</strong> 期末题第三题，字母表为 {P,I,Q}。P 是前置条件，可有零至多个；I 表示一项应用操作；Q 是后置条件，必须有一至多个。这里把题意中的“一步操作”解释为恰好一个 I，一串表示一条完整性质。原题未给多条性质的连接格式，不能擅自在整个表达式外再加星号。</p>
 <p>从自然语言直接画一张复杂图，容易忘记空前置条件或必需后置条件。先把要求拆成顺序不同的三个部分：<code>P* I Q+</code>，等价基本记法为 <code>P* I Q Q*</code>。每个星号只作用于其前一个字符。</p>
 <h3>15.1 一个有 ε 边的 NFA 与确定化</h3>
 <p>初态 s0，终态 s3，转换如下；未列出的转换为空集合。</p>
@@ -1183,7 +1337,7 @@ s3 --Q--&gt; s3
 <td>顺序或数量已违规，永久拒绝</td>
 </tr>
 </tbody></table></div>
-<h3>15.2 怎样确认已经最小</h3>
+<h3>15.2 怎样确认已经最小</h3><div class="stepper" aria-label="分步图解"><h3>PPIQQ的DFA识别轨迹</h3><p class="fig-intro">规则P*IQ+；A未读I，B已读I但缺Q，C接受，X为死态。读完整串后才判接受。</p><div class="progress-track" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span></div><div class="step-tools"><button id="step-prev">上一步</button><label for="step-range">推导步骤</label><input id="step-range" type="range" min="0" max="5" value="0"><button id="step-next">下一步</button><span id="step-count" class="step-count"></span></div><div id="step-panel" class="step-card" aria-live="polite"></div><details><summary>完整轨迹（适合打印与连续核对）</summary><div class="table-scroll"><table><thead><tr><th>读到的位置</th><th>新字符</th><th>当前状态</th><th>信息与结果</th></tr></thead><tbody><tr><td>0</td><td>尚未读</td><td>A</td><td>前缀ε，尚缺I和Q，不接受</td></tr><tr><td>1</td><td>P</td><td>A</td><td>允许继续前置条件，尚缺I</td></tr><tr><td>2</td><td>P</td><td>A</td><td>仍允许前置条件，尚缺I</td></tr><tr><td>3</td><td>I</td><td>B</td><td>唯一操作已经读完，必须至少再读一个Q</td></tr><tr><td>4</td><td>Q</td><td>C</td><td>已有一项后置条件；若现在结束可以接受</td></tr><tr><td>5</td><td>Q</td><td>C</td><td>全部输入已读完，末态C接受</td></tr></tbody></table></div></details></div>
 <p>初分接受类 {C} 和非接受类 {A,B,X}。读 Q 后 B 到接受类，A/X 到非接受类，所以拆出 B；接着读 I 后 A 到 {B}，X 到 {X}，再拆开。最后四个状态都独立。</p>
 <p>也可给区分后缀：C 与其他状态用 ε 区分；A 与 B 用 Q 区分；A 与 X 用 IQ 区分；B 与 X 用 Q 区分。存在一个后缀导致一个接受、另一个拒绝，就不能合并。由此完整最简 DFA 有 4 状态；若图省略死态及其边，是 3 个可见状态的部分 DFA。考试作图应注明采用哪种约定。</p>
 <p>图的文字表示是 <code>A --P→A、A --I→B、B --Q→C、C --Q→C</code>，C 双圈，其余缺边统一进 X。</p>
@@ -1230,7 +1384,7 @@ s3 --Q--&gt; s3
 <p><a id="ch02-s16"></a>
 <a id="作业中的难点奇偶计数为何要允许字符交错"></a></p>
 <h2>16. 作业中的难点：奇偶计数为何要允许字符交错</h2>
-<p><strong>来源：</strong>作业解析“引论＋正则表达式”第 11(2)(3)题。要接受偶数个 0、偶数个 1，不能写成 <code>(00|11)*</code>：它只允许相同字符成对相邻，会漏掉 0110。</p>
+<p><strong>来源：</strong> 作业解析“引论＋正则表达式”第 11(2)(3)题。要接受偶数个 0、偶数个 1，不能写成 <code>(00|11)*</code>：它只允许相同字符成对相邻，会漏掉 0110。</p>
 <p>令 E=(00|11)，M=(01|10)，暂用它们表示二字符块，并非加入两个新输入字符。偶、偶要求总长度偶数，按两字符分组后，E 不改变两计数奇偶性，M 同时翻转两项；所以 M 必须出现偶数次。把每两个 M 连同中间的 E 配成一块：</p>
 <pre><code class="language-text">A=(E|ME*M)*
  = (00|11|(01|10)(00|11)*(01|10))*
@@ -1238,44 +1392,34 @@ s3 --Q--&gt; s3
 <p>不会多收：每个完整块都使两计数保持偶数。不会漏收：任意合法串的 M 数为偶数，按出现顺序两两配对，间隔 E 放进 E*，其余 E 独立成块。ε 对应零块，也合法。</p>
 <p>若要求偶数个 0、奇数个 1，先按首位分支。首位1后剩偶、偶，为1A；首位0后剩奇、奇，可分成 A M A。因此为 <code>1A|0A(01|10)A</code>。例如010在第二分支中取两侧A=ε、M=10；只写1A或A1A都会漏它。</p>
 <p>上述分组论证同时说明不会多收和不会漏收；不能只凭几个合法串就判定表达式正确。</p>
-<h3>16.1 作业题意需要怎样澄清</h3>
+<h3>16.1 先明确记法，再判断结论</h3>
 <div class="table-scroll"><table>
 <thead>
 <tr>
-<th>题目或表述</th>
-<th>已核实内容</th>
-<th>尚需确认的部分</th>
-<th>为什么</th>
-<th>进一步核实方法</th>
+<th>表述</th>
+<th>使用条件</th>
+<th>例子与解释</th>
 </tr>
 </thead>
 <tbody><tr>
-<td>无穷正规集必含星闭包</td>
-<td>只有选择、连接、星闭包的基本系统中成立</td>
-<td>原选择题是否把正闭包看作缩写</td>
-<td>课件同时允许 a+，字面没有*却表示无穷语言</td>
-<td>按教师对记法展开的约定判分</td>
+<td>无穷正则语言的表达式需要重复构造</td>
+<td>基本算子仅含选择、连接、星闭包；正闭包须先展开</td>
+<td><code>a+</code> 字面不含星号，但展开为 <code>aa*</code>，因此不能只查文本中有没有星号</td>
 </tr>
 <tr>
-<td>属于Σ的符号串</td>
-<td>ε属于Σ*，不属于普通字符集合Σ</td>
-<td>原题是否漏写*</td>
-<td>按Σ与Σ*判断会得到不同选项</td>
-<td>教师确认原题文字</td>
+<td>字符与符号串不同</td>
+<td>Σ 是字符集合，Σ* 是所有有限串</td>
+<td>Σ={a,b} 时，a∈Σ，而 ab、ε∈Σ*；ε 不是一个普通输入字符</td>
 </tr>
 <tr>
-<td>最简DFA不含无关状态</td>
-<td>不可达状态可以去掉</td>
-<td>是否必须补死态</td>
-<td>删除可达死态会把完整DFA改成部分DFA</td>
-<td>作图先写总转移或缺边拒绝约定</td>
+<td>最简 DFA 是否保留死态</td>
+<td>必须先确定完整转移或缺边拒绝约定</td>
+<td>对 <code>{b,aa}</code>，补死态后是完整表；省略死态和相关边则是同语言的部分表</td>
 </tr>
 <tr>
-<td>单词自动机合并后最小化</td>
-<td>应按Token类别/动作初分</td>
-<td>能否仅按接受/不接受分组</td>
-<td>合并两个不同Token终态会丢分类输出</td>
-<td>检查每状态的输出动作是否一致</td>
+<td>扫描器的状态合并要保持输出</td>
+<td>初分组除接受性外，还须按 Token 类别和动作区分</td>
+<td>id 终态和整数终态即使没有后继，也不能合并成一个输出类别</td>
 </tr>
 </tbody></table></div>
 <p><a id="ch02-s17"></a>
@@ -1357,7 +1501,7 @@ s3 --Q--&gt; s3
 </tr>
 <tr>
 <td>2</td>
-<td>上例为什么A、B不能合并？给区分后缀</td>
+<td>字母表{a}上，A、B非终态，F为唯一终态；A读a到B、B读a到F、F读a自环。A、B能否合并？给区分后缀。</td>
 <td>用未来行为判等价</td>
 </tr>
 <tr>
@@ -1374,7 +1518,7 @@ s3 --Q--&gt; s3
 <h3>18.1 答案与理由</h3>
 <ol>
 <li>最短为IQ。ε没有I/Q；PI没有Q，均拒绝；PIQQ接受，P一次、I一次、Q两次。</li>
-<li>用Q：B读Q到C接受，A读Q到X拒绝。因此这两个状态未来行为不同，不能合并。</li>
+<li>不能。用后缀a：A读a到B拒绝，B读a到F接受。因此两状态未来行为不同，不能合并。</li>
 <li><code>&lt;id,ifx&gt;、&lt;ge,-&gt;、&lt;int,10&gt;</code>。先取最长标识符ifx，再查是否恰等于保留字if；不能见到if前缀就提前截断。&gt;=比&gt;更长，优先取&gt;=；规则优先处理的是等长冲突。</li>
 <li>不够。整数终态与id终态虽都接受，但必须返回不同Token。按输出动作细分初始类别，再按转换签名拆分，才会保持扫描器功能。</li>
 </ol>
@@ -1425,7 +1569,7 @@ s3 --Q--&gt; s3
 <a id="末尾速查表"></a></p>
 <h2>20. 末尾速查表</h2>
 <div class="ref-picker"><label for="quick-select">选择一个概念或方法，查看含义、形式、例子、结果和前提</label><select id="quick-select" class="quick-select"><option value="0">星闭包</option><option value="1">正则表达式</option><option value="2">DFA</option><option value="3">子集法</option><option value="4">状态分离</option><option value="5">最长匹配</option></select><div id="quick-panel" class="ref-panel" aria-live="polite"></div></div>
-</article><div class="chapter-links"><a href="01_编译引论.html">← 第1章 编译引论</a><a href="03_语法分析_自顶向下方法.html">第3章 语法分析：从文法规则到自顶向下分析器 →</a></div></main></div><script type="application/json" id="diagram-data">{"title":"PPIQQ的DFA识别轨迹","premise":"规则P*IQ+；A未读I，B已读I但缺Q，C接受，X为死态。读完整串后才判接受。","fields":["读到的位置","新字符","当前状态","信息与结果"],"rows":[["0","尚未读","A","前缀ε，尚缺I和Q，不接受"],["1","P","A","允许继续前置条件，尚缺I"],["2","P","A","仍允许前置条件，尚缺I"],["3","I","B","唯一操作已经读完，必须至少再读一个Q"],["4","Q","C","已有一项后置条件；若现在结束可以接受"],["5","Q","C","全部输入已读完，末态C接受"]]}</script><script type="application/json" id="quick-data">[{"name":"星闭包","kind":"语言运算","meaning":"任意有限次重复","form":"L*={ε}∪L∪L²…","notice":"包含ε；","example":"P*允许无前置条件","link":"\u003ca href=\"#ref-%E9%9B%86%E5%90%88\">串与集合\u003c/a>"},{"name":"正则表达式","kind":"语言描述","meaning":"规定合法串集合","form":"选择、连接、闭包","notice":"不含任意深度配对能力；","example":"P*IQ+","link":"\u003ca href=\"#ref-%E6%AD%A3%E5%88%99\">正则表达式\u003c/a>"},{"name":"DFA","kind":"确定识别模型","meaning":"一次只保存一个状态","form":"δ:S×Σ→S","notice":"完整型必须定义全部边；","example":"PPIQQ停C接受","link":"\u003ca href=\"#ref-DFA\">DFA\u003c/a>"},{"name":"子集法","kind":"转换算法","meaning":"把NFA变为DFA","form":"I_a=E(move(I,a))","notice":"初态E(S0)、交终态非空即接受；","example":"{s0,s1}读I得{s2}","link":"\u003ca href=\"#ref-%E7%A1%AE%E5%AE%9A%E5%8C%96\">确定化\u003c/a>"},{"name":"状态分离","kind":"最小化算法","meaning":"合并未来行为相同的状态","form":"初分→按后继类别拆分→稳定","notice":"扫描器需按输出动作初分；","example":"A/B用Q区分","link":"\u003ca href=\"#ref-%E6%9C%80%E5%B0%8F%E5%8C%96\">最小化\u003c/a>"},{"name":"最长匹配","kind":"连续扫描规则","meaning":"选择当前最长合法前缀","form":"保存最近接受位置、失败后回退","notice":"等长才比优先级；","example":"ifx整体是id","link":"\u003ca href=\"#ref-%E6%89%AB%E6%8F%8F\">连续扫描\u003c/a>"}]</script><script>
+</article><div class="chapter-links"><a href="01_编译引论.html">← 第1章 编译引论</a><a href="03_语法分析_自顶向下方法.html">第3章 语法分析：从文法规则到自顶向下分析器 →</a></div></main></div><script type="application/json" id="diagram-data">{"title":"PPIQQ的DFA识别轨迹","premise":"规则P*IQ+；A未读I，B已读I但缺Q，C接受，X为死态。读完整串后才判接受。","fields":["读到的位置","新字符","当前状态","信息与结果"],"rows":[["0","尚未读","A","前缀ε，尚缺I和Q，不接受"],["1","P","A","允许继续前置条件，尚缺I"],["2","P","A","仍允许前置条件，尚缺I"],["3","I","B","唯一操作已经读完，必须至少再读一个Q"],["4","Q","C","已有一项后置条件；若现在结束可以接受"],["5","Q","C","全部输入已读完，末态C接受"]]}</script><script type="application/json" id="quick-data">[{"name":"星闭包","kind":"语言运算","meaning":"任意有限次重复","form":"L*={ε}∪L∪L²…","notice":"星闭包包含零次重复；","example":"字母表{a}上a*允许ε、a、aa；a+至少一个a，不允许ε。","link":"\u003ca href=\"#ref-%E9%9B%86%E5%90%88\">串与集合\u003c/a>"},{"name":"正则表达式","kind":"语言描述","meaning":"规定合法串集合","form":"选择、连接、闭包","notice":"连接、选择和闭包须分清；","example":"ab*允许a、ab、abb，不允许空串或单独的b。","link":"\u003ca href=\"#ref-%E6%AD%A3%E5%88%99\">正则表达式\u003c/a>"},{"name":"DFA","kind":"确定识别模型","meaning":"一次只保存一个状态","form":"δ:S×Σ→S","notice":"读完整串后检查终态；","example":"初态0非终态、终态1，字母表{a}，0读a到1、1读a仍到1；a和aa接受，ε拒绝。","link":"\u003ca href=\"#ref-DFA\">DFA\u003c/a>"},{"name":"子集法","kind":"转换算法","meaning":"把NFA变为DFA","form":"I_a=E(move(I,a))","notice":"每个子集含全部可达分支；","example":"NFA初态s，s读a到s或终态t，t无出边；DFA从{s}读a到{s,t}，再读a仍到{s,t}，识别a+。","link":"\u003ca href=\"#ref-%E7%A1%AE%E5%AE%9A%E5%8C%96\">确定化\u003c/a>"},{"name":"状态分离","kind":"最小化算法","meaning":"合并未来行为相同的状态","form":"初分→按后继类别拆分→稳定","notice":"等价须对所有后缀一致；","example":"状态p读a到终态f，q读a到非终态q，p、q自身都非终态；后缀a即可区分两者，不能合并。","link":"\u003ca href=\"#ref-%E6%9C%80%E5%B0%8F%E5%8C%96\">最小化\u003c/a>"},{"name":"最长匹配","kind":"连续扫描规则","meaning":"选择当前最长合法前缀","form":"保存最近接受位置、失败后回退","notice":"最长匹配先于等长规则优先；","example":"规则含标识符、保留字if及&gt;、&gt;=，输入ifx&gt;=2得到id(ifx)、&gt;=、int(2)，不会拆成if与x。","link":"\u003ca href=\"#ref-%E6%89%AB%E6%8F%8F\">连续扫描\u003c/a>"}]</script><script>
 const links=[...document.querySelectorAll('nav a[href^="#"]')];
 const headings=links.map(a=>document.getElementById(a.hash.slice(1))).filter(Boolean);
 let scheduled=false;
@@ -1436,5 +1580,209 @@ document.querySelectorAll('[data-font]').forEach(b=>b.addEventListener('click',(
 const diagram=JSON.parse(document.getElementById('diagram-data').textContent);let step=0;
 function showStep(){if(!diagram)return;const row=diagram.rows[step];const panel=document.getElementById('step-panel');panel.replaceChildren();const grid=document.createElement('div');grid.className='step-grid';diagram.fields.forEach((field,i)=>{const cell=document.createElement('div');cell.className='step-field';const strong=document.createElement('strong');strong.textContent=field;const p=document.createElement('p');p.textContent=row[i];cell.append(strong,p);grid.append(cell);});panel.append(grid);document.getElementById('step-count').textContent=(step+1)+' / '+diagram.rows.length;document.getElementById('step-range').value=step;document.getElementById('step-prev').disabled=step===0;document.getElementById('step-next').disabled=step===diagram.rows.length-1;document.querySelectorAll('.progress-track span').forEach((s,i)=>s.classList.toggle('done',i<=step));}
 if(diagram){document.getElementById('step-prev').addEventListener('click',()=>{step=Math.max(0,step-1);showStep();});document.getElementById('step-next').addEventListener('click',()=>{step=Math.min(diagram.rows.length-1,step+1);showStep();});document.getElementById('step-range').addEventListener('input',e=>{step=Number(e.target.value);showStep();});showStep();}
-const quick=document.getElementById('quick-select');if(quick){const items=JSON.parse(document.getElementById('quick-data').textContent);function showQuick(){const r=items[Number(quick.value)];const panel=document.getElementById('quick-panel');panel.innerHTML='<h3>'+r.name+'</h3><p class="ref-kind">'+r.kind+'</p><h4>含义与用途</h4><p>'+r.meaning+'</p><h4>基本形式</h4><p>'+r.form+'</p><h4>学习例子与结果</h4><p class="result">'+r.example+'</p><h4>注意点与前提</h4><p>'+r.notice+'</p><p>'+r.link+'</p>';}quick.addEventListener('change',showQuick);showQuick();}markNavigation();
+function quickMarkup(r){return '<h3>'+r.name+'</h3><p class="ref-kind">'+r.kind+'</p><h4>含义与用途</h4><p>'+r.meaning+'</p><h4>基本形式</h4><p>'+r.form+'</p><h4>学习例子与结果</h4><p class="result">'+r.example+'</p><h4>注意点与前提</h4><p>'+r.notice+'</p><p>'+r.link+'</p>';}
+const quick=document.getElementById('quick-select');if(quick){const items=JSON.parse(document.getElementById('quick-data').textContent);function showQuick(){const r=items[Number(quick.value)];document.getElementById('quick-panel').innerHTML=quickMarkup(r);}quick.addEventListener('change',showQuick);showQuick();}markNavigation();
+(function () {
+  'use strict';
+  const $ = name => document.getElementById('chapter-search-' + name);
+  const panel = $('panel'), article = document.getElementById('article');
+  if (!panel || !article) return;
+  const blockTags = 'h1,h2,h3,h4,h5,h6,p,li,pre,td,th,summary,dt,dd,blockquote';
+  const ignored = '.stepper,.ref-picker,button,input,select,textarea,script,style,[data-search-ignore]';
+  const sectionIds = new Set([...document.querySelectorAll('nav a[href^="#"]')].map(a => a.hash.slice(1)));
+  const quickSelect = document.getElementById('quick-select'), quickPanel = document.getElementById('quick-panel');
+  const quickItems = JSON.parse(document.getElementById('quick-data')?.textContent || '[]');
+  const fold = text => text.replace(/[A-Z]/g, c => c.toLowerCase());
+  const pageSize = 40;
+  let matches = [], active = -1, page = 0, query = '', timer = null;
+  let resultsOpen = false, automaticQuick = false, originalQuick = null;
+  const openedDetails = new Set();
+
+  function measure() {
+    const top = Math.max(60, Math.ceil(document.querySelector('.topbar').getBoundingClientRect().height));
+    const height = panel.hidden ? 0 : Math.ceil(panel.getBoundingClientRect().height);
+    document.documentElement.style.setProperty('--reader-topbar-height', top + 'px');
+    document.documentElement.style.setProperty('--scroll-offset', Math.max(90, top + height + 18) + 'px');
+  }
+  window.addEventListener('resize', measure);
+  if (typeof ResizeObserver !== 'undefined') {
+    const observer = new ResizeObserver(measure);
+    observer.observe(document.querySelector('.topbar')); observer.observe(panel);
+  }
+
+  // 对文字节点建立段内偏移，不把行内 strong/code 等格式当作检索边界。
+  function collect(root, quick = false, quickName = '') {
+    const blocks = [], walker = document.createTreeWalker(root, NodeFilter.SHOW_ELEMENT | NodeFilter.SHOW_TEXT);
+    let node, owner = null, currentBlock = null, pendingSection = '', section = 'article', mainTitle = '本章导读', subTitle = '';
+    while ((node = walker.nextNode())) {
+      const element = node.nodeType === Node.ELEMENT_NODE ? node : node.parentElement;
+      if (!element || element.closest(quick ? 'h4,button,input,select,script,style' : ignored)) continue;
+      if (node.nodeType === Node.ELEMENT_NODE) {
+        if (!quick) {
+          if (node.matches('a[id]') && sectionIds.has(node.id)) pendingSection = node.id;
+          if (node.matches('h2')) { section = node.id || pendingSection || 'article'; mainTitle = node.textContent.trim(); subTitle = ''; pendingSection = ''; }
+          if (node.matches('h3')) subTitle = node.textContent.trim();
+        }
+        continue;
+      }
+      if (!node.data || (!quick && section === 'navigation')) continue;
+      const parent = element.closest(blockTags);
+      if (!parent || !root.contains(parent)) { owner = null; currentBlock = null; continue; }
+      const label = quick ? '末尾速查 › ' + quickName : mainTitle + (subTitle ? ' › ' + subTitle : '');
+      if (owner !== parent || !currentBlock || currentBlock.section !== section || currentBlock.label !== label) {
+        currentBlock = { el: parent, text: '', nodes: [], label, section }; blocks.push(currentBlock); owner = parent;
+      }
+      currentBlock.nodes.push({ node, start: currentBlock.text.length, end: currentBlock.text.length + node.data.length });
+      currentBlock.text += node.data;
+    }
+    return blocks.filter(b => b.text.trim());
+  }
+  function quickBlocks(index) {
+    const root = document.createElement('div'); root.innerHTML = quickMarkup(quickItems[index]);
+    const name = document.createElement('span'); name.innerHTML = quickItems[index].name;
+    return collect(root, true, name.textContent);
+  }
+  function find(blocks, source, item) {
+    const found = [], needle = fold(query);
+    blocks.forEach((block, blockIndex) => {
+      const text = fold(block.text); let start = text.indexOf(needle);
+      while (start !== -1) {
+        const end = start + query.length;
+        found.push({ source, item, blockIndex, start, end, text: block.text, label: block.label });
+        start = text.indexOf(needle, end);
+      }
+    });
+    return found;
+  }
+  function removeMarks() {
+    const parents = new Set();
+    article.querySelectorAll('mark.chapter-search-hit').forEach(mark => { parents.add(mark.parentNode); mark.replaceWith(document.createTextNode(mark.textContent)); });
+    parents.forEach(parent => parent.normalize());
+  }
+  function restoreDetails() { openedDetails.forEach(details => { if (details.isConnected) details.open = false; }); openedDetails.clear(); }
+  function restoreQuick() {
+    if (originalQuick !== null && quickSelect) {
+      automaticQuick = true; quickSelect.value = originalQuick; quickSelect.dispatchEvent(new Event('change')); automaticQuick = false;
+    }
+    originalQuick = null;
+  }
+  function setOpen(open, focusInput = false) {
+    panel.hidden = !open; $('toggle').setAttribute('aria-expanded', String(open));
+    if (open && typeof closeMenu === 'function') closeMenu();
+    measure();
+    if (focusInput) $('input').focus();
+  }
+  function text(tag, value) { const element = document.createElement(tag); element.textContent = value; return element; }
+  function state() {
+    $('prev').disabled = $('next').disabled = !matches.length;
+    $('results-toggle').disabled = !matches.length;
+    $('status').textContent = !query ? '请输入关键词' : !matches.length ? '没有找到匹配内容' : active < 0 ? '找到 ' + matches.length + ' 处，选择结果定位' : '第 ' + (active + 1) + ' / ' + matches.length + ' 处';
+    $('results').hidden = !resultsOpen || !matches.length;
+    $('results-toggle').setAttribute('aria-expanded', String(! $('results').hidden));
+    $('results-toggle').textContent = resultsOpen && matches.length ? '收起结果' : '展开结果';
+    measure();
+  }
+  function renderResults() {
+    const list = $('list'); list.replaceChildren();
+    const start = page * pageSize, end = Math.min(start + pageSize, matches.length);
+    $('page-status').textContent = matches.length ? '显示 ' + (start + 1) + '—' + end + '，共 ' + matches.length + ' 处' : '';
+    $('page-prev').disabled = page === 0; $('page-next').disabled = end >= matches.length;
+    for (let i = start; i < end; i++) {
+      const match = matches[i], item = document.createElement('li'), button = document.createElement('button');
+      button.type = 'button'; button.className = 'chapter-search-result';
+      if (i === active) button.setAttribute('aria-current', 'true');
+      button.append(text('strong', (i + 1) + '. ' + match.label));
+      const excerpt = document.createElement('span'), left = Math.max(0, match.start - 35), right = Math.min(match.text.length, match.end + 55);
+      excerpt.append(document.createTextNode((left ? '…' : '') + match.text.slice(left, match.start)));
+      excerpt.append(text('mark', match.text.slice(match.start, match.end)));
+      excerpt.append(document.createTextNode(match.text.slice(match.end, right) + (right < match.text.length ? '…' : '')));
+      button.append(excerpt); button.addEventListener('click', () => activate(i, true)); item.append(button); list.append(item);
+    }
+  }
+  function search() {
+    clearTimeout(timer); timer = null; removeMarks(); restoreDetails(); restoreQuick();
+    query = $('input').value.trim(); active = -1; page = 0; matches = [];
+    if (query) {
+      matches = find(collect(article), 'body');
+      if (typeof quickMarkup === 'function') quickItems.forEach((_, index) => { matches.push(...find(quickBlocks(index), 'quick', index)); });
+    }
+    resultsOpen = !!matches.length; renderResults(); state();
+  }
+  function activate(index, focusMatch = false) {
+    if (!matches.length) return;
+    index = (index + matches.length) % matches.length;
+    removeMarks(); const match = matches[index]; let block;
+    if (match.source === 'quick') {
+      if (!quickSelect || !quickPanel) return;
+      if (originalQuick === null) originalQuick = quickSelect.value;
+      automaticQuick = true; quickSelect.value = String(match.item); quickSelect.dispatchEvent(new Event('change')); automaticQuick = false;
+      const name = document.createElement('span'); name.innerHTML = quickItems[match.item].name;
+      block = collect(quickPanel, true, name.textContent)[match.blockIndex];
+    } else block = collect(article)[match.blockIndex];
+    // 动态正文如有改动，重建结果；不按旧字符位置猜测。
+    if (!block || block.text !== match.text) { search(); $('status').textContent = '正文已变化，结果已刷新，请重新选择。'; return; }
+    for (let parent = block.el; parent && parent !== article; parent = parent.parentElement) {
+      if (parent.tagName === 'DETAILS' && !parent.open) { openedDetails.add(parent); parent.open = true; }
+    }
+    const marks = [];
+    for (const part of block.nodes) {
+      if (part.end <= match.start || part.start >= match.end) continue;
+      const begin = Math.max(0, match.start - part.start), end = Math.min(part.node.length, match.end - part.start);
+      const fragment = document.createDocumentFragment();
+      if (begin) fragment.append(document.createTextNode(part.node.data.slice(0, begin)));
+      const mark = text('mark', part.node.data.slice(begin, end)); mark.className = 'chapter-search-hit'; fragment.append(mark); marks.push(mark);
+      if (end < part.node.length) fragment.append(document.createTextNode(part.node.data.slice(end)));
+      part.node.replaceWith(fragment);
+    }
+    active = index; page = Math.floor(index / pageSize); resultsOpen = false; renderResults(); state();
+    const first = marks[0];
+    if (first) {
+      first.tabIndex = -1; if (focusMatch) first.focus({ preventScroll: true });
+      first.scrollIntoView({ block: 'start', inline: 'nearest', behavior: 'auto' });
+      requestAnimationFrame(() => { measure(); if (typeof markNavigation === 'function') markNavigation(); });
+    }
+  }
+  function ensureQuery() { if (timer !== null || $('input').value.trim() !== query) search(); }
+  function clear() {
+    clearTimeout(timer); timer = null; $('input').value = ''; search(); $('input').focus();
+  }
+  $('toggle').addEventListener('click', () => setOpen(panel.hidden, panel.hidden));
+  $('close').addEventListener('click', () => { setOpen(false); $('toggle').focus(); });
+  $('clear').addEventListener('click', clear);
+  $('form').addEventListener('submit', event => { event.preventDefault(); ensureQuery(); if (matches.length) activate(active < 0 ? 0 : active + 1); });
+  $('input').addEventListener('input', () => { clearTimeout(timer); timer = setTimeout(search, 160); });
+  $('input').addEventListener('keydown', event => {
+    if (event.key === 'Enter' && event.shiftKey) { event.preventDefault(); ensureQuery(); if (matches.length) activate(active < 0 ? matches.length - 1 : active - 1); }
+  });
+  $('prev').addEventListener('click', () => { ensureQuery(); if (matches.length) activate(active < 0 ? matches.length - 1 : active - 1); });
+  $('next').addEventListener('click', () => { ensureQuery(); if (matches.length) activate(active < 0 ? 0 : active + 1); });
+  $('results-toggle').addEventListener('click', () => { resultsOpen = !resultsOpen; renderResults(); state(); });
+  $('page-prev').addEventListener('click', () => { if (page > 0) page--; renderResults(); measure(); });
+  $('page-next').addEventListener('click', () => { if ((page + 1) * pageSize < matches.length) page++; renderResults(); measure(); });
+  $('panel').querySelector('details').addEventListener('toggle', measure);
+  document.addEventListener('keydown', event => {
+    if ((event.ctrlKey || event.metaKey) && !event.altKey && event.key.toLowerCase() === 'k') { event.preventDefault(); setOpen(true, true); $('input').select(); }
+    if (event.key === 'Escape' && !panel.hidden) { setOpen(false); $('toggle').focus(); }
+  });
+  document.getElementById('menu').addEventListener('click', () => { if (document.body.classList.contains('nav-open')) setOpen(false); });
+  quickSelect?.addEventListener('change', () => {
+    if (!automaticQuick) {
+      originalQuick = null;
+      if (active >= 0 && matches[active].source === 'quick') { active = -1; renderResults(); state(); }
+    }
+  });
+  measure(); state();
+})();
+(function () {
+  'use strict';
+  const select = document.getElementById('reading-theme');
+  if (!select) return;
+  select.value = document.documentElement.dataset.readerTheme;
+  select.addEventListener('change', function () {
+    const theme = select.value;
+    if (theme !== 'light' && theme !== 'dark') return;
+    document.documentElement.dataset.readerTheme = theme;
+    try { localStorage.setItem('compiler-reading-theme-v1', theme); } catch (_) {}
+  });
+})();
 </script></body></html>
