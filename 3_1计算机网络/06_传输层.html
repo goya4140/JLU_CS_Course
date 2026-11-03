@@ -1,10 +1,61 @@
-<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>第6章 传输层：按字节追踪确认、连接与发送窗口</title><style>
+<!doctype html><html lang="zh-CN"><head><script>(function(){let t;try{t=localStorage.getItem('network-reading-theme')}catch(e){}if(t!=='light'&&t!=='dark')t=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';document.documentElement.dataset.theme=t})()</script><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>第6章 传输层：按字节追踪确认、连接与发送窗口</title><style>
 :root{--ink:#20334a;--muted:#63748a;--accent:#17666c;--light:#e9f4f1;--line:#d9e4e9;--paper:#fff;--back:#f5f8fa;color-scheme:light}*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--back);color:var(--ink);font:16px/1.85 'Segoe UI','Microsoft YaHei',sans-serif}a{color:var(--accent);text-underline-offset:4px}a:hover{color:#10494e}button,select{font:inherit}button{cursor:pointer}a:focus-visible,button:focus-visible,select:focus-visible,summary:focus-visible{outline:3px solid #d78b21;outline-offset:3px}aside{position:fixed;inset:0 auto 0 0;width:292px;overflow-y:auto;background:#f0f5f6;border-right:1px solid var(--line);padding:28px 18px 28px 24px;z-index:30}.brand{font-size:21px;font-weight:700;line-height:1.5}.subbrand{font-size:13px;color:var(--muted);margin:8px 0 22px}.navgroup{margin:22px 0}.navgroup h2{font-size:12px;font-weight:600;letter-spacing:.06em;color:#75858e;margin:0 0 8px;border:0;padding:0}.navgroup p{font-size:11px;line-height:1.5;color:#7a8796;margin:0 0 8px}.navlink{display:block;padding:8px 11px;margin:4px 0;border-radius:7px;color:#3c5366;text-decoration:none;font-size:13px;line-height:1.6;border-left:3px solid transparent}.navlink:hover{background:#e2edee}.navlink.active{color:#0c5f62;border-color:var(--accent);background:#dcefed;font-weight:600}.asidefoot{font-size:12px;color:var(--muted);border-top:1px solid var(--line);padding-top:18px}main{margin-left:292px;min-width:0}.toolbar{position:sticky;top:0;z-index:20;background:#ffffffed;border-bottom:1px solid var(--line);height:55px;display:flex;align-items:center;gap:16px;padding:0 32px;font-size:12px;color:var(--muted);backdrop-filter:blur(8px)}.toolbar .spacer{flex:1}.toolbar a{text-decoration:none}.menubtn{display:none;border:1px solid #acbec8;background:white;border-radius:5px;padding:4px 12px;color:var(--ink)}article{max-width:1120px;margin:0 auto;padding:50px 58px 90px;background:white;min-height:100vh}h1{font-size:30px;line-height:1.55;letter-spacing:.01em;margin:0 0 24px}h2{font-size:24px;line-height:1.6;margin:62px 0 22px;padding-bottom:14px;border-bottom:1px solid var(--line);scroll-margin-top:86px}h3{font-size:19px;line-height:1.7;margin:36px 0 14px;scroll-margin-top:86px}h4{font-size:16px;margin:26px 0 10px}p{margin:14px 0}blockquote{margin:22px 0 30px;padding:16px 22px;border-left:4px solid var(--accent);background:#f1f7f6;color:#3c5866;font-size:14px}blockquote p{margin:7px 0}.tablewrap{overflow-x:auto;max-width:100%;margin:22px 0;border:1px solid var(--line);border-radius:7px}table{width:100%;border-collapse:collapse;font-size:14px;line-height:1.75;min-width:500px}th,td{text-align:left;vertical-align:top;padding:12px 15px;border-bottom:1px solid #e1e9ee}th{background:#edf4f5;font-weight:600}tr:last-child td{border-bottom:0}tbody tr:nth-child(even){background:#fafcfd}td a{display:inline-block}pre{max-width:100%;overflow:auto;background:#f1f5f8;border:1px solid #dde6eb;border-radius:7px;padding:20px;font-size:13px;line-height:1.8}code{font-family:Consolas,'Courier New','Microsoft YaHei',monospace;background:#eef4f6;border-radius:3px;padding:2px 4px;overflow-wrap:anywhere}pre code{padding:0;background:transparent;white-space:pre;overflow-wrap:normal}li{margin:7px 0}ul,ol{padding-left:26px}details{border:1px solid #c6dadb;border-radius:8px;margin:24px 0;padding:14px 20px;background:#f8fbfb}summary{cursor:pointer;font-weight:600;color:#17666c}details[open] summary{border-bottom:1px solid var(--line);padding-bottom:12px;margin-bottom:20px}.formula{overflow-x:auto;padding:20px;text-align:center;white-space:nowrap;background:#f9fbfc;font-family:'Cambria Math','Times New Roman',serif;font-size:20px;margin:20px 0}.frac{display:inline-flex;flex-direction:column;vertical-align:middle;text-align:center;line-height:1.4;margin:0 4px}.frac>span:first-child{border-bottom:1px solid #63748a;padding:0 5px 3px}.frac>span:last-child{padding:3px 5px 0}.formula sup,.formula sub{font-size:.65em}.quickbox,.stepbox{margin:24px 0;padding:24px;border:1px solid #c3d9d8;border-radius:10px;background:#f3f9f8}.quickbox label{display:block;font-weight:600;margin-bottom:10px}.quickbox select{width:100%;padding:10px 12px;border:1px solid #9fbfbc;border-radius:6px;background:white;color:var(--ink)}.quickcard{margin-top:20px}.quickcard h3{margin:0 0 12px}.quickcard dl{display:grid;grid-template-columns:90px 1fr;gap:10px 18px;font-size:15px;margin:0}.quickcard dt{font-weight:600;color:#557275}.quickcard dd{margin:0}.stepbox h3{margin:0 0 10px}.stepnotes{font-size:13px;color:var(--muted)}.stepbuttons{display:flex;flex-wrap:wrap;gap:6px;margin:16px 0}.stepbuttons button{border:1px solid #a8c6c4;background:white;color:#436366;border-radius:50%;width:35px;height:35px;font-size:13px}.stepbuttons button.active{background:var(--accent);color:white}.stepdisplay{background:white;border-radius:8px;padding:18px 20px;min-height:145px}.stepdisplay h4{margin:0 0 12px}.stepdisplay dl{margin:0;display:grid;grid-template-columns:140px 1fr;gap:9px 18px}.stepdisplay dt{font-weight:600}.stepdisplay dd{margin:0}.stepcontrols{display:flex;gap:10px;align-items:center;margin-top:16px}.stepcontrols button{border:1px solid #a7c6c3;padding:6px 16px;border-radius:5px;background:white;color:var(--accent)}button:disabled{cursor:default;opacity:.4}.stepcount{font-size:13px;color:var(--muted)}.chaptercards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin:28px 0}.chaptercard{display:block;border:1px solid var(--line);border-radius:10px;background:#f9fcfc;padding:22px;text-decoration:none}.chaptercard strong{display:block;font-size:21px;color:var(--ink);margin-bottom:10px}.chaptercard span{display:block;font-size:14px;line-height:1.7;color:#647a89}.footerlinks{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;border-top:1px solid var(--line);margin-top:64px;padding-top:24px}.footerlinks a{text-decoration:none}hr{border:0;border-top:1px solid var(--line);margin:35px 0}.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)}[id]{scroll-margin-top:86px}.topjump{color:#6b7e8e;font-size:13px}
 @media(max-width:1100px){aside{width:255px;padding:24px 15px}main{margin-left:255px}article{padding:38px 32px 70px}h1{font-size:27px}.toolbar{padding:0 24px}}
 @media(max-width:860px){aside{width:min(320px,87vw);transform:translateX(-100%);transition:transform .18s;box-shadow:12px 0 30px #1233}.nav-open aside{transform:translateX(0)}main{margin-left:0}.menubtn{display:block}.toolbar{padding:0 15px;gap:12px}.toolbar .desktop-only{display:none}article{padding:28px 20px 64px}h1{font-size:24px}h2{font-size:21px;margin-top:48px}h3{font-size:18px}body{font-size:15px}table{font-size:13px}th,td{padding:9px 12px}.quickbox,.stepbox{padding:17px}.quickcard dl,.stepdisplay dl{grid-template-columns:1fr;gap:3px}.quickcard dd,.stepdisplay dd{margin-bottom:12px}.chaptercards{grid-template-columns:1fr}.navshade{display:none;position:fixed;inset:0;background:#10283f55;z-index:25}.nav-open .navshade{display:block}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}aside{transition:none}}
 @media print{aside,.toolbar,.navshade,.stepbox{display:none}main{margin:0}article{max-width:none;padding:0}details{break-inside:avoid}table{min-width:0;font-size:10pt}h2{break-after:avoid}.tablewrap{overflow:visible}body{font-size:11pt}.quickbox select{display:none}.formula{white-space:normal}}
-</style></head><body><div class="navshade"></div><aside id="course-nav" aria-label="阶段分组学习目录"><div class="brand">计算机网络<br>学习资料</div><p class="subbrand">第 6 章 · 传输层</p><nav><a class="navlink" href="#learning-nav">学习导航</a><section class="navgroup"><h2>学习准备</h2><p>认清场景、对象与计数边界</p><a class="navlink" href="#c6-0">6.0 共同场景与符号</a></section><section class="navgroup"><h2>端点与服务</h2><p>认清标识、边界和校验</p><a class="navlink" href="#c6-1">6.1 应用端点与复用</a><a class="navlink" href="#c6-2">6.2 UDP</a></section><section class="navgroup"><h2>TCP 的状态与控制</h2><p>推导字节恢复、连接与发送额度</p><a class="navlink" href="#c6-3">6.3 TCP 字节流、首部与丢失恢复</a><a class="navlink" href="#c6-4">6.4 连接建立与释放</a><a class="navlink" href="#c6-5">6.5 流量、拥塞与小段控制</a></section><section class="navgroup"><h2>扩展与使用</h2><p>区分 QUIC v1 并正确使用 Socket</p><a class="navlink" href="#c6-6">6.6 QUIC v1</a><a class="navlink" href="#c6-7">6.7 Socket</a></section><section class="navgroup"><h2>练习与复习</h2><p>组合推导、独立作答与排错</p><a class="navlink" href="#c6-8">6.8 综合应用</a><a class="navlink" href="#c6-9">6.9 自测与答案</a><a class="navlink" href="#c6-10">6.10 排错与复习</a><a class="navlink" href="#c6-11">6.11 分类速查</a></section></nav><p class="asidefoot">先看前提与对象，再推导中间过程。速查只显示当前选项，完整解释可返回正文。<br><a href="00_学习导航.html">全课程入口</a></p></aside><main><div class="toolbar"><button class="menubtn" id="menu-button" aria-expanded="false" aria-controls="course-nav">目录</button><a href="../index.html#/">课程资料站</a><a href="00_学习导航.html">课程导航</a><span class="desktop-only">传输层</span><span class="spacer"></span><a href="06_传输层.md">Markdown</a><span class="desktop-only">离线阅读</span></div><article><h1>第6章 传输层：按字节追踪确认、连接与发送窗口</h1>
+
+.chapter-search-toggle{font:inherit;border:1px solid #b1cecb;border-radius:6px;background:#f1f8f6;color:#155e63;padding:4px 12px;white-space:nowrap}.chapter-search-dialog{position:fixed;inset:70px 18px auto auto;margin:0;width:min(620px,calc(100vw - 36px));max-width:none;max-height:calc(100vh - 90px);max-height:calc(100dvh - 90px);border:1px solid #bfd5d2;border-radius:12px;padding:0;background:#fff;color:#20334a;box-shadow:0 16px 65px #102e4033;font:14px/1.7 'Segoe UI','Microsoft YaHei',sans-serif}.chapter-search-dialog::backdrop{background:#102e4055}.chapter-search-dialog[open]{display:flex;flex-direction:column}.chapter-search-head{display:flex;gap:14px;align-items:center;padding:17px 20px;border-bottom:1px solid #d9e4e9}.chapter-search-head h2{font-size:20px;line-height:1.5;margin:0;padding:0;border:0;flex:1}.chapter-search-ui button{font:inherit;cursor:pointer}.chapter-search-close{border:1px solid #b6cccb;border-radius:5px;background:white;color:#17666c;padding:3px 10px}.chapter-search-form{padding:14px 20px 4px}.chapter-search-form label{display:block;font-weight:600;font-size:13px;margin-bottom:7px}.chapter-search-fields{display:flex;gap:8px}.chapter-search-fields input{min-width:0;flex:1;border:1px solid #a9c7c1;border-radius:6px;padding:9px 11px;font:16px/1.5 'Segoe UI','Microsoft YaHei',sans-serif;color:#20334a;background:white}.chapter-search-fields button{border:1px solid #17666c;border-radius:6px;background:#17666c;color:white;padding:8px 15px;white-space:nowrap}.chapter-search-help{margin:9px 0 0;font-size:12px;color:#63748a;line-height:1.7}.chapter-search-status{margin:10px 20px;font-size:13px;color:#4b6e70}.chapter-search-results{overflow-y:auto;overscroll-behavior:contain;min-height:0;padding:0 13px 16px;flex:1}.chapter-search-result{display:block;width:100%;text-align:left;border:1px solid #d7e4e2;border-radius:7px;background:#fff;margin:7px 0;padding:11px 13px;color:#20334a;overflow-wrap:anywhere}.chapter-search-result:hover{background:#f0f8f5;border-color:#80b2aa}.chapter-search-result[aria-current="true"]{border-color:#17666c;background:#edf7f3}.chapter-search-result-title{display:block;font-size:12px;color:#17666c;font-weight:600;margin-bottom:5px}.chapter-search-snippet{display:block;font-size:13px}.chapter-search-snippet mark{background:#fff0a8;color:inherit;padding:0}.chapter-search-more{display:block;width:100%;border:1px solid #bfd4cf;border-radius:6px;background:#f4f9f7;color:#17666c;padding:8px;margin-top:12px}.chapter-search-empty{margin:16px 8px;color:#63748a;font-size:13px}.chapter-search-dock{position:fixed;bottom:18px;left:calc(50% + 146px);transform:translateX(-50%);max-width:calc(100vw - 24px);display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;z-index:35;border:1px solid #bdd3ce;border-radius:9px;background:#fffffffa;box-shadow:0 4px 24px #102e4026;padding:9px 12px;color:#20334a;font-size:13px}.chapter-search-dock[hidden]{display:none}.chapter-search-dock button{border:1px solid #b2cdc5;border-radius:5px;padding:4px 9px;background:#f5faf7;color:#17666c;white-space:nowrap}.chapter-search-counter{min-width:60px;text-align:center;font-variant-numeric:tabular-nums}.chapter-search-ui :focus-visible,.chapter-search-toggle:focus-visible{outline:3px solid #d78b21;outline-offset:2px}mark.chapter-search-hit{color:inherit;background:#fff0a8;padding:0;border-radius:2px;box-decoration-break:clone;-webkit-box-decoration-break:clone}mark.chapter-search-hit.chapter-search-current{background:#ffc66b;outline:2px solid #be7114;outline-offset:1px}.chapter-search-has-results article{padding-bottom:170px}
+@media(max-width:1100px){.chapter-search-dock{left:calc(50% + 127.5px)}}
+@media(max-width:860px){.chapter-search-dialog{inset:65px 12px auto;width:calc(100vw - 24px);max-height:calc(100vh - 80px);max-height:calc(100dvh - 80px)}.chapter-search-dock{left:50%;bottom:12px;width:max-content;gap:6px;padding:8px}.chapter-search-head{padding:14px 16px}.chapter-search-form{padding:12px 16px 4px}.chapter-search-status{margin:9px 16px}.chapter-search-results{padding:0 10px 12px}.chapter-search-fields button{padding:8px 11px}.chapter-search-toggle{padding:4px 10px}}
+@media print{.chapter-search-ui,.chapter-search-toggle{display:none!important}mark.chapter-search-hit{background:transparent;outline:none}.chapter-search-has-results article{padding-bottom:0}}
+</style><style>
+.theme-control{display:inline-flex;align-items:center;gap:5px;white-space:nowrap;color:var(--ink)}
+.theme-control select{font:inherit;color:var(--ink);background:var(--paper);border:1px solid var(--line);border-radius:5px;padding:4px 6px}
+.theme-control select:focus-visible{outline:3px solid #d78b21;outline-offset:2px}
+.toolbar{height:auto;min-height:55px;flex-wrap:wrap;padding-top:8px;padding-bottom:8px}
+:root[data-theme=dark]{color-scheme:dark;--ink:#e1eaf3;--muted:#a6b6c9;--accent:#83d5cf;--light:#223f40;--line:#45576a;--paper:#18232f;--back:#111b25}
+[data-theme=dark] article,[data-theme=dark] .stepdisplay,[data-theme=dark] button,[data-theme=dark] select,[data-theme=dark] input{background:var(--paper);color:var(--ink);border-color:var(--line)}
+[data-theme=dark] aside,[data-theme=dark] .toolbar{background:#1b2937;color:var(--muted)}
+[data-theme=dark] .navlink{color:#c4d7e5}[data-theme=dark] .navlink:hover{background:#2b414d}[data-theme=dark] .navlink.active{background:#254846;color:#a4eee7}
+[data-theme=dark] .navgroup h2,[data-theme=dark] .navgroup p,[data-theme=dark] .chaptercard span{color:var(--muted)}
+[data-theme=dark] a:hover{color:#b4f2eb}
+[data-theme=dark] th{background:#293d4c}[data-theme=dark] tbody tr:nth-child(even){background:#1e303d}[data-theme=dark] td,[data-theme=dark] th{border-color:var(--line)}
+[data-theme=dark] pre,[data-theme=dark] code,[data-theme=dark] .formula{background:#22313f;color:var(--ink);border-color:var(--line)}[data-theme=dark] pre code{background:transparent}
+[data-theme=dark] blockquote,[data-theme=dark] details,[data-theme=dark] .quickbox,[data-theme=dark] .stepbox,[data-theme=dark] .chaptercard{background:#20363c;color:var(--ink);border-color:#4b7074}
+[data-theme=dark] summary,[data-theme=dark] .quickcard dt{color:var(--accent)}
+[data-theme=dark] .stepbuttons button.active{background:#83d5cf;color:#142f32}
+[data-theme=dark] .chapter-search-dialog,[data-theme=dark] .chapter-search-dock,[data-theme=dark] .chapter-search-result{background:#1b2937;color:var(--ink);border-color:var(--line)}
+[data-theme=dark] .chapter-search-result:hover,[data-theme=dark] .chapter-search-result[aria-current=true]{background:#2a484a;border-color:var(--accent)}
+[data-theme=dark] .chapter-search-result-title,[data-theme=dark] .chapter-search-status{color:var(--accent)}
+[data-theme=dark] .chapter-search-help,[data-theme=dark] .chapter-search-empty{color:var(--muted)}
+[data-theme=dark] mark.chapter-search-hit,[data-theme=dark] .chapter-search-snippet mark{color:#ffedaf;background:#665217}
+[data-theme=dark] mark.chapter-search-current{color:#fff3da;background:#8b4a0b;outline-color:#ffc778}
+/* Waveform drawings use semantic fixed colors; map the whole drawing together. */
+[data-theme=dark] svg{filter:invert(.88) hue-rotate(165deg)}
+[data-theme=dark] .wave-card{background:#20313d;border-color:var(--line)}
+[data-theme=dark] .wave-title,[data-theme=dark] .wave-readout{color:var(--accent)}
+[data-theme=dark] .wave-readout{background:#294447}
+[data-theme=dark] .wave-caption,[data-theme=dark] .wave-legend,[data-theme=dark] .wave-mobile-hint{color:var(--muted)}
+[data-theme=dark] .wave-legend span:before{background:#83d5cf}
+[data-theme=dark] .wave-legend .amber:before{background:#dfb16c}
+[data-theme=dark] .wave-legend .gray:before{background:#b3c4ce}
+@media(max-width:860px){.toolbar{gap:8px;padding-left:12px;padding-right:12px}.theme-control{font-size:12px}h2,h3{scroll-margin-top:115px}}
+@media print{
+ :root[data-theme]{color-scheme:light;--ink:#17212b;--muted:#425363;--accent:#155d63;--line:#b9c4ce;--paper:#fff;--back:#fff}
+ .theme-control{display:none!important}
+ html[data-theme] body,html[data-theme] article,html[data-theme] pre,html[data-theme] code,html[data-theme] blockquote,html[data-theme] details,html[data-theme] .formula,html[data-theme] .quickbox,html[data-theme] .quickcard,html[data-theme] .stepbox,html[data-theme] .stepdisplay,html[data-theme] th,html[data-theme] tr{background:white!important;color:#17212b!important}
+ html[data-theme] svg{filter:none!important}html[data-theme] summary,html[data-theme] .quickcard dt{color:#155d63!important}
+ html[data-theme] .wave-card,html[data-theme] .wave-readout{background:white!important;color:#17212b!important}
+ html[data-theme] .wave-title,html[data-theme] .wave-caption,html[data-theme] .wave-legend{color:#17212b!important}
+}
+</style></head><body><div class="navshade"></div><aside id="course-nav" aria-label="阶段分组学习目录"><div class="brand">计算机网络<br>学习资料</div><p class="subbrand">第 6 章 · 传输层</p><nav><a class="navlink" href="#learning-nav">学习导航</a><section class="navgroup"><h2>学习准备</h2><p>认清场景、对象与计数边界</p><a class="navlink" href="#c6-0">6.0 共同场景与符号
+</a></section><section class="navgroup"><h2>端点与服务</h2><p>认清标识、边界和校验</p><a class="navlink" href="#c6-1">6.1 应用端点与复用</a><a class="navlink" href="#c6-2">6.2 UDP</a></section><section class="navgroup"><h2>TCP 的状态与控制</h2><p>推导字节恢复、连接与发送额度</p><a class="navlink" href="#c6-3">6.3 TCP 字节流、首部与丢失恢复
+</a><a class="navlink" href="#c6-4">6.4 连接建立与释放</a><a class="navlink" href="#c6-5">6.5 流量、拥塞与小段控制</a></section><section class="navgroup"><h2>扩展与使用</h2><p>区分 QUIC v1 并正确使用 Socket</p><a class="navlink" href="#c6-6">6.6 QUIC v1</a><a class="navlink" href="#c6-7">6.7 Socket</a></section><section class="navgroup"><h2>练习与复习</h2><p>组合推导、独立作答与排错</p><a class="navlink" href="#c6-8">6.8 综合应用
+</a><a class="navlink" href="#c6-9">6.9 自测与答案
+</a><a class="navlink" href="#c6-10">6.10 排错与复习
+</a><a class="navlink" href="#c6-11">6.11 分类速查
+</a></section></nav><p class="asidefoot">先看前提与对象，再推导中间过程。速查只显示当前选项，完整解释可返回正文。<br><a href="00_学习导航.html">全课程入口</a></p></aside><main><div class="toolbar"><button class="menubtn" id="menu-button" aria-expanded="false" aria-controls="course-nav">目录</button><a href="../index.html#/">课程资料站</a><a href="00_学习导航.html">课程导航</a><span class="desktop-only">传输层</span><span class="spacer"></span><label class="theme-control">外观 <select id="reading-theme" aria-label="阅读配色"><option value="light">白天</option><option value="dark">夜间</option></select></label><button type="button" id="chapter-search-toggle" class="chapter-search-toggle" aria-haspopup="dialog" aria-expanded="false" aria-controls="chapter-search-dialog" disabled>搜索</button><a href="06_传输层.md">Markdown</a><span class="desktop-only">离线阅读</span></div><article><h1>第6章 传输层：按字节追踪确认、连接与发送窗口</h1>
 <p>IP 包到达服务器，并没有回答交给哪个程序、缺失的数据怎样补齐。本章承接 IP 与滑动窗口，先区分应用端点和传输服务，再用字节位置追踪 TCP 的确认、连接和发送额度。TCP 序号按字节计数，不能沿用链路层按帧编号的习惯。</p>
 <a id="learning-nav"></a>
 <h2>学习导航</h2>
@@ -96,7 +147,7 @@
 <p>IP 包到达 B 后，B 上仍可能有许多应用，同时一个服务又接很多客户。端口标识端点，连接四元组区分会话，缓存和控制吸收双方处理速度差；这些不是每个进程永久占一个端口的固定映射。</p>
 <a id="k6.1.1"></a>
 <h3>6.1.1 进程、端口与通信端点</h3>
-<p>一台主机可以同时运行浏览器、邮件客户端等程序。<strong>进程</strong>是运行中的程序实例；<strong>端口</strong>是传输层区分通信端点的编号，不是网线插口，也不与进程永久一一对应。</p>
+<p>一台主机可以同时运行浏览器、邮件客户端等程序。<strong>进程</strong> 是运行中的程序实例；<strong>端口</strong> 是传输层区分通信端点的编号，不是网线插口，也不与进程永久一一对应。</p>
 <p>IP地址帮助找到网络接口，传输协议和端口帮助找到相应应用通信端点。端口号16位，TCP与UDP的编号空间相互独立。</p>
 <table>
 <thead>
@@ -119,12 +170,13 @@
 </tr>
 </tbody></table>
 <p>操作系统选临时端口的具体范围可能不同，分类不意味着每个程序都只能在某一段运行。</p>
-<p>TCP连接通常由<strong>四元组</strong>区分：源IP、源端口、目的IP、目的端口。再加传输协议可组成五元组。因此一个服务器端口可以同时接待不同客户端。</p>
-<p>课件TSAP是传输服务访问点，NSAP是网络服务访问点，属于分层描述；应用通常通过Socket接口使用服务，无须直接操作这些抽象名词。</p>
+<p>TCP连接通常由<strong>四元组</strong> 区分：源IP、源端口、目的IP、目的端口。再加传输协议可组成五元组。因此一个服务器端口可以同时接待不同客户端。</p>
+<p>TSAP 是传输服务访问点，NSAP是网络服务访问点，属于分层描述；应用通常通过Socket接口使用服务，无须直接操作这些抽象名词。</p>
+<p>例如同一电脑同时运行浏览器和邮件程序，两者共用主机 IP，却用不同端口关联通信端点。服务访问点是分层模型里的服务入口，Socket 是应用使用服务的接口及系统对象；不能把抽象访问点名、端口数值和一个连接对象当成同一种东西。</p>
 <a id="k6.1.2"></a>
 <h3>6.1.2 复用、缓冲与控制</h3>
 <p>许多应用共用 IP 传输，又可能以不同速度读写。端点分用解决交给谁，缓冲吸收暂时的速度差，控制机制再约束未完成数据的规模。</p>
-<p>多个应用通信共用网络层，接收端按端点信息分开，称为传输层的<strong>复用与分用</strong>。</p>
+<p>多个应用通信共用网络层，接收端按端点信息分开，称为传输层的<strong>复用与分用</strong> 。</p>
 <p>发送缓存保存待发和未确认的数据，接收缓存暂存收到但尚未交给应用的数据。缓存吸收速度差异，不能无限解决应用不读取的问题。</p>
 <table>
 <thead>
@@ -158,18 +210,20 @@
 <td>适应网络的容量</td>
 </tr>
 </tbody></table>
-<p>课件“向上复用”指多条传输连接共用网络连接，“向下复用”指一条传输连接使用多个网络连接，是一般分层模型；普通TCP并不要求IP先建立一条有连接的网络通道。</p>
+<p>一般分层模型中的“向上复用”指多条传输连接共用网络连接，“向下复用”指一条传输连接使用多个网络连接，是一般分层模型；普通TCP并不要求IP先建立一条有连接的网络通道。</p>
+<p>例如甲上两条传输连接共同使用一条下层连接，是一般模型中的向上复用；若一条传输连接的数据分散到两条下层连接，是向下复用。另看接收缓冲：应用暂未读取 1000 B，传输层可先缓存并限制新数据，缓存与复用分别处理存放与共享问题。</p>
 <a id="k6.1.3"></a>
 <h3>6.1.3 连接建立与释放的目的</h3>
 <p>连接建立不仅要“打个招呼”，还要确认双向状态、初始编号和协商参数，避免把延迟的旧请求误当新连接。</p>
 <p>两个方向都可发送时，也应分别考虑关闭：A不再发送，不意味着B马上也没有剩余数据。TCP的具体握手和半关闭见后文。</p>
+<p>例如甲先发送连接请求，乙返回自己的初始编号，甲再确认，双方才把后续数据关联到同一轮状态。若甲发完请求却仍等乙返回结果，可以只结束甲的发送方向，保留反向接收；建立与释放处理的是状态生命周期，不是创建和剪断一根物理网线。</p>
 <a id="c6-2"></a>
 <h2>6.2 UDP：有边界的数据报与校验</h2>
 <p>短请求想独立发送，不一定要先建持续连接。UDP 给出端点、长度和检错信息，却不保存恢复与排序机制；上层是否补充可靠性，应按任务判断。校验的伪首部不是网上多发送的首部。</p>
 <a id="k6.2.1"></a>
 <h3>6.2.1 UDP提供什么</h3>
-<p><strong>UDP，用户数据报协议</strong>无连接、面向报文，基本首部8 B。它不内置确认、重传、排序和拥塞控制，但使用它的上层协议可以按需要实现这些功能。</p>
-<p><strong>消息边界</strong>指一条消息从哪里开始、在哪里结束。UDP保留数据报边界，应用发送两份数据报，接收端仍按数据报处理；接收缓冲不足可能截断，不会自动拼成连续字节流。</p>
+<p><strong>UDP，用户数据报协议</strong> 无连接、面向报文，基本首部8 B。它不内置确认、重传、排序和拥塞控制，但使用它的上层协议可以按需要实现这些功能。</p>
+<p><strong>消息边界</strong> 指一条消息从哪里开始、在哪里结束。UDP保留数据报边界，应用发送两份数据报，接收端仍按数据报处理；接收缓冲不足可能截断，不会自动拼成连续字节流。</p>
 <table>
 <thead>
 <tr>
@@ -200,14 +254,16 @@
 </tr>
 </tbody></table>
 <p>UDP减少自身协议功能和连接管理开销，并不保证比TCP在任何任务上都快。实时应用也需要控制发送量；大数据报可能引起IP分片，必要分片丢失会导致整个数据报无法重组。</p>
+<p>例如应用把一条 20 B 消息交给 UDP，UDP 加 8 B 首部，形成 28 B 数据报再交给 IP。若该报文丢失，UDP 本身不自动重传；若应用要保证完成，就需要另外设计确认等机制。数据报的消息边界不等于可靠交付保证。</p>
 <a id="k6.2.2"></a>
 <h3>6.2.2 UDP校验和与伪首部</h3>
 <p>数据即使位数正确，也可能被误交给错误的地址或协议端点。UDP 把部分 IP 信息临时纳入检错计算，同时保持自身首部仍为 8 B。</p>
 <p>校验和按16位字反码求和、回卷进位、逐位取反，覆盖IP伪首部、UDP首部和数据。</p>
-<p><strong>伪首部</strong>是把源/目的IP、协议、长度等信息临时加入计算，检查是否误投递；它不是UDP在网上额外发送的一段首部。IPv4伪首部12 B。</p>
+<p><strong>伪首部</strong> 是把源/目的IP、协议、长度等信息临时加入计算，检查是否误投递；它不是UDP在网上额外发送的一段首部。IPv4伪首部12 B。</p>
 <p>IPv4的零校验字段可表示未使用校验；计算值恰为零时用全1编码。IPv6通常要求UDP校验和，少数特殊例外须按对应规范，不能推广为普通用途。</p>
+<p>例如某 UDP 数据报原计划交给乙，若途中被错误关联到别的目的 IP，仅检查正文未必能发现。把源、目的 IP、协议号和 UDP 长度纳入校验计算，可检查这种关联关系；伪首部只参与计算，不作为额外 UDP 字节在线路上插入。</p>
 <a id="k6.2.3"></a>
-<h3>6.2.3 课件校验和例题</h3>
+<h3>6.2.3 UDP 校验和计算例题</h3>
 <p>把规则用到奇数字节数据时，最容易混淆计算补零与实际报文长度。下面先列出所有 16 位字，再做回卷进位并填回校验字段。</p>
 <p>源IP153.19.8.104，目的171.3.14.11；源端口1087，目的13；数据<code>TESTING</code>为7 B，因此UDP长度为15 B。</p>
 <p>按网络字节顺序，每两个字节组成一个16位字：</p>
@@ -227,8 +283,9 @@ UDP首部：   043F 000D 000F 0000
 <p>应用需要按序得到同一串字节，而网络可能丢失、重复和乱序。TCP 用字节位置识别缺口，累计确认只越过连续范围，SACK 补充后续已收区域；定时器在没有进一步反馈时保证还有恢复机会。</p>
 <a id="k6.3.1"></a>
 <h3>6.3.1 可靠、有序的字节流</h3>
-<p><strong>TCP，传输控制协议</strong>提供面向连接、全双工的可靠有序字节流。</p>
-<p><strong>字节流</strong>把应用写入内容视为连续字节序列，不保留每次发送调用的消息边界。写入<code>HELLO</code>、<code>WORLD</code>，对端可以一次读到<code>HELLOWORLD</code>，也可分多次读取。</p>
+<p>应用每次写入的数据大小不等于对方每次读取的大小。要正确解释接收结果，必须先明确传输层保证的是哪些字节，以及怎样编号与恢复。</p>
+<p><strong>TCP，传输控制协议</strong> 提供面向连接、全双工的可靠有序字节流。</p>
+<p><strong>字节流</strong> 把应用写入内容视为连续字节序列，不保留每次发送调用的消息边界。写入<code>HELLO</code>、<code>WORLD</code>，对端可以一次读到<code>HELLOWORLD</code>，也可分多次读取。</p>
 <p>应用必须用长度、分隔符或约定格式区分消息。一次send不保证对应一次recv，序号也不能用“第几个包”理解。</p>
 <p>TCP按字节编号，两方向独立维护序号与窗口。可靠服务通过校验、序号、确认、重传和缓存实现；网络永久故障仍可能使连接失败，也不自动保证应用事务只执行一次。</p>
 <a id="k6.3.2"></a>
@@ -321,10 +378,11 @@ UDP首部：   043F 000D 000F 0000
 </tr>
 </tbody></table>
 <p>SYN、FIN各占一个序号，纯ACK不占。紧急指针相对本段序号，标准定义及历史实现存在兼容问题，不把它当紧急字节的绝对序号。<a href="https://www.rfc-editor.org/rfc/rfc9293.html">RFC 9293</a></p>
+<p>例如一个普通数据段源端口 50000、目的端口 80、Seq=1001、数据长 100 B、Data Offset=5，则首部为 20 B，数据覆盖 1001～1100，接收方正常下一期待 1101。若该段 ACK 位为 1，确认号才解释为反方向的反馈；端口、序号和确认号描述不同对象。</p>
 <a id="k6.3.3"></a>
 <h3>6.3.3 MSS与常见选项</h3>
 <p>IP 包受 MTU 限制，能装入的 TCP 数据还要扣掉各层实际首部。MSS 与选项帮助双方约定发送条件，不能把链路的 1500 B 全当成用户正文。</p>
-<p><strong>MSS，最大报文段大小</strong>限制TCP数据部分，不包括IP和TCP首部。</p>
+<p><strong>MSS，最大报文段大小</strong> 限制TCP数据部分，不包括IP和TCP首部。</p>
 <p>理解例子：MTU=1500 B、无额外选项与封装：IPv4按20+20 B首部计算，数据1460 B；IPv6按40+20 B计算，数据1440 B。选项或隧道可能减少实际可装数据。</p>
 <table>
 <thead>
@@ -358,7 +416,7 @@ UDP首部：   043F 000D 000F 0000
 <a id="k6.3.4"></a>
 <h3>6.3.4 字节序号与累计ACK</h3>
 <p>接收方可能先收到后面的段，却仍缺少前面的字节。确认必须指向连续范围的终点，才能让发送方知道哪一段缺口还没有补齐。</p>
-<p><strong>ACK=a</strong>表示a之前的数据已连续收到，下一期待a。</p>
+<p><strong>ACK=a</strong> 表示a之前的数据已连续收到，下一期待a。</p>
 <pre><code class="language-text">Seq=1001，Len=500
 覆盖字节1001～1500
 正常回复ACK=1501
@@ -367,8 +425,8 @@ UDP首部：   043F 000D 000F 0000
 <p>捎带确认把ACK放在反向数据段中，减少单独报文；但确认并非永远没有成本，纯ACK也需要首部和链路资源。</p>
 <a id="k6.3.5"></a>
 <h3>6.3.5 SACK：告诉发送方哪些后续区间已收到</h3>
-<p><strong>SACK，选择确认</strong>保留累计ACK，同时报告非连续的已收区间。要先协商支持；它报告已收范围，而非直接列出丢失范围。</p>
-<p>课件例中，假定发送端已发出 <code>[1001,4501)</code> 的全部数据，收到累计 ACK=1001，SACK 为 <code>[1501,3001)</code>、<code>[3501,4501)</code>：</p>
+<p><strong>SACK，选择确认</strong> 保留累计ACK，同时报告非连续的已收区间。要先协商支持；它报告已收范围，而非直接列出丢失范围。</p>
+<p>假定发送端已发出 <code>[1001,4501)</code> 的全部数据，收到累计 ACK=1001，SACK 为 <code>[1501,3001)</code>、<code>[3501,4501)</code>：</p>
 <table>
 <thead>
 <tr>
@@ -397,19 +455,20 @@ UDP首部：   043F 000D 000F 0000
 <p>课件早期“TCP不采用选择确认”的概括应与后续SACK扩展区分。</p>
 <a id="k6.3.6"></a>
 <h3>6.3.6 RTT、RTO与超时</h3>
-<p><strong>RTT</strong>是实测往返时间；<strong>RTO</strong>是判断等待过久、应当重传的阈值。网络延迟会变化，RTO既考虑平均水平，也考虑变化幅度。</p>
+<p>网络时延会波动，等待阈值太短会误重传，太长又会拖延恢复。必须区分一次实测的往返时间与用于判断超时的阈值。</p>
+<p><strong>RTT</strong> 是实测往返时间；<strong>RTO</strong> 是判断等待过久、应当重传的阈值。网络延迟会变化，RTO既考虑平均水平，也考虑变化幅度。</p>
 <p>RFC 6298基础算法：首次样本R，SRTT=R，RTTVAR=R/2。SRTT是平滑估计，RTTVAR估计偏差。</p>
 <pre><code class="language-text">RTTVAR ← 3/4×旧RTTVAR + 1/4×|旧SRTT−新样本|
 SRTT   ← 7/8×旧SRTT + 1/8×新样本
 RTO    ← SRTT + max(G,4×RTTVAR)
 </code></pre>
 <p>G为计时粒度，更新时间偏差时用旧SRTT。理解例子：先100 ms，后120 ms，得到SRTT=102.5 ms、RTTVAR=42.5 ms；若G很小，原始计算272.5 ms。RFC 6298 第 2.4 节建议（SHOULD）把小于 1 s 的计算结果提高到 1 s；按这个保守规则，本例使用 1 s。这里的建议不能改写成所有实现都强制采用同一最低值。<a href="https://www.rfc-editor.org/rfc/rfc6298">RFC 6298</a></p>
-<p><strong>Karn思想</strong>：重传后无法确定ACK对应原发还是重发，若没有消除歧义的机制，就不采用该RTT样本。超时后RTO通常加倍，避免反复迅速重传。</p>
+<p><strong>Karn思想</strong> ：重传后无法确定ACK对应原发还是重发，若没有消除歧义的机制，就不采用该RTT样本。超时后RTO通常加倍，避免反复迅速重传。</p>
 <h3>三个层次的编号不要互换</h3>
 <p>TCP 数据 Seq=1001、Len=500，字节范围为 [1001,1501)。它封装成一个 IP 包，IP 若分片，片偏移按原 IP 载荷的 8 B 块计；每片又进入链路帧。TCP 序号、IP 分片偏移、链路帧序号各标识自己的对象，不能拿 500 B 数据段直接叫“第 500 帧”。</p>
 <h3>可靠接收并不证明业务只执行一次</h3>
 <p>A 提交一个请求，B 应用已经完成操作，但响应前连接失败。A 重新建立连接提交同样内容时，TCP 会把新连接字节正常送到 B，不知道它是同一业务操作。防止重复业务要由应用加入请求标识和处理规则。这是解释服务边界的补充，不是 TCP 对单连接字节可靠性的否定。</p>
-<h3>讲义原题：先反推起点，再判断累计确认</h3>
+<h3>例题：先反推起点，再判断累计确认</h3>
 <p>参考：讲义 PDF 第 1341、1346 页。分别练习连续接收与存在缺口时的累计确认。</p>
 <p>第一题首段 Seq=200、300 B，第二段连续 500 B，接收均正确：第一段覆盖 [200,500)，第二段 [500,1000)，确认下一期待 1000。算式是 <code>200+300+500=1000</code>，不是“第 2 个包所以确认 2”。</p>
 <p>第二题连续三段分别 300、400、500 B，第三段 Seq=900，只有第一、第三段到达。先反推第二段从 <code>900−400=500</code> 开始，第一段从 <code>500−300=200</code> 开始。第一段后连续缺口在 500，第三段到达也不能跨过缺口，所以累计 ACK=500；如果支持 SACK，可以另报 [900,1400)。图中第二段的 Seq=500 与数据长度 400 B 描述的是不同数值，不能把序号当数据长度。</p>
@@ -432,7 +491,8 @@ RTO    ← SRTT + max(G,4×RTTVAR)
 <p>握手帮助确认双向状态与本轮参数，不能保证此后永不故障；初始序号也不固定从0或1开始。</p>
 <a id="k6.4.2"></a>
 <h3>6.4.2 释放、半关闭与TIME_WAIT</h3>
-<p>两个方向分别关闭。<strong>FIN表示本方向以后不发新数据，仍可继续接收。</strong></p>
+<p>两个方向可能在不同时刻发完。若一方不再发送就立刻毁掉整个连接，对方尚未发完的数据便无处交付，因此关闭必须按方向处理。</p>
+<p>两个方向分别关闭。<strong>FIN表示本方向以后不发新数据，仍可继续接收。</strong> </p>
 <p>典型过程：A发FIN，B确认；B把剩余数据发完，再发自己的FIN；A确认。中间ACK与FIN可合并，所以不必固定四个报文。</p>
 <table>
 <thead>
@@ -450,7 +510,7 @@ RTO    ← SRTT + max(G,4×RTTVAR)
 <td>ESTABLISHED→CLOSE-WAIT→LAST-ACK→CLOSED</td>
 </tr>
 </tbody></table>
-<p>FIN的Seq=301，对方应确认302，因为FIN也占序号。B收到FIN而尚未关闭自己方向时，是<strong>半关闭</strong>状态。</p>
+<p>FIN的Seq=301，对方应确认302，因为FIN也占序号。B收到FIN而尚未关闭自己方向时，是<strong>半关闭</strong> 状态。</p>
 <p>TIME_WAIT通常持续2MSL，MSL为最大报文段生存时间模型。它让旧报文失效，并允许最后ACK丢失时重新确认对方重传的FIN。具体时长不应当成所有系统相同的常量。</p>
 <p>CLOSE-WAIT表示本地应用还未关闭发送方向，与正常TIME_WAIT不同；同时关闭的状态路径也会不同。</p>
 <h3>按字节范围确定 FIN 的序号</h3>
@@ -461,36 +521,39 @@ RTO    ← SRTT + max(G,4×RTTVAR)
 <a id="k6.5.1"></a>
 <h3>6.5.1 接收窗口与可新发数据</h3>
 <p>知道对方缓冲还能装多少，只给出了总许可；已有未确认数据也占着额度。计算还能新发多少时，要同时检查接收窗口、拥塞窗口和在途量。</p>
-<p><strong>rwnd，接收窗口</strong>告诉发送端还能接收多少字节。ACK=1501、rwnd=3000，通告区间为<code>[1501,4501)</code>，即1501～4500。</p>
-<p>方括号表示包含左边界，圆括号表示不包含右边界，叫<strong>左闭右开区间</strong>。</p>
-<p>发送还受<strong>cwnd，拥塞窗口</strong>限制。常用简化上限为：</p>
+<p><strong>rwnd，接收窗口</strong> 告诉发送端还能接收多少字节。ACK=1501、rwnd=3000，通告区间为<code>[1501,4501)</code>，即1501～4500。</p>
+<p>方括号表示包含左边界，圆括号表示不包含右边界，叫<strong>左闭右开区间</strong> 。</p>
+<p>发送还受<strong>cwnd，拥塞窗口</strong> 限制。常用简化上限为：</p>
 <div class="formula" role="math" aria-label="W_{effective}=\min(cwnd,rwnd)">W<sub>effective</sub>=min(cwnd,rwnd)</div>
 
 
-<p>窗口是上限，已经发出而未确认的<strong>在途数据</strong>占用它。理解例子：cwnd=8000 B，rwnd=12000 B，在途5000 B，最多再发3000 B，不能再发8000 B。</p>
+<p>窗口是上限，已经发出而未确认的<strong>在途数据</strong> 占用它。理解例子：cwnd=8000 B，rwnd=12000 B，在途5000 B，最多再发3000 B，不能再发8000 B。</p>
 <a id="k6.5.2"></a>
 <h3>6.5.2 零窗口、Nagle与小报文低效</h3>
-<p>零窗口表示接收端暂不能接收新数据。窗口重开通知也可能丢失，所以用<strong>坚持定时器与窗口探测</strong>避免双方永远等下去，探测不等于允许大量越窗发送。</p>
-<p><strong>Nagle算法</strong>减少发送方的小段：没有未确认数据时可先发小段；已有未确认数据时积累新数据，直到确认到达或凑够足够大小。它可能增加交互等待，不是所有业务都适合相同设置。</p>
-<p><strong>糊涂窗口综合征</strong>是大量首部只带极少数据。例如接收应用每次读1 B、立即通告1 B空间，发送方也每次发1 B。接收端可等能容纳一个MSS或约半个缓冲时再更新，发送端也避免不必要的小段。</p>
+<p>既要避免接收缓冲被填满，也要减少很多小段造成的开销，这两类目标会产生不同等待规则。先分清等待的是窗口、确认还是更多应用数据。</p>
+<p>零窗口表示接收端暂不能接收新数据。窗口重开通知也可能丢失，所以用<strong>坚持定时器与窗口探测</strong> 避免双方永远等下去，探测不等于允许大量越窗发送。</p>
+<p><strong>Nagle算法</strong> 减少发送方的小段：没有未确认数据时可先发小段；已有未确认数据时积累新数据，直到确认到达或凑够足够大小。它可能增加交互等待，不是所有业务都适合相同设置。</p>
+<p><strong>糊涂窗口综合征</strong> 是大量首部只带极少数据。例如接收应用每次读1 B、立即通告1 B空间，发送方也每次发1 B。接收端可等能容纳一个MSS或约半个缓冲时再更新，发送端也避免不必要的小段。</p>
 <p>其他定时机制包括可选保活和关闭后的TIME_WAIT。保活不是每条连接都必须高频发送的心跳。</p>
+<p>例如接收端通告零窗口后应用腾出了空间，但窗口重开通知丢失；发送端的窗口探测可促使对方再次报告状态。另取发送端已有 1 B 未确认、应用又写入 1 B 的情形，Nagle 可能暂缓新小段，等确认或积累足够数据；这不是接收端通告零窗口。</p>
 <a id="k6.5.3"></a>
 <h3>6.5.3 慢开始与拥塞避免</h3>
 <p>连接刚开始时，并不知道网络能承受多大在途量。经典 TCP 先逐步探测容量，接近阈值后放慢增长，再根据反馈调整。</p>
-<p>cwnd保护网络，rwnd保护接收端。<strong>ssthresh</strong>是慢开始阈值。</p>
-<p>课件采用初始cwnd=1 MSS的经典模型：</p>
+<p>cwnd保护网络，rwnd保护接收端。<strong>ssthresh</strong> 是慢开始阈值。</p>
+<p>本节采用初始 cwnd=1 MSS 的经典模型：</p>
 <ul>
-<li><strong>慢开始</strong>：每个确认新数据的ACK增加约1 MSS，在窗口用满、及时确认时，每RTT约翻倍。</li>
-<li><strong>拥塞避免</strong>：每RTT约增加1 MSS，典型逐ACK增量约<code>MSS²/cwnd</code>字节。</li>
+<li><strong>慢开始</strong> ：每个确认新数据的ACK增加约1 MSS，在窗口用满、及时确认时，每RTT约翻倍。</li>
+<li><strong>拥塞避免</strong> ：每RTT约增加1 MSS，典型逐ACK增量约<code>MSS²/cwnd</code>字节。</li>
 </ul>
 <p>慢开始是指数增长，“慢”是相对于一开始就用很大窗口。拥塞避免不能误写成“每个ACK都增加1 MSS”。延迟确认和应用数据不足会改变实际增长。</p>
 <p>现代算法和初始窗口可能不同，计算按题设确认版本，不用这一条曲线代表全部TCP。<a href="https://www.rfc-editor.org/rfc/rfc5681.html">RFC 5681</a></p>
 <a id="k6.5.4"></a>
 <h3>6.5.4 超时、快重传与快恢复</h3>
-<p><strong>快重传</strong>利用重复ACK提前推断缺口。经典模型中，段2丢失，后续3、4、5各产生相同的缺口ACK，收到三个重复ACK即可触发重传，不必等RTO。</p>
-<p>经典Reno的<strong>快恢复</strong>把cwnd临时设置为ssthresh+3 MSS，再按反馈调整；收到推进确认后缩回ssthresh，进入拥塞避免。超时通常被视为更强的拥塞信号，窗口回到慢开始起点。</p>
+<p>数据丢失不一定要等定时器到期才暴露。后续数据产生的重复确认也能提示缺口，但不同恢复事件对窗口的影响不同。</p>
+<p><strong>快重传</strong> 利用重复ACK提前推断缺口。经典模型中，段2丢失，后续3、4、5各产生相同的缺口ACK，收到三个重复ACK即可触发重传，不必等RTO。</p>
+<p>经典Reno的<strong>快恢复</strong> 把cwnd临时设置为ssthresh+3 MSS，再按反馈调整；收到推进确认后缩回ssthresh，进入拥塞避免。超时通常被视为更强的拥塞信号，窗口回到慢开始起点。</p>
 <p>Tahoe、Reno、NewReno、SACK等恢复方式不同；ssthresh在规范中以在途量为重要依据，只有题设窗口用满时才可简单按cwnd减半。</p>
-<p><strong>课件例题：</strong> 超时前窗口16 KB，按题设阈值变8 KB；MSS=1 KB，cwnd重置1 KB，每轮用满并成功确认。</p>
+<p><strong>例题：</strong> 超时前窗口16 KB，按题设阈值变8 KB；MSS=1 KB，cwnd重置1 KB，每轮用满并成功确认。</p>
 <table>
 <thead>
 <tr>
@@ -541,7 +604,7 @@ RTO    ← SRTT + max(G,4×RTTVAR)
 <h3>同一窗口下连续追踪三个事件</h3>
 <p><strong>独立简化条件：</strong> cwnd=8000 B，rwnd=12000 B，当前在途 5000 B，应用有足够数据。初始最多新发 3000 B；发完后在途变 8000 B。之后 ACK 确认了其中 2000 B，若两个窗口都暂按原值保持，在途降到 6000 B，可再发 2000 B。</p>
 <p>如果 ACK 同时把 rwnd 改为 4000 B，而在途仍为 6000 B，则新增许可取 <code>max(0,4000−6000)=0</code>，不能给负数新发量，也不能强行撤回已在路上的数据。本例故意冻结 cwnd 更新，便于单独检查窗口算术；真实拥塞算法还会更新 cwnd。这里还假设对端将已通告的右边界向左缩回，以演示发送端的处理；RFC 9293 第 3.8.6 节不建议接收端主动这样收缩，但要求发送端能处理这种情况。不能把本例当成常规窗口更新方式。</p>
-<h3>讲义原题：确认释放多少额度</h3>
+<h3>例题：确认释放多少额度</h3>
 <p>参考：讲义 PDF 第 1227 页。MSS=1000 B，cwnd=4000 B，已连续发两段共 2000 B；收到第一段确认，通告 rwnd=2000 B。按题目固定 cwnd 的简化计算，已确认 1000 B、还在途 1000 B，新上限 <code>min(4000,2000)=2000 B</code>，还可新发 <code>2000−1000=1000 B</code>。</p>
 <p>如果不扣第二段，会错答 2000 B；如果把旧 cwnd 直接当新增许可，会错答 4000 B。题设没有表示接收方只剩 2000 B 应用文件，rwnd 描述的是接收许可而不是文件长度。</p>
 <a id="c6-6"></a>
@@ -549,10 +612,12 @@ RTO    ← SRTT + max(G,4×RTTVAR)
 <p>一条 TCP 字节流的缺口可能堵住复用其上的多个业务流。QUIC 在 UDP 之上独立组织可靠流，用包号反馈传输、流偏移定位内容，并保护连接。先确认版本，才能解释包类型、流号和长度字段。</p>
 <a id="k6.6.1"></a>
 <h3>6.6.1 UDP之上的可靠多流连接</h3>
-<p><strong>QUIC</strong>在UDP上实现安全连接、可靠流、拥塞控制和连接迁移。UDP自己没有突然变可靠，新增机制由QUIC完成。</p>
-<p><strong>流</strong>是连接内的一段独立字节序列。TCP的一条字节流有缺口时，后续字节交付受阻，可能影响共享它的多个应用流；QUIC把不同流独立组织，一条流的缺口通常不直接阻止其他完整流交付。</p>
+<p>多个业务共享一条按序字节流时，一个缺口可能拖住后面已到的数据。若希望不同流独立交付，就需要在传输机制中分别跟踪各流的字节。</p>
+<p><strong>QUIC</strong> 在UDP上实现安全连接、可靠流、拥塞控制和连接迁移。UDP自己没有突然变可靠，新增机制由QUIC完成。</p>
+<p><strong>流</strong> 是连接内的一段独立字节序列。TCP的一条字节流有缺口时，后续字节交付受阻，可能影响共享它的多个应用流；QUIC把不同流独立组织，一条流的缺口通常不直接阻止其他完整流交付。</p>
 <p>但各流仍共享连接的网络容量和某些控制限制，不是完全互不影响。HTTP/3是QUIC上的一种应用协议，QUIC本身不等于HTTP。</p>
 <p>QUIC v1结合TLS 1.3认证和建立密钥；初次通常需要相应往返，已有会话信息时可尝试0-RTT早期数据。0-RTT不表示第一次访问毫无等待，并有重放限制，即同一早期请求可能被重复使用。</p>
+<p>例如 QUIC 连接里流甲缺少偏移 100 的数据，而流乙已完整收到一条消息，乙可继续交付，甲等待恢复。它们仍共享路径和连接拥塞预算，甲的丢包可能降低整个连接的发送速率，因此独立交付不等于互相毫无影响。</p>
 <a id="k6.6.2"></a>
 <h3>6.6.2 先认清版本，再读首部</h3>
 <p>QUIC 的旧实现与 v1 字段并不完全相同。读取首部前先固定版本，再区分握手阶段、连接标识与包号，才能避免按旧图算错字段长度。</p>
@@ -573,13 +638,14 @@ RTO    ← SRTT + max(G,4×RTTVAR)
 <td>已建立连接的1-RTT包</td>
 </tr>
 </tbody></table>
-<p><strong>CID，连接标识</strong>帮助识别连接，减少对固定IP/端口组合的依赖；更换路径仍须验证，不能仅凭同CID信任任意新地址。</p>
+<p><strong>CID，连接标识</strong> 帮助识别连接，减少对固定IP/端口组合的依赖；更换路径仍须验证，不能仅凭同CID信任任意新地址。</p>
 <p>v1长首部类型位：Initial=00，0-RTT=01，Handshake=10，Retry=11。Initial可含令牌等，Retry有特殊布局，不把普通包号格式直接套给它。</p>
 <p>CID可变长，v1相应字段最多20 B，不是都固定160位。包号长度编码0～3对应1～4 B，公式是<code>(编码+1)×8 bit</code>，课件“P+8 bits”不正确。1350/1370 B是特定实现选择，不是QUIC统一固定包长。</p>
+<p>例如读取 QUIC v1 一个普通长首部数据包，包号长度编码为 2，则实际包号字段占 (2+1)×8=24 bit，即 3 B。CID 的字节数还须读对应长度信息；不能把相同算法直接用于特殊布局的 Retry 包，也不能把旧版本字段表直接套入。</p>
 <a id="k6.6.3"></a>
 <h3>6.6.3 包、帧与流偏移</h3>
 <p>一个连接内可能同时传多个流，还要发送确认与控制消息。QUIC 用包承载帧，用流标识和偏移定位字节，三种对象的编号各有作用。</p>
-<p>一个QUIC包可带多个<strong>帧</strong>，帧表达数据、确认或控制操作。这里的帧是QUIC包内部单位，不是链路层以太帧。</p>
+<p>一个QUIC包可带多个<strong>帧</strong> ，帧表达数据、确认或控制操作。这里的帧是QUIC包内部单位，不是链路层以太帧。</p>
 <p>STREAM帧用Stream ID、Offset及长度等描述流中数据。v1类型0x08～0x0f，低位标志决定是否有Offset、Length、FIN等；课件旧格式不能作为v1字段图。</p>
 <table>
 <thead>
@@ -603,14 +669,15 @@ RTO    ← SRTT + max(G,4×RTTVAR)
 <a id="k6.6.4"></a>
 <h3>6.6.4 流量控制与FIN</h3>
 <p>可靠多流也不能无限占用接收内存。接收方分别给每条流和整个连接授信，发送方要同时检查这两层许可，结束一条流也不等于关闭全部流。</p>
-<p><strong>MAX_STREAM_DATA</strong>给某流允许发送的最大结束偏移，<strong>MAX_DATA</strong>给连接级的数据总上限。两者是累计上限，不能把通告的数直接当成“本次还能新发多少”；新增额度要扣除已经占用的部分。重发原有范围不重复占用新增额度。</p>
+<p><strong>MAX_STREAM_DATA</strong> 给某流允许发送的最大结束偏移，<strong>MAX_DATA</strong> 给连接级的数据总上限。两者是累计上限，不能把通告的数直接当成“本次还能新发多少”；新增额度要扣除已经占用的部分。重发原有范围不重复占用新增额度。</p>
 <p>若流上限3000，Offset=2500、Length=500不越界，Length=600越界；还要满足连接级限制。FIN表示该流最终大小，不等于关闭整个连接。</p>
 <a id="c6-7"></a>
 <h2>6.7 Socket：应用怎样正确读写通信服务</h2>
 <p>应用通过调用接口使用协议服务，但调用边界不等于消息边界。要完成一条消息，就要定义格式、循环处理部分读写、识别关闭；监听入口仍须继续服务后来的客户。</p>
 <a id="k6.7.1"></a>
 <h3>6.7.1 TCP调用流程</h3>
-<p><strong>Socket，套接字</strong>是应用使用网络通信服务的编程接口。</p>
+<p>服务器需要长期等候新客户，同时又要处理已经接入的客户。若把监听入口与已建立连接混为一谈，就无法解释它怎样同时服务多人。</p>
+<p><strong>Socket，套接字</strong> 是应用使用网络通信服务的编程接口。</p>
 <pre><code class="language-text">TCP服务器                         TCP客户端
 socket：创建                      socket：创建
 bind：绑定本地地址/端口
@@ -621,6 +688,7 @@ close：关闭连接                   close：关闭
 </code></pre>
 <p>监听socket继续接受新连接，accept返回的新socket处理当前连接；服务器端口通常仍相同，靠四元组区分不同客户端。</p>
 <p>send可能只完成部分数据，recv(n)只是最多读n字节，不保证凑够n字节。应处理分批读写、错误和断开。</p>
+<p>例如服务器监听端口 8080，客户甲和乙分别连接它。两次 accept 返回两个连接对象，它们本地端口都可为 8080，但远端 IP 或端口不同；监听对象继续等待第三个客户。关闭甲对应的连接对象，不等于把服务器整个监听入口也关闭。</p>
 <a id="k6.7.2"></a>
 <h3>6.7.2 应用怎样定义消息边界</h3>
 <p>理解例子：用4字节长度前缀传文本。</p>
@@ -630,7 +698,7 @@ close：关闭连接                   close：关闭
       检查长度是否在允许范围内
       循环读够正文，再按UTF-8解释
 </code></pre>
-<p><strong>UTF-8</strong>是字符到字节的编码，“两个汉字”不等于“两个字节”。双方还要约定长度字段的字节顺序，例如大端表示先放高位字节。</p>
+<p><strong>UTF-8</strong> 是字符到字节的编码，“两个汉字”不等于“两个字节”。双方还要约定长度字段的字节顺序，例如大端表示先放高位字节。</p>
 <p>UDP通常用sendto/recvfrom按数据报收发，recvfrom还返回对端地址。它仍需处理丢失、截断、超时等情况。使用线程或事件循环，是程序组织方式，与TCP/UDP的选择是两个维度。</p>
 <h3>长度前缀为什么也可能分几次到达</h3>
 <p><strong>独立实例：</strong> 采用 4 B 大端长度，正文“你好”是 6 B UTF-8，总共 10 B。发送长度字段为 <code>00 00 00 06</code>，随后是 <code>E4 BD A0 E5 A5 BD</code>。接收调用可能依次得到 2 B、3 B、5 B：第一次还没够长度字段；第二次补足长度并多得首个正文字节；第三次补齐剩余正文。</p>
@@ -817,7 +885,7 @@ close：关闭连接                   close：关闭
 <p>选择一项查看用途、计算方法与适用条件，再回正文核对完整推导。</p>
 <div class="quickbox"><label for="quick-select">选择速查项</label><select id="quick-select"></select><div id="quick-card" class="quickcard" aria-live="polite"></div></div>
 
-<div class="footerlinks"><a href="05_网络层.html">← 上一章：网络层</a><a href="07_应用层.html">下一章：应用层 →</a></div></article></main><script>window.CHAPTER={"chapter":6,"name":"传输层","file":"06_传输层.md","title":"第6章 传输层：按字节追踪确认、连接与发送窗口","toc":[{"id":"c6-0","title":"6.0 共同场景与符号"},{"id":"c6-1","title":"6.1 应用端点与复用：同一主机怎样接多人通信"},{"id":"c6-2","title":"6.2 UDP：有边界的数据报与校验"},{"id":"c6-3","title":"6.3 TCP 字节流、首部与丢失恢复"},{"id":"c6-4","title":"6.4 连接建立与释放：双方状态怎样开始与结束"},{"id":"c6-5","title":"6.5 流量、拥塞与小段控制：还能发多少"},{"id":"c6-6","title":"6.6 QUIC v1：包恢复与多条流怎样分工"},{"id":"c6-7","title":"6.7 Socket：应用怎样正确读写通信服务"},{"id":"c6-8","title":"6.8 综合应用"},{"id":"c6-9","title":"6.9 自测与答案"},{"id":"c6-10","title":"6.10 排错与复习"},{"id":"c6-11","title":"6.11 分类速查"}],"stages":[{"name":"学习准备","task":"认清场景、对象与计数边界","ids":["c6-0"]},{"name":"端点与服务","task":"认清标识、边界和校验","ids":["c6-1","c6-2"]},{"name":"TCP 的状态与控制","task":"推导字节恢复、连接与发送额度","ids":["c6-3","c6-4","c6-5"]},{"name":"扩展与使用","task":"区分 QUIC v1 并正确使用 Socket","ids":["c6-6","c6-7"]},{"name":"练习与复习","task":"组合推导、独立作答与排错","ids":["c6-8","c6-9","c6-10","c6-11"]}],"quick":[["通信端点","复用标识","区分多应用与多连接","TCP 四元组；TCP/UDP 端口空间独立","同服务 :443 接多个客户端","端口不是进程永久身份",0],["UDP 校验与长度","数据报","检查首部和数据并保持边界","Length=8+数据；反码和含伪首部","7 B TESTING 得 Length15、校验 6912","临时补零与伪首部不增加线上 UDP 长度",1],["TCP ACK 与 SACK","恢复机制","说明连续已收与非连续已收","ACK 下一期待；SACK 左闭右开区间","缺口 1501 后仍 ACK1501","SACK 不代替累计确认",2],["握手与 FIN","连接状态","同步初始序号并分向关闭","SYN/FIN 各占 1 序号","SYN100、200 B 数据后 FIN301","半关闭仍允许反向数据",3],["可新发量","窗口控制","同时保护接收端与网络","max(0,min(cwnd,rwnd)−在途)","8000、12000、5000 得 3000 B","简化算式，需给定状态和算法",4],["RTO","时间恢复","在反馈不足时决定重传","SRTT+max(G,4RTTVAR)","100、120 ms 样本原值 272.5 ms","RFC 6298 建议计算后至少取 1 s；重传样本有歧义",2],["QUIC 包、帧、流","v1 结构","分开传输反馈与字节定位","包号 ACK；流 ID+Offset 定位","流 ID2 为客户端单向流","不同于以太网帧；按 v1 字段",5],["长度前缀读取","应用格式","在 TCP 字节流中恢复消息","先累计 4 B 长度，再累计正文","你好：长度6、正文6 B","大端、编码、长度上限和部分读写均需约定",6]],"quick_id":"c6-11","synthesis_id":"c6-8","source_module_count":24,"retained_core_chars":8509,"new_chars":18583};</script><script>
+<div class="footerlinks"><a href="05_网络层.html">← 上一章：网络层</a><a href="07_应用层.html">下一章：应用层 →</a></div></article></main><script>window.CHAPTER={"chapter":6,"name":"传输层","file":"06_传输层.md","title":"第6章 传输层：按字节追踪确认、连接与发送窗口","toc":[{"id":"c6-0","title":"6.0 共同场景与符号\r"},{"id":"c6-1","title":"6.1 应用端点与复用：同一主机怎样接多人通信\r"},{"id":"c6-2","title":"6.2 UDP：有边界的数据报与校验\r"},{"id":"c6-3","title":"6.3 TCP 字节流、首部与丢失恢复\r"},{"id":"c6-4","title":"6.4 连接建立与释放：双方状态怎样开始与结束\r"},{"id":"c6-5","title":"6.5 流量、拥塞与小段控制：还能发多少\r"},{"id":"c6-6","title":"6.6 QUIC v1：包恢复与多条流怎样分工\r"},{"id":"c6-7","title":"6.7 Socket：应用怎样正确读写通信服务\r"},{"id":"c6-8","title":"6.8 综合应用\r"},{"id":"c6-9","title":"6.9 自测与答案\r"},{"id":"c6-10","title":"6.10 排错与复习\r"},{"id":"c6-11","title":"6.11 分类速查\r"}],"stages":[{"name":"学习准备","task":"认清场景、对象与计数边界","ids":["c6-0"]},{"name":"端点与服务","task":"认清标识、边界和校验","ids":["c6-1","c6-2"]},{"name":"TCP 的状态与控制","task":"推导字节恢复、连接与发送额度","ids":["c6-3","c6-4","c6-5"]},{"name":"扩展与使用","task":"区分 QUIC v1 并正确使用 Socket","ids":["c6-6","c6-7"]},{"name":"练习与复习","task":"组合推导、独立作答与排错","ids":["c6-8","c6-9","c6-10","c6-11"]}],"quick":[["通信端点","复用标识","区分多应用与多连接","TCP 四元组；TCP/UDP 端口空间独立","同服务 :443 接多个客户端","端口不是进程永久身份",0],["UDP 校验与长度","数据报","检查首部和数据并保持边界","Length=8+数据；反码和含伪首部","7 B TESTING 得 Length15、校验 6912","临时补零与伪首部不增加线上 UDP 长度",1],["TCP ACK 与 SACK","恢复机制","说明连续已收与非连续已收","ACK 下一期待；SACK 左闭右开区间","缺口 1501 后仍 ACK1501","SACK 不代替累计确认",2],["握手与 FIN","连接状态","同步初始序号并分向关闭","SYN/FIN 各占 1 序号","SYN100、200 B 数据后 FIN301","半关闭仍允许反向数据",3],["可新发量","窗口控制","同时保护接收端与网络","max(0,min(cwnd,rwnd)−在途)","8000、12000、5000 得 3000 B","简化算式，需给定状态和算法",4],["RTO","时间恢复","在反馈不足时决定重传","SRTT+max(G,4RTTVAR)","100、120 ms 样本原值 272.5 ms","RFC 6298 建议计算后至少取 1 s；重传样本有歧义",2],["QUIC 包、帧、流","v1 结构","分开传输反馈与字节定位","包号 ACK；流 ID+Offset 定位","流 ID2 为客户端单向流","不同于以太网帧；按 v1 字段",5],["长度前缀读取","应用格式","在 TCP 字节流中恢复消息","先累计 4 B 长度，再累计正文","你好：长度6、正文6 B","大端、编码、长度上限和部分读写均需约定",6]],"quick_id":"c6-11","synthesis_id":"c6-8","source_module_count":24,"retained_core_chars":8509,"new_chars":18583};</script><script>
 const $$=(s,r=document)=>[...r.querySelectorAll(s)];
 const menu=document.getElementById('menu-button');
 const setNav=v=>{document.body.classList.toggle('nav-open',v);menu.setAttribute('aria-expanded',String(v))};
@@ -851,4 +919,103 @@ if(window.CHAPTER){
   prev.addEventListener('click',()=>{index--;showStep()});next.addEventListener('click',()=>{index++;showStep()});showStep();
  }
 }
-</script></body></html>
+</script><script>(function runtime(){
+ 'use strict';
+ const article=document.querySelector('article'),toggle=document.getElementById('chapter-search-toggle');
+ if(!article||!toggle)return;
+ const BLOCK='h1,h2,h3,h4,p,li,th,td,pre,.formula,summary';
+ const EXCLUDE='button,input,textarea,select,script,style,svg,.wave-mobile-hint,.quickbox,.stepbox,.footerlinks,.chapter-search-ui';
+ const fold=s=>s.replace(/[A-Z]/g,c=>c.toLowerCase());
+ const normalize=s=>s.replace(/\s+/g,' ').trim();
+ const panel=document.createElement('dialog');panel.id='chapter-search-dialog';panel.className='chapter-search-dialog chapter-search-ui';panel.setAttribute('aria-labelledby','chapter-search-title');
+ panel.innerHTML=`<header class="chapter-search-head"><h2 id="chapter-search-title">搜索本章</h2><button type="button" class="chapter-search-close" aria-label="收起搜索">关闭</button></header><form class="chapter-search-form"><label for="chapter-search-input">关键词</label><div class="chapter-search-fields"><input id="chapter-search-input" type="search" maxlength="120" autocomplete="off" spellcheck="false" placeholder="例如：光纤、差分、8N1"><button type="submit">定位</button></div><p class="chapter-search-help" id="chapter-search-help">搜索正文、表格、代码和折叠答案；速查与分步演示以原文为准。英文不区分大小写，按原样匹配。Enter 下一处，Shift+Enter 上一处；Ctrl+K 打开搜索，Esc 收起。</p></form><p class="chapter-search-status" role="status" aria-live="polite"></p><div class="chapter-search-results" aria-label="搜索结果"></div>`;
+ const input=panel.querySelector('input');input.setAttribute('aria-describedby','chapter-search-help');
+ const resultList=panel.querySelector('.chapter-search-results'),status=panel.querySelector('.chapter-search-status');
+ const dock=document.createElement('div');dock.className='chapter-search-dock chapter-search-ui';dock.hidden=true;dock.setAttribute('role','group');dock.setAttribute('aria-label','本章搜索定位');
+ function button(text,fn){const b=document.createElement('button');b.type='button';b.textContent=text;b.addEventListener('click',fn);return b}
+ const previous=button('上一处',()=>move(-1)),next=button('下一处',()=>move(1)),counter=document.createElement('span');counter.className='chapter-search-counter';counter.setAttribute('role','status');counter.setAttribute('aria-live','polite');
+ dock.append(previous,counter,next,button('搜索',showPanel),button('清除',()=>{input.value='';runSearch();toggle.focus()}));document.body.append(panel,dock);
+ let blocks=[],hits=[],active=-1,query='',timer,composing=false,shown=50;
+ // Use a per-block text index to match across inline bold/code without replacing HTML.
+ function indexBlock(el){
+  const walker=document.createTreeWalker(el,NodeFilter.SHOW_TEXT,{acceptNode(n){const p=n.parentElement;return p&&!p.closest(EXCLUDE)&&p.closest(BLOCK)===el?NodeFilter.FILTER_ACCEPT:NodeFilter.FILTER_REJECT}});
+  let raw='',nodes=[],node;while((node=walker.nextNode())){nodes.push({node,start:raw.length,end:raw.length+node.length});raw+=node.data}
+  let text='',starts=[],ends=[];
+  for(let i=0;i<raw.length;){const at=i;if(/\s/.test(raw[i])){while(i<raw.length&&/\s/.test(raw[i]))i++;text+=' ';starts.push(at);ends.push(i)}else{text+=raw[i];starts.push(i);ends.push(i+1);i++}}
+  if(text.startsWith(' ')){text=text.slice(1);starts.shift();ends.shift()}if(text.endsWith(' ')){text=text.slice(0,-1);starts.pop();ends.pop()}
+  return {text,starts,ends,nodes};
+ }
+ function scan(){
+  let section='learning-nav',heading='学习导航';blocks=[];
+  for(const el of article.querySelectorAll('a[id],'+BLOCK)){
+   if(el.matches('a[id]')){section=el.id;continue}if(el.closest(EXCLUDE))continue;
+   if(/^H[1-4]$/.test(el.tagName))heading=normalize(el.textContent);
+   const index=indexBlock(el);if(index.text)blocks.push({el,section,heading,index});
+  }
+ }
+ function unmark(){for(const mark of article.querySelectorAll('mark.chapter-search-hit'))mark.replaceWith(...mark.childNodes);article.normalize()}
+ function paint(){
+  const ranges=new Map();
+  for(const [i,hit] of hits.entries()){
+   hit.marks=[];const ix=hit.block.index,a=ix.starts[hit.start],z=ix.ends[hit.end-1];
+   for(const part of ix.nodes){const start=Math.max(a,part.start)-part.start,end=Math.min(z,part.end)-part.start;if(start>=end)continue;if(!ranges.has(part.node))ranges.set(part.node,[]);ranges.get(part.node).push({start,end,i})}
+  }
+  for(const [node,parts] of ranges){
+   parts.sort((a,b)=>a.start-b.start);const fragment=document.createDocumentFragment();let at=0;
+   for(const p of parts){if(p.start>at)fragment.append(document.createTextNode(node.data.slice(at,p.start)));const mark=document.createElement('mark');mark.className='chapter-search-hit';mark.textContent=node.data.slice(p.start,p.end);mark.dataset.searchIndex=String(p.i);hits[p.i].marks.push(mark);fragment.append(mark);at=p.end}
+   if(at<node.length)fragment.append(document.createTextNode(node.data.slice(at)));node.replaceWith(fragment);
+  }
+ }
+ function updateCounter(){counter.textContent=active<0?'共 '+hits.length+' 处':(active+1)+' / '+hits.length;previous.disabled=next.disabled=!hits.length;dock.hidden=!hits.length;document.body.classList.toggle('chapter-search-has-results',!!hits.length)}
+ function renderResults(){
+  resultList.replaceChildren();
+  if(!query||!hits.length){const p=document.createElement('p');p.className='chapter-search-empty';p.textContent=query?'试试更短的关键词，或检查名称与拼写。':'输入关键词，即可列出所在小节和原文摘录。';resultList.append(p);return}
+  for(let i=0;i<Math.min(shown,hits.length);i++){
+   const h=hits[i],text=h.block.index.text,start=Math.max(0,h.start-36),end=Math.min(text.length,h.end+62);
+   const item=button('',()=>choose(i));item.className='chapter-search-result';item.dataset.searchIndex=String(i);if(i===active)item.setAttribute('aria-current','true');
+   const title=document.createElement('span');title.className='chapter-search-result-title';title.textContent='第 '+(i+1)+' 处 · '+h.block.heading;
+   const snippet=document.createElement('span');snippet.className='chapter-search-snippet';snippet.append(document.createTextNode((start?'…':'')+text.slice(start,h.start)));const mark=document.createElement('mark');mark.textContent=text.slice(h.start,h.end);snippet.append(mark,document.createTextNode(text.slice(h.end,end)+(end<text.length?'…':'')));item.append(title,snippet);resultList.append(item);
+  }
+  if(shown<hits.length){const more=button('再显示 '+Math.min(50,hits.length-shown)+' 条结果',()=>{shown+=50;renderResults()});more.className='chapter-search-more';resultList.append(more)}
+ }
+ function runSearch(){
+  clearTimeout(timer);const value=normalize(input.value);if(value===query)return;
+  unmark();scan();query=value;hits=[];active=-1;shown=50;
+  if(query){const needle=fold(query);for(const b of blocks){const text=fold(b.index.text);let at=0;while((at=text.indexOf(needle,at))!==-1){hits.push({block:b,start:at,end:at+needle.length});at+=needle.length}}paint()}
+  status.textContent=!query?'输入关键词搜索本章。':hits.length?'找到 '+hits.length+' 处匹配。点击结果定位，或按 Enter。':'没有找到“'+query+'”。';
+  updateCounter();renderResults();
+ }
+ function showPanel(){
+  if(document.body.classList.contains('nav-open'))document.getElementById('menu-button')?.click();
+  if(!panel.open)panel.showModal();toggle.setAttribute('aria-expanded','true');if(active>=shown){shown=Math.ceil((active+1)/50)*50;renderResults()}input.focus();input.select();
+ }
+ function closePanel(){if(panel.open)panel.close();toggle.setAttribute('aria-expanded','false')}
+ function choose(i){
+  if(!hits.length)return;active=(i+hits.length)%hits.length;const hit=hits[active];
+  for(const mark of article.querySelectorAll('.chapter-search-current'))mark.classList.remove('chapter-search-current');for(const mark of hit.marks)mark.classList.add('chapter-search-current');
+  for(let p=hit.block.el;p&&p!==article;p=p.parentElement)if(p.tagName==='DETAILS')p.open=true;
+  closePanel();updateCounter();renderResults();
+  const mark=hit.marks[0];if(mark)mark.scrollIntoView({block:'center',inline:'center',behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth'});
+  const old=hit.block.el.getAttribute('tabindex');if(old===null){hit.block.el.tabIndex=-1;hit.block.el.addEventListener('blur',()=>hit.block.el.removeAttribute('tabindex'),{once:true})}hit.block.el.focus({preventScroll:true});
+  if(hit.block.section&&document.getElementById(hit.block.section)){try{history.replaceState(null,'','#'+encodeURIComponent(hit.block.section))}catch(e){/* Some local-file viewers restrict history; scrolling still works. */}}
+ }
+ function move(direction){runSearch();if(hits.length)choose(active<0?(direction>0?0:hits.length-1):active+direction)}
+ toggle.addEventListener('click',showPanel);panel.querySelector('.chapter-search-close').addEventListener('click',closePanel);
+ panel.addEventListener('close',()=>toggle.setAttribute('aria-expanded','false'));
+ panel.addEventListener('click',e=>{if(e.target!==panel)return;const r=panel.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)closePanel()});
+ panel.querySelector('form').addEventListener('submit',e=>{e.preventDefault();if(!composing)move(1)});
+ input.addEventListener('compositionstart',()=>{composing=true;clearTimeout(timer)});input.addEventListener('compositionend',()=>{composing=false;clearTimeout(timer);timer=setTimeout(runSearch,100)});
+ input.addEventListener('input',e=>{if(composing||e.isComposing)return;clearTimeout(timer);timer=setTimeout(runSearch,100)});
+ input.addEventListener('keydown',e=>{if(e.key==='Enter'&&e.shiftKey&&!e.isComposing){e.preventDefault();move(-1)}});
+ document.addEventListener('keydown',e=>{
+  if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='k'){e.preventDefault();e.stopImmediatePropagation();showPanel()}
+  else if(e.key==='Escape'&&panel.open&&!e.isComposing&&!composing){e.preventDefault();e.stopImmediatePropagation();closePanel()}
+  else if(e.key==='Tab'&&panel.open){
+   const focusables=[...panel.querySelectorAll('button,input,a[href],[tabindex]')].filter(el=>!el.disabled&&el.tabIndex>=0&&el.getClientRects().length);
+   const first=focusables[0],last=focusables.at(-1);
+   if(e.shiftKey&&(document.activeElement===first||!panel.contains(document.activeElement))){e.preventDefault();last?.focus()}
+   else if(!e.shiftKey&&(document.activeElement===last||!panel.contains(document.activeElement))){e.preventDefault();first?.focus()}
+  }
+ },true);
+ scan();status.textContent='输入关键词搜索本章。';renderResults();toggle.disabled=false;
+})();</script><script>(function(){const s=document.getElementById('reading-theme');s.value=document.documentElement.dataset.theme;s.addEventListener('change',()=>{document.documentElement.dataset.theme=s.value;try{localStorage.setItem('network-reading-theme',s.value)}catch(e){}})})();</script></body></html>
