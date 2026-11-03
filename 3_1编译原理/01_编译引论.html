@@ -1,5 +1,59 @@
-<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="source-sha256" content="fd3f703b59f2c3bdfa6b09fdffeb4e4a39814c69de265d921b2f348fe16fd42c"><title>第1章 编译引论 · 学习资料</title><style>:root{--paper:#fbfaf7;--surface:#fff;--ink:#253341;--muted:#5c6b75;--line:#d5dfdd;--teal:#156b62;--soft:#edf6f1;--font:17px;--scroll-offset:90px}*{box-sizing:border-box}html{scroll-behavior:auto;scroll-padding-top:var(--scroll-offset)}body{margin:0;background:var(--paper);color:var(--ink);font-family:'Microsoft YaHei','PingFang SC',system-ui,sans-serif;font-size:var(--font);line-height:1.85}a{color:var(--teal);text-underline-offset:3px}a:hover{color:#173f75}button,select{font:inherit}button{cursor:pointer}button,select{border:1px solid #b9cbc5;border-radius:7px;padding:7px 11px;background:#fff;color:var(--ink)}button:hover{background:var(--soft)}button:focus-visible,select:focus-visible,a:focus-visible{outline:3px solid #81cbb8;outline-offset:3px}.skip{position:absolute;top:-80px;left:12px;z-index:50;background:#fff;padding:8px}.skip:focus{top:8px}.sidebar{position:fixed;inset:0 auto 0 0;width:270px;padding:23px 18px;background:#f0f4f0;border-right:1px solid var(--line);overflow:auto;z-index:30;overscroll-behavior:contain}.brand{font-size:21px;font-weight:700}.brand small{display:block;font-size:12px;font-weight:400;color:var(--muted)}.sidebar nav a{display:block;color:var(--ink);text-decoration:none;padding:8px 10px;margin:3px 0;border-radius:6px;font-size:14px;line-height:1.6}.sidebar nav a:hover{background:#dcebe3}.sidebar nav a.active,.sidebar nav a.active:hover{background:var(--teal);color:white}.sidebar select{width:100%;font-size:13px}.nav-tip{font-size:12px;color:var(--muted);margin:14px 0}.shell{margin-left:270px;overflow-anchor:none}.topbar{position:sticky;top:0;background:rgba(251,250,247,.98);padding:12px 26px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:12px;z-index:20}.topbar-title{font-size:13px;color:var(--muted)}.toolbar{display:flex;gap:7px;flex-wrap:wrap}.toolbar button{font-size:13px}.menu{display:none}main{max-width:1120px;margin:auto;padding:30px 44px 80px;min-width:0}h1{font-size:32px;line-height:1.5;margin:14px 0 25px}h2{font-size:25px;line-height:1.5;padding:0 0 11px;border-bottom:1px solid var(--line);margin:44px 0 23px}h3{font-size:21px;line-height:1.55;margin:29px 0 16px}h4{font-size:18px;line-height:1.6;margin:22px 0 13px}p{margin:14px 0}li{margin:7px 0}ul,ol{padding-left:1.6em}blockquote{margin:20px 0;padding:5px 18px;border-left:3px solid #a8c6bb;background:#f0f3ef;color:#53655e;font-size:14px}blockquote p{margin:8px 0}hr{border:0;border-top:1px solid var(--line);margin:32px 0}code{font-family:Consolas,'Cascadia Code',monospace;font-size:.9em;background:#eef1ed;padding:2px 5px;border-radius:4px;overflow-wrap:anywhere}pre{background:#18313d;color:#e8f0f0;border-radius:9px;padding:19px;line-height:1.65;overflow-x:auto;max-width:100%;font-size:14px}pre code{background:none;padding:0;color:inherit;white-space:pre;overflow-wrap:normal}table{border-collapse:collapse;width:100%;font-size:15px}th{background:#eaf3ee;text-align:left}td,th{padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:top}tbody tr:nth-child(even){background:#f6f9f6}.table-scroll{overflow-x:auto;border:1px solid var(--line);border-radius:8px;margin:17px 0;max-width:100%}.table-scroll td{min-width:80px}.source-note{font-size:13px;color:var(--muted)}.learning-figure{padding:23px;border:1px solid #b4cfc2;border-radius:12px;background:var(--soft);margin:25px 0}.learning-figure h4{margin:0 0 8px;font-size:20px}.fig-intro{font-size:14px;color:var(--muted)}.learning-figure label{display:block;margin-top:15px;font-size:14px;font-weight:700}.learning-figure select{margin-top:7px;width:100%;min-height:44px;font-size:15px}.fig-output{margin-top:16px}.flow{display:flex;gap:10px;align-items:stretch;flex-wrap:wrap}.flow-node{flex:1 1 150px;border:1px solid #bfd2c9;border-radius:8px;background:#fff;padding:13px;min-width:0}.flow-node strong{display:block;color:var(--teal)}.flow-node p{font-size:14px;margin:8px 0}.flow-arrow{align-self:center;color:var(--teal);font-size:24px}.fig-note{padding:10px 14px;border-left:3px solid var(--teal);background:#fff;font-size:14px;margin:15px 0 0}.svg-scroll{overflow-x:auto;max-width:100%}.svg-scroll svg{display:block;max-width:100%;height:auto}.ref-area{min-height:calc(100vh - var(--scroll-offset));margin-top:24px}.ref-picker{padding:22px;border-radius:12px;background:var(--soft);border:1px solid #b4cfc2}.ref-picker label{display:block;font-weight:700;margin-bottom:10px}.ref-picker select{width:100%;font-size:15px;min-height:46px}.ref-panel{margin-top:18px;background:#fff;border:1px solid var(--line);padding:20px;border-radius:9px}.ref-panel[hidden]{display:none}.ref-panel h3{margin:0;font-size:24px}.ref-panel h4{font-size:16px;margin:18px 0 8px}.ref-kind{font-size:13px;color:var(--teal)}.result{padding:10px 15px;border-left:3px solid var(--teal);background:var(--soft)}.copy{display:block;margin:5px 0 0 auto;font-size:12px;padding:4px 8px}.code-wrap{margin:20px 0}.code-wrap pre{margin-bottom:0}.foot{font-size:13px;color:var(--muted);border-top:1px solid var(--line);padding-top:23px;margin-top:30px}details{border:1px solid var(--line);padding:12px;border-radius:8px;margin:15px 0}summary{cursor:pointer;font-weight:700}@media(max-width:900px){.sidebar{transform:translateX(-100%)}body.nav-open .sidebar{transform:translateX(0);top:60px}.shell{margin-left:0}.menu{display:inline-block}.topbar-title{display:none}.topbar{padding:10px 14px}main{padding:23px 18px 65px}h1{font-size:27px}h2{font-size:23px}.learning-figure,.ref-picker{padding:16px}.flow{flex-direction:column}.flow-arrow{transform:rotate(90deg)}.ref-panel{padding:15px}}@media print{.sidebar,.topbar,.toolbar,.copy,.skip{display:none!important}.shell{margin:0}main{padding:0;max-width:none}body{background:#fff;font-size:11pt}.ref-area{min-height:0}.ref-picker select{display:none}pre{white-space:pre-wrap;background:#f3f5f4;color:#111}.learning-figure{break-inside:avoid}.table-scroll{overflow:visible}a{color:inherit}}@media print{.svg-scroll{overflow:visible}.svg-scroll svg{min-width:0!important;width:100%!important;height:auto!important}}.sidebar{width:266px;background:#f1f4f1;padding:27px 19px;overflow-y:auto}.brand{font-size:21px;font-weight:700;letter-spacing:.03em;margin-bottom:5px}.brand small{font-size:12px;font-weight:400;color:var(--muted);letter-spacing:.1em}.sidebar .sub{font-size:13px;color:var(--muted);margin:5px 0 21px}.sidebar nav a{font-size:14px;line-height:1.5;padding:9px 11px;margin:3px 0;border-radius:6px}.sidebar nav a:hover{background:#e0ece6;color:#174d43}.sidebar nav a.active,.sidebar nav a.active:hover{background:var(--teal);color:#fff}.nav-group{font-size:12px;color:var(--muted);margin:18px 11px 6px;letter-spacing:.08em}.sidebar-footer{margin-top:24px;font-size:12px;color:var(--muted)}.shell{margin-left:266px}@media(max-width:900px){.shell{margin-left:0}}
-h2,h3,h4,[id]{scroll-margin-top:0}.stepper{background:#edf6f1;border:1px solid #b4cfc2;border-radius:12px;padding:22px;margin:24px 0}.stepper h3{margin:0 0 12px}.step-tools{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:15px 0}.step-tools input{width:200px;min-height:40px}.step-card{background:white;padding:18px;border-radius:8px;border:1px solid var(--line)}.step-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}.step-field{border:1px solid #d6e5dd;padding:12px;border-radius:7px;overflow-wrap:anywhere}.step-field strong{display:block;font-size:13px;color:var(--teal)}.step-field p{margin:7px 0 0}.progress-track{display:flex;gap:4px;margin:10px 0}.progress-track span{height:5px;flex:1;border-radius:3px;background:#c8d8d0}.progress-track span.done{background:var(--teal)}.step-count{font-variant-numeric:tabular-nums}.chapter-links{display:flex;gap:15px;justify-content:space-between;border-top:1px solid var(--line);padding-top:25px;margin-top:35px}.ref-area{min-height:0}.ref-panel h4{margin:12px 0 4px}.reading-meta{font-size:13px;color:var(--muted)}summary:focus-visible,input:focus-visible{outline:3px solid #81cbb8;outline-offset:3px}button:disabled{opacity:.5;cursor:default}.quick-select{width:100%}.overview-card{border:1px solid var(--line);background:white;border-radius:9px;padding:18px;margin:14px 0}.overview-card h3{margin-top:0}.sidebar nav a.external{background:#e4eee7}.nav-shade{display:none}@media(max-width:900px){body.nav-open .nav-shade{display:block;position:fixed;inset:60px 0 0 266px;background:#25334155;z-index:25}.stepper{padding:15px}.step-tools input{width:150px}.step-grid{grid-template-columns:1fr}.sidebar{max-width:85vw}.step-field{padding:10px}}@media print{.step-tools,.progress-track,.chapter-links{display:none}.step-card{break-inside:avoid}body.nav-open .nav-shade{display:none}}main{overflow-x:clip}article{min-width:0;max-width:100%}.table-scroll,pre{contain:inline-size}p,li,h1,h2,h3,h4{overflow-wrap:anywhere}</style></head><body><a class="skip" href="#article">跳到正文</a><aside class="sidebar" aria-label="章节目录"><div class="brand"><small>COMPILER / CHAPTER 01</small>第1章 编译引论</div><p class="sub">完整讲解 · 分步推导 · 离线阅读</p><nav><a href="#navigation">学习导航</a><div class="nav-group">准备 · 程序与语言</div><a href="#ch01-s01">1. 编译为什么存在</a><a href="#ch01-s02">2. 术语与记号入门</a><a href="#ch01-s03">3. 程序设计语言的发展</a><div class="nav-group">基础 · 实现流程</div><a href="#ch01-s04">4. 编译、解释与转换</a><a href="#ch01-s05">5. 编译程序的六个逻辑阶段</a><a href="#ch01-s06">6. 贯穿全程的表格管理与错误处理</a><a href="#ch01-s07">7. 阶段、遍、前端与后端</a><div class="nav-group">应用 · 实现与学习</div><a href="#ch01-s08">8. 编译程序怎样实现和移植</a><a href="#ch01-s09">9. 怎样学习和使用编译技术</a><div class="nav-group">综合应用 · 完整解题</div><a href="#ch01-s10">10. 综合应用：从一句赋值核对各阶段的输入和输出</a><div class="nav-group">练习与复习 · 回查、自测和速查</div><a href="#ch01-s11">11. 知识联系与复习</a><a href="#ch01-s12">12. 自测与答案：能否解释整个翻译流程</a><a href="#ch01-s13">13. 排错与复习：先找混淆了哪一层</a><a href="#ch01-s14">14. 末尾速查表</a><div class="nav-group">全课程</div><a class="external" href="00_学习导航.html">全课程学习导航</a></nav><div class="sidebar-footer">先看问题与条件，再跟踪推导和例题</div></aside><div class="nav-shade"></div><div class="shell"><header class="topbar"><span class="topbar-title">第1章 编译引论</span><div class="toolbar"><button id="menu" class="menu" aria-label="打开或收起目录" aria-expanded="false">目录</button><button data-font="-1" aria-label="减小正文字号">字号 −</button><button data-font="1" aria-label="增大正文字号">字号 ＋</button><button id="print">打印 / 保存 PDF</button></div></header><main><article id="article"><h1>第1章 编译引论：程序怎样变成可执行的指令</h1>
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="source-sha256" content="1677e8d41753d32b933de5c8227372fa27a6d47d800320922c889d8e0a2452d9"><title>第1章 编译引论 · 学习资料</title><script>(function () {
+  'use strict';
+  let saved;
+  try { saved = localStorage.getItem('compiler-reading-theme-v1'); } catch (_) {}
+  const theme = saved === 'light' || saved === 'dark' ? saved
+    : (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+  document.documentElement.dataset.readerTheme = theme;
+})();
+</script><style>:root{--paper:#fbfaf7;--surface:#fff;--ink:#253341;--muted:#5c6b75;--line:#d5dfdd;--teal:#156b62;--soft:#edf6f1;--font:17px;--scroll-offset:90px}*{box-sizing:border-box}html{scroll-behavior:auto;scroll-padding-top:var(--scroll-offset)}body{margin:0;background:var(--paper);color:var(--ink);font-family:'Microsoft YaHei','PingFang SC',system-ui,sans-serif;font-size:var(--font);line-height:1.85}a{color:var(--teal);text-underline-offset:3px}a:hover{color:#173f75}button,select{font:inherit}button{cursor:pointer}button,select{border:1px solid #b9cbc5;border-radius:7px;padding:7px 11px;background:#fff;color:var(--ink)}button:hover{background:var(--soft)}button:focus-visible,select:focus-visible,a:focus-visible{outline:3px solid #81cbb8;outline-offset:3px}.skip{position:absolute;top:-80px;left:12px;z-index:50;background:#fff;padding:8px}.skip:focus{top:8px}.sidebar{position:fixed;inset:0 auto 0 0;width:270px;padding:23px 18px;background:#f0f4f0;border-right:1px solid var(--line);overflow:auto;z-index:30;overscroll-behavior:contain}.brand{font-size:21px;font-weight:700}.brand small{display:block;font-size:12px;font-weight:400;color:var(--muted)}.sidebar nav a{display:block;color:var(--ink);text-decoration:none;padding:8px 10px;margin:3px 0;border-radius:6px;font-size:14px;line-height:1.6}.sidebar nav a:hover{background:#dcebe3}.sidebar nav a.active,.sidebar nav a.active:hover{background:var(--teal);color:white}.sidebar select{width:100%;font-size:13px}.nav-tip{font-size:12px;color:var(--muted);margin:14px 0}.shell{margin-left:270px;overflow-anchor:none}.topbar{position:sticky;top:0;background:rgba(251,250,247,.98);padding:12px 26px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:12px;z-index:20}.topbar-title{font-size:13px;color:var(--muted)}.toolbar{display:flex;gap:7px;flex-wrap:wrap}.toolbar button{font-size:13px}.menu{display:none}main{max-width:1120px;margin:auto;padding:30px 44px 80px;min-width:0}h1{font-size:32px;line-height:1.5;margin:14px 0 25px}h2{font-size:25px;line-height:1.5;padding:0 0 11px;border-bottom:1px solid var(--line);margin:44px 0 23px}h3{font-size:21px;line-height:1.55;margin:29px 0 16px}h4{font-size:18px;line-height:1.6;margin:22px 0 13px}p{margin:14px 0}li{margin:7px 0}ul,ol{padding-left:1.6em}blockquote{margin:20px 0;padding:5px 18px;border-left:3px solid #a8c6bb;background:#f0f3ef;color:#53655e;font-size:14px}blockquote p{margin:8px 0}hr{border:0;border-top:1px solid var(--line);margin:32px 0}code{font-family:Consolas,'Cascadia Code',monospace;font-size:.9em;background:#eef1ed;padding:2px 5px;border-radius:4px;overflow-wrap:anywhere}pre{background:#18313d;color:#e8f0f0;border-radius:9px;padding:19px;line-height:1.65;overflow-x:auto;max-width:100%;font-size:14px}pre code{background:none;padding:0;color:inherit;white-space:pre;overflow-wrap:normal}table{border-collapse:collapse;width:100%;font-size:15px}th{background:#eaf3ee;text-align:left}td,th{padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:top}tbody tr:nth-child(even){background:#f6f9f6}.table-scroll{overflow-x:auto;border:1px solid var(--line);border-radius:8px;margin:17px 0;max-width:100%}.table-scroll td{min-width:80px}.source-note{font-size:13px;color:var(--muted)}.learning-figure{padding:23px;border:1px solid #b4cfc2;border-radius:12px;background:var(--soft);margin:25px 0}.learning-figure h4{margin:0 0 8px;font-size:20px}.fig-intro{font-size:14px;color:var(--muted)}.learning-figure label{display:block;margin-top:15px;font-size:14px;font-weight:700}.learning-figure select{margin-top:7px;width:100%;min-height:44px;font-size:15px}.fig-output{margin-top:16px}.flow{display:flex;gap:10px;align-items:stretch;flex-wrap:wrap}.flow-node{flex:1 1 150px;border:1px solid #bfd2c9;border-radius:8px;background:#fff;padding:13px;min-width:0}.flow-node strong{display:block;color:var(--teal)}.flow-node p{font-size:14px;margin:8px 0}.flow-arrow{align-self:center;color:var(--teal);font-size:24px}.fig-note{padding:10px 14px;border-left:3px solid var(--teal);background:#fff;font-size:14px;margin:15px 0 0}.svg-scroll{overflow-x:auto;max-width:100%}.svg-scroll svg{display:block;max-width:100%;height:auto}.ref-area{min-height:calc(100vh - var(--scroll-offset));margin-top:24px}.ref-picker{padding:22px;border-radius:12px;background:var(--soft);border:1px solid #b4cfc2}.ref-picker label{display:block;font-weight:700;margin-bottom:10px}.ref-picker select{width:100%;font-size:15px;min-height:46px}.ref-panel{margin-top:18px;background:#fff;border:1px solid var(--line);padding:20px;border-radius:9px}.ref-panel[hidden]{display:none}.ref-panel h3{margin:0;font-size:24px}.ref-panel h4{font-size:16px;margin:18px 0 8px}.ref-kind{font-size:13px;color:var(--teal)}.result{padding:10px 15px;border-left:3px solid var(--teal);background:var(--soft)}.copy{display:block;margin:5px 0 0 auto;font-size:12px;padding:4px 8px}.code-wrap{margin:20px 0}.code-wrap pre{margin-bottom:0}.foot{font-size:13px;color:var(--muted);border-top:1px solid var(--line);padding-top:23px;margin-top:30px}details{border:1px solid var(--line);padding:12px;border-radius:8px;margin:15px 0}summary{cursor:pointer;font-weight:700}@media(max-width:900px){.sidebar{transform:translateX(-100%)}body.nav-open .sidebar{transform:translateX(0);top:60px}.shell{margin-left:0}.menu{display:inline-block}.topbar-title{display:none}.topbar{padding:10px 14px}main{padding:23px 18px 65px}h1{font-size:27px}h2{font-size:23px}.learning-figure,.ref-picker{padding:16px}.flow{flex-direction:column}.flow-arrow{transform:rotate(90deg)}.ref-panel{padding:15px}}@media print{.sidebar,.topbar,.toolbar,.copy,.skip{display:none!important}.shell{margin:0}main{padding:0;max-width:none}body{background:#fff;font-size:11pt}.ref-area{min-height:0}.ref-picker select{display:none}pre{white-space:pre-wrap;background:#f3f5f4;color:#111}.learning-figure{break-inside:avoid}.table-scroll{overflow:visible}a{color:inherit}}@media print{.svg-scroll{overflow:visible}.svg-scroll svg{min-width:0!important;width:100%!important;height:auto!important}}.sidebar{width:266px;background:#f1f4f1;padding:27px 19px;overflow-y:auto}.brand{font-size:21px;font-weight:700;letter-spacing:.03em;margin-bottom:5px}.brand small{font-size:12px;font-weight:400;color:var(--muted);letter-spacing:.1em}.sidebar .sub{font-size:13px;color:var(--muted);margin:5px 0 21px}.sidebar nav a{font-size:14px;line-height:1.5;padding:9px 11px;margin:3px 0;border-radius:6px}.sidebar nav a:hover{background:#e0ece6;color:#174d43}.sidebar nav a.active,.sidebar nav a.active:hover{background:var(--teal);color:#fff}.nav-group{font-size:12px;color:var(--muted);margin:18px 11px 6px;letter-spacing:.08em}.sidebar-footer{margin-top:24px;font-size:12px;color:var(--muted)}.shell{margin-left:266px}@media(max-width:900px){.shell{margin-left:0}}
+#sql-reference{min-height:calc(100vh - var(--scroll-offset,90px))}
+.table-scroll{max-width:100%;overflow-x:auto;margin:18px 0;border:1px solid var(--line);border-radius:8px}.table-scroll table{width:100%;border-collapse:collapse}.table-scroll td,.table-scroll th{min-width:85px;vertical-align:top}.table-scroll pre{white-space:pre-wrap}article h2,article h3,article h4{scroll-margin-top:var(--scroll-offset,90px)}.course-home{display:block;font-size:13px;padding:8px 11px;margin-bottom:12px}.chapter-turns{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;margin-top:34px;padding-top:20px;border-top:1px solid var(--line)}.chapter-turns a{font-size:14px}.sidebar-footer{font-size:12px;color:var(--muted);margin-top:24px}article>p:first-of-type{font-size:1.04em}.noscript-note{padding:12px;border-left:3px solid var(--teal)}@media(max-width:600px){.table-scroll table{min-width:520px}.table-scroll{font-size:14px}pre{max-width:100%;overflow-x:auto}article{min-width:0}}@media print{.table-scroll table{min-width:0}.chapter-turns{display:none}}
+
+h2,h3,h4,[id]{scroll-margin-top:0}.stepper{background:#edf6f1;border:1px solid #b4cfc2;border-radius:12px;padding:22px;margin:24px 0}.stepper h3{margin:0 0 12px}.step-tools{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:15px 0}.step-tools input{width:200px;min-height:40px}.step-card{background:white;padding:18px;border-radius:8px;border:1px solid var(--line)}.step-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}.step-field{border:1px solid #d6e5dd;padding:12px;border-radius:7px;overflow-wrap:anywhere}.step-field strong{display:block;font-size:13px;color:var(--teal)}.step-field p{margin:7px 0 0}.progress-track{display:flex;gap:4px;margin:10px 0}.progress-track span{height:5px;flex:1;border-radius:3px;background:#c8d8d0}.progress-track span.done{background:var(--teal)}.step-count{font-variant-numeric:tabular-nums}.chapter-links{display:flex;gap:15px;justify-content:space-between;border-top:1px solid var(--line);padding-top:25px;margin-top:35px}.ref-area{min-height:0}.ref-panel h4{margin:12px 0 4px}.reading-meta{font-size:13px;color:var(--muted)}summary:focus-visible,input:focus-visible{outline:3px solid #81cbb8;outline-offset:3px}button:disabled{opacity:.5;cursor:default}.quick-select{width:100%}.overview-card{border:1px solid var(--line);background:white;border-radius:9px;padding:18px;margin:14px 0}.overview-card h3{margin-top:0}.sidebar nav a.external{background:#e4eee7}.nav-shade{display:none}@media(max-width:900px){body.nav-open .nav-shade{display:block;position:fixed;inset:60px 0 0 266px;background:#25334155;z-index:25}.stepper{padding:15px}.step-tools input{width:150px}.step-grid{grid-template-columns:1fr}.sidebar{max-width:85vw}.step-field{padding:10px}}@media print{.step-tools,.progress-track,.chapter-links{display:none}.step-card{break-inside:avoid}body.nav-open .nav-shade{display:none}}main{overflow-x:clip}article{min-width:0;max-width:100%}.table-scroll,pre{contain:inline-size}p,li,h1,h2,h3,h4{overflow-wrap:anywhere}.chapter-search-panel[hidden],.chapter-search-results[hidden]{display:none!important}.chapter-search-panel{position:sticky;top:var(--reader-topbar-height,60px);z-index:21;background:#f4f8f3;border-bottom:1px solid #b9cbc5;padding:12px 26px;max-width:100%;font-size:14px;line-height:1.6}.chapter-search-form{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:7px;align-items:center}.chapter-search-form label{grid-column:1/-1;font-weight:700}.chapter-search-form input{min-width:0;width:100%;border:1px solid #7e9d90;border-radius:7px;padding:7px 10px;background:#fff;color:var(--ink);font:inherit;min-height:40px}.chapter-search-panel button{font-size:13px;min-height:36px;padding:6px 9px}.chapter-search-controls{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin-top:9px}.chapter-search-controls [role=status]{margin-right:auto;overflow-wrap:anywhere}.chapter-search-help{margin:8px 0 0;border:0;padding:0;font-size:12px;color:var(--muted)}.chapter-search-help summary{font-weight:400}.chapter-search-help p{margin:6px 0}.chapter-search-help[open]{max-height:20vh;overflow:auto}.chapter-search-results{margin-top:9px;border-top:1px solid var(--line);padding-top:8px;max-height:32vh;overflow:auto;overscroll-behavior:contain}.chapter-search-pages{display:flex;align-items:center;gap:7px;flex-wrap:wrap;font-size:12px}.chapter-search-pages span{margin-right:auto}.chapter-search-results ol{margin:5px 0;padding:0;list-style:none}.chapter-search-results li{margin:4px 0}.chapter-search-result{display:block;text-align:left;width:100%;white-space:normal;overflow-wrap:anywhere;background:#fff}.chapter-search-result strong{display:block;font-size:13px;color:var(--teal)}.chapter-search-result span{display:block;font-size:13px;line-height:1.65;margin-top:3px}.chapter-search-result[aria-current=true]{border-color:var(--teal);background:#e5f1e8}.chapter-search-result mark{background:#ffe69a;color:inherit;padding:0}mark.chapter-search-hit{background:#ffe38a;color:inherit;padding:0;border-radius:2px;outline:1px solid #ba8a11;scroll-margin-top:var(--scroll-offset,90px)}.chapter-search-form input:focus-visible,.chapter-search-panel summary:focus-visible,mark.chapter-search-hit:focus-visible{outline:3px solid #438f7e;outline-offset:3px}@media(max-width:900px){.chapter-search-panel{padding:10px 14px}body.nav-open .sidebar,body.nav-open .nav-shade{top:var(--reader-topbar-height,60px)}}@media(max-width:480px){.chapter-search-controls{gap:5px}.chapter-search-controls [role=status]{flex-basis:100%;font-size:13px}.chapter-search-controls button{flex:1 1 auto}.chapter-search-results{max-height:28vh}}@media print{.chapter-search-panel{display:none!important}mark.chapter-search-hit{background:transparent;color:inherit;outline:none}}
+.chapter-search-panel{max-height:calc(100vh - var(--reader-topbar-height,60px));max-height:calc(100dvh - var(--reader-topbar-height,60px));overflow-y:auto;overscroll-behavior:contain}
+:root[data-reader-theme]{color-scheme:light;--reader-sidebar:#f1f4f1;--reader-topbar:rgba(251,250,247,.98);--reader-hover:#e0ece6;--reader-hover-ink:#174d43;--reader-active-ink:#fff;--reader-external:#e4eee7;--reader-code:#eef1ed;--reader-pre:#18313d;--reader-pre-ink:#e8f0f0;--reader-th:#eaf3ee;--reader-row:#f6f9f6;--reader-panel-border:#b4cfc2;--reader-progress:#c8d8d0;--reader-search:#f4f8f3;--reader-current:#e5f1e8;--reader-link-hover:#173f75}
+:root[data-reader-theme="dark"]{color-scheme:dark;--paper:#141c22;--surface:#1d2830;--ink:#e3eaf0;--muted:#aab9c2;--line:#40515c;--teal:#83d8be;--soft:#233b3b;--reader-sidebar:#18242c;--reader-topbar:rgba(20,28,34,.98);--reader-hover:#2a4145;--reader-hover-ink:#b4ecd9;--reader-active-ink:#10231e;--reader-external:#23363d;--reader-code:#2a3943;--reader-pre:#0e171e;--reader-pre-ink:#dce8ef;--reader-th:#253b43;--reader-row:#19262e;--reader-panel-border:#46606a;--reader-progress:#3b515a;--reader-search:#1b2b33;--reader-current:#2a4145;--reader-link-hover:#b2e7ff}
+.reading-theme{display:inline-flex;align-items:center;gap:6px;font-size:13px;white-space:nowrap}.reading-theme select{font-size:13px;min-height:36px;cursor:pointer}
+:root[data-reader-theme] .sidebar{background:var(--reader-sidebar)}
+:root[data-reader-theme] .topbar{background:var(--reader-topbar)}
+:root[data-reader-theme] button,:root[data-reader-theme] select,:root[data-reader-theme] .chapter-search-form input{background:var(--surface);color:var(--ink);border-color:var(--line)}
+:root[data-reader-theme] button:hover{background:var(--soft)}
+:root[data-reader-theme] a:hover{color:var(--reader-link-hover)}
+:root[data-reader-theme] .sidebar nav a:hover{background:var(--reader-hover);color:var(--reader-hover-ink)}
+:root[data-reader-theme] .sidebar nav a.active,:root[data-reader-theme] .sidebar nav a.active:hover{background:var(--teal);color:var(--reader-active-ink)}
+:root[data-reader-theme] .sidebar nav a.external{background:var(--reader-external)}
+:root[data-reader-theme] .sidebar nav a.external.active{background:var(--teal)}
+:root[data-reader-theme] code{background:var(--reader-code)}
+:root[data-reader-theme] pre{background:var(--reader-pre);color:var(--reader-pre-ink)}
+:root[data-reader-theme] pre code{background:none;color:inherit}
+:root[data-reader-theme] th{background:var(--reader-th)}
+:root[data-reader-theme] tbody tr:nth-child(even){background:var(--reader-row)}
+:root[data-reader-theme] .ref-panel,:root[data-reader-theme] .step-card,:root[data-reader-theme] .overview-card,:root[data-reader-theme] .flow-node,:root[data-reader-theme] .fig-note,:root[data-reader-theme] .skip{background:var(--surface)}
+:root[data-reader-theme] .stepper,:root[data-reader-theme] .ref-picker,:root[data-reader-theme] .learning-figure{background:var(--soft);border-color:var(--reader-panel-border)}
+:root[data-reader-theme] .step-field{border-color:var(--line)}
+:root[data-reader-theme] .progress-track span{background:var(--reader-progress)}
+:root[data-reader-theme] .progress-track span.done{background:var(--teal)}
+:root[data-reader-theme] blockquote{background:var(--soft);color:var(--muted);border-color:var(--teal)}
+:root[data-reader-theme] .chapter-search-panel{background:var(--reader-search);border-color:var(--line)}
+:root[data-reader-theme] .chapter-search-result[aria-current=true]{background:var(--reader-current);border-color:var(--teal)}
+:root[data-reader-theme="dark"] mark.chapter-search-hit,:root[data-reader-theme="dark"] .chapter-search-result mark{background:#6b5013;color:#fff3c4;outline-color:#e8c86b}
+:root[data-reader-theme="dark"] ::selection{background:#386c73;color:#fff}
+@media print{
+ :root[data-reader-theme]{color-scheme:light;--paper:#fff;--surface:#fff;--ink:#111;--muted:#444;--line:#bbb;--teal:#175b50;--soft:#f2f5f3;--reader-code:#eee;--reader-pre:#f3f5f4;--reader-pre-ink:#111;--reader-th:#eaf0ec;--reader-row:#f7f7f7;--reader-panel-border:#aaa;--reader-progress:#ccc;--reader-active-ink:#fff}
+ :root[data-reader-theme] body{background:#fff;color:#111}
+ :root[data-reader-theme] .reading-theme{display:none!important}
+ :root[data-reader-theme] mark.chapter-search-hit{background:transparent;color:inherit;outline:none}
+}
+</style></head><body><a class="skip" href="#article">跳到正文</a><aside class="sidebar" aria-label="章节目录"><div class="brand"><small>COMPILER / CHAPTER 01</small>第1章 编译引论</div><p class="sub">完整讲解 · 分步推导 · 离线阅读</p><nav><a href="#navigation">学习导航</a><div class="nav-group">准备 · 程序与语言</div><a href="#ch01-s01">1. 编译为什么存在</a><a href="#ch01-s02">2. 术语与记号入门</a><a href="#ch01-s03">3. 程序设计语言的发展</a><div class="nav-group">基础 · 实现流程</div><a href="#ch01-s04">4. 编译、解释与转换</a><a href="#ch01-s05">5. 编译程序的六个逻辑阶段</a><a href="#ch01-s06">6. 贯穿全程的表格管理与错误处理</a><a href="#ch01-s07">7. 阶段、遍、前端与后端</a><div class="nav-group">应用 · 实现与学习</div><a href="#ch01-s08">8. 编译程序怎样实现和移植</a><a href="#ch01-s09">9. 怎样学习和使用编译技术</a><div class="nav-group">综合应用 · 完整解题</div><a href="#ch01-s10">10. 综合应用：从一句赋值核对各阶段的输入和输出</a><div class="nav-group">练习与复习 · 回查、自测和速查</div><a href="#ch01-s11">11. 知识联系与复习</a><a href="#ch01-s12">12. 自测与答案：能否解释整个翻译流程</a><a href="#ch01-s13">13. 排错与复习：先找混淆了哪一层</a><a href="#ch01-s14">14. 末尾速查表</a><div class="nav-group">全课程</div><a class="external" href="00_学习导航.html">全课程学习导航</a></nav><div class="sidebar-footer">先看问题与条件，再跟踪推导和例题</div></aside><div class="nav-shade"></div><div class="shell"><header class="topbar"><span class="topbar-title">第1章 编译引论</span><div class="toolbar"><button id="menu" class="menu" aria-label="打开或收起目录" aria-expanded="false">目录</button><button data-font="-1" aria-label="减小正文字号">字号 −</button><button data-font="1" aria-label="增大正文字号">字号 ＋</button><label class="reading-theme" for="reading-theme">外观<select id="reading-theme" aria-label="阅读模式"><option value="light">白天</option><option value="dark">夜间</option></select></label><button id="chapter-search-toggle" type="button" aria-expanded="false" aria-controls="chapter-search-panel">搜索</button><button id="print">打印 / 保存 PDF</button></div></header><section id="chapter-search-panel" class="chapter-search-panel" aria-label="本章关键词搜索" hidden>
+  <form id="chapter-search-form" class="chapter-search-form" role="search">
+    <label for="chapter-search-input">搜索本章</label><input id="chapter-search-input" type="search" placeholder="中文关键词或英文术语" autocomplete="off" spellcheck="false" aria-describedby="chapter-search-status"><button type="submit">查找</button><button id="chapter-search-clear" type="button">清除</button>
+  </form>
+  <div class="chapter-search-controls"><span id="chapter-search-status" role="status" aria-live="polite">请输入关键词</span><button id="chapter-search-prev" type="button" disabled>上一处</button><button id="chapter-search-next" type="button" disabled>下一处</button><button id="chapter-search-results-toggle" type="button" aria-expanded="false" aria-controls="chapter-search-results" disabled>展开结果</button><button id="chapter-search-close" type="button" aria-label="收起搜索，继续阅读">收起</button></div>
+  <details class="chapter-search-help"><summary>搜索范围与操作</summary><p>检索本章正文、表格、代码、折叠答案和全部速查项。目录与分步演示不重复计入，演示对应的正文仍可搜索。忽略关键词首尾空白，其余按文字原样匹配，英文不区分大小写；内部空格和符号也参与匹配。搜索完全离线，不上传关键词。</p><p>点击结果定位高亮，折叠内容会自动展开。Ctrl＋K 打开搜索；输入框内按 Enter 查找或跳到下一处，Shift＋Enter 跳到上一处；Esc 收起。清除会移除高亮，并恢复由搜索展开的折叠内容。浏览器的 Ctrl＋F 仍可使用。</p></details>
+  <div id="chapter-search-results" class="chapter-search-results" hidden><div class="chapter-search-pages"><span id="chapter-search-page-status"></span><button id="chapter-search-page-prev" type="button">前一页</button><button id="chapter-search-page-next" type="button">后一页</button></div><ol id="chapter-search-list"></ol></div>
+</section>
+<main><article id="article"><h1>第1章 编译引论：程序怎样变成可执行的指令</h1>
 <p>人写的程序使用变量、表达式和函数，处理器执行的却是取值、运算和存储指令。编译要跨过这段距离，同时保持程序的含义。本章用一条赋值语句连接各阶段，再说明这些阶段怎样组织和复用。</p>
 <p><a id="navigation"></a></p>
 <h2>学习导航</h2>
@@ -33,7 +87,7 @@ h2,h3,h4,[id]{scroll-margin-top:0}.stepper{background:#edf6f1;border:1px solid #
 </tr>
 <tr>
 <td>练习与复习 · 回查、自测和速查</td>
-<td>按课件位置回查，并用自测、排错和速查检查理解。</td>
+<td>联系本章各阶段的输入与输出，并用自测、排错和速查检查理解。</td>
 <td><a href="#ch01-s11">11. 知识联系与复习</a>、<a href="#ch01-s12">12. 自测与答案：能否解释整个翻译流程</a>、<a href="#ch01-s13">13. 排错与复习：先找混淆了哪一层</a>、<a href="#ch01-s14">14. 末尾速查表</a></td>
 </tr>
 </tbody></table></div>
@@ -43,13 +97,12 @@ h2,h3,h4,[id]{scroll-margin-top:0}.stepper{background:#edf6f1;border:1px solid #
 <h2>1. 编译为什么存在</h2>
 <h3>1.1 人的表达与机器的执行之间有距离</h3>
 <p>人习惯写 <code>sum = first + count * 10</code>，其中有名字、表达式和运算顺序。处理器执行的却是特定指令集中的操作，例如从内存取值、在寄存器中相乘、把结果写回内存。它不会因为看到字母 <code>count</code>，就自动知道这个名字在哪里、占多大空间、应采用整数乘法还是浮点乘法。</p>
-<p><strong>编译程序（compiler）</strong>处理这种距离：根据源语言规则理解程序，再把它转换为目标语言中的程序。编译器本身也是程序，它的输入主要是另一份程序文本，因此是一种“处理程序的程序”。</p>
+<p><strong>编译程序（compiler）</strong> 处理这种距离：根据源语言规则理解程序，再把它转换为目标语言中的程序。编译器本身也是程序，它的输入主要是另一份程序文本，因此是一种“处理程序的程序”。</p>
 <p>不能把编译简单理解成“把英文换成 0 和 1”。编译首先要弄清结构和含义。例如 <code>a+b*c</code> 应先算乘法；同名 <code>x</code> 在不同函数里可能指不同变量；整数和实数可能需要不同指令。这些问题并不能靠逐字替换解决。</p>
 <h3>1.2 什么叫正确翻译</h3>
-<p>翻译后的程序即使能运行，也可能算出另一个结果。因此，判断编译是否正确，要先确定译前译后应该保持什么。</p>
-<p>课件使用<strong>语义等价</strong>这个要求。语义是程序按照语言规则所表达的含义；等价意味着在约定的输入和执行条件下，译前与译后的可观察行为应一致。计算结果、输入输出、规定的副作用等都可能是观察对象。</p>
-<p>以 <code>sum = first + count * 10</code> 为例，把它翻译成 <code>(first+count)*10</code> 就改变了含义。当 <code>first=2、count=3</code> 时，前者为 32，后者为 50。目标程序跑得再快，也不能弥补这样的错误。</p>
-<p>等价的精确范围由语言语义决定。涉及溢出、浮点舍入、异常和外部输入输出时，不能只比较理想数学表达式。例如在允许观察舍入差异的环境下，随意改变浮点加法顺序可能改变结果。</p>
+<p>译后能运行还不够，还须保持语言规定的可观察行为，这称为<strong>语义等价</strong> 。</p>
+<p>小例子：只讨论无溢出的整数运算，p=2、q=3，源式为 <code>p+q*2</code>，正确结果是8。若误译成 <code>(p+q)*2</code>，结果变成10；两者在同一输入上不同，说明结构翻译错误。快慢不能补偿结果改变。</p>
+<p>等价的范围还取决于输入输出、副作用、异常、溢出和浮点舍入规则，不能把理想数学恒等式无条件套到所有机器操作上。</p>
 <p><a id="ch01-s02"></a>
 <a id="二术语与记号入门"></a>
 <a id="术语与记号入门"></a></p>
@@ -146,13 +199,15 @@ h2,h3,h4,[id]{scroll-margin-top:0}.stepper{background:#edf6f1;border:1px solid #
 <h2>3. 程序设计语言的发展</h2>
 <p>同一个加法，可以直接写成指令编码，也可以用指令助记符或表达式书写。下面按离机器细节的远近比较三种语言，说明为什么会需要不同的翻译工具。</p>
 <h3>3.1 机器语言：直接对应指令编码</h3>
-<p><strong>机器语言</strong>以处理器规定的二进制编码表达指令。课件概括为“机器指令＝操作码＋操作数地址”：先说明做什么，再说明对什么数据或位置操作。</p>
+<p><strong>机器语言</strong> 以处理器规定的二进制编码表达指令。可以先按“机器指令＝操作码＋操作数字段”理解：先说明做什么，再说明对什么数据或位置操作。</p>
 <p>这是入门抽象。具体指令也可能使用寄存器、立即数或隐含操作数，并非每个操作数都必须写成内存地址。机器语言依赖指令集，为一种处理器生成的指令不能无条件交给另一种处理器执行。</p>
+<p><strong>编码小例。</strong> 假定一台简化教学机用前四位表示操作、后四位表示地址，<code>0001</code> 表示“把指定内存单元的值读入累加器”。指令 <code>0001 0011</code> 就访问地址 3；若 <code>Mem[3]=7</code>，执行后累加器为 7。前四位来自指令编码表，后四位来自对象地址，二者不能互换。这只是解释编码字段的教学约定，不代表真实处理器的编码。</p>
 <h3>3.2 汇编语言：给机器指令起符号名字</h3>
-<p><strong>汇编语言</strong>用助记符、寄存器名和标号表示机器指令，例如装入、存储与加法指令。人比起长串二进制，更容易阅读 <code>LDA</code>、<code>STO</code> 一类符号。</p>
-<p><strong>汇编器（assembler）</strong>把汇编语言程序转换为机器语言表示。汇编语言仍十分接近机器结构：程序员常需关注寄存器、地址和指令顺序。不能把汇编源文件文本直接当作处理器能执行的指令字节。</p>
+<p><strong>汇编语言</strong> 用助记符、寄存器名和标号表示机器指令，例如装入、存储与加法指令。人比起长串二进制，更容易阅读 <code>LDA</code>、<code>STO</code> 一类符号。</p>
+<p><strong>汇编器（assembler）</strong> 把汇编语言程序转换为机器语言表示。汇编语言仍十分接近机器结构：程序员常需关注寄存器、地址和指令顺序。不能把汇编源文件文本直接当作处理器能执行的指令字节。</p>
+<p>小例子：本例汇编约定<code>LOAD R,#5</code>把常数5装入寄存器R。汇编器查操作码和寄存器编码表后生成相应指令字节；处理器执行的是这些字节，不是字母LOAD。本例只说明符号到编码的关系，不指定真实ISA。</p>
 <h3>3.3 高级语言：按问题和结构描述计算</h3>
-<p><strong>高级语言</strong>提供变量、函数、表达式和控制结构。例如 <code>x=f(i,j)</code> 不直接列出保存返回地址、传递参数和建立运行时空间的指令。</p>
+<p><strong>高级语言</strong> 提供变量、函数、表达式和控制结构。例如 <code>x=f(i,j)</code> 不直接列出保存返回地址、传递参数和建立运行时空间的指令。</p>
 <p>高级语言隐藏了许多机器细节，但这些细节最终仍须由语言实现系统处理。声明类型并不是无用的形式：编译器可能利用类型确定运算规则、空间大小和合法操作。后面的语义分析、存储管理和代码生成章节会逐项解释。</p>
 <p><a id="ch01-s04"></a>
 <a id="四编译解释与转换"></a>
@@ -167,10 +222,11 @@ h2,h3,h4,[id]{scroll-margin-top:0}.stepper{background:#edf6f1;border:1px solid #
                       计算结果
 </code></pre>
 <p>编译时不必执行源程序描述的整个计算。对 <code>read(x); print(x+1);</code> 编译，可以先生成读取、加法、输出的指令；真正的 x 在运行目标程序时才输入。</p>
-<p>课件举出 <code>.c/.pas → .obj/.exe</code>。其中 <code>.obj</code> 通常是尚需链接的目标文件，<code>.exe</code> 是某些平台的可执行文件。编译、汇编、链接、装载是可分开的环节。<strong>链接</strong>把多个目标文件及所需库连接起来并处理外部引用；<strong>装载</strong>把可执行内容安排到运行环境中。不能要求每一次编译都立即产生可单独运行的 <code>.exe</code>。</p>
+<p>例如 <code>.c/.pas → .obj/.exe</code> 表示一种常见的文件转换流程。其中 <code>.obj</code> 通常是尚需链接的目标文件，<code>.exe</code> 是某些平台的可执行文件。编译、汇编、链接、装载是可分开的环节。<strong>链接</strong> 把多个目标文件及所需库连接起来并处理外部引用；<strong>装载</strong> 把可执行内容安排到运行环境中。不能要求每一次编译都立即产生可单独运行的 <code>.exe</code>。</p>
 <p>目标语言也不一定比源语言“级别低”。广义编译包含源到源转换；本课程重点讨论高级语言到较低级表示的翻译。</p>
+<p><strong>外部引用怎样补齐。</strong> 假设 <code>main.obj</code> 中有一次对函数 f 的调用，编译该文件时只登记“目标为 f”，<code>f.obj</code> 则提供 f 的定义。链接器把 f 排在代码地址 200，便将这次调用的符号引用解析为 200；若找不到定义，就报告未解析引用。装载器再把得到的程序放入运行环境。可见“某个源文件已编译成功”与“整个程序已能运行”之间还可能隔着链接和装载。这里的 200 是本例选定的地址。</p>
 <h3>4.2 解释方式：让实现程序执行输入程序的含义</h3>
-<p><strong>解释程序（interpreter）</strong>接收程序及数据，执行程序描述的操作并产生结果。课件用“边翻译边执行”解释这一过程，强调它通常不先交付一份独立的目标程序。</p>
+<p><strong>解释程序（interpreter）</strong> 接收程序及数据，执行程序描述的操作并产生结果。这里用“边翻译边执行”解释这一过程，强调它通常不先交付一份独立的目标程序。</p>
 <pre><code class="language-text">源程序或中间表示 + 输入数据 ──解释程序──→ 计算结果
 </code></pre>
 <p>例如解释器读到“把 x 加 1”，便在自身运行过程中完成取值和加法。与编译后的程序相比，解释器在执行时通常还承担查找操作和控制执行的工作。</p>
@@ -180,7 +236,7 @@ h2,h3,h4,[id]{scroll-margin-top:0}.stepper{background:#edf6f1;border:1px solid #
 <thead>
 <tr>
 <th>方面</th>
-<th>课件给出的典型认识</th>
+<th>下面给出的典型认识</th>
 <th>理解时需要的前提</th>
 </tr>
 </thead>
@@ -215,17 +271,19 @@ h2,h3,h4,[id]{scroll-margin-top:0}.stepper{background:#edf6f1;border:1px solid #
 <td>源码改变后可能需要重新编译</td>
 </tr>
 </tbody></table></div>
-<p>选择依据是需求：程序是否频繁变化、是否反复运行、启动与吞吐要求、平台条件等。课件的比较是典型教学场景，不是关于所有实现的性能定理。</p>
+<p>选择依据是需求：程序是否频繁变化、是否反复运行、启动与吞吐要求、平台条件等。上述比较限于相应教学场景，具体性能取决于实现与任务。</p>
+<p>小例子：只考察一行<code>x=2+3</code>。编译方案先输出可重复运行的目标程序，之后运行它才得到x=5；解释方案由解释系统执行该表达式得到5。若要比较耗时，还必须给出运行次数和具体实现，不能从5这个相同结果推出性能相同。</p>
 <h3>4.4 混合实现：不同层次可以采用不同方式</h3>
-<p>课件备注中的 Java 例子是 <code>.java → .class</code>，再由 JVM 执行字节码。<strong>虚拟机</strong>是实现一套抽象指令与运行规则的软件或执行系统。它给不同平台提供统一的程序表示。</p>
-<p>执行字节码可以采用解释，也可以采用<strong>即时编译（JIT）</strong>，即在运行期间把部分代码翻译成机器码。因此先编译字节码与随后解释或即时编译并不矛盾。</p>
-<p>Python 源文件通常使用 <code>.py</code> 后缀；课件备注中的 <code>.ph</code> 是笔误。某些实现会生成或缓存 <code>.pyc</code> 字节码，但不能据此断言每次运行每个源文件都必定在磁盘写出 <code>.pyc</code>。这些例子用于理解实现层次，不用于概括语言的全部实现。</p>
+<p>Java 的典型流程是 <code>.java → .class</code>，再由 JVM 执行字节码。<strong>虚拟机</strong> 是实现一套抽象指令与运行规则的软件或执行系统。它给不同平台提供统一的程序表示。</p>
+<p>执行字节码可以采用解释，也可以采用<strong>即时编译（JIT）</strong> ，即在运行期间把部分代码翻译成机器码。因此先编译字节码与随后解释或即时编译并不矛盾。</p>
+<p>Python 源文件通常使用 <code>.py</code> 后缀。某些实现会生成或缓存 <code>.pyc</code> 字节码，但不能据此断言每次运行每个源文件都必定在磁盘写出 <code>.pyc</code>。这些例子用于理解实现层次，不用于概括语言的全部实现。</p>
 <h3>4.5 转换方式：借助已有语言实现</h3>
 <p>假设已有 A 语言的实现，要支持 B，可以安排：</p>
 <pre><code class="language-text">B 程序 ──转换程序──→ 等价的 A 程序 ──A 的实现──→ 结果或目标程序
 </code></pre>
 <p>这样可复用 A 的编译器、库和平台支持。代价是转换器必须保留 B 的语义，必要时补上 A 本身不直接提供的运行支持。</p>
-<p>课件认为两种语言接近，或 B 是 A 的扩展时便于采用这种方式。这是实施便利条件，不是数学上的必要条件。课件将 C++ 列为例子，应理解为早期 C++ 到 C 的实现思路，不能据此认定所有 C++ 编译器都先生成 C。</p>
+<p>两种语言接近，或 B 是 A 的扩展时，通常便于采用这种方式，这是实施便利条件。早期 C++ 到 C 的转换说明了这种路线，但不能据此认定所有 C++ 编译器都先生成 C。</p>
+<p>小例子：新教学语言的<code>twice x</code>规定输出x的两倍，而已有语言支持乘法和输出。转换器把它映射成已有语言的“输出2*x”；输入x=3时两边都应输出6。这里复用已有实现，转换仍须保持求值和副作用规则。</p>
 <p><a id="ch01-s05"></a>
 <a id="五编译程序的六个逻辑阶段"></a>
 <a id="编译程序的六个逻辑阶段"></a>
@@ -233,105 +291,49 @@ h2,h3,h4,[id]{scroll-margin-top:0}.stepper{background:#edf6f1;border:1px solid #
 <h2>5. 编译程序的六个逻辑阶段</h2>
 <p>对一条赋值语句，逐字替换无法解决单词边界、运算顺序、类型和指令选择等不同问题。把翻译工作分成六个逻辑阶段，可以看清每一步需要什么信息、交出什么结果。</p>
 <h3>5.1 用一条赋值语句把阶段串起来</h3>
-<p>以下采用课件的 Pascal 风格程序，三个变量均为实数：</p>
-<pre><code class="language-text">var sum, first, count: real;
-begin
-    sum := first + count * 10
-end.
-</code></pre>
-<p>六阶段形成一条逻辑路线：</p>
-<pre><code class="language-text">字符 → Token → 结构 → 带属性的结构 → 中间代码 → 优化代码 → 目标代码
-       词法      语法       语义          生成          优化          生成
-</code></pre>
-<p>每个阶段回答不同问题。它们可以在实现中交错调用，并不必然是六个各自读完整文件的独立程序。</p>
+<p>同一句源码要经历分词、确定结构、检查含义、生成中间表示、可选优化和生成目标代码。它们回答不同问题，并不要求实现恰好扫描六遍。</p>
+<p>小例子：输入 <code>x:=4</code>，分词得到名字、赋值号和整数；语法识别赋值结构；语义确认x是可赋整数的变量，后续才能安排写入x的操作。单词拼写合法，并没有自动完成后面的工作。</p>
+<p>以下每个阶段另用一个小情境讲解，不沿用这一行的声明或运行状态。完整多阶段推导放在综合应用。</p>
 <h3>5.2 词法分析：字符怎样组成单词</h3>
-<p><strong>词法分析</strong>按照单词构成规则分离字符，产生 Token，并发现词法错误。对例子得到：</p>
-<pre><code class="language-text">&lt;id,sum&gt; &lt;assign,:=&gt; &lt;id,first&gt; &lt;plus,+&gt;
-&lt;id,count&gt; &lt;mult,*&gt; &lt;intConstant,10&gt;
-</code></pre>
-<p><code>id</code> 表示标识符类别，名字可直接存储，也可通过索引引用名字表。<code>10</code> 是一个常数单词，不能拆成两个彼此独立的数字 Token。词法分析还会处理空白、注释及位置记录。</p>
-<p>例如某教学语言不允许 <code>@</code>，读到它便可报告词法错误。对 <code>7L</code> 是否应整体报错、拆成两个 Token，或作为某种数值后缀，必须依据具体语言规则，不能脱离语言作结论。</p>
+<p>词法分析把字符切成有类别的单词，保存名字、常量和位置信息。</p>
+<p>小例子：规定标识符以字母开头、后接字母或数字，数字串是整数，+是运算符。输入 <code>n2+7</code> 得到 <code>&lt;id,n2&gt;、&lt;+&gt;、&lt;int,7&gt;</code> 三个Token。n2不能按字符拆成两个Token；数字7的值可作为常量属性保存。若该语言不允许@，读到它就在词法阶段报告非法字符。</p>
+<p>有些语言允许数字后缀，因此<code>7L</code>如何处理必须按具体词法规则决定。</p>
 <h3>5.3 语法分析：单词怎样组成合法结构</h3>
-<p>得到合法单词以后，还不能确定它们怎样组合。例如加号后面直接接乘号，单词各自合法，整个表达式却不成立。接下来需要检查排列并建立组成关系。</p>
-<p><strong>语法分析</strong>依据文法判断 Token 的排列是否合法，并建立结构。例如例子的计算结构可以写成：</p>
-<pre><code class="language-text">赋值
-├─ 左边：sum
-└─ 右边：加法
-   ├─ first
-   └─ 乘法
-      ├─ count
-      └─ 10
-</code></pre>
-<p>树把“乘法先于加法”明确表达出来。语法分析处理括号、语句组成、运算优先级等；仅看字符串里出现了合法单词还不够。<code>first + * count</code> 的每个单词都可能合法，但排列不构成合法表达式。</p>
-<p>课件比较 <code>i++</code> 与 <code>i:=i+1</code>：它们在不同语言中受到不同规则约束。判断错误以前要先确定源语言，不能拿 C 的规则检查 Pascal。</p>
+<p>合法单词还必须按规则排列，语法分析据此建立组成结构。</p>
+<p>小例子：教学表达式文法为 <code>E→E+T|T，T→n</code>，n是整数Token。输入 <code>n+n</code> 可组成一个加法表达式；<code>n++n</code> 虽然每个Token都合法，却缺少两个加号之间的项，不能由规则生成。这里不支持自增或一元加号，不拿其他语言的规则替代本例规则。</p>
+<p>结构决定谁与谁结合；声明和操作数类型是否允许，还需语义分析。</p>
 <h3>5.4 语义分析：合法结构是否表达合法含义</h3>
-<p>表达式有了正确结构，还可能使用未声明的名字，或把不能相乘的类型放在一起。要继续检查，就必须把树中的名字与声明、类型等信息联系起来。</p>
-<p><strong>语义分析</strong>建立名字的属性与联系，进行静态语义检查，并为后续翻译准备信息。“静态”指不必执行程序就检查的性质。</p>
-<p>常见检查包括名字是否声明、同一作用域中是否重复声明、操作数类型是否允许、赋值双方是否兼容、调用参数是否匹配。课件例子中如果只有 <code>first</code> 和 <code>count</code> 的声明，没有 <code>sum</code>，使用 <code>sum</code> 就是语义问题。</p>
-<p>课件另一例把 <code>count</code> 声明成字符。按课件采用的 Pascal 教学规则，字符不能直接进行该乘法；但 C 中字符值可以参与整数提升，因而不能把这个错误原样套到 C 上。</p>
-<p>语法检查与语义检查的区别可以这样看：<code>x+y</code> 有合法的加法结构，但若 x 是不支持加法的对象，仍可能语义不合法。符号表帮助编译器知道 x、y 究竟是什么。</p>
+<p>语义分析把使用位置的名字绑定到声明，再按语言规则检查操作，并保存后续翻译所需属性。</p>
+<p>小例子：同一范围只声明 <code>int k;</code>。表达式 <code>k+1</code> 的名字已声明且两个操作数可作整数加法；<code>k()</code> 却试图调用整数变量，结构像调用，含义不合法。若写 <code>u+1</code>，u没有声明，应先报告未声明名字。</p>
+<p>具体的类型兼容、重复声明和参数匹配仍按源语言规定，不能仅凭表达式形状作结论。</p>
 <h3>5.5 中间代码生成：把复杂结构拆成简单操作</h3>
-<p>结构和类型确认后，可以直接针对某台机器生成指令，也可以先拆成简单操作。后一种做法让后续优化和不同目标机的代码生成共用一份表示。</p>
-<p><strong>中间代码生成</strong>把已经理解的程序转换为便于后续处理的内部表示。课件采用四元式：</p>
-<div class="table-scroll"><table>
-<thead>
-<tr>
-<th>顺序</th>
-<th>四元式</th>
-<th>通俗解释</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>1</td>
-<td><code>(int-to-real,10,-,t1)</code></td>
-<td>把整数常数 10 转成实数</td>
-</tr>
-<tr>
-<td>2</td>
-<td><code>(*,count,t1,t2)</code></td>
-<td>计算实数乘法，结果暂存 t2</td>
-</tr>
-<tr>
-<td>3</td>
-<td><code>(+,first,t2,t3)</code></td>
-<td>把 first 与乘法结果相加</td>
-</tr>
-<tr>
-<td>4</td>
-<td><code>(:=,t3,-,sum)</code></td>
-<td>把最后结果赋给 sum</td>
-</tr>
-</tbody></table></div>
-<p>为什么必须先转换？例子中 <code>count</code> 是 real，语言规定的混合类型运算可能要求把整数操作数提升为 real。不同类型往往对应不同运算指令；转换把这种要求表达清楚。</p>
-<p>为什么需要临时名字？一条四元式只表达简单操作，中间结果需要被下一条引用。t1 等不是程序员声明的名字，而是编译器管理的暂存结果。</p>
-<p>课件说明中间代码并非所有编译器都必须单独产生的阶段。如果不需要相应优化与移植安排，也可以在分析过程中直接生成目标代码。这里保留它，便于理解和实现后续处理。</p>
+<p>中间代码把复杂计算拆成简单步骤，暂不绑定某台目标机的寄存器。</p>
+<p>小例子：已声明整数a、b，翻译 <code>b:=(a+2)*3</code>，约定四元式为(操作,左输入,右输入,结果)：</p>
+<pre><code class="language-text">(ADDI,a,2,t1)
+(MULTI,t1,3,t2)
+(ASSIG,t2,-,b)
+</code></pre>
+<p>t1保存一次加法结果，供下一条乘法读取；t2再交给赋值。若运行时a=1，依次得到3、9，最后b=9。t1、t2是本例新分配的临时名，生成这些记录并不等于编译时已经运行整个程序。</p>
+<p>某些编译器也可直接生成目标代码，IR是本章用于组织分析与后续处理的选择。</p>
 <h3>5.6 中间代码优化：在保持行为的前提下减少代价</h3>
-<p>前面的四元式包含一次对常量 10 的转换；它的结果在编译时已经知道，没有必要每次运行再算。下面用这一处重复工作说明优化的目的与限制。</p>
-<p><strong>优化</strong>变换程序表示，以改善运行时间、空间或其他指定指标。例子的第一条只把一个已知常数转换成实数，可以在编译时完成：</p>
-<pre><code class="language-text">(*,count,10.0,t2)
-(+,first,t2,t3)
-(:=,t3,-,sum)
-</code></pre>
-<p>运行时因此少做一次类型转换。这叫<strong>常量折叠</strong>：编译时计算结果已知的运算，并用结果替换。</p>
-<p>课件强调，编译优化通常针对现有程序的实现，不能假定它会自动替学生重新设计更好的求解算法。选择辗转相除而非枚举求最大公约数属于算法设计；发现循环中重复计算的数组地址并减少重复工作属于编译优化的典型内容。</p>
-<p>优化本身也消耗编译时间和开发成本。是否优化、优化到什么程度，要在编译速度、程序运行速度与代码大小之间权衡。编译器可以提供多种优化等级；优化不是保证所有指标都同时改善。</p>
+<p>优化在保持行为的条件下改善运行时间、空间等指标，也要付出编译成本。</p>
+<p>小例子：原中间操作为 <code>t=2*3; x=t+1</code>，两个输入常量已知且按无溢出整数计算，可改成 <code>x=7</code>。运行时不必再乘、再加；必要赋值仍保留。若x在后面被读取，不能把运算和给x定值一起删掉，只在编译器的表中记住7。</p>
+<p>这体现常量折叠。重新设计求解算法与自动节省既有程序中的重复工作是不同任务；优化也不保证所有成本指标同时改善。</p>
 <h3>5.7 目标代码生成：安排具体指令</h3>
-<p>中间代码还没有说明由哪些机器指令执行、结果放在哪个寄存器。<strong>目标代码生成</strong>根据目标机的指令和存储约定完成这一步。</p>
-<p>课件 01 第 24 页的汇编示例如下：</p>
-<pre><code class="language-text">MOV   count, R1
-MULT  R1, #10.0
-MOV   first, R2
-ADD   R1, R2
-MOV   R1, sum
+<p>目标代码生成把操作落实为取值、运算和写回。必须先说明采用的指令含义。</p>
+<p>小例子：翻译整数 <code>y:=a+1</code>。本例教学机规定<code>LD R,a</code>读a，<code>ADD R,#1</code>把常数1加到R，<code>ST y,R</code>把R写给y：</p>
+<pre><code class="language-text">LD R,a
+ADD R,#1
+ST y,R
 </code></pre>
-<p>这段示例表达“取 count、乘 10.0、与 first 相加、写回 sum”。其中 <code>#10.0</code> 表示立即数。原页没有给出统一的操作数方向约定，暂不能确定每步的结果寄存器；应先确认目标机约定，再作逐寄存器跟踪。这里先对照四元式理解各指令的作用。</p>
+<p>若a=4，R先是4，再是5，最终y=5。代码、操作数字段方向和结果逐项对应；这只是一个短指令片段，不代表所有真实机器都用这套编码。</p>
 <p><a id="ch01-s06"></a>
 <a id="六贯穿全程的表格管理与错误处理"></a>
 <a id="贯穿全程的表格管理与错误处理"></a></p>
 <h2>6. 贯穿全程的表格管理与错误处理</h2>
 <p>各阶段要反复使用名字、类型等共同信息，也都可能发现错误。只画一条顺序流水线还不足以说明这些工作，因此需要贯穿各阶段的信息管理和错误处理。</p>
 <h3>6.1 表格不是最后才建立</h3>
-<p>编译时需要保存许多“以后还要用”的信息，因此课件把<strong>表格管理</strong>放在主流程旁边，服务于多个阶段。</p>
+<p>编译时需要保存许多“以后还要用”的信息，因此<strong>表格管理</strong> 贯穿翻译流程，服务于多个阶段。</p>
 <div class="table-scroll"><table>
 <thead>
 <tr>
@@ -367,8 +369,9 @@ MOV   R1, sum
 </tr>
 </tbody></table></div>
 <p>“表”泛指有组织的数据结构，不要求一定是二维表格。哈希表、树、链表、数组都可承担管理功能。名字索引表只知道“拼写是什么”，符号表还要知道“在这里指哪个声明”，两者职责不能混为一谈。</p>
+<p>小例子：读到声明<code>int score;</code>时登记名字score、变量类别和整数类型；遇到<code>score+1</code>再查这项，确定使用整数加法。名字表可保存拼写score，语义符号项还需区分它是哪一范围的声明，两者不能只因名字相同而合并成一个职责。</p>
 <h3>6.2 错误处理既要定位，也要避免误导</h3>
-<p><strong>错误处理</strong>包括发现错误、给出诊断、决定如何恢复以及控制是否继续生成结果。理想诊断需要说明位置和原因，而不是只打印“编译失败”。</p>
+<p><strong>错误处理</strong> 包括发现错误、给出诊断、决定如何恢复以及控制是否继续生成结果。理想诊断需要说明位置和原因，而不是只打印“编译失败”。</p>
 <pre><code class="language-text">词法：非法字符
 语法：括号或语句结构不完整
 语义：名字未声明、类型不兼容
@@ -383,86 +386,57 @@ MOV   R1, sum
 <h2>7. 阶段、遍、前端与后端</h2>
 <p>前面按功能分出了六阶段，真正编写编译器时，还要决定何时扫描、哪些功能一起完成，以及更换语言或机器时能复用什么。这是下面两种组织方式要解决的问题。</p>
 <h3>7.1 阶段回答“做什么”，遍回答“扫几次”</h3>
-<p><strong>阶段（phase）</strong>按逻辑功能划分，例如词法分析、语义分析。<strong>遍（pass）</strong>是把源程序或某种中间表示从头到尾扫描并加工一次。</p>
+<p><strong>阶段（phase）</strong> 按逻辑功能划分，例如词法分析、语义分析。<strong>遍（pass）</strong> 是把源程序或某种中间表示从头到尾扫描并加工一次。</p>
 <p>一遍扫描可以完成多个阶段。语法分析器一边向词法分析器索取 Token，一边检查结构并执行语义动作，就能把多种工作组织在一次扫描过程中。一个阶段也可以有多遍，例如先收集声明，再检查使用，或反复做不同优化。</p>
 <p>因此“六个阶段＝六遍”不成立。遍的对象也不必是原始字符：Token 序列、语法树和四元式都可以被遍历。</p>
 <h3>7.2 为什么分遍</h3>
-<p>课件提出分遍的理由。可从三个实际问题理解：</p>
+<p>为什么把编译工作分成多遍？可以从三个实际问题理解：</p>
 <ol>
-<li><strong>信息尚未齐全。</strong>先收集声明或函数信息，后续再处理引用，能减少临时推迟处理的复杂度。</li>
-<li><strong>结构便于维护。</strong>把不同任务分开，方便调试、替换算法和验证。</li>
-<li><strong>资源与质量权衡。</strong>少遍可能减少中间存储和扫描成本；多遍可能获得更多分析信息并支持更充分优化。早期内存受限的实现也会通过分遍处理问题。</li>
+<li><strong>信息尚未齐全。</strong> 先收集声明或函数信息，后续再处理引用，能减少临时推迟处理的复杂度。</li>
+<li><strong>结构便于维护。</strong> 把不同任务分开，方便调试、替换算法和验证。</li>
+<li><strong>资源与质量权衡。</strong> 少遍可能减少中间存储和扫描成本；多遍可能获得更多分析信息并支持更充分优化。早期内存受限的实现也会通过分遍处理问题。</li>
 </ol>
-<p>课件没有给出所有编译器都应采用的固定遍数。本课程按逻辑阶段讲授，不能据此推断最终实现必须逐阶段保存一个中间文件。</p>
+<p>逻辑阶段划分不规定固定遍数，也不要求实现逐阶段保存中间文件；应按分析需求与资源选择组织方式。</p>
+<p>小例子：语言允许先调用函数f、后出现f的定义。第一遍收集f的签名，第二遍检查调用实参与该签名是否相符；否则首次看到调用时还拿不到完整信息。例子只说明分遍的一种理由，不规定全部语言必须采用两遍。</p>
 <h3>7.3 前端与后端使移植更容易</h3>
-<p><strong>前端（front end）</strong>处理主要与源语言相关的事情：词法、语法、语义分析、中间表示生成，以及适合放在这一侧的目标机无关优化。</p>
-<p><strong>后端（back end）</strong>处理主要与目标机相关的事情：具体指令选择、寄存器与存储安排、目标相关优化、代码输出等。</p>
+<p><strong>前端（front end）</strong> 处理主要与源语言相关的事情：词法、语法、语义分析、中间表示生成，以及适合放在这一侧的目标机无关优化。</p>
+<p><strong>后端（back end）</strong> 处理主要与目标机相关的事情：具体指令选择、寄存器与存储安排、目标相关优化、代码输出等。</p>
 <p>可以把中间表示想成双方约定的接口：前端承诺“把源程序解释成这样的操作”，后端承诺“把这些操作实现到目标机上”。</p>
 <pre><code class="language-text">C 前端 ──┐                 ┌── 目标机 A 后端
          ├── 共同的 IR ────┤
 Pascal前端┘                 └── 目标机 B 后端
 </code></pre>
-<p>这样支持新的源语言或新的目标机时，可以复用已有部分。实际边界未必完全纯净，类型大小、异常模型和调用约定等可能影响中间表示。课件的划分是一种设计原则，不要求前端对目标信息毫无了解。</p>
+<p>这样支持新的源语言或新的目标机时，可以复用已有部分。实际边界未必完全纯净，类型大小、异常模型和调用约定等可能影响中间表示。这里的划分是一种设计原则，前端仍可能需要部分目标信息。</p>
 <p><a id="ch01-s08"></a>
 <a id="八编译程序怎样实现和移植"></a>
 <a id="编译程序怎样实现和移植"></a></p>
 <h2>8. 编译程序怎样实现和移植</h2>
 <h3>8.1 直接用机器语言实现</h3>
-<p>编译器最终需要能在某台机器上运行，最直接的起点是用机器语言编写它。问题是代码难写、难调试、与机器高度绑定。课件把它作为实现路线的起点，不表示大型编译器通常应这样开发。</p>
-<p>这里要区分两个问题：<strong>实现语言</strong>是编译器自身用什么写；<strong>被编译语言</strong>是编译器接受什么输入。用 C 写 Pascal 编译器完全可以；用某种语言写本语言的编译器也不矛盾。</p>
+<p>编译器最终需要能在某台机器上运行，最直接的起点是用机器语言编写它。问题是代码难写、难调试、与机器高度绑定。这种路线容易解释从无到有的起点，但大型实现还要考虑可维护性和开发成本。</p>
+<p>这里要区分两个问题：<strong>实现语言</strong> 是编译器自身用什么写；<strong>被编译语言</strong> 是编译器接受什么输入。用 C 写 Pascal 编译器完全可以；用某种语言写本语言的编译器也不矛盾。</p>
 <h3>8.2 自展法：从可实现的小子集滚成完整语言</h3>
 <p>直接实现整门语言可能工作量太大，而已有工具又不支持它。可以先实现足够小的子集，再用已支持的功能编写更强的编译器，逐步扩大可处理的范围。</p>
-<p><strong>自展法，也称雪球法</strong>先选取源语言 L 的小子集 L0，逐步扩展：</p>
+<p><strong>自展法，也称雪球法</strong> 先选取源语言 L 的小子集 L0，逐步扩展：</p>
 <pre><code class="language-text">L0 ⊆ L1 ⊆ L2 ⊆ … ⊆ L
 </code></pre>
 <p>首先用已有手段实现 L0 的编译器；再用 L0 编写接受 L1 的编译器，把该源码交给已能运行的 L0 编译器，得到新的可执行编译器。继续用已经支持的 Li 编写接受更大子集的编译器，最终覆盖 L。</p>
 <p>关键是“写第 i+1 步实现源码时，只使用当前已经能编译的功能”。如果源码用了尚未支持的特性，已有编译器就无法处理，雪球滚不起来。</p>
-<p><strong>自举（bootstrapping）</strong>泛指借助已有实现建立新的实现。语言逐步自展可以成为自举路线之一；“编译器用本语言写”与“从子集不断扩展”分别描述实现语言和构建过程，不应当作同一个定义。</p>
+<p><strong>自举（bootstrapping）</strong> 泛指借助已有实现建立新的实现。语言逐步自展可以成为自举路线之一；“编译器用本语言写”与“从子集不断扩展”分别描述实现语言和构建过程，不应当作同一个定义。</p>
+<p><strong>实现语言小，不妨碍处理更大的语言。</strong> 假设 L₀ 已有字符读取、条件和循环，L₁ 在被编译的表达式中增加乘号。用 L₀ 写的扫描器可以判断当前字符是否为 <code>*</code>，用 L₀ 写的分析程序可以输出乘法四元式；实现这些判断时不要求实现语言自身已有 L₁ 的全部语法。先用已有的 L₀ 编译器得到这个 L₁ 编译器，再用它编译以 L₁ 编写的新版本，才形成自展链。关键是区分“编译器用什么写”与“编译器处理什么”。</p>
 <h3>8.3 移植：在哪台机器运行，与给哪台机器生成代码</h3>
-<p>假设已有 A 机器上运行的 L 编译器 CCA，其实现源码 SA 也用 L 写成，现在要支持指令集不同的 B。</p>
-<p>必须同时记录两项属性：<strong>宿主机</strong>是编译器运行的机器；<strong>目标机</strong>是输出程序运行的机器。例如“在 A 上运行、为 B 生成代码”就是<strong>交叉编译器</strong>，不能因为名称含 B 就以为它已能在 B 上运行。</p>
-<p>课件列出三条移植途径：</p>
-<div class="table-scroll"><table>
-<thead>
-<tr>
-<th>途径</th>
-<th>基本思路</th>
-<th>需要解决的事情</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>目标代码转换</td>
-<td>把 A 的目标表示转换为 B 的表示</td>
-<td>指令、数据表示与运行环境差异</td>
-</tr>
-<tr>
-<td>交叉编译</td>
-<td>在 A 上建立能输出 B 代码的编译器</td>
-<td>改造 B 后端，再生成并部署 B 程序</td>
-</tr>
-<tr>
-<td>虚拟机移植</td>
-<td>程序输出统一的虚拟机表示</td>
-<td>在 B 上实现对应虚拟机与运行支持</td>
-</tr>
-</tbody></table></div>
-<p>交叉编译路线的详细过程：</p>
-<ol>
-<li>修改 SA 的代码生成部分，得到源码 SB。SB 要生成 B 代码，但它此时仍是 L 源码。</li>
-<li>用 CCA 编译 SB，得到一个<strong>在 A 上运行、输出 B 代码</strong>的可执行编译器。</li>
-<li>把普通 L 程序交给它，即可在 A 上产生给 B 使用的程序。</li>
-<li>若还需要在 B 上运行这个编译器，可再用交叉编译器编译 SB，生成 B 版本；同时准备其依赖的库与运行支持。</li>
-</ol>
-<p>第 4 步改变的是编译器自身的运行机器。SB 在编译前仍是 L 源码，只有交给能输出 B 代码的编译器后，才得到可在 B 上运行的版本。</p>
+<p>移植要分清宿主机与目标机。<strong>宿主机</strong> 运行编译器自身，<strong>目标机</strong> 运行它生成的程序。</p>
+<p>小例子：编译器在机器A上运行，读取语言L源码，输出机器B指令。三个字段是“源语言L、宿主A、目标B”，所以它是交叉编译器。即使输出的是B指令，也不能把编译器自身直接当作可在B运行的程序。</p>
+<p>实现新目标时可以修改已有后端、借助交叉编译或其他已有工具。完整的交叉编译到本地编译器的构建过程放在综合移植练习。</p>
 <h3>8.4 转换法与自动生成工具</h3>
 <p>实现新语言时，不必从头手写所有模块。已有语言的编译系统和基于规则生成分析器的工具，都能承担部分工作；需要弄清它们替代的是哪一部分。</p>
-<p>转换法已经在 4.5 解释：先把新语言映射到已有语言，复用其实现。课件也称其为预处理法；这里的含义是语言转换，不应与 C 的宏预处理完全等同。</p>
-<p><strong>编译器生成工具</strong>从形式化规则生成部分分析器。课件列出 Flex、Yacc、LLGen、Bison：词法工具依据单词规则生成扫描程序，语法工具依据文法生成分析器框架。</p>
+<p>转换法已经在 4.5 解释：先把新语言映射到已有语言，复用其实现。也称为预处理法；这里的含义是语言转换，不应与 C 的宏预处理完全等同。</p>
+<p><strong>编译器生成工具</strong> 从形式化规则生成部分分析器。下面列出 Flex、Yacc、LLGen、Bison：词法工具依据单词规则生成扫描程序，语法工具依据文法生成分析器框架。</p>
 <p>工具减少重复编码，但需要人给出正确规则、语义动作、错误策略及其他阶段的实现。生成语法分析器不等于已经得到完整编译器；语义、运行时组织、优化和目标代码等仍需设计。</p>
-<h3>8.5 大模型调研怎样做才有依据</h3>
-<p>课件将大模型生成编译阶段程序的现状、优势和不足列为调研主题，没有给出统一实验结论。这里只保留这一课程要求；若要比较具体产品，需要指定版本、任务和实际结果，不能由课件中的产品名单推断能力排名。</p>
+<p>例如把标识符规则写为 <code>L(L|D)*</code>，并给动作“输出 id 及原文”，词法生成工具据此产生的扫描器读到 <code>sum12</code>，应得到一个 id Token。语法生成工具接收的则是 <code>E→E+T|T</code> 等结构规则，产生选择、匹配或归约所需的程序与表。规则文件是输入，扫描器或分析器是输出，不能把工具本身与生成后的编译器混为一物。</p>
+<h3>8.5 怎样检验大模型生成的编译阶段程序</h3>
+<p>评价大模型生成的扫描器或分析器，先固定语言规则和预期结果。例如规定标识符为 <code>L(L|D)*</code>，输入 <code>sum12+3</code> 的预期类别是 id、+、整数；再加入空输入、非法字符和未配对括号，检查首次报错的位置与后续行为。比较不同生成方案时应使用同一题设，并记录版本与实测结果。能生成代码只说明得到候选实现，正确性还须由规则和输入输出核对；不能用产品名称或几次成功样例代替判断。</p>
 <h3>8.6 开发前要确定哪些事</h3>
-<p>课件的开发要求可以转成如下检查表：</p>
+<p>开发前可按以下问题确定边界：</p>
 <div class="table-scroll"><table>
 <thead>
 <tr>
@@ -498,23 +472,22 @@ Pascal前端┘                 └── 目标机 B 后端
 <h2>9. 怎样学习和使用编译技术</h2>
 <h3>9.1 从语言使用走向语言理解</h3>
 <p>学会写表达式与函数，只说明会使用一门语言。实现编译器还要解释为什么类型需要转换、同名变量如何区别、递归为何不能共用一份局部空间等。后续章节会把这些规则落到具体结构和操作上。</p>
-<p>课程同时训练<strong>抽象</strong>与<strong>形式化</strong>：抽象是保留解决问题所需的特征，例如把源文件看成字符流；形式化是用精确符号规定规则，例如用正则表达式描述单词、用文法描述嵌套结构。形式化减少“我觉得应该如此”的歧义，使算法能被验证和自动执行。</p>
+<p>课程同时训练<strong>抽象</strong> 与<strong>形式化</strong> ：抽象是保留解决问题所需的特征，例如把源文件看成字符流；形式化是用精确符号规定规则，例如用正则表达式描述单词、用文法描述嵌套结构。形式化减少“我觉得应该如此”的歧义，使算法能被验证和自动执行。</p>
 <h3>9.2 元级程序设计与系统设计能力</h3>
-<p><strong>元级程序设计</strong>以程序为处理对象，例如分析、转换、生成和检查程序。编译器、静态检查器、代码生成器都体现这种思想。</p>
+<p><strong>元级程序设计</strong> 以程序为处理对象，例如分析、转换、生成和检查程序。编译器、静态检查器、代码生成器都体现这种思想。</p>
 <p>编译器通常包含多个模块和复杂数据结构。学习如何规定接口、传递属性、管理状态、恢复错误、核对正确性，对大型软件设计有直接训练作用。只背概念而不手工跟踪例子，很难理解这些模块为什么必须这样配合。</p>
 <h3>9.3 应用不局限于编程语言</h3>
-<p>课件及备注列出查询优化、图像与游戏计算、机器学习计算、嵌入式和硬件描述语言、程序安全、调试器及系统开发等方向。</p>
+<p>查询优化、图像与游戏计算、机器学习计算、嵌入式和硬件描述语言、程序安全、调试器及系统开发，都可能使用编译分析与变换的方法。</p>
 <p>可以抓住它们共同的工作方式：先读取某种描述，建立结构与含义，再分析、变换或生成执行方案。数据库查询可以先分析查询结构再优化执行计划；配置文件和公式系统需要识别与解析；张量计算可以通过中间表示安排执行与优化。</p>
-<p>这些应用复用的是方法，不意味着一个语法分析算法就能自动完成全部业务。课件关于自主创新与国产编译器的内容也可由此理解：语言工具链直接影响程序开发、性能和平台适配，需要长期积累正确性和工程能力。</p>
-<h3>9.4 课件所载课程安排</h3>
-<p>课件列教材为刘磊《编译原理及实现技术》第 3 版，理论课 48 学时、1—12 周；超星 MOOC 内部构成为作业 40%、签到 20%、视频 40%，该部分占总成绩 30%，期末考试占 70%。若两部分都用百分制，课件方案对应 <code>总评=0.3×平时分+0.7×期末分</code>。</p>
-<p>这些是课件记载，并未核实本学期是否有调整。涉及提交时间或实际评分，应依据教师最新通知。内容按第 1—9 章排列，存储管理在授课中安排到优化后讲，故学习资料编号与部分课件封面编号不必一致。</p>
+<p>这些应用复用的是方法，不意味着一个语法分析算法就能自动完成全部业务。关于自主创新与国产编译器的内容也可由此理解：语言工具链直接影响程序开发、性能和平台适配，需要长期积累正确性和工程能力。</p>
+<h3>9.4 怎样安排后续学习</h3>
+<p>先沿一条语句看清词法、语法和语义各自交付什么，再分别学习自动机、文法和符号表。涉及数组与调用的代码生成前，先明确对象的大小、层数和活动记录。本资料按这条知识依赖安排九章，具体入口见全课程学习导航。学时、成绩比例和提交日期属于教学管理信息，应按当期通知另行查询。</p>
 <p><a id="ch01-s10"></a>
 <a id="综合应用从一句赋值核对各阶段的输入和输出"></a>
 <a id="ref-综合"></a></p>
-<h2>10. 综合应用：从一句赋值核对各阶段的输入和输出</h2><div class="stepper" aria-label="分步图解"><h3>同一句程序经过六个逻辑阶段</h3><p class="fig-intro">sum、first、count为real；编译输入sum:=first+count*10。2.0与3.0仅用于执行核对。</p><div class="progress-track" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span></div><div class="step-tools"><button id="step-prev">上一步</button><label for="step-range">推导步骤</label><input id="step-range" type="range" min="0" max="5" value="0"><button id="step-next">下一步</button><span id="step-count" class="step-count"></span></div><div id="step-panel" class="step-card" aria-live="polite"></div><details><summary>完整轨迹（适合打印与连续核对）</summary><div class="table-scroll"><table><thead><tr><th>阶段</th><th>当前对象</th><th>所用规则</th><th>具体结果</th></tr></thead><tbody><tr><td>词法</td><td>源码字符</td><td>按单词模式分离</td><td>id(sum)、:=、id(first)、+、id(count)、*、int(10)</td></tr><tr><td>语法</td><td>Token序列</td><td>乘法高于加法</td><td>sum := first + (count*10)</td></tr><tr><td>语义</td><td>结构和声明</td><td>整数允许提升real</td><td>count与10.0参与实数乘法，结果可赋给sum</td></tr><tr><td>IR</td><td>带类型的结构</td><td>显式转换与临时结果</td><td>FLOAT 10→t1；MULTF count,t1→t2；ADDF first,t2→t3；ASSIG t3→sum</td></tr><tr><td>优化</td><td>四元式</td><td>已知常量转换提前计算</td><td>用10.0替t1，运行保留乘法、加法、赋值</td></tr><tr><td>目标</td><td>优化IR</td><td>对应取值、乘法、加法与写回；原指令方向限制见5.7</td><td>按源式first=2、count=3应写sum=32；逐寄存器跟踪需先确认原指令约定</td></tr></tbody></table></div></details></div>
+<h2>10. 综合应用：从一句赋值核对各阶段的输入和输出</h2>
 <p>初学时容易把词法、语法和语义都说成“查错”。这样背得出阶段名字，却无法解释同一程序为什么要交给几个模块处理。下面用同一输入把各阶段接起来；每一行的输出正好是下一行所需的信息。</p>
-<p><strong>前提：</strong>采用课件的 Pascal 风格语法，sum、first、count 都声明为 real；整数常量可以提升为 real。语句是 <code>sum:=first+count*10</code>。first=2.0、count=3.0 只用于后来核对执行结果，编译不需要预先知道这两个运行值。</p>
+<p><strong>前提：</strong> 采用 Pascal 风格语法，sum、first、count 都声明为 real；整数常量可以提升为 real。语句是 <code>sum:=first+count*10</code>。first=2.0、count=3.0 只用于后来核对执行结果，编译不需要预先知道这两个运行值。</p>
 <div class="table-scroll"><table>
 <thead>
 <tr>
@@ -558,7 +531,7 @@ Pascal前端┘                 └── 目标机 B 后端
 <td>如何执行</td>
 <td>按目标机约定把四元式映射到指令</td>
 <td>取 count，乘 10.0，再加 first，写 sum</td>
-<td>结果写到目标对象；原课件指令方向的限制见 5.7</td>
+<td>结果写到目标对象；本题目标片段与语义轨迹的区别见10.2</td>
 </tr>
 </tbody></table></div>
 <p>这里 sum 的值只在执行最终赋值或存储时改变；生成四元式不是提前运行整个源程序。代入运行值后 sum=32.0。若结构误排成 <code>(first+count)*10</code>，得到 50.0，说明翻译已经改变含义；若最后误把乘法中间结果写回 sum，得到 30.0，说明后端存错结果。</p>
@@ -599,6 +572,101 @@ Pascal前端┘                 └── 目标机 B 后端
 </tr>
 </tbody></table></div>
 <p>第三步实际输出的编译器程序才改变宿主；第二步改变的是所生成程序的目标。流程是教学推导，没有在 A/B 两台实际机器上构建。是否还需运行库和链接支持，必须由具体平台确定。</p>
+<h3>10.2 完整赋值例：从声明、Token到目标操作</h3>
+<h4>综合阶段1：用一条赋值语句把阶段串起来</h4>
+<p>以下采用 Pascal 风格程序，三个变量均为实数：</p>
+<pre><code class="language-text">var sum, first, count: real;
+begin
+    sum := first + count * 10
+end.
+</code></pre><div class="stepper" aria-label="分步图解"><h3>同一句程序经过六个逻辑阶段</h3><p class="fig-intro">sum、first、count为real；编译输入sum:=first+count*10。2.0与3.0仅用于执行核对。</p><div class="progress-track" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span></div><div class="step-tools"><button id="step-prev">上一步</button><label for="step-range">推导步骤</label><input id="step-range" type="range" min="0" max="5" value="0"><button id="step-next">下一步</button><span id="step-count" class="step-count"></span></div><div id="step-panel" class="step-card" aria-live="polite"></div><details><summary>完整轨迹（适合打印与连续核对）</summary><div class="table-scroll"><table><thead><tr><th>阶段</th><th>当前对象</th><th>所用规则</th><th>具体结果</th></tr></thead><tbody><tr><td>词法</td><td>源码字符</td><td>按单词模式分离</td><td>id(sum)、:=、id(first)、+、id(count)、*、int(10)</td></tr><tr><td>语法</td><td>Token序列</td><td>乘法高于加法</td><td>sum := first + (count*10)</td></tr><tr><td>语义</td><td>结构和声明</td><td>整数允许提升real</td><td>count与10.0参与实数乘法，结果可赋给sum</td></tr><tr><td>IR</td><td>带类型的结构</td><td>显式转换与临时结果</td><td>FLOAT 10→t1；MULTF count,t1→t2；ADDF first,t2→t3；ASSIG t3→sum</td></tr><tr><td>优化</td><td>四元式</td><td>已知常量转换提前计算</td><td>用10.0替t1，运行保留乘法、加法、赋值</td></tr><tr><td>目标</td><td>优化 IR</td><td>按明确的取值、运算、写回轨迹核对，见10.2</td><td>first=2、count=3时，R1依次3→30→32，sum=32；该轨迹说明预期语义</td></tr></tbody></table></div></details></div>
+<p>六阶段形成一条逻辑路线：</p>
+<pre><code class="language-text">字符 → Token → 结构 → 带属性的结构 → 中间代码 → 优化代码 → 目标代码
+       词法      语法       语义          生成          优化          生成
+</code></pre>
+<p>每个阶段回答不同问题。它们可以在实现中交错调用，并不必然是六个各自读完整文件的独立程序。</p>
+<h4>综合阶段2：词法分析：字符怎样组成单词</h4>
+<p><strong>词法分析</strong> 按照单词构成规则分离字符，产生 Token，并发现词法错误。对例子得到：</p>
+<pre><code class="language-text">&lt;id,sum&gt; &lt;assign,:=&gt; &lt;id,first&gt; &lt;plus,+&gt;
+&lt;id,count&gt; &lt;mult,*&gt; &lt;intConstant,10&gt;
+</code></pre>
+<p><code>id</code> 表示标识符类别，名字可直接存储，也可通过索引引用名字表。<code>10</code> 是一个常数单词，不能拆成两个彼此独立的数字 Token。词法分析还会处理空白、注释及位置记录。</p>
+<p>例如某教学语言不允许 <code>@</code>，读到它便可报告词法错误。对 <code>7L</code> 是否应整体报错、拆成两个 Token，或作为某种数值后缀，必须依据具体语言规则，不能脱离语言作结论。</p>
+<h4>综合阶段3：语法分析：单词怎样组成合法结构</h4>
+<p>得到合法单词以后，还不能确定它们怎样组合。例如加号后面直接接乘号，单词各自合法，整个表达式却不成立。接下来需要检查排列并建立组成关系。</p>
+<p><strong>语法分析</strong> 依据文法判断 Token 的排列是否合法，并建立结构。例如例子的计算结构可以写成：</p>
+<pre><code class="language-text">赋值
+├─ 左边：sum
+└─ 右边：加法
+   ├─ first
+   └─ 乘法
+      ├─ count
+      └─ 10
+</code></pre>
+<p>树把“乘法先于加法”明确表达出来。语法分析处理括号、语句组成、运算优先级等；仅看字符串里出现了合法单词还不够。<code>first + * count</code> 的每个单词都可能合法，但排列不构成合法表达式。</p>
+<p>比较 <code>i++</code> 与 <code>i:=i+1</code>：它们在不同语言中受到不同规则约束。判断错误以前要先确定源语言，不能拿 C 的规则检查 Pascal。</p>
+<h4>综合阶段4：语义分析：合法结构是否表达合法含义</h4>
+<p>表达式有了正确结构，还可能使用未声明的名字，或把不能相乘的类型放在一起。要继续检查，就必须把树中的名字与声明、类型等信息联系起来。</p>
+<p><strong>语义分析</strong> 建立名字的属性与联系，进行静态语义检查，并为后续翻译准备信息。“静态”指不必执行程序就检查的性质。</p>
+<p>常见检查包括名字是否声明、同一作用域中是否重复声明、操作数类型是否允许、赋值双方是否兼容、调用参数是否匹配。本例中如果只有 <code>first</code> 和 <code>count</code> 的声明，没有 <code>sum</code>，使用 <code>sum</code> 就是语义问题。</p>
+<p>若把 <code>count</code> 改为字符类型，按这里的 Pascal 教学规则，字符不能直接进行该乘法；C 中字符值可以参与整数提升，判断时必须先固定源语言的规则。</p>
+<p>语法检查与语义检查的区别可以这样看：<code>x+y</code> 有合法的加法结构，但若 x 是不支持加法的对象，仍可能语义不合法。符号表帮助编译器知道 x、y 究竟是什么。</p>
+<h4>综合阶段5：中间代码生成：把复杂结构拆成简单操作</h4>
+<p>结构和类型确认后，可以直接针对某台机器生成指令，也可以先拆成简单操作。后一种做法让后续优化和不同目标机的代码生成共用一份表示。</p>
+<p><strong>中间代码生成</strong> 把已经理解的程序转换为便于后续处理的内部表示。这里采用四元式：</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>顺序</th>
+<th>四元式</th>
+<th>通俗解释</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td><code>(int-to-real,10,-,t1)</code></td>
+<td>把整数常数 10 转成实数</td>
+</tr>
+<tr>
+<td>2</td>
+<td><code>(*,count,t1,t2)</code></td>
+<td>计算实数乘法，结果暂存 t2</td>
+</tr>
+<tr>
+<td>3</td>
+<td><code>(+,first,t2,t3)</code></td>
+<td>把 first 与乘法结果相加</td>
+</tr>
+<tr>
+<td>4</td>
+<td><code>(:=,t3,-,sum)</code></td>
+<td>把最后结果赋给 sum</td>
+</tr>
+</tbody></table></div>
+<p>为什么必须先转换？例子中 <code>count</code> 是 real，语言规定的混合类型运算可能要求把整数操作数提升为 real。不同类型往往对应不同运算指令；转换把这种要求表达清楚。</p>
+<p>为什么需要临时名字？一条四元式只表达简单操作，中间结果需要被下一条引用。t1 等不是程序员声明的名字，而是编译器管理的暂存结果。</p>
+<p>需要说明中间代码并非所有编译器都必须单独产生的阶段。如果不需要相应优化与移植安排，也可以在分析过程中直接生成目标代码。这里保留它，便于理解和实现后续处理。</p>
+<h4>综合阶段6：中间代码优化：在保持行为的前提下减少代价</h4>
+<p>前面的四元式包含一次对常量 10 的转换；它的结果在编译时已经知道，没有必要每次运行再算。下面用这一处重复工作说明优化的目的与限制。</p>
+<p><strong>优化</strong> 变换程序表示，以改善运行时间、空间或其他指定指标。例子的第一条只把一个已知常数转换成实数，可以在编译时完成：</p>
+<pre><code class="language-text">(*,count,10.0,t2)
+(+,first,t2,t3)
+(:=,t3,-,sum)
+</code></pre>
+<p>运行时因此少做一次类型转换。这叫<strong>常量折叠</strong> ：编译时计算结果已知的运算，并用结果替换。</p>
+<p>需要注意，编译优化通常针对现有程序的实现，不能假定它会自动替学生重新设计更好的求解算法。选择辗转相除而非枚举求最大公约数属于算法设计；发现循环中重复计算的数组地址并减少重复工作属于编译优化的典型内容。</p>
+<p>优化本身也消耗编译时间和开发成本。是否优化、优化到什么程度，要在编译速度、程序运行速度与代码大小之间权衡。编译器可以提供多种优化等级；优化不是保证所有指标都同时改善。</p>
+<h4>综合阶段7：目标代码生成：安排具体指令</h4>
+<p>中间代码还没有说明由哪些机器指令执行、结果放在哪个寄存器。<strong>目标代码生成</strong> 根据目标机的指令和存储约定完成这一步。</p>
+<p>汇编示例如下：</p>
+<pre><code class="language-text">MOV   count, R1
+MULT  R1, #10.0
+MOV   first, R2
+ADD   R1, R2
+MOV   R1, sum
+</code></pre>
+<p>这段片段的预期作用是“取 count、乘 10.0、与 first 相加、写回 sum”，<code>#10.0</code> 表示立即数。片段未定义统一的操作数方向，所以以下用明确的赋值轨迹说明应实现的计算，不将其当成可直接运行的目标程序。</p>
+<p>核对上述目标片段时，先固定所需的操作含义：<code>R1←count</code>，<code>R1←R1×10.0</code>，<code>R1←first+R1</code>，<code>sum←R1</code>。在 first=2.0、count=3.0 时，R1 依次为 3.0、30.0、32.0，最终 sum=32.0。它是与四元式一致的语义轨迹；上面的 MOV/MULT/ADD 片段未给出一致的操作数字段方向，不能据其拼写直接当作第九章教学机的可执行指令。第九章会另行完整规定 LD、ST 等指令的方向。</p>
 <p><a id="ch01-s11"></a>
 <a id="课件例题回查与知识路线"></a></p>
 <h2>11. 知识联系与复习</h2>
@@ -617,9 +685,9 @@ Pascal前端┘                 └── 目标机 B 后端
 <p><strong>3. 解释器内部有字节码，就不算解释吗？</strong> 仍可能算。内部表示与执行方式是两个问题，解释器可解释树或字节码。</p>
 <p><strong>4. <code>a+*b</code> 与未声明的 <code>a</code> 分别是什么问题？</strong> 前者是结构问题，属于语法检查；后者是名字与声明的关系问题，属于语义检查。</p>
 <p><strong>5. 词法分析知道所有同名 x 都是同一个变量吗？</strong> 不知道。词法可记录拼写；具体绑定依赖声明和作用域。</p>
-<p><strong>6. 为什么例子中 10 要转成 10.0？</strong> 为满足教学语言对实数运算的类型要求。优化又可在编译时完成这个已知转换。</p>
+<p><strong>6. 若实数变量r参与r*2，教学语言要求两边都为real，应怎样处理？</strong> 先把整数常量2提升为2.0，再作实数乘法；已知常量的转换也可在编译时完成。</p>
 <p><strong>7. 六阶段为什么不等于六遍？</strong> 前者划分功能，后者计扫描次数。一遍可执行多种功能，一个功能也可多次扫描。</p>
-<p><strong>8. 中间代码与优化都是不可缺少的吗？</strong> 不是。课件明确允许直接生成目标代码，也可不进行优化；但结构和语义仍须被正确处理。</p>
+<p><strong>8. 中间代码与优化都是不可缺少的吗？</strong> 不是。实现可以直接生成目标代码，也可不进行优化；但结构和语义仍须被正确处理。</p>
 <p><strong>9. 在 A 上运行、输出 B 代码的编译器能直接放到 B 上运行吗？</strong> 不能据此判断。它的宿主仍是 A，需要为自身生成 B 版本并满足 B 的运行依赖。</p>
 <p><strong>10. 用 L0 写接受 L1 的编译器矛盾吗？</strong> 不矛盾。实现语言可以是小子集，输入语言可以是更大语言；前提是实现源码只使用已有工具能处理的功能。</p>
 <p><strong>11. 自动生成分析器是否等于自动生成整个编译器？</strong> 不等于。输入规则及语义、运行时、后端等仍须完成。</p>
@@ -653,13 +721,13 @@ Pascal前端┘                 └── 目标机 B 后端
 </tr>
 <tr>
 <td>4</td>
-<td>CAB 在 A 上编译自己的源码后得到什么？为什么不能直接把 CAB 的 A 可执行文件复制到 B？</td>
-<td>独立推导移植步骤</td>
+<td>编译器CAB接受语言L、在A运行并输出B代码，其L源码SAB也实现相同功能。在A上用CAB编译SAB，所得程序在哪里运行、输出哪种代码？</td>
+<td>独立推导宿主与目标</td>
 </tr>
 </tbody></table></div>
 <h3>12.1 答案与理由</h3>
 <ol>
-<li>编译的外部过程把程序翻译成目标程序，执行目标程序才得到计算结果；解释由解释系统执行输入程序的含义并得到结果。先建立 AST 是内部处理安排，并不强制改变解释执行的性质。期末题采用课件的“是否先产生目标程序”表述；回答时可补一句讨论的是该层的执行流程。</li>
+<li>编译的外部过程把程序翻译成目标程序，执行目标程序才得到计算结果；解释由解释系统执行输入程序的含义并得到结果。先建立 AST 是内部处理安排，并不强制改变解释执行的性质。判断“是否先产生目标程序”时，要说明讨论的是哪一层的执行流程。</li>
 <li><code>a+*b</code> 是结构不合法，语法阶段可发现；未声明是绑定问题，语义阶段可发现；依赖未知运行输入的除零通常要运行时判断。若分母可在编译时证明为零，可以提前诊断，这不是与动态性质矛盾。</li>
 <li>共享接口成立时是 3+4=7 个主要模块，单独实现每个组合是 3×4=12 套完整翻译器。7 不含公共 IR 的设计维护，也不表示总工作量严格按这个比例降低。</li>
 <li>CAB 接受 L 源码、输出 B 代码，因此编译 SAB 得 B 版本 CBB。CAB 自身是 A 指令编成的可执行文件；它输出哪种代码不能改变自己的指令集。</li>
@@ -712,7 +780,7 @@ Pascal前端┘                 └── 目标机 B 后端
 <a id="末尾速查表"></a></p>
 <h2>14. 末尾速查表</h2>
 <div class="ref-picker"><label for="quick-select">选择一个概念或方法，查看含义、形式、例子、结果和前提</label><select id="quick-select" class="quick-select"><option value="0">编译方式</option><option value="1">词法分析</option><option value="2">语义分析</option><option value="3">遍</option><option value="4">IR</option><option value="5">交叉编译</option></select><div id="quick-panel" class="ref-panel" aria-live="polite"></div></div>
-</article><div class="chapter-links"><a href="00_学习导航.html">← 全课程导航</a><a href="02_词法分析.html">第2章 词法分析 →</a></div></main></div><script type="application/json" id="diagram-data">{"title":"同一句程序经过六个逻辑阶段","premise":"sum、first、count为real；编译输入sum:=first+count*10。2.0与3.0仅用于执行核对。","fields":["阶段","当前对象","所用规则","具体结果"],"rows":[["词法","源码字符","按单词模式分离","id(sum)、:=、id(first)、+、id(count)、*、int(10)"],["语法","Token序列","乘法高于加法","sum := first + (count*10)"],["语义","结构和声明","整数允许提升real","count与10.0参与实数乘法，结果可赋给sum"],["IR","带类型的结构","显式转换与临时结果","FLOAT 10→t1；MULTF count,t1→t2；ADDF first,t2→t3；ASSIG t3→sum"],["优化","四元式","已知常量转换提前计算","用10.0替t1，运行保留乘法、加法、赋值"],["目标","优化IR","对应取值、乘法、加法与写回；原指令方向限制见5.7","按源式first=2、count=3应写sum=32；逐寄存器跟踪需先确认原指令约定"]]}</script><script type="application/json" id="quick-data">[{"name":"编译方式","kind":"语言实现方式","meaning":"提前把程序转成目标表示","form":"源程序→目标程序→执行结果","notice":"目标产物未必可直接运行；","example":"赋值先生成三条 IR，再执行得32","link":"\u003ca href=\"#ref-%E5%AE%9E%E7%8E%B0\">编译、解释与转换\u003c/a>"},{"name":"词法分析","kind":"前端阶段","meaning":"把字符分成单词信息","form":"字符流→Token 流","notice":"类别合法不保证结构合法；","example":"x1整体返回id","link":"\u003ca href=\"#ref-%E9%98%B6%E6%AE%B5\">六个逻辑阶段\u003c/a>"},{"name":"语义分析","kind":"前端阶段","meaning":"检查声明、类别、类型","form":"结构＋符号表→带属性结构","notice":"按源语言规定；","example":"real运算提升10到10.0","link":"\u003ca href=\"#ref-%E9%98%B6%E6%AE%B5\">六个逻辑阶段\u003c/a>"},{"name":"遍","kind":"实现组织","meaning":"安排一次完整扫描","form":"表示→扫描加工→新表示","notice":"不与阶段数等同；","example":"一遍同时调用词法和语法","link":"\u003ca href=\"#ref-%E7%BB%84%E7%BB%87\">阶段、遍、前端与后端\u003c/a>"},{"name":"IR","kind":"内部程序表示","meaning":"隔离机器细节并便于优化","form":"\u003ccode>(op,a,b,r)\u003c/code>","notice":"类型、异常等语义不能丢；","example":"乘法结果t2交给加法","link":"\u003ca href=\"#ref-%E7%BB%BC%E5%90%88\">综合应用\u003c/a>"},{"name":"交叉编译","kind":"编译器运行与输出关系","meaning":"在宿主上生成异机代码","form":"CAB：宿主A，目标B","notice":"CAB自身不能因此在B运行；编译SAB得到CBB","example":"用法：CAB：宿主A，目标B。CAB自身不能因此在B运行；编译SAB得到CBB","link":"\u003ca href=\"#ref-%E7%BB%BC%E5%90%88\">移植流程\u003c/a>"}]</script><script>
+</article><div class="chapter-links"><a href="00_学习导航.html">← 全课程导航</a><a href="02_词法分析.html">第2章 词法分析 →</a></div></main></div><script type="application/json" id="diagram-data">{"title":"同一句程序经过六个逻辑阶段","premise":"sum、first、count为real；编译输入sum:=first+count*10。2.0与3.0仅用于执行核对。","fields":["阶段","当前对象","所用规则","具体结果"],"rows":[["词法","源码字符","按单词模式分离","id(sum)、:=、id(first)、+、id(count)、*、int(10)"],["语法","Token序列","乘法高于加法","sum := first + (count*10)"],["语义","结构和声明","整数允许提升real","count与10.0参与实数乘法，结果可赋给sum"],["IR","带类型的结构","显式转换与临时结果","FLOAT 10→t1；MULTF count,t1→t2；ADDF first,t2→t3；ASSIG t3→sum"],["优化","四元式","已知常量转换提前计算","用10.0替t1，运行保留乘法、加法、赋值"],["目标","优化 IR","按明确的取值、运算、写回轨迹核对，见10.2","first=2、count=3时，R1依次3→30→32，sum=32；该轨迹说明预期语义"]]}</script><script type="application/json" id="quick-data">[{"name":"编译方式","kind":"语言实现方式","meaning":"提前把程序转成目标表示","form":"源程序→目标程序→执行结果","notice":"目标产物的运行条件须明确；","example":"只含整数赋值x:=2+3的程序先译成可执行目标代码，再运行得到x=5。","link":"\u003ca href=\"#ref-%E5%AE%9E%E7%8E%B0\">编译、解释与转换\u003c/a>"},{"name":"词法分析","kind":"前端阶段","meaning":"把字符分成单词信息","form":"字符流→Token 流","notice":"分词规则须明确；","example":"规则为字母开头、其后可接数字，则输入x1+2分成id(x1)、+、int(2)。","link":"\u003ca href=\"#ref-%E9%98%B6%E6%AE%B5\">六个逻辑阶段\u003c/a>"},{"name":"语义分析","kind":"前端阶段","meaning":"检查声明、类别、类型","form":"结构＋符号表→带属性结构","notice":"须先取得声明；","example":"仅声明int k，k+1的结果为int，而k()因整数不可调用而失败。","link":"\u003ca href=\"#ref-%E9%98%B6%E6%AE%B5\">六个逻辑阶段\u003c/a>"},{"name":"遍","kind":"实现组织","meaning":"安排一次完整扫描","form":"表示→扫描加工→新表示","notice":"遍数不等于阶段数；","example":"一次扫描输入a+1，扫描器返回三个Token，语法分析器立即使用它们，可把两个阶段组织在一遍内。","link":"\u003ca href=\"#ref-%E7%BB%84%E7%BB%87\">阶段、遍、前端与后端\u003c/a>"},{"name":"IR","kind":"内部程序表示","meaning":"隔离机器细节并便于优化","form":"\u003ccode>(op,a,b,r)\u003c/code>","notice":"临时结果要先定义再使用；","example":"整数y:=(a+1)\u003cem>2可分为t=a+1、y=t\u003c/em>2；a=3时依次得t=4、y=8。","link":"\u003ca href=\"#ref-%E7%BB%BC%E5%90%88\">综合应用\u003c/a>"},{"name":"交叉编译","kind":"编译器运行与输出关系","meaning":"在宿主上生成异机代码","form":"宿主A；目标B","notice":"宿主与目标是两项条件；","example":"一个在机器A运行、输出机器B代码的编译器是交叉编译器；把x:=1译成B代码不表示编译器自身能在B运行。","link":"\u003ca href=\"#ref-%E7%BB%BC%E5%90%88\">移植流程\u003c/a>"}]</script><script>
 const links=[...document.querySelectorAll('nav a[href^="#"]')];
 const headings=links.map(a=>document.getElementById(a.hash.slice(1))).filter(Boolean);
 let scheduled=false;
@@ -723,5 +791,209 @@ document.querySelectorAll('[data-font]').forEach(b=>b.addEventListener('click',(
 const diagram=JSON.parse(document.getElementById('diagram-data').textContent);let step=0;
 function showStep(){if(!diagram)return;const row=diagram.rows[step];const panel=document.getElementById('step-panel');panel.replaceChildren();const grid=document.createElement('div');grid.className='step-grid';diagram.fields.forEach((field,i)=>{const cell=document.createElement('div');cell.className='step-field';const strong=document.createElement('strong');strong.textContent=field;const p=document.createElement('p');p.textContent=row[i];cell.append(strong,p);grid.append(cell);});panel.append(grid);document.getElementById('step-count').textContent=(step+1)+' / '+diagram.rows.length;document.getElementById('step-range').value=step;document.getElementById('step-prev').disabled=step===0;document.getElementById('step-next').disabled=step===diagram.rows.length-1;document.querySelectorAll('.progress-track span').forEach((s,i)=>s.classList.toggle('done',i<=step));}
 if(diagram){document.getElementById('step-prev').addEventListener('click',()=>{step=Math.max(0,step-1);showStep();});document.getElementById('step-next').addEventListener('click',()=>{step=Math.min(diagram.rows.length-1,step+1);showStep();});document.getElementById('step-range').addEventListener('input',e=>{step=Number(e.target.value);showStep();});showStep();}
-const quick=document.getElementById('quick-select');if(quick){const items=JSON.parse(document.getElementById('quick-data').textContent);function showQuick(){const r=items[Number(quick.value)];const panel=document.getElementById('quick-panel');panel.innerHTML='<h3>'+r.name+'</h3><p class="ref-kind">'+r.kind+'</p><h4>含义与用途</h4><p>'+r.meaning+'</p><h4>基本形式</h4><p>'+r.form+'</p><h4>学习例子与结果</h4><p class="result">'+r.example+'</p><h4>注意点与前提</h4><p>'+r.notice+'</p><p>'+r.link+'</p>';}quick.addEventListener('change',showQuick);showQuick();}markNavigation();
+function quickMarkup(r){return '<h3>'+r.name+'</h3><p class="ref-kind">'+r.kind+'</p><h4>含义与用途</h4><p>'+r.meaning+'</p><h4>基本形式</h4><p>'+r.form+'</p><h4>学习例子与结果</h4><p class="result">'+r.example+'</p><h4>注意点与前提</h4><p>'+r.notice+'</p><p>'+r.link+'</p>';}
+const quick=document.getElementById('quick-select');if(quick){const items=JSON.parse(document.getElementById('quick-data').textContent);function showQuick(){const r=items[Number(quick.value)];document.getElementById('quick-panel').innerHTML=quickMarkup(r);}quick.addEventListener('change',showQuick);showQuick();}markNavigation();
+(function () {
+  'use strict';
+  const $ = name => document.getElementById('chapter-search-' + name);
+  const panel = $('panel'), article = document.getElementById('article');
+  if (!panel || !article) return;
+  const blockTags = 'h1,h2,h3,h4,h5,h6,p,li,pre,td,th,summary,dt,dd,blockquote';
+  const ignored = '.stepper,.ref-picker,button,input,select,textarea,script,style,[data-search-ignore]';
+  const sectionIds = new Set([...document.querySelectorAll('nav a[href^="#"]')].map(a => a.hash.slice(1)));
+  const quickSelect = document.getElementById('quick-select'), quickPanel = document.getElementById('quick-panel');
+  const quickItems = JSON.parse(document.getElementById('quick-data')?.textContent || '[]');
+  const fold = text => text.replace(/[A-Z]/g, c => c.toLowerCase());
+  const pageSize = 40;
+  let matches = [], active = -1, page = 0, query = '', timer = null;
+  let resultsOpen = false, automaticQuick = false, originalQuick = null;
+  const openedDetails = new Set();
+
+  function measure() {
+    const top = Math.max(60, Math.ceil(document.querySelector('.topbar').getBoundingClientRect().height));
+    const height = panel.hidden ? 0 : Math.ceil(panel.getBoundingClientRect().height);
+    document.documentElement.style.setProperty('--reader-topbar-height', top + 'px');
+    document.documentElement.style.setProperty('--scroll-offset', Math.max(90, top + height + 18) + 'px');
+  }
+  window.addEventListener('resize', measure);
+  if (typeof ResizeObserver !== 'undefined') {
+    const observer = new ResizeObserver(measure);
+    observer.observe(document.querySelector('.topbar')); observer.observe(panel);
+  }
+
+  // 对文字节点建立段内偏移，不把行内 strong/code 等格式当作检索边界。
+  function collect(root, quick = false, quickName = '') {
+    const blocks = [], walker = document.createTreeWalker(root, NodeFilter.SHOW_ELEMENT | NodeFilter.SHOW_TEXT);
+    let node, owner = null, currentBlock = null, pendingSection = '', section = 'article', mainTitle = '本章导读', subTitle = '';
+    while ((node = walker.nextNode())) {
+      const element = node.nodeType === Node.ELEMENT_NODE ? node : node.parentElement;
+      if (!element || element.closest(quick ? 'h4,button,input,select,script,style' : ignored)) continue;
+      if (node.nodeType === Node.ELEMENT_NODE) {
+        if (!quick) {
+          if (node.matches('a[id]') && sectionIds.has(node.id)) pendingSection = node.id;
+          if (node.matches('h2')) { section = node.id || pendingSection || 'article'; mainTitle = node.textContent.trim(); subTitle = ''; pendingSection = ''; }
+          if (node.matches('h3')) subTitle = node.textContent.trim();
+        }
+        continue;
+      }
+      if (!node.data || (!quick && section === 'navigation')) continue;
+      const parent = element.closest(blockTags);
+      if (!parent || !root.contains(parent)) { owner = null; currentBlock = null; continue; }
+      const label = quick ? '末尾速查 › ' + quickName : mainTitle + (subTitle ? ' › ' + subTitle : '');
+      if (owner !== parent || !currentBlock || currentBlock.section !== section || currentBlock.label !== label) {
+        currentBlock = { el: parent, text: '', nodes: [], label, section }; blocks.push(currentBlock); owner = parent;
+      }
+      currentBlock.nodes.push({ node, start: currentBlock.text.length, end: currentBlock.text.length + node.data.length });
+      currentBlock.text += node.data;
+    }
+    return blocks.filter(b => b.text.trim());
+  }
+  function quickBlocks(index) {
+    const root = document.createElement('div'); root.innerHTML = quickMarkup(quickItems[index]);
+    const name = document.createElement('span'); name.innerHTML = quickItems[index].name;
+    return collect(root, true, name.textContent);
+  }
+  function find(blocks, source, item) {
+    const found = [], needle = fold(query);
+    blocks.forEach((block, blockIndex) => {
+      const text = fold(block.text); let start = text.indexOf(needle);
+      while (start !== -1) {
+        const end = start + query.length;
+        found.push({ source, item, blockIndex, start, end, text: block.text, label: block.label });
+        start = text.indexOf(needle, end);
+      }
+    });
+    return found;
+  }
+  function removeMarks() {
+    const parents = new Set();
+    article.querySelectorAll('mark.chapter-search-hit').forEach(mark => { parents.add(mark.parentNode); mark.replaceWith(document.createTextNode(mark.textContent)); });
+    parents.forEach(parent => parent.normalize());
+  }
+  function restoreDetails() { openedDetails.forEach(details => { if (details.isConnected) details.open = false; }); openedDetails.clear(); }
+  function restoreQuick() {
+    if (originalQuick !== null && quickSelect) {
+      automaticQuick = true; quickSelect.value = originalQuick; quickSelect.dispatchEvent(new Event('change')); automaticQuick = false;
+    }
+    originalQuick = null;
+  }
+  function setOpen(open, focusInput = false) {
+    panel.hidden = !open; $('toggle').setAttribute('aria-expanded', String(open));
+    if (open && typeof closeMenu === 'function') closeMenu();
+    measure();
+    if (focusInput) $('input').focus();
+  }
+  function text(tag, value) { const element = document.createElement(tag); element.textContent = value; return element; }
+  function state() {
+    $('prev').disabled = $('next').disabled = !matches.length;
+    $('results-toggle').disabled = !matches.length;
+    $('status').textContent = !query ? '请输入关键词' : !matches.length ? '没有找到匹配内容' : active < 0 ? '找到 ' + matches.length + ' 处，选择结果定位' : '第 ' + (active + 1) + ' / ' + matches.length + ' 处';
+    $('results').hidden = !resultsOpen || !matches.length;
+    $('results-toggle').setAttribute('aria-expanded', String(! $('results').hidden));
+    $('results-toggle').textContent = resultsOpen && matches.length ? '收起结果' : '展开结果';
+    measure();
+  }
+  function renderResults() {
+    const list = $('list'); list.replaceChildren();
+    const start = page * pageSize, end = Math.min(start + pageSize, matches.length);
+    $('page-status').textContent = matches.length ? '显示 ' + (start + 1) + '—' + end + '，共 ' + matches.length + ' 处' : '';
+    $('page-prev').disabled = page === 0; $('page-next').disabled = end >= matches.length;
+    for (let i = start; i < end; i++) {
+      const match = matches[i], item = document.createElement('li'), button = document.createElement('button');
+      button.type = 'button'; button.className = 'chapter-search-result';
+      if (i === active) button.setAttribute('aria-current', 'true');
+      button.append(text('strong', (i + 1) + '. ' + match.label));
+      const excerpt = document.createElement('span'), left = Math.max(0, match.start - 35), right = Math.min(match.text.length, match.end + 55);
+      excerpt.append(document.createTextNode((left ? '…' : '') + match.text.slice(left, match.start)));
+      excerpt.append(text('mark', match.text.slice(match.start, match.end)));
+      excerpt.append(document.createTextNode(match.text.slice(match.end, right) + (right < match.text.length ? '…' : '')));
+      button.append(excerpt); button.addEventListener('click', () => activate(i, true)); item.append(button); list.append(item);
+    }
+  }
+  function search() {
+    clearTimeout(timer); timer = null; removeMarks(); restoreDetails(); restoreQuick();
+    query = $('input').value.trim(); active = -1; page = 0; matches = [];
+    if (query) {
+      matches = find(collect(article), 'body');
+      if (typeof quickMarkup === 'function') quickItems.forEach((_, index) => { matches.push(...find(quickBlocks(index), 'quick', index)); });
+    }
+    resultsOpen = !!matches.length; renderResults(); state();
+  }
+  function activate(index, focusMatch = false) {
+    if (!matches.length) return;
+    index = (index + matches.length) % matches.length;
+    removeMarks(); const match = matches[index]; let block;
+    if (match.source === 'quick') {
+      if (!quickSelect || !quickPanel) return;
+      if (originalQuick === null) originalQuick = quickSelect.value;
+      automaticQuick = true; quickSelect.value = String(match.item); quickSelect.dispatchEvent(new Event('change')); automaticQuick = false;
+      const name = document.createElement('span'); name.innerHTML = quickItems[match.item].name;
+      block = collect(quickPanel, true, name.textContent)[match.blockIndex];
+    } else block = collect(article)[match.blockIndex];
+    // 动态正文如有改动，重建结果；不按旧字符位置猜测。
+    if (!block || block.text !== match.text) { search(); $('status').textContent = '正文已变化，结果已刷新，请重新选择。'; return; }
+    for (let parent = block.el; parent && parent !== article; parent = parent.parentElement) {
+      if (parent.tagName === 'DETAILS' && !parent.open) { openedDetails.add(parent); parent.open = true; }
+    }
+    const marks = [];
+    for (const part of block.nodes) {
+      if (part.end <= match.start || part.start >= match.end) continue;
+      const begin = Math.max(0, match.start - part.start), end = Math.min(part.node.length, match.end - part.start);
+      const fragment = document.createDocumentFragment();
+      if (begin) fragment.append(document.createTextNode(part.node.data.slice(0, begin)));
+      const mark = text('mark', part.node.data.slice(begin, end)); mark.className = 'chapter-search-hit'; fragment.append(mark); marks.push(mark);
+      if (end < part.node.length) fragment.append(document.createTextNode(part.node.data.slice(end)));
+      part.node.replaceWith(fragment);
+    }
+    active = index; page = Math.floor(index / pageSize); resultsOpen = false; renderResults(); state();
+    const first = marks[0];
+    if (first) {
+      first.tabIndex = -1; if (focusMatch) first.focus({ preventScroll: true });
+      first.scrollIntoView({ block: 'start', inline: 'nearest', behavior: 'auto' });
+      requestAnimationFrame(() => { measure(); if (typeof markNavigation === 'function') markNavigation(); });
+    }
+  }
+  function ensureQuery() { if (timer !== null || $('input').value.trim() !== query) search(); }
+  function clear() {
+    clearTimeout(timer); timer = null; $('input').value = ''; search(); $('input').focus();
+  }
+  $('toggle').addEventListener('click', () => setOpen(panel.hidden, panel.hidden));
+  $('close').addEventListener('click', () => { setOpen(false); $('toggle').focus(); });
+  $('clear').addEventListener('click', clear);
+  $('form').addEventListener('submit', event => { event.preventDefault(); ensureQuery(); if (matches.length) activate(active < 0 ? 0 : active + 1); });
+  $('input').addEventListener('input', () => { clearTimeout(timer); timer = setTimeout(search, 160); });
+  $('input').addEventListener('keydown', event => {
+    if (event.key === 'Enter' && event.shiftKey) { event.preventDefault(); ensureQuery(); if (matches.length) activate(active < 0 ? matches.length - 1 : active - 1); }
+  });
+  $('prev').addEventListener('click', () => { ensureQuery(); if (matches.length) activate(active < 0 ? matches.length - 1 : active - 1); });
+  $('next').addEventListener('click', () => { ensureQuery(); if (matches.length) activate(active < 0 ? 0 : active + 1); });
+  $('results-toggle').addEventListener('click', () => { resultsOpen = !resultsOpen; renderResults(); state(); });
+  $('page-prev').addEventListener('click', () => { if (page > 0) page--; renderResults(); measure(); });
+  $('page-next').addEventListener('click', () => { if ((page + 1) * pageSize < matches.length) page++; renderResults(); measure(); });
+  $('panel').querySelector('details').addEventListener('toggle', measure);
+  document.addEventListener('keydown', event => {
+    if ((event.ctrlKey || event.metaKey) && !event.altKey && event.key.toLowerCase() === 'k') { event.preventDefault(); setOpen(true, true); $('input').select(); }
+    if (event.key === 'Escape' && !panel.hidden) { setOpen(false); $('toggle').focus(); }
+  });
+  document.getElementById('menu').addEventListener('click', () => { if (document.body.classList.contains('nav-open')) setOpen(false); });
+  quickSelect?.addEventListener('change', () => {
+    if (!automaticQuick) {
+      originalQuick = null;
+      if (active >= 0 && matches[active].source === 'quick') { active = -1; renderResults(); state(); }
+    }
+  });
+  measure(); state();
+})();
+(function () {
+  'use strict';
+  const select = document.getElementById('reading-theme');
+  if (!select) return;
+  select.value = document.documentElement.dataset.readerTheme;
+  select.addEventListener('change', function () {
+    const theme = select.value;
+    if (theme !== 'light' && theme !== 'dark') return;
+    document.documentElement.dataset.readerTheme = theme;
+    try { localStorage.setItem('compiler-reading-theme-v1', theme); } catch (_) {}
+  });
+})();
 </script></body></html>

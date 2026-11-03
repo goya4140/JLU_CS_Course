@@ -1,5 +1,59 @@
-<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="source-sha256" content="02fdcd22f207433f38b2cbacb3ca430fd256515ed4f2b9d3f451e1e6a79f03f5"><title>第4章 语法分析：自底向上分析方法 · 学习资料</title><style>:root{--paper:#fbfaf7;--surface:#fff;--ink:#253341;--muted:#5c6b75;--line:#d5dfdd;--teal:#156b62;--soft:#edf6f1;--font:17px;--scroll-offset:90px}*{box-sizing:border-box}html{scroll-behavior:auto;scroll-padding-top:var(--scroll-offset)}body{margin:0;background:var(--paper);color:var(--ink);font-family:'Microsoft YaHei','PingFang SC',system-ui,sans-serif;font-size:var(--font);line-height:1.85}a{color:var(--teal);text-underline-offset:3px}a:hover{color:#173f75}button,select{font:inherit}button{cursor:pointer}button,select{border:1px solid #b9cbc5;border-radius:7px;padding:7px 11px;background:#fff;color:var(--ink)}button:hover{background:var(--soft)}button:focus-visible,select:focus-visible,a:focus-visible{outline:3px solid #81cbb8;outline-offset:3px}.skip{position:absolute;top:-80px;left:12px;z-index:50;background:#fff;padding:8px}.skip:focus{top:8px}.sidebar{position:fixed;inset:0 auto 0 0;width:270px;padding:23px 18px;background:#f0f4f0;border-right:1px solid var(--line);overflow:auto;z-index:30;overscroll-behavior:contain}.brand{font-size:21px;font-weight:700}.brand small{display:block;font-size:12px;font-weight:400;color:var(--muted)}.sidebar nav a{display:block;color:var(--ink);text-decoration:none;padding:8px 10px;margin:3px 0;border-radius:6px;font-size:14px;line-height:1.6}.sidebar nav a:hover{background:#dcebe3}.sidebar nav a.active,.sidebar nav a.active:hover{background:var(--teal);color:white}.sidebar select{width:100%;font-size:13px}.nav-tip{font-size:12px;color:var(--muted);margin:14px 0}.shell{margin-left:270px;overflow-anchor:none}.topbar{position:sticky;top:0;background:rgba(251,250,247,.98);padding:12px 26px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:12px;z-index:20}.topbar-title{font-size:13px;color:var(--muted)}.toolbar{display:flex;gap:7px;flex-wrap:wrap}.toolbar button{font-size:13px}.menu{display:none}main{max-width:1120px;margin:auto;padding:30px 44px 80px;min-width:0}h1{font-size:32px;line-height:1.5;margin:14px 0 25px}h2{font-size:25px;line-height:1.5;padding:0 0 11px;border-bottom:1px solid var(--line);margin:44px 0 23px}h3{font-size:21px;line-height:1.55;margin:29px 0 16px}h4{font-size:18px;line-height:1.6;margin:22px 0 13px}p{margin:14px 0}li{margin:7px 0}ul,ol{padding-left:1.6em}blockquote{margin:20px 0;padding:5px 18px;border-left:3px solid #a8c6bb;background:#f0f3ef;color:#53655e;font-size:14px}blockquote p{margin:8px 0}hr{border:0;border-top:1px solid var(--line);margin:32px 0}code{font-family:Consolas,'Cascadia Code',monospace;font-size:.9em;background:#eef1ed;padding:2px 5px;border-radius:4px;overflow-wrap:anywhere}pre{background:#18313d;color:#e8f0f0;border-radius:9px;padding:19px;line-height:1.65;overflow-x:auto;max-width:100%;font-size:14px}pre code{background:none;padding:0;color:inherit;white-space:pre;overflow-wrap:normal}table{border-collapse:collapse;width:100%;font-size:15px}th{background:#eaf3ee;text-align:left}td,th{padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:top}tbody tr:nth-child(even){background:#f6f9f6}.table-scroll{overflow-x:auto;border:1px solid var(--line);border-radius:8px;margin:17px 0;max-width:100%}.table-scroll td{min-width:80px}.source-note{font-size:13px;color:var(--muted)}.learning-figure{padding:23px;border:1px solid #b4cfc2;border-radius:12px;background:var(--soft);margin:25px 0}.learning-figure h4{margin:0 0 8px;font-size:20px}.fig-intro{font-size:14px;color:var(--muted)}.learning-figure label{display:block;margin-top:15px;font-size:14px;font-weight:700}.learning-figure select{margin-top:7px;width:100%;min-height:44px;font-size:15px}.fig-output{margin-top:16px}.flow{display:flex;gap:10px;align-items:stretch;flex-wrap:wrap}.flow-node{flex:1 1 150px;border:1px solid #bfd2c9;border-radius:8px;background:#fff;padding:13px;min-width:0}.flow-node strong{display:block;color:var(--teal)}.flow-node p{font-size:14px;margin:8px 0}.flow-arrow{align-self:center;color:var(--teal);font-size:24px}.fig-note{padding:10px 14px;border-left:3px solid var(--teal);background:#fff;font-size:14px;margin:15px 0 0}.svg-scroll{overflow-x:auto;max-width:100%}.svg-scroll svg{display:block;max-width:100%;height:auto}.ref-area{min-height:calc(100vh - var(--scroll-offset));margin-top:24px}.ref-picker{padding:22px;border-radius:12px;background:var(--soft);border:1px solid #b4cfc2}.ref-picker label{display:block;font-weight:700;margin-bottom:10px}.ref-picker select{width:100%;font-size:15px;min-height:46px}.ref-panel{margin-top:18px;background:#fff;border:1px solid var(--line);padding:20px;border-radius:9px}.ref-panel[hidden]{display:none}.ref-panel h3{margin:0;font-size:24px}.ref-panel h4{font-size:16px;margin:18px 0 8px}.ref-kind{font-size:13px;color:var(--teal)}.result{padding:10px 15px;border-left:3px solid var(--teal);background:var(--soft)}.copy{display:block;margin:5px 0 0 auto;font-size:12px;padding:4px 8px}.code-wrap{margin:20px 0}.code-wrap pre{margin-bottom:0}.foot{font-size:13px;color:var(--muted);border-top:1px solid var(--line);padding-top:23px;margin-top:30px}details{border:1px solid var(--line);padding:12px;border-radius:8px;margin:15px 0}summary{cursor:pointer;font-weight:700}@media(max-width:900px){.sidebar{transform:translateX(-100%)}body.nav-open .sidebar{transform:translateX(0);top:60px}.shell{margin-left:0}.menu{display:inline-block}.topbar-title{display:none}.topbar{padding:10px 14px}main{padding:23px 18px 65px}h1{font-size:27px}h2{font-size:23px}.learning-figure,.ref-picker{padding:16px}.flow{flex-direction:column}.flow-arrow{transform:rotate(90deg)}.ref-panel{padding:15px}}@media print{.sidebar,.topbar,.toolbar,.copy,.skip{display:none!important}.shell{margin:0}main{padding:0;max-width:none}body{background:#fff;font-size:11pt}.ref-area{min-height:0}.ref-picker select{display:none}pre{white-space:pre-wrap;background:#f3f5f4;color:#111}.learning-figure{break-inside:avoid}.table-scroll{overflow:visible}a{color:inherit}}@media print{.svg-scroll{overflow:visible}.svg-scroll svg{min-width:0!important;width:100%!important;height:auto!important}}.sidebar{width:266px;background:#f1f4f1;padding:27px 19px;overflow-y:auto}.brand{font-size:21px;font-weight:700;letter-spacing:.03em;margin-bottom:5px}.brand small{font-size:12px;font-weight:400;color:var(--muted);letter-spacing:.1em}.sidebar .sub{font-size:13px;color:var(--muted);margin:5px 0 21px}.sidebar nav a{font-size:14px;line-height:1.5;padding:9px 11px;margin:3px 0;border-radius:6px}.sidebar nav a:hover{background:#e0ece6;color:#174d43}.sidebar nav a.active,.sidebar nav a.active:hover{background:var(--teal);color:#fff}.nav-group{font-size:12px;color:var(--muted);margin:18px 11px 6px;letter-spacing:.08em}.sidebar-footer{margin-top:24px;font-size:12px;color:var(--muted)}.shell{margin-left:266px}@media(max-width:900px){.shell{margin-left:0}}
-h2,h3,h4,[id]{scroll-margin-top:0}.stepper{background:#edf6f1;border:1px solid #b4cfc2;border-radius:12px;padding:22px;margin:24px 0}.stepper h3{margin:0 0 12px}.step-tools{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:15px 0}.step-tools input{width:200px;min-height:40px}.step-card{background:white;padding:18px;border-radius:8px;border:1px solid var(--line)}.step-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}.step-field{border:1px solid #d6e5dd;padding:12px;border-radius:7px;overflow-wrap:anywhere}.step-field strong{display:block;font-size:13px;color:var(--teal)}.step-field p{margin:7px 0 0}.progress-track{display:flex;gap:4px;margin:10px 0}.progress-track span{height:5px;flex:1;border-radius:3px;background:#c8d8d0}.progress-track span.done{background:var(--teal)}.step-count{font-variant-numeric:tabular-nums}.chapter-links{display:flex;gap:15px;justify-content:space-between;border-top:1px solid var(--line);padding-top:25px;margin-top:35px}.ref-area{min-height:0}.ref-panel h4{margin:12px 0 4px}.reading-meta{font-size:13px;color:var(--muted)}summary:focus-visible,input:focus-visible{outline:3px solid #81cbb8;outline-offset:3px}button:disabled{opacity:.5;cursor:default}.quick-select{width:100%}.overview-card{border:1px solid var(--line);background:white;border-radius:9px;padding:18px;margin:14px 0}.overview-card h3{margin-top:0}.sidebar nav a.external{background:#e4eee7}.nav-shade{display:none}@media(max-width:900px){body.nav-open .nav-shade{display:block;position:fixed;inset:60px 0 0 266px;background:#25334155;z-index:25}.stepper{padding:15px}.step-tools input{width:150px}.step-grid{grid-template-columns:1fr}.sidebar{max-width:85vw}.step-field{padding:10px}}@media print{.step-tools,.progress-track,.chapter-links{display:none}.step-card{break-inside:avoid}body.nav-open .nav-shade{display:none}}main{overflow-x:clip}article{min-width:0;max-width:100%}.table-scroll,pre{contain:inline-size}p,li,h1,h2,h3,h4{overflow-wrap:anywhere}</style></head><body><a class="skip" href="#article">跳到正文</a><aside class="sidebar" aria-label="章节目录"><div class="brand"><small>COMPILER / CHAPTER 04</small>第4章 语法分析：自底向上分析方法</div><p class="sub">完整讲解 · 分步推导 · 离线阅读</p><nav><a href="#navigation">学习导航</a><div class="nav-group">准备 · 归约与前缀</div><a href="#ch04-s01">1. 自底向上分析要做什么</a><a href="#ch04-s02">2. 符号与规范活前缀</a><div class="nav-group">基础 · 项目与LR(0)</div><a href="#ch04-s03">3. LR(0) 项目及三个运算</a><a href="#ch04-s04">4. 构造 LR(0) 状态机</a><a href="#ch04-s05">5. 分析表与通用驱动</a><a href="#ch04-s06">6. LR(0) 完整构表与冲突</a><div class="nav-group">进阶 · 限制归约与合并</div><a href="#ch04-s07">7. SLR(1)：用 FOLLOW 限制归约</a><a href="#ch04-s08">8. LR(1)：给项目增加展望符</a><a href="#ch04-s09">9. LR(1) 完整例题与空产生式</a><a href="#ch04-s10">10. LALR(1)：合并同心状态</a><div class="nav-group">应用 · 文法判定</div><a href="#ch04-s11">11. 课件判定练习</a><div class="nav-group">综合应用 · 完整解题</div><a href="#ch04-s12">12. 综合应用：历年题规范 LR(1) 的完整构造</a><div class="nav-group">练习与复习 · 回查、自测和速查</div><a href="#ch04-s13">13. 知识联系与复习</a><a href="#ch04-s14">14. 自测与答案：一个完成项目何时允许归约</a><a href="#ch04-s15">15. 排错与复习</a><a href="#ch04-s16">16. 末尾速查表</a><div class="nav-group">全课程</div><a class="external" href="00_学习导航.html">全课程学习导航</a></nav><div class="sidebar-footer">先看问题与条件，再跟踪推导和例题</div></aside><div class="nav-shade"></div><div class="shell"><header class="topbar"><span class="topbar-title">第4章 语法分析：自底向上分析方法</span><div class="toolbar"><button id="menu" class="menu" aria-label="打开或收起目录" aria-expanded="false">目录</button><button data-font="-1" aria-label="减小正文字号">字号 −</button><button data-font="1" aria-label="增大正文字号">字号 ＋</button><button id="print">打印 / 保存 PDF</button></div></header><main><article id="article"><h1>第4章 语法分析：自底向上分析方法：怎样决定移入还是归约</h1>
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="source-sha256" content="782cebba418cc4465c28e18cbfa29b33369780270c0aae73b8ff81dde7d3d0ab"><title>第4章 语法分析：自底向上分析方法 · 学习资料</title><script>(function () {
+  'use strict';
+  let saved;
+  try { saved = localStorage.getItem('compiler-reading-theme-v1'); } catch (_) {}
+  const theme = saved === 'light' || saved === 'dark' ? saved
+    : (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+  document.documentElement.dataset.readerTheme = theme;
+})();
+</script><style>:root{--paper:#fbfaf7;--surface:#fff;--ink:#253341;--muted:#5c6b75;--line:#d5dfdd;--teal:#156b62;--soft:#edf6f1;--font:17px;--scroll-offset:90px}*{box-sizing:border-box}html{scroll-behavior:auto;scroll-padding-top:var(--scroll-offset)}body{margin:0;background:var(--paper);color:var(--ink);font-family:'Microsoft YaHei','PingFang SC',system-ui,sans-serif;font-size:var(--font);line-height:1.85}a{color:var(--teal);text-underline-offset:3px}a:hover{color:#173f75}button,select{font:inherit}button{cursor:pointer}button,select{border:1px solid #b9cbc5;border-radius:7px;padding:7px 11px;background:#fff;color:var(--ink)}button:hover{background:var(--soft)}button:focus-visible,select:focus-visible,a:focus-visible{outline:3px solid #81cbb8;outline-offset:3px}.skip{position:absolute;top:-80px;left:12px;z-index:50;background:#fff;padding:8px}.skip:focus{top:8px}.sidebar{position:fixed;inset:0 auto 0 0;width:270px;padding:23px 18px;background:#f0f4f0;border-right:1px solid var(--line);overflow:auto;z-index:30;overscroll-behavior:contain}.brand{font-size:21px;font-weight:700}.brand small{display:block;font-size:12px;font-weight:400;color:var(--muted)}.sidebar nav a{display:block;color:var(--ink);text-decoration:none;padding:8px 10px;margin:3px 0;border-radius:6px;font-size:14px;line-height:1.6}.sidebar nav a:hover{background:#dcebe3}.sidebar nav a.active,.sidebar nav a.active:hover{background:var(--teal);color:white}.sidebar select{width:100%;font-size:13px}.nav-tip{font-size:12px;color:var(--muted);margin:14px 0}.shell{margin-left:270px;overflow-anchor:none}.topbar{position:sticky;top:0;background:rgba(251,250,247,.98);padding:12px 26px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:12px;z-index:20}.topbar-title{font-size:13px;color:var(--muted)}.toolbar{display:flex;gap:7px;flex-wrap:wrap}.toolbar button{font-size:13px}.menu{display:none}main{max-width:1120px;margin:auto;padding:30px 44px 80px;min-width:0}h1{font-size:32px;line-height:1.5;margin:14px 0 25px}h2{font-size:25px;line-height:1.5;padding:0 0 11px;border-bottom:1px solid var(--line);margin:44px 0 23px}h3{font-size:21px;line-height:1.55;margin:29px 0 16px}h4{font-size:18px;line-height:1.6;margin:22px 0 13px}p{margin:14px 0}li{margin:7px 0}ul,ol{padding-left:1.6em}blockquote{margin:20px 0;padding:5px 18px;border-left:3px solid #a8c6bb;background:#f0f3ef;color:#53655e;font-size:14px}blockquote p{margin:8px 0}hr{border:0;border-top:1px solid var(--line);margin:32px 0}code{font-family:Consolas,'Cascadia Code',monospace;font-size:.9em;background:#eef1ed;padding:2px 5px;border-radius:4px;overflow-wrap:anywhere}pre{background:#18313d;color:#e8f0f0;border-radius:9px;padding:19px;line-height:1.65;overflow-x:auto;max-width:100%;font-size:14px}pre code{background:none;padding:0;color:inherit;white-space:pre;overflow-wrap:normal}table{border-collapse:collapse;width:100%;font-size:15px}th{background:#eaf3ee;text-align:left}td,th{padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:top}tbody tr:nth-child(even){background:#f6f9f6}.table-scroll{overflow-x:auto;border:1px solid var(--line);border-radius:8px;margin:17px 0;max-width:100%}.table-scroll td{min-width:80px}.source-note{font-size:13px;color:var(--muted)}.learning-figure{padding:23px;border:1px solid #b4cfc2;border-radius:12px;background:var(--soft);margin:25px 0}.learning-figure h4{margin:0 0 8px;font-size:20px}.fig-intro{font-size:14px;color:var(--muted)}.learning-figure label{display:block;margin-top:15px;font-size:14px;font-weight:700}.learning-figure select{margin-top:7px;width:100%;min-height:44px;font-size:15px}.fig-output{margin-top:16px}.flow{display:flex;gap:10px;align-items:stretch;flex-wrap:wrap}.flow-node{flex:1 1 150px;border:1px solid #bfd2c9;border-radius:8px;background:#fff;padding:13px;min-width:0}.flow-node strong{display:block;color:var(--teal)}.flow-node p{font-size:14px;margin:8px 0}.flow-arrow{align-self:center;color:var(--teal);font-size:24px}.fig-note{padding:10px 14px;border-left:3px solid var(--teal);background:#fff;font-size:14px;margin:15px 0 0}.svg-scroll{overflow-x:auto;max-width:100%}.svg-scroll svg{display:block;max-width:100%;height:auto}.ref-area{min-height:calc(100vh - var(--scroll-offset));margin-top:24px}.ref-picker{padding:22px;border-radius:12px;background:var(--soft);border:1px solid #b4cfc2}.ref-picker label{display:block;font-weight:700;margin-bottom:10px}.ref-picker select{width:100%;font-size:15px;min-height:46px}.ref-panel{margin-top:18px;background:#fff;border:1px solid var(--line);padding:20px;border-radius:9px}.ref-panel[hidden]{display:none}.ref-panel h3{margin:0;font-size:24px}.ref-panel h4{font-size:16px;margin:18px 0 8px}.ref-kind{font-size:13px;color:var(--teal)}.result{padding:10px 15px;border-left:3px solid var(--teal);background:var(--soft)}.copy{display:block;margin:5px 0 0 auto;font-size:12px;padding:4px 8px}.code-wrap{margin:20px 0}.code-wrap pre{margin-bottom:0}.foot{font-size:13px;color:var(--muted);border-top:1px solid var(--line);padding-top:23px;margin-top:30px}details{border:1px solid var(--line);padding:12px;border-radius:8px;margin:15px 0}summary{cursor:pointer;font-weight:700}@media(max-width:900px){.sidebar{transform:translateX(-100%)}body.nav-open .sidebar{transform:translateX(0);top:60px}.shell{margin-left:0}.menu{display:inline-block}.topbar-title{display:none}.topbar{padding:10px 14px}main{padding:23px 18px 65px}h1{font-size:27px}h2{font-size:23px}.learning-figure,.ref-picker{padding:16px}.flow{flex-direction:column}.flow-arrow{transform:rotate(90deg)}.ref-panel{padding:15px}}@media print{.sidebar,.topbar,.toolbar,.copy,.skip{display:none!important}.shell{margin:0}main{padding:0;max-width:none}body{background:#fff;font-size:11pt}.ref-area{min-height:0}.ref-picker select{display:none}pre{white-space:pre-wrap;background:#f3f5f4;color:#111}.learning-figure{break-inside:avoid}.table-scroll{overflow:visible}a{color:inherit}}@media print{.svg-scroll{overflow:visible}.svg-scroll svg{min-width:0!important;width:100%!important;height:auto!important}}.sidebar{width:266px;background:#f1f4f1;padding:27px 19px;overflow-y:auto}.brand{font-size:21px;font-weight:700;letter-spacing:.03em;margin-bottom:5px}.brand small{font-size:12px;font-weight:400;color:var(--muted);letter-spacing:.1em}.sidebar .sub{font-size:13px;color:var(--muted);margin:5px 0 21px}.sidebar nav a{font-size:14px;line-height:1.5;padding:9px 11px;margin:3px 0;border-radius:6px}.sidebar nav a:hover{background:#e0ece6;color:#174d43}.sidebar nav a.active,.sidebar nav a.active:hover{background:var(--teal);color:#fff}.nav-group{font-size:12px;color:var(--muted);margin:18px 11px 6px;letter-spacing:.08em}.sidebar-footer{margin-top:24px;font-size:12px;color:var(--muted)}.shell{margin-left:266px}@media(max-width:900px){.shell{margin-left:0}}
+#sql-reference{min-height:calc(100vh - var(--scroll-offset,90px))}
+.table-scroll{max-width:100%;overflow-x:auto;margin:18px 0;border:1px solid var(--line);border-radius:8px}.table-scroll table{width:100%;border-collapse:collapse}.table-scroll td,.table-scroll th{min-width:85px;vertical-align:top}.table-scroll pre{white-space:pre-wrap}article h2,article h3,article h4{scroll-margin-top:var(--scroll-offset,90px)}.course-home{display:block;font-size:13px;padding:8px 11px;margin-bottom:12px}.chapter-turns{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;margin-top:34px;padding-top:20px;border-top:1px solid var(--line)}.chapter-turns a{font-size:14px}.sidebar-footer{font-size:12px;color:var(--muted);margin-top:24px}article>p:first-of-type{font-size:1.04em}.noscript-note{padding:12px;border-left:3px solid var(--teal)}@media(max-width:600px){.table-scroll table{min-width:520px}.table-scroll{font-size:14px}pre{max-width:100%;overflow-x:auto}article{min-width:0}}@media print{.table-scroll table{min-width:0}.chapter-turns{display:none}}
+
+h2,h3,h4,[id]{scroll-margin-top:0}.stepper{background:#edf6f1;border:1px solid #b4cfc2;border-radius:12px;padding:22px;margin:24px 0}.stepper h3{margin:0 0 12px}.step-tools{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:15px 0}.step-tools input{width:200px;min-height:40px}.step-card{background:white;padding:18px;border-radius:8px;border:1px solid var(--line)}.step-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}.step-field{border:1px solid #d6e5dd;padding:12px;border-radius:7px;overflow-wrap:anywhere}.step-field strong{display:block;font-size:13px;color:var(--teal)}.step-field p{margin:7px 0 0}.progress-track{display:flex;gap:4px;margin:10px 0}.progress-track span{height:5px;flex:1;border-radius:3px;background:#c8d8d0}.progress-track span.done{background:var(--teal)}.step-count{font-variant-numeric:tabular-nums}.chapter-links{display:flex;gap:15px;justify-content:space-between;border-top:1px solid var(--line);padding-top:25px;margin-top:35px}.ref-area{min-height:0}.ref-panel h4{margin:12px 0 4px}.reading-meta{font-size:13px;color:var(--muted)}summary:focus-visible,input:focus-visible{outline:3px solid #81cbb8;outline-offset:3px}button:disabled{opacity:.5;cursor:default}.quick-select{width:100%}.overview-card{border:1px solid var(--line);background:white;border-radius:9px;padding:18px;margin:14px 0}.overview-card h3{margin-top:0}.sidebar nav a.external{background:#e4eee7}.nav-shade{display:none}@media(max-width:900px){body.nav-open .nav-shade{display:block;position:fixed;inset:60px 0 0 266px;background:#25334155;z-index:25}.stepper{padding:15px}.step-tools input{width:150px}.step-grid{grid-template-columns:1fr}.sidebar{max-width:85vw}.step-field{padding:10px}}@media print{.step-tools,.progress-track,.chapter-links{display:none}.step-card{break-inside:avoid}body.nav-open .nav-shade{display:none}}main{overflow-x:clip}article{min-width:0;max-width:100%}.table-scroll,pre{contain:inline-size}p,li,h1,h2,h3,h4{overflow-wrap:anywhere}.chapter-search-panel[hidden],.chapter-search-results[hidden]{display:none!important}.chapter-search-panel{position:sticky;top:var(--reader-topbar-height,60px);z-index:21;background:#f4f8f3;border-bottom:1px solid #b9cbc5;padding:12px 26px;max-width:100%;font-size:14px;line-height:1.6}.chapter-search-form{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:7px;align-items:center}.chapter-search-form label{grid-column:1/-1;font-weight:700}.chapter-search-form input{min-width:0;width:100%;border:1px solid #7e9d90;border-radius:7px;padding:7px 10px;background:#fff;color:var(--ink);font:inherit;min-height:40px}.chapter-search-panel button{font-size:13px;min-height:36px;padding:6px 9px}.chapter-search-controls{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin-top:9px}.chapter-search-controls [role=status]{margin-right:auto;overflow-wrap:anywhere}.chapter-search-help{margin:8px 0 0;border:0;padding:0;font-size:12px;color:var(--muted)}.chapter-search-help summary{font-weight:400}.chapter-search-help p{margin:6px 0}.chapter-search-help[open]{max-height:20vh;overflow:auto}.chapter-search-results{margin-top:9px;border-top:1px solid var(--line);padding-top:8px;max-height:32vh;overflow:auto;overscroll-behavior:contain}.chapter-search-pages{display:flex;align-items:center;gap:7px;flex-wrap:wrap;font-size:12px}.chapter-search-pages span{margin-right:auto}.chapter-search-results ol{margin:5px 0;padding:0;list-style:none}.chapter-search-results li{margin:4px 0}.chapter-search-result{display:block;text-align:left;width:100%;white-space:normal;overflow-wrap:anywhere;background:#fff}.chapter-search-result strong{display:block;font-size:13px;color:var(--teal)}.chapter-search-result span{display:block;font-size:13px;line-height:1.65;margin-top:3px}.chapter-search-result[aria-current=true]{border-color:var(--teal);background:#e5f1e8}.chapter-search-result mark{background:#ffe69a;color:inherit;padding:0}mark.chapter-search-hit{background:#ffe38a;color:inherit;padding:0;border-radius:2px;outline:1px solid #ba8a11;scroll-margin-top:var(--scroll-offset,90px)}.chapter-search-form input:focus-visible,.chapter-search-panel summary:focus-visible,mark.chapter-search-hit:focus-visible{outline:3px solid #438f7e;outline-offset:3px}@media(max-width:900px){.chapter-search-panel{padding:10px 14px}body.nav-open .sidebar,body.nav-open .nav-shade{top:var(--reader-topbar-height,60px)}}@media(max-width:480px){.chapter-search-controls{gap:5px}.chapter-search-controls [role=status]{flex-basis:100%;font-size:13px}.chapter-search-controls button{flex:1 1 auto}.chapter-search-results{max-height:28vh}}@media print{.chapter-search-panel{display:none!important}mark.chapter-search-hit{background:transparent;color:inherit;outline:none}}
+.chapter-search-panel{max-height:calc(100vh - var(--reader-topbar-height,60px));max-height:calc(100dvh - var(--reader-topbar-height,60px));overflow-y:auto;overscroll-behavior:contain}
+:root[data-reader-theme]{color-scheme:light;--reader-sidebar:#f1f4f1;--reader-topbar:rgba(251,250,247,.98);--reader-hover:#e0ece6;--reader-hover-ink:#174d43;--reader-active-ink:#fff;--reader-external:#e4eee7;--reader-code:#eef1ed;--reader-pre:#18313d;--reader-pre-ink:#e8f0f0;--reader-th:#eaf3ee;--reader-row:#f6f9f6;--reader-panel-border:#b4cfc2;--reader-progress:#c8d8d0;--reader-search:#f4f8f3;--reader-current:#e5f1e8;--reader-link-hover:#173f75}
+:root[data-reader-theme="dark"]{color-scheme:dark;--paper:#141c22;--surface:#1d2830;--ink:#e3eaf0;--muted:#aab9c2;--line:#40515c;--teal:#83d8be;--soft:#233b3b;--reader-sidebar:#18242c;--reader-topbar:rgba(20,28,34,.98);--reader-hover:#2a4145;--reader-hover-ink:#b4ecd9;--reader-active-ink:#10231e;--reader-external:#23363d;--reader-code:#2a3943;--reader-pre:#0e171e;--reader-pre-ink:#dce8ef;--reader-th:#253b43;--reader-row:#19262e;--reader-panel-border:#46606a;--reader-progress:#3b515a;--reader-search:#1b2b33;--reader-current:#2a4145;--reader-link-hover:#b2e7ff}
+.reading-theme{display:inline-flex;align-items:center;gap:6px;font-size:13px;white-space:nowrap}.reading-theme select{font-size:13px;min-height:36px;cursor:pointer}
+:root[data-reader-theme] .sidebar{background:var(--reader-sidebar)}
+:root[data-reader-theme] .topbar{background:var(--reader-topbar)}
+:root[data-reader-theme] button,:root[data-reader-theme] select,:root[data-reader-theme] .chapter-search-form input{background:var(--surface);color:var(--ink);border-color:var(--line)}
+:root[data-reader-theme] button:hover{background:var(--soft)}
+:root[data-reader-theme] a:hover{color:var(--reader-link-hover)}
+:root[data-reader-theme] .sidebar nav a:hover{background:var(--reader-hover);color:var(--reader-hover-ink)}
+:root[data-reader-theme] .sidebar nav a.active,:root[data-reader-theme] .sidebar nav a.active:hover{background:var(--teal);color:var(--reader-active-ink)}
+:root[data-reader-theme] .sidebar nav a.external{background:var(--reader-external)}
+:root[data-reader-theme] .sidebar nav a.external.active{background:var(--teal)}
+:root[data-reader-theme] code{background:var(--reader-code)}
+:root[data-reader-theme] pre{background:var(--reader-pre);color:var(--reader-pre-ink)}
+:root[data-reader-theme] pre code{background:none;color:inherit}
+:root[data-reader-theme] th{background:var(--reader-th)}
+:root[data-reader-theme] tbody tr:nth-child(even){background:var(--reader-row)}
+:root[data-reader-theme] .ref-panel,:root[data-reader-theme] .step-card,:root[data-reader-theme] .overview-card,:root[data-reader-theme] .flow-node,:root[data-reader-theme] .fig-note,:root[data-reader-theme] .skip{background:var(--surface)}
+:root[data-reader-theme] .stepper,:root[data-reader-theme] .ref-picker,:root[data-reader-theme] .learning-figure{background:var(--soft);border-color:var(--reader-panel-border)}
+:root[data-reader-theme] .step-field{border-color:var(--line)}
+:root[data-reader-theme] .progress-track span{background:var(--reader-progress)}
+:root[data-reader-theme] .progress-track span.done{background:var(--teal)}
+:root[data-reader-theme] blockquote{background:var(--soft);color:var(--muted);border-color:var(--teal)}
+:root[data-reader-theme] .chapter-search-panel{background:var(--reader-search);border-color:var(--line)}
+:root[data-reader-theme] .chapter-search-result[aria-current=true]{background:var(--reader-current);border-color:var(--teal)}
+:root[data-reader-theme="dark"] mark.chapter-search-hit,:root[data-reader-theme="dark"] .chapter-search-result mark{background:#6b5013;color:#fff3c4;outline-color:#e8c86b}
+:root[data-reader-theme="dark"] ::selection{background:#386c73;color:#fff}
+@media print{
+ :root[data-reader-theme]{color-scheme:light;--paper:#fff;--surface:#fff;--ink:#111;--muted:#444;--line:#bbb;--teal:#175b50;--soft:#f2f5f3;--reader-code:#eee;--reader-pre:#f3f5f4;--reader-pre-ink:#111;--reader-th:#eaf0ec;--reader-row:#f7f7f7;--reader-panel-border:#aaa;--reader-progress:#ccc;--reader-active-ink:#fff}
+ :root[data-reader-theme] body{background:#fff;color:#111}
+ :root[data-reader-theme] .reading-theme{display:none!important}
+ :root[data-reader-theme] mark.chapter-search-hit{background:transparent;color:inherit;outline:none}
+}
+</style></head><body><a class="skip" href="#article">跳到正文</a><aside class="sidebar" aria-label="章节目录"><div class="brand"><small>COMPILER / CHAPTER 04</small>第4章 语法分析：自底向上分析方法</div><p class="sub">完整讲解 · 分步推导 · 离线阅读</p><nav><a href="#navigation">学习导航</a><div class="nav-group">准备 · 归约与前缀</div><a href="#ch04-s01">1. 自底向上分析要做什么</a><a href="#ch04-s02">2. 符号与规范活前缀</a><div class="nav-group">基础 · 项目与LR(0)</div><a href="#ch04-s03">3. LR(0) 项目及三个运算</a><a href="#ch04-s04">4. 构造 LR(0) 状态机</a><a href="#ch04-s05">5. 分析表与通用驱动</a><a href="#ch04-s06">6. LR(0) 完整构表与冲突</a><div class="nav-group">进阶 · 限制归约与合并</div><a href="#ch04-s07">7. SLR(1)：用 FOLLOW 限制归约</a><a href="#ch04-s08">8. LR(1)：给项目增加展望符</a><a href="#ch04-s09">9. LR(1) 完整例题与空产生式</a><a href="#ch04-s10">10. LALR(1)：合并同心状态</a><div class="nav-group">应用 · 文法判定</div><a href="#ch04-s11">11. 文法判定练习</a><div class="nav-group">综合应用 · 完整解题</div><a href="#ch04-s12">12. 综合应用：历年题规范 LR(1) 的完整构造</a><div class="nav-group">练习与复习 · 回查、自测和速查</div><a href="#ch04-s13">13. 知识联系与复习</a><a href="#ch04-s14">14. 自测与答案：一个完成项目何时允许归约</a><a href="#ch04-s15">15. 排错与复习</a><a href="#ch04-s16">16. 末尾速查表</a><div class="nav-group">全课程</div><a class="external" href="00_学习导航.html">全课程学习导航</a></nav><div class="sidebar-footer">先看问题与条件，再跟踪推导和例题</div></aside><div class="nav-shade"></div><div class="shell"><header class="topbar"><span class="topbar-title">第4章 语法分析：自底向上分析方法</span><div class="toolbar"><button id="menu" class="menu" aria-label="打开或收起目录" aria-expanded="false">目录</button><button data-font="-1" aria-label="减小正文字号">字号 −</button><button data-font="1" aria-label="增大正文字号">字号 ＋</button><label class="reading-theme" for="reading-theme">外观<select id="reading-theme" aria-label="阅读模式"><option value="light">白天</option><option value="dark">夜间</option></select></label><button id="chapter-search-toggle" type="button" aria-expanded="false" aria-controls="chapter-search-panel">搜索</button><button id="print">打印 / 保存 PDF</button></div></header><section id="chapter-search-panel" class="chapter-search-panel" aria-label="本章关键词搜索" hidden>
+  <form id="chapter-search-form" class="chapter-search-form" role="search">
+    <label for="chapter-search-input">搜索本章</label><input id="chapter-search-input" type="search" placeholder="中文关键词或英文术语" autocomplete="off" spellcheck="false" aria-describedby="chapter-search-status"><button type="submit">查找</button><button id="chapter-search-clear" type="button">清除</button>
+  </form>
+  <div class="chapter-search-controls"><span id="chapter-search-status" role="status" aria-live="polite">请输入关键词</span><button id="chapter-search-prev" type="button" disabled>上一处</button><button id="chapter-search-next" type="button" disabled>下一处</button><button id="chapter-search-results-toggle" type="button" aria-expanded="false" aria-controls="chapter-search-results" disabled>展开结果</button><button id="chapter-search-close" type="button" aria-label="收起搜索，继续阅读">收起</button></div>
+  <details class="chapter-search-help"><summary>搜索范围与操作</summary><p>检索本章正文、表格、代码、折叠答案和全部速查项。目录与分步演示不重复计入，演示对应的正文仍可搜索。忽略关键词首尾空白，其余按文字原样匹配，英文不区分大小写；内部空格和符号也参与匹配。搜索完全离线，不上传关键词。</p><p>点击结果定位高亮，折叠内容会自动展开。Ctrl＋K 打开搜索；输入框内按 Enter 查找或跳到下一处，Shift＋Enter 跳到上一处；Esc 收起。清除会移除高亮，并恢复由搜索展开的折叠内容。浏览器的 Ctrl＋F 仍可使用。</p></details>
+  <div id="chapter-search-results" class="chapter-search-results" hidden><div class="chapter-search-pages"><span id="chapter-search-page-status"></span><button id="chapter-search-page-prev" type="button">前一页</button><button id="chapter-search-page-next" type="button">后一页</button></div><ol id="chapter-search-list"></ol></div>
+</section>
+<main><article id="article"><h1>第4章 语法分析：自底向上分析方法：怎样决定移入还是归约</h1>
 <p>读到一段输入后，分析器要决定：继续移入单词，还是把已经识别的结构归约成非终结符？本章先观察移入归约过程，再用项目集记录进度，依次学习 LR(0)、SLR(1)、LR(1) 与 LALR(1) 怎样作出这些决策。</p>
 <p><a id="navigation"></a></p>
 <h2>学习导航</h2>
@@ -29,7 +83,7 @@ h2,h3,h4,[id]{scroll-margin-top:0}.stepper{background:#edf6f1;border:1px solid #
 <tr>
 <td>应用 · 文法判定</td>
 <td>用具体冲突证明文法不属于某一类，用完整表证明无冲突。</td>
-<td><a href="#ch04-s11">11. 课件判定练习</a></td>
+<td><a href="#ch04-s11">11. 文法判定练习</a></td>
 </tr>
 <tr>
 <td>综合应用 · 完整解题</td>
@@ -38,7 +92,7 @@ h2,h3,h4,[id]{scroll-margin-top:0}.stepper{background:#edf6f1;border:1px solid #
 </tr>
 <tr>
 <td>练习与复习 · 回查、自测和速查</td>
-<td>比较归约条件，回查课件并练习闭包、空归约和冲突判断。</td>
+<td>比较归约条件，复习并练习闭包、空归约和冲突判断。</td>
 <td><a href="#ch04-s13">13. 知识联系与复习</a>、<a href="#ch04-s14">14. 自测与答案：一个完成项目何时允许归约</a>、<a href="#ch04-s15">15. 排错与复习</a>、<a href="#ch04-s16">16. 末尾速查表</a></td>
 </tr>
 </tbody></table></div>
@@ -48,119 +102,15 @@ h2,h3,h4,[id]{scroll-margin-top:0}.stepper{background:#edf6f1;border:1px solid #
 <h2>1. 自底向上分析要做什么</h2>
 <h3>1.1 从输入的单词逐步搭回开始符</h3>
 <p>第三章从开始符向下展开；另一条路线是先读实际单词，把已识别的局部结构逐层组合回开始符。难点在于：何时继续读，何时把栈顶的一段归约，才能保留正确结构。</p>
-<p><strong>自底向上分析</strong>从输入 Token 出发，把已识别的局部结构归约成非终结符，直到完整程序被归约为开始符。相比自顶向下先展开文法，它先看见具体输入，再逐层确认结构。</p>
-<p>四种动作是：<strong>移入</strong>，把当前输入 Token 压栈并前进输入；<strong>归约</strong>，用一条规则左部替换栈顶对应右部；<strong>接受</strong>，确认完整输入与开始结构匹配；<strong>报错</strong>，当前格局没有合法动作。</p>
+<p><strong>自底向上分析</strong> 从输入 Token 出发，把已识别的局部结构归约成非终结符，直到完整程序被归约为开始符。相比自顶向下先展开文法，它先看见具体输入，再逐层确认结构。</p>
+<p>四种动作是：<strong>移入</strong> ，把当前输入 Token 压栈并前进输入；<strong>归约</strong> ，用一条规则左部替换栈顶对应右部；<strong>接受</strong> ，确认完整输入与开始结构匹配；<strong>报错</strong> ，当前格局没有合法动作。</p>
 <p>核心不是“有没有一段文字等于某规则右部”，而是“它是否是此时应该撤销的最右推导步骤”。例如表达式中看到 T 时，既可能归约成 E，也可能还需等待 <code>*F</code>，不能任选。</p>
-<h3>1.2 课件 <code>(a+t)*c</code> 的完整结构归约</h3>
-<p>词法把 a、t、c 都归为终结符 i。文法为 <code>E→E+T|T、T→T*F|F、F→(E)|i</code>，输入 <code>(i+i)*i</code>。下面栈底左、栈顶右，表中动作在该行格局上执行：</p>
-<div class="table-scroll"><table>
-<thead>
-<tr>
-<th>符号栈</th>
-<th>剩余输入</th>
-<th>动作</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>#</td>
-<td>(i+i)*i#</td>
-<td>移入 (</td>
-</tr>
-<tr>
-<td>#(</td>
-<td>i+i)*i#</td>
-<td>移入 i</td>
-</tr>
-<tr>
-<td>#(i</td>
-<td>+i)*i#</td>
-<td>i→F</td>
-</tr>
-<tr>
-<td>#(F</td>
-<td>+i)*i#</td>
-<td>F→T</td>
-</tr>
-<tr>
-<td>#(T</td>
-<td>+i)*i#</td>
-<td>T→E</td>
-</tr>
-<tr>
-<td>#(E</td>
-<td>+i)*i#</td>
-<td>移入 +</td>
-</tr>
-<tr>
-<td>#(E+</td>
-<td>i)*i#</td>
-<td>移入 i</td>
-</tr>
-<tr>
-<td>#(E+i</td>
-<td>)*i#</td>
-<td>i→F</td>
-</tr>
-<tr>
-<td>#(E+F</td>
-<td>)*i#</td>
-<td>F→T</td>
-</tr>
-<tr>
-<td>#(E+T</td>
-<td>)*i#</td>
-<td>E+T→E</td>
-</tr>
-<tr>
-<td>#(E</td>
-<td>)*i#</td>
-<td>移入 )</td>
-</tr>
-<tr>
-<td>#(E)</td>
-<td>*i#</td>
-<td>(E)→F</td>
-</tr>
-<tr>
-<td>#F</td>
-<td>*i#</td>
-<td>F→T</td>
-</tr>
-<tr>
-<td>#T</td>
-<td>*i#</td>
-<td>移入 *</td>
-</tr>
-<tr>
-<td>#T*</td>
-<td>i#</td>
-<td>移入 i</td>
-</tr>
-<tr>
-<td>#T*i</td>
-<td>#</td>
-<td>i→F</td>
-</tr>
-<tr>
-<td>#T*F</td>
-<td>#</td>
-<td>T*F→T</td>
-</tr>
-<tr>
-<td>#T</td>
-<td>#</td>
-<td>T→E</td>
-</tr>
-<tr>
-<td>#E</td>
-<td>#</td>
-<td>接受</td>
-</tr>
-</tbody></table></div>
-<p>在 #T、头符 * 时不能先做 T→E，否则丢失外层乘法结构。教学中画树用于解释这些选择；运行的分析器需要算法确定句柄，并不预先拥有完整正确语法树。</p>
+<h3>1.2 两个终结符的移入归约</h3>
+<p>小例子：文法S→aB、B→b，开始符S，输入ab#。先移入a，再移入b；用B→b把栈顶b归约成B，栈成为aB；再用S→aB归约成S，输入只剩#时接受。</p>
+<p>每次归约只替换当前应还原的右部，不把尚未读入的字符提前放进栈。完整括号表达式的多步轨迹另放构表综合练习。</p>
 <h3>1.3 LR 名字的含义</h3>
 <p>L 表示从左到右扫描，R 表示最右推导的逆过程，即规范归约。括号内数字表示归约决策所用的向前看 Token 数；LR(0) 不为完成项目附展望符，LR(1) 采用一个。</p>
-<p>LR(0) 也必须读取当前输入以决定移入哪条终结符边；“不看输入”是指其普通归约项目对所有头符都要求归约，并非驱动完全没有读头。课件点名算符优先、简单优先等找句柄方法，本组课件展开的是 LR 家族，未给出前两者的完整算法。</p>
+<p>LR(0) 也必须读取当前输入以决定移入哪条终结符边；“不看输入”是指其普通归约项目对所有头符都要求归约，并非驱动完全没有读头。找句柄也可以采用优先关系等方法；本章选择用项目集系统学习 LR 家族，后面的状态、表和驱动均采用这一路线。</p>
 <p><a id="ch04-s02"></a>
 <a id="二符号与规范活前缀"></a>
 <a id="符号与规范活前缀"></a>
@@ -226,13 +176,15 @@ h2,h3,h4,[id]{scroll-margin-top:0}.stepper{background:#edf6f1;border:1px solid #
 </tbody></table></div>
 <p>FOLLOW 不含 ε；FIRST(βa) 中的 a 是一个真正展望 Token 或 #。项目中的圆点不是输入字符。</p>
 <h3>2.2 句柄必须带结构和位置</h3>
-<p><strong>规范句型</strong>由最右推导产生。若 <code>S⇒rm*αAβ⇒rmαπβ</code>，其中使用 A→π，且 β 为终结符串，则 απβ 中这次出现的 π 是要逆向撤销的<strong>句柄</strong>。重复拼写时必须指明是哪一位置。</p>
+<p><strong>规范句型</strong> 由最右推导产生。若 <code>S⇒rm*αAβ⇒rmαπβ</code>，其中使用 A→π，且 β 为终结符串，则 απβ 中这次出现的 π 是要逆向撤销的<strong>句柄</strong> 。重复拼写时必须指明是哪一位置。</p>
 <p>把任意右部匹配片段都称为句柄会误归约。句柄不仅包含右部文字，还关联具体产生式及规范推导位置。</p>
+<p>小例子：文法S→AB、A→a、B→b，最右推导S⇒AB⇒Ab⇒ab。最后一步使用A→a，所以ab中的a是句柄，先归约它得到Ab；不能仅因b也匹配B的右部就随意先归约b。</p>
 <h3>2.3 规范前缀、活前缀与可归前缀</h3>
-<p>课件<strong>规范前缀</strong>α 满足存在规范句型 αβ，β 为终结符串或空串。<strong>活前缀</strong>是不越过当前句柄右端的这种前缀；它可能尚未包含完整句柄，也可能恰好以完整句柄结束。后一种称<strong>可归前缀</strong>。</p>
-<p>直观上，栈保存已处理部分，不应把句柄右边的结构也一并压过头。可归前缀只要求“某规则已完整”，是否现在执行归约还由当前状态和所采用方法决定。</p>
+<p><strong>规范前缀</strong> α 满足存在规范句型 αβ，β 为终结符串或空串。<strong>活前缀</strong> 是不越过当前句柄右端的这种前缀；它可能尚未包含完整句柄，也可能恰好以完整句柄结束。后一种称<strong>可归前缀</strong> 。</p>
+<p>直观上，栈保存已处理部分，不应把句柄右边的结构也一并压过头。可归前缀是在合法活前缀上恰好识别完当前句柄，不能只凭任意规则右部完整出现来判断；是否执行某个归约还由状态和相应分析方法决定。</p>
+<p>小例子：文法S→ab，开始符S。句子ab的句柄是整个ab，ε、a、ab都没有越过它的右端，均为活前缀；ab恰好包含完整句柄，是可归前缀。只有a时不能按S→ab归约，因为右部还没识别完。</p>
 <h3>2.4 派生定理与 <code>aAc</code> 例</h3>
-<p>课件给可归前缀派生规律：开始符规则的右部是可归前缀；若 αAβ 是可归前缀且 A→π 是规则，则 απ 也是可归前缀；可归前缀可如此派生。</p>
+<p>可归前缀的派生规律为：开始符规则的右部是可归前缀；若 αAβ 是可归前缀且 A→π 是规则，则 απ 也是可归前缀；可归前缀可如此派生。</p>
 <p>对 <code>S→aAc、A→dbb|b</code>，可归前缀为 aAc、adbb、ab。为什么不是 adbbc？adbb 已以 A 的句柄 dbb 结束，再移入尾部 c 就越过该句柄；应先归约 A，再把 c 接到 aA 上完成 S。</p>
 <p>可归前缀集合可能无限，项目集自动机用有限状态识别这些分析进度。自动机输入是 VT∪VN 的文法符号，而源码 Token 流本身仍只有终结符；非终结符由归约后产生。</p>
 <p><a id="ch04-s03"></a>
@@ -242,24 +194,24 @@ h2,h3,h4,[id]{scroll-margin-top:0}.stepper{background:#edf6f1;border:1px solid #
 <h2>3. LR(0) 项目及三个运算</h2>
 <p>活前缀说明栈不能越过句柄，但还没有给出逐步识别的方法。可以在产生式中标出“已经识别到哪里”，再把当前可能的进度收在一起，用作分析器的状态。</p>
 <h3>3.1 圆点表示进度</h3>
-<p><strong>LR(0) 项目</strong>是在产生式右部加入一个圆点。<code>S→aAc</code> 有四种：</p>
+<p><strong>LR(0) 项目</strong> 是在产生式右部加入一个圆点。<code>S→aAc</code> 有四种：</p>
 <pre><code class="language-text">S→·aAc   尚未识别此右部
 S→a·Ac   已识别 a，等待 A、c
 S→aA·c   已识别 aA，等待 c
 S→aAc·   整个右部已经识别，可提出归约
 </code></pre>
 <p>点后是终结符时可移入该 Token；点后是非终结符时需要识别其结构，不能从输入直接“移入非终结符”；点在末尾时是完成/归约项目。空规则 A→ε 只有 A→·，从开始就完成，不能把 ε 当作待移入字符。</p>
+<p>小例子：规则A→xy的三个项目分别A→·xy、A→x·y、A→xy·，依次表示尚未识别、已认出x、右部完成。圆点是分析进度标记，不是输入中的一个字符。</p>
 <h3>3.2 投影：圆点越过同一符号</h3>
 <p>已有一组可能进度时，读到或归约出 X，就要找出哪些进度能接受这个 X，并把它们向前推进一格。投影负责这一步，不负责补入新结构的起点。</p>
-<p>项目集 I 关于 X 的<strong>投影</strong>为 <code>I(X)={A→αX·β | A→α·Xβ∈I}</code>。只取点后恰为 X 的项目，点右移一位。</p>
-<p>若 <code>I={S→a·Ac,A→·dbb,A→·b}</code>，则 I(A) 为 <code>{S→aA·c}</code>，I(d) 为 <code>{A→d·bb}</code>，I(b) 为 <code>{A→b·}</code>；I(a)、I(c)、I(S) 为空。课件投影例里 A→dbb 的编号误排，这里按原规则身份处理。</p>
+<p>项目集 I 关于 X 的<strong>投影</strong> 为 <code>I(X)={A→αX·β | A→α·Xβ∈I}</code>。只取点后恰为 X 的项目，点右移一位。</p>
+<p>若 <code>I={S→a·Ac,A→·dbb,A→·b}</code>，则 I(A) 为 <code>{S→aA·c}</code>，I(d) 为 <code>{A→d·bb}</code>，I(b) 为 <code>{A→b·}</code>；I(a)、I(c)、I(S) 为空。项目保留各自产生式身份，规则编号不随圆点移动而改变。</p>
 <h3>3.3 闭包：等待 A 就加入 A 的所有开头</h3>
-<p>圆点停在非终结符 A 前时，接下来可能从 A 的任意候选式开始。只保存外层进度会漏掉这些可能性，因此要把它们及后续依赖逐项补齐。</p>
-<p><strong>CLOSURE(I)</strong> 先包含 I；若有 B→α·Aβ，则加入 A 的每条规则 A→·γ，再对新增项目继续检查，直到没有新项。它表达“接下来要识别 A，因此 A 的所有起始方式也可能处于当前分析进度”。</p>
-<p>例如 <code>{S→a·Ac}</code> 的闭包为 <code>{S→a·Ac,A→·dbb,A→·b}</code>。只加点后非终结符的规则，不能把文法全部规则无条件塞入每个状态。</p>
+<p>点后等待非终结符，就需要补入它所有可能开头，直到没有新项目，这称为CLOSURE。</p>
+<p>小例子：文法T→aB、B→b|c，从{T→a·B}开始。因为点后是B，加入B→·b、B→·c，得到{T→a·B,B→·b,B→·c}。新项目点后都是终结符，补项停止；不能无条件把其他无关规则加进来。</p>
 <h3>3.4 GO：投影后闭包</h3>
-<p><code>GO(I,X)=CLOSURE(I(X))</code>。投影说明读/归约出 X 后进度变化，闭包补足新位置上可能开始的结构。空投影的 GO 为空，不建立边。</p>
-<p>闭包是一个项目集内部补项，GO 是项目集之间转换；两者不能混同。项目集合整体相同才是同一个 LR(0) 状态，排列顺序不影响身份。</p>
+<p>GO把“移动圆点”与“补入接下来可能开始的规则”合在一起：<code>GO(I,X)=CLOSURE(I(X))</code>。</p>
+<p>小例子：文法S′→S、S→aB、B→b，取初态I={S′→·S,S→·aB}。关于a的投影只有S→a·B；点后等待B，闭包补B→·b，故GO(I,a)={S→a·B,B→·b}。投影提供种子，闭包补新结构，二者不能颠倒或省略。</p>
 <p><a id="ch04-s04"></a>
 <a id="四构造-lr0-状态机"></a>
 <a id="构造-lr0-状态机"></a></p>
@@ -268,207 +220,47 @@ S→aAc·   整个右部已经识别，可提出归约
 <h3>4.1 增广与接受约定</h3>
 <p>统一增加新开始符 S&#39;，规则 S&#39;→S。初态为 <code>CLOSURE({S&#39;→·S})</code>，S&#39;→S· 且头符 # 时接受。S&#39; 不出现在任何规则右部。</p>
 <p>这里采用增广规则 S&#39;→S，# 只作输入结束标志，不移入栈。若采用 S→E$ 并移入 $ 的另一套约定，接受状态与计数会相应不同；比较结果时应对齐项目和转换，不能只看状态编号。</p>
+<p>小例子：源文法只有T→t，新增唯一开始规则Z→T。T→t·只说明一个T完成；Z→T·且头符为#才表示整个输入接受。增广把局部完成与全局接受分开。</p>
 <h3>4.2 待处理队列构造</h3>
 <p>从初态开始，对每个未处理 I 和每个 X∈VT∪VN 算 GO。非空且新集合出现，就加一个新状态；若已存在，连接到旧状态。直到全部已知状态都处理完。</p>
-<p>因为产生式与圆点位置有限，可能项目集有限，构造会终止。实现要按集合去重；课件的 NO 是“尚未处理”的工作标记，不是状态属性或源码内容。</p>
+<p>因为产生式与圆点位置有限，可能项目集有限，构造会终止。实现要按集合去重；构造算法中的 NO 是“尚未处理”的工作标记，不是状态属性或源码内容。</p>
+<p>小例子：文法S′→S、S→a，初态中关于a和S各有一条边，分别产生{S→a·}与{S′→S·}。把两集加入待处理队列后，它们没有出边，队列清空，全部三个可达状态已构完。</p>
 <h3>4.3 基本项目与派生项目</h3>
-<p><strong>基本/核心项目</strong>通常来自前驱转换，即圆点移动后的种子项，初态还包括增广起始项；<strong>派生项目</strong>由闭包补入，点在右部最左。饱和项目集是已求完闭包的项目集。</p>
-<p>注意后文 LALR 的“状态心”按课件定义指忽略展望符后的 LR(0) 项目集合，不可把术语与只取部分核项目混用。</p>
-<h3>4.4 <code>S→aAc、A→dbb|b</code> 的完整项目集与表</h3>
-<p>本题规则编号：</p>
-<pre><code class="language-text">(0) S&#39; → S
-(1) S → a A c
-(2) A → d b b
-(3) A → b
-</code></pre>
-<p>全部项目集：</p>
-<pre><code class="language-text">I0:
-  S&#39; → · S
-  S → · a A c
-I1:
-  S → a · A c
-  A → · d b b
-  A → · b
-I2:
-  S&#39; → S ·
-I3:
-  A → b ·
-I4:
-  A → d · b b
-I5:
-  S → a A · c
-I6:
-  A → d b · b
-I7:
-  S → a A c ·
-I8:
-  A → d b b ·
-</code></pre>
-<p>完整 ACTION/GOTO 表；— 表示出错，sj 表示移入到 j，rk 表示按 k 号规则归约：</p>
+<p><strong>基本/核心项目</strong> 通常来自前驱转换，即圆点移动后的种子项，初态还包括增广起始项；<strong>派生项目</strong> 由闭包补入，点在右部最左。饱和项目集是已求完闭包的项目集。</p>
+<p>注意后文 LALR 的“状态心”在本章指忽略展望符后的 LR(0) 项目集合，不可把术语与只取部分核项目混用。</p>
+<p>小例子：从项目S→x·A出发，按A→a加入A→·a。前者是本次GO移动得到的种子，后者来自闭包，是派生项目；不能因为两项同处一集就忘记它们来源不同。</p>
+<h3>4.4 三个状态完成一次LR(0)构造</h3>
+<p>用只有一条源规则S→a的小文法完成一次构造。增加S′→S，终结符只有a，#为结束标记。</p>
+<p>初态I0={S′→·S,S→·a}；读a得I1={S→a·}；识别S后到I2={S′→S·}。这三个集合已没有新转换：</p>
 <div class="table-scroll"><table>
 <thead>
 <tr>
 <th>状态</th>
 <th>a</th>
-<th>b</th>
-<th>c</th>
-<th>d</th>
 <th>#</th>
-<th>A</th>
-<th>S</th>
+<th>GOTO(S)</th>
 </tr>
 </thead>
 <tbody><tr>
 <td>0</td>
 <td>s1</td>
-<td>—</td>
-<td>—</td>
-<td>—</td>
-<td>—</td>
 <td>—</td>
 <td>2</td>
 </tr>
 <tr>
 <td>1</td>
-<td>—</td>
-<td>s3</td>
-<td>—</td>
-<td>s4</td>
-<td>—</td>
-<td>5</td>
+<td>r(S→a)</td>
+<td>r(S→a)</td>
 <td>—</td>
 </tr>
 <tr>
 <td>2</td>
 <td>—</td>
-<td>—</td>
-<td>—</td>
-<td>—</td>
 <td>acc</td>
-<td>—</td>
-<td>—</td>
-</tr>
-<tr>
-<td>3</td>
-<td>r3</td>
-<td>r3</td>
-<td>r3</td>
-<td>r3</td>
-<td>r3</td>
-<td>—</td>
-<td>—</td>
-</tr>
-<tr>
-<td>4</td>
-<td>—</td>
-<td>s6</td>
-<td>—</td>
-<td>—</td>
-<td>—</td>
-<td>—</td>
-<td>—</td>
-</tr>
-<tr>
-<td>5</td>
-<td>—</td>
-<td>—</td>
-<td>s7</td>
-<td>—</td>
-<td>—</td>
-<td>—</td>
-<td>—</td>
-</tr>
-<tr>
-<td>6</td>
-<td>—</td>
-<td>s8</td>
-<td>—</td>
-<td>—</td>
-<td>—</td>
-<td>—</td>
-<td>—</td>
-</tr>
-<tr>
-<td>7</td>
-<td>r1</td>
-<td>r1</td>
-<td>r1</td>
-<td>r1</td>
-<td>r1</td>
-<td>—</td>
-<td>—</td>
-</tr>
-<tr>
-<td>8</td>
-<td>r2</td>
-<td>r2</td>
-<td>r2</td>
-<td>r2</td>
-<td>r2</td>
-<td>—</td>
 <td>—</td>
 </tr>
 </tbody></table></div>
-<p>输入 <code>a d b b c #</code> 的全过程（每行动作针对动作前的格局）：</p>
-<div class="table-scroll"><table>
-<thead>
-<tr>
-<th>状态栈</th>
-<th>符号栈</th>
-<th>剩余输入</th>
-<th>动作</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>0</td>
-<td>#</td>
-<td>a d b b c #</td>
-<td>s1</td>
-</tr>
-<tr>
-<td>0,1</td>
-<td># a</td>
-<td>d b b c #</td>
-<td>s4</td>
-</tr>
-<tr>
-<td>0,1,4</td>
-<td># a d</td>
-<td>b b c #</td>
-<td>s6</td>
-</tr>
-<tr>
-<td>0,1,4,6</td>
-<td># a d b</td>
-<td>b c #</td>
-<td>s8</td>
-</tr>
-<tr>
-<td>0,1,4,6,8</td>
-<td># a d b b</td>
-<td>c #</td>
-<td>r2</td>
-</tr>
-<tr>
-<td>0,1,5</td>
-<td># a A</td>
-<td>c #</td>
-<td>s7</td>
-</tr>
-<tr>
-<td>0,1,5,7</td>
-<td># a A c</td>
-<td>#</td>
-<td>r1</td>
-</tr>
-<tr>
-<td>0,2</td>
-<td># S</td>
-<td>#</td>
-<td>acc</td>
-</tr>
-</tbody></table></div>
-<p>读 a 后闭包才引入 A 两条规则；读 d 后依次等两个 b。完成 A→dbb· 时先归约 A，再从移入 a 后的状态查 GOTO(A)，此时才准备外层 c。上表中所有归约不推进输入。</p>
+<p>输入a#：在0移入a到1，再用S→a归约，弹回0、查GOTO(S)=2，头符#时接受。归约时不前进输入。</p>
 <p><a id="ch04-s05"></a>
 <a id="五分析表与通用驱动"></a>
 <a id="分析表与通用驱动"></a>
@@ -478,11 +270,13 @@ I8:
 <h3>5.1 ACTION 与 GOTO 分工</h3>
 <p>ACTION 的列是 VT∪{#}，GOTO 的列是 VN。移入由点后终结符边决定；归约由完成项目和方法规定的展望范围决定；接受只填增广完成状态的 # 列；未填格报错。</p>
 <p>LR(0) 普通完成项目 A→β· 要在全部终结符及 # 列填该规则归约。如果同格还要移入或另一个归约，表有冲突，不能悄悄覆盖其中一个。</p>
+<p>小例子：若I={A→a·}且按LR(0)构表，字母表为{a,b}，则a、b、#三列都提出A→a归约。若该集还含B→a·b，b列同时要求移入，必须明确报告冲突，不能让后填动作覆盖前填动作。</p>
 <h3>5.2 归约为何先弹栈再查 GOTO</h3>
 <p>状态栈初始 <code>[0]</code>，符号栈初始 <code>[#]</code>。当按 A→β 归约，令 n=|β|，从符号栈弹 n 个文法符号，状态栈也弹 n 个状态；用弹出后的栈顶 s 查 GOTO[s,A]，再压 A 和新状态。</p>
 <p>例如 β 长 3，就撤销识别这三个符号带来的三次状态推进。若用归约前栈顶查 GOTO，会找错前驱。ε 规则 n=0，不弹任何项，仍查当前栈顶 GOTO 并压左部。</p>
+<p>小例子：规则A→x，当前状态栈[0,2]、符号栈[#,x]，题设GOTO[0,A]=3。归约先弹x与2，再从0查表，得到状态栈[0,3]、符号栈[#,A]；当前输入保持原位。</p>
 <h3>5.3 按表执行的栈操作</h3>
-<p>下面对照课件 11 第 27、29—31 页，归纳各动作怎样更新栈与输入：</p>
+<p>各动作怎样更新栈与输入，归纳如下：</p>
 <div class="table-scroll"><table>
 <thead>
 <tr>
@@ -513,16 +307,18 @@ I8:
 </tr>
 </tbody></table></div>
 <p>状态栈最初为 [0]，符号栈最初为 [#]。只识别合法性时可以只保存状态；若构树或执行语义动作，还需要对应属性。</p>
+<p>小例子：栈顶状态0、当前Token为a，题设ACTION[0,a]=s2；执行后压入a和状态2，并读取下一Token。若动作改为归约，则按产生式弹栈，不读取下一Token。</p>
 <h3>5.4 出错与恢复</h3>
-<p>遇到空格动作可及时报错，指出实际 Token 和当前允许类别。错误恢复可跳过输入或弹状态寻找同步点，但不能把任意恢复后到 acc 的路径当成原程序完全合法。第三章所讲定位、恐慌恢复等原则仍适用。</p>
+<p>空ACTION格表示当前状态没有允许的动作，应报告实际Token和期待类别。恢复可以寻找同步点，但不能把恢复后的接受当作原输入完全合法。</p>
+<p>小例子：本题文法只有S→a。初态只允许读a；输入b#在第一个b处就无动作，报告期待a即可，不必先运行另一道题的状态栈。若决定跳过b继续寻找下一条语句，还须把本次错误保留下来。</p>
 <p><a id="ch04-s06"></a>
 <a id="lr0-完整构表与冲突"></a>
 <a id="六lr0-完整构表与冲突"></a>
 <a id="ref-LR0"></a></p>
 <h2>6. LR(0) 完整构表与冲突</h2>
-<p>下面将项目集、分析表与输入轨迹放在同一道课件题中核对。若同一个表格需要填两个不同动作，就说明仅靠当前项目进度还不能作唯一决策。</p>
+<p>下面将项目集、分析表与输入轨迹放在同一道本题中核对。若同一个表格需要填两个不同动作，就说明仅靠当前项目进度还不能作唯一决策。</p>
 <h3>6.1 简化表达式练习</h3>
-<p>课件文法为 <code>E→E+T|T、T→id|(E)</code>。只有加法与括号，不是同时有加乘的常见文法。它的完成项目状态没有同时要求移入的终结符边，因此是 LR(0)。不能凭“表达式文法一般不是 LR(0)”直接下结论。</p>
+<p>本题文法为 <code>E→E+T|T、T→id|(E)</code>。只有加法与括号，不是同时有加乘的常见文法。它的完成项目状态没有同时要求移入的终结符边，因此是 LR(0)。不能凭“表达式文法一般不是 LR(0)”直接下结论。</p>
 <p>本题规则编号：</p>
 <pre><code class="language-text">(0) S&#39; → E
 (1) E → E + T
@@ -1205,19 +1001,322 @@ I7:
 </tr>
 </tbody></table></div>
 <h3>6.4 两类冲突与“二义性状态”的边界</h3>
-<p><strong>移入/归约冲突</strong>是在同一 ACTION 格既填 s 又填 r；<strong>归约/归约冲突</strong>是在同格要求不同 r。点后为非终结符的未完成项目本身不直接产生移入动作，所以“任何未完成项与完成项共存都冲突”过于粗略。</p>
-<p>课件称冲突状态为二义性状态，但表冲突不等于文法一定二义。冲突可能只是该方法提供的上下文信息不够，换 SLR 或 LR(1) 可以消除；一个二义文法则无法成为本章无冲突的确定 LR 文法。</p>
-<p>课件 <code>M→T、T→F|F*T、F→a</code> 有状态 <code>{T→F·,T→F·*T}</code>：完成项目要求在 * 上归约，另一项要求移入 *，故不是 LR(0)。下面看 FOLLOW 怎样解决。</p>
+<p><strong>移入/归约冲突</strong> 是在同一 ACTION 格既填 s 又填 r；<strong>归约/归约冲突</strong> 是在同格要求不同 r。点后为非终结符的未完成项目本身不直接产生移入动作，所以“任何未完成项与完成项共存都冲突”过于粗略。</p>
+<p>有冲突的状态并不能单独证明文法二义。冲突可能只是该方法提供的上下文信息不够，换 SLR 或 LR(1) 可以消除；一个二义文法则无法成为本章无冲突的确定 LR 文法。</p>
+<p>本例 <code>M→T、T→F|F*T、F→a</code> 有状态 <code>{T→F·,T→F·*T}</code>：完成项目要求在 * 上归约，另一项要求移入 *，故不是 LR(0)。下面看 FOLLOW 怎样解决。</p>
+<h3>6.5 S→aAc的完整构表与输入轨迹</h3>
+<p>本题规则编号：</p>
+<pre><code class="language-text">(0) S&#39; → S
+(1) S → a A c
+(2) A → d b b
+(3) A → b
+</code></pre>
+<p>全部项目集：</p>
+<pre><code class="language-text">I0:
+  S&#39; → · S
+  S → · a A c
+I1:
+  S → a · A c
+  A → · d b b
+  A → · b
+I2:
+  S&#39; → S ·
+I3:
+  A → b ·
+I4:
+  A → d · b b
+I5:
+  S → a A · c
+I6:
+  A → d b · b
+I7:
+  S → a A c ·
+I8:
+  A → d b b ·
+</code></pre>
+<p>完整 ACTION/GOTO 表；— 表示出错，sj 表示移入到 j，rk 表示按 k 号规则归约：</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>状态</th>
+<th>a</th>
+<th>b</th>
+<th>c</th>
+<th>d</th>
+<th>#</th>
+<th>A</th>
+<th>S</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>0</td>
+<td>s1</td>
+<td>—</td>
+<td>—</td>
+<td>—</td>
+<td>—</td>
+<td>—</td>
+<td>2</td>
+</tr>
+<tr>
+<td>1</td>
+<td>—</td>
+<td>s3</td>
+<td>—</td>
+<td>s4</td>
+<td>—</td>
+<td>5</td>
+<td>—</td>
+</tr>
+<tr>
+<td>2</td>
+<td>—</td>
+<td>—</td>
+<td>—</td>
+<td>—</td>
+<td>acc</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td>3</td>
+<td>r3</td>
+<td>r3</td>
+<td>r3</td>
+<td>r3</td>
+<td>r3</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td>4</td>
+<td>—</td>
+<td>s6</td>
+<td>—</td>
+<td>—</td>
+<td>—</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td>5</td>
+<td>—</td>
+<td>—</td>
+<td>s7</td>
+<td>—</td>
+<td>—</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td>6</td>
+<td>—</td>
+<td>s8</td>
+<td>—</td>
+<td>—</td>
+<td>—</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td>7</td>
+<td>r1</td>
+<td>r1</td>
+<td>r1</td>
+<td>r1</td>
+<td>r1</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td>8</td>
+<td>r2</td>
+<td>r2</td>
+<td>r2</td>
+<td>r2</td>
+<td>r2</td>
+<td>—</td>
+<td>—</td>
+</tr>
+</tbody></table></div>
+<p>输入 <code>a d b b c #</code> 的全过程（每行动作针对动作前的格局）：</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>状态栈</th>
+<th>符号栈</th>
+<th>剩余输入</th>
+<th>动作</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>0</td>
+<td>#</td>
+<td>a d b b c #</td>
+<td>s1</td>
+</tr>
+<tr>
+<td>0,1</td>
+<td># a</td>
+<td>d b b c #</td>
+<td>s4</td>
+</tr>
+<tr>
+<td>0,1,4</td>
+<td># a d</td>
+<td>b b c #</td>
+<td>s6</td>
+</tr>
+<tr>
+<td>0,1,4,6</td>
+<td># a d b</td>
+<td>b c #</td>
+<td>s8</td>
+</tr>
+<tr>
+<td>0,1,4,6,8</td>
+<td># a d b b</td>
+<td>c #</td>
+<td>r2</td>
+</tr>
+<tr>
+<td>0,1,5</td>
+<td># a A</td>
+<td>c #</td>
+<td>s7</td>
+</tr>
+<tr>
+<td>0,1,5,7</td>
+<td># a A c</td>
+<td>#</td>
+<td>r1</td>
+</tr>
+<tr>
+<td>0,2</td>
+<td># S</td>
+<td>#</td>
+<td>acc</td>
+</tr>
+</tbody></table></div>
+<p>读 a 后闭包才引入 A 两条规则；读 d 后依次等两个 b。完成 A→dbb· 时先归约 A，再从移入 a 后的状态查 GOTO(A)，此时才准备外层 c。上表中所有归约不推进输入。</p>
+<h3>6.6 括号表达式的完整移入归约练习</h3>
+<p>词法把 a、t、c 都归为终结符 i。文法为 <code>E→E+T|T、T→T*F|F、F→(E)|i</code>，输入 <code>(i+i)*i</code>。下面栈底左、栈顶右，表中动作在该行格局上执行：</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>符号栈</th>
+<th>剩余输入</th>
+<th>动作</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>#</td>
+<td>(i+i)*i#</td>
+<td>移入 (</td>
+</tr>
+<tr>
+<td>#(</td>
+<td>i+i)*i#</td>
+<td>移入 i</td>
+</tr>
+<tr>
+<td>#(i</td>
+<td>+i)*i#</td>
+<td>i→F</td>
+</tr>
+<tr>
+<td>#(F</td>
+<td>+i)*i#</td>
+<td>F→T</td>
+</tr>
+<tr>
+<td>#(T</td>
+<td>+i)*i#</td>
+<td>T→E</td>
+</tr>
+<tr>
+<td>#(E</td>
+<td>+i)*i#</td>
+<td>移入 +</td>
+</tr>
+<tr>
+<td>#(E+</td>
+<td>i)*i#</td>
+<td>移入 i</td>
+</tr>
+<tr>
+<td>#(E+i</td>
+<td>)*i#</td>
+<td>i→F</td>
+</tr>
+<tr>
+<td>#(E+F</td>
+<td>)*i#</td>
+<td>F→T</td>
+</tr>
+<tr>
+<td>#(E+T</td>
+<td>)*i#</td>
+<td>E+T→E</td>
+</tr>
+<tr>
+<td>#(E</td>
+<td>)*i#</td>
+<td>移入 )</td>
+</tr>
+<tr>
+<td>#(E)</td>
+<td>*i#</td>
+<td>(E)→F</td>
+</tr>
+<tr>
+<td>#F</td>
+<td>*i#</td>
+<td>F→T</td>
+</tr>
+<tr>
+<td>#T</td>
+<td>*i#</td>
+<td>移入 *</td>
+</tr>
+<tr>
+<td>#T*</td>
+<td>i#</td>
+<td>移入 i</td>
+</tr>
+<tr>
+<td>#T*i</td>
+<td>#</td>
+<td>i→F</td>
+</tr>
+<tr>
+<td>#T*F</td>
+<td>#</td>
+<td>T*F→T</td>
+</tr>
+<tr>
+<td>#T</td>
+<td>#</td>
+<td>T→E</td>
+</tr>
+<tr>
+<td>#E</td>
+<td>#</td>
+<td>接受</td>
+</tr>
+</tbody></table></div>
+<p>在 #T、头符 * 时不能先做 T→E，否则丢失外层乘法结构。教学中画树用于解释这些选择；运行的分析器需要算法确定句柄，并不预先拥有完整正确语法树。</p>
 <p><a id="ch04-s07"></a>
 <a id="slr1用-follow-限制归约"></a>
 <a id="七slr1用-follow-限制归约"></a>
 <a id="ref-SLR"></a></p>
 <h2>7. SLR(1)：用 FOLLOW 限制归约</h2>
-<p>前面的乘法例在 * 上既要求移入又要求归约，但已完成的 T 在该文法中并不能后接 *。利用这种后继信息，可以删去不适用的归约格；SLR 就是在 LR(0) 状态机上作这一限制。</p>
+<p>LR(0)在全部终结符列填写完成项的归约，有些输入却并不可能合法地跟在该非终结符后面。SLR利用FOLLOW描述这些合法后继，限制归约的填写范围。下面用一条短规则说明它怎样选列。</p>
 <h3>7.1 相同状态机，更小的归约范围</h3>
 <p><strong>SLR(1)</strong> 使用 LR(0) 项目集与转换，但完成项目 A→β· 只在 FOLLOW(A) 列填归约。FOLLOW 收集某非终结符在所有文法位置上可能遇到的后继；开始符加入 #，不能忘记结束列。</p>
 <p>移入、GOTO 和增广接受与 LR(0) 相同。它不是遇到冲突以后临时随便挑动作，而是用明确规则重新限定全表的归约格。</p>
-<h3>7.2 课件乘法例的 FOLLOW 与表</h3>
+<p>小例子：文法S→Ab、A→a，开始符S。FOLLOW(A)={b}，所以完成项目A→a·在SLR表中只对b归约；在a或#上不会仅凭这个完成项填归约。</p>
+<h3>7.2 乘法例的 FOLLOW 与表</h3>
 <p><code>M→T、T→F|F*T、F→a</code> 中 FOLLOW(M)=FOLLOW(T)={#}，FOLLOW(F)={*,#}。F 后可能跟 *，也可能在末尾继承 T 的 #。</p>
 <p>在 <code>{T→F·,T→F·*T}</code>，* 不在 FOLLOW(T)，因此 * 上移入，# 上归约，冲突消除。三个 a 的结构为 <code>a*(a*a)</code>，因为 T 的递归位于右边，不能把它误解释为左结合。</p>
 <p>本题规则编号：</p>
@@ -1420,9 +1519,10 @@ I6:
 <h3>7.3 SLR 无冲突条件</h3>
 <p>在每个状态中，设完成项目左部为 A1…An，点后终结符集合为 Shift。必须有：每个 FOLLOW(Ai) 与 Shift 不交；不同归约项目的 FOLLOW 两两不交。多个移入项目同样指向某个字符不构成不同动作时，不必将它们视为冲突。</p>
 <p>正式标准仍是每个 ACTION 格最多一个动作。增广完成项目只提出 # 接受，单独处理。若条件失败，指出具体状态、Token 和竞争规则，比笼统说“它不是 SLR”更有解释力。</p>
+<p>小例子：某集的移入字符只有c，两个完成项左部分别A、B；已知FOLLOW(A)={a}、FOLLOW(B)={b}，三者互不相交，这些动作没有冲突。若FOLLOW(B)也含a，a列就要求两个归约，不能称该集无冲突。</p>
 <h3>7.4 全局 FOLLOW 为什么不够精确</h3>
-<p>课件 <code>Z→BaBbBc、B→d</code> 中三次 B 的后继分别为 a、b、c，但 FOLLOW(B)={a,b,c}，忽略了当前是哪个 B。这个例子说明精度损失，本身不自动证明发生表冲突。</p>
-<p>讲者备注进一步给：</p>
+<p>本例 <code>Z→BaBbBc、B→d</code> 中三次 B 的后继分别为 a、b、c，但 FOLLOW(B)={a,b,c}，忽略了当前是哪个 B。这个例子说明精度损失，本身不自动证明发生表冲突。</p>
+<p>再比较下面的文法：</p>
 <pre><code class="language-text">Z→BaBbBc | AbD
 D→BbBc
 A→d
@@ -1437,23 +1537,25 @@ B→d
 <h2>8. LR(1)：给项目增加展望符</h2>
 <p>7.4 中同一个 B 出现在多个位置，全局 FOLLOW 把各处后继混在一起，仍可能产生不必要的冲突。LR(1) 为每个具体项目保存局部后继，使归约条件随当前上下文区分。</p>
 <h3>8.1 展望符解释的是完成后的后继</h3>
-<p><strong>LR(1) 项目</strong>是 <code>[A→α·β,a]</code>。a 是一个展望符，表示该位置上的 A 结构完整结束后允许跟随的 Token，不是圆点后紧接着必须移入的字符。</p>
+<p><strong>LR(1) 项目</strong> 是 <code>[A→α·β,a]</code>。a 是一个展望符，表示该位置上的 A 结构完整结束后允许跟随的 Token，不是圆点后紧接着必须移入的字符。</p>
 <p><code>[A→x·y,#]</code> 仍先等待 y，不能因为展望符是 # 就跳过 y。只有 <code>[A→xy·,#]</code> 完成后，# 才限定归约。合写 <code>{a,b}</code> 等于同一 LR(0) 项目配两个不同展望符，不是一次看两个 Token。</p>
 <h3>8.2 LR(1) 闭包的 FIRST(βa)</h3>
 <p>若 <code>[B→α·Aβ,b]</code> 在闭包中，则对每条 A→γ、每个 <code>a∈FIRST(βb)</code>，加入 <code>[A→·γ,a]</code>。</p>
 <p>为什么看 βb？A 结束后先遇到后面的 β；若 β 能消失，才遇到外层的 b。例如 β 以终结符 c 开头，A 的后继就是 c；若 β=ε，才继承 b；若 β 能空也能以 c 开头，则两者都保留。</p>
 <p>不能一律复制原展望符，也不能只算 FIRST(β) 后忘记可空情形。b 是终结符或 #，所以 βb 整体不为空，结果不会把 ε 当作展望符。</p>
+<p>小例子：题设文法S→Ac，A→a；项目[S→·Ac,#]等待A，而A之后紧接c。计算FIRST(c#)={c}，所以闭包加入[A→·a,c]，不是把#机械复制给A。</p>
 <h3>8.3 投影、GO 与状态构造</h3>
 <p>投影把 <code>[A→α·Xβ,a]</code> 改成 <code>[A→αX·β,a]</code>，保持展望符；GO 是投影后求 LR(1) 闭包。初态为 <code>CLOSURE({[S&#39;→·S,#]})</code>，待处理构造同 LR(0)。</p>
 <p>判断规范 LR(1) 状态相同必须同时比较点位与展望符。只忽略展望符去重，已经是 LALR 合并的思路，不能再称完整规范 LR(1)。</p>
+<p>小例子：规则S→ab，项目集只有[S→a·b,#]；关于b移动后得[S→ab·,#]，展望#保持不变。同一个点位若配展望c就是不同LR(1)项目，不能按点位相同直接去重。</p>
 <h3>8.4 LR(1) 构表</h3>
-<p>点后终结符 a 的 GO 边填移入；<code>[A→β·,a]</code> 只在 a 列填该归约；增广 <code>[S&#39;→S·,#]</code> 填 acc；非终结符边填 GOTO。归约范围由项目的局部展望符提供，不用全局 FOLLOW 代替。</p>
-<p>SLR 失败备注例中读初始 d 后的完成项为 <code>[A→d·,b]</code> 和 <code>[B→d·,a]</code>，a 归约 B、b 归约 A，互不冲突。同一个非终结符的不同出现，由具体项目上下文区分。</p>
+<p>LR(1)按项目的展望符限定归约：点后终结符边填移入，完成项目[A→β·,a]只在a列归约；非终结符边填GOTO，增广完成在#接受。</p>
+<p>小例子：某集含[A→x·,a]和[B→x·,b]，其中a、b不同。a列归约A→x，b列归约B→x，不冲突。若错误地把两者都扩到全部FOLLOW列，就丢掉了项目所带的具体上下文。</p>
 <p><a id="ch04-s09"></a>
 <a id="lr1-完整例题与空产生式"></a>
 <a id="九lr1-完整例题与空产生式"></a></p>
 <h2>9. LR(1) 完整例题与空产生式</h2>
-<p>下面用两个课件文法落实局部展望的计算：先比较两个相同 B 的不同出现，再观察空规则如何不读输入、不弹右部而完成归约。</p>
+<p>下面用两个文法落实局部展望的计算：先比较两个相同 B 的不同出现，再观察空规则如何不读输入、不弹右部而完成归约。</p>
 <h3>9.1 <code>Z→BB、B→aB|b</code></h3>
 <p>B 生成 a*b，Z 生成两个这种片段，即 <code>a*ba*b</code>。初态中的第一个 B 后有 B，FIRST(B#)={a,b}；识别完第一个 B 后，第二个 B 位于尾部，展望符为 #。这解释了相同 B 项目为什么出现不同展望符版本。</p>
 <p>本题规则编号：</p>
@@ -1860,22 +1962,24 @@ I6:
 <p>abab 在得到两个 A 后，先做 S→ε：不弹栈，直接压 S 及 GOTO 状态；再连续用 S→AS 归约两个 A，最后得到开始符。空串输入在初态 # 列同样能 ε 归约后接受。</p>
 <h3>9.3 如何证明某文法属于 LR(1)</h3>
 <p>给出完整可达项目集，按规则构全表，核对每格无冲突，即证明本章意义上的 LR(1) 文法。只给一次输入成功不够，因为其他状态可能有冲突；只给 FIRST/FOLLOW 也不够，因为 LR(1) 使用局部项目展望符。</p>
+<p>小例子：文法S→a，增广后只有{S′→·S,S→·a}、{S→a·,#}和{S′→S·,#}三种可达进度（初态相应带#）。逐格填表无冲突才构成证明；只测试输入a被接受，不能替代完整构造。</p>
 <p><a id="ch04-s10"></a>
 <a id="lalr1合并同心状态"></a>
 <a id="十lalr1合并同心状态"></a>
 <a id="ref-LALR"></a></p>
 <h2>10. LALR(1)：合并同心状态</h2>
 <h3>10.1 为什么合并</h3>
-<p>规范 LR(1) 对上下文区分较细，可能出现许多仅展望符不同的状态，导致表增大。<strong>项目的心</strong>是去掉展望符后的 LR(0) 项目；按课件，<strong>状态的心 Core(I)</strong> 是其所有项目心组成的集合。心相同称同心状态。</p>
+<p>规范 LR(1) 对上下文区分较细，可能出现许多仅展望符不同的状态，导致表增大。<strong>项目的心</strong> 是去掉展望符后的 LR(0) 项目；按本章约定，<strong>状态的心 Core(I)</strong> 是其所有项目心组成的集合。心相同称同心状态。</p>
 <p><strong>LALR(1)</strong> 合并同心状态，把相同项目的展望符取并，转换边也映射到合并后的目标。它保留 LR(0) 规模的状态骨架，又使用比全局 FOLLOW 更精确的展望信息。</p>
 <p>这与第二章 DFA 最小化不是同一算法：这里按同心条件合并并检查分析动作，不能仅凭“未来接受同样串”随意混合 LR 栈的状态。</p>
-<h3>10.2 课件 <code>bMb</code> 完整例</h3>
+<p>小例子：两个状态分别只有[A→x·,a]、[A→x·,b]。去掉展望后心都为{A→x·}，合并后保存[A→x·,{a,b}]，即在a和b上都允许同一归约；不是随意合并两个外形不同的状态。</p>
+<h3>10.2 本例 <code>bMb</code> 完整例</h3>
 <pre><code class="language-text">Z→bMb
 M→a | (L
 L→Ma)
 </code></pre>
 <p>M→(L 的右部只有左括号与 L；右括号在 L→Ma) 中。不要为了习惯“括号应成对”把规则悄悄改成 M→(L)。句子 b(aa)b 的内部 M 先生成 (L，再由 L 生成 Ma)，其中 M→a。</p>
-<p>课件未统一增广的图有 16 状态，同心组是 4/9、5/11、6/12、7/13、8/14、10/15，合并为 10 状态。加上统一增广规则后，规范 LR(1) 为 17 状态，LALR(1) 为 11 状态；项目及转换如下。</p>
+<p>以下统一增加新开始规则，规范 LR(1) 为 17 状态，LALR(1) 为 11 状态；具体项目、转换和合并组都在下面列出。若另一种构造不增加独立的增广接受状态，可能分别少一个状态；比较时须先对齐增广与接受约定。</p>
 <p>本题规则编号：</p>
 <pre><code class="language-text">(0) S&#39; → Z
 (1) Z → b M b
@@ -2132,10 +2236,11 @@ I10:
 <h3>10.3 合并算法与传播</h3>
 <p>最直观算法先构造完整 LR(1)，按相同心分组、并展望、映射边，再按 LR(1) 规则构表。这样源状态的全部展望已算齐。</p>
 <p>若采用“发现同心立即合并”增量实现，新增展望还须继续传播到闭包及后继，重复到稳定。只把新状态并入后就停止处理，会漏掉沿边产生的新展望符。</p>
+<p>小例子：两个同心状态的项目展望原为{a}和{b}，合并后父项展望变为{a,b}。若它的后继项目需继承父项展望，后继也必须补上b；只改当前状态而不继续传播，会漏掉合法归约。</p>
 <h3>10.4 为什么可能新增归约/归约冲突</h3>
-<p>在原规范 LR(1) <strong>已经无冲突</strong>的前提下，同心状态有相同的终结符移入边；任何归约展望若与这些边相交，原状态就已冲突，因此合并不会新增移入/归约冲突。</p>
+<p>在原规范 LR(1) <strong>已经无冲突</strong> 的前提下，同心状态有相同的终结符移入边；任何归约展望若与这些边相交，原状态就已冲突，因此合并不会新增移入/归约冲突。</p>
 <p>但两个不同状态可以分别要求“a 归约 A，b 归约 B”和“b 归约 A，a 归约 B”，各自无冲突，取并后 a/b 都要求两个归约，于是产生新冲突。</p>
-<p>课件反例：</p>
+<p>合并反例：</p>
 <pre><code class="language-text">Z→aAd | bAc | aBc | bBd
 A→e
 B→e
@@ -2144,7 +2249,7 @@ B→e
 <p><a id="ch04-s11"></a>
 <a id="十一课件判定练习"></a>
 <a id="课件判定练习"></a></p>
-<h2>11. 课件判定练习</h2>
+<h2>11. 文法判定练习</h2>
 <p>判断文法属于哪一类，需要给出该方法下的证据。下面一题用具体冲突排除 SLR，再检查合并表；另一题直接在 LR(1) 初态找到竞争动作。</p>
 <h3>11.1 <code>S→AaB|B、A→aB|b、B→A</code></h3>
 <p>FOLLOW(S)={#}，FOLLOW(A)=FOLLOW(B)={a,#}。LR(0) 的一个状态有 <code>S→A·aB</code> 与 <code>B→A·</code>，a 上移入与 FOLLOW(B) 所要求的归约冲突，所以不是 SLR(1)。</p>
@@ -2360,7 +2465,7 @@ I9:
 <p>该文法语言仍是 ab*，可以用其他文法表示，如 <code>L→aB、B→bB|ε</code>。一个具体文法不是 LR(1)，不等于它的语言不能用 LR 文法描述。这也是区分文法与语言的必要练习。</p>
 <p><a id="ch04-s12"></a>
 <a id="综合应用历年题规范-lr1-的完整构造"></a></p>
-<h2>12. 综合应用：历年题规范 LR(1) 的完整构造</h2><div class="stepper" aria-label="分步图解"><h3>(a;a)的LR(1)分析轨迹</h3><p class="fig-intro">使用正文13状态表，状态从0起。归约弹右部长度后查GOTO，输入不前进。</p><div class="progress-track" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div><div class="step-tools"><button id="step-prev">上一步</button><label for="step-range">推导步骤</label><input id="step-range" type="range" min="0" max="10" value="0"><button id="step-next">下一步</button><span id="step-count" class="step-count"></span></div><div id="step-panel" class="step-card" aria-live="polite"></div><details><summary>完整轨迹（适合打印与连续核对）</summary><div class="table-scroll"><table><thead><tr><th>状态栈</th><th>符号栈</th><th>剩余输入</th><th>本步动作</th><th>转向状态</th></tr></thead><tbody><tr><td>0</td><td>#</td><td>( a ; a ) #</td><td>s1</td><td>1</td></tr><tr><td>0,1</td><td># (</td><td>a ; a ) #</td><td>s5</td><td>5</td></tr><tr><td>0,1,5</td><td># ( a</td><td>; a ) #</td><td>r1</td><td>6</td></tr><tr><td>0,1,6</td><td># ( S</td><td>; a ) #</td><td>r4</td><td>7</td></tr><tr><td>0,1,7</td><td># ( T</td><td>; a ) #</td><td>s10</td><td>10</td></tr><tr><td>0,1,7,10</td><td># ( T ;</td><td>a ) #</td><td>s5</td><td>5</td></tr><tr><td>0,1,7,10,5</td><td># ( T ; a</td><td>) #</td><td>r1</td><td>12</td></tr><tr><td>0,1,7,10,12</td><td># ( T ; S</td><td>) #</td><td>r3</td><td>7</td></tr><tr><td>0,1,7</td><td># ( T</td><td>) #</td><td>s9</td><td>9</td></tr><tr><td>0,1,7,9</td><td># ( T )</td><td>#</td><td>r2</td><td>3</td></tr><tr><td>0,3</td><td># S</td><td>#</td><td>acc</td><td>—</td></tr></tbody></table></div></details></div>
+<h2>12. 综合应用：历年题规范 LR(1) 的完整构造</h2>
 <p>完整构表比只模拟一个串多一步关键要求：所有可达状态都必须纳入，全部动作格都要检查冲突。下面从原题规则重新构造13个规范LR(1)状态，再用同一编号给出表和输入分析。</p>
 <h3>12.1 原题文法、编号与初态闭包</h3>
 <p>例题取自期末题第五题。本例初态编号为 0；状态编号只作标记，判断应依据项目内容与转换。</p>
@@ -2558,7 +2663,7 @@ I12:
 </tr>
 </tbody></table></div>
 <p>表中 sj 为移入至 j，rk 为按 k 号产生式归约，空格为报错；非终结符列为 GOTO。</p>
-<h3>12.3 输入 (a;a) 的完整分析</h3>
+<h3>12.3 输入 (a;a) 的完整分析</h3><div class="stepper" aria-label="分步图解"><h3>(a;a)的LR(1)分析轨迹</h3><p class="fig-intro">使用正文13状态表，状态从0起。归约弹右部长度后查GOTO，输入不前进。</p><div class="progress-track" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div><div class="step-tools"><button id="step-prev">上一步</button><label for="step-range">推导步骤</label><input id="step-range" type="range" min="0" max="10" value="0"><button id="step-next">下一步</button><span id="step-count" class="step-count"></span></div><div id="step-panel" class="step-card" aria-live="polite"></div><details><summary>完整轨迹（适合打印与连续核对）</summary><div class="table-scroll"><table><thead><tr><th>状态栈</th><th>符号栈</th><th>剩余输入</th><th>本步动作</th><th>转向状态</th></tr></thead><tbody><tr><td>0</td><td>#</td><td>( a ; a ) #</td><td>s1</td><td>1</td></tr><tr><td>0,1</td><td># (</td><td>a ; a ) #</td><td>s5</td><td>5</td></tr><tr><td>0,1,5</td><td># ( a</td><td>; a ) #</td><td>r1</td><td>6</td></tr><tr><td>0,1,6</td><td># ( S</td><td>; a ) #</td><td>r4</td><td>7</td></tr><tr><td>0,1,7</td><td># ( T</td><td>; a ) #</td><td>s10</td><td>10</td></tr><tr><td>0,1,7,10</td><td># ( T ;</td><td>a ) #</td><td>s5</td><td>5</td></tr><tr><td>0,1,7,10,5</td><td># ( T ; a</td><td>) #</td><td>r1</td><td>12</td></tr><tr><td>0,1,7,10,12</td><td># ( T ; S</td><td>) #</td><td>r3</td><td>7</td></tr><tr><td>0,1,7</td><td># ( T</td><td>) #</td><td>s9</td><td>9</td></tr><tr><td>0,1,7,9</td><td># ( T )</td><td>#</td><td>r2</td><td>3</td></tr><tr><td>0,3</td><td># S</td><td>#</td><td>acc</td><td>—</td></tr></tbody></table></div></details></div>
 <div class="table-scroll"><table>
 <thead>
 <tr>
@@ -2686,7 +2791,7 @@ I12:
 <td>状态少，可能新增归约冲突</td>
 </tr>
 </tbody></table></div>
-<p>文法类包含关系为 <code>LR(0)⊂SLR(1)⊂LALR(1)⊂LR(1)</code>。在同样增广和可达构造约定下，状态数通常满足 <code>LR(0)=SLR(1)=LALR(1)≤规范LR(1)</code>；课件写严格小于，但某文法可相等。包含关系谈能处理哪些文法，状态数谈同一文法的构造规模，不能混为一个概念。</p>
+<p>文法类包含关系为 <code>LR(0)⊂SLR(1)⊂LALR(1)⊂LR(1)</code>。在同样增广和可达构造约定下，状态数通常满足 <code>LR(0)=SLR(1)=LALR(1)≤规范LR(1)</code>；其中允许相等，例如没有可合并同心状态时，规范 LR(1) 与 LALR 的状态数就相同。包含关系谈能处理哪些文法，状态数谈同一文法的构造规模，不能混为一个概念。</p>
 <h3>13.2 做题步骤</h3>
 <p>统一增广与结束约定 → 编号规则 → 构闭包和所有 GO → 按方法填移入/归约/接受 → 检查每格冲突 → 无冲突时模拟输入。SLR 额外先算 FOLLOW；LR(1) 每次闭包用 FIRST(后缀＋原展望)；LALR 先确保所有同心状态展望已正确并集并传播。</p>
 <h3>13.3 自检与参考解释</h3>
@@ -2772,7 +2877,7 @@ I12:
 <td>弹完后才查左部转向</td>
 </tr>
 <tr>
-<td>与课件状态号不一样</td>
+<td>与参考状态号不一样</td>
 <td>增广或遍历顺序不同</td>
 <td>对齐项目集内容及GO边</td>
 <td>编号本身不决定正确性</td>
@@ -2795,7 +2900,7 @@ I12:
 <a id="末尾速查表"></a></p>
 <h2>16. 末尾速查表</h2>
 <div class="ref-picker"><label for="quick-select">选择一个概念或方法，查看含义、形式、例子、结果和前提</label><select id="quick-select" class="quick-select"><option value="0">活前缀</option><option value="1">CLOSURE/GO</option><option value="2">LR(0)</option><option value="3">SLR(1)</option><option value="4">规范LR(1)</option><option value="5">LALR(1)</option><option value="6">归约驱动</option></select><div id="quick-panel" class="ref-panel" aria-live="polite"></div></div>
-</article><div class="chapter-links"><a href="03_语法分析_自顶向下方法.html">← 第3章 语法分析：从文法规则到自顶向下分析器</a><a href="05_语义分析与符号表.html">第5章 语义分析和符号表 →</a></div></main></div><script type="application/json" id="diagram-data">{"title":"(a;a)的LR(1)分析轨迹","premise":"使用正文13状态表，状态从0起。归约弹右部长度后查GOTO，输入不前进。","fields":["状态栈","符号栈","剩余输入","本步动作","转向状态"],"rows":[["0","#","( a ; a ) #","s1","1"],["0,1","# (","a ; a ) #","s5","5"],["0,1,5","# ( a","; a ) #","r1","6"],["0,1,6","# ( S","; a ) #","r4","7"],["0,1,7","# ( T","; a ) #","s10","10"],["0,1,7,10","# ( T ;","a ) #","s5","5"],["0,1,7,10,5","# ( T ; a",") #","r1","12"],["0,1,7,10,12","# ( T ; S",") #","r3","7"],["0,1,7","# ( T",") #","s9","9"],["0,1,7,9","# ( T )","#","r2","3"],["0,3","# S","#","acc","—"]]}</script><script type="application/json" id="quick-data">[{"name":"活前缀","kind":"分析栈的结构约束","meaning":"保证没有越过句柄右端","form":"最右句型的合法前缀","notice":"右部匹配不必为当前句柄；","example":"adbb先归约A再读c","link":"\u003ca href=\"#ref-%E5%89%8D%E7%BC%80\">规范活前缀\u003c/a>"},{"name":"CLOSURE/GO","kind":"构造运算","meaning":"补等待项并推进状态","form":"GO(I,X)=CLOSURE(投影(I,X))","notice":"点后为非终结符才补其规则；","example":"等A补A→·dbb与·b","link":"\u003ca href=\"#ref-%E8%BF%90%E7%AE%97\">三个运算\u003c/a>"},{"name":"LR(0)","kind":"LR构表方法","meaning":"仅靠项目进度归约","form":"完成项归约填全部输入列","notice":"移入仍读当前输入；","example":"A→x·与B→x·a在a上竞争","link":"\u003ca href=\"#ref-LR0\">LR(0)构表\u003c/a>"},{"name":"SLR(1)","kind":"LR构表方法","meaning":"以全局后继限制归约","form":"仅FOLLOW(A)列填A归约","notice":"全局信息可能过宽；","example":"FOLLOW(A)={#}避开a移入","link":"\u003ca href=\"#ref-SLR\">SLR\u003c/a>"},{"name":"规范LR(1)","kind":"LR构表方法","meaning":"区分局部语法上下文","form":"[A→α·β,a]，闭包用FIRST(βa)","notice":"展望是A完成后继；","example":"FIRST(Cb)={c,b}","link":"\u003ca href=\"#ref-LR1\">LR(1)\u003c/a>"},{"name":"LALR(1)","kind":"状态压缩方法","meaning":"合并同心状态减少表","form":"同心并展望、映射全部GO","notice":"合后查归约冲突；","example":"ae/be两态合出c/d双归约","link":"\u003ca href=\"#ref-LALR\">LALR\u003c/a>"},{"name":"归约驱动","kind":"分析执行动作","meaning":"撤销右部后压左部","form":"弹|β|对，查GOTO，压A","notice":"ε弹零项，输入不动；","example":"[0,3,6]归空得[0,3,6,8]","link":"\u003ca href=\"#ref-%E9%A9%B1%E5%8A%A8\">驱动\u003c/a>"}]</script><script>
+</article><div class="chapter-links"><a href="03_语法分析_自顶向下方法.html">← 第3章 语法分析：从文法规则到自顶向下分析器</a><a href="05_语义分析与符号表.html">第5章 语义分析和符号表 →</a></div></main></div><script type="application/json" id="diagram-data">{"title":"(a;a)的LR(1)分析轨迹","premise":"使用正文13状态表，状态从0起。归约弹右部长度后查GOTO，输入不前进。","fields":["状态栈","符号栈","剩余输入","本步动作","转向状态"],"rows":[["0","#","( a ; a ) #","s1","1"],["0,1","# (","a ; a ) #","s5","5"],["0,1,5","# ( a","; a ) #","r1","6"],["0,1,6","# ( S","; a ) #","r4","7"],["0,1,7","# ( T","; a ) #","s10","10"],["0,1,7,10","# ( T ;","a ) #","s5","5"],["0,1,7,10,5","# ( T ; a",") #","r1","12"],["0,1,7,10,12","# ( T ; S",") #","r3","7"],["0,1,7","# ( T",") #","s9","9"],["0,1,7,9","# ( T )","#","r2","3"],["0,3","# S","#","acc","—"]]}</script><script type="application/json" id="quick-data">[{"name":"活前缀","kind":"分析栈的结构约束","meaning":"保证没有越过句柄右端","form":"最右句型的合法前缀","notice":"活前缀不能越过当前句柄右端；","example":"S→ab，句子ab的句柄是整个ab，其ε、a、ab都是活前缀。","link":"\u003ca href=\"#ref-%E5%89%8D%E7%BC%80\">规范活前缀\u003c/a>"},{"name":"CLOSURE/GO","kind":"构造运算","meaning":"补等待项并推进状态","form":"GO(I,X)=CLOSURE(投影(I,X))","notice":"GO先移动圆点再闭包；","example":"规则S′→S、S→aB、B→b，状态含S→·aB；读a后得到S→a·B，并补入B→·b。","link":"\u003ca href=\"#ref-%E8%BF%90%E7%AE%97\">三个运算\u003c/a>"},{"name":"LR(0)","kind":"LR构表方法","meaning":"仅靠项目进度归约","form":"完成项归约填全部输入列","notice":"LR(0)完成项在所有终结符列归约；","example":"同一状态含A→a·与B→a·b，b列同时需要归约与移入，出现冲突。","link":"\u003ca href=\"#ref-LR0\">LR(0)构表\u003c/a>"},{"name":"SLR(1)","kind":"LR构表方法","meaning":"以全局后继限制归约","form":"仅FOLLOW(A)列填A归约","notice":"只在左部FOLLOW上归约；","example":"S→Ab、A→a，则FOLLOW(A)={b}；完成项A→a·只在b列填归约，不在a列填。","link":"\u003ca href=\"#ref-SLR\">SLR\u003c/a>"},{"name":"规范LR(1)","kind":"LR构表方法","meaning":"区分局部语法上下文","form":"[A→α·β,a]，闭包用FIRST(βa)","notice":"展望符限制完成项的归约；","example":"[A→x·,a]只在输入a时按A→x归约，不能看到b也采用它。","link":"\u003ca href=\"#ref-LR1\">LR(1)\u003c/a>"},{"name":"LALR(1)","kind":"状态压缩方法","meaning":"合并同心状态减少表","form":"同心并展望、映射全部GO","notice":"同心合并要重查冲突；","example":"两状态分别只有[A→x·,a]与[A→x·,b]，合并为[A→x·,{a,b}]，在a、b两列归约。","link":"\u003ca href=\"#ref-LALR\">LALR\u003c/a>"},{"name":"归约驱动","kind":"分析执行动作","meaning":"撤销右部后压左部","form":"弹|β|对，查GOTO，压A","notice":"弹出长度按右部符号数计算；","example":"栈[0,2]在输入b时按A→a归约，弹出状态2；若GOTO(0,A)=3，新状态栈为[0,3]，不消费b。","link":"\u003ca href=\"#ref-%E9%A9%B1%E5%8A%A8\">驱动\u003c/a>"}]</script><script>
 const links=[...document.querySelectorAll('nav a[href^="#"]')];
 const headings=links.map(a=>document.getElementById(a.hash.slice(1))).filter(Boolean);
 let scheduled=false;
@@ -2806,5 +2911,209 @@ document.querySelectorAll('[data-font]').forEach(b=>b.addEventListener('click',(
 const diagram=JSON.parse(document.getElementById('diagram-data').textContent);let step=0;
 function showStep(){if(!diagram)return;const row=diagram.rows[step];const panel=document.getElementById('step-panel');panel.replaceChildren();const grid=document.createElement('div');grid.className='step-grid';diagram.fields.forEach((field,i)=>{const cell=document.createElement('div');cell.className='step-field';const strong=document.createElement('strong');strong.textContent=field;const p=document.createElement('p');p.textContent=row[i];cell.append(strong,p);grid.append(cell);});panel.append(grid);document.getElementById('step-count').textContent=(step+1)+' / '+diagram.rows.length;document.getElementById('step-range').value=step;document.getElementById('step-prev').disabled=step===0;document.getElementById('step-next').disabled=step===diagram.rows.length-1;document.querySelectorAll('.progress-track span').forEach((s,i)=>s.classList.toggle('done',i<=step));}
 if(diagram){document.getElementById('step-prev').addEventListener('click',()=>{step=Math.max(0,step-1);showStep();});document.getElementById('step-next').addEventListener('click',()=>{step=Math.min(diagram.rows.length-1,step+1);showStep();});document.getElementById('step-range').addEventListener('input',e=>{step=Number(e.target.value);showStep();});showStep();}
-const quick=document.getElementById('quick-select');if(quick){const items=JSON.parse(document.getElementById('quick-data').textContent);function showQuick(){const r=items[Number(quick.value)];const panel=document.getElementById('quick-panel');panel.innerHTML='<h3>'+r.name+'</h3><p class="ref-kind">'+r.kind+'</p><h4>含义与用途</h4><p>'+r.meaning+'</p><h4>基本形式</h4><p>'+r.form+'</p><h4>学习例子与结果</h4><p class="result">'+r.example+'</p><h4>注意点与前提</h4><p>'+r.notice+'</p><p>'+r.link+'</p>';}quick.addEventListener('change',showQuick);showQuick();}markNavigation();
+function quickMarkup(r){return '<h3>'+r.name+'</h3><p class="ref-kind">'+r.kind+'</p><h4>含义与用途</h4><p>'+r.meaning+'</p><h4>基本形式</h4><p>'+r.form+'</p><h4>学习例子与结果</h4><p class="result">'+r.example+'</p><h4>注意点与前提</h4><p>'+r.notice+'</p><p>'+r.link+'</p>';}
+const quick=document.getElementById('quick-select');if(quick){const items=JSON.parse(document.getElementById('quick-data').textContent);function showQuick(){const r=items[Number(quick.value)];document.getElementById('quick-panel').innerHTML=quickMarkup(r);}quick.addEventListener('change',showQuick);showQuick();}markNavigation();
+(function () {
+  'use strict';
+  const $ = name => document.getElementById('chapter-search-' + name);
+  const panel = $('panel'), article = document.getElementById('article');
+  if (!panel || !article) return;
+  const blockTags = 'h1,h2,h3,h4,h5,h6,p,li,pre,td,th,summary,dt,dd,blockquote';
+  const ignored = '.stepper,.ref-picker,button,input,select,textarea,script,style,[data-search-ignore]';
+  const sectionIds = new Set([...document.querySelectorAll('nav a[href^="#"]')].map(a => a.hash.slice(1)));
+  const quickSelect = document.getElementById('quick-select'), quickPanel = document.getElementById('quick-panel');
+  const quickItems = JSON.parse(document.getElementById('quick-data')?.textContent || '[]');
+  const fold = text => text.replace(/[A-Z]/g, c => c.toLowerCase());
+  const pageSize = 40;
+  let matches = [], active = -1, page = 0, query = '', timer = null;
+  let resultsOpen = false, automaticQuick = false, originalQuick = null;
+  const openedDetails = new Set();
+
+  function measure() {
+    const top = Math.max(60, Math.ceil(document.querySelector('.topbar').getBoundingClientRect().height));
+    const height = panel.hidden ? 0 : Math.ceil(panel.getBoundingClientRect().height);
+    document.documentElement.style.setProperty('--reader-topbar-height', top + 'px');
+    document.documentElement.style.setProperty('--scroll-offset', Math.max(90, top + height + 18) + 'px');
+  }
+  window.addEventListener('resize', measure);
+  if (typeof ResizeObserver !== 'undefined') {
+    const observer = new ResizeObserver(measure);
+    observer.observe(document.querySelector('.topbar')); observer.observe(panel);
+  }
+
+  // 对文字节点建立段内偏移，不把行内 strong/code 等格式当作检索边界。
+  function collect(root, quick = false, quickName = '') {
+    const blocks = [], walker = document.createTreeWalker(root, NodeFilter.SHOW_ELEMENT | NodeFilter.SHOW_TEXT);
+    let node, owner = null, currentBlock = null, pendingSection = '', section = 'article', mainTitle = '本章导读', subTitle = '';
+    while ((node = walker.nextNode())) {
+      const element = node.nodeType === Node.ELEMENT_NODE ? node : node.parentElement;
+      if (!element || element.closest(quick ? 'h4,button,input,select,script,style' : ignored)) continue;
+      if (node.nodeType === Node.ELEMENT_NODE) {
+        if (!quick) {
+          if (node.matches('a[id]') && sectionIds.has(node.id)) pendingSection = node.id;
+          if (node.matches('h2')) { section = node.id || pendingSection || 'article'; mainTitle = node.textContent.trim(); subTitle = ''; pendingSection = ''; }
+          if (node.matches('h3')) subTitle = node.textContent.trim();
+        }
+        continue;
+      }
+      if (!node.data || (!quick && section === 'navigation')) continue;
+      const parent = element.closest(blockTags);
+      if (!parent || !root.contains(parent)) { owner = null; currentBlock = null; continue; }
+      const label = quick ? '末尾速查 › ' + quickName : mainTitle + (subTitle ? ' › ' + subTitle : '');
+      if (owner !== parent || !currentBlock || currentBlock.section !== section || currentBlock.label !== label) {
+        currentBlock = { el: parent, text: '', nodes: [], label, section }; blocks.push(currentBlock); owner = parent;
+      }
+      currentBlock.nodes.push({ node, start: currentBlock.text.length, end: currentBlock.text.length + node.data.length });
+      currentBlock.text += node.data;
+    }
+    return blocks.filter(b => b.text.trim());
+  }
+  function quickBlocks(index) {
+    const root = document.createElement('div'); root.innerHTML = quickMarkup(quickItems[index]);
+    const name = document.createElement('span'); name.innerHTML = quickItems[index].name;
+    return collect(root, true, name.textContent);
+  }
+  function find(blocks, source, item) {
+    const found = [], needle = fold(query);
+    blocks.forEach((block, blockIndex) => {
+      const text = fold(block.text); let start = text.indexOf(needle);
+      while (start !== -1) {
+        const end = start + query.length;
+        found.push({ source, item, blockIndex, start, end, text: block.text, label: block.label });
+        start = text.indexOf(needle, end);
+      }
+    });
+    return found;
+  }
+  function removeMarks() {
+    const parents = new Set();
+    article.querySelectorAll('mark.chapter-search-hit').forEach(mark => { parents.add(mark.parentNode); mark.replaceWith(document.createTextNode(mark.textContent)); });
+    parents.forEach(parent => parent.normalize());
+  }
+  function restoreDetails() { openedDetails.forEach(details => { if (details.isConnected) details.open = false; }); openedDetails.clear(); }
+  function restoreQuick() {
+    if (originalQuick !== null && quickSelect) {
+      automaticQuick = true; quickSelect.value = originalQuick; quickSelect.dispatchEvent(new Event('change')); automaticQuick = false;
+    }
+    originalQuick = null;
+  }
+  function setOpen(open, focusInput = false) {
+    panel.hidden = !open; $('toggle').setAttribute('aria-expanded', String(open));
+    if (open && typeof closeMenu === 'function') closeMenu();
+    measure();
+    if (focusInput) $('input').focus();
+  }
+  function text(tag, value) { const element = document.createElement(tag); element.textContent = value; return element; }
+  function state() {
+    $('prev').disabled = $('next').disabled = !matches.length;
+    $('results-toggle').disabled = !matches.length;
+    $('status').textContent = !query ? '请输入关键词' : !matches.length ? '没有找到匹配内容' : active < 0 ? '找到 ' + matches.length + ' 处，选择结果定位' : '第 ' + (active + 1) + ' / ' + matches.length + ' 处';
+    $('results').hidden = !resultsOpen || !matches.length;
+    $('results-toggle').setAttribute('aria-expanded', String(! $('results').hidden));
+    $('results-toggle').textContent = resultsOpen && matches.length ? '收起结果' : '展开结果';
+    measure();
+  }
+  function renderResults() {
+    const list = $('list'); list.replaceChildren();
+    const start = page * pageSize, end = Math.min(start + pageSize, matches.length);
+    $('page-status').textContent = matches.length ? '显示 ' + (start + 1) + '—' + end + '，共 ' + matches.length + ' 处' : '';
+    $('page-prev').disabled = page === 0; $('page-next').disabled = end >= matches.length;
+    for (let i = start; i < end; i++) {
+      const match = matches[i], item = document.createElement('li'), button = document.createElement('button');
+      button.type = 'button'; button.className = 'chapter-search-result';
+      if (i === active) button.setAttribute('aria-current', 'true');
+      button.append(text('strong', (i + 1) + '. ' + match.label));
+      const excerpt = document.createElement('span'), left = Math.max(0, match.start - 35), right = Math.min(match.text.length, match.end + 55);
+      excerpt.append(document.createTextNode((left ? '…' : '') + match.text.slice(left, match.start)));
+      excerpt.append(text('mark', match.text.slice(match.start, match.end)));
+      excerpt.append(document.createTextNode(match.text.slice(match.end, right) + (right < match.text.length ? '…' : '')));
+      button.append(excerpt); button.addEventListener('click', () => activate(i, true)); item.append(button); list.append(item);
+    }
+  }
+  function search() {
+    clearTimeout(timer); timer = null; removeMarks(); restoreDetails(); restoreQuick();
+    query = $('input').value.trim(); active = -1; page = 0; matches = [];
+    if (query) {
+      matches = find(collect(article), 'body');
+      if (typeof quickMarkup === 'function') quickItems.forEach((_, index) => { matches.push(...find(quickBlocks(index), 'quick', index)); });
+    }
+    resultsOpen = !!matches.length; renderResults(); state();
+  }
+  function activate(index, focusMatch = false) {
+    if (!matches.length) return;
+    index = (index + matches.length) % matches.length;
+    removeMarks(); const match = matches[index]; let block;
+    if (match.source === 'quick') {
+      if (!quickSelect || !quickPanel) return;
+      if (originalQuick === null) originalQuick = quickSelect.value;
+      automaticQuick = true; quickSelect.value = String(match.item); quickSelect.dispatchEvent(new Event('change')); automaticQuick = false;
+      const name = document.createElement('span'); name.innerHTML = quickItems[match.item].name;
+      block = collect(quickPanel, true, name.textContent)[match.blockIndex];
+    } else block = collect(article)[match.blockIndex];
+    // 动态正文如有改动，重建结果；不按旧字符位置猜测。
+    if (!block || block.text !== match.text) { search(); $('status').textContent = '正文已变化，结果已刷新，请重新选择。'; return; }
+    for (let parent = block.el; parent && parent !== article; parent = parent.parentElement) {
+      if (parent.tagName === 'DETAILS' && !parent.open) { openedDetails.add(parent); parent.open = true; }
+    }
+    const marks = [];
+    for (const part of block.nodes) {
+      if (part.end <= match.start || part.start >= match.end) continue;
+      const begin = Math.max(0, match.start - part.start), end = Math.min(part.node.length, match.end - part.start);
+      const fragment = document.createDocumentFragment();
+      if (begin) fragment.append(document.createTextNode(part.node.data.slice(0, begin)));
+      const mark = text('mark', part.node.data.slice(begin, end)); mark.className = 'chapter-search-hit'; fragment.append(mark); marks.push(mark);
+      if (end < part.node.length) fragment.append(document.createTextNode(part.node.data.slice(end)));
+      part.node.replaceWith(fragment);
+    }
+    active = index; page = Math.floor(index / pageSize); resultsOpen = false; renderResults(); state();
+    const first = marks[0];
+    if (first) {
+      first.tabIndex = -1; if (focusMatch) first.focus({ preventScroll: true });
+      first.scrollIntoView({ block: 'start', inline: 'nearest', behavior: 'auto' });
+      requestAnimationFrame(() => { measure(); if (typeof markNavigation === 'function') markNavigation(); });
+    }
+  }
+  function ensureQuery() { if (timer !== null || $('input').value.trim() !== query) search(); }
+  function clear() {
+    clearTimeout(timer); timer = null; $('input').value = ''; search(); $('input').focus();
+  }
+  $('toggle').addEventListener('click', () => setOpen(panel.hidden, panel.hidden));
+  $('close').addEventListener('click', () => { setOpen(false); $('toggle').focus(); });
+  $('clear').addEventListener('click', clear);
+  $('form').addEventListener('submit', event => { event.preventDefault(); ensureQuery(); if (matches.length) activate(active < 0 ? 0 : active + 1); });
+  $('input').addEventListener('input', () => { clearTimeout(timer); timer = setTimeout(search, 160); });
+  $('input').addEventListener('keydown', event => {
+    if (event.key === 'Enter' && event.shiftKey) { event.preventDefault(); ensureQuery(); if (matches.length) activate(active < 0 ? matches.length - 1 : active - 1); }
+  });
+  $('prev').addEventListener('click', () => { ensureQuery(); if (matches.length) activate(active < 0 ? matches.length - 1 : active - 1); });
+  $('next').addEventListener('click', () => { ensureQuery(); if (matches.length) activate(active < 0 ? 0 : active + 1); });
+  $('results-toggle').addEventListener('click', () => { resultsOpen = !resultsOpen; renderResults(); state(); });
+  $('page-prev').addEventListener('click', () => { if (page > 0) page--; renderResults(); measure(); });
+  $('page-next').addEventListener('click', () => { if ((page + 1) * pageSize < matches.length) page++; renderResults(); measure(); });
+  $('panel').querySelector('details').addEventListener('toggle', measure);
+  document.addEventListener('keydown', event => {
+    if ((event.ctrlKey || event.metaKey) && !event.altKey && event.key.toLowerCase() === 'k') { event.preventDefault(); setOpen(true, true); $('input').select(); }
+    if (event.key === 'Escape' && !panel.hidden) { setOpen(false); $('toggle').focus(); }
+  });
+  document.getElementById('menu').addEventListener('click', () => { if (document.body.classList.contains('nav-open')) setOpen(false); });
+  quickSelect?.addEventListener('change', () => {
+    if (!automaticQuick) {
+      originalQuick = null;
+      if (active >= 0 && matches[active].source === 'quick') { active = -1; renderResults(); state(); }
+    }
+  });
+  measure(); state();
+})();
+(function () {
+  'use strict';
+  const select = document.getElementById('reading-theme');
+  if (!select) return;
+  select.value = document.documentElement.dataset.readerTheme;
+  select.addEventListener('change', function () {
+    const theme = select.value;
+    if (theme !== 'light' && theme !== 'dark') return;
+    document.documentElement.dataset.readerTheme = theme;
+    try { localStorage.setItem('compiler-reading-theme-v1', theme); } catch (_) {}
+  });
+})();
 </script></body></html>

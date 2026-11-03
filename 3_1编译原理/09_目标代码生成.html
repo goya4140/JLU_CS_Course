@@ -1,5 +1,59 @@
-<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="source-sha256" content="ee4cb4b46da666640d493d8c8ce27083c302b0a83d695d9110a929a7e91f08c6"><title>第9章 目标代码生成 · 学习资料</title><style>:root{--paper:#fbfaf7;--surface:#fff;--ink:#253341;--muted:#5c6b75;--line:#d5dfdd;--teal:#156b62;--soft:#edf6f1;--font:17px;--scroll-offset:90px}*{box-sizing:border-box}html{scroll-behavior:auto;scroll-padding-top:var(--scroll-offset)}body{margin:0;background:var(--paper);color:var(--ink);font-family:'Microsoft YaHei','PingFang SC',system-ui,sans-serif;font-size:var(--font);line-height:1.85}a{color:var(--teal);text-underline-offset:3px}a:hover{color:#173f75}button,select{font:inherit}button{cursor:pointer}button,select{border:1px solid #b9cbc5;border-radius:7px;padding:7px 11px;background:#fff;color:var(--ink)}button:hover{background:var(--soft)}button:focus-visible,select:focus-visible,a:focus-visible{outline:3px solid #81cbb8;outline-offset:3px}.skip{position:absolute;top:-80px;left:12px;z-index:50;background:#fff;padding:8px}.skip:focus{top:8px}.sidebar{position:fixed;inset:0 auto 0 0;width:270px;padding:23px 18px;background:#f0f4f0;border-right:1px solid var(--line);overflow:auto;z-index:30;overscroll-behavior:contain}.brand{font-size:21px;font-weight:700}.brand small{display:block;font-size:12px;font-weight:400;color:var(--muted)}.sidebar nav a{display:block;color:var(--ink);text-decoration:none;padding:8px 10px;margin:3px 0;border-radius:6px;font-size:14px;line-height:1.6}.sidebar nav a:hover{background:#dcebe3}.sidebar nav a.active,.sidebar nav a.active:hover{background:var(--teal);color:white}.sidebar select{width:100%;font-size:13px}.nav-tip{font-size:12px;color:var(--muted);margin:14px 0}.shell{margin-left:270px;overflow-anchor:none}.topbar{position:sticky;top:0;background:rgba(251,250,247,.98);padding:12px 26px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:12px;z-index:20}.topbar-title{font-size:13px;color:var(--muted)}.toolbar{display:flex;gap:7px;flex-wrap:wrap}.toolbar button{font-size:13px}.menu{display:none}main{max-width:1120px;margin:auto;padding:30px 44px 80px;min-width:0}h1{font-size:32px;line-height:1.5;margin:14px 0 25px}h2{font-size:25px;line-height:1.5;padding:0 0 11px;border-bottom:1px solid var(--line);margin:44px 0 23px}h3{font-size:21px;line-height:1.55;margin:29px 0 16px}h4{font-size:18px;line-height:1.6;margin:22px 0 13px}p{margin:14px 0}li{margin:7px 0}ul,ol{padding-left:1.6em}blockquote{margin:20px 0;padding:5px 18px;border-left:3px solid #a8c6bb;background:#f0f3ef;color:#53655e;font-size:14px}blockquote p{margin:8px 0}hr{border:0;border-top:1px solid var(--line);margin:32px 0}code{font-family:Consolas,'Cascadia Code',monospace;font-size:.9em;background:#eef1ed;padding:2px 5px;border-radius:4px;overflow-wrap:anywhere}pre{background:#18313d;color:#e8f0f0;border-radius:9px;padding:19px;line-height:1.65;overflow-x:auto;max-width:100%;font-size:14px}pre code{background:none;padding:0;color:inherit;white-space:pre;overflow-wrap:normal}table{border-collapse:collapse;width:100%;font-size:15px}th{background:#eaf3ee;text-align:left}td,th{padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:top}tbody tr:nth-child(even){background:#f6f9f6}.table-scroll{overflow-x:auto;border:1px solid var(--line);border-radius:8px;margin:17px 0;max-width:100%}.table-scroll td{min-width:80px}.source-note{font-size:13px;color:var(--muted)}.learning-figure{padding:23px;border:1px solid #b4cfc2;border-radius:12px;background:var(--soft);margin:25px 0}.learning-figure h4{margin:0 0 8px;font-size:20px}.fig-intro{font-size:14px;color:var(--muted)}.learning-figure label{display:block;margin-top:15px;font-size:14px;font-weight:700}.learning-figure select{margin-top:7px;width:100%;min-height:44px;font-size:15px}.fig-output{margin-top:16px}.flow{display:flex;gap:10px;align-items:stretch;flex-wrap:wrap}.flow-node{flex:1 1 150px;border:1px solid #bfd2c9;border-radius:8px;background:#fff;padding:13px;min-width:0}.flow-node strong{display:block;color:var(--teal)}.flow-node p{font-size:14px;margin:8px 0}.flow-arrow{align-self:center;color:var(--teal);font-size:24px}.fig-note{padding:10px 14px;border-left:3px solid var(--teal);background:#fff;font-size:14px;margin:15px 0 0}.svg-scroll{overflow-x:auto;max-width:100%}.svg-scroll svg{display:block;max-width:100%;height:auto}.ref-area{min-height:calc(100vh - var(--scroll-offset));margin-top:24px}.ref-picker{padding:22px;border-radius:12px;background:var(--soft);border:1px solid #b4cfc2}.ref-picker label{display:block;font-weight:700;margin-bottom:10px}.ref-picker select{width:100%;font-size:15px;min-height:46px}.ref-panel{margin-top:18px;background:#fff;border:1px solid var(--line);padding:20px;border-radius:9px}.ref-panel[hidden]{display:none}.ref-panel h3{margin:0;font-size:24px}.ref-panel h4{font-size:16px;margin:18px 0 8px}.ref-kind{font-size:13px;color:var(--teal)}.result{padding:10px 15px;border-left:3px solid var(--teal);background:var(--soft)}.copy{display:block;margin:5px 0 0 auto;font-size:12px;padding:4px 8px}.code-wrap{margin:20px 0}.code-wrap pre{margin-bottom:0}.foot{font-size:13px;color:var(--muted);border-top:1px solid var(--line);padding-top:23px;margin-top:30px}details{border:1px solid var(--line);padding:12px;border-radius:8px;margin:15px 0}summary{cursor:pointer;font-weight:700}@media(max-width:900px){.sidebar{transform:translateX(-100%)}body.nav-open .sidebar{transform:translateX(0);top:60px}.shell{margin-left:0}.menu{display:inline-block}.topbar-title{display:none}.topbar{padding:10px 14px}main{padding:23px 18px 65px}h1{font-size:27px}h2{font-size:23px}.learning-figure,.ref-picker{padding:16px}.flow{flex-direction:column}.flow-arrow{transform:rotate(90deg)}.ref-panel{padding:15px}}@media print{.sidebar,.topbar,.toolbar,.copy,.skip{display:none!important}.shell{margin:0}main{padding:0;max-width:none}body{background:#fff;font-size:11pt}.ref-area{min-height:0}.ref-picker select{display:none}pre{white-space:pre-wrap;background:#f3f5f4;color:#111}.learning-figure{break-inside:avoid}.table-scroll{overflow:visible}a{color:inherit}}@media print{.svg-scroll{overflow:visible}.svg-scroll svg{min-width:0!important;width:100%!important;height:auto!important}}.sidebar{width:266px;background:#f1f4f1;padding:27px 19px;overflow-y:auto}.brand{font-size:21px;font-weight:700;letter-spacing:.03em;margin-bottom:5px}.brand small{font-size:12px;font-weight:400;color:var(--muted);letter-spacing:.1em}.sidebar .sub{font-size:13px;color:var(--muted);margin:5px 0 21px}.sidebar nav a{font-size:14px;line-height:1.5;padding:9px 11px;margin:3px 0;border-radius:6px}.sidebar nav a:hover{background:#e0ece6;color:#174d43}.sidebar nav a.active,.sidebar nav a.active:hover{background:var(--teal);color:#fff}.nav-group{font-size:12px;color:var(--muted);margin:18px 11px 6px;letter-spacing:.08em}.sidebar-footer{margin-top:24px;font-size:12px;color:var(--muted)}.shell{margin-left:266px}@media(max-width:900px){.shell{margin-left:0}}
-h2,h3,h4,[id]{scroll-margin-top:0}.stepper{background:#edf6f1;border:1px solid #b4cfc2;border-radius:12px;padding:22px;margin:24px 0}.stepper h3{margin:0 0 12px}.step-tools{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:15px 0}.step-tools input{width:200px;min-height:40px}.step-card{background:white;padding:18px;border-radius:8px;border:1px solid var(--line)}.step-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}.step-field{border:1px solid #d6e5dd;padding:12px;border-radius:7px;overflow-wrap:anywhere}.step-field strong{display:block;font-size:13px;color:var(--teal)}.step-field p{margin:7px 0 0}.progress-track{display:flex;gap:4px;margin:10px 0}.progress-track span{height:5px;flex:1;border-radius:3px;background:#c8d8d0}.progress-track span.done{background:var(--teal)}.step-count{font-variant-numeric:tabular-nums}.chapter-links{display:flex;gap:15px;justify-content:space-between;border-top:1px solid var(--line);padding-top:25px;margin-top:35px}.ref-area{min-height:0}.ref-panel h4{margin:12px 0 4px}.reading-meta{font-size:13px;color:var(--muted)}summary:focus-visible,input:focus-visible{outline:3px solid #81cbb8;outline-offset:3px}button:disabled{opacity:.5;cursor:default}.quick-select{width:100%}.overview-card{border:1px solid var(--line);background:white;border-radius:9px;padding:18px;margin:14px 0}.overview-card h3{margin-top:0}.sidebar nav a.external{background:#e4eee7}.nav-shade{display:none}@media(max-width:900px){body.nav-open .nav-shade{display:block;position:fixed;inset:60px 0 0 266px;background:#25334155;z-index:25}.stepper{padding:15px}.step-tools input{width:150px}.step-grid{grid-template-columns:1fr}.sidebar{max-width:85vw}.step-field{padding:10px}}@media print{.step-tools,.progress-track,.chapter-links{display:none}.step-card{break-inside:avoid}body.nav-open .nav-shade{display:none}}main{overflow-x:clip}article{min-width:0;max-width:100%}.table-scroll,pre{contain:inline-size}p,li,h1,h2,h3,h4{overflow-wrap:anywhere}</style></head><body><a class="skip" href="#article">跳到正文</a><aside class="sidebar" aria-label="章节目录"><div class="brand"><small>COMPILER / CHAPTER 09</small>第9章 目标代码生成</div><p class="sub">完整讲解 · 分步推导 · 离线阅读</p><nav><a href="#navigation">学习导航</a><div class="nav-group">准备 · 目标机与地址</div><a href="#ch09-s01">1. 目标代码是什么</a><a href="#ch09-s02">2. 虚拟目标机与指令系统</a><a href="#ch09-s03">3. 把抽象地址变成访问方式</a><div class="nav-group">基础 · 指令与回填</div><a href="#ch09-s04">4. 运算赋值与输入输出的翻译</a><a href="#ch09-s05">5. 为什么需要回填和两个栈</a><a href="#ch09-s06">6. 条件与循环的回填规则</a><a href="#ch09-s07">7. 嵌套控制例的完整目标代码</a><div class="nav-group">应用 · 入口与调用</div><a href="#ch09-s08">8. 标号与过程入口</a><a href="#ch09-s09">9. 参数传递的目标指令</a><a href="#ch09-s10">10. 调用活动记录与返回</a><div class="nav-group">进阶 · 寄存器和代价</div><a href="#ch09-s11">11. 多寄存器分配与代码质量</a><div class="nav-group">综合应用 · 完整解题</div><a href="#ch09-s12">12. 综合应用：历年 while 题从标号 m 生成完整代码</a><a href="#ch09-s13">13. 寄存器复用的有效性检查</a><div class="nav-group">练习与复习 · 回查、自测和速查</div><a href="#ch09-s14">14. 知识联系与复习</a><a href="#ch09-s15">15. 自测与答案</a><a href="#ch09-s16">16. 排错与复习</a><a href="#ch09-s17">17. 末尾速查表</a><div class="nav-group">全课程</div><a class="external" href="00_学习导航.html">全课程学习导航</a></nav><div class="sidebar-footer">先看问题与条件，再跟踪推导和例题</div></aside><div class="nav-shade"></div><div class="shell"><header class="topbar"><span class="topbar-title">第9章 目标代码生成</span><div class="toolbar"><button id="menu" class="menu" aria-label="打开或收起目录" aria-expanded="false">目录</button><button data-font="-1" aria-label="减小正文字号">字号 −</button><button data-font="1" aria-label="增大正文字号">字号 ＋</button><button id="print">打印 / 保存 PDF</button></div></header><main><article id="article"><h1>第9章 目标代码生成：怎样把四元式落实为读写与跳转指令</h1>
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="source-sha256" content="88496687250f97fef2fc66780a74ed8b99e9d3ea0baecba24ee70793a630a20d"><title>第9章 目标代码生成 · 学习资料</title><script>(function () {
+  'use strict';
+  let saved;
+  try { saved = localStorage.getItem('compiler-reading-theme-v1'); } catch (_) {}
+  const theme = saved === 'light' || saved === 'dark' ? saved
+    : (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+  document.documentElement.dataset.readerTheme = theme;
+})();
+</script><style>:root{--paper:#fbfaf7;--surface:#fff;--ink:#253341;--muted:#5c6b75;--line:#d5dfdd;--teal:#156b62;--soft:#edf6f1;--font:17px;--scroll-offset:90px}*{box-sizing:border-box}html{scroll-behavior:auto;scroll-padding-top:var(--scroll-offset)}body{margin:0;background:var(--paper);color:var(--ink);font-family:'Microsoft YaHei','PingFang SC',system-ui,sans-serif;font-size:var(--font);line-height:1.85}a{color:var(--teal);text-underline-offset:3px}a:hover{color:#173f75}button,select{font:inherit}button{cursor:pointer}button,select{border:1px solid #b9cbc5;border-radius:7px;padding:7px 11px;background:#fff;color:var(--ink)}button:hover{background:var(--soft)}button:focus-visible,select:focus-visible,a:focus-visible{outline:3px solid #81cbb8;outline-offset:3px}.skip{position:absolute;top:-80px;left:12px;z-index:50;background:#fff;padding:8px}.skip:focus{top:8px}.sidebar{position:fixed;inset:0 auto 0 0;width:270px;padding:23px 18px;background:#f0f4f0;border-right:1px solid var(--line);overflow:auto;z-index:30;overscroll-behavior:contain}.brand{font-size:21px;font-weight:700}.brand small{display:block;font-size:12px;font-weight:400;color:var(--muted)}.sidebar nav a{display:block;color:var(--ink);text-decoration:none;padding:8px 10px;margin:3px 0;border-radius:6px;font-size:14px;line-height:1.6}.sidebar nav a:hover{background:#dcebe3}.sidebar nav a.active,.sidebar nav a.active:hover{background:var(--teal);color:white}.sidebar select{width:100%;font-size:13px}.nav-tip{font-size:12px;color:var(--muted);margin:14px 0}.shell{margin-left:270px;overflow-anchor:none}.topbar{position:sticky;top:0;background:rgba(251,250,247,.98);padding:12px 26px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:12px;z-index:20}.topbar-title{font-size:13px;color:var(--muted)}.toolbar{display:flex;gap:7px;flex-wrap:wrap}.toolbar button{font-size:13px}.menu{display:none}main{max-width:1120px;margin:auto;padding:30px 44px 80px;min-width:0}h1{font-size:32px;line-height:1.5;margin:14px 0 25px}h2{font-size:25px;line-height:1.5;padding:0 0 11px;border-bottom:1px solid var(--line);margin:44px 0 23px}h3{font-size:21px;line-height:1.55;margin:29px 0 16px}h4{font-size:18px;line-height:1.6;margin:22px 0 13px}p{margin:14px 0}li{margin:7px 0}ul,ol{padding-left:1.6em}blockquote{margin:20px 0;padding:5px 18px;border-left:3px solid #a8c6bb;background:#f0f3ef;color:#53655e;font-size:14px}blockquote p{margin:8px 0}hr{border:0;border-top:1px solid var(--line);margin:32px 0}code{font-family:Consolas,'Cascadia Code',monospace;font-size:.9em;background:#eef1ed;padding:2px 5px;border-radius:4px;overflow-wrap:anywhere}pre{background:#18313d;color:#e8f0f0;border-radius:9px;padding:19px;line-height:1.65;overflow-x:auto;max-width:100%;font-size:14px}pre code{background:none;padding:0;color:inherit;white-space:pre;overflow-wrap:normal}table{border-collapse:collapse;width:100%;font-size:15px}th{background:#eaf3ee;text-align:left}td,th{padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:top}tbody tr:nth-child(even){background:#f6f9f6}.table-scroll{overflow-x:auto;border:1px solid var(--line);border-radius:8px;margin:17px 0;max-width:100%}.table-scroll td{min-width:80px}.source-note{font-size:13px;color:var(--muted)}.learning-figure{padding:23px;border:1px solid #b4cfc2;border-radius:12px;background:var(--soft);margin:25px 0}.learning-figure h4{margin:0 0 8px;font-size:20px}.fig-intro{font-size:14px;color:var(--muted)}.learning-figure label{display:block;margin-top:15px;font-size:14px;font-weight:700}.learning-figure select{margin-top:7px;width:100%;min-height:44px;font-size:15px}.fig-output{margin-top:16px}.flow{display:flex;gap:10px;align-items:stretch;flex-wrap:wrap}.flow-node{flex:1 1 150px;border:1px solid #bfd2c9;border-radius:8px;background:#fff;padding:13px;min-width:0}.flow-node strong{display:block;color:var(--teal)}.flow-node p{font-size:14px;margin:8px 0}.flow-arrow{align-self:center;color:var(--teal);font-size:24px}.fig-note{padding:10px 14px;border-left:3px solid var(--teal);background:#fff;font-size:14px;margin:15px 0 0}.svg-scroll{overflow-x:auto;max-width:100%}.svg-scroll svg{display:block;max-width:100%;height:auto}.ref-area{min-height:calc(100vh - var(--scroll-offset));margin-top:24px}.ref-picker{padding:22px;border-radius:12px;background:var(--soft);border:1px solid #b4cfc2}.ref-picker label{display:block;font-weight:700;margin-bottom:10px}.ref-picker select{width:100%;font-size:15px;min-height:46px}.ref-panel{margin-top:18px;background:#fff;border:1px solid var(--line);padding:20px;border-radius:9px}.ref-panel[hidden]{display:none}.ref-panel h3{margin:0;font-size:24px}.ref-panel h4{font-size:16px;margin:18px 0 8px}.ref-kind{font-size:13px;color:var(--teal)}.result{padding:10px 15px;border-left:3px solid var(--teal);background:var(--soft)}.copy{display:block;margin:5px 0 0 auto;font-size:12px;padding:4px 8px}.code-wrap{margin:20px 0}.code-wrap pre{margin-bottom:0}.foot{font-size:13px;color:var(--muted);border-top:1px solid var(--line);padding-top:23px;margin-top:30px}details{border:1px solid var(--line);padding:12px;border-radius:8px;margin:15px 0}summary{cursor:pointer;font-weight:700}@media(max-width:900px){.sidebar{transform:translateX(-100%)}body.nav-open .sidebar{transform:translateX(0);top:60px}.shell{margin-left:0}.menu{display:inline-block}.topbar-title{display:none}.topbar{padding:10px 14px}main{padding:23px 18px 65px}h1{font-size:27px}h2{font-size:23px}.learning-figure,.ref-picker{padding:16px}.flow{flex-direction:column}.flow-arrow{transform:rotate(90deg)}.ref-panel{padding:15px}}@media print{.sidebar,.topbar,.toolbar,.copy,.skip{display:none!important}.shell{margin:0}main{padding:0;max-width:none}body{background:#fff;font-size:11pt}.ref-area{min-height:0}.ref-picker select{display:none}pre{white-space:pre-wrap;background:#f3f5f4;color:#111}.learning-figure{break-inside:avoid}.table-scroll{overflow:visible}a{color:inherit}}@media print{.svg-scroll{overflow:visible}.svg-scroll svg{min-width:0!important;width:100%!important;height:auto!important}}.sidebar{width:266px;background:#f1f4f1;padding:27px 19px;overflow-y:auto}.brand{font-size:21px;font-weight:700;letter-spacing:.03em;margin-bottom:5px}.brand small{font-size:12px;font-weight:400;color:var(--muted);letter-spacing:.1em}.sidebar .sub{font-size:13px;color:var(--muted);margin:5px 0 21px}.sidebar nav a{font-size:14px;line-height:1.5;padding:9px 11px;margin:3px 0;border-radius:6px}.sidebar nav a:hover{background:#e0ece6;color:#174d43}.sidebar nav a.active,.sidebar nav a.active:hover{background:var(--teal);color:#fff}.nav-group{font-size:12px;color:var(--muted);margin:18px 11px 6px;letter-spacing:.08em}.sidebar-footer{margin-top:24px;font-size:12px;color:var(--muted)}.shell{margin-left:266px}@media(max-width:900px){.shell{margin-left:0}}
+#sql-reference{min-height:calc(100vh - var(--scroll-offset,90px))}
+.table-scroll{max-width:100%;overflow-x:auto;margin:18px 0;border:1px solid var(--line);border-radius:8px}.table-scroll table{width:100%;border-collapse:collapse}.table-scroll td,.table-scroll th{min-width:85px;vertical-align:top}.table-scroll pre{white-space:pre-wrap}article h2,article h3,article h4{scroll-margin-top:var(--scroll-offset,90px)}.course-home{display:block;font-size:13px;padding:8px 11px;margin-bottom:12px}.chapter-turns{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;margin-top:34px;padding-top:20px;border-top:1px solid var(--line)}.chapter-turns a{font-size:14px}.sidebar-footer{font-size:12px;color:var(--muted);margin-top:24px}article>p:first-of-type{font-size:1.04em}.noscript-note{padding:12px;border-left:3px solid var(--teal)}@media(max-width:600px){.table-scroll table{min-width:520px}.table-scroll{font-size:14px}pre{max-width:100%;overflow-x:auto}article{min-width:0}}@media print{.table-scroll table{min-width:0}.chapter-turns{display:none}}
+
+h2,h3,h4,[id]{scroll-margin-top:0}.stepper{background:#edf6f1;border:1px solid #b4cfc2;border-radius:12px;padding:22px;margin:24px 0}.stepper h3{margin:0 0 12px}.step-tools{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:15px 0}.step-tools input{width:200px;min-height:40px}.step-card{background:white;padding:18px;border-radius:8px;border:1px solid var(--line)}.step-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}.step-field{border:1px solid #d6e5dd;padding:12px;border-radius:7px;overflow-wrap:anywhere}.step-field strong{display:block;font-size:13px;color:var(--teal)}.step-field p{margin:7px 0 0}.progress-track{display:flex;gap:4px;margin:10px 0}.progress-track span{height:5px;flex:1;border-radius:3px;background:#c8d8d0}.progress-track span.done{background:var(--teal)}.step-count{font-variant-numeric:tabular-nums}.chapter-links{display:flex;gap:15px;justify-content:space-between;border-top:1px solid var(--line);padding-top:25px;margin-top:35px}.ref-area{min-height:0}.ref-panel h4{margin:12px 0 4px}.reading-meta{font-size:13px;color:var(--muted)}summary:focus-visible,input:focus-visible{outline:3px solid #81cbb8;outline-offset:3px}button:disabled{opacity:.5;cursor:default}.quick-select{width:100%}.overview-card{border:1px solid var(--line);background:white;border-radius:9px;padding:18px;margin:14px 0}.overview-card h3{margin-top:0}.sidebar nav a.external{background:#e4eee7}.nav-shade{display:none}@media(max-width:900px){body.nav-open .nav-shade{display:block;position:fixed;inset:60px 0 0 266px;background:#25334155;z-index:25}.stepper{padding:15px}.step-tools input{width:150px}.step-grid{grid-template-columns:1fr}.sidebar{max-width:85vw}.step-field{padding:10px}}@media print{.step-tools,.progress-track,.chapter-links{display:none}.step-card{break-inside:avoid}body.nav-open .nav-shade{display:none}}main{overflow-x:clip}article{min-width:0;max-width:100%}.table-scroll,pre{contain:inline-size}p,li,h1,h2,h3,h4{overflow-wrap:anywhere}.chapter-search-panel[hidden],.chapter-search-results[hidden]{display:none!important}.chapter-search-panel{position:sticky;top:var(--reader-topbar-height,60px);z-index:21;background:#f4f8f3;border-bottom:1px solid #b9cbc5;padding:12px 26px;max-width:100%;font-size:14px;line-height:1.6}.chapter-search-form{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:7px;align-items:center}.chapter-search-form label{grid-column:1/-1;font-weight:700}.chapter-search-form input{min-width:0;width:100%;border:1px solid #7e9d90;border-radius:7px;padding:7px 10px;background:#fff;color:var(--ink);font:inherit;min-height:40px}.chapter-search-panel button{font-size:13px;min-height:36px;padding:6px 9px}.chapter-search-controls{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin-top:9px}.chapter-search-controls [role=status]{margin-right:auto;overflow-wrap:anywhere}.chapter-search-help{margin:8px 0 0;border:0;padding:0;font-size:12px;color:var(--muted)}.chapter-search-help summary{font-weight:400}.chapter-search-help p{margin:6px 0}.chapter-search-help[open]{max-height:20vh;overflow:auto}.chapter-search-results{margin-top:9px;border-top:1px solid var(--line);padding-top:8px;max-height:32vh;overflow:auto;overscroll-behavior:contain}.chapter-search-pages{display:flex;align-items:center;gap:7px;flex-wrap:wrap;font-size:12px}.chapter-search-pages span{margin-right:auto}.chapter-search-results ol{margin:5px 0;padding:0;list-style:none}.chapter-search-results li{margin:4px 0}.chapter-search-result{display:block;text-align:left;width:100%;white-space:normal;overflow-wrap:anywhere;background:#fff}.chapter-search-result strong{display:block;font-size:13px;color:var(--teal)}.chapter-search-result span{display:block;font-size:13px;line-height:1.65;margin-top:3px}.chapter-search-result[aria-current=true]{border-color:var(--teal);background:#e5f1e8}.chapter-search-result mark{background:#ffe69a;color:inherit;padding:0}mark.chapter-search-hit{background:#ffe38a;color:inherit;padding:0;border-radius:2px;outline:1px solid #ba8a11;scroll-margin-top:var(--scroll-offset,90px)}.chapter-search-form input:focus-visible,.chapter-search-panel summary:focus-visible,mark.chapter-search-hit:focus-visible{outline:3px solid #438f7e;outline-offset:3px}@media(max-width:900px){.chapter-search-panel{padding:10px 14px}body.nav-open .sidebar,body.nav-open .nav-shade{top:var(--reader-topbar-height,60px)}}@media(max-width:480px){.chapter-search-controls{gap:5px}.chapter-search-controls [role=status]{flex-basis:100%;font-size:13px}.chapter-search-controls button{flex:1 1 auto}.chapter-search-results{max-height:28vh}}@media print{.chapter-search-panel{display:none!important}mark.chapter-search-hit{background:transparent;color:inherit;outline:none}}
+.chapter-search-panel{max-height:calc(100vh - var(--reader-topbar-height,60px));max-height:calc(100dvh - var(--reader-topbar-height,60px));overflow-y:auto;overscroll-behavior:contain}
+:root[data-reader-theme]{color-scheme:light;--reader-sidebar:#f1f4f1;--reader-topbar:rgba(251,250,247,.98);--reader-hover:#e0ece6;--reader-hover-ink:#174d43;--reader-active-ink:#fff;--reader-external:#e4eee7;--reader-code:#eef1ed;--reader-pre:#18313d;--reader-pre-ink:#e8f0f0;--reader-th:#eaf3ee;--reader-row:#f6f9f6;--reader-panel-border:#b4cfc2;--reader-progress:#c8d8d0;--reader-search:#f4f8f3;--reader-current:#e5f1e8;--reader-link-hover:#173f75}
+:root[data-reader-theme="dark"]{color-scheme:dark;--paper:#141c22;--surface:#1d2830;--ink:#e3eaf0;--muted:#aab9c2;--line:#40515c;--teal:#83d8be;--soft:#233b3b;--reader-sidebar:#18242c;--reader-topbar:rgba(20,28,34,.98);--reader-hover:#2a4145;--reader-hover-ink:#b4ecd9;--reader-active-ink:#10231e;--reader-external:#23363d;--reader-code:#2a3943;--reader-pre:#0e171e;--reader-pre-ink:#dce8ef;--reader-th:#253b43;--reader-row:#19262e;--reader-panel-border:#46606a;--reader-progress:#3b515a;--reader-search:#1b2b33;--reader-current:#2a4145;--reader-link-hover:#b2e7ff}
+.reading-theme{display:inline-flex;align-items:center;gap:6px;font-size:13px;white-space:nowrap}.reading-theme select{font-size:13px;min-height:36px;cursor:pointer}
+:root[data-reader-theme] .sidebar{background:var(--reader-sidebar)}
+:root[data-reader-theme] .topbar{background:var(--reader-topbar)}
+:root[data-reader-theme] button,:root[data-reader-theme] select,:root[data-reader-theme] .chapter-search-form input{background:var(--surface);color:var(--ink);border-color:var(--line)}
+:root[data-reader-theme] button:hover{background:var(--soft)}
+:root[data-reader-theme] a:hover{color:var(--reader-link-hover)}
+:root[data-reader-theme] .sidebar nav a:hover{background:var(--reader-hover);color:var(--reader-hover-ink)}
+:root[data-reader-theme] .sidebar nav a.active,:root[data-reader-theme] .sidebar nav a.active:hover{background:var(--teal);color:var(--reader-active-ink)}
+:root[data-reader-theme] .sidebar nav a.external{background:var(--reader-external)}
+:root[data-reader-theme] .sidebar nav a.external.active{background:var(--teal)}
+:root[data-reader-theme] code{background:var(--reader-code)}
+:root[data-reader-theme] pre{background:var(--reader-pre);color:var(--reader-pre-ink)}
+:root[data-reader-theme] pre code{background:none;color:inherit}
+:root[data-reader-theme] th{background:var(--reader-th)}
+:root[data-reader-theme] tbody tr:nth-child(even){background:var(--reader-row)}
+:root[data-reader-theme] .ref-panel,:root[data-reader-theme] .step-card,:root[data-reader-theme] .overview-card,:root[data-reader-theme] .flow-node,:root[data-reader-theme] .fig-note,:root[data-reader-theme] .skip{background:var(--surface)}
+:root[data-reader-theme] .stepper,:root[data-reader-theme] .ref-picker,:root[data-reader-theme] .learning-figure{background:var(--soft);border-color:var(--reader-panel-border)}
+:root[data-reader-theme] .step-field{border-color:var(--line)}
+:root[data-reader-theme] .progress-track span{background:var(--reader-progress)}
+:root[data-reader-theme] .progress-track span.done{background:var(--teal)}
+:root[data-reader-theme] blockquote{background:var(--soft);color:var(--muted);border-color:var(--teal)}
+:root[data-reader-theme] .chapter-search-panel{background:var(--reader-search);border-color:var(--line)}
+:root[data-reader-theme] .chapter-search-result[aria-current=true]{background:var(--reader-current);border-color:var(--teal)}
+:root[data-reader-theme="dark"] mark.chapter-search-hit,:root[data-reader-theme="dark"] .chapter-search-result mark{background:#6b5013;color:#fff3c4;outline-color:#e8c86b}
+:root[data-reader-theme="dark"] ::selection{background:#386c73;color:#fff}
+@media print{
+ :root[data-reader-theme]{color-scheme:light;--paper:#fff;--surface:#fff;--ink:#111;--muted:#444;--line:#bbb;--teal:#175b50;--soft:#f2f5f3;--reader-code:#eee;--reader-pre:#f3f5f4;--reader-pre-ink:#111;--reader-th:#eaf0ec;--reader-row:#f7f7f7;--reader-panel-border:#aaa;--reader-progress:#ccc;--reader-active-ink:#fff}
+ :root[data-reader-theme] body{background:#fff;color:#111}
+ :root[data-reader-theme] .reading-theme{display:none!important}
+ :root[data-reader-theme] mark.chapter-search-hit{background:transparent;color:inherit;outline:none}
+}
+</style></head><body><a class="skip" href="#article">跳到正文</a><aside class="sidebar" aria-label="章节目录"><div class="brand"><small>COMPILER / CHAPTER 09</small>第9章 目标代码生成</div><p class="sub">完整讲解 · 分步推导 · 离线阅读</p><nav><a href="#navigation">学习导航</a><div class="nav-group">准备 · 目标机与地址</div><a href="#ch09-s01">1. 目标代码是什么</a><a href="#ch09-s02">2. 虚拟目标机与指令系统</a><a href="#ch09-s03">3. 把抽象地址变成访问方式</a><div class="nav-group">基础 · 指令与回填</div><a href="#ch09-s04">4. 运算赋值与输入输出的翻译</a><a href="#ch09-s05">5. 为什么需要回填和两个栈</a><a href="#ch09-s06">6. 条件与循环的回填规则</a><a href="#ch09-s07">7. 综合练习：嵌套控制的完整目标代码</a><div class="nav-group">应用 · 入口与调用</div><a href="#ch09-s08">8. 标号与过程入口</a><a href="#ch09-s09">9. 参数传递的目标指令</a><a href="#ch09-s10">10. 调用活动记录与返回</a><div class="nav-group">进阶 · 寄存器和代价</div><a href="#ch09-s11">11. 多寄存器分配与代码质量</a><div class="nav-group">综合应用 · 完整解题</div><a href="#ch09-s12">12. 综合应用：历年 while 题从标号 m 生成完整代码</a><a href="#ch09-s13">13. 综合练习：有效副本与调用协议</a><div class="nav-group">练习与复习 · 回查、自测和速查</div><a href="#ch09-s14">14. 知识联系与复习</a><a href="#ch09-s15">15. 自测与答案</a><a href="#ch09-s16">16. 排错与复习</a><a href="#ch09-s17">17. 末尾速查表</a><div class="nav-group">全课程</div><a class="external" href="00_学习导航.html">全课程学习导航</a></nav><div class="sidebar-footer">先看问题与条件，再跟踪推导和例题</div></aside><div class="nav-shade"></div><div class="shell"><header class="topbar"><span class="topbar-title">第9章 目标代码生成</span><div class="toolbar"><button id="menu" class="menu" aria-label="打开或收起目录" aria-expanded="false">目录</button><button data-font="-1" aria-label="减小正文字号">字号 −</button><button data-font="1" aria-label="增大正文字号">字号 ＋</button><label class="reading-theme" for="reading-theme">外观<select id="reading-theme" aria-label="阅读模式"><option value="light">白天</option><option value="dark">夜间</option></select></label><button id="chapter-search-toggle" type="button" aria-expanded="false" aria-controls="chapter-search-panel">搜索</button><button id="print">打印 / 保存 PDF</button></div></header><section id="chapter-search-panel" class="chapter-search-panel" aria-label="本章关键词搜索" hidden>
+  <form id="chapter-search-form" class="chapter-search-form" role="search">
+    <label for="chapter-search-input">搜索本章</label><input id="chapter-search-input" type="search" placeholder="中文关键词或英文术语" autocomplete="off" spellcheck="false" aria-describedby="chapter-search-status"><button type="submit">查找</button><button id="chapter-search-clear" type="button">清除</button>
+  </form>
+  <div class="chapter-search-controls"><span id="chapter-search-status" role="status" aria-live="polite">请输入关键词</span><button id="chapter-search-prev" type="button" disabled>上一处</button><button id="chapter-search-next" type="button" disabled>下一处</button><button id="chapter-search-results-toggle" type="button" aria-expanded="false" aria-controls="chapter-search-results" disabled>展开结果</button><button id="chapter-search-close" type="button" aria-label="收起搜索，继续阅读">收起</button></div>
+  <details class="chapter-search-help"><summary>搜索范围与操作</summary><p>检索本章正文、表格、代码、折叠答案和全部速查项。目录与分步演示不重复计入，演示对应的正文仍可搜索。忽略关键词首尾空白，其余按文字原样匹配，英文不区分大小写；内部空格和符号也参与匹配。搜索完全离线，不上传关键词。</p><p>点击结果定位高亮，折叠内容会自动展开。Ctrl＋K 打开搜索；输入框内按 Enter 查找或跳到下一处，Shift＋Enter 跳到上一处；Esc 收起。清除会移除高亮，并恢复由搜索展开的折叠内容。浏览器的 Ctrl＋F 仍可使用。</p></details>
+  <div id="chapter-search-results" class="chapter-search-results" hidden><div class="chapter-search-pages"><span id="chapter-search-page-status"></span><button id="chapter-search-page-prev" type="button">前一页</button><button id="chapter-search-page-next" type="button">后一页</button></div><ol id="chapter-search-list"></ol></div>
+</section>
+<main><article id="article"><h1>第9章 目标代码生成：怎样把四元式落实为读写与跳转指令</h1>
 <p>四元式说明了要做什么，却还没有确定从哪里取值、用哪个寄存器、写到哪里和跳到哪里。本章先固定教学目标机的访问规则，再生成运算、控制流与调用指令，最后讨论怎样减少重复访存。</p>
 <p><a id="navigation"></a></p>
 <h2>学习导航</h2>
@@ -19,7 +73,7 @@ h2,h3,h4,[id]{scroll-margin-top:0}.stepper{background:#edf6f1;border:1px solid #
 <tr>
 <td>基础 · 指令与回填</td>
 <td>怎样翻译简单操作，并正确配对、回填条件和循环跳转？</td>
-<td><a href="#ch09-s04">4. 运算赋值与输入输出的翻译</a>、<a href="#ch09-s05">5. 为什么需要回填和两个栈</a>、<a href="#ch09-s06">6. 条件与循环的回填规则</a>、<a href="#ch09-s07">7. 嵌套控制例的完整目标代码</a></td>
+<td><a href="#ch09-s04">4. 运算赋值与输入输出的翻译</a>、<a href="#ch09-s05">5. 为什么需要回填和两个栈</a>、<a href="#ch09-s06">6. 条件与循环的回填规则</a>、<a href="#ch09-s07">7. 综合练习：嵌套控制的完整目标代码</a></td>
 </tr>
 <tr>
 <td>应用 · 入口与调用</td>
@@ -28,17 +82,17 @@ h2,h3,h4,[id]{scroll-margin-top:0}.stepper{background:#edf6f1;border:1px solid #
 </tr>
 <tr>
 <td>进阶 · 寄存器和代价</td>
-<td>课件怎样管理寄存器、选择剥夺对象并比较访存代价？</td>
+<td>怎样管理寄存器、选择剥夺对象并比较访存代价？</td>
 <td><a href="#ch09-s11">11. 多寄存器分配与代码质量</a></td>
 </tr>
 <tr>
 <td>综合应用 · 完整解题</td>
 <td>沿历年 while 题核对完整地址，并检查寄存器值何时失效。</td>
-<td><a href="#ch09-s12">12. 综合应用：历年 while 题从标号 m 生成完整代码</a>、<a href="#ch09-s13">13. 寄存器复用的有效性检查</a></td>
+<td><a href="#ch09-s12">12. 综合应用：历年 while 题从标号 m 生成完整代码</a>、<a href="#ch09-s13">13. 综合练习：有效副本与调用协议</a></td>
 </tr>
 <tr>
 <td>练习与复习 · 回查、自测和速查</td>
-<td>回查课件、自测寻址与回填，检查生成后的必要值和控制流。</td>
+<td>回顾规则、自测寻址与回填，检查生成后的必要值和控制流。</td>
 <td><a href="#ch09-s14">14. 知识联系与复习</a>、<a href="#ch09-s15">15. 自测与答案</a>、<a href="#ch09-s16">16. 排错与复习</a>、<a href="#ch09-s17">17. 末尾速查表</a></td>
 </tr>
 </tbody></table></div>
@@ -48,8 +102,8 @@ h2,h3,h4,[id]{scroll-margin-top:0}.stepper{background:#edf6f1;border:1px solid #
 <h2>1. 目标代码是什么</h2>
 <h3>1.1 从四元式到可执行动作</h3>
 <p>四元式已经拆清计算，却还未指定寄存器、访存方式和实际跳转位置。后端需要结合目标机能力，把这些操作落实成指令，同时保持原来的值、地址和控制关系。</p>
-<p><strong>目标代码生成</strong>把经过语义分析、可选优化后的中间表示转换成某种目标机的指令。输入四元式说明“做什么”，目标代码还要明确“从哪取值、用哪个寄存器、写到哪、跳到哪”。翻译需要保持类型运算、存储访问与控制流的语义。</p>
-<p>并非所有编译器都必须先生成四元式；课件备注指出可以直接由语义分析生成目标代码。本课程保留 IR，是为了便于优化、组织阶段和适配不同后端。目标机的寄存器、指令集和寻址能力会影响后端实现与代码质量。</p>
+<p><strong>目标代码生成</strong> 把经过语义分析、可选优化后的中间表示转换成某种目标机的指令。输入四元式说明“做什么”，目标代码还要明确“从哪取值、用哪个寄存器、写到哪、跳到哪”。翻译需要保持类型运算、存储访问与控制流的语义。</p>
+<p>编译器也可以直接由语义分析生成目标代码。本章保留 IR，是为了便于优化、组织阶段和适配不同后端。目标机的寄存器、指令集和寻址能力会影响后端实现与代码质量。</p>
 <h3>1.2 四种目标形式</h3>
 <div class="table-scroll"><table>
 <thead>
@@ -80,7 +134,8 @@ h2,h3,h4,[id]{scroll-margin-top:0}.stepper{background:#edf6f1;border:1px solid #
 <td>相应运行系统解释执行或转换后执行</td>
 </tr>
 </tbody></table></div>
-<p>课件用 Pascal、Java 类虚拟目标说明可移植性：同一虚拟指令可由不同平台上的实现执行。虚拟目标不必只靠逐条解释，运行系统也可以采用编译等执行方式；下面使用课程教学机，其指令和寄存器含义按本章约定理解。</p>
+<p>这里用 Pascal、Java 类虚拟目标说明可移植性：同一虚拟指令可由不同平台上的实现执行。虚拟目标不必只靠逐条解释，运行系统也可以采用编译等执行方式；下面使用课程教学机，其指令和寄存器含义按本章约定理解。</p>
+<p>同样要把 1 写给 x，四种产物的区别在地址何时确定：绝对代码可以直接指向选定的地址 500；可重定位代码可记录“段基址+偏移12”，装载基址 1000 时落在 1012；汇编文本先用符号 x，由汇编与链接解析；虚拟指令可用局部槽编号 0，由虚拟机把槽 0 映射到实际存储。这里的数字分别属于独立示例，不是同一个 x 在四个阶段先后改变地址，也不指定真实机器编码。</p>
 <p><a id="ch09-s02"></a>
 <a id="二虚拟目标机与指令系统"></a>
 <a id="虚拟目标机与指令系统"></a>
@@ -154,7 +209,7 @@ h2,h3,h4,[id]{scroll-margin-top:0}.stepper{background:#edf6f1;border:1px solid #
 </tr>
 </tbody></table></div>
 <p>布尔例题采用 0 假、1 真。精确类型、浮点指令和溢出行为须由目标机定义。MOVEB 在本章约定 A1 为源、A2 为目的；重叠区域如何处理也需由具体实现规定，不能凭名称认定等于所有语言的某个库函数。</p>
-<p><code>SUB R,A</code> 是 R−A，不是 A−R；<code>ST A,R</code> 先写目的。课件第 15 页和部分讲者口述颠倒了 LD/ST 的字段，本章统一按指令表的方向，不沿用不一致的排列。</p>
+<p><code>SUB R,A</code> 是 R−A，<code>ST A,R</code> 则把寄存器 R 的值存到地址 A。后面的模板和完整代码统一使用这个方向；若把 LD、ST 的字段交换，生成器就会读写错误对象。</p>
 <h3>2.2 三种操作数访问方式</h3>
 <div class="table-scroll"><table>
 <thead>
@@ -181,7 +236,7 @@ h2,h3,h4,[id]{scroll-margin-top:0}.stepper{background:#edf6f1;border:1px solid #
 </tr>
 </tbody></table></div>
 <p>若 Mem[p]=500、Mem[500]=9，则 <code>LD R,p</code> 得 500，<code>LD R,*p</code> 得 9；<code>LEA R,p</code> 得 p 槽的地址。三者分别是保存的地址值、所指对象值、地址槽自身地址。</p>
-<p>课件例中的 <code>ADD R,1</code> 常用于表示加常量 1。为避免和“内存地址 1 的内容”混淆，本章把立即数写成 <code>#1</code>，因此加常量 1 写为 <code>ADD R,#1</code>。跳转中的 1 是指令地址，无需 #；立即数地址传参例如 <code>LD R,#返回位置</code> 则加 #。</p>
+<p>本例中的 <code>ADD R,1</code> 常用于表示加常量 1。为避免和“内存地址 1 的内容”混淆，本章把立即数写成 <code>#1</code>，因此加常量 1 写为 <code>ADD R,#1</code>。跳转中的 1 是指令地址，无需 #；立即数地址传参例如 <code>LD R,#返回位置</code> 则加 #。</p>
 <h3>2.3 专用寄存器</h3>
 <ul>
 <li>SP：当前活动记录首地址，本课程如此定义，不要套用其他机器的栈指针方向。</li>
@@ -189,7 +244,8 @@ h2,h3,h4,[id]{scroll-margin-top:0}.stepper{background:#edf6f1;border:1px solid #
 <li>SP0：静态存储区首地址，用于 SP0+偏移寻址。</li>
 <li>R1、R2、…：一般运算可用的寄存器。</li>
 </ul>
-<p><strong>寄存器</strong>是处理器内部保存值、地址或状态的高速存储部件。课件提到累加器、变址寄存器和通用寄存器等用途；本章先用一个通用寄存器 R 展开每条四元式，不追求最快，再引入多个寄存器的分配。</p>
+<p><strong>寄存器</strong> 是处理器内部保存值、地址或状态的高速存储部件。按用途可以区分累加器、变址寄存器和通用寄存器等；本章先用一个通用寄存器 R 展开每条四元式，再学习多个寄存器的分配。</p>
+<p>例如累加器原值为 3，执行把常量 2 加入累加器的操作后得到 5，结果默认仍在该寄存器；变址寄存器保存 i=2，元素宽 4、数组首址 100 时，可用于形成 <code>100+2×4=108</code> 的地址。通用寄存器则可由生成器分配来保存值或地址，例如 R1 保存数值 5，R2 保存地址 108。寄存器用途、可使用的寻址形式仍由目标机指令规定，不能仅凭保存的是数字就把值与地址混用。</p>
 <p><a id="ch09-s03"></a>
 <a id="三把抽象地址变成访问方式"></a>
 <a id="把抽象地址变成访问方式"></a>
@@ -202,10 +258,12 @@ h2,h3,h4,[id]{scroll-margin-top:0}.stepper{background:#edf6f1;border:1px solid #
 静态对象：            地址 = SP0 + Off
 外层直接对象：        地址 = Display[L] + Off
 </code></pre>
-<p>这里 L 是变量所属的过程层，Display[L] 保存该层活动记录首地址。按第六章 Pascal 课件的变量登记层 Lv，应先算 L=Lv-1；不能直接把 Lv 当作 Display 下标。若采用内嵌局部 Display 且每项占一个地址单位，须先读 <code>Mem[SP+DisplayOff+L]</code> 取得首地址，再加 Off；若采用静态链，则按过程层差取基址。具体 DisplayOff 和槽宽按第六章布局计算，不能把课件简写的 SP+display[L]+Off 无条件当成统一公式。</p>
+<p>这里 L 是变量所属的过程层，Display[L] 保存该层活动记录首地址。按第六章 Pascal 模型的变量登记层 Lv，应先算 L=Lv-1；不能直接把 Lv 当作 Display 下标。若采用内嵌局部 Display 且每项占一个地址单位，须先读 <code>Mem[SP+DisplayOff+L]</code> 取得首地址，再加 Off；若采用静态链，则按过程层差取基址。具体 DisplayOff 和槽宽按第六章布局计算，不能省略读取表项中基址这一步。</p>
+<p>取同一组基址核算：SP=200、SP0=1000、Display[1]=120。当前帧偏移 3 的直接对象在 203；静态区偏移 5 的直接对象在 1005；词法层 1、偏移 4 的直接对象在 124。若第三个对象是间接属性，且 <code>Mem[124]=600</code>，则 124 是地址槽，真正对象在 600，读值还需 <code>Mem[600]</code>。先由 Level 选基址，再加 Off 找槽，最后按 Access 决定是否再解引用。</p>
 <h3>3.2 间接属性要延续到读取和写入</h3>
-<p>若符号是引用参数或数组寻址结果，计算出的是<strong>保存地址的槽位置</strong>，对象值还需再解引用。假定 <code>slot(x)=SP+Offx</code>：读 x 的值用 <code>Mem[Mem[slot(x)]]</code>；写 x 则写到 <code>Mem[slot(x)]</code> 指定的位置。</p>
+<p>若符号是引用参数或数组寻址结果，计算出的是<strong>保存地址的槽位置</strong> ，对象值还需再解引用。假定 <code>slot(x)=SP+Offx</code>：读 x 的值用 <code>Mem[Mem[slot(x)]]</code>；写 x 则写到 <code>Mem[slot(x)]</code> 指定的位置。</p>
 <p>AADD 的结果 t 保存数组元素地址。例如 <code>(AADD,A,offset,t)</code> 要形成基址加偏移，不读取元素。随后 <code>(ADDI,t,1,u)</code> 若 t 标记为地址引用型，就读取 t 所指元素再加 1；<code>(ASSIG,u,-,t)</code> 写回该元素。若目标不直接支持这种寻址方式，后端用额外加载或地址寄存器展开，不能强行仍限定为三条真实指令。</p>
+<p>小例子：只给定一个地址形参q，槽在104，Mem[104]=500，Mem[500]=7。算出槽104还没有得到对象值；读取q所代表对象应先取500，再取7，赋8则写500，不能把104中的地址覆盖为8。</p>
 <p><a id="ch09-s04"></a>
 <a id="四运算赋值与输入输出的翻译"></a>
 <a id="运算赋值与输入输出的翻译"></a></p>
@@ -245,14 +303,16 @@ ST  T,R
 </tr>
 </tbody></table></div>
 <p>间接对象须使用相应间接访问；例如写引用形参 y，目的为 <code>*slot(y)</code>。输入类型检查和输出格式由源语言及运行系统约定。这些示例展示映射方法，不能仅凭 IN/OUT 名称推断真实设备协议。</p>
+<p>小例子：整数x为直接对象，当前值2，赋值y:=x时先LD R,x取得2，再ST y,R写给y。输入到x的IN操作应写x的位置，输出x的OUT操作读x的值；具体设备协议不由IN/OUT名称自动确定。</p>
 <p><a id="ch09-s05"></a>
 <a id="为什么需要回填和两个栈"></a>
 <a id="五为什么需要回填和两个栈"></a>
 <a id="ref-回填"></a></p>
 <h2>5. 为什么需要回填和两个栈</h2>
 <h3>5.1 先生成跳转，后知道目的地</h3>
-<p>读到 THEN 时，后面假分支尚未生成，不知道它会从第几条目标指令开始。可以先生成 <code>JMPF R,?</code>，记下这条指令的位置，生成后续代码后再把 ? 替换为正确目的地。这称为<strong>回填 backpatching</strong>。</p>
-<p>课件把未填完地址的指令叫“半条指令”；它仍占一个完整的指令位置，只是一个字段未确定，不是实际长度只有半条。课堂模型一条助记符占一个指令编号；真实目标机应按编码字节长度计算地址。</p>
+<p>读到 THEN 时，后面假分支尚未生成，不知道它会从第几条目标指令开始。可以先生成 <code>JMPF R,?</code>，记下这条指令的位置，生成后续代码后再把 ? 替换为正确目的地。这称为<strong>回填 backpatching</strong> 。</p>
+<p>未填完地址的指令可称为“半条指令”；它仍占一个完整的指令位置，只是一个字段未确定，不是实际长度只有半条。课堂模型一条助记符占一个指令编号；真实目标机应按编码字节长度计算地址。</p>
+<p>小例子：第10条先生成<code>JMP  ?</code>，把10记入待填表。生成后续片段后发现目标标号在18，于是将第10条改成JMP 18。10是待改指令的位置，18才是运行时转移目标。</p>
 <h3>5.2 L1 与 L2 保存的不是同一件事</h3>
 <div class="table-scroll"><table>
 <thead>
@@ -282,7 +342,7 @@ ST  T,R
 <h2>6. 条件与循环的回填规则</h2>
 <p>已经能记录待填跳转，接下来要在遇到 ELSE、ENDIF 和 ENDWHILE 时算出正确目的地。分支出口与循环回边作用不同，须按结构分别配对。</p>
 <h3>6.1 THEN、ELSE、ENDIF</h3>
-<p>用 next 表示<strong>下一条尚未生成指令的编号</strong>，以它统一计算：</p>
+<p>用 next 表示<strong>下一条尚未生成指令的编号</strong> ，以它统一计算：</p>
 <ol>
 <li>THEN x：生成 LD R,x 和 JMPF R,?；把后者位置压 L2。</li>
 <li>ELSE：设当前 next=m。生成第 m 条 JMP ?，弹出 THEN 的跳转位置，把其目的地填为 m+1（假分支起点）；把第 m 条无条件跳转压 L2。</li>
@@ -300,33 +360,22 @@ ST  T,R
 </code></pre>
 <p>处理 ELSE 时 next=5，假分支从 6 开始，所以第 2 条填 6，不能填 5，否则假分支会先执行跳过自身的 JMP。8 是后续位置；若整个片段到此结束，则表示离开片段，不应伪造为一条已生成的指令。</p>
 <h3>6.2 WHILE、DO、ENDWHILE</h3>
-<ol>
-<li>WHILE：不发指令，把 next 压 L1，入口在<strong>条件计算之前</strong>。</li>
-<li>DO x：生成 LD R,x 和 JMPF R,?，把假转移位置压 L2。</li>
-<li>ENDWHILE：生成 JMP L1 栈顶并弹 L1；随后 next 指向循环后续，把 L2 中对应 DO 的假转移填为 next 并弹栈。</li>
-</ol>
-<p><code>while x&lt;3 do x:=x+1</code> 的未优化单寄存器代码：</p>
-<pre><code class="language-text">1  LD   R,x
-2  LT   R,#3
-3  ST   t1,R
-4  LD   R,t1
-5  JMPF R,12
-6  LD   R,x
-7  ADD  R,#1
-8  ST   t2,R
-9  LD   R,t2
-10 ST   x,R
-11 JMP  1
-12 后续指令位置
+<p>WHILE记录条件入口，DO留下条件假时的出口，ENDWHILE生成回边并定位后续位置。</p>
+<p>小例子：b为bool，语句<code>while b do b:=false</code>；本例教学机中0为假，JMPF R,L在R为假时跳L：</p>
+<pre><code class="language-text">1 LD R,b
+2 JMPF R,6
+3 LD R,#0
+4 ST b,R
+5 JMP 1
 </code></pre>
-<p>回到 1 会读取更新后的 x；若回到 4，只读取上次比较结果 t1，就可能永远重复旧条件。11 发出后 next=12，正是第 5 条退出目的地。</p>
+<p>入口是1，待填跳转位置是2，生成回边5之后下一位置为6，故把2的目的地填6。b初值真时只执行一次体，回到1重读到假后退出；初值假则零次。6是片段出口，不是另造的一条指令。</p>
 <p><a id="ch09-s07"></a>
 <a id="七嵌套控制例的完整目标代码"></a>
 <a id="嵌套控制例的完整目标代码"></a></p>
-<h2>7. 嵌套控制例的完整目标代码</h2>
-<p>单个结构的规则正确，还要检查嵌套时是否填到了对应层的跳转。下面固定课件 IR，统一编号，再同时跟踪代码地址和两个辅助栈。</p>
+<h2>7. 综合练习：嵌套控制的完整目标代码</h2>
+<p>单个结构的规则正确，还要检查嵌套时是否填到了对应层的跳转。下面给出完整 IR，统一编号，再同时跟踪代码地址和两个辅助栈。</p>
 <h3>7.1 先确认四元式结构</h3>
-<p>课件 22 第 17—18 页：</p>
+<p>完整输入为：</p>
 <pre><code class="language-text">while x&lt;y do begin
   y:=y+1;
   if y&gt;0 then y:=y−x
@@ -391,6 +440,13 @@ end
 </code></pre>
 <p>34 是片段出口，并非本片段生成的第 34 条真实指令。</p>
 <h3>7.3 栈的变化与执行核对</h3>
+<p>本综合题重新列出源结构，所有变量为整数，按无溢出教学规则处理：</p>
+<pre><code class="language-text">while x&lt;y do begin
+  y:=y+1;
+  if y&gt;0 then y:=y−x
+  else while y&lt;0 do y:=y+x
+end
+</code></pre>
 <div class="table-scroll"><table>
 <thead>
 <tr>
@@ -470,10 +526,11 @@ end
 (ASSIG,2,-,x)      目标：4 LD R,#2；5 ST x,R
 </code></pre>
 <p>所以第 1 条改为 JMP 4。同一 L 可能有多个前向跳转，都要填，不能一个标号只记一条待填指令。程序结束仍找不到 L 应报未定义标号；不能把未找到的地址当 0 使用。</p>
-<p>课件用“先令地址字段指向标号表单元，末尾再替换为代码地址”的方式组织这个关联。它是编译时回填数据结构，不意味着最终运行时每个 goto 都必须访问编译器的符号表。</p>
+<p>这里用“先令地址字段指向标号表单元，末尾再替换为代码地址”的方式组织这个关联。它是编译时回填数据结构，不意味着最终运行时每个 goto 都必须访问编译器的符号表。</p>
 <h3>8.2 ENTRY 定位与调用前后分工</h3>
-<p><code>(ENTRY,Labelf,Size,Level)</code> 在课件的调用者建帧方案下不发指令，把 next 填到过程/函数信息的 Code 项。Size 和 Level 已由前面阶段计算好，供调用准备使用。</p>
+<p><code>(ENTRY,Labelf,Size,Level)</code> 在本章的调用者建帧方案下不发指令，把 next 填到过程/函数信息的 Code 项。Size 和 Level 已由前面阶段计算好，供调用准备使用。</p>
 <p>调用前的建帧/环境设置也可以部分移到被调用者入口生成序言代码。这种方案下 ENTRY 附近会有指令，两者并不矛盾；一套实现必须统一选择，不能两边都重复建立活动记录。嵌套声明产生的内层代码与外层入口定位遵循第七章安排，不能因 ENTRY 自身不发指令就顺序执行全部声明体。</p>
+<p>例如 next=20，处理 <code>(ENTRY,Lf,12,1)</code> 时登记 <code>Code(f)=20、Size(f)=12、Level(f)=1</code>。ENTRY 不发指令，因此 next 仍是 20；后面的第一条实际目标指令取得编号 20。调用 f 时使用 Code=20 作入口，Size=12 用于安排帧，Level=1 用于环境管理，三个字段分别服务不同动作。</p>
 <p><a id="ch09-s09"></a>
 <a id="九参数传递的目标指令"></a>
 <a id="参数传递的目标指令"></a>
@@ -481,7 +538,7 @@ end
 <h2>9. 参数传递的目标指令</h2>
 <p>调用前要把实参送入下一活动记录，但形参可能需要值，也可能需要对象地址。先区分传递内容与目的槽位置，才能选择 LD、LEA 和 ST。</p>
 <h3>9.1 值参数复制内容</h3>
-<p><code>(VALACT,t,Offset,Size)</code> 的 Offset 是<strong>下一活动记录</strong>的相对偏移，所以目的在 TOP+Offset：</p>
+<p><code>(VALACT,t,Offset,Size)</code> 的 Offset 是<strong>下一活动记录</strong> 的相对偏移，所以目的在 TOP+Offset：</p>
 <pre><code class="language-text">实参是直接对象：
 LD R,slot(t)
 ST Offset(TOP),R
@@ -491,7 +548,8 @@ LD R,*slot(t)
 ST Offset(TOP),R
 </code></pre>
 <p>实参是常量则用 LD R,#常量。Size 大于一个存储单位时要按类型宽度复制，不能假定任意实数/结构只需一次单字 ST。</p>
-<p>课件允许数组值参数，用 <code>MOVEB 源对象地址,Offset(TOP),Size</code> 成组复制。这个规则是课件教学语言的按值数组语义；不应类推为 C 中数组形参按整个数组值复制。若实参是指向数组对象的间接引用，应先取得所指数组基址作为块传送源。</p>
+<p>本章教学语言允许数组值参数，用 <code>MOVEB 源对象地址,Offset(TOP),Size</code> 成组复制。这个规则使用本章教学语言的按值数组语义；不应类推为 C 中数组形参按整个数组值复制。若实参是指向数组对象的间接引用，应先取得所指数组基址作为块传送源。</p>
+<p>小例子：普通整数a的槽为100、Mem[100]=7；新参数区TOP=200，形参偏移4且大小1。值传递读取7并写Mem[204]=7。传入的是7，不是100；进入被调函数后形参是独立副本。</p>
 <h3>9.2 变量参数复制地址</h3>
 <p><code>(VARACT,t,Offset,Size)</code>：</p>
 <pre><code class="language-text">实参是直接对象：
@@ -504,17 +562,49 @@ ST Offset(TOP),R
 </code></pre>
 <p>第一种取对象地址；第二种槽里已有对象地址，直接复制这个地址，不加 *。若在第二种中用 LD R,*slot(t)，传走的是对象值；若用 LEA R,slot(t)，传走的是地址槽自身地址，都不符合原变量参数含义。</p>
 <p>例如 Mem[slot(Y)]=500，Y 对象在地址 500。继续引用传参应存 500 到新形参槽，不能存 Mem[500]，也不能存 slot(Y)。VARACT 的 Size 用于形参信息/检查，传地址槽占多大按目标地址宽度，不等于复制 Size 个对象单元。</p>
+<p>统一输入比较两种传递：TOP=300；普通变量 X 的槽为 104，<code>Mem[104]=7</code>；引用形参 Y 的槽为 108，<code>Mem[108]=212、Mem[212]=9</code>。假设新形参槽分别位于 TOP+4、TOP+5：</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>实参和方式</th>
+<th>传入 304 的内容（若占第一个形参槽）</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>X 作为值参数</td>
+<td>7</td>
+<td>复制 X 的值，之后改形参不改变 X</td>
+</tr>
+<tr>
+<td>X 作为变量参数</td>
+<td>104</td>
+<td>保存 X 对象的地址，之后可写回 X</td>
+</tr>
+<tr>
+<td>Y 作为值参数</td>
+<td>9</td>
+<td>先从 108 取地址212，再从212取值9</td>
+</tr>
+<tr>
+<td>Y 作为变量参数</td>
+<td>212</td>
+<td>转传其已指向的对象地址；不能传108</td>
+</tr>
+</tbody></table></div>
+<p>若放第二个形参槽，则写到 305，传递的内容不因目标槽偏移改变。表中每行是独立方案，不是同时向 304 连写四次。</p>
 <h3>9.3 函数参数与实参计算次序</h3>
-<p>直接声明函数与形式函数参数的传递，要保留可调用入口和访问非局部变量所需的环境。具体采用入口/环境二元组、Display 或静态链由第六章方案规定；第 22 课件没有给它们完整指令序列，本章不填造统一的寄存器数量和偏移。</p>
+<p>直接声明的函数与作为参数的函数，均需保存入口及访问非局部变量所需的环境。第六章解释环境选择；下面给出两槽传递协议。具体机器指令取决于已选的 Display 或静态链布局，不预设所有机器具有相同寄存器数与管理区偏移。</p>
 <p>若实参表达式中有嵌套调用，应完成这些表达式并保存结果，再安放外层实参，或采用有明确隔离的待调用区。单纯把每个实参算出后立即写 TOP 区，在内层调用复用该区域时可能破坏先前参数。</p>
+<p>入口与环境的传递也可按字段追踪。设形参过程 G 占两个地址单位，目标偏移 d 是入口槽、d+1 是环境槽；实在嵌套过程 h 的 Code=900、应捕获的父帧首址=100。准备实参时写 <code>Mem[TOP+d]=900、Mem[TOP+d+1]=100</code>。若再把已有形参 G 转传给另一过程，则从 G 的两个源槽取出这两个内容，原样复制到新的两个目标槽，不能改用当前调用者的帧。此处给的是抽象传递协议，具体装载、存储指令和 d 的数值须由选定帧布局决定；环境还必须仍然有效。</p>
 <p><a id="ch09-s10"></a>
 <a id="十调用活动记录与返回"></a>
 <a id="调用活动记录与返回"></a>
 <a id="ref-调用"></a></p>
 <h2>10. 调用活动记录与返回</h2>
 <p>传好参数还不足以完成调用：被调用者要知道如何返回，调用者要能恢复自身并取回结果。下面先固定管理字段，再按保存、建帧、转入和恢复的顺序核对。</p>
-<h3>10.1 本课件的管理字段</h3>
-<p>本章使用第 22 课件的简化布局：</p>
+<h3>10.1 本章的管理字段</h3>
+<p>本章调用协议使用以下简化布局：</p>
 <div class="table-scroll"><table>
 <thead>
 <tr>
@@ -549,9 +639,10 @@ ST Offset(TOP),R
 <td>依照 Size 和布局确定</td>
 </tr>
 </tbody></table></div>
-<p>第六章也讨论了在帧里保存“返回值目的地址”的方案；那是另一种返回约定。这里偏移 2 放<strong>返回值本身</strong>，不能将它又当目的地址解引用，否则调用双方会不一致。多单元返回类型需要扩展相应布局，不能让它覆盖紧接的管理字段。</p>
+<p>第六章也讨论了在帧里保存“返回值目的地址”的方案；那是另一种返回约定。这里偏移 2 放<strong>返回值本身</strong> ，不能将它又当目的地址解引用，否则调用双方会不一致。多单元返回类型需要扩展相应布局，不能让它覆盖紧接的管理字段。</p>
+<p>小例子：仅为识别字段，设新帧首址100，偏移0、1、2分别存动态链40、返回地址25、结果值8。返回恢复SP取Mem[100]=40，跳转取Mem[101]=25，交付结果取Mem[102]=8；不能把槽102中的8再当成结果目的地址。</p>
 <h3>10.2 CALL 的工作顺序</h3>
-<p>对 <code>(CALL,f,true,tresult)</code>，沿用课件表示，生成器应完成：</p>
+<p>对 <code>(CALL,f,true,tresult)</code>，f 的类别由符号信息确定，生成器应完成：</p>
 <ol>
 <li>从 f 的语义信息或形式函数参数取得入口、层次、大小和所需环境。</li>
 <li>在新帧准备区填写静态链或 Display 等变量访问环境。</li>
@@ -562,58 +653,63 @@ ST Offset(TOP),R
 <li>返回后如为函数，从结果槽取值存到 tresult；过程无需此步。</li>
 </ol>
 <p>动态链按调用关系设置，静态链/Display 按声明环境设置，不能一律把 SP 当所需静态父帧。形式函数参数还须采用传入的环境，不能仅根据调用地点的层次构造环境。</p>
-<h3>10.3 返回地址 A+5 的准确含义</h3>
-<p>课件 22 第 25 页在填写动态链和其他管理信息后，列出以下序列。其中 sp、top 分别表示 SP、TOP：</p>
-<pre><code class="language-text">[A]   LD R, A+5
-[A+1] ST 1(top), R
-[A+2] ST sp, top
-[A+3] ST top, top + sem[f].size
-[A+4] JMP sem[f].code
-[A+5] LD R, 2(top)
-[A+6] ST result, R
-</code></pre>
-<p>这里 <code>[A+2]</code>、<code>[A+3]</code> 是课件用 ST 形式表示的建帧简写，含义分别为 SP←旧 TOP、TOP←旧 TOP+Sizef；不能按前面只操作内存的普通 ST 模板机械执行。第 A 条要把返回位置 A+5 当地址常量装入 R，按本章立即数记法应写 <code>LD R,#(A+5)</code>。这些建帧语句应按课件的抽象操作解释，不能当作可直接执行的普通内存 ST 指令。</p>
-<p>A+5 由这段特定序列的五个位置推得；增加指令或改变编码长度后，要重新定位返回后的第一条指令。函数返回后，TOP 按本章协议恢复为被调帧原首址，故可暂从 2(top) 读结果，并应在该区域被下次调用复用前取走。</p>
+<p>小例子：普通实在函数f的入口20、帧大小4，调用前SP=60、TOP=70；参数已安排，保存DL=60及本次返回位置后，令新SP=70、TOP=74，再跳20。f的词法环境另按声明关系设置，不能因DL为60就断言SL也必须为60。</p>
+<h3>10.3 返回地址由本次序列长度决定</h3>
+<p>小例子：调用准备与转入函数共占5条指令，从编号20开始，依次占20—24。返回后第一条应执行的指令在25，因此保存返回地址25，也可写20+5。</p>
+<p>若同一协议增加一条保存现场指令，调用序列占20—25，返回位置就改成26。+5来自这次序列长度，不是CALL、某个函数名或所有目标机永远不变的常数。原教学调用伪指令的完整辨析放在综合练习。</p>
 <h3>10.4 一个带数值的帧变化</h3>
-<p>设调用前 SP=100、TOP=140，f 的帧大小 30，下一帧基址 B=140：</p>
-<pre><code class="language-text">Mem[140]   =100        动态链
-Mem[141]   =返回后续地址
-Mem[142]   =函数结束时放结果的槽
-Mem[143]   =f 的静态层次
-形参写在 140+对应偏移
-调用转入后：SP=140，TOP=170
-</code></pre>
-<p>结束时令 TOP←旧 SP=140，SP←Mem[140]=100，再跳 Mem[141]；调用者恢复，140 起的空间可再用，且返回后应及时读取 Mem[142]。单纯调整指针并没有把每一个内存单元擦除，这也是栈区释放的含义。</p>
+<p>小例子：调用前SP=40、TOP=50，新帧大小4，偏移0存DL、1存RA、2存结果、3存过程层。本次返回位置25，过程层1，结果为整数9，各字段均1单位。</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>单元</th>
+<th>保存内容</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>50</td>
+<td>40</td>
+<td>返回恢复调用者SP</td>
+</tr>
+<tr>
+<td>51</td>
+<td>25</td>
+<td>返回继续执行的位置</td>
+</tr>
+<tr>
+<td>52</td>
+<td>9</td>
+<td>本次函数结果</td>
+</tr>
+<tr>
+<td>53</td>
+<td>1</td>
+<td>被调过程层</td>
+</tr>
+</tbody></table></div>
+<p>进入时SP=50、TOP=54。退出时先取得结果及控制信息，再令TOP=50、SP=40，跳25；若协议允许调用者暂从旧帧取结果，也必须在50起的区域被复用前取得52中的9。这里只展示选定的小布局，不是通用ABI。</p>
 <h3>10.5 ENDFUNC、ENDPROC 与 RETURN</h3>
 <p>结束代码先按约定保存函数结果，再恢复需恢复的寄存器与访问环境，调整 SP/TOP，按返回地址跳转。若 RETURN 携带一个结果，先存到当前帧结果槽再走同一套退出代码；不要同时在 RETURN 和顺序执行的 ENDFUNC 中重复弹帧。</p>
-<p>课件抽象过程是：</p>
+<p>抽象返回过程为：</p>
 <pre><code class="language-text">恢复寄存器及变量访问环境
 TOP ← SP
 SP  ← Mem[TOP+0]
 跳转至 Mem[TOP+1]
 </code></pre>
 <p>要按恢复依赖安排顺序：结果、环境信息和管理字段尚需读取时不能丢掉基址；恢复通用寄存器后也不能随意用它们覆盖调用者需要的值。本课程不指定保存几个寄存器，所以“恢复现场”不能擅自展开为固定的两条或八条指令。</p>
+<p>小例子：被调帧首址80，保存DL=40、返回位置30，结果槽已得到6。统一退出段先保住6、40和30，再恢复环境并回收帧，恢复SP=40、跳30；RETURN和末尾结束标记不能各自再回收同一帧。</p>
 <p><a id="ch09-s11"></a>
 <a id="十一多寄存器分配与代码质量"></a>
 <a id="多寄存器分配与代码质量"></a>
 <a id="ref-寄存器"></a></p>
 <h2>11. 多寄存器分配与代码质量</h2>
 <h3>11.1 为什么不必每步立刻存回内存</h3>
-<p>单寄存器模板让每个结果先 ST 到内存，下一四元式再 LD。多个寄存器或更合理的连续生成可以让结果留在寄存器中，避免同一值来回搬运。</p>
-<p>例如 <code>t1=x+y; t2=t1+z; w:=t2</code> 的机械翻译共 8 条：</p>
-<pre><code class="language-text">LD R,x; ADD R,y; ST t1,R
-LD R,t1; ADD R,z; ST t2,R
-LD R,t2; ST w,R
-</code></pre>
-<p>若 t1、t2 没有其他需要保留的使用，直接：</p>
-<pre><code class="language-text">LD R,x
-ADD R,y
-ADD R,z
-ST w,R
-</code></pre>
-<p>仍得到 w=x+y+z，也没有擅自重排成 x+(y+z)。类型语义尤其是浮点结合性可能不允许任意重排。</p>
+<p>每次把中间结果存入内存、随后又装入，会产生可以避免的搬运。</p>
+<p>小例子：短IR为临时u=x+1、y=u+2，u没有别的使用。教学指令可直接<code>LD R,x；ADD R,#1；ADD R,#2；ST y,R</code>，让u的值暂留R。x=3时R依次3、4、6，最后y=6；没有重排运算顺序，也没有丢掉需要保留的用户变量写入。</p>
+<p>若u还有其他读取，则须另外保证那个使用也能得到u的正确值，不能仅凭它叫“临时量”就删除一切保存。</p>
 <h3>11.2 寄存器状态表和失效处理</h3>
-<p>课件表项为寄存器名字、空闲/占用状态、占用的变量名。判断能否省存储时，还要知道内存中是否已经保存同一最新值，不能只看名字登记。</p>
+<p>本章表项为寄存器名字、空闲/占用状态、占用的变量名。判断能否省存储时，还要知道内存中是否已经保存同一最新值，不能只看名字登记。</p>
 <div class="table-scroll"><table>
 <thead>
 <tr>
@@ -643,8 +739,9 @@ ST w,R
 </tr>
 </tbody></table></div>
 <p>同一值可能有多个名字，因为复制赋值使它们相等；某个名字被新定义后，不能仍把旧寄存器当它的当前值。</p>
+<p>小例子：R1保存5，名字描述同时登记x、y，因为执行过y:=x。随后只给y重新赋3，则R1中的5仍可代表x，不能再代表y。寄存器内容、关联名字和内存是否最新都要随定义更新。</p>
 <h3>11.3 分配和剥夺的步骤</h3>
-<p><strong>寄存器分配</strong>决定一个值放在哪个寄存器；<strong>剥夺/溢出处理</strong>在没有空闲寄存器时释放一个，必要时把值保存到内存。</p>
+<p><strong>寄存器分配</strong> 决定一个值放在哪个寄存器；<strong>剥夺/溢出处理</strong> 在没有空闲寄存器时释放一个，必要时把值保存到内存。</p>
 <ol>
 <li>所需值已经在寄存器且记录有效，就复用。</li>
 <li>有空闲寄存器就分配，并更新状态表。</li>
@@ -652,20 +749,21 @@ ST w,R
 <li>被剥夺的值若仍活跃且内存副本过时，先存回；否则可以省写回。</li>
 <li>再装入新值并更新描述。</li>
 </ol>
-<p>课件提出<strong>最远使用点</strong>：剥夺下一次使用距离最远者。基本块内顺序已知，可以分析下一次使用；跨分支的真实未来执行路径不能简单确定。它是在课堂简化模型下的局部策略，不保证面对所有寄存器约束和指令集都达到全局最优。</p>
-<p>课件保守实现是在每个块结束时把寄存器内容存回并清空记录。更精细实现只需确保后续可观察/活跃的值正确落地，已死临时量可不写回；无充分分析时采用保守方案。</p>
+<p>可以采用<strong>最远使用点</strong> ：剥夺下一次使用距离最远者。基本块内顺序已知，可以分析下一次使用；跨分支的真实未来执行路径不能简单确定。它是在课堂简化模型下的局部策略，不保证面对所有寄存器约束和指令集都达到全局最优。</p>
+<p>本章保守实现是在每个块结束时把寄存器内容存回并清空记录。更精细实现只需确保后续可观察/活跃的值正确落地，已死临时量可不写回；无充分分析时采用保守方案。</p>
+<p>设当前在基本块第 10 条，两个寄存器都占用：R1 保存 x，下次在第 12 条使用，且内存副本已过时；R2 保存 y，下次在第 20 条使用，且内存已有 y 的最新值。现在需要给 z 一个寄存器，按最远下一使用选择 R2；因 y 的内存副本有效，无需先写回，下次使用时可重新载入。若 R2 中的 y 已被改过而内存仍旧，则剥夺前应先保存 y。选择谁依据下一使用距离，是否写回还依据活跃性与副本是否最新，不能由同一列状态包办。</p>
 <h3>11.4 间接写和调用为什么影响寄存器副本</h3>
 <p>例如 R1 保存 x 的值，随后 <code>*p:=7</code>，p 可能指向 x，则 R1 的 x 副本可能已过时。应按别名信息使受影响的记录失效。若 x 的最新值此前只在 R1 中，还要保证间接读取/写入发生前内存状态符合语义，不能事后简单清空表就了事。</p>
 <p>未知函数调用也可能读写全局对象或引用参数。必须按调用约定保存需跨调用的寄存器值，并对可变内存信息作适当写回/失效。寄存器优化不只是“尽量不存”，还必须保证每个读取拿到当前正确值。</p>
 <h3>11.5 用访存次数评价目标程序</h3>
-<p>课件以访问内存一次代价 1 建立教学模型。为了计数清楚，这里只计<strong>数据内存访问</strong>：直接对象读写各 1；读取间接对象通常先读地址槽、再读对象，共 2；仅用寄存器或立即数不访问数据内存。若把取指也计入，须对所有候选一致计入，不能混用两种口径。</p>
-<p>前面的 8 条机械代码在 x/y/z/t1/t2/w 全为直接对象时共 8 次数据访问；4 条代码共 4 次。存储顺序和寄存器占用优化确实减少了搬运，但这不是实际 CPU 周期公式：真实效率还受缓存、流水线、分支、指令延迟等因素影响。</p>
-<p>间接读成本较高解释了课件强调复用地址与寄存器的理由；若优化增加昂贵计算或改变缓存行为，不能只凭指令数更少就断言实际一定更快。</p>
+<p>本节按每次数据内存读或写代价1计数，不计取指。立即数和纯寄存器操作不访问数据内存，间接读通常还需先读取地址槽。</p>
+<p>独立小例：临时t=a+1，随后z=t+2，t无其他使用。先存再读t的六指令序列是<code>LD R,a；ADD R,#1；ST t,R；LD R,t；ADD R,#2；ST z,R</code>，数据访存分别发生在读a、写t、读t、写z，共4次。若把t留在R，只读a和写z，共2次。</p>
+<p>四次与两次是这个教学模型的数据访存比较，不是实际CPU周期；真实性能还受缓存、流水线和指令延迟等因素影响。</p>
 <p><a id="ch09-s12"></a>
 <a id="综合应用历年-while-题从标号-m-生成完整代码"></a></p>
-<h2>12. 综合应用：历年 while 题从标号 m 生成完整代码</h2><div class="stepper" aria-label="分步图解"><h3>i=8的while执行与回填</h3><p class="fig-intro">使用正文11条模板，初始i=8。LT覆盖R为布尔，回边m处重读i，假分支目标m+11。</p><div class="progress-track" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span></div><div class="step-tools"><button id="step-prev">上一步</button><label for="step-range">推导步骤</label><input id="step-range" type="range" min="0" max="5" value="0"><button id="step-next">下一步</button><span id="step-count" class="step-count"></span></div><div id="step-panel" class="step-card" aria-live="polite"></div><details><summary>完整轨迹（适合打印与连续核对）</summary><div class="table-scroll"><table><thead><tr><th>执行点</th><th>i</th><th>R/动作</th><th>结果</th></tr></thead><tbody><tr><td>第一次条件</td><td>8</td><td>LD 8；LT #10得1</td><td>JMPF不跳，进入体</td></tr><tr><td>第一次赋值</td><td>8→9</td><td>ADD #1得9；ST i</td><td>写原对象i=9，再JMP m</td></tr><tr><td>第二次条件</td><td>9</td><td>LD 9；LT #10得1</td><td>仍进入体</td></tr><tr><td>第二次赋值</td><td>9→10</td><td>ADD #1得10；ST i</td><td>写i=10，再JMP m</td></tr><tr><td>第三次条件</td><td>10</td><td>LD 10；LT #10得0</td><td>JMPF跳m+11，退出；体执行2次</td></tr><tr><td>边界对照</td><td>初始12</td><td>首轮LT为0</td><td>体0次，i仍12；不是所有初值最后都等于10</td></tr></tbody></table></div></details></div>
-<p><strong>来源：</strong>期末题一.4，第2页。输入是<code>while(i&lt;10) i=i+1;</code>，仅一个通用寄存器R，目标第一条标号为[m]。采用前文教学指令方向：LD R,A读取；ST A,R写入；LT R,A把比较结果放回R；JMPF R,L在R为假时跳转。i和临时量都是已确定的直接对象；这里先用名字简写其访问地址。</p>
-<h3>12.1 按四元式模板逐条生成</h3>
+<h2>12. 综合应用：历年 while 题从标号 m 生成完整代码</h2>
+<p><strong>来源：</strong> 期末题一.4，第2页。输入是<code>while(i&lt;10) i=i+1;</code>，仅一个通用寄存器R，目标第一条标号为[m]。采用前文教学指令方向：LD R,A读取；ST A,R写入；LT R,A把比较结果放回R；JMPF R,L在R为假时跳转。i和临时量都是已确定的直接对象；这里先用名字简写其访问地址。</p>
+<h3>12.1 按四元式模板逐条生成</h3><div class="stepper" aria-label="分步图解"><h3>i=8的while执行与回填</h3><p class="fig-intro">使用正文11条模板，初始i=8。LT覆盖R为布尔，回边m处重读i，假分支目标m+11。</p><div class="progress-track" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span></div><div class="step-tools"><button id="step-prev">上一步</button><label for="step-range">推导步骤</label><input id="step-range" type="range" min="0" max="5" value="0"><button id="step-next">下一步</button><span id="step-count" class="step-count"></span></div><div id="step-panel" class="step-card" aria-live="polite"></div><details><summary>完整轨迹（适合打印与连续核对）</summary><div class="table-scroll"><table><thead><tr><th>执行点</th><th>i</th><th>R/动作</th><th>结果</th></tr></thead><tbody><tr><td>第一次条件</td><td>8</td><td>LD 8；LT #10得1</td><td>JMPF不跳，进入体</td></tr><tr><td>第一次赋值</td><td>8→9</td><td>ADD #1得9；ST i</td><td>写原对象i=9，再JMP m</td></tr><tr><td>第二次条件</td><td>9</td><td>LD 9；LT #10得1</td><td>仍进入体</td></tr><tr><td>第二次赋值</td><td>9→10</td><td>ADD #1得10；ST i</td><td>写i=10，再JMP m</td></tr><tr><td>第三次条件</td><td>10</td><td>LD 10；LT #10得0</td><td>JMPF跳m+11，退出；体执行2次</td></tr><tr><td>边界对照</td><td>初始12</td><td>首轮LT为0</td><td>体0次，i仍12；不是所有初值最后都等于10</td></tr></tbody></table></div></details></div>
 <pre><code class="language-text">(WHILE,-,-,-)
 (LT,i,10,t1)
 (DO,t1,-,-)
@@ -749,9 +847,35 @@ ST w,R
 <p>尤其要注意 LT 会把 R 改成比较结果；真分支计算 i+1 时不能把这个 0/1 当成原 i。省掉指令还会改变跳转编号，必须同时重新回填。</p>
 <p><a id="ch09-s13"></a>
 <a id="复用寄存器前先检查值是否仍有效"></a></p>
-<h2>13. 寄存器复用的有效性检查</h2>
-<p>课件的寄存器状态表记录寄存器及其占用对象，但“登记过这个名字”不保证以后仍是该名字的当前值。复用前要核对指令有没有覆盖寄存器、对象有没有重新赋值，以及调用或间接写是否可能改变对象。</p>
-<p>例如 R 保存 x，随后执行 <code>*p:=7</code>，若 p 可能指向 x，旧寄存器值就不能直接当作新 x。第 11.4 节说明的写回与失效处理必须配合完成；信息不足时沿用课件保守策略。</p>
+<h2>13. 综合练习：有效副本与调用协议</h2>
+<p>寄存器状态表记录寄存器及其占用对象，但“登记过这个名字”不保证以后仍是该名字的当前值。复用前要核对指令有没有覆盖寄存器、对象有没有重新赋值，以及调用或间接写是否可能改变对象。</p>
+<p>例如 R 保存 x，随后执行 <code>*p:=7</code>，若 p 可能指向 x，旧寄存器值就不能直接当作新 x。第 11.4 节说明的写回与失效处理必须配合完成；信息不足时沿用本章保守策略。</p>
+<h3>13.1 两次加法的完整寄存器复用比较</h3>
+<p>单寄存器模板让每个结果先 ST 到内存，下一四元式再 LD。多个寄存器或更合理的连续生成可以让结果留在寄存器中，避免同一值来回搬运。</p>
+<p>例如 <code>t1=x+y; t2=t1+z; w:=t2</code> 的机械翻译共 8 条：</p>
+<pre><code class="language-text">LD R,x; ADD R,y; ST t1,R
+LD R,t1; ADD R,z; ST t2,R
+LD R,t2; ST w,R
+</code></pre>
+<p>若 t1、t2 没有其他需要保留的使用，直接：</p>
+<pre><code class="language-text">LD R,x
+ADD R,y
+ADD R,z
+ST w,R
+</code></pre>
+<p>仍得到 w=x+y+z，也没有擅自重排成 x+(y+z)。类型语义尤其是浮点结合性可能不允许任意重排。</p>
+<h3>13.2 调用伪指令的返回位置与操作性质</h3>
+<p>在填写动态链和其他管理信息后，列出以下序列。其中 sp、top 分别表示 SP、TOP：</p>
+<pre><code class="language-text">[A]   LD R, A+5
+[A+1] ST 1(top), R
+[A+2] ST sp, top
+[A+3] ST top, top + sem[f].size
+[A+4] JMP sem[f].code
+[A+5] LD R, 2(top)
+[A+6] ST result, R
+</code></pre>
+<p>这里 <code>[A+2]</code>、<code>[A+3]</code> 是用 ST 形式表示的建帧伪操作，含义分别为 SP←旧 TOP、TOP←旧 TOP+Sizef；不能按前面只操作内存的普通 ST 模板机械执行。第 A 条要把返回位置 A+5 当地址常量装入 R，按本章立即数记法应写 <code>LD R,#(A+5)</code>。这些建帧语句应按本例的抽象操作解释，不能当作可直接执行的普通内存 ST 指令。</p>
+<p>A+5 由这段特定序列的五个位置推得；增加指令或改变编码长度后，要重新定位返回后的第一条指令。函数返回后，TOP 按本章协议恢复为被调帧原首址，故可暂从 2(top) 读结果，并应在该区域被下次调用复用前取走。</p>
 <p><a id="ch09-s14"></a>
 <a id="课件例题回查与知识路线"></a></p>
 <h2>14. 知识联系与复习</h2>
@@ -767,17 +891,17 @@ ST w,R
 </ol>
 <h3>14.2 编译时符号表与运行时的区别</h3>
 <p>生成代码时仍需要符号表查类型、偏移、入口、大小和层次。生成完后，程序通常依照已编码的地址与运行时数据结构执行，不再使用编译器那张语义符号表来逐个查名字。</p>
-<p>课件“之后没有符号表”的说法应理解为上述编译语义表的任务完成；链接符号、调试信息、动态运行环境中的名字信息可能另有用途，不能扩大为所有产物都绝对不包含任何符号信息。</p>
+<p>生成后的指令已用确定的存储位置与控制目标执行，不必在每一步再查编译期语义符号表。链接符号、调试信息或动态名字信息仍可能另有用途，不能因此断言所有产物都不含任何符号信息。</p>
 <h3>14.3 自检题与答案</h3>
 <p><strong>1. LD R,p、LD R,*p、LEA R,p 有何差别？</strong> 分别读 p 槽的内容、读 p 槽所存地址指向的对象、取得 p 槽自身地址。</p>
 <p><strong>2. L2 保存的是退出目的地吗？</strong> 保存待回填的跳转指令自身地址；目的地将来才计算出来。</p>
 <p><strong>3. ELSE 回填为何指向新 JMP 的下一条？</strong> 条件假时应该从假分支开始，不能先执行真分支末尾用于跳过假分支的 JMP。</p>
 <p><strong>4. WHILE 为什么不发跳转指令？</strong> 它标记回跳入口；ENDWHILE 才发往该入口的回跳。</p>
 <p><strong>5. 引用参数再作变量实参时为何用 LD 而不 LEA？</strong> 槽里已经有对象地址，要复制它；LEA 会得到槽地址。</p>
-<p><strong>6. 调用返回地址永远加 5 吗？</strong> 不是。由实际调用序列长度和返回后续位置计算，课件 +5 只适用那段特定序列。</p>
+<p><strong>6. 调用返回地址永远加 5 吗？</strong> 不是。由实际调用序列长度和返回后续位置计算，本节 +5 只适用那段特定序列。</p>
 <p><strong>7. 释放活动记录要擦除全部单元吗？</strong> 通常只需调整指针使空间可复用；仍需正确恢复现场并及时取回结果。</p>
-<p><strong>8. 剥夺寄存器时一定要写回吗？</strong> 当前值以后需要且内存副本过时才必须写回；课件使用更保守的方案。</p>
-<p><strong>9. 程序指令少是否就一定实际更快？</strong> 不一定，课件模型主要比较访存，真实机器还受其他代价影响。</p>
+<p><strong>8. 剥夺寄存器时一定要写回吗？</strong> 当前值以后需要且内存副本过时才必须写回；本章的简单实现则在块尾统一保存。</p>
+<p><strong>9. 程序指令少是否就一定实际更快？</strong> 不一定，本章模型主要比较访存，真实机器还受其他代价影响。</p>
 <p><a id="ch09-s15"></a>
 <a id="自测与答案"></a></p>
 <h2>15. 自测与答案</h2>
@@ -791,7 +915,7 @@ ST w,R
 </thead>
 <tbody><tr>
 <td>1</td>
-<td>上例i=12时最终多少？机械版退出跳到m+10是否正确？</td>
+<td>对while(i&lt;10)i=i+1，i初值12。教学目标片段从m开始，m+10是回跳m的指令，m+11是出口。最终i多少？条件假时能跳m+10吗？</td>
 <td>边界与地址核对</td>
 </tr>
 <tr>
@@ -864,7 +988,7 @@ ST w,R
 <a id="末尾速查表"></a></p>
 <h2>17. 末尾速查表</h2>
 <div class="ref-picker"><label for="quick-select">选择一个概念或方法，查看含义、形式、例子、结果和前提</label><select id="quick-select" class="quick-select"><option value="0">LD/ST/LEA</option><option value="1">地址映射</option><option value="2">回填</option><option value="3">L1/L2</option><option value="4">VALACT/VARACT</option><option value="5">CALL/RETURN</option><option value="6">寄存器分配</option></select><div id="quick-panel" class="ref-panel" aria-live="polite"></div></div>
-</article><div class="chapter-links"><a href="08_中间代码优化.html">← 第8章 中间代码优化</a><a href="00_学习导航.html">全课程导航 →</a></div></main></div><script type="application/json" id="diagram-data">{"title":"i=8的while执行与回填","premise":"使用正文11条模板，初始i=8。LT覆盖R为布尔，回边m处重读i，假分支目标m+11。","fields":["执行点","i","R/动作","结果"],"rows":[["第一次条件","8","LD 8；LT #10得1","JMPF不跳，进入体"],["第一次赋值","8→9","ADD #1得9；ST i","写原对象i=9，再JMP m"],["第二次条件","9","LD 9；LT #10得1","仍进入体"],["第二次赋值","9→10","ADD #1得10；ST i","写i=10，再JMP m"],["第三次条件","10","LD 10；LT #10得0","JMPF跳m+11，退出；体执行2次"],["边界对照","初始12","首轮LT为0","体0次，i仍12；不是所有初值最后都等于10"]]}</script><script type="application/json" id="quick-data">[{"name":"LD/ST/LEA","kind":"目标指令","meaning":"分别取值、写值、取地址","form":"LD R,A；ST A,R；LEA R,A","notice":"先定字段方向；","example":"p槽存500，LD得500、间接LD得9","link":"\u003ca href=\"#ref-%E6%8C%87%E4%BB%A4\">指令系统\u003c/a>"},{"name":"地址映射","kind":"后端定位","meaning":"把Level/Off变成目标访问","form":"本层SP+Off、静态SP0+Off、外层环境+Off","notice":"indir需再取所指对象；单位必须一致","example":"用法：本层SP+Off、静态SP0+Off、外层环境+Off。indir需再取所指对象；单位必须一致","link":"\u003ca href=\"#ref-%E5%9C%B0%E5%9D%80\">抽象地址\u003c/a>"},{"name":"回填","kind":"编译期补目标","meaning":"生成时暂不知道目的地","form":"记跳转位置，目的已知后改字段","notice":"半条仍占完整编号；","example":"m+4填m+11","link":"\u003ca href=\"#ref-%E5%9B%9E%E5%A1%AB\">回填栈\u003c/a>"},{"name":"L1/L2","kind":"后端辅助栈","meaning":"匹配嵌套循环与待填转移","form":"L1存入口，L2存待填指令位置","notice":"两者不可互换；","example":"L1=m，L2=m+4","link":"\u003ca href=\"#ref-%E6%8E%A7%E5%88%B6\">控制规则\u003c/a>"},{"name":"VALACT/VARACT","kind":"传参动作","meaning":"复制值或对象地址到新帧","form":"目的TOP+Offset","notice":"引用再传引用复制槽中地址；不是LEA槽本身","example":"用法：目的TOP+Offset。引用再传引用复制槽中地址；不是LEA槽本身","link":"\u003ca href=\"#ref-%E5%8F%82%E6%95%B0\">参数\u003c/a>"},{"name":"CALL/RETURN","kind":"调用协议","meaning":"建帧、转入、交付结果、恢复","form":"DL/RA/环境先存，再改SP/TOP","notice":"返回结果协议一致；+5非固定规则","example":"用法：DL/RA/环境先存，再改SP/TOP。返回结果协议一致；+5非固定规则","link":"\u003ca href=\"#ref-%E8%B0%83%E7%94%A8\">调用返回\u003c/a>"},{"name":"寄存器分配","kind":"后端优化","meaning":"让当前值少来回访存","form":"复用有效值，剥夺远用或死值","notice":"仍需使用且内存未更新的值需写回；LT会覆盖R的旧整数","example":"用法：复用有效值，剥夺远用或死值。仍需使用且内存未更新的值需写回；LT会覆盖R的旧整数","link":"\u003ca href=\"#ref-%E5%AF%84%E5%AD%98%E5%99%A8\">多寄存器\u003c/a>"}]</script><script>
+</article><div class="chapter-links"><a href="08_中间代码优化.html">← 第8章 中间代码优化</a><a href="00_学习导航.html">全课程导航 →</a></div></main></div><script type="application/json" id="diagram-data">{"title":"i=8的while执行与回填","premise":"使用正文11条模板，初始i=8。LT覆盖R为布尔，回边m处重读i，假分支目标m+11。","fields":["执行点","i","R/动作","结果"],"rows":[["第一次条件","8","LD 8；LT #10得1","JMPF不跳，进入体"],["第一次赋值","8→9","ADD #1得9；ST i","写原对象i=9，再JMP m"],["第二次条件","9","LD 9；LT #10得1","仍进入体"],["第二次赋值","9→10","ADD #1得10；ST i","写i=10，再JMP m"],["第三次条件","10","LD 10；LT #10得0","JMPF跳m+11，退出；体执行2次"],["边界对照","初始12","首轮LT为0","体0次，i仍12；不是所有初值最后都等于10"]]}</script><script type="application/json" id="quick-data">[{"name":"LD/ST/LEA","kind":"目标指令","meaning":"分别取值、写值、取地址","form":"LD R,A；ST A,R；LEA R,A","notice":"本章用LD寄存器,对象与ST对象,寄存器；","example":"x=4时LD R,x令R=4，ADD R,#1令R=5，ST y,R令y=5。","link":"\u003ca href=\"#ref-%E6%8C%87%E4%BB%A4\">指令系统\u003c/a>"},{"name":"地址映射","kind":"后端定位","meaning":"把Level/Off变成目标访问","form":"本层SP+Off、静态SP0+Off、外层环境+Off","notice":"地址和值及间接层数要区分；","example":"槽104存地址500，槽500存整数7，取104得到500，再间接取500才得到7。","link":"\u003ca href=\"#ref-%E5%9C%B0%E5%9D%80\">抽象地址\u003c/a>"},{"name":"回填","kind":"编译期补目标","meaning":"生成时暂不知道目的地","form":"记跳转位置，目的已知后改字段","notice":"待填位置和跳转目标是两个地址；","example":"第10条是目标未知的JMP，生成分支后确定出口为18，则把第10条的目标字段填18。","link":"\u003ca href=\"#ref-%E5%9B%9E%E5%A1%AB\">回填栈\u003c/a>"},{"name":"L1/L2","kind":"后端辅助栈","meaning":"匹配嵌套循环与待填转移","form":"L1存入口，L2存待填指令位置","notice":"两种层差用途不同；","example":"变量登记Lv=2、当前过程层2，先取所属过程层L=Lv−1=1；访问链需走2−1=1步，Display直接取Display[1]。","link":"\u003ca href=\"#ref-%E6%8E%A7%E5%88%B6\">控制规则\u003c/a>"},{"name":"VALACT/VARACT","kind":"传参动作","meaning":"复制值或对象地址到新帧","form":"目的TOP+Offset","notice":"传值复制内容，传址复制地址；","example":"整数x在100且值7，形参槽204：VAL把7放204；VAR把100放204，再经该地址访问x。","link":"\u003ca href=\"#ref-%E5%8F%82%E6%95%B0\">参数\u003c/a>"},{"name":"CALL/RETURN","kind":"调用协议","meaning":"建帧、转入、交付结果、恢复","form":"DL/RA/环境先存，再改SP/TOP","notice":"返回地址取决于实际调用长度；","example":"调用序列占20—24五条指令，则保存返回25；若序列多一条变成20—25，应保存26。","link":"\u003ca href=\"#ref-%E8%B0%83%E7%94%A8\">调用返回\u003c/a>"},{"name":"寄存器分配","kind":"后端优化","meaning":"让当前值少来回访存","form":"复用有效值，剥夺远用或死值","notice":"副本有效性依赖后续写入和使用；","example":"u=x+1、y=u+2，且u不再使用、之间无改写x，x=3时可让R依次装3、加1得4、加2得6，再存y。","link":"\u003ca href=\"#ref-%E5%AF%84%E5%AD%98%E5%99%A8\">多寄存器\u003c/a>"}]</script><script>
 const links=[...document.querySelectorAll('nav a[href^="#"]')];
 const headings=links.map(a=>document.getElementById(a.hash.slice(1))).filter(Boolean);
 let scheduled=false;
@@ -875,5 +999,209 @@ document.querySelectorAll('[data-font]').forEach(b=>b.addEventListener('click',(
 const diagram=JSON.parse(document.getElementById('diagram-data').textContent);let step=0;
 function showStep(){if(!diagram)return;const row=diagram.rows[step];const panel=document.getElementById('step-panel');panel.replaceChildren();const grid=document.createElement('div');grid.className='step-grid';diagram.fields.forEach((field,i)=>{const cell=document.createElement('div');cell.className='step-field';const strong=document.createElement('strong');strong.textContent=field;const p=document.createElement('p');p.textContent=row[i];cell.append(strong,p);grid.append(cell);});panel.append(grid);document.getElementById('step-count').textContent=(step+1)+' / '+diagram.rows.length;document.getElementById('step-range').value=step;document.getElementById('step-prev').disabled=step===0;document.getElementById('step-next').disabled=step===diagram.rows.length-1;document.querySelectorAll('.progress-track span').forEach((s,i)=>s.classList.toggle('done',i<=step));}
 if(diagram){document.getElementById('step-prev').addEventListener('click',()=>{step=Math.max(0,step-1);showStep();});document.getElementById('step-next').addEventListener('click',()=>{step=Math.min(diagram.rows.length-1,step+1);showStep();});document.getElementById('step-range').addEventListener('input',e=>{step=Number(e.target.value);showStep();});showStep();}
-const quick=document.getElementById('quick-select');if(quick){const items=JSON.parse(document.getElementById('quick-data').textContent);function showQuick(){const r=items[Number(quick.value)];const panel=document.getElementById('quick-panel');panel.innerHTML='<h3>'+r.name+'</h3><p class="ref-kind">'+r.kind+'</p><h4>含义与用途</h4><p>'+r.meaning+'</p><h4>基本形式</h4><p>'+r.form+'</p><h4>学习例子与结果</h4><p class="result">'+r.example+'</p><h4>注意点与前提</h4><p>'+r.notice+'</p><p>'+r.link+'</p>';}quick.addEventListener('change',showQuick);showQuick();}markNavigation();
+function quickMarkup(r){return '<h3>'+r.name+'</h3><p class="ref-kind">'+r.kind+'</p><h4>含义与用途</h4><p>'+r.meaning+'</p><h4>基本形式</h4><p>'+r.form+'</p><h4>学习例子与结果</h4><p class="result">'+r.example+'</p><h4>注意点与前提</h4><p>'+r.notice+'</p><p>'+r.link+'</p>';}
+const quick=document.getElementById('quick-select');if(quick){const items=JSON.parse(document.getElementById('quick-data').textContent);function showQuick(){const r=items[Number(quick.value)];document.getElementById('quick-panel').innerHTML=quickMarkup(r);}quick.addEventListener('change',showQuick);showQuick();}markNavigation();
+(function () {
+  'use strict';
+  const $ = name => document.getElementById('chapter-search-' + name);
+  const panel = $('panel'), article = document.getElementById('article');
+  if (!panel || !article) return;
+  const blockTags = 'h1,h2,h3,h4,h5,h6,p,li,pre,td,th,summary,dt,dd,blockquote';
+  const ignored = '.stepper,.ref-picker,button,input,select,textarea,script,style,[data-search-ignore]';
+  const sectionIds = new Set([...document.querySelectorAll('nav a[href^="#"]')].map(a => a.hash.slice(1)));
+  const quickSelect = document.getElementById('quick-select'), quickPanel = document.getElementById('quick-panel');
+  const quickItems = JSON.parse(document.getElementById('quick-data')?.textContent || '[]');
+  const fold = text => text.replace(/[A-Z]/g, c => c.toLowerCase());
+  const pageSize = 40;
+  let matches = [], active = -1, page = 0, query = '', timer = null;
+  let resultsOpen = false, automaticQuick = false, originalQuick = null;
+  const openedDetails = new Set();
+
+  function measure() {
+    const top = Math.max(60, Math.ceil(document.querySelector('.topbar').getBoundingClientRect().height));
+    const height = panel.hidden ? 0 : Math.ceil(panel.getBoundingClientRect().height);
+    document.documentElement.style.setProperty('--reader-topbar-height', top + 'px');
+    document.documentElement.style.setProperty('--scroll-offset', Math.max(90, top + height + 18) + 'px');
+  }
+  window.addEventListener('resize', measure);
+  if (typeof ResizeObserver !== 'undefined') {
+    const observer = new ResizeObserver(measure);
+    observer.observe(document.querySelector('.topbar')); observer.observe(panel);
+  }
+
+  // 对文字节点建立段内偏移，不把行内 strong/code 等格式当作检索边界。
+  function collect(root, quick = false, quickName = '') {
+    const blocks = [], walker = document.createTreeWalker(root, NodeFilter.SHOW_ELEMENT | NodeFilter.SHOW_TEXT);
+    let node, owner = null, currentBlock = null, pendingSection = '', section = 'article', mainTitle = '本章导读', subTitle = '';
+    while ((node = walker.nextNode())) {
+      const element = node.nodeType === Node.ELEMENT_NODE ? node : node.parentElement;
+      if (!element || element.closest(quick ? 'h4,button,input,select,script,style' : ignored)) continue;
+      if (node.nodeType === Node.ELEMENT_NODE) {
+        if (!quick) {
+          if (node.matches('a[id]') && sectionIds.has(node.id)) pendingSection = node.id;
+          if (node.matches('h2')) { section = node.id || pendingSection || 'article'; mainTitle = node.textContent.trim(); subTitle = ''; pendingSection = ''; }
+          if (node.matches('h3')) subTitle = node.textContent.trim();
+        }
+        continue;
+      }
+      if (!node.data || (!quick && section === 'navigation')) continue;
+      const parent = element.closest(blockTags);
+      if (!parent || !root.contains(parent)) { owner = null; currentBlock = null; continue; }
+      const label = quick ? '末尾速查 › ' + quickName : mainTitle + (subTitle ? ' › ' + subTitle : '');
+      if (owner !== parent || !currentBlock || currentBlock.section !== section || currentBlock.label !== label) {
+        currentBlock = { el: parent, text: '', nodes: [], label, section }; blocks.push(currentBlock); owner = parent;
+      }
+      currentBlock.nodes.push({ node, start: currentBlock.text.length, end: currentBlock.text.length + node.data.length });
+      currentBlock.text += node.data;
+    }
+    return blocks.filter(b => b.text.trim());
+  }
+  function quickBlocks(index) {
+    const root = document.createElement('div'); root.innerHTML = quickMarkup(quickItems[index]);
+    const name = document.createElement('span'); name.innerHTML = quickItems[index].name;
+    return collect(root, true, name.textContent);
+  }
+  function find(blocks, source, item) {
+    const found = [], needle = fold(query);
+    blocks.forEach((block, blockIndex) => {
+      const text = fold(block.text); let start = text.indexOf(needle);
+      while (start !== -1) {
+        const end = start + query.length;
+        found.push({ source, item, blockIndex, start, end, text: block.text, label: block.label });
+        start = text.indexOf(needle, end);
+      }
+    });
+    return found;
+  }
+  function removeMarks() {
+    const parents = new Set();
+    article.querySelectorAll('mark.chapter-search-hit').forEach(mark => { parents.add(mark.parentNode); mark.replaceWith(document.createTextNode(mark.textContent)); });
+    parents.forEach(parent => parent.normalize());
+  }
+  function restoreDetails() { openedDetails.forEach(details => { if (details.isConnected) details.open = false; }); openedDetails.clear(); }
+  function restoreQuick() {
+    if (originalQuick !== null && quickSelect) {
+      automaticQuick = true; quickSelect.value = originalQuick; quickSelect.dispatchEvent(new Event('change')); automaticQuick = false;
+    }
+    originalQuick = null;
+  }
+  function setOpen(open, focusInput = false) {
+    panel.hidden = !open; $('toggle').setAttribute('aria-expanded', String(open));
+    if (open && typeof closeMenu === 'function') closeMenu();
+    measure();
+    if (focusInput) $('input').focus();
+  }
+  function text(tag, value) { const element = document.createElement(tag); element.textContent = value; return element; }
+  function state() {
+    $('prev').disabled = $('next').disabled = !matches.length;
+    $('results-toggle').disabled = !matches.length;
+    $('status').textContent = !query ? '请输入关键词' : !matches.length ? '没有找到匹配内容' : active < 0 ? '找到 ' + matches.length + ' 处，选择结果定位' : '第 ' + (active + 1) + ' / ' + matches.length + ' 处';
+    $('results').hidden = !resultsOpen || !matches.length;
+    $('results-toggle').setAttribute('aria-expanded', String(! $('results').hidden));
+    $('results-toggle').textContent = resultsOpen && matches.length ? '收起结果' : '展开结果';
+    measure();
+  }
+  function renderResults() {
+    const list = $('list'); list.replaceChildren();
+    const start = page * pageSize, end = Math.min(start + pageSize, matches.length);
+    $('page-status').textContent = matches.length ? '显示 ' + (start + 1) + '—' + end + '，共 ' + matches.length + ' 处' : '';
+    $('page-prev').disabled = page === 0; $('page-next').disabled = end >= matches.length;
+    for (let i = start; i < end; i++) {
+      const match = matches[i], item = document.createElement('li'), button = document.createElement('button');
+      button.type = 'button'; button.className = 'chapter-search-result';
+      if (i === active) button.setAttribute('aria-current', 'true');
+      button.append(text('strong', (i + 1) + '. ' + match.label));
+      const excerpt = document.createElement('span'), left = Math.max(0, match.start - 35), right = Math.min(match.text.length, match.end + 55);
+      excerpt.append(document.createTextNode((left ? '…' : '') + match.text.slice(left, match.start)));
+      excerpt.append(text('mark', match.text.slice(match.start, match.end)));
+      excerpt.append(document.createTextNode(match.text.slice(match.end, right) + (right < match.text.length ? '…' : '')));
+      button.append(excerpt); button.addEventListener('click', () => activate(i, true)); item.append(button); list.append(item);
+    }
+  }
+  function search() {
+    clearTimeout(timer); timer = null; removeMarks(); restoreDetails(); restoreQuick();
+    query = $('input').value.trim(); active = -1; page = 0; matches = [];
+    if (query) {
+      matches = find(collect(article), 'body');
+      if (typeof quickMarkup === 'function') quickItems.forEach((_, index) => { matches.push(...find(quickBlocks(index), 'quick', index)); });
+    }
+    resultsOpen = !!matches.length; renderResults(); state();
+  }
+  function activate(index, focusMatch = false) {
+    if (!matches.length) return;
+    index = (index + matches.length) % matches.length;
+    removeMarks(); const match = matches[index]; let block;
+    if (match.source === 'quick') {
+      if (!quickSelect || !quickPanel) return;
+      if (originalQuick === null) originalQuick = quickSelect.value;
+      automaticQuick = true; quickSelect.value = String(match.item); quickSelect.dispatchEvent(new Event('change')); automaticQuick = false;
+      const name = document.createElement('span'); name.innerHTML = quickItems[match.item].name;
+      block = collect(quickPanel, true, name.textContent)[match.blockIndex];
+    } else block = collect(article)[match.blockIndex];
+    // 动态正文如有改动，重建结果；不按旧字符位置猜测。
+    if (!block || block.text !== match.text) { search(); $('status').textContent = '正文已变化，结果已刷新，请重新选择。'; return; }
+    for (let parent = block.el; parent && parent !== article; parent = parent.parentElement) {
+      if (parent.tagName === 'DETAILS' && !parent.open) { openedDetails.add(parent); parent.open = true; }
+    }
+    const marks = [];
+    for (const part of block.nodes) {
+      if (part.end <= match.start || part.start >= match.end) continue;
+      const begin = Math.max(0, match.start - part.start), end = Math.min(part.node.length, match.end - part.start);
+      const fragment = document.createDocumentFragment();
+      if (begin) fragment.append(document.createTextNode(part.node.data.slice(0, begin)));
+      const mark = text('mark', part.node.data.slice(begin, end)); mark.className = 'chapter-search-hit'; fragment.append(mark); marks.push(mark);
+      if (end < part.node.length) fragment.append(document.createTextNode(part.node.data.slice(end)));
+      part.node.replaceWith(fragment);
+    }
+    active = index; page = Math.floor(index / pageSize); resultsOpen = false; renderResults(); state();
+    const first = marks[0];
+    if (first) {
+      first.tabIndex = -1; if (focusMatch) first.focus({ preventScroll: true });
+      first.scrollIntoView({ block: 'start', inline: 'nearest', behavior: 'auto' });
+      requestAnimationFrame(() => { measure(); if (typeof markNavigation === 'function') markNavigation(); });
+    }
+  }
+  function ensureQuery() { if (timer !== null || $('input').value.trim() !== query) search(); }
+  function clear() {
+    clearTimeout(timer); timer = null; $('input').value = ''; search(); $('input').focus();
+  }
+  $('toggle').addEventListener('click', () => setOpen(panel.hidden, panel.hidden));
+  $('close').addEventListener('click', () => { setOpen(false); $('toggle').focus(); });
+  $('clear').addEventListener('click', clear);
+  $('form').addEventListener('submit', event => { event.preventDefault(); ensureQuery(); if (matches.length) activate(active < 0 ? 0 : active + 1); });
+  $('input').addEventListener('input', () => { clearTimeout(timer); timer = setTimeout(search, 160); });
+  $('input').addEventListener('keydown', event => {
+    if (event.key === 'Enter' && event.shiftKey) { event.preventDefault(); ensureQuery(); if (matches.length) activate(active < 0 ? matches.length - 1 : active - 1); }
+  });
+  $('prev').addEventListener('click', () => { ensureQuery(); if (matches.length) activate(active < 0 ? matches.length - 1 : active - 1); });
+  $('next').addEventListener('click', () => { ensureQuery(); if (matches.length) activate(active < 0 ? 0 : active + 1); });
+  $('results-toggle').addEventListener('click', () => { resultsOpen = !resultsOpen; renderResults(); state(); });
+  $('page-prev').addEventListener('click', () => { if (page > 0) page--; renderResults(); measure(); });
+  $('page-next').addEventListener('click', () => { if ((page + 1) * pageSize < matches.length) page++; renderResults(); measure(); });
+  $('panel').querySelector('details').addEventListener('toggle', measure);
+  document.addEventListener('keydown', event => {
+    if ((event.ctrlKey || event.metaKey) && !event.altKey && event.key.toLowerCase() === 'k') { event.preventDefault(); setOpen(true, true); $('input').select(); }
+    if (event.key === 'Escape' && !panel.hidden) { setOpen(false); $('toggle').focus(); }
+  });
+  document.getElementById('menu').addEventListener('click', () => { if (document.body.classList.contains('nav-open')) setOpen(false); });
+  quickSelect?.addEventListener('change', () => {
+    if (!automaticQuick) {
+      originalQuick = null;
+      if (active >= 0 && matches[active].source === 'quick') { active = -1; renderResults(); state(); }
+    }
+  });
+  measure(); state();
+})();
+(function () {
+  'use strict';
+  const select = document.getElementById('reading-theme');
+  if (!select) return;
+  select.value = document.documentElement.dataset.readerTheme;
+  select.addEventListener('change', function () {
+    const theme = select.value;
+    if (theme !== 'light' && theme !== 'dark') return;
+    document.documentElement.dataset.readerTheme = theme;
+    try { localStorage.setItem('compiler-reading-theme-v1', theme); } catch (_) {}
+  });
+})();
 </script></body></html>
