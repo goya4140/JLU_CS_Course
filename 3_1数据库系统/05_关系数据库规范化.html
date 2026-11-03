@@ -1,8 +1,55 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>第5单元 关系数据库规范化 · 图解学习版</title><style>:root{--paper:#fbfaf7;--surface:#fff;--ink:#253341;--muted:#5c6b75;--line:#d5dfdd;--teal:#156b62;--soft:#edf6f1;--font:17px;--scroll-offset:90px}*{box-sizing:border-box}html{scroll-behavior:auto;scroll-padding-top:var(--scroll-offset)}body{margin:0;background:var(--paper);color:var(--ink);font-family:'Microsoft YaHei','PingFang SC',system-ui,sans-serif;font-size:var(--font);line-height:1.85}a{color:var(--teal);text-underline-offset:3px}a:hover{color:#173f75}button,select{font:inherit}button{cursor:pointer}button,select{border:1px solid #b9cbc5;border-radius:7px;padding:7px 11px;background:#fff;color:var(--ink)}button:hover{background:var(--soft)}button:focus-visible,select:focus-visible,a:focus-visible{outline:3px solid #81cbb8;outline-offset:3px}.skip{position:absolute;top:-80px;left:12px;z-index:50;background:#fff;padding:8px}.skip:focus{top:8px}.sidebar{position:fixed;inset:0 auto 0 0;width:270px;padding:23px 18px;background:#f0f4f0;border-right:1px solid var(--line);overflow:auto;z-index:30;overscroll-behavior:contain}.brand{font-size:21px;font-weight:700}.brand small{display:block;font-size:12px;font-weight:400;color:var(--muted)}.sidebar nav a{display:block;color:var(--ink);text-decoration:none;padding:8px 10px;margin:3px 0;border-radius:6px;font-size:14px;line-height:1.6}.sidebar nav a:hover{background:#dcebe3}.sidebar nav a.active,.sidebar nav a.active:hover{background:var(--teal);color:white}.sidebar select{width:100%;font-size:13px}.nav-tip{font-size:12px;color:var(--muted);margin:14px 0}.shell{margin-left:270px;overflow-anchor:none}.topbar{position:sticky;top:0;background:rgba(251,250,247,.98);padding:12px 26px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:12px;z-index:20}.topbar-title{font-size:13px;color:var(--muted)}.toolbar{display:flex;gap:7px;flex-wrap:wrap}.toolbar button{font-size:13px}.menu{display:none}main{max-width:1120px;margin:auto;padding:30px 44px 80px;min-width:0}h1{font-size:32px;line-height:1.5;margin:14px 0 25px}h2{font-size:25px;line-height:1.5;padding:0 0 11px;border-bottom:1px solid var(--line);margin:44px 0 23px}h3{font-size:21px;line-height:1.55;margin:29px 0 16px}h4{font-size:18px;line-height:1.6;margin:22px 0 13px}p{margin:14px 0}li{margin:7px 0}ul,ol{padding-left:1.6em}blockquote{margin:20px 0;padding:5px 18px;border-left:3px solid #a8c6bb;background:#f0f3ef;color:#53655e;font-size:14px}blockquote p{margin:8px 0}hr{border:0;border-top:1px solid var(--line);margin:32px 0}code{font-family:Consolas,'Cascadia Code',monospace;font-size:.9em;background:#eef1ed;padding:2px 5px;border-radius:4px;overflow-wrap:anywhere}pre{background:#18313d;color:#e8f0f0;border-radius:9px;padding:19px;line-height:1.65;overflow-x:auto;max-width:100%;font-size:14px}pre code{background:none;padding:0;color:inherit;white-space:pre;overflow-wrap:normal}table{border-collapse:collapse;width:100%;font-size:15px}th{background:#eaf3ee;text-align:left}td,th{padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:top}tbody tr:nth-child(even){background:#f6f9f6}.table-scroll{overflow-x:auto;border:1px solid var(--line);border-radius:8px;margin:17px 0;max-width:100%}.table-scroll td{min-width:80px}.source-note{font-size:13px;color:var(--muted)}.learning-figure{padding:23px;border:1px solid #b4cfc2;border-radius:12px;background:var(--soft);margin:25px 0}.learning-figure h4{margin:0 0 8px;font-size:20px}.fig-intro{font-size:14px;color:var(--muted)}.learning-figure label{display:block;margin-top:15px;font-size:14px;font-weight:700}.learning-figure select{margin-top:7px;width:100%;min-height:44px;font-size:15px}.fig-output{margin-top:16px}.flow{display:flex;gap:10px;align-items:stretch;flex-wrap:wrap}.flow-node{flex:1 1 150px;border:1px solid #bfd2c9;border-radius:8px;background:#fff;padding:13px;min-width:0}.flow-node strong{display:block;color:var(--teal)}.flow-node p{font-size:14px;margin:8px 0}.flow-arrow{align-self:center;color:var(--teal);font-size:24px}.fig-note{padding:10px 14px;border-left:3px solid var(--teal);background:#fff;font-size:14px;margin:15px 0 0}.svg-scroll{overflow-x:auto;max-width:100%}.svg-scroll svg{display:block;max-width:100%;height:auto}.ref-area{min-height:calc(100vh - var(--scroll-offset));margin-top:24px}.ref-picker{padding:22px;border-radius:12px;background:var(--soft);border:1px solid #b4cfc2}.ref-picker label{display:block;font-weight:700;margin-bottom:10px}.ref-picker select{width:100%;font-size:15px;min-height:46px}.ref-panel{margin-top:18px;background:#fff;border:1px solid var(--line);padding:20px;border-radius:9px}.ref-panel[hidden]{display:none}.ref-panel h3{margin:0;font-size:24px}.ref-panel h4{font-size:16px;margin:18px 0 8px}.ref-kind{font-size:13px;color:var(--teal)}.result{padding:10px 15px;border-left:3px solid var(--teal);background:var(--soft)}.copy{display:block;margin:5px 0 0 auto;font-size:12px;padding:4px 8px}.code-wrap{margin:20px 0}.code-wrap pre{margin-bottom:0}.foot{font-size:13px;color:var(--muted);border-top:1px solid var(--line);padding-top:23px;margin-top:30px}details{border:1px solid var(--line);padding:12px;border-radius:8px;margin:15px 0}summary{cursor:pointer;font-weight:700}@media(max-width:900px){.sidebar{transform:translateX(-100%)}body.nav-open .sidebar{transform:translateX(0);top:60px}.shell{margin-left:0}.menu{display:inline-block}.topbar-title{display:none}.topbar{padding:10px 14px}main{padding:23px 18px 65px}h1{font-size:27px}h2{font-size:23px}.learning-figure,.ref-picker{padding:16px}.flow{flex-direction:column}.flow-arrow{transform:rotate(90deg)}.ref-panel{padding:15px}}@media print{.sidebar,.topbar,.toolbar,.copy,.skip{display:none!important}.shell{margin:0}main{padding:0;max-width:none}body{background:#fff;font-size:11pt}.ref-area{min-height:0}.ref-picker select{display:none}pre{white-space:pre-wrap;background:#f3f5f4;color:#111}.learning-figure{break-inside:avoid}.table-scroll{overflow:visible}a{color:inherit}}@media print{.svg-scroll{overflow:visible}.svg-scroll svg{min-width:0!important;width:100%!important;height:auto!important}}.sidebar{width:266px;background:#f1f4f1;padding:27px 19px;overflow-y:auto}.brand{font-size:21px;font-weight:700;letter-spacing:.03em;margin-bottom:5px}.brand small{font-size:12px;font-weight:400;color:var(--muted);letter-spacing:.1em}.sidebar .sub{font-size:13px;color:var(--muted);margin:5px 0 21px}.sidebar nav a{font-size:14px;line-height:1.5;padding:9px 11px;margin:3px 0;border-radius:6px}.sidebar nav a:hover{background:#e0ece6;color:#174d43}.sidebar nav a.active,.sidebar nav a.active:hover{background:var(--teal);color:#fff}.nav-group{font-size:12px;color:var(--muted);margin:18px 11px 6px;letter-spacing:.08em}.sidebar-footer{margin-top:24px;font-size:12px;color:var(--muted)}.shell{margin-left:266px}@media(max-width:900px){.shell{margin-left:0}}
+<html lang="zh-CN"><head><script id="study-theme-init">(()=>{let t;try{t=localStorage.getItem('jlu-database-reading-theme');}catch{}if(t!=='light'&&t!=='dark'){t=window.matchMedia&&matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';}document.documentElement.dataset.theme=t;})();</script><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>第5单元 关系数据库规范化 · 图解学习版</title><style>:root{--paper:#fbfaf7;--surface:#fff;--ink:#253341;--muted:#5c6b75;--line:#d5dfdd;--teal:#156b62;--soft:#edf6f1;--font:17px;--scroll-offset:90px}*{box-sizing:border-box}html{scroll-behavior:auto;scroll-padding-top:var(--scroll-offset)}body{margin:0;background:var(--paper);color:var(--ink);font-family:'Microsoft YaHei','PingFang SC',system-ui,sans-serif;font-size:var(--font);line-height:1.85}a{color:var(--teal);text-underline-offset:3px}a:hover{color:#173f75}button,select{font:inherit}button{cursor:pointer}button,select{border:1px solid #b9cbc5;border-radius:7px;padding:7px 11px;background:#fff;color:var(--ink)}button:hover{background:var(--soft)}button:focus-visible,select:focus-visible,a:focus-visible{outline:3px solid #81cbb8;outline-offset:3px}.skip{position:absolute;top:-80px;left:12px;z-index:50;background:#fff;padding:8px}.skip:focus{top:8px}.sidebar{position:fixed;inset:0 auto 0 0;width:270px;padding:23px 18px;background:#f0f4f0;border-right:1px solid var(--line);overflow:auto;z-index:30;overscroll-behavior:contain}.brand{font-size:21px;font-weight:700}.brand small{display:block;font-size:12px;font-weight:400;color:var(--muted)}.sidebar nav a{display:block;color:var(--ink);text-decoration:none;padding:8px 10px;margin:3px 0;border-radius:6px;font-size:14px;line-height:1.6}.sidebar nav a:hover{background:#dcebe3}.sidebar nav a.active,.sidebar nav a.active:hover{background:var(--teal);color:white}.sidebar select{width:100%;font-size:13px}.nav-tip{font-size:12px;color:var(--muted);margin:14px 0}.shell{margin-left:270px;overflow-anchor:none}.topbar{position:sticky;top:0;background:rgba(251,250,247,.98);padding:12px 26px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:12px;z-index:20}.topbar-title{font-size:13px;color:var(--muted)}.toolbar{display:flex;gap:7px;flex-wrap:wrap}.toolbar button{font-size:13px}.menu{display:none}main{max-width:1120px;margin:auto;padding:30px 44px 80px;min-width:0}h1{font-size:32px;line-height:1.5;margin:14px 0 25px}h2{font-size:25px;line-height:1.5;padding:0 0 11px;border-bottom:1px solid var(--line);margin:44px 0 23px}h3{font-size:21px;line-height:1.55;margin:29px 0 16px}h4{font-size:18px;line-height:1.6;margin:22px 0 13px}p{margin:14px 0}li{margin:7px 0}ul,ol{padding-left:1.6em}blockquote{margin:20px 0;padding:5px 18px;border-left:3px solid #a8c6bb;background:#f0f3ef;color:#53655e;font-size:14px}blockquote p{margin:8px 0}hr{border:0;border-top:1px solid var(--line);margin:32px 0}code{font-family:Consolas,'Cascadia Code',monospace;font-size:.9em;background:#eef1ed;padding:2px 5px;border-radius:4px;overflow-wrap:anywhere}pre{background:#18313d;color:#e8f0f0;border-radius:9px;padding:19px;line-height:1.65;overflow-x:auto;max-width:100%;font-size:14px}pre code{background:none;padding:0;color:inherit;white-space:pre;overflow-wrap:normal}table{border-collapse:collapse;width:100%;font-size:15px}th{background:#eaf3ee;text-align:left}td,th{padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:top}tbody tr:nth-child(even){background:#f6f9f6}.table-scroll{overflow-x:auto;border:1px solid var(--line);border-radius:8px;margin:17px 0;max-width:100%}.table-scroll td{min-width:80px}.source-note{font-size:13px;color:var(--muted)}.learning-figure{padding:23px;border:1px solid #b4cfc2;border-radius:12px;background:var(--soft);margin:25px 0}.learning-figure h4{margin:0 0 8px;font-size:20px}.fig-intro{font-size:14px;color:var(--muted)}.learning-figure label{display:block;margin-top:15px;font-size:14px;font-weight:700}.learning-figure select{margin-top:7px;width:100%;min-height:44px;font-size:15px}.fig-output{margin-top:16px}.flow{display:flex;gap:10px;align-items:stretch;flex-wrap:wrap}.flow-node{flex:1 1 150px;border:1px solid #bfd2c9;border-radius:8px;background:#fff;padding:13px;min-width:0}.flow-node strong{display:block;color:var(--teal)}.flow-node p{font-size:14px;margin:8px 0}.flow-arrow{align-self:center;color:var(--teal);font-size:24px}.fig-note{padding:10px 14px;border-left:3px solid var(--teal);background:#fff;font-size:14px;margin:15px 0 0}.svg-scroll{overflow-x:auto;max-width:100%}.svg-scroll svg{display:block;max-width:100%;height:auto}.ref-area{min-height:calc(100vh - var(--scroll-offset));margin-top:24px}.ref-picker{padding:22px;border-radius:12px;background:var(--soft);border:1px solid #b4cfc2}.ref-picker label{display:block;font-weight:700;margin-bottom:10px}.ref-picker select{width:100%;font-size:15px;min-height:46px}.ref-panel{margin-top:18px;background:#fff;border:1px solid var(--line);padding:20px;border-radius:9px}.ref-panel[hidden]{display:none}.ref-panel h3{margin:0;font-size:24px}.ref-panel h4{font-size:16px;margin:18px 0 8px}.ref-kind{font-size:13px;color:var(--teal)}.result{padding:10px 15px;border-left:3px solid var(--teal);background:var(--soft)}.copy{display:block;margin:5px 0 0 auto;font-size:12px;padding:4px 8px}.code-wrap{margin:20px 0}.code-wrap pre{margin-bottom:0}.foot{font-size:13px;color:var(--muted);border-top:1px solid var(--line);padding-top:23px;margin-top:30px}details{border:1px solid var(--line);padding:12px;border-radius:8px;margin:15px 0}summary{cursor:pointer;font-weight:700}@media(max-width:900px){.sidebar{transform:translateX(-100%)}body.nav-open .sidebar{transform:translateX(0);top:60px}.shell{margin-left:0}.menu{display:inline-block}.topbar-title{display:none}.topbar{padding:10px 14px}main{padding:23px 18px 65px}h1{font-size:27px}h2{font-size:23px}.learning-figure,.ref-picker{padding:16px}.flow{flex-direction:column}.flow-arrow{transform:rotate(90deg)}.ref-panel{padding:15px}}@media print{.sidebar,.topbar,.toolbar,.copy,.skip{display:none!important}.shell{margin:0}main{padding:0;max-width:none}body{background:#fff;font-size:11pt}.ref-area{min-height:0}.ref-picker select{display:none}pre{white-space:pre-wrap;background:#f3f5f4;color:#111}.learning-figure{break-inside:avoid}.table-scroll{overflow:visible}a{color:inherit}}@media print{.svg-scroll{overflow:visible}.svg-scroll svg{min-width:0!important;width:100%!important;height:auto!important}}.sidebar{width:266px;background:#f1f4f1;padding:27px 19px;overflow-y:auto}.brand{font-size:21px;font-weight:700;letter-spacing:.03em;margin-bottom:5px}.brand small{font-size:12px;font-weight:400;color:var(--muted);letter-spacing:.1em}.sidebar .sub{font-size:13px;color:var(--muted);margin:5px 0 21px}.sidebar nav a{font-size:14px;line-height:1.5;padding:9px 11px;margin:3px 0;border-radius:6px}.sidebar nav a:hover{background:#e0ece6;color:#174d43}.sidebar nav a.active,.sidebar nav a.active:hover{background:var(--teal);color:#fff}.nav-group{font-size:12px;color:var(--muted);margin:18px 11px 6px;letter-spacing:.08em}.sidebar-footer{margin-top:24px;font-size:12px;color:var(--muted)}.shell{margin-left:266px}@media(max-width:900px){.shell{margin-left:0}}
 #sql-reference{min-height:calc(100vh - var(--scroll-offset,90px))}
 .table-scroll{max-width:100%;overflow-x:auto;margin:18px 0;border:1px solid var(--line);border-radius:8px}.table-scroll table{width:100%;border-collapse:collapse}.table-scroll td,.table-scroll th{min-width:85px;vertical-align:top}.table-scroll pre{white-space:pre-wrap}article h2,article h3,article h4{scroll-margin-top:var(--scroll-offset,90px)}.course-home{display:block;font-size:13px;padding:8px 11px;margin-bottom:12px}.chapter-turns{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;margin-top:34px;padding-top:20px;border-top:1px solid var(--line)}.chapter-turns a{font-size:14px}.sidebar-footer{font-size:12px;color:var(--muted);margin-top:24px}article>p:first-of-type{font-size:1.04em}.noscript-note{padding:12px;border-left:3px solid var(--teal)}@media(max-width:600px){.table-scroll table{min-width:520px}.table-scroll{font-size:14px}pre{max-width:100%;overflow-x:auto}article{min-width:0}}@media print{.table-scroll table{min-width:0}.chapter-turns{display:none}}
-</style><meta name="source-sha256" content="360fb5fcb31b69356e0ded00688cafe80630fd3509595dbf68f59dbb14882f3b"></head><body><a class="skip" href="#article">跳到正文</a><aside class="sidebar" aria-label="章节目录"><div class="brand"><small>DATABASE / UNIT 05</small>关系数据库规范化</div><p class="sub">理解 · 例题 · 自测</p><a class="course-home" href="00_%E5%AD%A6%E4%B9%A0%E5%AF%BC%E8%88%AA.html">返回课程学习导航</a><nav><a href="#ch05-navigation">学习导航</a><div class="nav-group">准备 · 重复与依赖</div><a href="#ch05-s002">1. 从选课汇总表发现重复与异常</a><a href="#ch05-s005">2. 1NF 与 2NF：先搭入门桥梁</a><a href="#ch05-s008">3. 函数依赖与码</a><div class="nav-group">推导 · 闭包与规则</div><a href="#ch05-s013">4. Armstrong 公理：怎样推出更多依赖</a><a href="#ch05-s016">5. 属性闭包与候选码</a><a href="#ch05-s020">6. F⁺ 与依赖蕴含</a><a href="#ch05-s021">7. 正则覆盖：把规则写得精简且等价</a><div class="nav-group">分解 · 范式与保证</div><a href="#ch05-s024">8. BCNF：每个非平凡决定因素都应是超码</a><a href="#ch05-s029">9. 3NF：允许右边是主属性的特定情况</a><a href="#ch05-s033">10. 无损连接：拆开再拼不会造假记录</a><a href="#ch05-s038">11. 依赖保持：拆后规则能否分别检查</a><div class="nav-group">进阶 · 条件与取舍</div><a href="#ch05-s041">12. 多值依赖与 4NF</a><a href="#ch05-s044">13. 设计取舍与时间数据</a><a href="#ch05-s047">14. “NP问题”与算法难度</a><div class="nav-group">练习与复习</div><a href="#ch05-s051">15. 常见误解</a><a href="#ch05-s052">16. 本单元模拟题</a><a href="#ch05-s066">17. 自拟自测题与逐步答案</a><a href="#ch05-s071">18. 复习路线</a><a href="#ch05-check-order">19. 用同一张检查表，分清四种结论</a><a href="#ch05-reference">20. 本章概念与方法速查</a></nav><div class="sidebar-footer">先推导例子，再对照答案。<br>可用键盘选择目录与图解选项。</div></aside><div class="shell"><header class="topbar"><span class="topbar-title">第5单元 关系数据库规范化</span><div class="toolbar"><button id="menu" class="menu" aria-label="打开或收起目录" aria-expanded="false">目录</button><button data-font="-1" aria-label="减小正文字号">字号 −</button><button data-font="1" aria-label="增大正文字号">字号 ＋</button><button id="print">打印 / 保存 PDF</button></div></header><main><article id="article"><h1>第5单元 关系数据库规范化</h1>
+</style><meta name="source-sha256" content="7ea1c03e30ea24183b2cfae63af32fd5a05ece01c24bc6dbce3ac1323d83291a"><style id="study-theme-style">:root{color-scheme:light}
+.theme-control{display:inline-flex;align-items:center;gap:6px;font-size:13px;white-space:nowrap}
+.theme-control select{font:inherit;max-width:90px;padding:7px}
+html[data-theme=dark]{color-scheme:dark;--paper:#151c23;--surface:#1c2730;--ink:#e3ebef;--muted:#b3c3cc;--line:#465964;--teal:#80d8c3;--soft:#213b36}
+html[data-theme=dark] body{background:var(--paper);color:var(--ink)}
+html[data-theme=dark] .sidebar,html[data-theme=dark] .topbar{background:#1b2730;color:var(--ink)}
+html[data-theme=dark] :is(button,select,input,.flow-node,.fig-note,.ref-panel,.card,.course-card){background:var(--surface);color:var(--ink);border-color:var(--line)}
+html[data-theme=dark] :is(button:hover,.sidebar nav a:hover){background:#29463f;color:#e8fff6}
+html[data-theme=dark] .sidebar nav a.active{background:#80d8c3;color:#102921}
+html[data-theme=dark] a:hover{color:#c1e2ff}
+html[data-theme=dark] :is(th,blockquote,.learning-figure,.ref-picker,.result){background:#213b36;color:var(--ink);border-color:#527568}
+html[data-theme=dark] tbody tr:nth-child(even){background:#1c2b33}
+html[data-theme=dark] code{background:#293a43;color:#e7f4f6}
+html[data-theme=dark] pre,html[data-theme=dark] pre code{background:#0e1820;color:#e7f4f6}
+html[data-theme=dark] :is(.source-note,.fig-intro,.ref-kind,.sidebar-footer,.topbar-title,.nav-group,.foot,.nav-tip){color:var(--muted)}
+html[data-theme=dark] #chapter-search{background:#213b36;border-color:#527568}
+html[data-theme=dark] #chapter-search :is(summary,#chapter-search-status){color:#a5e8d7}
+html[data-theme=dark] #chapter-search input,html[data-theme=dark] #chapter-search .chapter-search-results button{background:#1c2730;color:#e3ebef;border-color:#607c77}
+html[data-theme=dark] #chapter-search .chapter-search-results span{color:#bdccd4}
+html[data-theme=dark] #chapter-search button[aria-current=true]{background:#345b4e;border-color:#a5e8d7}
+html[data-theme=dark] .chapter-search-dock{background:#243a34;color:#eef6f3;border-color:#80b5a3}
+html[data-theme=dark] mark[data-chapter-search]{background:#eedb77;color:#192218}
+html[data-theme=dark] mark.chapter-search-current{background:#ffbe63;color:#201609;outline-color:#ffebae}
+html[data-theme=dark] .skip{background:#1c2730;color:#80d8c3}
+html[data-theme=dark] :is(.syntax-line,.logic-flow>div,.balance-stage,.rollup-nodes>div,.window-anatomy span,.ref-result){background:#213b36;color:var(--ink)}
+html[data-theme=dark] :is(.dynamic-note.blocked,.noscript-note){background:#463b22;color:#ffe3a5}
+html[data-theme=dark] .truth.yes{background:#254b36;color:#b8f2ca}
+html[data-theme=dark] .truth.no{background:#522f30;color:#ffd0ca}
+html[data-theme=dark] .truth.unknown{background:#403254;color:#e5d2ff}
+html[data-theme=dark] .step-flow button[aria-pressed=true]{background:#80d8c3;color:#102921}
+html[data-theme=dark] .step-flow button span{background:#344c45;color:#def6ec}
+html[data-theme=dark] .syntax-line :is(.sql-key,.sql-string,.sql-num){color:inherit}
+html[data-theme=dark] :focus-visible{outline-color:#94e5cc}
+/* SVG 图内保留颜色之间的区别，并让白底图适合暗色页面。 */
+html[data-theme=dark] .svg-scroll svg{filter:invert(.88) hue-rotate(180deg)}
+@media(max-width:600px){.theme-control{font-size:12px}.toolbar{align-items:center}.theme-control select{min-height:36px}}
+@media(max-width:900px){.toolbar{min-width:0;max-width:100%}.topbar{flex-wrap:wrap}.topbar-label{display:none}.shell{overflow-x:clip}}
+@media print{
+ html[data-theme]{color-scheme:light;--paper:#fff;--surface:#fff;--ink:#111;--muted:#444;--line:#bbb;--teal:#154f47;--soft:#f2f5f3}
+ .theme-control{display:none!important}
+ html[data-theme=dark] body,html[data-theme=dark] :is(th,blockquote,.learning-figure,.ref-picker,.result,.flow-node,.fig-note,.ref-panel,.card,.course-card){background:#fff;color:#111}
+ html[data-theme=dark] tbody tr:nth-child(even){background:#f6f6f6}
+ html[data-theme=dark] :is(pre,pre code,code){background:#f2f2f2;color:#111}
+ html[data-theme=dark] .svg-scroll svg{filter:none}
+ html[data-theme=dark] :is(.syntax-line,.logic-flow>div,.balance-stage,.rollup-nodes>div,.window-anatomy span,.ref-result,.truth.yes,.truth.no,.truth.unknown,.dynamic-note.blocked,.noscript-note){background:#f5f5f5;color:#111}
+ html[data-theme=dark] a,html[data-theme=dark] :is(.source-note,.fig-intro,.ref-kind,.foot){color:#333}
+}
+</style></head><body><a class="skip" href="#article">跳到正文</a><aside class="sidebar" aria-label="章节目录"><div class="brand"><small>DATABASE / UNIT 05</small>关系数据库规范化</div><p class="sub">理解 · 例题 · 自测</p><a class="course-home" href="00_%E5%AD%A6%E4%B9%A0%E5%AF%BC%E8%88%AA.html">返回课程学习导航</a><nav><a href="#ch05-navigation">学习导航</a><div class="nav-group">准备 · 重复与依赖</div><a href="#ch05-s002">1. 从选课汇总表发现重复与异常</a><a href="#ch05-s005">2. 1NF 与 2NF：先搭入门桥梁</a><a href="#ch05-s008">3. 函数依赖与码</a><div class="nav-group">推导 · 闭包与规则</div><a href="#ch05-s013">4. Armstrong 公理：怎样推出更多依赖</a><a href="#ch05-s016">5. 属性闭包与候选码</a><a href="#ch05-s020">6. F⁺ 与依赖蕴含</a><a href="#ch05-s021">7. 正则覆盖：把规则写得精简且等价</a><div class="nav-group">分解 · 范式与保证</div><a href="#ch05-s024">8. BCNF：每个非平凡决定因素都应是超码</a><a href="#ch05-s029">9. 3NF：允许右边是主属性的特定情况</a><a href="#ch05-s033">10. 无损连接：拆开再拼不会造假记录</a><a href="#ch05-s038">11. 依赖保持：拆后规则能否分别检查</a><div class="nav-group">进阶 · 条件与取舍</div><a href="#ch05-s041">12. 多值依赖与 4NF</a><a href="#ch05-s044">13. 设计取舍与时间数据</a><a href="#ch05-s047">14. “NP问题”与算法难度</a><div class="nav-group">练习与复习</div><a href="#ch05-s051">15. 常见误解</a><a href="#ch05-s052">16. 本单元模拟题</a><a href="#ch05-s066">17. 自拟自测题与逐步答案</a><a href="#ch05-s071">18. 复习路线</a><a href="#ch05-check-order">19. 用同一张检查表，分清四种结论</a><a href="#ch05-reference">20. 本章概念与方法速查</a></nav><div class="sidebar-footer">先推导例子，再对照答案。<br>可用键盘选择目录与图解选项。</div></aside><div class="shell"><header class="topbar"><span class="topbar-title">第5单元 关系数据库规范化</span><div class="toolbar"><label class="theme-control" for="study-theme">阅读配色 <select id="study-theme" aria-label="阅读配色"><option value="light">白天</option><option value="dark">夜间</option></select></label><button id="menu" class="menu" aria-label="打开或收起目录" aria-expanded="false">目录</button><button data-font="-1" aria-label="减小正文字号">字号 −</button><button data-font="1" aria-label="增大正文字号">字号 ＋</button><button id="print">打印 / 保存 PDF</button></div></header><main><article id="article"><h1>第5单元 关系数据库规范化</h1>
 <p>选课表里反复写着同一位学生的姓名和同一门课的名称，改名时就容易漏改。怎样拆表才能减少这类重复，又不丢信息、不漏掉业务规则？本章用函数依赖说明拆分依据，分别检查范式、无损连接和依赖保持。</p>
 <!-- toc:start -->
 <h2 id="ch05-navigation">学习导航</h2>
@@ -140,6 +187,7 @@ SC → Grade
 <p><strong>子集</strong>指一个集合的全部成员都在另一集合内；集合自己也是自己的子集。<strong>真子集</strong>还要求不能相等，例如 {S} 是 {S,C} 的真子集。</p>
 <p><code>SC→S</code>是<strong>平凡依赖</strong>，因为右边已经在左边里面：知道学号课程组合当然知道学号。<code>S→SName</code>是<strong>非平凡依赖</strong>，右边不全在左边内。规范化主要检查这些增加了新信息的依赖。</p>
 <h3 id="ch05-s011">3.3 超码、候选码、主码、主属性</h3>
+<p>独立模式 R(A,B,C)，给 F={A→BC,B→AC}。A⁺=ABC，B⁺=ABC，而空集闭包为空，因此 A、B 都是候选码。AB 也是超码，但可去掉 A 或 B，不是候选码；若选 A 作主码，B 仍是主属性，C 才是非主属性。主属性的“主”不是只看所选主码。</p>
 <p><strong>超码</strong>是一组能决定表中全部属性的列。SC 决定 Grade，再由 S、C 分别得到两个名称，因此决定全部五列，是超码；SC 加 SName 仍是超码，但名称多余。</p>
 <p><strong>候选码</strong>是没有多余属性的超码；“最小”是不能再去掉属性，不要求它在所有候选码里列数最少。选择一个候选码作<strong>主码</strong>。<strong>主属性</strong>是出现在至少一个候选码中的属性；其他是<strong>非主属性</strong>。</p>
 <p>本例候选码只有 SC，所以 S、C 是主属性，两个名称和成绩是非主属性。稍后用闭包证明，不只凭“看起来像编号”。</p>
@@ -149,6 +197,7 @@ SC → Grade
 <h2 id="ch05-s013">4. Armstrong 公理：怎样推出更多依赖</h2>
 <p>题目只给了少量业务规则，但判断码和范式需要知道它们还保证哪些结论。公理用于从已有规则推出新规则，每一步都要能说明依据；它不会替我们添加题目没给的业务事实。</p>
 <h3 id="ch05-s014">4.1 三条基础规则先用普通语言理解</h3>
+<p>用属性 A、B、C 看具体推理：AB→A 不用额外规则就成立，这是自反；给定 A→B，则要求两行 AC 相同，也能保证 BC 相同，得到 AC→BC，这是增广；给定 A→B、B→C，则 A 相同先迫使 B 相同，再迫使 C 相同，得到 A→C，这是传递。三条规则都没有凭空添加业务事实。</p>
 <p>希腊字母 <code>α</code>、<code>β</code>、<code>γ</code>读阿尔法、贝塔、伽马，在此都代表属性集合；并排 <code>αβ</code>表示并集，也就是把两组属性合在一起且不重复。</p>
 <div class="table-scroll"><table>
 <thead>
@@ -176,6 +225,7 @@ SC → Grade
 </tbody></table>
 </div><p>公理是无需额外业务假设即可使用的推理规则。它们是<strong>可靠</strong>的，即推出来的依赖不会超出前提允许；也是<strong>完备</strong>的，即所有被前提逻辑保证的函数依赖均能用它们推出。学习时重点是每一步能指出依据。</p>
 <h3 id="ch05-s015">4.2 合并、分解与伪传递</h3>
+<p>局部例子分别看三种规则：给 A→B、A→C，可合并成 A→BC；给 D→EF，可拆成 D→E 与 D→F；给 G→H、HK→L，单知 G 不够，但 GK 先得到 HK，再得到 L，所以 GK→L。最后一种必须保留额外条件 K，不能误推 G→L。</p>
 <p><strong>合并律</strong>：α→β 且 α→γ，则 α→βγ。证明：</p>
 <ol>
 <li>对 α→β，两边增加 α，得 α→αβ。</li>
@@ -188,6 +238,7 @@ SC → Grade
 <h2 id="ch05-s016">5. 属性闭包与候选码</h2>
 <p>要判断学号课程组合能否识别整行，就要看看“仅知道这些列时，沿规则还能知道哪些列”。属性闭包把这个过程变成可以逐轮检查的步骤，比直接猜主码更可靠。</p>
 <h3 id="ch05-s017">5.1 闭包就是“凭手上信息最终能知道什么”</h3>
+<p>给独立模式 R(A,B,C,D)、F={A→B,B→C}，从 X={A} 开始：已知 A；用第一条添 B，得到 AB；用第二条添 C，得到 ABC；再看两条都没有新属性，停止，A⁺=ABC。因为缺 D，A 在此模式中不是超码。这个停止条件与计算顺序共同构成可重复的算法。</p>
 <p>给定 F，<code>X⁺</code>读“X 的闭包”，表示从属性集 X 出发，按 F 能确定的所有属性。上标 <code>+</code>不是数值加一，是推理结果的标记。<strong>算法</strong>就是一套明确可重复执行的步骤。</p>
 <p>计算方法：先把 X 放进已知集合；逐条看依赖，左边全部已知就把右边加入；反复检查，直到没有新属性。</p>
 <h3 id="ch05-s018">5.2 对主例逐轮计算</h3>
@@ -250,7 +301,7 @@ SC → Grade
 <p>同一个业务保证可以重复写，也可以写成可由其他规则推出的形式。正则覆盖要把表达简化，同时保持原来的全部推理能力。每次删掉的不是“看起来多余的字”，而是已经证明能够被剩余规则替代的部分。</p>
 <h3 id="ch05-s022">7.1 覆盖不是少写一条就更好</h3>
 <p><strong>正则覆盖</strong>记 <code>Fc</code>，是与 F 能推出相同规则、又去掉冗余表达的依赖集。<code>Fc⁺=F⁺</code>表示推理能力相同。“冗余”是某条或某个属性可由其他规则替代。</p>
-<p>课件正则覆盖允许合并同左部依赖；很多“最小覆盖”算法习惯保持右部单属性。两种表示形式要按课程约定区分，不能只按条数判断对错。</p>
+<p>本章正则覆盖允许合并同左部依赖；例如 {A→B,A→C} 可写为 {A→BC}。保持右部单属性的最小覆盖则保留前一种形式。两种形式的条数不同，推理能力却相同；检查时仍须核对等价、属性冗余及所用表示约定。</p>
 <h3 id="ch05-s023">7.2 一个完整算例：逐项去掉多余部分</h3>
 <p>这是独立的三属性模式 R(A,B,C)，A、B、C 是列名代号；给定业务 F={A→BC，B→C，AB→C}，不假定这些列具体是学号。目标是简化规则而不改变结论。</p>
 <p>先把 A→BC 拆为 A→B、A→C，便于检查：</p>
@@ -660,8 +711,8 @@ R2 = R−(Y−X)
 <h3 id="ch05-s048">14.1 先说明“规模变大”是什么意思</h3>
 <p>一题只有五列，手算所有属性组合尚可；若有 n 列，属性子集共有 2 的 n 次方个。n 是列数，<code>2ⁿ</code>表示 2 连乘 n 次；每列都有选或不选两种情况，所以得到这个数量。</p>
 <p><strong>多项式时间</strong>表示运行步骤可用输入规模的固定次幂控制，例如 n²；<strong>指数增长</strong>如 2ⁿ，规模增加时可能很快变得难以穷举。不能因手算某题麻烦，就直接判断它具有哪种理论复杂性。</p>
-<h3 id="ch05-s049">14.2 对照实际课件区分三个问题</h3>
-<p>课程 <code>ch8.pdf</code> 对不同问题分别给出了结论：</p>
+<h3 id="ch05-s049">14.2 分清判定、检查与构造的不同任务</h3>
+<p>比较算法难度前，先明确输入是什么、要得到哪一种答案。例如给 R(A,B,C)、F={A→B,B→C}：算 A⁺=ABC、B⁺=BC，可发现 B→C 的左部不是超码，从而否定 BCNF；要构造分解，则还需实际输出 AB、BC，并说明无损及依赖保持。前者输出一个判断，后者输出一组模式，不是同一个任务。具体区别如下：</p>
 <ul>
 <li>第 44 页：对给定原模式 R 和依赖集 F，检查 F 中各非平凡依赖的左部是否为超码，足以判断原模式 BCNF；不必展开全部 F⁺。分解后子模式却不能只检查原 F 中原样留下的规则，要考虑投影依赖。</li>
 <li>第 54 页：一般的 <strong>3NF 判定是 NP-hard</strong>；难点包括判定某属性是否属于某个候选码。NP-hard 常译“NP 难”，是一种严格的复杂性分类，不能简单理解为“绝对无法解”或“每个小例都很慢”。</li>
@@ -675,7 +726,7 @@ R2 = R−(Y−X)
 result = result∪t
 </code></pre>
 <p>Ri 是第 i 个子模式；t 是临时新增信息。先拿手上已知且在这个子表的属性，用原 F 算闭包，再只留下本子表能承载的结果；把这些信息加入 result。遍历并重复直到没有新增。若包含 Y，则该依赖被保持。对原 F 的每一条都检查。</p>
-<p>第 11.2 节 CB、AC，从 AB 出发：在 CB 内只有 B，可得的仍只有 B；在 AC 内只有 A，可得的仍只有 A。重复后仍 AB，得不到 C，故 AB→C 不保持。这与反例证明一致。</p>
+<p>独立给 R(A,B,C)、F={AB→C,C→B}，分解为 CB、AC，要检查 AB→C 是否保持。从 result=AB 出发：在 CB 内已知 B，B⁺∩CB=B；在 AC 内已知 A，A⁺∩AC=A。没有添入新属性，重复后仍为 AB，不含目标 C，因此该依赖不保持。两张子表各自满足局部规则，不代表原来的 AB→C 自动成立。</p>
 <h2 id="ch05-s051">15. 常见误解</h2>
 <div class="table-scroll"><table>
 <thead>
@@ -967,4 +1018,232 @@ R2(A,B,D,E)
 <h2 id="ch05-reference">20. 本章概念与方法速查</h2>
 <p>选择一个条目，查看用途、写法、例子、结果和适用条件；需要完整推导时可返回正文。</p><div class="ref-area"><div class="ref-picker"><label for="ref-select">选择要查的概念或方法</label><select id="ref-select" aria-controls="ref-panel"><option value="">请选择一个条目</option><option value="更新/插入/删除异常">更新/插入/删除异常</option><option value="函数依赖 X→Y">函数依赖 X→Y</option><option value="平凡/非平凡与主/非主属性">平凡/非平凡与主/非主属性</option><option value="超码、候选码与主码">超码、候选码与主码</option><option value="属性闭包 X⁺">属性闭包 X⁺</option><option value="依赖闭包 F⁺与蕴含">依赖闭包 F⁺与蕴含</option><option value="Armstrong 公理">Armstrong 公理</option><option value="正则覆盖/最小覆盖">正则覆盖/最小覆盖</option><option value="1NF 与 2NF">1NF 与 2NF</option><option value="BCNF">BCNF</option><option value="3NF">3NF</option><option value="BCNF 分解与 3NF 综合">BCNF 分解与 3NF 综合</option><option value="无损连接">无损连接</option><option value="Chase">Chase</option><option value="依赖保持">依赖保持</option><option value="多值依赖与 4NF">多值依赖与 4NF</option><option value="有效时间与事务时间">有效时间与事务时间</option><option value="判定、构造与验证的复杂性">判定、构造与验证的复杂性</option></select><p class="source-note">选中后显示用途、读法、例子、结果和注意点。完整总结表保存在 Markdown 版。</p><div id="ref-panel" class="ref-panel" aria-live="polite" hidden></div><noscript><p>请启用 JavaScript 使用选择菜单，或查看 Markdown 版的速查表。</p></noscript></div></div>
 
-</article><noscript><p class="noscript-note">交互图解和选择式速查需要 JavaScript；完整学习正文与速查表也可阅读对应的 Markdown 文件。</p></noscript><footer class="chapter-turns"><a href="04_ER%E6%A8%A1%E5%9E%8B%E4%B8%8E%E5%85%B3%E7%B3%BB%E6%A8%A1%E5%BC%8F%E8%BD%AC%E6%8D%A2.html">上一单元</a><a href="https://goya4140.github.io/JLU_CS_Course/#/3_1%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F/05_%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E8%A7%84%E8%8C%83%E5%8C%96.md">Markdown 正文</a><a href="06_%E4%BA%8B%E5%8A%A1.html">下一单元</a></footer></main></div><script id="guide-data" type="application/json">{"figures":[{"id":"ch05-viz-closure","after":"ch05-s016","title":"属性闭包：每次只加入规则保证的新信息","intro":"三个主例起点使用 ENROLL 的同一组依赖；五属性题是另一个独立依赖集。","type":"choices","options":[{"label":"从学号 S出发","meaning":"依赖为 S→SName、C→CName、SC→Grade；已知左部所有列才可以增加右部。","headers":["规则或阶段","目前已知属性","发生什么"],"rows":[["开始","S","先放入给定属性"],["S→SName","S、SName","新增 SName"],["再检查","S、SName","无新增，停止"]],"note":"没有覆盖全部五列，所以不是 ENROLL 的超码；不能仅因为它是编号就判定是码。"},{"label":"从课程号 C出发","meaning":"依赖为 S→SName、C→CName、SC→Grade；已知左部所有列才可以增加右部。","headers":["规则或阶段","目前已知属性","发生什么"],"rows":[["开始","C","先放入给定属性"],["C→CName","C、CName","新增 CName"],["再检查","C、CName","无新增，停止"]],"note":"没有覆盖全部五列，所以不是 ENROLL 的超码；不能仅因为它是编号就判定是码。"},{"label":"从学号与课程号 SC出发","meaning":"依赖为 S→SName、C→CName、SC→Grade；已知左部所有列才可以增加右部。","headers":["规则或阶段","目前已知属性","发生什么"],"rows":[["开始","S、C","先放入给定属性"],["S→SName","S、C、SName","新增 SName"],["C→CName","S、C、SName、CName","新增 CName"],["SC→Grade","S、C、SName、CName、Grade","新增 Grade"],["再检查","S、C、SName、CName、Grade","无新增，停止"]],"note":"覆盖全部五列，还需检查去掉 S 或 C 后不能覆盖，才能判定候选码。"},{"label":"五属性模拟题：从 BC 出发","meaning":"独立规则 BC→AD、AD→EB、E→C。","headers":["规则或阶段","目前已知属性","发生什么"],"rows":[["开始","B、C","先放入给定属性"],["BC→AD","B、C、A、D","新增 A、D"],["AD→EB","B、C、A、D、E","新增 E"],["再检查","B、C、A、D、E","无新增，停止"]],"note":"闭包完整；B⁺和 C⁺都不完整，说明 BC 最小。但还要继续找 AD、BE 等其他候选码。"}]},{"id":"ch05-viz-lossless","after":"ch05-s033","title":"同一份原数据，拆法不同就可能出现伪元组","intro":"独立 R(A,B,C)，依赖 A→B；原数据只有 a1/b1/c1、a2/b1/c2 两行。","type":"choices","options":[{"label":"AB + BC：按 B 拼回","meaning":"B=b1 在两边均对应两个剩余值，两两组合得到四行。","flow":[["原表","两条完整事实"],["投影 AB 与 BC","共同列 B"],["按 B 连接","原有两行加两行伪元组"]],"headers":["A","B","C","是否原有"],"rows":[["a1","b1","c1","是"],["a1","b1","c2","否，新增组合"],["a2","b1","c1","否，新增组合"],["a2","b1","c2","是"]],"note":"B⁺只有 B，不能决定 AB 或 BC，这个二表分解相对于给定 F 有损。"},{"label":"AB + AC：按 A 拼回","meaning":"共同 A 决定 AB，配对受到规则保证。","flow":[["原表","同样两条事实"],["投影 AB 与 AC","共同列 A"],["按 A 连接","恰好恢复原两行"]],"headers":["A","B","C","是否原有"],"rows":[["a1","b1","c1","是"],["a2","b1","c2","是"]],"note":"无损证明来自 A→B 及二表判据，不只因为这个样本碰巧能还原。"}]},{"id":"ch05-viz-preserve","after":"ch05-s038","title":"无损、BCNF 与依赖保持需要分别给证据","intro":"使用正文 ABC、F={AB→C，C→B} 的独立例子。","type":"choices","options":[{"label":"原 ABC：3NF，但非 BCNF","meaning":"候选码 AB/AC，所有列为主属性。","headers":["检查","结论","依据"],"rows":[["3NF","满足","C→B 右侧 B 是主属性"],["BCNF","不满足","C⁺=BC，C 不是超码"]],"note":"3NF 的右部例外并不让 C 自动变成超码。"},{"label":"拆 CB 与 AC：无损且达 BCNF","meaning":"共同 C 决定 CB，可按二表判据证明无损。","headers":["性质","结论","依据"],"rows":[["无损","是","C→CB"],["各子表 BCNF","是","子表中非平凡决定因素为超码"],["依赖保持","否","局部规则不能从 AB 推出 C"]],"note":"从原合法关系出发能拼回，不代表以后独立维护子表就自动遵守全部原规则。"},{"label":"局部都合法，却漏掉 AB→C","meaning":"CB 保存 c1/b1、c2/b1；AC 保存 a1/c1、a1/c2。","headers":["A","B","C"],"rows":[["a1","b1","c1"],["a1","b1","c2"]],"note":"同一个 AB 对两个 C，违反原规则 AB→C，但各子表内部仍合法。这是依赖不保持的反例，不是否定无损证明。"}]}],"references":[{"name":"更新/插入/删除异常","kind":"结构造成的风险","meaning":"同一类事实被重复或与另一类事实捆绑保存。","usage":"先看一行包含了几种不同事实。","example":"取消小周唯一选课，同时丢掉他的姓名信息。","result":"异常来自身份与选课事实绑在一表，不是一定报错。","note":"正常的受控重复与未维护的冗余要分清。","anchor":"ch05-s004"},{"name":"函数依赖 X→Y","kind":"业务保证","meaning":"两行的 X 相同时，Y 必须也相同。","usage":"同左值不能对应不同右值。","example":"S1 在两条选课中姓名必须一致。","result":"S→SName，但不因此 S→Grade。","note":"不是编程函数，也不是凭当前样本没冲突就成立。","anchor":"ch05-s009"},{"name":"平凡/非平凡与主/非主属性","kind":"两个不同分类角度","meaning":"依赖是否增加新属性，与属性是否出现在某候选码中。","usage":"Y⊆X 是平凡；候选码中的列是主属性。","example":"SC→S 平凡，S→SName 非平凡；S/C 是主属性。","result":"主属性的判定需要所有候选码信息。","note":"不要把“主属性”只理解为已选主码中的列。","anchor":"ch05-s010"},{"name":"超码、候选码与主码","kind":"识别属性集合","meaning":"超码覆盖全体，候选码无多余，主码从候选码选定。","usage":"计算闭包，再逐个删除检验最小性。","example":"SC⁺覆盖 ENROLL 五列，S⁺和 C⁺都不完整。","result":"SC 是主例唯一候选码。","note":"找到一组候选码不保证已经找全。","anchor":"ch05-s011"},{"name":"属性闭包 X⁺","kind":"属性推理结果","meaning":"从 X 沿依赖得到的全部属性。","usage":"先放 X，左部全已知时加右部，反复直到不增长。","example":"SC → 加姓名、课名 → 加成绩。","result":"能覆盖 R 才是超码。","note":"不是数值加一；还需最小性才能判候选码。","anchor":"ch05-s017"},{"name":"依赖闭包 F⁺与蕴含","kind":"规则推理结果","meaning":"F⁺是全部可推出规则；用 X⁺检查一条依赖是否被保证。","usage":"F 蕴含 X→Y，当且仅当 Y⊆X⁺。","example":"S⁺只有 S/SName，不含 Grade。","result":"不能从主例规则推出 S→Grade。","note":"属性集合和规则集合是不同结果；不能推出不代表所有样本都违反。","anchor":"ch05-s020"},{"name":"Armstrong 公理","kind":"推理规则","meaning":"自反、增广和传递推出可靠的依赖结论。","usage":"知道整体可知部分；双方加同属性；顺链传递。","example":"S→Dept、Dept→Office 推出 S→Office。","result":"每一步都来自给定规则，不额外发明业务事实。","note":"增广改变两边；分解律拆右边，不随意拆左边。","anchor":"ch05-s014"},{"name":"正则覆盖/最小覆盖","kind":"等价的规则精简","meaning":"去掉多余属性或依赖，保持全部推理能力。","usage":"先明确表示约定；每次调整后重算相应闭包。","example":"A→BC、B→C、AB→C 可精简为 A→B、B→C。","result":"去掉冗余 A→C 后仍能通过 B 得到 C。","note":"不能留下被删规则来证明它自己；同左部合并与单右部形式要按课程区分。","anchor":"ch05-s022"},{"name":"1NF 与 2NF","kind":"入门结构标准","meaning":"每格一个原子值，并避免非主属性只依赖候选码的一部分。","usage":"先检查值，再检查非主属性对每个候选码的依赖。","example":"ENROLL 的姓名只由 S 确定，不需要组合 SC。","result":"符合 1NF 仍可违反 2NF。","note":"2NF 不能只检查选定主码，也不能保证没有传递造成的重复。","anchor":"ch05-s005"},{"name":"BCNF","kind":"函数依赖范式","meaning":"每个非平凡决定因素都必须能识别本关系整行。","usage":"非平凡 X→Y 时，X⁺应包含本关系全部属性。","example":"ENROLL 的 S→SName 左侧不是超码。","result":"原表不满足 BCNF；拆学生/课程/选课可满足。","note":"子表要考虑投影依赖，不能只看原 F 中原样剩余的条目。","anchor":"ch05-s024"},{"name":"3NF","kind":"较宽松的函数依赖范式","meaning":"平凡、左部超码，或右部单属性为主属性，满足一项即可。","usage":"先确定所有候选码与主属性，再逐项判断。","example":"AB→C、C→B 的 ABC，候选码 AB/AC。","result":"B 是主属性，所以 C→B 被 3NF 允许，但违反 BCNF。","note":"BCNF 推出 3NF，反向不保证。","anchor":"ch05-s029"},{"name":"BCNF 分解与 3NF 综合","kind":"两种构造方法","meaning":"前者按违反依赖拆，后者围绕等价精简规则建子模式。","usage":"违反 X→Y 可拆 XY 与 R−(Y−X)；综合还检查候选码是否被包含。","example":"ENROLL 最终 Student、Course、Takes。","result":"这个主例既无损又保持依赖，不代表所有 BCNF 分解都如此。","note":"检查每次拆的性质，并给出依赖保持的单独证明。","anchor":"ch05-s026"},{"name":"无损连接","kind":"信息恢复性质","meaning":"从原合法关系投影再连接，恰好还原，不产生假组合。","usage":"二表覆盖 R 时，交集应决定至少一侧全部属性。","example":"AB/BC 共同 B=b1，两边各两行会拼出四行。","result":"多出的 a1/b1/c2 等是伪元组。","note":"二表判据不直接适用于随便的多表逐对比较。","anchor":"ch05-s033"},{"name":"Chase","kind":"多表无损检验方法","meaning":"用依赖合并必须相同的符号，找全目标符号行。","usage":"每子表一行，本表列用 a，其他格初始不同 b 符号，再反复统一。","example":"主例 TAKES 行因 S→SName、C→CName 补齐。","result":"出现全 a 行说明该函数依赖检验成功。","note":"这是符号检验，不是实际查询执行轨迹。","anchor":"ch05-s037"},{"name":"依赖保持","kind":"规则检查性质","meaning":"各表内部规则合起来仍能保证全部原业务依赖。","usage":"比较投影依赖联合的推理能力与 F。","example":"CB/AC 局部合法，可拼成同 AB 对两个 C。","result":"不能只靠局部检查保证 AB→C。","note":"无损不等于保持依赖，两项用不同证据证明。","anchor":"ch05-s038"},{"name":"多值依赖与 4NF","kind":"独立多值信息","meaning":"给定 X 时，Y 与剩余属性的选择能自由组合。","usage":"X↠Y；非平凡多值决定因素应为超码。","example":"学生两爱好、两语言在独立假设下有四种组合。","result":"拆为爱好与语言两表可还原四对，减少交叉重复。","note":"若某爱好依赖所用语言，就不能假设自由组合。","anchor":"ch05-s041"},{"name":"有效时间与事务时间","kind":"两种历史观察","meaning":"现实何时生效，以及数据库何时记录这个版本。","usage":"分别保存事实区间和记录区间。","example":"9月1日搬家，9月5日才登记。","result":"9月3日的实际住址与当时库中记录可能不同。","note":"事务时间不是业务操作耗时，区间边界要说明。","anchor":"ch05-s046"},{"name":"判定、构造与验证的复杂性","kind":"任务区分","meaning":"原模式范式判断、分解构造、给定分解性质验证是不同问题。","usage":"明确输入、输出与限制，再读 NP-hard 等结论。","example":"课件 8.54 说一般 3NF 判定 NP-hard，3NF 综合可多项式完成。","result":"不能概括成所有 BCNF/3NF 工作都同样困难。","note":"不展开 F⁺也可以用闭包步骤检查依赖保持。","anchor":"ch05-s049"}]}</script><script>(()=>{'use strict';const payload=JSON.parse(document.getElementById('guide-data').textContent);const byId=id=>document.getElementById(id);const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));const rows=(headers,data)=>'<div class="table-scroll"><table><thead><tr>'+headers.map(x=>'<th scope="col">'+esc(x)+'</th>').join('')+'</tr></thead><tbody>'+data.map(row=>'<tr>'+row.map(x=>'<td>'+esc(x===null?'NULL':x)+'</td>').join('')+'</tr>').join('')+'</tbody></table></div>';const flow=steps=>'<div class="flow">'+steps.map((s,i)=>(i?'<div class="flow-arrow" aria-hidden="true">→</div>':'')+'<div class="flow-node"><strong>'+esc(s[0])+'</strong><p>'+esc(s[1])+'</p></div>').join('')+'</div>';for(const fig of payload.figures){if(fig.type==='choices'){const select=byId(fig.id+'-select');const draw=()=>{const option=fig.options[Number(select.value)];byId(fig.id+'-output').innerHTML='<p>'+esc(option.meaning)+'</p>'+(option.flow?flow(option.flow):'')+(option.svg||'')+(option.headers?rows(option.headers,option.rows):'')+(option.note?'<p class="fig-note">'+esc(option.note)+'</p>':'');};select.addEventListener('change',draw);draw();}}const refSelect=byId('ref-select');const refPanel=byId('ref-panel');const drawRef=()=>{const item=payload.references.find(x=>x.name===refSelect.value);if(!item){refPanel.hidden=true;refPanel.replaceChildren();return;}refPanel.innerHTML='<h3>'+esc(item.name)+'</h3><p class="ref-kind">'+esc(item.kind)+'</p><h4>解决什么问题</h4><p>'+esc(item.meaning)+'</p><h4>怎样理解或使用</h4><p>'+esc(item.usage)+'</p><h4>学习例子</h4><p>'+esc(item.example)+'</p><h4>结果与理由</h4><p class="result">'+esc(item.result)+'</p><h4>注意点</h4><p>'+esc(item.note)+'</p><a href="#'+esc(item.anchor)+'">回到正文看完整解释</a>';refPanel.hidden=false;};refSelect.addEventListener('change',drawRef);drawRef();const entries=[...document.querySelectorAll('.sidebar nav a')].map(link=>({link,target:document.getElementById(link.hash.slice(1))})).filter(e=>e.target);const offset=()=>{const n=Math.ceil(document.querySelector('.topbar').getBoundingClientRect().height)+18;document.documentElement.style.setProperty('--scroll-offset',n+'px');return n;};const close=()=>{document.body.classList.remove('nav-open');byId('menu').setAttribute('aria-expanded','false');};const activate=e=>entries.forEach(x=>{const on=x===e;x.link.classList.toggle('active',on);if(on)x.link.setAttribute('aria-current','location');else x.link.removeAttribute('aria-current');});const current=()=>{const boundary=offset()+3;let active=entries[0];for(const entry of entries){if(entry.target.getBoundingClientRect().top<=boundary)active=entry;else break;}if(entries.length&&innerHeight+scrollY>=document.documentElement.scrollHeight-2&&entries[entries.length-1].target.getBoundingClientRect().top<innerHeight)active=entries[entries.length-1];if(active)activate(active);};const jump=(target,hash)=>{close();window.scrollTo({top:Math.max(0,target.getBoundingClientRect().top+scrollY-offset()),behavior:'auto'});if(location.hash!==hash)history.pushState(null,'',hash);current();};document.addEventListener('click',event=>{const link=event.target.closest('a[href^="#"]');if(!link||event.button!==0||event.ctrlKey||event.metaKey||event.shiftKey||event.altKey)return;const target=document.getElementById(link.hash.slice(1));if(target){event.preventDefault();jump(target,link.hash);}});byId('menu').addEventListener('click',()=>{const on=document.body.classList.toggle('nav-open');byId('menu').setAttribute('aria-expanded',String(on));});document.addEventListener('keydown',e=>{if(e.key==='Escape')close();});let pending=false;const schedule=()=>{if(!pending){pending=true;requestAnimationFrame(()=>{current();pending=false;});}};window.addEventListener('scroll',schedule,{passive:true});window.addEventListener('resize',schedule);window.addEventListener('hashchange',schedule);window.addEventListener('popstate',schedule);if(typeof ResizeObserver!=='undefined')new ResizeObserver(schedule).observe(document.querySelector('.topbar'));let font=17;document.querySelectorAll('[data-font]').forEach(b=>b.addEventListener('click',()=>{font=Math.max(15,Math.min(21,font+Number(b.dataset.font)));document.documentElement.style.setProperty('--font',font+'px');schedule();}));byId('print').addEventListener('click',()=>window.print());document.querySelectorAll('article pre code').forEach(code=>{const pre=code.parentElement;const wrap=document.createElement('div');wrap.className='code-wrap';pre.parentNode.insertBefore(wrap,pre);wrap.append(pre);const button=document.createElement('button');button.type='button';button.className='copy';button.textContent='复制';button.setAttribute('aria-label','复制本段示例');button.addEventListener('click',async()=>{try{await navigator.clipboard.writeText(code.textContent);button.textContent='已复制';}catch{const range=document.createRange();range.selectNodeContents(code);const selection=window.getSelection();selection.removeAllRanges();selection.addRange(range);button.textContent='已选中';}setTimeout(()=>button.textContent='复制',1500);});wrap.append(button);});current();})();</script></body></html>
+</article><noscript><p class="noscript-note">交互图解和选择式速查需要 JavaScript；完整学习正文与速查表也可阅读对应的 Markdown 文件。</p></noscript><footer class="chapter-turns"><a href="04_ER%E6%A8%A1%E5%9E%8B%E4%B8%8E%E5%85%B3%E7%B3%BB%E6%A8%A1%E5%BC%8F%E8%BD%AC%E6%8D%A2.html">上一单元</a><a href="https://goya4140.github.io/JLU_CS_Course/#/3_1%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F/05_%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E8%A7%84%E8%8C%83%E5%8C%96.md">Markdown 正文</a><a href="06_%E4%BA%8B%E5%8A%A1.html">下一单元</a></footer></main></div><script id="guide-data" type="application/json">{"figures":[{"id":"ch05-viz-closure","after":"ch05-s016","title":"属性闭包：每次只加入规则保证的新信息","intro":"三个主例起点使用 ENROLL 的同一组依赖；五属性题是另一个独立依赖集。","type":"choices","options":[{"label":"从学号 S出发","meaning":"依赖为 S→SName、C→CName、SC→Grade；已知左部所有列才可以增加右部。","headers":["规则或阶段","目前已知属性","发生什么"],"rows":[["开始","S","先放入给定属性"],["S→SName","S、SName","新增 SName"],["再检查","S、SName","无新增，停止"]],"note":"没有覆盖全部五列，所以不是 ENROLL 的超码；不能仅因为它是编号就判定是码。"},{"label":"从课程号 C出发","meaning":"依赖为 S→SName、C→CName、SC→Grade；已知左部所有列才可以增加右部。","headers":["规则或阶段","目前已知属性","发生什么"],"rows":[["开始","C","先放入给定属性"],["C→CName","C、CName","新增 CName"],["再检查","C、CName","无新增，停止"]],"note":"没有覆盖全部五列，所以不是 ENROLL 的超码；不能仅因为它是编号就判定是码。"},{"label":"从学号与课程号 SC出发","meaning":"依赖为 S→SName、C→CName、SC→Grade；已知左部所有列才可以增加右部。","headers":["规则或阶段","目前已知属性","发生什么"],"rows":[["开始","S、C","先放入给定属性"],["S→SName","S、C、SName","新增 SName"],["C→CName","S、C、SName、CName","新增 CName"],["SC→Grade","S、C、SName、CName、Grade","新增 Grade"],["再检查","S、C、SName、CName、Grade","无新增，停止"]],"note":"覆盖全部五列，还需检查去掉 S 或 C 后不能覆盖，才能判定候选码。"},{"label":"五属性模拟题：从 BC 出发","meaning":"独立规则 BC→AD、AD→EB、E→C。","headers":["规则或阶段","目前已知属性","发生什么"],"rows":[["开始","B、C","先放入给定属性"],["BC→AD","B、C、A、D","新增 A、D"],["AD→EB","B、C、A、D、E","新增 E"],["再检查","B、C、A、D、E","无新增，停止"]],"note":"闭包完整；B⁺和 C⁺都不完整，说明 BC 最小。但还要继续找 AD、BE 等其他候选码。"}]},{"id":"ch05-viz-lossless","after":"ch05-s033","title":"同一份原数据，拆法不同就可能出现伪元组","intro":"独立 R(A,B,C)，依赖 A→B；原数据只有 a1/b1/c1、a2/b1/c2 两行。","type":"choices","options":[{"label":"AB + BC：按 B 拼回","meaning":"B=b1 在两边均对应两个剩余值，两两组合得到四行。","flow":[["原表","两条完整事实"],["投影 AB 与 BC","共同列 B"],["按 B 连接","原有两行加两行伪元组"]],"headers":["A","B","C","是否原有"],"rows":[["a1","b1","c1","是"],["a1","b1","c2","否，新增组合"],["a2","b1","c1","否，新增组合"],["a2","b1","c2","是"]],"note":"B⁺只有 B，不能决定 AB 或 BC，这个二表分解相对于给定 F 有损。"},{"label":"AB + AC：按 A 拼回","meaning":"共同 A 决定 AB，配对受到规则保证。","flow":[["原表","同样两条事实"],["投影 AB 与 AC","共同列 A"],["按 A 连接","恰好恢复原两行"]],"headers":["A","B","C","是否原有"],"rows":[["a1","b1","c1","是"],["a2","b1","c2","是"]],"note":"无损证明来自 A→B 及二表判据，不只因为这个样本碰巧能还原。"}]},{"id":"ch05-viz-preserve","after":"ch05-s038","title":"无损、BCNF 与依赖保持需要分别给证据","intro":"使用正文 ABC、F={AB→C，C→B} 的独立例子。","type":"choices","options":[{"label":"原 ABC：3NF，但非 BCNF","meaning":"候选码 AB/AC，所有列为主属性。","headers":["检查","结论","依据"],"rows":[["3NF","满足","C→B 右侧 B 是主属性"],["BCNF","不满足","C⁺=BC，C 不是超码"]],"note":"3NF 的右部例外并不让 C 自动变成超码。"},{"label":"拆 CB 与 AC：无损且达 BCNF","meaning":"共同 C 决定 CB，可按二表判据证明无损。","headers":["性质","结论","依据"],"rows":[["无损","是","C→CB"],["各子表 BCNF","是","子表中非平凡决定因素为超码"],["依赖保持","否","局部规则不能从 AB 推出 C"]],"note":"从原合法关系出发能拼回，不代表以后独立维护子表就自动遵守全部原规则。"},{"label":"局部都合法，却漏掉 AB→C","meaning":"CB 保存 c1/b1、c2/b1；AC 保存 a1/c1、a1/c2。","headers":["A","B","C"],"rows":[["a1","b1","c1"],["a1","b1","c2"]],"note":"同一个 AB 对两个 C，违反原规则 AB→C，但各子表内部仍合法。这是依赖不保持的反例，不是否定无损证明。"}]}],"references":[{"name":"更新/插入/删除异常","kind":"结构造成的风险","meaning":"同一类事实被重复或与另一类事实捆绑保存。","usage":"先看一行包含了几种不同事实。","example":"取消小周唯一选课，同时丢掉他的姓名信息。","result":"异常来自身份与选课事实绑在一表，不是一定报错。","note":"正常的受控重复与未维护的冗余要分清。","anchor":"ch05-s004"},{"name":"函数依赖 X→Y","kind":"业务保证","meaning":"两行的 X 相同时，Y 必须也相同。","usage":"同左值不能对应不同右值。","example":"S1 在两条选课中姓名必须一致。","result":"S→SName，但不因此 S→Grade。","note":"不是编程函数，也不是凭当前样本没冲突就成立。","anchor":"ch05-s009"},{"name":"平凡/非平凡与主/非主属性","kind":"两个不同分类角度","meaning":"依赖是否增加新属性，与属性是否出现在某候选码中。","usage":"Y⊆X 是平凡；候选码中的列是主属性。","example":"SC→S 平凡，S→SName 非平凡；S/C 是主属性。","result":"主属性的判定需要所有候选码信息。","note":"不要把“主属性”只理解为已选主码中的列。","anchor":"ch05-s010"},{"name":"超码、候选码与主码","kind":"识别属性集合","meaning":"超码覆盖全体，候选码无多余，主码从候选码选定。","usage":"计算闭包，再逐个删除检验最小性。","example":"SC⁺覆盖 ENROLL 五列，S⁺和 C⁺都不完整。","result":"SC 是主例唯一候选码。","note":"找到一组候选码不保证已经找全。","anchor":"ch05-s011"},{"name":"属性闭包 X⁺","kind":"属性推理结果","meaning":"从 X 沿依赖得到的全部属性。","usage":"先放 X，左部全已知时加右部，反复直到不增长。","example":"SC → 加姓名、课名 → 加成绩。","result":"能覆盖 R 才是超码。","note":"不是数值加一；还需最小性才能判候选码。","anchor":"ch05-s017"},{"name":"依赖闭包 F⁺与蕴含","kind":"规则推理结果","meaning":"F⁺是全部可推出规则；用 X⁺检查一条依赖是否被保证。","usage":"F 蕴含 X→Y，当且仅当 Y⊆X⁺。","example":"S⁺只有 S/SName，不含 Grade。","result":"不能从主例规则推出 S→Grade。","note":"属性集合和规则集合是不同结果；不能推出不代表所有样本都违反。","anchor":"ch05-s020"},{"name":"Armstrong 公理","kind":"推理规则","meaning":"自反、增广和传递推出可靠的依赖结论。","usage":"知道整体可知部分；双方加同属性；顺链传递。","example":"S→Dept、Dept→Office 推出 S→Office。","result":"每一步都来自给定规则，不额外发明业务事实。","note":"增广改变两边；分解律拆右边，不随意拆左边。","anchor":"ch05-s014"},{"name":"正则覆盖/最小覆盖","kind":"等价的规则精简","meaning":"去掉多余属性或依赖，保持全部推理能力。","usage":"先明确表示约定；每次调整后重算相应闭包。","example":"A→BC、B→C、AB→C 可精简为 A→B、B→C。","result":"去掉冗余 A→C 后仍能通过 B 得到 C。","note":"不能留下被删规则来证明它自己；同左部合并与单右部形式要按课程区分。","anchor":"ch05-s022"},{"name":"1NF 与 2NF","kind":"入门结构标准","meaning":"每格一个原子值，并避免非主属性只依赖候选码的一部分。","usage":"先检查值，再检查非主属性对每个候选码的依赖。","example":"ENROLL 的姓名只由 S 确定，不需要组合 SC。","result":"符合 1NF 仍可违反 2NF。","note":"2NF 不能只检查选定主码，也不能保证没有传递造成的重复。","anchor":"ch05-s005"},{"name":"BCNF","kind":"函数依赖范式","meaning":"每个非平凡决定因素都必须能识别本关系整行。","usage":"非平凡 X→Y 时，X⁺应包含本关系全部属性。","example":"ENROLL 的 S→SName 左侧不是超码。","result":"原表不满足 BCNF；拆学生/课程/选课可满足。","note":"子表要考虑投影依赖，不能只看原 F 中原样剩余的条目。","anchor":"ch05-s024"},{"name":"3NF","kind":"较宽松的函数依赖范式","meaning":"平凡、左部超码，或右部单属性为主属性，满足一项即可。","usage":"先确定所有候选码与主属性，再逐项判断。","example":"AB→C、C→B 的 ABC，候选码 AB/AC。","result":"B 是主属性，所以 C→B 被 3NF 允许，但违反 BCNF。","note":"BCNF 推出 3NF，反向不保证。","anchor":"ch05-s029"},{"name":"BCNF 分解与 3NF 综合","kind":"两种构造方法","meaning":"前者按违反依赖拆，后者围绕等价精简规则建子模式。","usage":"违反 X→Y 可拆 XY 与 R−(Y−X)；综合还检查候选码是否被包含。","example":"ENROLL 最终 Student、Course、Takes。","result":"这个主例既无损又保持依赖，不代表所有 BCNF 分解都如此。","note":"检查每次拆的性质，并给出依赖保持的单独证明。","anchor":"ch05-s026"},{"name":"无损连接","kind":"信息恢复性质","meaning":"从原合法关系投影再连接，恰好还原，不产生假组合。","usage":"二表覆盖 R 时，交集应决定至少一侧全部属性。","example":"AB/BC 共同 B=b1，两边各两行会拼出四行。","result":"多出的 a1/b1/c2 等是伪元组。","note":"二表判据不直接适用于随便的多表逐对比较。","anchor":"ch05-s033"},{"name":"Chase","kind":"多表无损检验方法","meaning":"用依赖合并必须相同的符号，找全目标符号行。","usage":"每子表一行，本表列用 a，其他格初始不同 b 符号，再反复统一。","example":"主例 TAKES 行因 S→SName、C→CName 补齐。","result":"出现全 a 行说明该函数依赖检验成功。","note":"这是符号检验，不是实际查询执行轨迹。","anchor":"ch05-s037"},{"name":"依赖保持","kind":"规则检查性质","meaning":"各表内部规则合起来仍能保证全部原业务依赖。","usage":"比较投影依赖联合的推理能力与 F。","example":"CB/AC 局部合法，可拼成同 AB 对两个 C。","result":"不能只靠局部检查保证 AB→C。","note":"无损不等于保持依赖，两项用不同证据证明。","anchor":"ch05-s038"},{"name":"多值依赖与 4NF","kind":"独立多值信息","meaning":"给定 X 时，Y 与剩余属性的选择能自由组合。","usage":"X↠Y；非平凡多值决定因素应为超码。","example":"学生两爱好、两语言在独立假设下有四种组合。","result":"拆为爱好与语言两表可还原四对，减少交叉重复。","note":"若某爱好依赖所用语言，就不能假设自由组合。","anchor":"ch05-s041"},{"name":"有效时间与事务时间","kind":"两种历史观察","meaning":"现实何时生效，以及数据库何时记录这个版本。","usage":"分别保存事实区间和记录区间。","example":"9月1日搬家，9月5日才登记。","result":"9月3日的实际住址与当时库中记录可能不同。","note":"事务时间不是业务操作耗时，区间边界要说明。","anchor":"ch05-s046"},{"name":"判定、构造与验证的复杂性","kind":"任务区分","meaning":"原模式范式判断、分解构造、给定分解性质验证是不同问题。","usage":"明确输入、输出与限制，再读 NP-hard 等结论。","example":"课件 8.54 说一般 3NF 判定 NP-hard，3NF 综合可多项式完成。","result":"不能概括成所有 BCNF/3NF 工作都同样困难。","note":"不展开 F⁺也可以用闭包步骤检查依赖保持。","anchor":"ch05-s049"}]}</script><script>(()=>{'use strict';const payload=JSON.parse(document.getElementById('guide-data').textContent);const byId=id=>document.getElementById(id);const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));const rows=(headers,data)=>'<div class="table-scroll"><table><thead><tr>'+headers.map(x=>'<th scope="col">'+esc(x)+'</th>').join('')+'</tr></thead><tbody>'+data.map(row=>'<tr>'+row.map(x=>'<td>'+esc(x===null?'NULL':x)+'</td>').join('')+'</tr>').join('')+'</tbody></table></div>';const flow=steps=>'<div class="flow">'+steps.map((s,i)=>(i?'<div class="flow-arrow" aria-hidden="true">→</div>':'')+'<div class="flow-node"><strong>'+esc(s[0])+'</strong><p>'+esc(s[1])+'</p></div>').join('')+'</div>';for(const fig of payload.figures){if(fig.type==='choices'){const select=byId(fig.id+'-select');const draw=()=>{const option=fig.options[Number(select.value)];byId(fig.id+'-output').innerHTML='<p>'+esc(option.meaning)+'</p>'+(option.flow?flow(option.flow):'')+(option.svg||'')+(option.headers?rows(option.headers,option.rows):'')+(option.note?'<p class="fig-note">'+esc(option.note)+'</p>':'');};select.addEventListener('change',draw);draw();}}const refSelect=byId('ref-select');const refPanel=byId('ref-panel');const drawRef=()=>{const item=payload.references.find(x=>x.name===refSelect.value);if(!item){refPanel.hidden=true;refPanel.replaceChildren();return;}refPanel.innerHTML='<h3>'+esc(item.name)+'</h3><p class="ref-kind">'+esc(item.kind)+'</p><h4>解决什么问题</h4><p>'+esc(item.meaning)+'</p><h4>怎样理解或使用</h4><p>'+esc(item.usage)+'</p><h4>学习例子</h4><p>'+esc(item.example)+'</p><h4>结果与理由</h4><p class="result">'+esc(item.result)+'</p><h4>注意点</h4><p>'+esc(item.note)+'</p><a href="#'+esc(item.anchor)+'">回到正文看完整解释</a>';refPanel.hidden=false;};refSelect.addEventListener('change',drawRef);drawRef();const entries=[...document.querySelectorAll('.sidebar nav a')].map(link=>({link,target:document.getElementById(link.hash.slice(1))})).filter(e=>e.target);const offset=()=>{const n=Math.ceil(document.querySelector('.topbar').getBoundingClientRect().height)+18;document.documentElement.style.setProperty('--scroll-offset',n+'px');return n;};const close=()=>{document.body.classList.remove('nav-open');byId('menu').setAttribute('aria-expanded','false');};const activate=e=>entries.forEach(x=>{const on=x===e;x.link.classList.toggle('active',on);if(on)x.link.setAttribute('aria-current','location');else x.link.removeAttribute('aria-current');});const current=()=>{const boundary=offset()+3;let active=entries[0];for(const entry of entries){if(entry.target.getBoundingClientRect().top<=boundary)active=entry;else break;}if(entries.length&&innerHeight+scrollY>=document.documentElement.scrollHeight-2&&entries[entries.length-1].target.getBoundingClientRect().top<innerHeight)active=entries[entries.length-1];if(active)activate(active);};const jump=(target,hash)=>{close();window.scrollTo({top:Math.max(0,target.getBoundingClientRect().top+scrollY-offset()),behavior:'auto'});if(location.hash!==hash)history.pushState(null,'',hash);current();};document.addEventListener('click',event=>{const link=event.target.closest('a[href^="#"]');if(!link||event.button!==0||event.ctrlKey||event.metaKey||event.shiftKey||event.altKey)return;const target=document.getElementById(link.hash.slice(1));if(target){event.preventDefault();jump(target,link.hash);}});byId('menu').addEventListener('click',()=>{const on=document.body.classList.toggle('nav-open');byId('menu').setAttribute('aria-expanded',String(on));});document.addEventListener('keydown',e=>{if(e.key==='Escape')close();});let pending=false;const schedule=()=>{if(!pending){pending=true;requestAnimationFrame(()=>{current();pending=false;});}};window.addEventListener('scroll',schedule,{passive:true});window.addEventListener('resize',schedule);window.addEventListener('hashchange',schedule);window.addEventListener('popstate',schedule);if(typeof ResizeObserver!=='undefined')new ResizeObserver(schedule).observe(document.querySelector('.topbar'));let font=17;document.querySelectorAll('[data-font]').forEach(b=>b.addEventListener('click',()=>{font=Math.max(15,Math.min(21,font+Number(b.dataset.font)));document.documentElement.style.setProperty('--font',font+'px');schedule();}));byId('print').addEventListener('click',()=>window.print());document.querySelectorAll('article pre code').forEach(code=>{const pre=code.parentElement;const wrap=document.createElement('div');wrap.className='code-wrap';pre.parentNode.insertBefore(wrap,pre);wrap.append(pre);const button=document.createElement('button');button.type='button';button.className='copy';button.textContent='复制';button.setAttribute('aria-label','复制本段示例');button.addEventListener('click',async()=>{try{await navigator.clipboard.writeText(code.textContent);button.textContent='已复制';}catch{const range=document.createRange();range.selectNodeContents(code);const selection=window.getSelection();selection.removeAllRanges();selection.addRange(range);button.textContent='已选中';}setTimeout(()=>button.textContent='复制',1500);});wrap.append(button);});current();})();</script><!-- legacy-notes-cleanup:start -->
+
+<!-- legacy-notes-cleanup:end -->
+<!-- chapter-search:start -->
+<style id="chapter-search-style">
+#chapter-search{margin:0 0 32px;border:1px solid #b8cfc7;border-radius:9px;background:#f1f7f3;scroll-margin-top:110px;padding:12px 16px;font-size:14px}
+#chapter-search summary{cursor:pointer;font-weight:700;color:#135b54;min-height:30px}
+#chapter-search form{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:15px}
+#chapter-search label{font-weight:600}
+#chapter-search input{flex:1;min-width:140px;width:100%;font:inherit;font-size:16px;padding:9px 11px;border:1px solid #839e96;border-radius:6px;background:#fff;color:#24313e}
+#chapter-search p{font-size:13px;line-height:1.7;margin:12px 0}
+#chapter-search-status{font-weight:600;color:#185d52}
+#chapter-search .chapter-search-results{max-height:300px;overflow:auto;overscroll-behavior:contain;margin:0;padding-left:30px}
+#chapter-search .chapter-search-results button{display:block;width:100%;text-align:left;margin:5px 0;padding:9px 12px;background:#fff;white-space:normal;overflow-wrap:anywhere}
+#chapter-search .chapter-search-results strong,#chapter-search .chapter-search-results span{display:block}
+#chapter-search .chapter-search-results span{font-size:13px;font-weight:400;color:#43535b}
+#chapter-search button[aria-current=true]{border-color:#176c61;background:#e0efe9}
+.chapter-search-pages{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin-top:12px}
+.chapter-search-dock{position:fixed;bottom:14px;right:20px;z-index:35;display:flex;gap:7px;align-items:center;flex-wrap:wrap;max-width:calc(100vw - 30px);padding:9px 12px;border:1px solid #91b8a8;border-radius:9px;box-shadow:0 3px 18px #1232;background:#f2f8f4;color:#24313e;font-size:13px}
+.chapter-search-dock button{font-size:13px;min-height:36px}
+.chapter-search-dock span{font-variant-numeric:tabular-nums}
+.chapter-search-dock[hidden],.chapter-search-pages[hidden]{display:none}
+mark[data-chapter-search]{background:#ffec91;color:#24313e;padding:0;border-radius:2px;scroll-margin:130px 20px}
+mark.chapter-search-current{background:#ffc663;color:#172b36;outline:2px solid #9c5f0d;outline-offset:1px}
+#chapter-search :focus-visible,.chapter-search-dock :focus-visible{outline:3px solid #24877c;outline-offset:3px}
+#chapter-search button:disabled{opacity:.45;cursor:default}
+@media(max-width:600px){#chapter-search{padding:11px;margin-bottom:25px}#chapter-search label{width:100%}#chapter-search form{gap:6px}#chapter-search input{flex-basis:100%}#chapter-search .chapter-search-results{max-height:240px}.chapter-search-dock{bottom:8px;right:8px;max-width:calc(100vw - 16px);gap:5px;padding:7px}.chapter-search-dock button{padding:6px 8px}.chapter-search-dock span{min-width:45px}body:has(.chapter-search-dock:not([hidden])){padding-bottom:110px}}
+@media print{#chapter-search,.chapter-search-dock{display:none!important}mark[data-chapter-search]{background:none;color:inherit;outline:0}}
+</style>
+<script id="chapter-search-script">
+/* 离线章节搜索：从当前正文建立索引，不发送或保存关键词。 */
+(() => {
+  'use strict';
+  const article = document.querySelector('article');
+  if (!article || document.getElementById('chapter-search')) return;
+  const make = (tag, text, attrs = {}) => {
+    const el = document.createElement(tag);
+    if (text !== undefined) el.textContent = text;
+    for (const [key, value] of Object.entries(attrs)) el.setAttribute(key, value);
+    return el;
+  };
+  const button = (text, action) => {
+    const el = make('button', text, { type: 'button' });
+    el.addEventListener('click', action);
+    return el;
+  };
+  const box = make('section', undefined, { id: 'chapter-search', 'aria-label': '本章关键词搜索' });
+  const disclosure = make('details');
+  disclosure.append(make('summary', '搜索本章 · 中文 / English'));
+  const form = make('form', undefined, { role: 'search' });
+  const label = make('label', '关键词', { for: 'chapter-search-input' });
+  const input = make('input', undefined, { id: 'chapter-search-input', type: 'search', placeholder: '输入概念、术语或代码片段', autocomplete: 'off', 'aria-describedby': 'chapter-search-scope chapter-search-status' });
+  const submit = make('button', '搜索', { type: 'submit' });
+  const clearButton = button('清除', clear);
+  form.append(label, input, submit, clearButton);
+  const scope = make('p', '范围：本章正文、例子、表格、代码及折叠答案。交互图示与动态速查不重复计入，请检索对应正文。按原文匹配，英文不区分大小写；离线可用。Ctrl+K 打开，Enter 定位 / 下一处，Esc 清除。', { id: 'chapter-search-scope' });
+  const status = make('p', '输入关键词后搜索本章。', { id: 'chapter-search-status', role: 'status', 'aria-live': 'polite', 'aria-atomic': 'true' });
+  const results = make('ol', undefined, { class: 'chapter-search-results', 'aria-label': '匹配结果' });
+  const pages = make('div', undefined, { class: 'chapter-search-pages' });
+  const pageLabel = make('span');
+  const pagePrev = button('上一页结果', () => { page--; render(); });
+  const pageNext = button('下一页结果', () => { page++; render(); });
+  pages.append(pagePrev, pageLabel, pageNext);
+  pages.hidden = true;
+  disclosure.append(form, scope, status, results, pages);
+  box.append(disclosure);
+  article.before(box);
+  const dock = make('nav', undefined, { class: 'chapter-search-dock', 'aria-label': '搜索定位' });
+  dock.hidden = true;
+  const position = make('span', undefined, { role: 'status', 'aria-live': 'polite' });
+  dock.append(button('查看结果', openSearch), position, button('上一处', () => go(active < 0 ? hits.length - 1 : active - 1)), button('下一处', () => go(active + 1)), button('清除', clear));
+  document.body.append(dock);
+  const launch = button('搜索本章', openSearch);
+  launch.setAttribute('aria-controls', box.id);
+  document.querySelector('.toolbar')?.append(launch);
+  let hits = [], active = -1, page = 0, query = '', timer;
+  const pageSize = 20;
+  const excluded = 'script,style,noscript,button,select,option,input,textarea,nav,.learning-figure,.ref-area,.ref-picker,.ref-panel,.ref-hint,[aria-hidden="true"],[data-search-exclude]';
+  const blocks = 'h1,h2,h3,h4,h5,h6,p,li,pre,td,th,caption,dt,dd,summary,blockquote';
+
+  function unmark() {
+    const parents = new Set();
+    article.querySelectorAll('mark[data-chapter-search]').forEach(mark => {
+      parents.add(mark.parentNode);
+      mark.replaceWith(document.createTextNode(mark.textContent));
+    });
+    parents.forEach(parent => parent.normalize());
+  }
+  function clear() {
+    clearTimeout(timer);
+    unmark(); hits = []; active = -1; page = 0; query = ''; input.value = '';
+    results.replaceChildren(); pages.hidden = true; dock.hidden = true;
+    status.textContent = '已清除搜索与高亮，可继续阅读。';
+  }
+  function openSearch() {
+    disclosure.open = true;
+    box.scrollIntoView({ block: 'start' });
+    input.focus({ preventScroll: true });
+  }
+  function groups() {
+    const list = [];
+    let last = null;
+    const walk = node => {
+      if (node.nodeType === Node.ELEMENT_NODE) {
+        if (node.matches(excluded)) { last = null; return; }
+        for (const child of node.childNodes) walk(child);
+      } else if (node.nodeType === Node.TEXT_NODE && node.textContent) {
+        const block = node.parentElement.closest(blocks) || node.parentElement;
+        if (!node.textContent.trim() && !last) return;
+        if (!last || last.block !== block) {
+          last = { block, text: '', nodes: [] }; list.push(last);
+        }
+        last.nodes.push({ node, start: last.text.length });
+        last.text += node.textContent;
+      }
+    };
+    walk(article);
+    return list;
+  }
+  function search() {
+    clearTimeout(timer); unmark(); hits = []; active = -1; page = 0;
+    query = input.value.trim(); results.replaceChildren(); dock.hidden = true; pages.hidden = true;
+    if (!query) { status.textContent = '请输入非空关键词。'; return; }
+    const literal = query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const headings = [...article.querySelectorAll('h2,h3,h4')];
+    const edits = new Map();
+    for (const group of groups()) {
+      const re = new RegExp(literal, 'giu');
+      let found;
+      while ((found = re.exec(group.text))) {
+        const start = found.index, end = start + found[0].length;
+        let title = '本章正文';
+        for (const heading of headings) {
+          if (heading === group.block || (heading.compareDocumentPosition(group.nodes[0].node) & Node.DOCUMENT_POSITION_FOLLOWING)) title = heading.textContent.trim();
+          else break;
+        }
+        const from = Math.max(0, start - 32), to = Math.min(group.text.length, end + 48);
+        const hit = { title, excerpt: (from ? '…' : '') + group.text.slice(from, to) + (to < group.text.length ? '…' : ''), marks: [] };
+        const index = hits.push(hit) - 1;
+        for (const entry of group.nodes) {
+          const a = Math.max(0, start - entry.start), b = Math.min(entry.node.length, end - entry.start);
+          if (a < b) {
+            if (!edits.has(entry.node)) edits.set(entry.node, []);
+            edits.get(entry.node).push({ a, b, index });
+          }
+        }
+      }
+    }
+    for (const [node, ranges] of edits) {
+      const frag = document.createDocumentFragment();
+      let offset = 0;
+      for (const { a, b, index } of ranges) {
+        frag.append(document.createTextNode(node.data.slice(offset, a)));
+        const mark = make('mark', node.data.slice(a, b), { 'data-chapter-search': String(index) });
+        hits[index].marks.push(mark); frag.append(mark); offset = b;
+      }
+      frag.append(document.createTextNode(node.data.slice(offset))); node.replaceWith(frag);
+    }
+    status.textContent = hits.length ? `找到 ${hits.length} 处匹配。选择结果定位，或按 Enter 跳到第一处。` : `没有找到“${query}”。请尝试更短的关键词。`;
+    dock.hidden = !hits.length;
+    position.textContent = `共 ${hits.length} 处`;
+    render();
+  }
+  function render() {
+    results.replaceChildren();
+    const start = page * pageSize;
+    results.start = start + 1;
+    hits.slice(start, start + pageSize).forEach((hit, i) => {
+      const item = make('li');
+      const link = button('', () => go(start + i));
+      link.append(make('strong', hit.title), make('span', hit.excerpt));
+      link.setAttribute('aria-label', `${start + i + 1}. ${hit.title}：${hit.excerpt}`);
+      if (start + i === active) link.setAttribute('aria-current', 'true');
+      item.append(link); results.append(item);
+    });
+    pages.hidden = hits.length <= pageSize;
+    pageLabel.textContent = `第 ${page + 1} / ${Math.max(1, Math.ceil(hits.length / pageSize))} 页`;
+    pagePrev.disabled = page === 0;
+    pageNext.disabled = start + pageSize >= hits.length;
+  }
+  function go(index) {
+    if (!hits.length) return;
+    hits[active]?.marks.forEach(mark => mark.classList.remove('chapter-search-current'));
+    active = (index + hits.length) % hits.length;
+    const hit = hits[active];
+    hit.marks.forEach(mark => mark.classList.add('chapter-search-current'));
+    const mark = hit.marks[0];
+    for (let ancestor = mark.parentElement; ancestor; ancestor = ancestor.parentElement) {
+      if (ancestor.tagName === 'DETAILS') ancestor.open = true;
+    }
+    mark.setAttribute('tabindex', '-1');
+    mark.focus({ preventScroll: true });
+    mark.scrollIntoView({ block: 'center', inline: 'center', behavior: 'instant' });
+    position.textContent = `${active + 1} / ${hits.length}`;
+    page = Math.floor(active / pageSize); render();
+  }
+  input.addEventListener('input', () => { clearTimeout(timer); timer = setTimeout(search, 180); });
+  form.addEventListener('submit', event => {
+    event.preventDefault();
+    if (query !== input.value.trim() || !hits.length) search();
+    go(active + 1);
+  });
+  document.addEventListener('keydown', event => {
+    if ((event.ctrlKey || event.metaKey) && !event.altKey && event.key.toLowerCase() === 'k') {
+      event.preventDefault(); openSearch();
+    } else if (event.key === 'Escape' && (hits.length || box.contains(event.target))) {
+      clear();
+    }
+  });
+})();
+</script>
+<!-- chapter-search:end -->
+<script id="study-theme-script">(()=>{'use strict';
+ const select=document.getElementById('study-theme');
+ if(!select)return;
+ document.querySelector('.sidebar nav')?.addEventListener('click',event=>{
+  if(event.target.closest('a')){
+   document.body.classList.remove('nav-open');
+   document.getElementById('menu')?.setAttribute('aria-expanded','false');
+  }
+ });
+ select.value=document.documentElement.dataset.theme==='dark'?'dark':'light';
+ select.addEventListener('change',()=>{
+  const value=select.value==='dark'?'dark':'light';
+  document.documentElement.dataset.theme=value;
+  try{localStorage.setItem('jlu-database-reading-theme',value);}catch{}
+ });
+})();
+</script></body></html>

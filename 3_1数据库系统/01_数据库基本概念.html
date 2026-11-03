@@ -1,8 +1,55 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>第1单元 数据库基本概念 · 图解学习版</title><style>:root{--paper:#fbfaf7;--surface:#fff;--ink:#253341;--muted:#5c6b75;--line:#d5dfdd;--teal:#156b62;--soft:#edf6f1;--font:17px;--scroll-offset:90px}*{box-sizing:border-box}html{scroll-behavior:auto;scroll-padding-top:var(--scroll-offset)}body{margin:0;background:var(--paper);color:var(--ink);font-family:'Microsoft YaHei','PingFang SC',system-ui,sans-serif;font-size:var(--font);line-height:1.85}a{color:var(--teal);text-underline-offset:3px}a:hover{color:#173f75}button,select{font:inherit}button{cursor:pointer}button,select{border:1px solid #b9cbc5;border-radius:7px;padding:7px 11px;background:#fff;color:var(--ink)}button:hover{background:var(--soft)}button:focus-visible,select:focus-visible,a:focus-visible{outline:3px solid #81cbb8;outline-offset:3px}.skip{position:absolute;top:-80px;left:12px;z-index:50;background:#fff;padding:8px}.skip:focus{top:8px}.sidebar{position:fixed;inset:0 auto 0 0;width:270px;padding:23px 18px;background:#f0f4f0;border-right:1px solid var(--line);overflow:auto;z-index:30;overscroll-behavior:contain}.brand{font-size:21px;font-weight:700}.brand small{display:block;font-size:12px;font-weight:400;color:var(--muted)}.sidebar nav a{display:block;color:var(--ink);text-decoration:none;padding:8px 10px;margin:3px 0;border-radius:6px;font-size:14px;line-height:1.6}.sidebar nav a:hover{background:#dcebe3}.sidebar nav a.active,.sidebar nav a.active:hover{background:var(--teal);color:white}.sidebar select{width:100%;font-size:13px}.nav-tip{font-size:12px;color:var(--muted);margin:14px 0}.shell{margin-left:270px;overflow-anchor:none}.topbar{position:sticky;top:0;background:rgba(251,250,247,.98);padding:12px 26px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:12px;z-index:20}.topbar-title{font-size:13px;color:var(--muted)}.toolbar{display:flex;gap:7px;flex-wrap:wrap}.toolbar button{font-size:13px}.menu{display:none}main{max-width:1120px;margin:auto;padding:30px 44px 80px;min-width:0}h1{font-size:32px;line-height:1.5;margin:14px 0 25px}h2{font-size:25px;line-height:1.5;padding:0 0 11px;border-bottom:1px solid var(--line);margin:44px 0 23px}h3{font-size:21px;line-height:1.55;margin:29px 0 16px}h4{font-size:18px;line-height:1.6;margin:22px 0 13px}p{margin:14px 0}li{margin:7px 0}ul,ol{padding-left:1.6em}blockquote{margin:20px 0;padding:5px 18px;border-left:3px solid #a8c6bb;background:#f0f3ef;color:#53655e;font-size:14px}blockquote p{margin:8px 0}hr{border:0;border-top:1px solid var(--line);margin:32px 0}code{font-family:Consolas,'Cascadia Code',monospace;font-size:.9em;background:#eef1ed;padding:2px 5px;border-radius:4px;overflow-wrap:anywhere}pre{background:#18313d;color:#e8f0f0;border-radius:9px;padding:19px;line-height:1.65;overflow-x:auto;max-width:100%;font-size:14px}pre code{background:none;padding:0;color:inherit;white-space:pre;overflow-wrap:normal}table{border-collapse:collapse;width:100%;font-size:15px}th{background:#eaf3ee;text-align:left}td,th{padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:top}tbody tr:nth-child(even){background:#f6f9f6}.table-scroll{overflow-x:auto;border:1px solid var(--line);border-radius:8px;margin:17px 0;max-width:100%}.table-scroll td{min-width:80px}.source-note{font-size:13px;color:var(--muted)}.learning-figure{padding:23px;border:1px solid #b4cfc2;border-radius:12px;background:var(--soft);margin:25px 0}.learning-figure h4{margin:0 0 8px;font-size:20px}.fig-intro{font-size:14px;color:var(--muted)}.learning-figure label{display:block;margin-top:15px;font-size:14px;font-weight:700}.learning-figure select{margin-top:7px;width:100%;min-height:44px;font-size:15px}.fig-output{margin-top:16px}.flow{display:flex;gap:10px;align-items:stretch;flex-wrap:wrap}.flow-node{flex:1 1 150px;border:1px solid #bfd2c9;border-radius:8px;background:#fff;padding:13px;min-width:0}.flow-node strong{display:block;color:var(--teal)}.flow-node p{font-size:14px;margin:8px 0}.flow-arrow{align-self:center;color:var(--teal);font-size:24px}.fig-note{padding:10px 14px;border-left:3px solid var(--teal);background:#fff;font-size:14px;margin:15px 0 0}.svg-scroll{overflow-x:auto;max-width:100%}.svg-scroll svg{display:block;max-width:100%;height:auto}.ref-area{min-height:calc(100vh - var(--scroll-offset));margin-top:24px}.ref-picker{padding:22px;border-radius:12px;background:var(--soft);border:1px solid #b4cfc2}.ref-picker label{display:block;font-weight:700;margin-bottom:10px}.ref-picker select{width:100%;font-size:15px;min-height:46px}.ref-panel{margin-top:18px;background:#fff;border:1px solid var(--line);padding:20px;border-radius:9px}.ref-panel[hidden]{display:none}.ref-panel h3{margin:0;font-size:24px}.ref-panel h4{font-size:16px;margin:18px 0 8px}.ref-kind{font-size:13px;color:var(--teal)}.result{padding:10px 15px;border-left:3px solid var(--teal);background:var(--soft)}.copy{display:block;margin:5px 0 0 auto;font-size:12px;padding:4px 8px}.code-wrap{margin:20px 0}.code-wrap pre{margin-bottom:0}.foot{font-size:13px;color:var(--muted);border-top:1px solid var(--line);padding-top:23px;margin-top:30px}details{border:1px solid var(--line);padding:12px;border-radius:8px;margin:15px 0}summary{cursor:pointer;font-weight:700}@media(max-width:900px){.sidebar{transform:translateX(-100%)}body.nav-open .sidebar{transform:translateX(0);top:60px}.shell{margin-left:0}.menu{display:inline-block}.topbar-title{display:none}.topbar{padding:10px 14px}main{padding:23px 18px 65px}h1{font-size:27px}h2{font-size:23px}.learning-figure,.ref-picker{padding:16px}.flow{flex-direction:column}.flow-arrow{transform:rotate(90deg)}.ref-panel{padding:15px}}@media print{.sidebar,.topbar,.toolbar,.copy,.skip{display:none!important}.shell{margin:0}main{padding:0;max-width:none}body{background:#fff;font-size:11pt}.ref-area{min-height:0}.ref-picker select{display:none}pre{white-space:pre-wrap;background:#f3f5f4;color:#111}.learning-figure{break-inside:avoid}.table-scroll{overflow:visible}a{color:inherit}}@media print{.svg-scroll{overflow:visible}.svg-scroll svg{min-width:0!important;width:100%!important;height:auto!important}}.sidebar{width:266px;background:#f1f4f1;padding:27px 19px;overflow-y:auto}.brand{font-size:21px;font-weight:700;letter-spacing:.03em;margin-bottom:5px}.brand small{font-size:12px;font-weight:400;color:var(--muted);letter-spacing:.1em}.sidebar .sub{font-size:13px;color:var(--muted);margin:5px 0 21px}.sidebar nav a{font-size:14px;line-height:1.5;padding:9px 11px;margin:3px 0;border-radius:6px}.sidebar nav a:hover{background:#e0ece6;color:#174d43}.sidebar nav a.active,.sidebar nav a.active:hover{background:var(--teal);color:#fff}.nav-group{font-size:12px;color:var(--muted);margin:18px 11px 6px;letter-spacing:.08em}.sidebar-footer{margin-top:24px;font-size:12px;color:var(--muted)}.shell{margin-left:266px}@media(max-width:900px){.shell{margin-left:0}}
+<html lang="zh-CN"><head><script id="study-theme-init">(()=>{let t;try{t=localStorage.getItem('jlu-database-reading-theme');}catch{}if(t!=='light'&&t!=='dark'){t=window.matchMedia&&matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';}document.documentElement.dataset.theme=t;})();</script><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>第1单元 数据库基本概念 · 图解学习版</title><style>:root{--paper:#fbfaf7;--surface:#fff;--ink:#253341;--muted:#5c6b75;--line:#d5dfdd;--teal:#156b62;--soft:#edf6f1;--font:17px;--scroll-offset:90px}*{box-sizing:border-box}html{scroll-behavior:auto;scroll-padding-top:var(--scroll-offset)}body{margin:0;background:var(--paper);color:var(--ink);font-family:'Microsoft YaHei','PingFang SC',system-ui,sans-serif;font-size:var(--font);line-height:1.85}a{color:var(--teal);text-underline-offset:3px}a:hover{color:#173f75}button,select{font:inherit}button{cursor:pointer}button,select{border:1px solid #b9cbc5;border-radius:7px;padding:7px 11px;background:#fff;color:var(--ink)}button:hover{background:var(--soft)}button:focus-visible,select:focus-visible,a:focus-visible{outline:3px solid #81cbb8;outline-offset:3px}.skip{position:absolute;top:-80px;left:12px;z-index:50;background:#fff;padding:8px}.skip:focus{top:8px}.sidebar{position:fixed;inset:0 auto 0 0;width:270px;padding:23px 18px;background:#f0f4f0;border-right:1px solid var(--line);overflow:auto;z-index:30;overscroll-behavior:contain}.brand{font-size:21px;font-weight:700}.brand small{display:block;font-size:12px;font-weight:400;color:var(--muted)}.sidebar nav a{display:block;color:var(--ink);text-decoration:none;padding:8px 10px;margin:3px 0;border-radius:6px;font-size:14px;line-height:1.6}.sidebar nav a:hover{background:#dcebe3}.sidebar nav a.active,.sidebar nav a.active:hover{background:var(--teal);color:white}.sidebar select{width:100%;font-size:13px}.nav-tip{font-size:12px;color:var(--muted);margin:14px 0}.shell{margin-left:270px;overflow-anchor:none}.topbar{position:sticky;top:0;background:rgba(251,250,247,.98);padding:12px 26px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:12px;z-index:20}.topbar-title{font-size:13px;color:var(--muted)}.toolbar{display:flex;gap:7px;flex-wrap:wrap}.toolbar button{font-size:13px}.menu{display:none}main{max-width:1120px;margin:auto;padding:30px 44px 80px;min-width:0}h1{font-size:32px;line-height:1.5;margin:14px 0 25px}h2{font-size:25px;line-height:1.5;padding:0 0 11px;border-bottom:1px solid var(--line);margin:44px 0 23px}h3{font-size:21px;line-height:1.55;margin:29px 0 16px}h4{font-size:18px;line-height:1.6;margin:22px 0 13px}p{margin:14px 0}li{margin:7px 0}ul,ol{padding-left:1.6em}blockquote{margin:20px 0;padding:5px 18px;border-left:3px solid #a8c6bb;background:#f0f3ef;color:#53655e;font-size:14px}blockquote p{margin:8px 0}hr{border:0;border-top:1px solid var(--line);margin:32px 0}code{font-family:Consolas,'Cascadia Code',monospace;font-size:.9em;background:#eef1ed;padding:2px 5px;border-radius:4px;overflow-wrap:anywhere}pre{background:#18313d;color:#e8f0f0;border-radius:9px;padding:19px;line-height:1.65;overflow-x:auto;max-width:100%;font-size:14px}pre code{background:none;padding:0;color:inherit;white-space:pre;overflow-wrap:normal}table{border-collapse:collapse;width:100%;font-size:15px}th{background:#eaf3ee;text-align:left}td,th{padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:top}tbody tr:nth-child(even){background:#f6f9f6}.table-scroll{overflow-x:auto;border:1px solid var(--line);border-radius:8px;margin:17px 0;max-width:100%}.table-scroll td{min-width:80px}.source-note{font-size:13px;color:var(--muted)}.learning-figure{padding:23px;border:1px solid #b4cfc2;border-radius:12px;background:var(--soft);margin:25px 0}.learning-figure h4{margin:0 0 8px;font-size:20px}.fig-intro{font-size:14px;color:var(--muted)}.learning-figure label{display:block;margin-top:15px;font-size:14px;font-weight:700}.learning-figure select{margin-top:7px;width:100%;min-height:44px;font-size:15px}.fig-output{margin-top:16px}.flow{display:flex;gap:10px;align-items:stretch;flex-wrap:wrap}.flow-node{flex:1 1 150px;border:1px solid #bfd2c9;border-radius:8px;background:#fff;padding:13px;min-width:0}.flow-node strong{display:block;color:var(--teal)}.flow-node p{font-size:14px;margin:8px 0}.flow-arrow{align-self:center;color:var(--teal);font-size:24px}.fig-note{padding:10px 14px;border-left:3px solid var(--teal);background:#fff;font-size:14px;margin:15px 0 0}.svg-scroll{overflow-x:auto;max-width:100%}.svg-scroll svg{display:block;max-width:100%;height:auto}.ref-area{min-height:calc(100vh - var(--scroll-offset));margin-top:24px}.ref-picker{padding:22px;border-radius:12px;background:var(--soft);border:1px solid #b4cfc2}.ref-picker label{display:block;font-weight:700;margin-bottom:10px}.ref-picker select{width:100%;font-size:15px;min-height:46px}.ref-panel{margin-top:18px;background:#fff;border:1px solid var(--line);padding:20px;border-radius:9px}.ref-panel[hidden]{display:none}.ref-panel h3{margin:0;font-size:24px}.ref-panel h4{font-size:16px;margin:18px 0 8px}.ref-kind{font-size:13px;color:var(--teal)}.result{padding:10px 15px;border-left:3px solid var(--teal);background:var(--soft)}.copy{display:block;margin:5px 0 0 auto;font-size:12px;padding:4px 8px}.code-wrap{margin:20px 0}.code-wrap pre{margin-bottom:0}.foot{font-size:13px;color:var(--muted);border-top:1px solid var(--line);padding-top:23px;margin-top:30px}details{border:1px solid var(--line);padding:12px;border-radius:8px;margin:15px 0}summary{cursor:pointer;font-weight:700}@media(max-width:900px){.sidebar{transform:translateX(-100%)}body.nav-open .sidebar{transform:translateX(0);top:60px}.shell{margin-left:0}.menu{display:inline-block}.topbar-title{display:none}.topbar{padding:10px 14px}main{padding:23px 18px 65px}h1{font-size:27px}h2{font-size:23px}.learning-figure,.ref-picker{padding:16px}.flow{flex-direction:column}.flow-arrow{transform:rotate(90deg)}.ref-panel{padding:15px}}@media print{.sidebar,.topbar,.toolbar,.copy,.skip{display:none!important}.shell{margin:0}main{padding:0;max-width:none}body{background:#fff;font-size:11pt}.ref-area{min-height:0}.ref-picker select{display:none}pre{white-space:pre-wrap;background:#f3f5f4;color:#111}.learning-figure{break-inside:avoid}.table-scroll{overflow:visible}a{color:inherit}}@media print{.svg-scroll{overflow:visible}.svg-scroll svg{min-width:0!important;width:100%!important;height:auto!important}}.sidebar{width:266px;background:#f1f4f1;padding:27px 19px;overflow-y:auto}.brand{font-size:21px;font-weight:700;letter-spacing:.03em;margin-bottom:5px}.brand small{font-size:12px;font-weight:400;color:var(--muted);letter-spacing:.1em}.sidebar .sub{font-size:13px;color:var(--muted);margin:5px 0 21px}.sidebar nav a{font-size:14px;line-height:1.5;padding:9px 11px;margin:3px 0;border-radius:6px}.sidebar nav a:hover{background:#e0ece6;color:#174d43}.sidebar nav a.active,.sidebar nav a.active:hover{background:var(--teal);color:#fff}.nav-group{font-size:12px;color:var(--muted);margin:18px 11px 6px;letter-spacing:.08em}.sidebar-footer{margin-top:24px;font-size:12px;color:var(--muted)}.shell{margin-left:266px}@media(max-width:900px){.shell{margin-left:0}}
 #sql-reference{min-height:calc(100vh - var(--scroll-offset,90px))}
 .table-scroll{max-width:100%;overflow-x:auto;margin:18px 0;border:1px solid var(--line);border-radius:8px}.table-scroll table{width:100%;border-collapse:collapse}.table-scroll td,.table-scroll th{min-width:85px;vertical-align:top}.table-scroll pre{white-space:pre-wrap}article h2,article h3,article h4{scroll-margin-top:var(--scroll-offset,90px)}.course-home{display:block;font-size:13px;padding:8px 11px;margin-bottom:12px}.chapter-turns{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;margin-top:34px;padding-top:20px;border-top:1px solid var(--line)}.chapter-turns a{font-size:14px}.sidebar-footer{font-size:12px;color:var(--muted);margin-top:24px}article>p:first-of-type{font-size:1.04em}.noscript-note{padding:12px;border-left:3px solid var(--teal)}@media(max-width:600px){.table-scroll table{min-width:520px}.table-scroll{font-size:14px}pre{max-width:100%;overflow-x:auto}article{min-width:0}}@media print{.table-scroll table{min-width:0}.chapter-turns{display:none}}
-</style><meta name="source-sha256" content="798801e881cdc00c40ef9516499a5233e5e38f4e81c0263c1516fb6488ab43a5"></head><body><a class="skip" href="#article">跳到正文</a><aside class="sidebar" aria-label="章节目录"><div class="brand"><small>DATABASE / UNIT 01</small>数据库基本概念</div><p class="sub">理解 · 例题 · 自测</p><a class="course-home" href="00_%E5%AD%A6%E4%B9%A0%E5%AF%BC%E8%88%AA.html">返回课程学习导航</a><nav><a href="#ch01-navigation">学习导航</a><div class="nav-group">准备 · 数据与管理</div><a href="#ch01-s002">1. 从学校业务理解数据库、DBMS 与数据库系统</a><a href="#ch01-s006">2. 普通文件管理为什么会遇到困难</a><div class="nav-group">基础 · 结构与表达</div><a href="#ch01-s013">3. 数据抽象的三个层次</a><a href="#ch01-s017">4. 模式与实例</a><a href="#ch01-s020">5. 数据模型：用什么方式描述数据</a><a href="#ch01-s025">6. 数据库语言与数据字典</a><div class="nav-group">运行 · 设计与系统</div><a href="#ch01-s030">7. 数据库设计的四个阶段</a><a href="#ch01-s031">8. 一条查询怎样经过 DBMS</a><a href="#ch01-s035">9. 用户与数据库管理员</a><a href="#ch01-s036">10. 体系结构与发展概览</a><div class="nav-group">练习与复习</div><a href="#ch01-s039">11. 常见误解及修正</a><a href="#ch01-s040">12. 本单元模拟题</a><a href="#ch01-s043">13. 自拟自测题与逐步答案</a><a href="#ch01-s048">14. 复习清单与后续路线</a><a href="#ch01-effect">15. 把“定义、查询、修改、管理”放在同一场景中比较</a><a href="#ch01-reference">16. 本章概念与方法速查</a></nav><div class="sidebar-footer">先推导例子，再对照答案。<br>可用键盘选择目录与图解选项。</div></aside><div class="shell"><header class="topbar"><span class="topbar-title">第1单元 数据库基本概念</span><div class="toolbar"><button id="menu" class="menu" aria-label="打开或收起目录" aria-expanded="false">目录</button><button data-font="-1" aria-label="减小正文字号">字号 −</button><button data-font="1" aria-label="增大正文字号">字号 ＋</button><button id="print">打印 / 保存 PDF</button></div></header><main><article id="article"><h1>第1单元 数据库基本概念</h1>
+</style><meta name="source-sha256" content="7a86b4aaf948e6db87bae6e0fbceca264d1c7c1b9dbd389b3ff2d1c03a8cc167"><style id="study-theme-style">:root{color-scheme:light}
+.theme-control{display:inline-flex;align-items:center;gap:6px;font-size:13px;white-space:nowrap}
+.theme-control select{font:inherit;max-width:90px;padding:7px}
+html[data-theme=dark]{color-scheme:dark;--paper:#151c23;--surface:#1c2730;--ink:#e3ebef;--muted:#b3c3cc;--line:#465964;--teal:#80d8c3;--soft:#213b36}
+html[data-theme=dark] body{background:var(--paper);color:var(--ink)}
+html[data-theme=dark] .sidebar,html[data-theme=dark] .topbar{background:#1b2730;color:var(--ink)}
+html[data-theme=dark] :is(button,select,input,.flow-node,.fig-note,.ref-panel,.card,.course-card){background:var(--surface);color:var(--ink);border-color:var(--line)}
+html[data-theme=dark] :is(button:hover,.sidebar nav a:hover){background:#29463f;color:#e8fff6}
+html[data-theme=dark] .sidebar nav a.active{background:#80d8c3;color:#102921}
+html[data-theme=dark] a:hover{color:#c1e2ff}
+html[data-theme=dark] :is(th,blockquote,.learning-figure,.ref-picker,.result){background:#213b36;color:var(--ink);border-color:#527568}
+html[data-theme=dark] tbody tr:nth-child(even){background:#1c2b33}
+html[data-theme=dark] code{background:#293a43;color:#e7f4f6}
+html[data-theme=dark] pre,html[data-theme=dark] pre code{background:#0e1820;color:#e7f4f6}
+html[data-theme=dark] :is(.source-note,.fig-intro,.ref-kind,.sidebar-footer,.topbar-title,.nav-group,.foot,.nav-tip){color:var(--muted)}
+html[data-theme=dark] #chapter-search{background:#213b36;border-color:#527568}
+html[data-theme=dark] #chapter-search :is(summary,#chapter-search-status){color:#a5e8d7}
+html[data-theme=dark] #chapter-search input,html[data-theme=dark] #chapter-search .chapter-search-results button{background:#1c2730;color:#e3ebef;border-color:#607c77}
+html[data-theme=dark] #chapter-search .chapter-search-results span{color:#bdccd4}
+html[data-theme=dark] #chapter-search button[aria-current=true]{background:#345b4e;border-color:#a5e8d7}
+html[data-theme=dark] .chapter-search-dock{background:#243a34;color:#eef6f3;border-color:#80b5a3}
+html[data-theme=dark] mark[data-chapter-search]{background:#eedb77;color:#192218}
+html[data-theme=dark] mark.chapter-search-current{background:#ffbe63;color:#201609;outline-color:#ffebae}
+html[data-theme=dark] .skip{background:#1c2730;color:#80d8c3}
+html[data-theme=dark] :is(.syntax-line,.logic-flow>div,.balance-stage,.rollup-nodes>div,.window-anatomy span,.ref-result){background:#213b36;color:var(--ink)}
+html[data-theme=dark] :is(.dynamic-note.blocked,.noscript-note){background:#463b22;color:#ffe3a5}
+html[data-theme=dark] .truth.yes{background:#254b36;color:#b8f2ca}
+html[data-theme=dark] .truth.no{background:#522f30;color:#ffd0ca}
+html[data-theme=dark] .truth.unknown{background:#403254;color:#e5d2ff}
+html[data-theme=dark] .step-flow button[aria-pressed=true]{background:#80d8c3;color:#102921}
+html[data-theme=dark] .step-flow button span{background:#344c45;color:#def6ec}
+html[data-theme=dark] .syntax-line :is(.sql-key,.sql-string,.sql-num){color:inherit}
+html[data-theme=dark] :focus-visible{outline-color:#94e5cc}
+/* SVG 图内保留颜色之间的区别，并让白底图适合暗色页面。 */
+html[data-theme=dark] .svg-scroll svg{filter:invert(.88) hue-rotate(180deg)}
+@media(max-width:600px){.theme-control{font-size:12px}.toolbar{align-items:center}.theme-control select{min-height:36px}}
+@media(max-width:900px){.toolbar{min-width:0;max-width:100%}.topbar{flex-wrap:wrap}.topbar-label{display:none}.shell{overflow-x:clip}}
+@media print{
+ html[data-theme]{color-scheme:light;--paper:#fff;--surface:#fff;--ink:#111;--muted:#444;--line:#bbb;--teal:#154f47;--soft:#f2f5f3}
+ .theme-control{display:none!important}
+ html[data-theme=dark] body,html[data-theme=dark] :is(th,blockquote,.learning-figure,.ref-picker,.result,.flow-node,.fig-note,.ref-panel,.card,.course-card){background:#fff;color:#111}
+ html[data-theme=dark] tbody tr:nth-child(even){background:#f6f6f6}
+ html[data-theme=dark] :is(pre,pre code,code){background:#f2f2f2;color:#111}
+ html[data-theme=dark] .svg-scroll svg{filter:none}
+ html[data-theme=dark] :is(.syntax-line,.logic-flow>div,.balance-stage,.rollup-nodes>div,.window-anatomy span,.ref-result,.truth.yes,.truth.no,.truth.unknown,.dynamic-note.blocked,.noscript-note){background:#f5f5f5;color:#111}
+ html[data-theme=dark] a,html[data-theme=dark] :is(.source-note,.fig-intro,.ref-kind,.foot){color:#333}
+}
+</style></head><body><a class="skip" href="#article">跳到正文</a><aside class="sidebar" aria-label="章节目录"><div class="brand"><small>DATABASE / UNIT 01</small>数据库基本概念</div><p class="sub">理解 · 例题 · 自测</p><a class="course-home" href="00_%E5%AD%A6%E4%B9%A0%E5%AF%BC%E8%88%AA.html">返回课程学习导航</a><nav><a href="#ch01-navigation">学习导航</a><div class="nav-group">准备 · 数据与管理</div><a href="#ch01-s002">1. 从学校业务理解数据库、DBMS 与数据库系统</a><a href="#ch01-s006">2. 普通文件管理为什么会遇到困难</a><div class="nav-group">基础 · 结构与表达</div><a href="#ch01-s013">3. 数据抽象的三个层次</a><a href="#ch01-s017">4. 模式与实例</a><a href="#ch01-s020">5. 数据模型：用什么方式描述数据</a><a href="#ch01-s025">6. 数据库语言与数据字典</a><div class="nav-group">运行 · 设计与系统</div><a href="#ch01-s030">7. 数据库设计的四个阶段</a><a href="#ch01-s031">8. 一条查询怎样经过 DBMS</a><a href="#ch01-s035">9. 用户与数据库管理员</a><a href="#ch01-s036">10. 体系结构与发展概览</a><div class="nav-group">练习与复习</div><a href="#ch01-s039">11. 常见误解及修正</a><a href="#ch01-s040">12. 本单元模拟题</a><a href="#ch01-s043">13. 自拟自测题与逐步答案</a><a href="#ch01-s048">14. 复习清单与后续路线</a><a href="#ch01-effect">15. 把“定义、查询、修改、管理”放在同一场景中比较</a><a href="#ch01-reference">16. 本章概念与方法速查</a></nav><div class="sidebar-footer">先推导例子，再对照答案。<br>可用键盘选择目录与图解选项。</div></aside><div class="shell"><header class="topbar"><span class="topbar-title">第1单元 数据库基本概念</span><div class="toolbar"><label class="theme-control" for="study-theme">阅读配色 <select id="study-theme" aria-label="阅读配色"><option value="light">白天</option><option value="dark">夜间</option></select></label><button id="menu" class="menu" aria-label="打开或收起目录" aria-expanded="false">目录</button><button data-font="-1" aria-label="减小正文字号">字号 −</button><button data-font="1" aria-label="增大正文字号">字号 ＋</button><button id="print">打印 / 保存 PDF</button></div></header><main><article id="article"><h1>第1单元 数据库基本概念</h1>
 <p>学校登记学生、开设课程，还要记录谁选了哪门课。怎样让这些信息对应起来，让多人共同使用，并在修改或故障时保持正确？本章从选课业务出发，逐步认识数据、管理软件、设计过程和系统分工。</p>
 <!-- toc:start -->
 <h2 id="ch01-navigation">学习导航</h2>
@@ -214,6 +261,7 @@
 <h2 id="ch01-s013">3. 数据抽象的三个层次</h2>
 <p>同一份数据要服务学生、教务员和开发人员，他们需要知道的细节不同。如果每个人都必须理解磁盘文件才能查成绩，应用就很难使用和维护。三层抽象把“看到什么”“整体保存什么”“实际怎样存”分开，再讨论下层变化为什么有时不必改上层程序。</p>
 <h3 id="ch01-s014">3.1 为什么要分层</h3>
+<p>先看一个只有两条记录的教学页 P：它保存 <code>(S8,小江,数学)</code>、<code>(S9,小叶,历史)</code>。文件中读写 P 属于物理层；按 <code>student(SID,name,dept)</code> 理解记录属于逻辑层；学生 S8 登录后只显示自己的姓名和系属于视图层。同两条数据在三个层次有不同表达，数据页也不是一张完整的逻辑表。</p>
 <p>教务员只想知道学生成绩，不想先学数据在硬盘哪里。开发人员需要知道表和字段，却不一定需要知道每条记录占用哪块磁盘。<strong>抽象</strong>就是保留当前任务所需的细节，隐藏暂时无关的细节。</p>
 <div class="table-scroll"><table>
 <thead>
@@ -384,13 +432,14 @@ WHERE dept = '计算机';
 <h3 id="ch01-s033">8.2 存储管理器：把逻辑记录与存储衔接起来</h3>
 <p>执行计划指出要读哪些记录后，还要把这些请求落实到实际保存数据的文件和页。经常使用的数据若每次都重新读磁盘，开销会很大，因此还需要在内存中暂存数据页。</p>
 <p><strong>存储管理器</strong>负责组织文件、读写页和管理相关资源。<strong>缓冲区</strong>是内存中临时保存数据页的区域，减少重复读取磁盘。内存比磁盘访问快，但断电后通常不能像持久存储那样保留内容。</p>
-<p>课件把权限与完整性、事务、文件、缓冲区管理列在存储管理器相关组件中；不同软件的实际模块边界可以不同。这是一种原理划分，不是每款产品必须采用的组织图。</p>
+<p>这里把权限与完整性、事务、文件、缓冲区管理作为存储管理相关职责来理解；不同软件的实际模块边界可以不同。例如查询 S8 的姓名时，文件管理定位保存 S8 的数据页，缓冲区管理先检查该页是否已在内存：已在则可复用，否则从存储读入。读到页并不等于获准查看，仍需权限检查。</p>
 <h3 id="ch01-s034">8.3 事务管理：协调并发与故障恢复</h3>
 <p>如果查询过程中别人修改了成绩，或者写入时机器突然故障，单纯“找记录”的模块不能独自回答怎样保持正确。事务管理关注修改何时算成功、失败时撤销什么，以及多个操作能怎样交错。</p>
-<p><strong>事务管理</strong>负责前面介绍的整体提交、回滚和并发协调。<strong>提交</strong>表示事务成功结束，其结果应被数据库持久保留。<strong>故障恢复</strong>利用持久保存的信息，把故障后的状态恢复到符合事务规则的状态。</p>
+<p><strong>事务管理</strong>负责整体提交、回滚和并发协调。<strong>提交</strong>表示事务成功结束，其结果应被数据库持久保留。<strong>故障恢复</strong>利用持久保存的信息，把故障后的状态恢复到符合事务规则的状态。例如 A 有 100 元、B 有 50 元，要转 20 元；扣 A 后、加 B 前故障且未提交，应撤销扣款回到 100、50。两步成功并提交后，则应保留 80、70，不能把“程序已经执行扣款”当作“转账已经成功”。</p>
 <p>它既不决定学生选什么课程，也不替应用判断业务输入是否合理。第 06、07 章深入讲解。</p>
 <figure class="learning-figure" id="ch01-viz-query"><h4>一条查询怎样到达数据，再返回结果</h4><p class="fig-intro">此图表示模块分工和学习推导，并不要求某款 DBMS 按相同代码结构实现。</p><div class="flow"><div class="flow-node"><strong>应用提交要求</strong><p>查计算机系学生</p></div><div class="flow-arrow" aria-hidden="true">→</div><div class="flow-node"><strong>解析与翻译</strong><p>确认表列及条件，把文本变成内部操作</p></div><div class="flow-arrow" aria-hidden="true">→</div><div class="flow-node"><strong>选择执行计划</strong><p>比较扫描、索引等方法的代价</p></div><div class="flow-arrow" aria-hidden="true">→</div><div class="flow-node"><strong>存储组件取数据</strong><p>读取页、使用缓冲区，并执行相关检查</p></div><div class="flow-arrow" aria-hidden="true">→</div><div class="flow-node"><strong>返回本次结果</strong><p>S1 小林；查询不新增或修改学生</p></div></div></figure>
 <h2 id="ch01-s035">9. 用户与数据库管理员</h2>
+<p>例如周一备份的学生数为 100，周二又登记 2 人；只恢复周一副本，通常只能回到 100 人，若要找回新增记录还需相应恢复信息。管理员据此安排备份与恢复。若平时每分钟 10 次查询、选课开放时每分钟 1000 次，次数与操作组成就是工作负载；监测响应时间，并估算明年新增记录需要多少存储，分别对应性能监控与容量规划。</p>
 <p>同一个选课系统中，学生提出业务请求，开发者编写应用，管理员维护数据库，职责并不相同。先看每种人员对哪个对象做什么，再理解“数据库管理员”和授权中的“角色”为什么不是同一个概念。</p>
 <div class="table-scroll"><table>
 <thead>
@@ -463,6 +512,7 @@ WHERE dept = '计算机';
 </tbody></table>
 </div><p><strong>服务器</strong>是提供服务的程序或设备，<strong>客户机</strong>是发出服务请求的一方。并行强调协作使用计算资源；分布式强调跨多个位置或节点的协调，二者可以同时存在。</p>
 <h3 id="ch01-s038">10.2 为什么出现多种模型</h3>
+<p>假设只需表达学校→院系→学生，且每名学生仅属一个院系，父子树很直观；若还要表达学生与多个社团互相关联，单一父子路径就不够。允许多条记录联系可表达这种交叉关系；用学生表、社团表和加入表，也能把它写成关系模型。比较的是信息如何组织，不是服务器摆放在哪。</p>
 <p>早期<strong>层次模型</strong>把数据组织成树状的父子结构；<strong>网状模型</strong>允许更复杂的记录联系；关系模型用表表达事实，使应用更少依赖具体访问路径。之后，复杂类型、网络访问、大规模分析等需求推动更多扩展。本章只了解变化的动因，不要求记发展年份。</p>
 <h2 id="ch01-s039">11. 常见误解及修正</h2>
 <div class="table-scroll"><table>
@@ -618,4 +668,232 @@ WHERE dept = '计算机';
 <h2 id="ch01-reference">16. 本章概念与方法速查</h2>
 <p>选择一个条目，查看用途、写法、例子、结果和适用条件；需要完整推导时可返回正文。</p><div class="ref-area"><div class="ref-picker"><label for="ref-select">选择要查的概念或方法</label><select id="ref-select" aria-controls="ref-panel"><option value="">请选择一个条目</option><option value="数据库、DBMS、数据库系统">数据库、DBMS、数据库系统</option><option value="数据冗余与不一致">数据冗余与不一致</option><option value="数据抽象的三层">数据抽象的三层</option><option value="物理数据独立性">物理数据独立性</option><option value="逻辑数据独立性">逻辑数据独立性</option><option value="模式与实例">模式与实例</option><option value="数据模型">数据模型</option><option value="DDL 与 DML">DDL 与 DML</option><option value="过程式与声明式">过程式与声明式</option><option value="数据字典与元数据">数据字典与元数据</option><option value="数据库设计阶段">数据库设计阶段</option><option value="查询处理与存储管理">查询处理与存储管理</option><option value="事务与原子性">事务与原子性</option><option value="并发控制">并发控制</option><option value="权限、角色与 DBA">权限、角色与 DBA</option><option value="索引">索引</option><option value="集中、客户机/服务器、并行、分布式">集中、客户机/服务器、并行、分布式</option></select><p class="source-note">选中后显示用途、读法、例子、结果和注意点。完整总结表保存在 Markdown 版。</p><div id="ref-panel" class="ref-panel" aria-live="polite" hidden></div><noscript><p>请启用 JavaScript 使用选择菜单，或查看 Markdown 版的速查表。</p></noscript></div></div>
 
-</article><noscript><p class="noscript-note">交互图解和选择式速查需要 JavaScript；完整学习正文与速查表也可阅读对应的 Markdown 文件。</p></noscript><footer class="chapter-turns"><a href="00_%E5%AD%A6%E4%B9%A0%E5%AF%BC%E8%88%AA.html">返回课程导航</a><a href="https://goya4140.github.io/JLU_CS_Course/#/3_1%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F/01_%E6%95%B0%E6%8D%AE%E5%BA%93%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5.md">Markdown 正文</a><a href="02_%E5%85%B3%E7%B3%BB%E6%A8%A1%E5%9E%8B%E4%B8%8E%E5%85%B3%E7%B3%BB%E4%BB%A3%E6%95%B0.html">下一单元</a></footer></main></div><script id="guide-data" type="application/json">{"figures":[{"id":"ch01-viz-layers","after":"ch01-s014","title":"同一份资料的三层视角","intro":"先看谁需要哪些信息，再看结构与存储。切换一种变化，观察它主要影响哪一层。","type":"choices","options":[{"label":"只给学号增加索引","meaning":"增加一种定位方法，学生表的列没有改变。","flow":[["视图层","仍显示姓名和成绩"],["逻辑层","仍使用 SID、name、dept"],["物理层","增加索引与新的查找路径"]],"note":"物理变化不必因此改写逻辑查询；实际是否走索引仍由执行计划决定。"},{"label":"增加邮箱列","meaning":"整体结构多了一种信息，原本仅查询姓名的页面可以继续只取姓名。","flow":[["视图层","旧页面仍可只显示姓名"],["逻辑层","student 增加 email 列"],["物理层","需要能保存新增值"]],"note":"这说明适当的逻辑变化可由接口吸收，不能保证删除旧列仍兼容。"},{"label":"登记一位新生","meaning":"已有结构下增加一条记录。","flow":[["视图层","再次查询可显示新增学生"],["逻辑层","列与原有约束没有改变"],["数据实例","多一个按这些列填写的学生"]],"note":"记录变化不是逻辑模式变化；已经显示在屏幕的旧结果需要重新查询。"}]},{"id":"ch01-viz-query","after":"ch01-s031","title":"一条查询怎样到达数据，再返回结果","intro":"此图表示模块分工和学习推导，并不要求某款 DBMS 按相同代码结构实现。","type":"flow","steps":[["应用提交要求","查计算机系学生"],["解析与翻译","确认表列及条件，把文本变成内部操作"],["选择执行计划","比较扫描、索引等方法的代价"],["存储组件取数据","读取页、使用缓冲区，并执行相关检查"],["返回本次结果","S1 小林；查询不新增或修改学生"]]}],"references":[{"name":"数据库、DBMS、数据库系统","kind":"三个不同范围的对象","meaning":"分别是相关数据、管理软件，以及包含应用人员设备的整体。","usage":"先问：我说的是数据、软件还是整个使用环境？","example":"学校保存 student/course/takes；DBMS 管理它们；选课网页和维护人员属于整个系统。","result":"三个名称不会因为服务同一业务就变成同义词。","note":"不能把数据库只理解成某个软件程序。","anchor":"ch01-s004"},{"name":"数据冗余与不一致","kind":"两种相关但不同的问题","meaning":"冗余是同一事实多次保存，不一致是副本内容互相矛盾。","usage":"比较同一对象同一事实在各处的值。","example":"教务地址改成校园路，财务仍为松林路。","result":"修改前可能只是重复，修改后产生矛盾。","note":"副本不一定必须全部消除，但需要维护一致性。","anchor":"ch01-s007"},{"name":"数据抽象的三层","kind":"观察数据的层次","meaning":"视图层关注用户所见，逻辑层关注整体结构，物理层关注实际存储。","usage":"用户所见 → 表与联系 → 页、文件和访问路径。","example":"学生看本人成绩；逻辑上有学生选课表；存储上使用数据页。","result":"同一数据可有多个用户视图，底层存储细节被隐藏。","note":"这里的视图层不只指一个 CREATE VIEW 对象。","anchor":"ch01-s014"},{"name":"物理数据独立性","kind":"变化影响范围","meaning":"物理存储改变时，不必因此改变逻辑模式。","usage":"检查：列和规则是否变化？原逻辑查询是否仍有同样含义？","example":"给 SID 加索引，仍用原查询找 S1。","result":"查找路径改变，学生表的结构和查询含义不变。","note":"不是说建索引没有维护成本。","anchor":"ch01-s015"},{"name":"逻辑数据独立性","kind":"变化影响范围","meaning":"适当改变逻辑结构，通过接口和视图保持已有使用方式。","usage":"结构变化 → 调整映射或接口 → 尽量维持用户需求。","example":"增加邮箱列，原先只显示姓名的页面继续使用原输出列。","result":"旧功能有机会不改，但需要检查它实际依赖的列和接口。","note":"删除被应用直接使用的列不能自动保证兼容。","anchor":"ch01-s016"},{"name":"模式与实例","kind":"结构与数据","meaning":"模式规定有哪些列与规则，实例是某时刻的实际数据。","usage":"先问变化在表头规则，还是在记录内容。","example":"新增学生改变实例；增加邮箱列改变模式。","result":"空表也已有模式，并不是没有数据库结构。","note":"这里的实例不是某些产品的运行服务名称。","anchor":"ch01-s018"},{"name":"数据模型","kind":"表达业务的概念工具","meaning":"规定怎样描述对象、联系和规则。","usage":"选择表达工具 → 描述实际业务 → 再落实表与存储。","example":"ER 先画学生和课程；关系模型用表实现对应事实。","result":"模型、具体模式和当前数据是不同层次。","note":"不能把一种部署方式当作一种数据模型。","anchor":"ch01-s020"},{"name":"DDL 与 DML","kind":"命令用途分类","meaning":"DDL 定义结构；DML 查询或修改记录。","usage":"先确定需要建立规则、读结果，还是改已保存的行。","example":"CREATE TABLE 建表；SELECT 查计算机系学生。","result":"前者建立空表，后者按已有数据得到名单。","note":"同属 DML 的查询和更新，也有不同的数据影响。","anchor":"ch01-s025"},{"name":"过程式与声明式","kind":"表达方式","meaning":"前者描述操作步骤，后者描述需要的结果条件。","usage":"把“怎么一步步取到”与“什么结果符合要求”分开。","example":"逐行检查系名，与 SELECT ... WHERE dept=计算机。","result":"数据库内部仍需要一个具体执行过程。","note":"理解过程不等于实际物理执行计划。","anchor":"ch01-s028"},{"name":"数据字典与元数据","kind":"管理信息","meaning":"元数据描述列、类型、约束等；数据字典保存这些描述。","usage":"区分“记录值”与“关于列和规则的说明”。","example":"小林是姓名值；姓名列长度上限是元数据。","result":"修改姓名和改变姓名列类型是不同操作。","note":"不同产品保存和提供元数据的接口不同。","anchor":"ch01-s029"},{"name":"数据库设计阶段","kind":"从需求到实现的流程","meaning":"需求、概念、逻辑、物理分别解决规则、模型、表、存储问题。","usage":"先问重修规则，再画联系、转表、选访问路径。","example":"允许跨学期重修时，SID/CID 组合不能直接标识全部修读。","result":"业务前提会影响后续每一步。","note":"不能先选一个表结构再强迫业务适应它。","anchor":"ch01-s030"},{"name":"查询处理与存储管理","kind":"DBMS 内部职责","meaning":"查询组件解释和执行需求，存储组件组织与读取实际数据。","usage":"应用请求 → 解析翻译 → 计划选择 → 读取与返回。","example":"查询计算机系学生可扫描表，也可使用合适索引。","result":"方法不同，但结果必须回答同一个查询。","note":"课件模块划分不代表所有产品代码结构都相同。","anchor":"ch01-s031"},{"name":"事务与原子性","kind":"修改整体的处理规则","meaning":"把相关操作作为整体确认或撤销。","usage":"一起开始 → 执行相关修改 → 提交或回滚。","example":"500/300 转 200，最终 300/500，失败则撤销未提交修改。","result":"只扣款不是合法的成功结束。","note":"原子性不能纠正错误收款人等错误业务输入。","anchor":"ch01-s010"},{"name":"并发控制","kind":"协调交错操作的机制","meaning":"决定多人操作怎样交错而不破坏业务规则。","usage":"观察读到什么、谁先写、何时允许另一人继续。","example":"最后一个名额不能让两个请求都成功占用。","result":"控制的是操作关系，并非一律禁止同时使用系统。","note":"并发不要求每条指令物理上同时执行。","anchor":"ch01-s011"},{"name":"权限、角色与 DBA","kind":"访问规则与人员职责","meaning":"权限规定可做什么，角色集中权限，DBA 是管理人员职责。","usage":"把允许的操作、接收权限的组和维护人员分开。","example":"教师角色可以录成绩；DBA 管理授权、备份与性能。","result":"能读成绩不自动意味着能修改或再授权。","note":"“角色”不等于一个管理员账号。","anchor":"ch01-s012"},{"name":"索引","kind":"辅助访问结构","meaning":"用搜索值帮助定位记录或页。","usage":"搜索码值 → 索引查找 → 记录位置。","example":"学号 S2 → 小周的记录。","result":"可能减少读页，但维护索引也要空间和写入工作。","note":"散列索引不保证全体搜索码有序；搜索码不一定唯一。","anchor":"ch01-s042"},{"name":"集中、客户机/服务器、并行、分布式","kind":"体系结构角度","meaning":"分别说明工作是否集中、服务分工、协同资源和跨节点协调。","usage":"按每个名称回答的问题分类，不把它们当作全互斥选项。","example":"学生设备发请求，多个节点可协作处理大查询。","result":"一个系统可同时具有客户机/服务器与分布式特征。","note":"具体部署与数据模型分别决定。","anchor":"ch01-s037"}]}</script><script>(()=>{'use strict';const payload=JSON.parse(document.getElementById('guide-data').textContent);const byId=id=>document.getElementById(id);const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));const rows=(headers,data)=>'<div class="table-scroll"><table><thead><tr>'+headers.map(x=>'<th scope="col">'+esc(x)+'</th>').join('')+'</tr></thead><tbody>'+data.map(row=>'<tr>'+row.map(x=>'<td>'+esc(x===null?'NULL':x)+'</td>').join('')+'</tr>').join('')+'</tbody></table></div>';const flow=steps=>'<div class="flow">'+steps.map((s,i)=>(i?'<div class="flow-arrow" aria-hidden="true">→</div>':'')+'<div class="flow-node"><strong>'+esc(s[0])+'</strong><p>'+esc(s[1])+'</p></div>').join('')+'</div>';for(const fig of payload.figures){if(fig.type==='choices'){const select=byId(fig.id+'-select');const draw=()=>{const option=fig.options[Number(select.value)];byId(fig.id+'-output').innerHTML='<p>'+esc(option.meaning)+'</p>'+(option.flow?flow(option.flow):'')+(option.svg||'')+(option.headers?rows(option.headers,option.rows):'')+(option.note?'<p class="fig-note">'+esc(option.note)+'</p>':'');};select.addEventListener('change',draw);draw();}}const refSelect=byId('ref-select');const refPanel=byId('ref-panel');const drawRef=()=>{const item=payload.references.find(x=>x.name===refSelect.value);if(!item){refPanel.hidden=true;refPanel.replaceChildren();return;}refPanel.innerHTML='<h3>'+esc(item.name)+'</h3><p class="ref-kind">'+esc(item.kind)+'</p><h4>解决什么问题</h4><p>'+esc(item.meaning)+'</p><h4>怎样理解或使用</h4><p>'+esc(item.usage)+'</p><h4>学习例子</h4><p>'+esc(item.example)+'</p><h4>结果与理由</h4><p class="result">'+esc(item.result)+'</p><h4>注意点</h4><p>'+esc(item.note)+'</p><a href="#'+esc(item.anchor)+'">回到正文看完整解释</a>';refPanel.hidden=false;};refSelect.addEventListener('change',drawRef);drawRef();const entries=[...document.querySelectorAll('.sidebar nav a')].map(link=>({link,target:document.getElementById(link.hash.slice(1))})).filter(e=>e.target);const offset=()=>{const n=Math.ceil(document.querySelector('.topbar').getBoundingClientRect().height)+18;document.documentElement.style.setProperty('--scroll-offset',n+'px');return n;};const close=()=>{document.body.classList.remove('nav-open');byId('menu').setAttribute('aria-expanded','false');};const activate=e=>entries.forEach(x=>{const on=x===e;x.link.classList.toggle('active',on);if(on)x.link.setAttribute('aria-current','location');else x.link.removeAttribute('aria-current');});const current=()=>{const boundary=offset()+3;let active=entries[0];for(const entry of entries){if(entry.target.getBoundingClientRect().top<=boundary)active=entry;else break;}if(entries.length&&innerHeight+scrollY>=document.documentElement.scrollHeight-2&&entries[entries.length-1].target.getBoundingClientRect().top<innerHeight)active=entries[entries.length-1];if(active)activate(active);};const jump=(target,hash)=>{close();window.scrollTo({top:Math.max(0,target.getBoundingClientRect().top+scrollY-offset()),behavior:'auto'});if(location.hash!==hash)history.pushState(null,'',hash);current();};document.addEventListener('click',event=>{const link=event.target.closest('a[href^="#"]');if(!link||event.button!==0||event.ctrlKey||event.metaKey||event.shiftKey||event.altKey)return;const target=document.getElementById(link.hash.slice(1));if(target){event.preventDefault();jump(target,link.hash);}});byId('menu').addEventListener('click',()=>{const on=document.body.classList.toggle('nav-open');byId('menu').setAttribute('aria-expanded',String(on));});document.addEventListener('keydown',e=>{if(e.key==='Escape')close();});let pending=false;const schedule=()=>{if(!pending){pending=true;requestAnimationFrame(()=>{current();pending=false;});}};window.addEventListener('scroll',schedule,{passive:true});window.addEventListener('resize',schedule);window.addEventListener('hashchange',schedule);window.addEventListener('popstate',schedule);if(typeof ResizeObserver!=='undefined')new ResizeObserver(schedule).observe(document.querySelector('.topbar'));let font=17;document.querySelectorAll('[data-font]').forEach(b=>b.addEventListener('click',()=>{font=Math.max(15,Math.min(21,font+Number(b.dataset.font)));document.documentElement.style.setProperty('--font',font+'px');schedule();}));byId('print').addEventListener('click',()=>window.print());document.querySelectorAll('article pre code').forEach(code=>{const pre=code.parentElement;const wrap=document.createElement('div');wrap.className='code-wrap';pre.parentNode.insertBefore(wrap,pre);wrap.append(pre);const button=document.createElement('button');button.type='button';button.className='copy';button.textContent='复制';button.setAttribute('aria-label','复制本段示例');button.addEventListener('click',async()=>{try{await navigator.clipboard.writeText(code.textContent);button.textContent='已复制';}catch{const range=document.createRange();range.selectNodeContents(code);const selection=window.getSelection();selection.removeAllRanges();selection.addRange(range);button.textContent='已选中';}setTimeout(()=>button.textContent='复制',1500);});wrap.append(button);});current();})();</script></body></html>
+</article><noscript><p class="noscript-note">交互图解和选择式速查需要 JavaScript；完整学习正文与速查表也可阅读对应的 Markdown 文件。</p></noscript><footer class="chapter-turns"><a href="00_%E5%AD%A6%E4%B9%A0%E5%AF%BC%E8%88%AA.html">返回课程导航</a><a href="https://goya4140.github.io/JLU_CS_Course/#/3_1%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F/01_%E6%95%B0%E6%8D%AE%E5%BA%93%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5.md">Markdown 正文</a><a href="02_%E5%85%B3%E7%B3%BB%E6%A8%A1%E5%9E%8B%E4%B8%8E%E5%85%B3%E7%B3%BB%E4%BB%A3%E6%95%B0.html">下一单元</a></footer></main></div><script id="guide-data" type="application/json">{"figures":[{"id":"ch01-viz-layers","after":"ch01-s014","title":"同一份资料的三层视角","intro":"先看谁需要哪些信息，再看结构与存储。切换一种变化，观察它主要影响哪一层。","type":"choices","options":[{"label":"只给学号增加索引","meaning":"增加一种定位方法，学生表的列没有改变。","flow":[["视图层","仍显示姓名和成绩"],["逻辑层","仍使用 SID、name、dept"],["物理层","增加索引与新的查找路径"]],"note":"物理变化不必因此改写逻辑查询；实际是否走索引仍由执行计划决定。"},{"label":"增加邮箱列","meaning":"整体结构多了一种信息，原本仅查询姓名的页面可以继续只取姓名。","flow":[["视图层","旧页面仍可只显示姓名"],["逻辑层","student 增加 email 列"],["物理层","需要能保存新增值"]],"note":"这说明适当的逻辑变化可由接口吸收，不能保证删除旧列仍兼容。"},{"label":"登记一位新生","meaning":"已有结构下增加一条记录。","flow":[["视图层","再次查询可显示新增学生"],["逻辑层","列与原有约束没有改变"],["数据实例","多一个按这些列填写的学生"]],"note":"记录变化不是逻辑模式变化；已经显示在屏幕的旧结果需要重新查询。"}]},{"id":"ch01-viz-query","after":"ch01-s031","title":"一条查询怎样到达数据，再返回结果","intro":"此图表示模块分工和学习推导，并不要求某款 DBMS 按相同代码结构实现。","type":"flow","steps":[["应用提交要求","查计算机系学生"],["解析与翻译","确认表列及条件，把文本变成内部操作"],["选择执行计划","比较扫描、索引等方法的代价"],["存储组件取数据","读取页、使用缓冲区，并执行相关检查"],["返回本次结果","S1 小林；查询不新增或修改学生"]]}],"references":[{"name":"数据库、DBMS、数据库系统","kind":"三个不同范围的对象","meaning":"分别是相关数据、管理软件，以及包含应用人员设备的整体。","usage":"先问：我说的是数据、软件还是整个使用环境？","example":"学校保存 student/course/takes；DBMS 管理它们；选课网页和维护人员属于整个系统。","result":"三个名称不会因为服务同一业务就变成同义词。","note":"不能把数据库只理解成某个软件程序。","anchor":"ch01-s004"},{"name":"数据冗余与不一致","kind":"两种相关但不同的问题","meaning":"冗余是同一事实多次保存，不一致是副本内容互相矛盾。","usage":"比较同一对象同一事实在各处的值。","example":"教务地址改成校园路，财务仍为松林路。","result":"修改前可能只是重复，修改后产生矛盾。","note":"副本不一定必须全部消除，但需要维护一致性。","anchor":"ch01-s007"},{"name":"数据抽象的三层","kind":"观察数据的层次","meaning":"视图层关注用户所见，逻辑层关注整体结构，物理层关注实际存储。","usage":"用户所见 → 表与联系 → 页、文件和访问路径。","example":"学生看本人成绩；逻辑上有学生选课表；存储上使用数据页。","result":"同一数据可有多个用户视图，底层存储细节被隐藏。","note":"这里的视图层不只指一个 CREATE VIEW 对象。","anchor":"ch01-s014"},{"name":"物理数据独立性","kind":"变化影响范围","meaning":"物理存储改变时，不必因此改变逻辑模式。","usage":"检查：列和规则是否变化？原逻辑查询是否仍有同样含义？","example":"给 SID 加索引，仍用原查询找 S1。","result":"查找路径改变，学生表的结构和查询含义不变。","note":"不是说建索引没有维护成本。","anchor":"ch01-s015"},{"name":"逻辑数据独立性","kind":"变化影响范围","meaning":"适当改变逻辑结构，通过接口和视图保持已有使用方式。","usage":"结构变化 → 调整映射或接口 → 尽量维持用户需求。","example":"增加邮箱列，原先只显示姓名的页面继续使用原输出列。","result":"旧功能有机会不改，但需要检查它实际依赖的列和接口。","note":"删除被应用直接使用的列不能自动保证兼容。","anchor":"ch01-s016"},{"name":"模式与实例","kind":"结构与数据","meaning":"模式规定有哪些列与规则，实例是某时刻的实际数据。","usage":"先问变化在表头规则，还是在记录内容。","example":"新增学生改变实例；增加邮箱列改变模式。","result":"空表也已有模式，并不是没有数据库结构。","note":"这里的实例不是某些产品的运行服务名称。","anchor":"ch01-s018"},{"name":"数据模型","kind":"表达业务的概念工具","meaning":"规定怎样描述对象、联系和规则。","usage":"选择表达工具 → 描述实际业务 → 再落实表与存储。","example":"ER 先画学生和课程；关系模型用表实现对应事实。","result":"模型、具体模式和当前数据是不同层次。","note":"不能把一种部署方式当作一种数据模型。","anchor":"ch01-s020"},{"name":"DDL 与 DML","kind":"命令用途分类","meaning":"DDL 定义结构；DML 查询或修改记录。","usage":"先确定需要建立规则、读结果，还是改已保存的行。","example":"CREATE TABLE 建表；SELECT 查计算机系学生。","result":"前者建立空表，后者按已有数据得到名单。","note":"同属 DML 的查询和更新，也有不同的数据影响。","anchor":"ch01-s025"},{"name":"过程式与声明式","kind":"表达方式","meaning":"前者描述操作步骤，后者描述需要的结果条件。","usage":"把“怎么一步步取到”与“什么结果符合要求”分开。","example":"逐行检查系名，与 SELECT ... WHERE dept=计算机。","result":"数据库内部仍需要一个具体执行过程。","note":"理解过程不等于实际物理执行计划。","anchor":"ch01-s028"},{"name":"数据字典与元数据","kind":"管理信息","meaning":"元数据描述列、类型、约束等；数据字典保存这些描述。","usage":"区分“记录值”与“关于列和规则的说明”。","example":"小林是姓名值；姓名列长度上限是元数据。","result":"修改姓名和改变姓名列类型是不同操作。","note":"不同产品保存和提供元数据的接口不同。","anchor":"ch01-s029"},{"name":"数据库设计阶段","kind":"从需求到实现的流程","meaning":"需求、概念、逻辑、物理分别解决规则、模型、表、存储问题。","usage":"先问重修规则，再画联系、转表、选访问路径。","example":"允许跨学期重修时，SID/CID 组合不能直接标识全部修读。","result":"业务前提会影响后续每一步。","note":"不能先选一个表结构再强迫业务适应它。","anchor":"ch01-s030"},{"name":"查询处理与存储管理","kind":"DBMS 内部职责","meaning":"查询组件解释和执行需求，存储组件组织与读取实际数据。","usage":"应用请求 → 解析翻译 → 计划选择 → 读取与返回。","example":"查询计算机系学生可扫描表，也可使用合适索引。","result":"方法不同，但结果必须回答同一个查询。","note":"课件模块划分不代表所有产品代码结构都相同。","anchor":"ch01-s031"},{"name":"事务与原子性","kind":"修改整体的处理规则","meaning":"把相关操作作为整体确认或撤销。","usage":"一起开始 → 执行相关修改 → 提交或回滚。","example":"500/300 转 200，最终 300/500，失败则撤销未提交修改。","result":"只扣款不是合法的成功结束。","note":"原子性不能纠正错误收款人等错误业务输入。","anchor":"ch01-s010"},{"name":"并发控制","kind":"协调交错操作的机制","meaning":"决定多人操作怎样交错而不破坏业务规则。","usage":"观察读到什么、谁先写、何时允许另一人继续。","example":"最后一个名额不能让两个请求都成功占用。","result":"控制的是操作关系，并非一律禁止同时使用系统。","note":"并发不要求每条指令物理上同时执行。","anchor":"ch01-s011"},{"name":"权限、角色与 DBA","kind":"访问规则与人员职责","meaning":"权限规定可做什么，角色集中权限，DBA 是管理人员职责。","usage":"把允许的操作、接收权限的组和维护人员分开。","example":"教师角色可以录成绩；DBA 管理授权、备份与性能。","result":"能读成绩不自动意味着能修改或再授权。","note":"“角色”不等于一个管理员账号。","anchor":"ch01-s012"},{"name":"索引","kind":"辅助访问结构","meaning":"用搜索值帮助定位记录或页。","usage":"搜索码值 → 索引查找 → 记录位置。","example":"学号 S2 → 小周的记录。","result":"可能减少读页，但维护索引也要空间和写入工作。","note":"散列索引不保证全体搜索码有序；搜索码不一定唯一。","anchor":"ch01-s042"},{"name":"集中、客户机/服务器、并行、分布式","kind":"体系结构角度","meaning":"分别说明工作是否集中、服务分工、协同资源和跨节点协调。","usage":"按每个名称回答的问题分类，不把它们当作全互斥选项。","example":"学生设备发请求，多个节点可协作处理大查询。","result":"一个系统可同时具有客户机/服务器与分布式特征。","note":"具体部署与数据模型分别决定。","anchor":"ch01-s037"}]}</script><script>(()=>{'use strict';const payload=JSON.parse(document.getElementById('guide-data').textContent);const byId=id=>document.getElementById(id);const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));const rows=(headers,data)=>'<div class="table-scroll"><table><thead><tr>'+headers.map(x=>'<th scope="col">'+esc(x)+'</th>').join('')+'</tr></thead><tbody>'+data.map(row=>'<tr>'+row.map(x=>'<td>'+esc(x===null?'NULL':x)+'</td>').join('')+'</tr>').join('')+'</tbody></table></div>';const flow=steps=>'<div class="flow">'+steps.map((s,i)=>(i?'<div class="flow-arrow" aria-hidden="true">→</div>':'')+'<div class="flow-node"><strong>'+esc(s[0])+'</strong><p>'+esc(s[1])+'</p></div>').join('')+'</div>';for(const fig of payload.figures){if(fig.type==='choices'){const select=byId(fig.id+'-select');const draw=()=>{const option=fig.options[Number(select.value)];byId(fig.id+'-output').innerHTML='<p>'+esc(option.meaning)+'</p>'+(option.flow?flow(option.flow):'')+(option.svg||'')+(option.headers?rows(option.headers,option.rows):'')+(option.note?'<p class="fig-note">'+esc(option.note)+'</p>':'');};select.addEventListener('change',draw);draw();}}const refSelect=byId('ref-select');const refPanel=byId('ref-panel');const drawRef=()=>{const item=payload.references.find(x=>x.name===refSelect.value);if(!item){refPanel.hidden=true;refPanel.replaceChildren();return;}refPanel.innerHTML='<h3>'+esc(item.name)+'</h3><p class="ref-kind">'+esc(item.kind)+'</p><h4>解决什么问题</h4><p>'+esc(item.meaning)+'</p><h4>怎样理解或使用</h4><p>'+esc(item.usage)+'</p><h4>学习例子</h4><p>'+esc(item.example)+'</p><h4>结果与理由</h4><p class="result">'+esc(item.result)+'</p><h4>注意点</h4><p>'+esc(item.note)+'</p><a href="#'+esc(item.anchor)+'">回到正文看完整解释</a>';refPanel.hidden=false;};refSelect.addEventListener('change',drawRef);drawRef();const entries=[...document.querySelectorAll('.sidebar nav a')].map(link=>({link,target:document.getElementById(link.hash.slice(1))})).filter(e=>e.target);const offset=()=>{const n=Math.ceil(document.querySelector('.topbar').getBoundingClientRect().height)+18;document.documentElement.style.setProperty('--scroll-offset',n+'px');return n;};const close=()=>{document.body.classList.remove('nav-open');byId('menu').setAttribute('aria-expanded','false');};const activate=e=>entries.forEach(x=>{const on=x===e;x.link.classList.toggle('active',on);if(on)x.link.setAttribute('aria-current','location');else x.link.removeAttribute('aria-current');});const current=()=>{const boundary=offset()+3;let active=entries[0];for(const entry of entries){if(entry.target.getBoundingClientRect().top<=boundary)active=entry;else break;}if(entries.length&&innerHeight+scrollY>=document.documentElement.scrollHeight-2&&entries[entries.length-1].target.getBoundingClientRect().top<innerHeight)active=entries[entries.length-1];if(active)activate(active);};const jump=(target,hash)=>{close();window.scrollTo({top:Math.max(0,target.getBoundingClientRect().top+scrollY-offset()),behavior:'auto'});if(location.hash!==hash)history.pushState(null,'',hash);current();};document.addEventListener('click',event=>{const link=event.target.closest('a[href^="#"]');if(!link||event.button!==0||event.ctrlKey||event.metaKey||event.shiftKey||event.altKey)return;const target=document.getElementById(link.hash.slice(1));if(target){event.preventDefault();jump(target,link.hash);}});byId('menu').addEventListener('click',()=>{const on=document.body.classList.toggle('nav-open');byId('menu').setAttribute('aria-expanded',String(on));});document.addEventListener('keydown',e=>{if(e.key==='Escape')close();});let pending=false;const schedule=()=>{if(!pending){pending=true;requestAnimationFrame(()=>{current();pending=false;});}};window.addEventListener('scroll',schedule,{passive:true});window.addEventListener('resize',schedule);window.addEventListener('hashchange',schedule);window.addEventListener('popstate',schedule);if(typeof ResizeObserver!=='undefined')new ResizeObserver(schedule).observe(document.querySelector('.topbar'));let font=17;document.querySelectorAll('[data-font]').forEach(b=>b.addEventListener('click',()=>{font=Math.max(15,Math.min(21,font+Number(b.dataset.font)));document.documentElement.style.setProperty('--font',font+'px');schedule();}));byId('print').addEventListener('click',()=>window.print());document.querySelectorAll('article pre code').forEach(code=>{const pre=code.parentElement;const wrap=document.createElement('div');wrap.className='code-wrap';pre.parentNode.insertBefore(wrap,pre);wrap.append(pre);const button=document.createElement('button');button.type='button';button.className='copy';button.textContent='复制';button.setAttribute('aria-label','复制本段示例');button.addEventListener('click',async()=>{try{await navigator.clipboard.writeText(code.textContent);button.textContent='已复制';}catch{const range=document.createRange();range.selectNodeContents(code);const selection=window.getSelection();selection.removeAllRanges();selection.addRange(range);button.textContent='已选中';}setTimeout(()=>button.textContent='复制',1500);});wrap.append(button);});current();})();</script><!-- legacy-notes-cleanup:start -->
+
+<!-- legacy-notes-cleanup:end -->
+<!-- chapter-search:start -->
+<style id="chapter-search-style">
+#chapter-search{margin:0 0 32px;border:1px solid #b8cfc7;border-radius:9px;background:#f1f7f3;scroll-margin-top:110px;padding:12px 16px;font-size:14px}
+#chapter-search summary{cursor:pointer;font-weight:700;color:#135b54;min-height:30px}
+#chapter-search form{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:15px}
+#chapter-search label{font-weight:600}
+#chapter-search input{flex:1;min-width:140px;width:100%;font:inherit;font-size:16px;padding:9px 11px;border:1px solid #839e96;border-radius:6px;background:#fff;color:#24313e}
+#chapter-search p{font-size:13px;line-height:1.7;margin:12px 0}
+#chapter-search-status{font-weight:600;color:#185d52}
+#chapter-search .chapter-search-results{max-height:300px;overflow:auto;overscroll-behavior:contain;margin:0;padding-left:30px}
+#chapter-search .chapter-search-results button{display:block;width:100%;text-align:left;margin:5px 0;padding:9px 12px;background:#fff;white-space:normal;overflow-wrap:anywhere}
+#chapter-search .chapter-search-results strong,#chapter-search .chapter-search-results span{display:block}
+#chapter-search .chapter-search-results span{font-size:13px;font-weight:400;color:#43535b}
+#chapter-search button[aria-current=true]{border-color:#176c61;background:#e0efe9}
+.chapter-search-pages{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin-top:12px}
+.chapter-search-dock{position:fixed;bottom:14px;right:20px;z-index:35;display:flex;gap:7px;align-items:center;flex-wrap:wrap;max-width:calc(100vw - 30px);padding:9px 12px;border:1px solid #91b8a8;border-radius:9px;box-shadow:0 3px 18px #1232;background:#f2f8f4;color:#24313e;font-size:13px}
+.chapter-search-dock button{font-size:13px;min-height:36px}
+.chapter-search-dock span{font-variant-numeric:tabular-nums}
+.chapter-search-dock[hidden],.chapter-search-pages[hidden]{display:none}
+mark[data-chapter-search]{background:#ffec91;color:#24313e;padding:0;border-radius:2px;scroll-margin:130px 20px}
+mark.chapter-search-current{background:#ffc663;color:#172b36;outline:2px solid #9c5f0d;outline-offset:1px}
+#chapter-search :focus-visible,.chapter-search-dock :focus-visible{outline:3px solid #24877c;outline-offset:3px}
+#chapter-search button:disabled{opacity:.45;cursor:default}
+@media(max-width:600px){#chapter-search{padding:11px;margin-bottom:25px}#chapter-search label{width:100%}#chapter-search form{gap:6px}#chapter-search input{flex-basis:100%}#chapter-search .chapter-search-results{max-height:240px}.chapter-search-dock{bottom:8px;right:8px;max-width:calc(100vw - 16px);gap:5px;padding:7px}.chapter-search-dock button{padding:6px 8px}.chapter-search-dock span{min-width:45px}body:has(.chapter-search-dock:not([hidden])){padding-bottom:110px}}
+@media print{#chapter-search,.chapter-search-dock{display:none!important}mark[data-chapter-search]{background:none;color:inherit;outline:0}}
+</style>
+<script id="chapter-search-script">
+/* 离线章节搜索：从当前正文建立索引，不发送或保存关键词。 */
+(() => {
+  'use strict';
+  const article = document.querySelector('article');
+  if (!article || document.getElementById('chapter-search')) return;
+  const make = (tag, text, attrs = {}) => {
+    const el = document.createElement(tag);
+    if (text !== undefined) el.textContent = text;
+    for (const [key, value] of Object.entries(attrs)) el.setAttribute(key, value);
+    return el;
+  };
+  const button = (text, action) => {
+    const el = make('button', text, { type: 'button' });
+    el.addEventListener('click', action);
+    return el;
+  };
+  const box = make('section', undefined, { id: 'chapter-search', 'aria-label': '本章关键词搜索' });
+  const disclosure = make('details');
+  disclosure.append(make('summary', '搜索本章 · 中文 / English'));
+  const form = make('form', undefined, { role: 'search' });
+  const label = make('label', '关键词', { for: 'chapter-search-input' });
+  const input = make('input', undefined, { id: 'chapter-search-input', type: 'search', placeholder: '输入概念、术语或代码片段', autocomplete: 'off', 'aria-describedby': 'chapter-search-scope chapter-search-status' });
+  const submit = make('button', '搜索', { type: 'submit' });
+  const clearButton = button('清除', clear);
+  form.append(label, input, submit, clearButton);
+  const scope = make('p', '范围：本章正文、例子、表格、代码及折叠答案。交互图示与动态速查不重复计入，请检索对应正文。按原文匹配，英文不区分大小写；离线可用。Ctrl+K 打开，Enter 定位 / 下一处，Esc 清除。', { id: 'chapter-search-scope' });
+  const status = make('p', '输入关键词后搜索本章。', { id: 'chapter-search-status', role: 'status', 'aria-live': 'polite', 'aria-atomic': 'true' });
+  const results = make('ol', undefined, { class: 'chapter-search-results', 'aria-label': '匹配结果' });
+  const pages = make('div', undefined, { class: 'chapter-search-pages' });
+  const pageLabel = make('span');
+  const pagePrev = button('上一页结果', () => { page--; render(); });
+  const pageNext = button('下一页结果', () => { page++; render(); });
+  pages.append(pagePrev, pageLabel, pageNext);
+  pages.hidden = true;
+  disclosure.append(form, scope, status, results, pages);
+  box.append(disclosure);
+  article.before(box);
+  const dock = make('nav', undefined, { class: 'chapter-search-dock', 'aria-label': '搜索定位' });
+  dock.hidden = true;
+  const position = make('span', undefined, { role: 'status', 'aria-live': 'polite' });
+  dock.append(button('查看结果', openSearch), position, button('上一处', () => go(active < 0 ? hits.length - 1 : active - 1)), button('下一处', () => go(active + 1)), button('清除', clear));
+  document.body.append(dock);
+  const launch = button('搜索本章', openSearch);
+  launch.setAttribute('aria-controls', box.id);
+  document.querySelector('.toolbar')?.append(launch);
+  let hits = [], active = -1, page = 0, query = '', timer;
+  const pageSize = 20;
+  const excluded = 'script,style,noscript,button,select,option,input,textarea,nav,.learning-figure,.ref-area,.ref-picker,.ref-panel,.ref-hint,[aria-hidden="true"],[data-search-exclude]';
+  const blocks = 'h1,h2,h3,h4,h5,h6,p,li,pre,td,th,caption,dt,dd,summary,blockquote';
+
+  function unmark() {
+    const parents = new Set();
+    article.querySelectorAll('mark[data-chapter-search]').forEach(mark => {
+      parents.add(mark.parentNode);
+      mark.replaceWith(document.createTextNode(mark.textContent));
+    });
+    parents.forEach(parent => parent.normalize());
+  }
+  function clear() {
+    clearTimeout(timer);
+    unmark(); hits = []; active = -1; page = 0; query = ''; input.value = '';
+    results.replaceChildren(); pages.hidden = true; dock.hidden = true;
+    status.textContent = '已清除搜索与高亮，可继续阅读。';
+  }
+  function openSearch() {
+    disclosure.open = true;
+    box.scrollIntoView({ block: 'start' });
+    input.focus({ preventScroll: true });
+  }
+  function groups() {
+    const list = [];
+    let last = null;
+    const walk = node => {
+      if (node.nodeType === Node.ELEMENT_NODE) {
+        if (node.matches(excluded)) { last = null; return; }
+        for (const child of node.childNodes) walk(child);
+      } else if (node.nodeType === Node.TEXT_NODE && node.textContent) {
+        const block = node.parentElement.closest(blocks) || node.parentElement;
+        if (!node.textContent.trim() && !last) return;
+        if (!last || last.block !== block) {
+          last = { block, text: '', nodes: [] }; list.push(last);
+        }
+        last.nodes.push({ node, start: last.text.length });
+        last.text += node.textContent;
+      }
+    };
+    walk(article);
+    return list;
+  }
+  function search() {
+    clearTimeout(timer); unmark(); hits = []; active = -1; page = 0;
+    query = input.value.trim(); results.replaceChildren(); dock.hidden = true; pages.hidden = true;
+    if (!query) { status.textContent = '请输入非空关键词。'; return; }
+    const literal = query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const headings = [...article.querySelectorAll('h2,h3,h4')];
+    const edits = new Map();
+    for (const group of groups()) {
+      const re = new RegExp(literal, 'giu');
+      let found;
+      while ((found = re.exec(group.text))) {
+        const start = found.index, end = start + found[0].length;
+        let title = '本章正文';
+        for (const heading of headings) {
+          if (heading === group.block || (heading.compareDocumentPosition(group.nodes[0].node) & Node.DOCUMENT_POSITION_FOLLOWING)) title = heading.textContent.trim();
+          else break;
+        }
+        const from = Math.max(0, start - 32), to = Math.min(group.text.length, end + 48);
+        const hit = { title, excerpt: (from ? '…' : '') + group.text.slice(from, to) + (to < group.text.length ? '…' : ''), marks: [] };
+        const index = hits.push(hit) - 1;
+        for (const entry of group.nodes) {
+          const a = Math.max(0, start - entry.start), b = Math.min(entry.node.length, end - entry.start);
+          if (a < b) {
+            if (!edits.has(entry.node)) edits.set(entry.node, []);
+            edits.get(entry.node).push({ a, b, index });
+          }
+        }
+      }
+    }
+    for (const [node, ranges] of edits) {
+      const frag = document.createDocumentFragment();
+      let offset = 0;
+      for (const { a, b, index } of ranges) {
+        frag.append(document.createTextNode(node.data.slice(offset, a)));
+        const mark = make('mark', node.data.slice(a, b), { 'data-chapter-search': String(index) });
+        hits[index].marks.push(mark); frag.append(mark); offset = b;
+      }
+      frag.append(document.createTextNode(node.data.slice(offset))); node.replaceWith(frag);
+    }
+    status.textContent = hits.length ? `找到 ${hits.length} 处匹配。选择结果定位，或按 Enter 跳到第一处。` : `没有找到“${query}”。请尝试更短的关键词。`;
+    dock.hidden = !hits.length;
+    position.textContent = `共 ${hits.length} 处`;
+    render();
+  }
+  function render() {
+    results.replaceChildren();
+    const start = page * pageSize;
+    results.start = start + 1;
+    hits.slice(start, start + pageSize).forEach((hit, i) => {
+      const item = make('li');
+      const link = button('', () => go(start + i));
+      link.append(make('strong', hit.title), make('span', hit.excerpt));
+      link.setAttribute('aria-label', `${start + i + 1}. ${hit.title}：${hit.excerpt}`);
+      if (start + i === active) link.setAttribute('aria-current', 'true');
+      item.append(link); results.append(item);
+    });
+    pages.hidden = hits.length <= pageSize;
+    pageLabel.textContent = `第 ${page + 1} / ${Math.max(1, Math.ceil(hits.length / pageSize))} 页`;
+    pagePrev.disabled = page === 0;
+    pageNext.disabled = start + pageSize >= hits.length;
+  }
+  function go(index) {
+    if (!hits.length) return;
+    hits[active]?.marks.forEach(mark => mark.classList.remove('chapter-search-current'));
+    active = (index + hits.length) % hits.length;
+    const hit = hits[active];
+    hit.marks.forEach(mark => mark.classList.add('chapter-search-current'));
+    const mark = hit.marks[0];
+    for (let ancestor = mark.parentElement; ancestor; ancestor = ancestor.parentElement) {
+      if (ancestor.tagName === 'DETAILS') ancestor.open = true;
+    }
+    mark.setAttribute('tabindex', '-1');
+    mark.focus({ preventScroll: true });
+    mark.scrollIntoView({ block: 'center', inline: 'center', behavior: 'instant' });
+    position.textContent = `${active + 1} / ${hits.length}`;
+    page = Math.floor(active / pageSize); render();
+  }
+  input.addEventListener('input', () => { clearTimeout(timer); timer = setTimeout(search, 180); });
+  form.addEventListener('submit', event => {
+    event.preventDefault();
+    if (query !== input.value.trim() || !hits.length) search();
+    go(active + 1);
+  });
+  document.addEventListener('keydown', event => {
+    if ((event.ctrlKey || event.metaKey) && !event.altKey && event.key.toLowerCase() === 'k') {
+      event.preventDefault(); openSearch();
+    } else if (event.key === 'Escape' && (hits.length || box.contains(event.target))) {
+      clear();
+    }
+  });
+})();
+</script>
+<!-- chapter-search:end -->
+<script id="study-theme-script">(()=>{'use strict';
+ const select=document.getElementById('study-theme');
+ if(!select)return;
+ document.querySelector('.sidebar nav')?.addEventListener('click',event=>{
+  if(event.target.closest('a')){
+   document.body.classList.remove('nav-open');
+   document.getElementById('menu')?.setAttribute('aria-expanded','false');
+  }
+ });
+ select.value=document.documentElement.dataset.theme==='dark'?'dark':'light';
+ select.addEventListener('change',()=>{
+  const value=select.value==='dark'?'dark':'light';
+  document.documentElement.dataset.theme=value;
+  try{localStorage.setItem('jlu-database-reading-theme',value);}catch{}
+ });
+})();
+</script></body></html>
