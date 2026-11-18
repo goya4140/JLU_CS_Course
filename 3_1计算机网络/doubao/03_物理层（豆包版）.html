@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>物理层 · 计算机网络初学者精讲</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%23173b5e'/><path d='M20 30h60v40H20z' stroke='%23e8743b' stroke-width='7' fill='none' stroke-linejoin='round'/><path d='M35 50h30' stroke='%23e8743b' stroke-width='7' stroke-linecap='round'/></svg>">
+<style>
+:root{
+  --ink:#173b5e; --ink2:#2f5b83; --org:#e8743b; --org2:#f3a06f;
+  --blue-bg:#eef4f9; --org-bg:#fdf1e8; --line:#d8e2ec; --gray:#5f7185;
+  --paper:#ffffff; --soft:#f6f9fc; --green:#2e7d5b; --red:#c0392b;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;color:#233242;background:var(--paper);line-height:1.85;font-size:15px}
+h1,h2,h3,h4{font-family:Georgia,"Songti SC","SimSun",serif;color:var(--ink);line-height:1.35}
+a{color:var(--ink2);text-decoration:none}
+.layout{display:flex;min-height:100vh}
+.side{width:238px;background:var(--ink);color:#cfe0f0;padding:26px 0;position:fixed;top:0;bottom:0;left:0;overflow-y:auto;z-index:40}
+.side .brand{padding:0 22px 18px;border-bottom:1px solid rgba(255,255,255,.14);margin-bottom:14px}
+.side .brand b{display:block;color:#fff;font-size:17px;font-family:Georgia,serif}
+.side .brand span{font-size:12px;color:var(--org2);letter-spacing:1px}
+.side a{display:block;color:#c4d6e8;padding:9px 22px;font-size:13.5px;border-left:3px solid transparent}
+.side a:hover{background:rgba(255,255,255,.08);color:#fff;border-left-color:var(--org)}
+.side .grp{padding:14px 22px 5px;font-size:11px;color:#7fa3c4;letter-spacing:2px}
+.main{margin-left:238px;flex:1;min-width:0}
+.wrap{max-width:900px;margin:0 auto;padding:0 34px}
+.hero{background:linear-gradient(135deg,#173b5e 0%,#24557e 60%,#2f6896 100%);color:#eaf1f8;padding:58px 0 50px;margin-bottom:38px;position:relative;overflow:hidden}
+.hero::after{content:"";position:absolute;right:-60px;top:-60px;width:260px;height:260px;border:2px solid rgba(232,116,59,.35);border-radius:50%}
+.hero::before{content:"";position:absolute;right:30px;bottom:-90px;width:180px;height:180px;border:2px solid rgba(255,255,255,.12);border-radius:50%}
+.hero .kicker{font-size:12px;letter-spacing:3px;color:var(--org2);margin-bottom:14px;position:relative}
+.hero h1{color:#fff;font-size:34px;margin-bottom:16px;position:relative}
+.hero p{max-width:640px;color:#cfe0f0;font-size:15px;position:relative}
+section{margin-bottom:46px;scroll-margin-top:20px}
+.modtag{display:flex;align-items:center;gap:9px;background:var(--org);color:#fff;font-size:12px;font-weight:700;padding:7px 16px;border-radius:4px;letter-spacing:1px;margin-bottom:14px;width:100%}
+.modtag em{font-style:normal;background:rgba(255,255,255,.25);border-radius:2px;padding:0 7px;font-family:Georgia,serif}
+h2{font-size:26px;margin-bottom:14px;padding-bottom:10px;border-bottom:2px solid var(--line)}
+h3{font-size:19.5px;margin:26px 0 10px;color:var(--ink)}
+h4{font-size:16px;margin:18px 0 7px;color:var(--ink2)}
+p{margin-bottom:12px}
+ul,ol{margin:8px 0 14px 22px}
+li{margin-bottom:6px}
+strong{color:var(--ink)}
+.card{background:var(--soft);border:1px solid var(--line);border-radius:9px;padding:18px 20px;margin:16px 0}
+.story{background:var(--org-bg);border-left:4px solid var(--org);border-radius:0 8px 8px 0;padding:16px 20px;margin:16px 0}
+.story .t{font-weight:700;color:var(--org);margin-bottom:5px;font-size:14px}
+.note{background:var(--blue-bg);border-left:4px solid var(--ink2);border-radius:0 8px 8px 0;padding:14px 18px;margin:15px 0;font-size:14px}
+.warn{background:#fdeee9;border-left:4px solid var(--red);border-radius:0 8px 8px 0;padding:14px 18px;margin:15px 0;font-size:14px}
+.tbl{width:100%;border-collapse:collapse;margin:15px 0;font-size:13.5px;background:#fff}
+.tbl th{background:var(--ink);color:#fff;padding:10px 12px;text-align:left;font-weight:600}
+.tbl td{padding:9px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+.tbl tr:nth-child(even) td{background:var(--soft)}
+.tbl-wrap{overflow-x:auto}
+.frame{display:flex;flex-wrap:wrap;border:1px solid var(--line);border-radius:8px;overflow:hidden;margin:16px 0}
+.fseg{padding:12px 10px;text-align:center;min-width:64px;flex:1;border-right:1px solid var(--line)}
+.fseg .b{display:block;font-weight:700;font-size:13.5px;margin-bottom:3px}
+.fseg .s{display:block;font-size:11.5px;color:var(--gray)}
+.fseg.h{background:var(--blue-bg)}.fseg.h .b{color:var(--ink)}
+.fseg.p{background:#fff}.fseg.p .b{color:#333}
+.fseg.t{background:var(--org-bg)}.fseg.t .b{color:var(--org)}
+.tabs{margin:16px 0}
+.tabbtns{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:0}
+.tabbtn{padding:9px 18px;background:var(--blue-bg);border:1px solid var(--line);border-bottom:none;border-radius:8px 8px 0 0;cursor:pointer;font-size:13.5px;color:var(--ink2);font-family:inherit}
+.tabbtn.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.tabpanel{display:none;border:1px solid var(--line);border-radius:0 8px 8px 8px;padding:18px 20px;background:#fff}
+.tabpanel.on{display:block}
+details{background:var(--soft);border:1px solid var(--line);border-radius:8px;padding:12px 18px;margin:12px 0}
+summary{cursor:pointer;font-weight:700;color:var(--ink2)}
+details[open] summary{margin-bottom:9px}
+.stepper{background:#fff;border:1px solid var(--line);border-radius:10px;padding:20px;margin:16px 0}
+.stepbar{display:flex;gap:8px;align-items:center;margin-bottom:15px;flex-wrap:wrap}
+.stepdot{width:28px;height:28px;border-radius:50%;background:var(--line);color:var(--gray);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;font-family:Georgia,serif}
+.stepdot.on{background:var(--org);color:#fff}
+.stepline{flex:1;height:2px;background:var(--line);min-width:14px}
+.stepbody{min-height:92px;background:var(--soft);border-radius:8px;padding:15px 18px;margin-bottom:14px}
+.stepbody .st{font-weight:700;color:var(--ink);margin-bottom:5px}
+.stepbtns{display:flex;gap:10px}
+.btn{padding:8px 20px;background:var(--ink);color:#fff;border:none;border-radius:6px;cursor:pointer;font-family:inherit;font-size:13.5px}
+.btn.o{background:var(--org)}
+.btn.ghost{background:#fff;color:var(--ink2);border:1px solid var(--line)}
+.btn:disabled{opacity:.45;cursor:default}
+.bits{font-family:Consolas,"Courier New",monospace;font-size:13px;letter-spacing:1px;background:var(--blue-bg);padding:10px 14px;border-radius:6px;overflow-x:auto;margin:8px 0}
+.bits .ins{color:var(--org);font-weight:700}
+.bits .flag{color:var(--red);font-weight:700}
+.formula{background:var(--blue-bg);border-radius:7px;padding:12px 18px;font-family:Georgia,serif;text-align:center;margin:12px 0;color:var(--ink)}
+.pill{display:inline-block;background:var(--blue-bg);color:var(--ink);border:1px solid var(--line);border-radius:20px;padding:2px 12px;font-size:12.5px;margin:2px 3px}
+.pill.o{background:var(--org-bg);color:var(--org);border-color:#f0cdb4}
+footer{border-top:2px solid var(--line);padding:26px 0 40px;color:var(--gray);font-size:12.5px}
+.topbtn{position:fixed;right:26px;bottom:26px;width:44px;height:44px;border-radius:50%;background:var(--ink);color:#fff;border:none;cursor:pointer;font-size:18px;display:none;z-index:50}
+.menu-toggle{display:none}
+@media(max-width:900px){
+  .side{transform:translateX(-100%);transition:transform .25s;width:260px}
+  .side.open{transform:translateX(0)}
+  .main{margin-left:0}
+  .menu-toggle{display:flex;position:fixed;top:14px;left:14px;z-index:60;background:var(--ink);color:#fff;border:none;width:44px;height:44px;border-radius:8px;align-items:center;justify-content:center;font-size:20px}
+  .hero{padding:66px 0 38px}
+  .wrap{padding:0 18px}
+  .hero h1{font-size:26px}
+  .fseg{min-width:90px}
+}
+</style>
+</head>
+<body>
+<button class="menu-toggle" onclick="document.querySelector('.side').classList.toggle('open')" aria-label="打开目录"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+<div class="layout">
+<nav class="side">
+  <div class="brand"><b>物理层</b><span>豆包版 · 初学者精讲</span></div>
+  <div class="grp">启程</div>
+  <a href="#start">最底层在干什么</a>
+  <div class="grp">五个模块</div>
+  <a href="#m1">一 · 有线介质：双绞线 / 同轴 / 光纤</a>
+  <a href="#m2">二 · 无线介质：微波 / 卫星 / 红外</a>
+  <a href="#m3">三 · 物理接口与 EIA-232</a>
+  <a href="#m4">四 · USB 与数字用户线路 DSL</a>
+  <a href="#m5">五 · 中继器与集线器</a>
+  <a href="#endmap">知识地图回顾</a>
+</nav>
+<div class="main">
+<header class="hero">
+  <div class="wrap">
+    <div class="kicker">CHAPTER 3 · PHYSICAL LAYER</div>
+    <h1>物理层：0 和 1 真正跑在线缆、<br>光纤和空气里的那一层</h1>
+    <p>物理层是整个协议栈的最底层。它不关心你在看视频还是发邮件，只负责一件事：怎么把数据链路层交下来的一串比特，变成实实在在的电压、光信号或电磁波，从这台机器送到那台机器。这一章我们就来认识那些真正"跑腿"的介质、插头和设备。</p>
+  </div>
+</header>
+<div class="wrap">
+
+<!-- ===== 启程 ===== -->
+<section id="start">
+  <h2>先建立一个整体印象：物理层在忙什么</h2>
+  <p>课件一句话定位：<strong>物理层负责如何把计算机连接到通信媒体上，数据传输的单位是比特（Bit）</strong>。它把数据链路层交下来的 L2 数据，逐比特地送上传输介质，再原样送到对端。</p>
+  <p>要把这件事干成，物理层得回答一组很实际的问题：线路怎么配置、数据通信什么模式、拓扑长什么样、信号怎么编码、接口怎么定、用哪种介质。课件把这些归纳成它要解决的六个方面：<strong>线路配置、数据通信模式、拓扑结构、信号、编码、接口、介质</strong>。</p>
+
+  <h3>物理层的四个特性（必背）</h3>
+  <p>物理层的所有标准，归根到底就是在规定下面这四件事：</p>
+  <div class="tbl-wrap"><table class="tbl">
+    <tr><th>特性</th><th>规定什么</th><th>举例</th></tr>
+    <tr><td>机械特性</td><td>接口插头的尺寸、各管脚位置</td><td>DB25 有 25 针、RJ45 是 8P8C</td></tr>
+    <tr><td>电气特性</td><td>传输线上电压应在什么范围</td><td>RS-232 电压 ±15V，±3V 以内算无效</td></tr>
+    <tr><td>功能特性</td><td>某根线上某一电平代表什么意义</td><td>哪根是发送数据、哪根是请求发送</td></tr>
+    <tr><td>规程特性</td><td>不同功能事件出现的先后顺序</td><td>先就绪、再建立连接、再传数据</td></tr>
+  </table></div>
+  <div class="story">
+    <div class="t">用"插插头"来理解四个特性</div>
+    <p style="margin-bottom:0">机械特性＝插头长什么样、几个脚；电气特性＝每个脚电压多高才算数；功能特性＝哪个脚是供电、哪个脚传数据；规程特性＝插上去之后先做什么、再做什么。四个特性凑齐，不同厂家的设备才能插上就用。后面 EIA-232 那一大段，就是这四个特性的一次完整展开。</p>
+  </div>
+</section>
+
+<!-- ===== 模块一 ===== -->
+<section id="m1">
+  <div class="modtag"><em>模块 1</em> 有线介质：双绞线、同轴电缆、光纤</div>
+  <h2>信号跑在线缆里的三种方式</h2>
+  <p>信息最终要变成信号才能传输，传输介质分两大类：<strong>导向传输媒体（有线）</strong>和<strong>非导向传输媒体（无线）</strong>。这一模块先讲有线的三种主力。</p>
+
+  <h3>双绞线：网线为什么要两两扭在一起</h3>
+  <p>双绞线由两两扭绞的铜导线组成，分屏蔽和非屏蔽：<strong>UTP 非屏蔽双绞线</strong>没有金属屏蔽层；<strong>STP 屏蔽双绞线</strong>有屏蔽层，抗干扰更好（还有 S/UTP、S/STP 等屏蔽结构变体）。两两扭绞的目的，就是用差分抵消电磁干扰。</p>
+  <h4>线序 568A 与 568B</h4>
+  <p>EIA/TIA 布线标准规定了两种线序。记住关键区别：<strong>568B 把橙线放在 1/2、绿线放在 3/6；568A 则是绿线在 1/2、橙线在 3/6</strong>（蓝、棕两对位置不变）。</p>
+  <div class="tbl-wrap"><table class="tbl">
+    <tr><th>引脚</th><th>568A</th><th>568B</th></tr>
+    <tr><td>1 / 2</td><td>白绿 / 绿</td><td>白橙 / 橙</td></tr>
+    <tr><td>3 / 6</td><td>白橙 / 橙</td><td>白绿 / 绿</td></tr>
+    <tr><td>4 / 5</td><td>蓝 / 白蓝</td><td>蓝 / 白蓝</td></tr>
+    <tr><td>7 / 8</td><td>白棕 / 棕</td><td>白棕 / 棕</td></tr>
+  </table></div>
+  <h4>RJ45 插头与直连/交叉线</h4>
+  <p>以太网用的连接器叫 <strong>8P8C（RJ45）</strong>：8 个位置、8 个触点。<strong>百兆以太网只用 1、2、3、6 四根线</strong>——1、2 是 TX 发送，3、6 是 RX 接收，靠差分信号减少干扰；<strong>千兆以太网或 PoE 供电则四对全用</strong>。</p>
+  <ul>
+    <li><strong>直连线</strong>：两端线序相同（都 568A 或都 568B），用来连不同类设备（电脑↔交换机）。</li>
+    <li><strong>交叉线</strong>：一端 568A、另一端 568B，用来连同类型设备（电脑↔电脑）。</li>
+  </ul>
+  <h4>不同速率双绞线的参数</h4>
+  <p>课件给了一张对照表，传输速率公式是 <strong>传输速率 = lanes × bits per hertz × spectral bandwidth</strong>。看几个典型：</p>
+  <div class="tbl-wrap"><table class="tbl">
+    <tr><th>标准</th><th>速率</th><th>用线对</th><th>编码</th><th>symbol率</th><th>带宽</th><th>最大距离</th><th>线缆等级</th></tr>
+    <tr><td>10BASE-T</td><td>10 Mbps</td><td>2 对</td><td>PE</td><td>10 MBd</td><td>10 MHz</td><td>100 m</td><td>Cat 3</td></tr>
+    <tr><td>100BASE-TX</td><td>100 Mbps</td><td>2 对</td><td>4B/5B、MLT-3、NRZ-I</td><td>125 MBd</td><td>31.25 MHz</td><td>100 m</td><td>Cat 5</td></tr>
+    <tr><td>1000BASE-T</td><td>1000 Mbps</td><td>4 对</td><td>TCM、4D-PAM-5</td><td>125 MBd</td><td>62.5 MHz</td><td>100 m</td><td>Cat 5e</td></tr>
+    <tr><td>2.5GBASE-T</td><td>2500 Mbps</td><td>4 对</td><td>64B/65B、PAM-16、128-DSQ</td><td>800 MBd</td><td>100 MHz</td><td>100 m</td><td>Cat 5e</td></tr>
+    <tr><td>5GBASE-T</td><td>5000 Mbps</td><td>4 对</td><td>64B/65B、PAM-16、128-DSQ</td><td>800 MBd</td><td>200 MHz</td><td>100 m</td><td>Cat 6</td></tr>
+  </table></div>
+
+  <h3>同轴电缆</h3>
+  <p>由内到外是：内层导体、第二层绝缘体、第三层网格导线、最外层塑料外皮。历史上用于总线型拓扑网络，分两种：<strong>细缆 10Base2</strong> 和 <strong>粗缆 10Base5</strong>。</p>
+
+  <h3>光纤：光在里面"反复全反射"</h3>
+  <p>光纤结构从内到外：<strong>纤芯（高折射率）→ 包层（低折射率）→ 保护层</strong>。工作原理：光在纤芯里不断发生<strong>全反射</strong>地向前传播——因为纤芯折射率比包层高，光射到界面时全被反射回来，跑不出去。</p>
+  <div class="tbl-wrap"><table class="tbl">
+    <tr><th></th><th>单模光纤</th><th>多模光纤</th></tr>
+    <tr><td>芯径</td><td>约 1～10 μm，细</td><td>约 50～60 μm，粗</td></tr>
+    <tr><td>传输模式</td><td>只传一个基模</td><td>同时传多个模式</td></tr>
+    <tr><td>脉冲形状</td><td>输入脉冲几乎原样输出，色散小</td><td>多模式光路径不同，输出脉冲被展宽</td></tr>
+    <tr><td>适用</td><td>大容量、长距离通信</td><td>短距离</td></tr>
+  </table></div>
+  <p><strong>优点</strong>：抗干扰、传输速率高、距离长；<strong>缺点</strong>：价格贵、安装维护困难、费用高。光信号和电信号之间要靠光电转换设备匹配：发送端用发光二极管 LED 或注入激光二极管 ILD，接收端用光敏元件/光敏二极管。</p>
+  <div class="note">为什么多模会"展宽"？课件图说：一束光里走了多条路径（多个模式），有的走直线、有的反复斜反射，到达终点时间有先有后，一个输入脉冲就被拉宽成模糊的一团。芯径越细、只允许一条路径（单模），脉冲就越不容易糊，才能跑远距离高速率。</div>
+</section>
+
+<!-- ===== 模块二 ===== -->
+<section id="m2">
+  <div class="modtag"><em>模块 2</em> 无线介质：信号跑在空气里</div>
+  <h2>微波、卫星与红外</h2>
+  <p>无线传播不用线缆，主要信号有三种：<strong>地面微波、卫星微波、红外线</strong>。传播方式分两类：<strong>定向</strong>（信号集中朝一个方向发射，像探照灯）和<strong>全向</strong>（信号向四周发散，像灯泡）。</p>
+
+  <h3>地面微波：视距传播</h3>
+  <p>地面微波靠视距传播——收发天线之间要"看得见"中间不能挡。频率高、方向性强，所以需要每隔一段距离建一个中继站接力。它和靠电离层反射的短波广播是两种不同的传播方式。</p>
+
+  <h3>卫星微波：天上的中继站</h3>
+  <p>把微波中继站搬到天上。卫星通信可以是<strong>点对点</strong>的通信线路（两个地面站之间），也可以是<strong>广播式</strong>的通信线路（一颗卫星向一大片区域广播）。它覆盖范围极大，但有传播延迟。</p>
+
+  <h3>红外与 WLAN</h3>
+  <p>红外也是常见的无线介质（电视遥控器就是）。在无线局域网场景里，常用的组件包括无线接入点等，把无线信号接入有线网络。</p>
+  <div class="note">有线 vs 无线的取舍：有线（双绞线/同轴/光纤）稳定、速率高、抗干扰，但要布线；无线（微波/卫星/红外）灵活、免布线，但易受环境和遮挡影响。实际网络常常两者混用——室内用 Wi-Fi，骨干用光纤。</div>
+</section>
+
+<!-- ===== 模块三 ===== -->
+<section id="m3">
+  <div class="modtag"><em>模块 3</em> 物理接口：DTE/DCE 与 EIA-232</div>
+  <h2>电脑和网络之间，隔着一个"翻译官"</h2>
+
+  <h3>DTE 与 DCE：谁是用户、谁是接线员</h3>
+  <p><strong>DTE（数据终端设备）</strong>是具有数据处理和收发能力的设备（比如你的电脑）。<strong>DCE（数据电路端接设备）</strong>是能通过网络收发模拟或数字信号的设备（比如调制解调器）。DTE 一般不直接连网络，而是通过一台 DCE 通信；DTE 和 DCE 的连接就叫 <strong>DTE—DCE 接口</strong>。这个接口上既有数据信息也有控制信息。</p>
+  <div class="story">
+    <div class="t">为什么要把接口标准化</div>
+    <p style="margin-bottom:0">你想让任何公司生产的电脑都能插进任何一家的调制解调器，就必须对 DTE—DCE 接口做统一规定。这些标准，就是我们说的"物理层协议"。最经典的例子就是 EIA-232。</p>
+  </div>
+
+  <h3>EIA-232（老 RS-232）：物理层协议的活化石</h3>
+  <p><strong>EIA-232 由电子工业协会 EIA 于 1962 年制定，早期叫 RS-232</strong>。典型连接：电脑（DTE，用 Male DB25 插头）通过接口电缆连调制解调器（DCE，Female DB25 插座），再接到电话线。下面按四个特性拆开看。</p>
+
+  <h4>机械特性：DB25</h4>
+  <p>用 DB25 连接器：数据 4 根、控制 11 根、定时 3 根、其他 7 根；<strong>电缆长度不能超过 25 米</strong>。</p>
+
+  <h4>电气特性：电平范围</h4>
+  <p>数据用非归零电平编码 NRZ-L：<strong>0 对应正电平、1 对应负电平</strong>，电压范围 −15V～+15V。注意有个"无效区域"——电压绝对值在 3V 以内算不定（无效），必须 &gt;+3V 或 &lt;−3V 才算数。控制信号同理：<strong>正电平＝开（ON），负电平＝关（OFF）</strong>。</p>
+  <div class="warn">别和 TTL 电平混淆：RS-232 用的是 ±15V 大摆幅，而且<strong>负电压代表逻辑 1、正电压代表逻辑 0</strong>——正好和常见的 TTL 电平相反。早期串口烧坏设备，很多就是因为没注意这个极性。</div>
+
+  <h4>异步串行传输的帧结构</h4>
+  <p>每个字符包含：7 或 8 bit 数据位、1 bit 起始位、1 bit 停止位、1 bit 校验位。</p>
+
+  <h4>功能特性：引脚都管什么</h4>
+  <p>DB25 引脚很多，但记住最常用的几根就够日常理解：</p>
+  <div class="tbl-wrap"><table class="tbl">
+    <tr><th>连线号</th><th>代号</th><th>方向</th><th>功能</th></tr>
+    <tr><td>2</td><td>BA / TxD</td><td>DTE→DCE</td><td>发送数据</td></tr>
+    <tr><td>3</td><td>BB / RxD</td><td>DCE→DTE</td><td>接收数据</td></tr>
+    <tr><td>4</td><td>CA / RTS</td><td>DTE→DCE</td><td>请求发送（发数据前请求许可）</td></tr>
+    <tr><td>5</td><td>CB / CTS</td><td>DCE→DTE</td><td>清除待发送（允许发送）</td></tr>
+    <tr><td>6</td><td>CC / DSR</td><td>DCE→DTE</td><td>DCE 准备好（如调制解调器是否在线）</td></tr>
+    <tr><td>7</td><td>AB / SG</td><td>—</td><td>信号地（所有电平的参考）</td></tr>
+    <tr><td>8</td><td>CF / CD</td><td>DCE→DTE</td><td>数据载波检测</td></tr>
+    <tr><td>20</td><td>CD / DTR</td><td>DTE→DCE</td><td>DTE 准备好</td></tr>
+    <tr><td>22</td><td>CE / RI</td><td>DCE→DTE</td><td>振铃指示（收到呼叫）</td></tr>
+  </table></div>
+  <p>其余引脚还有同步时钟（15/17/24）、测试回环（18/21）、辅助信道（12/13/14/16/19）等，用到再查即可。</p>
+
+  <h4>规程特性：握手五步</h4>
+  <p>同步全双工通信按五步走：<strong>步骤 1 准备 → 步骤 2 就绪 → 步骤 3 建立 → 步骤 4 数据传输 → 步骤 5 清除</strong>。每一步哪些信号线变高、哪些变低都有讲究，载波在建立阶段打开、清除阶段关闭。</p>
+
+  <h4>实际只用了子集</h4>
+  <p>大多数用户用不上全部 25 针。比如异步串行通信不需要同步时钟线，只需要 2、3、4、5、6、7、8、20、22 这 9 根——<strong>计算机上那个 9 针串口，其实就是 EIA-232 的一个子集</strong>。</p>
+</section>
+
+<!-- ===== 模块四 ===== -->
+<section id="m4">
+  <div class="modtag"><em>模块 4</em> 现代接口：USB 与数字用户线路 DSL</div>
+  <h2>从串口到 USB、再到电话线宽带</h2>
+
+  <h3>USB：几代的速率飞跃</h3>
+  <div class="tbl-wrap"><table class="tbl">
+    <tr><th>版本</th><th>年份</th><th>速率</th></tr>
+    <tr><td>USB 1.0</td><td>1996</td><td>低速 187.5 kB/s；全速 1.5 MB/s</td></tr>
+    <tr><td>USB 2.0</td><td>2001</td><td>60 MB/s</td></tr>
+    <tr><td>USB 3.0</td><td>2011</td><td>625 MB/s（SuperSpeed）</td></tr>
+    <tr><td>USB 3.1 / 3.2</td><td>2014 / 2017</td><td>1.25 GB/s；2.5 GB/s（SuperSpeed+）</td></tr>
+  </table></div>
+  <h4>USB 的线和引脚</h4>
+  <p><strong>USB 2.0</strong>：2 线供电（VBUS 和 GND）＋2 线差分信号传输。引脚：1=VBUS（红/橙，+5V）、2=D−（白/金）、3=D+（绿）、4=GND（黑/蓝）。<strong>USB 3.0</strong> 又加 4 线（SSTx+、SSTx−、SSRx+、SSRx−）做全双工。</p>
+
+  <h4>差分信号：为什么抗干扰强</h4>
+  <p>发送方同时发两根线，一根是信号、另一根是它的反相信号。路上的噪声会同时叠加到两根线上，接收方做<strong>减法（两根相减）</strong>——共有的噪声被减掉，两个信号的差才是真正的数据。这就是 USB、网线都用差分信号的原因，也是双绞线要两两扭绞配合的道理。</p>
+
+  <h3>DSL：在普通电话线上跑宽带</h3>
+  <p><strong>DSL（数字用户线路）</strong>的灵感来自一个浪费：常规电话线路在局端被滤波器把带宽限到 4 kHz（只够打电话），但 3 类 UTP 的实际带宽远大于 4 kHz。如果把这个限制做成"按需可调"，多出来的带宽就能用来跑宽带。</p>
+  <div class="tbl-wrap"><table class="tbl">
+    <tr><th>类型</th><th>上行</th><th>下行</th></tr>
+    <tr><td>ADSL 非对称</td><td>64k～1 Mbps</td><td>1～8 Mbps</td></tr>
+    <tr><td>VDSL / HDSL / SDSL</td><td colspan="2">更高/对称等不同变体</td></tr>
+  </table></div>
+  <h4>ADSL 接入模型</h4>
+  <p>用户侧是 ATU-R（ADSL 远程传输单元，即 ADSL Modem），本地局端是 ATU-C，中间靠 DSLAM（数字用户线路接入复用器）把数据接到交换机；电话信号则经滤波器接到程控交换机。这样打电话和上网能同时进行、互不干扰。</p>
+  <h4>DMT 离散多音调调制</h4>
+  <p>ADSL 把本地可用带宽（约 1.1 MHz）切成 <strong>256 个 4312.5 Hz 的独立子信道</strong>：信道 0 留给传统电话，信道 1～5 保留，信道 6～256 里 1 个上行控制、1 个下行控制，其余传数据。一般 <strong>80～90% 信道分给下行、10～20% 分给上行</strong>——这就是"非对称"的由来：下载快、上传慢，符合大家上网的习惯。</p>
+</section>
+
+<!-- ===== 模块五 ===== -->
+<section id="m5">
+  <div class="modtag"><em>模块 5</em> 物理层互连设备：中继器与集线器</div>
+  <h2>把信号"续命"，把网段"拼长"</h2>
+  <p>物理层的网络设备就两类：<strong>中继器、集线器</strong>。它们作用于信号的电气部分，<strong>重新产生信号</strong>，从而扩展局域网覆盖的地理范围。注意一个前提：所连接的局域网必须<strong>具有相同的物理层和 MAC 协议</strong>——中继器不懂地址，只会再生电气信号。</p>
+
+  <h3>中继器：给衰减的信号"充电"</h3>
+  <p>信号在线上跑得越远越弱、越歪。中继器把收到的弱信号<strong>重新生成</strong>成干净的新信号再发出去，于是多个局域网段（L1、L2、L3、L4……）可以一段段接起来。它不以任何方式改变网络功能，纯粹跑在物理层。</p>
+
+  <h3>用中继器扩展后，带来两个问题</h3>
+  <ul>
+    <li><strong>性能</strong>：更多站点挤到同一介质上，流量变大，局域网整体性能下降。</li>
+    <li><strong>安全性</strong>：更多站点共用同一介质，安全防护更困难。</li>
+  </ul>
+  <div class="warn">记住：中继器/集线器只是"把信号再生放大"，它们<strong>不隔离冲突、不隔离流量</strong>——所有接进来的设备仍在同一个冲突域里。想要隔离，得用上一层的网桥/交换机，那是数据链路层的事。</div>
+</section>
+
+<!-- ===== 知识地图回顾 ===== -->
+<section id="endmap">
+  <h2>最后：把物理层这一层装进脑子</h2>
+  <div class="card">
+    <p style="margin-bottom:8px"><strong>定位</strong>：物理层是分层体系结构的最底层，数据单位是比特；为设备间通信提供传输介质及互连设备，尽量为上层提供透明、可靠的传输环境。</p>
+    <p style="margin-bottom:8px"><strong>四个特性</strong>：机械（插头尺寸管脚）、电气（电压范围）、功能（电平含义）、规程（事件顺序）。</p>
+    <p style="margin-bottom:8px"><strong>两类介质</strong>：导向（双绞线 UTP/STP、同轴、光纤——靠纤芯/包层折射率差全反射，分单模长距和多模短距）；非导向（地面微波视距、卫星广播、红外；分定向/全向）。</p>
+    <p style="margin-bottom:8px"><strong>接口标本</strong>：EIA-232（RS-232）DB25、±15V、负电压表 1、常用 9 针子集、五步握手；USB 几代速率从 1.5 MB/s 到 2.5 GB/s，靠差分信号抗干扰；ADSL 用 DMT 把 1.1MHz 分成 256 个子信道、下行占大头。</p>
+    <p style="margin-bottom:0"><strong>互连设备</strong>：中继器、集线器——只再生信号、扩展距离，不隔离流量，要求两端物理层和 MAC 协议相同。</p>
+  </div>
+</section>
+
+<footer><p>本资料基于课程课件《计算机网络（胡亮 等编著）》第 3 章整理，仅供学习交流使用，具体教学要求以任课教师通知为准。</p></footer>
+</div>
+<button class="topbtn" id="topBtn" onclick="window.scrollTo({top:0})">↑</button>
+</div>
+</div>
+<script>
+document.querySelectorAll('.tabs').forEach(function(g){
+  g.querySelectorAll('.tabbtn').forEach(function(b){
+    b.addEventListener('click',function(){
+      g.querySelectorAll('.tabbtn').forEach(function(x){x.classList.remove('on')});
+      g.querySelectorAll('.tabpanel').forEach(function(x){x.classList.remove('on')});
+      b.classList.add('on');
+      g.querySelector('#'+b.dataset.t).classList.add('on');
+    });
+  });
+});
+function createStepper(id,steps){
+  var cur=0,box=document.getElementById(id);
+  if(!box)return;
+  var dots=box.querySelector('.stepdots'),body=box.querySelector('.stepbody'),
+      prev=box.querySelector('.prev'),next=box.querySelector('.next');
+  steps.forEach(function(_,i){
+    if(i>0){var l=document.createElement('span');l.className='stepline';dots.appendChild(l);}
+    var d=document.createElement('span');d.className='stepdot';d.textContent=i+1;dots.appendChild(d);
+  });
+  function render(){
+    var ds=dots.querySelectorAll('.stepdot');
+    ds.forEach(function(d,i){d.classList.toggle('on',i<=cur)});
+    body.innerHTML='<div class="st">'+steps[cur].t+'</div>'+steps[cur].c;
+    prev.disabled=cur===0;
+    next.textContent=cur===steps.length-1?'已完成':'下一步';
+    next.classList.toggle('o',cur<steps.length-1);
+  }
+  prev.addEventListener('click',function(){if(cur>0){cur--;render();}});
+  next.addEventListener('click',function(){if(cur<steps.length-1){cur++;render();}});
+  render();
+}
+var tb=document.getElementById('topBtn');
+window.addEventListener('scroll',function(){tb.style.display=window.scrollY>500?'block':'none';});
+document.querySelector('.side').addEventListener('click',function(e){
+  if(e.target.tagName==='A'&&window.innerWidth<=900)this.classList.remove('open');
+});
+</script>
+</body>
+</html>

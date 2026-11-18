@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>数据链路层 · 豆包版</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%23173b5e'/><path d='M20 50h60M65 35l15 15-15 15' stroke='%23e8743b' stroke-width='9' fill='none' stroke-linecap='round' stroke-linejoin='round'/></svg>">
+<style>
+:root{
+  --ink:#173b5e; --ink2:#2f5b83; --org:#e8743b; --org2:#f3a06f;
+  --blue-bg:#eef4f9; --org-bg:#fdf1e8; --line:#d8e2ec; --gray:#5f7185;
+  --paper:#ffffff; --soft:#f6f9fc; --green:#2e7d5b; --red:#c0392b;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;color:#233242;background:var(--paper);line-height:1.85;font-size:15px}
+h1,h2,h3,h4{font-family:Georgia,"Songti SC","SimSun",serif;color:var(--ink);line-height:1.35}
+a{color:var(--ink2);text-decoration:none}
+.layout{display:flex;min-height:100vh}
+/* 侧边栏 */
+.side{width:238px;background:var(--ink);color:#cfe0f0;padding:26px 0;position:fixed;top:0;bottom:0;left:0;overflow-y:auto;z-index:40}
+.side .brand{padding:0 22px 18px;border-bottom:1px solid rgba(255,255,255,.14);margin-bottom:14px}
+.side .brand b{display:block;color:#fff;font-size:17px;font-family:Georgia,serif}
+.side .brand span{font-size:12px;color:var(--org2);letter-spacing:1px}
+.side a{display:block;color:#c4d6e8;padding:9px 22px;font-size:13.5px;border-left:3px solid transparent}
+.side a:hover{background:rgba(255,255,255,.08);color:#fff;border-left-color:var(--org)}
+.side .grp{padding:14px 22px 5px;font-size:11px;color:#7fa3c4;letter-spacing:2px}
+.main{margin-left:238px;flex:1;min-width:0}
+.wrap{max-width:900px;margin:0 auto;padding:0 34px}
+/* hero */
+.hero{background:linear-gradient(135deg,#173b5e 0%,#24557e 60%,#2f6896 100%);color:#eaf1f8;padding:58px 0 50px;margin-bottom:38px;position:relative;overflow:hidden}
+.hero::after{content:"";position:absolute;right:-60px;top:-60px;width:260px;height:260px;border:2px solid rgba(232,116,59,.35);border-radius:50%}
+.hero::before{content:"";position:absolute;right:30px;bottom:-90px;width:180px;height:180px;border:2px solid rgba(255,255,255,.12);border-radius:50%}
+.hero .kicker{font-size:12px;letter-spacing:3px;color:var(--org2);margin-bottom:14px;position:relative}
+.hero h1{color:#fff;font-size:34px;margin-bottom:16px;position:relative}
+.hero p{max-width:640px;color:#cfe0f0;font-size:15px;position:relative}
+/* 章节 */
+section{margin-bottom:46px;scroll-margin-top:20px}
+.modtag{display:flex;align-items:center;gap:9px;background:var(--org);color:#fff;font-size:12px;font-weight:700;padding:7px 16px;border-radius:4px;letter-spacing:1px;margin-bottom:14px;width:100%}
+.modtag em{font-style:normal;background:rgba(255,255,255,.25);border-radius:2px;padding:0 7px;font-family:Georgia,serif}
+h2{font-size:26px;margin-bottom:14px;padding-bottom:10px;border-bottom:2px solid var(--line)}
+h3{font-size:19.5px;margin:26px 0 10px;color:var(--ink)}
+h4{font-size:16px;margin:18px 0 7px;color:var(--ink2)}
+p{margin-bottom:12px}
+ul,ol{margin:8px 0 14px 22px}
+li{margin-bottom:6px}
+strong{color:var(--ink)}
+/* 卡片 */
+.card{background:var(--soft);border:1px solid var(--line);border-radius:9px;padding:18px 20px;margin:16px 0}
+.story{background:var(--org-bg);border-left:4px solid var(--org);border-radius:0 8px 8px 0;padding:16px 20px;margin:16px 0}
+.story .t{font-weight:700;color:var(--org);margin-bottom:5px;font-size:14px}
+.note{background:var(--blue-bg);border-left:4px solid var(--ink2);border-radius:0 8px 8px 0;padding:14px 18px;margin:15px 0;font-size:14px}
+.warn{background:#fdeee9;border-left:4px solid var(--red);border-radius:0 8px 8px 0;padding:14px 18px;margin:15px 0;font-size:14px}
+/* 表格 */
+.tbl{width:100%;border-collapse:collapse;margin:15px 0;font-size:13.5px;background:#fff}
+.tbl th{background:var(--ink);color:#fff;padding:10px 12px;text-align:left;font-weight:600}
+.tbl td{padding:9px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+.tbl tr:nth-child(even) td{background:var(--soft)}
+.tbl-wrap{overflow-x:auto}
+/* 帧结构块 */
+.frame{display:flex;flex-wrap:wrap;border:1px solid var(--line);border-radius:8px;overflow:hidden;margin:16px 0}
+.fseg{padding:12px 10px;text-align:center;min-width:64px;flex:1;border-right:1px solid var(--line)}
+.fseg .b{display:block;font-weight:700;font-size:13.5px;margin-bottom:3px}
+.fseg .s{display:block;font-size:11.5px;color:var(--gray)}
+.fseg.h{background:var(--blue-bg)}.fseg.h .b{color:var(--ink)}
+.fseg.p{background:#fff}.fseg.p .b{color:#333}
+.fseg.t{background:var(--org-bg)}.fseg.t .b{color:var(--org)}
+/* 交互 */
+.tabs{margin:16px 0}
+.tabbtns{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:0}
+.tabbtn{padding:9px 18px;background:var(--blue-bg);border:1px solid var(--line);border-bottom:none;border-radius:8px 8px 0 0;cursor:pointer;font-size:13.5px;color:var(--ink2);font-family:inherit}
+.tabbtn.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.tabpanel{display:none;border:1px solid var(--line);border-radius:0 8px 8px 8px;padding:18px 20px;background:#fff}
+.tabpanel.on{display:block}
+details{background:var(--soft);border:1px solid var(--line);border-radius:8px;padding:12px 18px;margin:12px 0}
+summary{cursor:pointer;font-weight:700;color:var(--ink2)}
+details[open] summary{margin-bottom:9px}
+.stepper{background:#fff;border:1px solid var(--line);border-radius:10px;padding:20px;margin:16px 0}
+.stepbar{display:flex;gap:8px;align-items:center;margin-bottom:15px;flex-wrap:wrap}
+.stepdot{width:28px;height:28px;border-radius:50%;background:var(--line);color:var(--gray);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;font-family:Georgia,serif}
+.stepdot.on{background:var(--org);color:#fff}
+.stepline{flex:1;height:2px;background:var(--line);min-width:14px}
+.stepbody{min-height:92px;background:var(--soft);border-radius:8px;padding:15px 18px;margin-bottom:14px}
+.stepbody .st{font-weight:700;color:var(--ink);margin-bottom:5px}
+.stepbtns{display:flex;gap:10px}
+.btn{padding:8px 20px;background:var(--ink);color:#fff;border:none;border-radius:6px;cursor:pointer;font-family:inherit;font-size:13.5px}
+.btn.o{background:var(--org)}
+.btn.ghost{background:#fff;color:var(--ink2);border:1px solid var(--line)}
+.btn:disabled{opacity:.45;cursor:default}
+/* 比特/字节串 */
+.bits{font-family:Consolas,"Courier New",monospace;font-size:13px;letter-spacing:1px;background:var(--blue-bg);padding:10px 14px;border-radius:6px;overflow-x:auto;margin:8px 0}
+.bits .ins{color:var(--org);font-weight:700}
+.bits .flag{color:var(--red);font-weight:700}
+.formula{background:var(--blue-bg);border-radius:7px;padding:12px 18px;font-family:Georgia,serif;text-align:center;margin:12px 0;color:var(--ink)}
+.pill{display:inline-block;background:var(--blue-bg);color:var(--ink);border:1px solid var(--line);border-radius:20px;padding:2px 12px;font-size:12.5px;margin:2px 3px}
+.pill.o{background:var(--org-bg);color:var(--org);border-color:#f0cdb4}
+footer{border-top:2px solid var(--line);padding:26px 0 40px;color:var(--gray);font-size:12.5px}
+.topbtn{position:fixed;right:26px;bottom:26px;width:44px;height:44px;border-radius:50%;background:var(--ink);color:#fff;border:none;cursor:pointer;font-size:18px;display:none;z-index:50}
+.menu-toggle{display:none}
+@media(max-width:900px){
+  .side{transform:translateX(-100%);transition:transform .25s;width:260px}
+  .side.open{transform:translateX(0)}
+  .main{margin-left:0}
+  .menu-toggle{display:flex;position:fixed;top:14px;left:14px;z-index:60;background:var(--ink);color:#fff;border:none;width:44px;height:44px;border-radius:8px;align-items:center;justify-content:center;font-size:20px}
+  .hero{padding:66px 0 38px}
+  .wrap{padding:0 18px}
+  .hero h1{font-size:26px}
+  .fseg{min-width:90px}
+}
+</style>
+</head>
+<body>
+<button class="menu-toggle" onclick="document.querySelector('.side').classList.toggle('open')" aria-label="打开目录"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+<div class="layout">
+<nav class="side">
+  <div class="brand"><b>数据链路层</b><span>豆包版 · 初学者精讲</span></div>
+  <div class="grp">启程</div>
+  <a href="#start">这一层在忙什么</a>
+  <div class="grp">七个模块</div>
+  <a href="#m1">一 · 给比特流加信封</a>
+  <a href="#m2">二 · 对话前先打招呼</a>
+  <a href="#m3">三 · 出错与太快怎么办</a>
+  <a href="#m4">四 · HDLC / PPP / LLC</a>
+  <a href="#m5">五 · 以太网</a>
+  <a href="#m6">六 · 无线的规则</a>
+  <a href="#m7">七 · 组网与 VLAN</a>
+  <a href="#endmap">知识地图回顾</a>
+</nav>
+<div class="main">
+<header class="hero">
+  <div class="wrap">
+    <div class="kicker">CHAPTER 4 · DATA LINK LAYER</div>
+    <h1>数据链路层：让相邻两站之间的对话<br>既听得清，又不会乱</h1>
+    <p>物理层只负责把一串 0 和 1 从这头送到那头，至于这串数字从哪里开始、到哪里结束、中间有没有出错、对方听不听得过来——全部是数据链路层要操心的事。这一版我们抛开教科书式的定义堆砌，跟着"一条消息的旅程"把这些事一件一件弄明白。</p>
+  </div>
+</header>
+<div class="wrap">
+
+<!-- ===== 启程 ===== -->
+<section id="start">
+  <h2>先建立一个整体印象：这一层在忙什么</h2>
+  <p>想象两台相邻的设备（比如你的电脑和家里的路由器）要对话。线路上跑的只是连续不断的比特流，就像一段没有标点、没有停顿的语音。要让这段对话真正可靠，必须解决四个绕不开的问题：</p>
+  <div class="frame">
+    <div class="fseg h"><span class="b">成帧</span><span class="s">从哪里到哪里算一句话</span></div>
+    <div class="fseg h"><span class="b">差错控制</span><span class="s">路上说错了怎么发现、怎么补救</span></div>
+    <div class="fseg h"><span class="b">流量控制</span><span class="s">说得太快对方记不下来怎么办</span></div>
+    <div class="fseg h"><span class="b">介质访问</span><span class="s">一条线多人用，轮谁开口</span></div>
+  </div>
+  <div class="story">
+    <div class="t">用"打电话"来类比</div>
+    <p style="margin-bottom:0">成帧＝约定一句话的起止；差错控制＝听不清时请对方重复；流量控制＝请对方说慢点；介质访问＝会议室里多人轮流发言。数据链路层的任务，就是在<strong>相邻两个结点</strong>之间提供可靠通信，把一条可能出错的物理线路，变成一条用起来可靠的"逻辑链路"。它传输的数据单元有一个专门的名字——<strong>帧（Frame）</strong>。</p>
+  </div>
+  <h3>它在协议栈里的位置</h3>
+  <p>在 TCP/IP 模型中，数据链路层夹在物理层和网络层之间：<strong>向下</strong>使用物理层提供的比特流服务（这条服务本身可能有差错），<strong>向上</strong>向网络层提供无差错的数据包收发服务。主机、交换机、路由器都必须实现这一层——任何数据从一个设备到下一个设备，都要靠它。</p>
+  <p>在局域网里，数据链路层还被进一步分成两个子层：</p>
+  <ul>
+    <li><strong>MAC 子层（介质访问控制）</strong>：解决"一条共享线路谁先发言"的问题，跟具体的传输介质有关。</li>
+    <li><strong>LLC 子层（逻辑链路控制）</strong>：向网络层提供统一的接口，屏蔽底层介质的差异。</li>
+  </ul>
+  <div class="note">记住这条主线：成帧解决"边界"，差错控制解决"对错"，流量控制解决"快慢"，介质访问解决"谁先"。后面所有协议，都是在这四件事上做文章。</div>
+</section>
+
+<!-- ===== 模块一 ===== -->
+<section id="m1">
+  <div class="modtag"><em>模块 1</em> 给比特流加一个"信封"</div>
+  <h2>成帧：怎么从连续的比特里切出一帧</h2>
+  <p>发送端把网络层交下来的数据包，加上自己的控制信息，组成一帧，这叫<strong>组帧</strong>；接收端再把它拆开，叫<strong>拆帧</strong>。成帧这件事有两个关键问题：一是<strong>怎么选定界符</strong>（标记帧的开始和结束），二是<strong>如果数据里恰好出现了和定界符一模一样的内容怎么办</strong>——总不能把数据误当成结尾。</p>
+  <p>接收方能从比特流中分辨一帧开始和结束的能力，叫做<strong>帧定界</strong>，也叫<strong>帧同步</strong>。成帧之后，数据才能分段传输、错误隔离、逐帧校验，出错时也能只重传相关部分。</p>
+
+  <h3>一帧的通用长相</h3>
+  <div class="frame">
+    <div class="fseg h"><span class="b">帧首部</span><span class="s">地址、类型、序号等</span></div>
+    <div class="fseg p"><span class="b">有效载荷</span><span class="s">网络层交下来的数据</span></div>
+    <div class="fseg t"><span class="b">帧尾部</span><span class="s">校验信息（如 FCS）</span></div>
+  </div>
+  <p>不同协议定义不同的帧（PPP 帧、MAC 帧、HDLC 帧……），但都逃不出"首部＋载荷＋尾部"这个基本结构。具体怎么定界，有四种方法。</p>
+
+  <h3>方法一：字节计数法（早期技术，现在很少用）</h3>
+  <p>在每一帧开头用一个数字标明这一帧有多少字节，接收方按这个数字切帧。它的致命弱点是：<strong>一旦这个计数数字本身出错，后面的帧会连环错位</strong>。</p>
+  <div class="warn">
+    <p style="margin-bottom:0">课件示例：正常时各帧长度为 5、5、8、6 字节。当第二帧的长度字段"5"被噪声错成"8"，接收方就会把第二帧切长，把第三帧的内容吞进去；从这一帧开始，后面所有帧的起点全部错乱——错误不是只坏一帧，而是<strong>后续边界连环错位</strong>。这正是它被淘汰的原因。</p>
+  </div>
+
+  <h3>方法二：字节填充的标志字节法（适合软件，如 PPP）</h3>
+  <p>用一个特殊字节 <strong>FLAG</strong> 作为帧的定界符，帧和帧之间还可以连续发 FLAG 做同步填充。问题来了：如果载荷数据里本身就有一个字节等于 FLAG，接收方会误以为帧结束了。</p>
+  <p>解决办法叫<strong>字节填充</strong>：约定一个转义字符 <strong>ESC</strong>（ASCII 码 1B，即 0x1B）。发送方扫描载荷——</p>
+  <ul>
+    <li>载荷中每出现一个 FLAG，就在它前面插入一个 ESC；</li>
+    <li>载荷中每出现一个 ESC，也在它前面再插入一个 ESC。</li>
+  </ul>
+  <p>接收方看到 ESC 就知道：下一个字节是普通数据，不是控制符，于是把 ESC 去掉、保留后面的字节。真正的帧边界只可能出现在没有被 ESC 保护的 FLAG 上。</p>
+  <div class="bits">原始：FLAG &nbsp;A &nbsp;B &nbsp;ESC &nbsp;A &nbsp;B<br>发送：<span class="flag">FLAG</span> ESC FLAG A B ESC ESC A B <span class="flag">FLAG</span></div>
+
+  <h3>方法三：比特填充的标志比特法（硬件友好，如 HDLC、USB）</h3>
+  <p>HDLC 协议用 8 位比特模式 <strong>01111110（即 0x7E）</strong>作为定界符，帧的划分在比特级完成。为了防止载荷里出现同样的 01111110，发送方做<strong>比特填充</strong>：</p>
+  <div class="card">
+    <p style="margin-bottom:0"><strong>发送方：</strong>扫描载荷，只要出现连续 <strong>5 个 1</strong>，就主动在后面插入一个 <strong>0</strong>（不管第 6 位本来是什么）。这样载荷里永远凑不出 01111110 这个模式。这是纯比特操作，硬件实现很方便。</p>
+  </div>
+  <div class="bits">原始载荷：0 1 1 1 1 1 0 1 1 1 1 1 1 0<br>填充之后：0 1 1 1 1 1 <span class="ins">0</span> 0 1 1 1 1 1 <span class="ins">0</span> 1 0</div>
+  <p><strong>接收方：</strong>每看到连续 5 个 1，就检查紧跟着的那一位：</p>
+  <ul>
+    <li>下一位是 <strong>0</strong>：这是发送方填充的，直接丢弃，后面是有效载荷；</li>
+    <li>下一位是 <strong>1，再下一位是 0</strong>：构成 01111110 定界符，一帧结束；</li>
+    <li>下一位是 <strong>1，再下一位还是 1</strong>：属于非法模式，按出错处理。</li>
+  </ul>
+
+  <h3>方法四：编码违禁法（在物理层实现，如各类以太网）</h3>
+  <p>思路很巧妙：物理层的线路编码本来就有一些<strong>永远不会用于正常数据的"违禁模式"</strong>，直接拿这些模式当定界符，数据部分天然不可能出现，连填充都省了。它只适用于带冗余编码的方案。课件里给了三代以太网的例子：</p>
+  <div class="tbl-wrap"><table class="tbl">
+    <tr><th>编码方式</th><th>违禁 / 未使用的模式</th><th>用在哪里</th></tr>
+    <tr><td>曼彻斯特 / 差分曼彻斯特</td><td>"高-高"或"低-低"电平对在数据编码中违禁，拿来定界</td><td>10Mbps 以太网、802.5 令牌环</td></tr>
+    <tr><td>4B/5B</td><td>5 位编码共 32 种组合，其中 16 种未使用，可作定界符</td><td>100BASE-TX / FX 快速以太网</td></tr>
+    <tr><td>8B/10B</td><td>未使用的编码用作定界符、空闲状态等控制码</td><td>1000BASE-SX/LX 千兆以太网（802.3z）</td></tr>
+  </table></div>
+  <div class="note">目前主流的成帧方法是<strong>比特填充法</strong>和<strong>编码违禁法</strong>。一句话记忆：字节计数怕连环错，字节填充靠 ESC，比特填充靠插 0，编码违禁靠"数据里根本不会出现"。</div>
+
+  <h3>链路层能提供的三类服务</h3>
+  <p>成帧解决了"怎么装"，另一个问题是"装完之后双方怎么配合"。围绕<strong>要不要建立连接、要不要确认</strong>，链路层提供三类服务：</p>
+  <div class="tbl-wrap"><table class="tbl">
+    <tr><th>服务类型</th><th>特点</th><th>适用场景</th></tr>
+    <tr><td>无确认、无连接</td><td>发出去就完事，不建连接、不逐帧确认</td><td>误码率低的可靠信道、实时通信，如普通以太网</td></tr>
+    <tr><td>有确认、无连接</td><td>不用建连接，但每一帧都单独确认</td><td>不可靠信道，如无线 Wi-Fi</td></tr>
+    <tr><td>面向连接</td><td>先建连接、逐帧确认，结束后释放</td><td>长延迟的不可靠信道</td></tr>
+  </table></div>
+</section>
+
+<!-- ===== 模块二 ===== -->
+<section id="m2">
+  <div class="modtag"><em>模块 2</em> 对话前先打招呼：链路管理</div>
+  <h2>线路怎么连、怎么传、怎么约定规矩</h2>
+  <p>在正式传数据之前，双方要先把"物理上怎么连、比特怎么传、听谁指挥"这几件事确定下来。这一模块的知识点看起来零散，其实是三个互相独立的选择，分开记就不会混。</p>
+
+  <h3>2.1 线路配置：点到点，还是多点共享</h3>
+  <div class="tbl-wrap"><table class="tbl">
+    <tr><th>配置方式</th><th>结构</th><th>特点</th></tr>
+    <tr><td>点到点连接</td><td>两个结点之间由专用线路连接，一对一</td><td>整条信道容量都归这两个结点使用，无需协调他人</td></tr>
+    <tr><td>多点连接（广播信道）</td><td>两个以上结点共享一条线路，一对多</td><td>通过复用共享容量，必须用专门的共享信道协议协调谁先发送</td></tr>
+  </table></div>
+
+  <h3>2.2 传输方式：三组独立的选择</h3>
+  <h4>第一组：单工 / 半双工 / 全双工（看方向）</h4>
+  <ul>
+    <li><strong>单工</strong>：数据只能单向走，一个只能发、一个只能收。</li>
+    <li><strong>半双工</strong>：双方都能发也能收，但<strong>不能同时</strong>发，同一时刻只能一个人说。</li>
+    <li><strong>全双工</strong>：双方可以同时发、同时收。实现上有两种情况：要么有两条物理上独立的路径（一条发、一条收），要么把信道带宽一分为二、复用两个方向的信号。</li>
+  </ul>
+  <h4>第二组：串行 / 并行（看一次走几个比特）</h4>
+  <ul>
+    <li><strong>串行传输</strong>：每个时钟脉冲只发一个比特，用一条线路逐个比特传送，短距离、长距离都能用，网络通信基本都是串行。</li>
+    <li><strong>并行传输</strong>：每个时钟脉冲同时发多个比特，每个比特走单独线路。长距离时多条线路成本高、线缆制作难、接收端同步困难，所以只用于近距离，比如计算机和外部设备之间。</li>
+  </ul>
+  <h4>第三组：异步 / 同步（看怎么对齐节奏）</h4>
+  <ul>
+    <li><strong>异步传输</strong>：以少数几个比特（通常是一个字符）为单位，每个字符前加开始位、后加停止位；字符之间的间隔不固定。开销大、效率低，用于键盘、某些打印机等低速设备。</li>
+    <li><strong>同步传输</strong>：把字符或比特流组成数据帧、成块传送。一帧一般包含同步字符 syn、控制域、数据域、错误检查域、帧结束标记 end。需要两级同步：<strong>位同步</strong>（时钟对齐）和<strong>帧同步</strong>（知道帧的起止）。</li>
+  </ul>
+  <div class="note">易混点提醒："串行/并行"说的是一次走几位，"单工/全双工"说的是能不能同时双向，"同步/异步"说的是节奏怎么对齐——三者是不同维度，不要画等号。</div>
+
+  <h3>2.3 线路规程：谁来发起、怎么确认</h3>
+  <p>线路规程的作用是监视链路的建立，并在给定时刻把"发送权"分配给具体设备。有两种实现方式。</p>
+  <h4>询问 / 应答（ENQ/ACK）：用于点到点</h4>
+  <p>链路两端级别相同，任何一方都可以发起会话。发起方先发询问帧 <strong>ENQ</strong>："你能接收数据吗？"接收方准备好了回答 <strong>ACK</strong>，没准备好回答 <strong>NAK</strong>。之后进入数据传输，最后用 <strong>EOT</strong> 帧结束。整个过程分三段：建立 → 数据传输 → 终止。</p>
+  <h4>轮询 / 选择（Poll/Select）：用于多点，主从结构</h4>
+  <p>多点系统里由<strong>主设备</strong>控制链路、发命令，从设备响应。每个设备都有自己的地址。分两种动作：</p>
+  <ul>
+    <li><strong>轮询（Poll）——主设备想收数据</strong>：逐个询问从设备有没有数据要发。没有数据的从设备回答 NAK；有数据的直接用数据帧应答，发完用 EOT 结束。主设备也可以发"时间到"来终止。</li>
+    <li><strong>选择（Select）——主设备想发数据</strong>：主设备用 SEL 帧通知指定从设备准备接收，从设备用 ACK 表示同意、NAK 表示拒绝，然后主设备开始发数据。</li>
+  </ul>
+
+  <h3>2.4 链路状态管理：建立、维持、释放</h3>
+  <p>发送方需要确认接收方处于可接收状态。一条数据链路的生命周期分三步：收发数据前<strong>建立链路</strong>、收发过程中<strong>维持链路</strong>、完成后<strong>释放链路</strong>。</p>
+</section>
+
+<!-- ===== 模块三 ===== -->
+<section id="m3">
+  <div class="modtag"><em>模块 3</em> 出错了、太快了怎么办</div>
+  <h2>差错控制、流量控制与两大协议</h2>
+
+  <h3>3.1 如果什么控制都不做，会怎样</h3>
+  <p>"发送端只管发、接收端只管收"需要三个理想假设：信道完美（帧不丢不坏、带宽足够）、接收方始终就绪、双方处理能力无限。现实中这些假设几乎不存在，于是带来两类问题：</p>
+  <div class="tbl-wrap"><table class="tbl">
+    <tr><th>问题</th><th>具体表现</th><th>对应机制</th></tr>
+    <tr><td>接收方来不及处理</td><td>处理速率低于发送速率；接收缓冲区小，装不下突发数据</td><td>流量控制</td></tr>
+    <tr><td>信道发生差错</td><td>帧损坏（比特出错）、帧丢失、帧乱序（先发后到）、帧重复（收到多次）</td><td>差错控制</td></tr>
+  </table></div>
+
+  <h3>3.2 差错控制的四件武器</h3>
+  <ul>
+    <li><strong>错误检测</strong>：接收方靠帧携带的校验信息发现出错，不把错误数据交给网络层。</li>
+    <li><strong>确认</strong>：正确收到后，给发送方一个肯定应答（ACK）。</li>
+    <li><strong>自动重复请求 ARQ</strong>：帧出错时接收方返回否定应答 NAK，发送方重传出错帧。</li>
+    <li><strong>超时重传</strong>：发送方对每帧启动定时器，超时还没收到确认就重发，以应对帧丢失。</li>
+  </ul>
+  <p>需要重传的情况有三种：<strong>帧破坏、帧丢失、应答帧丢失</strong>。接收方还要按序接收，以防帧丢失、乱序和重复。</p>
+
+  <h3>3.3 流量控制：基于反馈</h3>
+  <p>流量控制是一组过程，它告诉发送方：在收到接收方应答之前，最多可以再传多少数据。核心是<strong>基于反馈</strong>——接收方不断反馈，发送方据此调整速率，保证数据不会把接收方压垮。</p>
+  <div class="note">流量控制和差错控制通常结合在一起实现。<strong>共同点</strong>：都要用到"接收确认、超时重传"。<strong>区别</strong>：差错控制多了一个"差错检测与纠错"的先导环节。具体实现技术有两种：停止等待协议、滑动窗口协议。</div>
+
+  <h3>3.4 停止等待协议（Stop-and-Wait）</h3>
+  <p>核心规则一句话：<strong>发一帧，就停下来等确认，确认到了再发下一帧</strong>。</p>
+  <h4>无错信道上</h4>
+  <p>发送方发完一帧后暂停；接收方收完交给上层，回复一个确认。这个确认帧里装什么内容并不重要，所以叫"哑帧"，它只表示"我收到了"。</p>
+  <h4>有错信道上：计时器来兜底</h4>
+  <p>信道可能出错或丢帧。发送方每发一帧就启动计时器，超时还没等来确认，就认为帧没到或出错，于是重传。但这引出一个新问题：<strong>如果接收方其实收到了，只是确认回来晚了，重传就会让接收方收到重复帧</strong>。</p>
+  <p>接收方重复收到同一帧有两种典型场景：</p>
+  <ul>
+    <li><strong>场景一：ACK 丢失</strong>。B 已收到 A1 并生成 ACK，但 ACK 在路上丢了；A 超时重传 A1，B 收到第二个副本。</li>
+    <li><strong>场景二：超时时间设得过小（或帧传输时间过长）</strong>。A 超时重传后，第一次发的帧才慢悠悠到达，B 同样收到两个副本。</li>
+  </ul>
+  <h4>用序号解决重复：1 bit 就够</h4>
+  <p>发送方在帧里带上<strong>序号 SEQ</strong>，接收方检查序号判断是不是新帧。由于只需要区分"当前帧"和"它的直接下一帧"，用 1 位序号（0 和 1 交替）就足够了。接收方看到相邻两帧序号相同，就知道是重复帧，直接丢弃。</p>
+  <div class="card">
+    <p style="margin-bottom:6px"><strong>发送方逻辑：</strong>初始序号 0；发帧后等待 ACK / NAK / 超时；收到肯定确认就发下一帧（序号翻转），超时或收到 NAK 就重传当前帧。</p>
+    <p style="margin-bottom:0"><strong>接收方逻辑：</strong>初始期待 0 号帧；收到序号和内容都正确的帧，交给网络层并回确认；收到错误帧，则重发上一个成功帧的确认（让发送方别再等）。</p>
+  </div>
+  <p>这套机制也叫<strong>带重传的肯定确认（PAR）</strong>，与 ARQ 指的是同一类思想。停等协议用"收到确认才发下一帧"天然实现了流量控制，优点是简单，缺点是<strong>效率低、线路带宽利用率低</strong>。</p>
+
+  <h4>停等协议的性能怎么算</h4>
+  <p>完成一帧发送所需的最短时间 tW，由几段时间拼成：</p>
+  <div class="formula">tW = tI + 2tP + 2tProc + tS</div>
+  <ul>
+    <li>tI：发送数据帧的时间＝帧长 ÷ 数据速率；</li>
+    <li>tS：发送应答帧的时间＝应答帧长 ÷ 数据速率；</li>
+    <li>tP：信号传播延时＝距离 ÷ 传播速度；</li>
+    <li>tProc：结点处理时间。</li>
+  </ul>
+  <p>无差错时，发送信道利用率 P 和有效数据传输率 S 分别为：</p>
+  <div class="formula">P = tI / tW　　S = N / tW（N 是一帧的有效数据比特数）</div>
+  <p>当帧出错率为 p 时，正确发送一帧的平均时间 tV、系统最大吞吐量、极限吞吐量和传输效率为：</p>
+  <div class="formula">tV = tW/(1−p)　λmax = (1−p)/tW　M = 1/tI　η = (1−p)/(tW/tI)</div>
+  <details>
+    <summary>课件计算实例（点开看完整数字）</summary>
+    <p>已知 C=10Mbps（10 bit/μs）、传播速度 S=200m/μs、距离 D=200m、tProc=1μs、数据帧 Lf=200bit、有效数据 N=160bit、应答帧 LS=40bit。</p>
+    <p>tI=200/10=20 μs，tP=200/200=1 μs，tS=40/10=4 μs。<br>
+    tW=20+2×1+2×1+4=28 μs。<br>
+    利用率 P=20/28=71.4%；有效数据率 S=160/28=5.7 Mbps。</p>
+  </details>
+  <div class="warn">停等的根本问题：把链路想成一根管道，帧是管道里流动的数据。在传播延迟长、速率高的线路上，发一帧然后干等，<strong>管道大部分时间是空的</strong>，利用率很低。解决出路是"流水线/管道协议"：允许在没收到确认前连续发多个帧——这就是滑动窗口。</div>
+</section>
+
+<section id="m3b" style="scroll-margin-top:20px">
+  <h3>3.5 滑动窗口协议：像批发而不是零售</h3>
+  <p><strong>窗口</strong>就是发送方和接收方各自开辟的数据缓冲区。发送方在收到应答前可以连续发若干帧，发送窗口由两部分组成：已经发出但还没收到应答的帧，以及还可以继续发、直到窗口占满的帧。接收窗口同理：已接收但还没应答的帧，加上还能继续接收的额度。</p>
+  <p>几个关键约定：</p>
+  <ul>
+    <li><strong>序号循环使用</strong>：帧以模 n 方式编号，编号从 0 到 n−1，用完一圈再从头来。</li>
+    <li><strong>接收窗口驱动发送窗口转动</strong>：确认一来，窗口整体向右滑动。</li>
+    <li><strong>累积确认</strong>：接收方用一个 ACK 就能确认多个帧。ACK 编号 x 表示"x 之前的都收到了，我现在期待下一帧 x"。</li>
+  </ul>
+  <p>窗口随发送和确认移动的过程：初始时窗口左边界与分界重合；发出 4 帧，分界右移 4 格（这些帧变成"已发未确认"）；收到 ACK 3，整个窗口右移 3 格，左边腾出位置、右边获得新的可发帧。接收窗口的转动方式完全对称。</p>
+
+  <h3>3.6 两种窗口 ARQ：回退 N 与选择拒绝</h3>
+  <p>两者都要求发送站保留帧备份、接收方可发 NAK、用定时器判断丢失。区别在于出错后怎么重传。</p>
+
+  <h4>回退 N（Go-Back-N，GBN）：出错全部重传</h4>
+  <ul>
+    <li>接收窗口为 1，只能按顺序收。收到出错帧或乱序帧时，<strong>丢弃这个帧以及后面所有帧，也不为它们确认</strong>。</li>
+    <li>发送方超时后，重传<strong>所有未被确认的帧</strong>——哪怕其中有些帧本来是对的。</li>
+    <li>优点：能连续发送，信道利用率高；缺点：正确的帧也被白白丢弃重传。</li>
+  </ul>
+  <h4>窗口为什么必须留一个编号的余量</h4>
+  <p>若编号范围是 0～n−1，GBN 发送窗口取 n−1。原因用反例看得最清楚：假设窗口尺寸等于 n（即 8 个编号 0～7 全占满），发送方发完 0～7，而 ACK 0 丢失导致超时重传 0～7；接收方此时正好期待编号 0，会把这批<strong>重复帧误当成新帧</strong>全部收下，协议失败。窗口取 n−1（只发 0～6）时，重传帧的编号和接收方当前期待对不上，就能被正确识别为重复帧而丢弃。</p>
+  <div class="note">课件在窗口基本概念处也出现"窗口大小为 n−1"的说法，结合上面的反例理解即可：<strong>留一个编号不放进窗口，是为了让"新一圈的帧"和"重传的旧帧"能被序号区分开</strong>。</div>
+
+  <h4>选择拒绝（Select-Reject，SR）：只重传出错的那一帧</h4>
+  <ul>
+    <li>接收窗口大于 1，能把出错帧之后、先到达的正确帧<strong>暂存</strong>在窗口里，等缺的帧补来再按序上交。</li>
+    <li>收到某帧的 NAK 或某帧定时器超时，<strong>只重传那一帧</strong>，不牵连其他帧。</li>
+    <li>优点：避免重传本来正确的帧；缺点：接收端要占更多缓存，且需要排序功能，发送端要有查找机制。</li>
+  </ul>
+  <h4>SR 的窗口约束：两窗之和不超过编号空间</h4>
+  <p>若编号范围是 0～n−1，则<strong>发送窗口＋接收窗口 ≤ n</strong>；若要求两窗口等大，则每个窗口 ≤ n/2。课件反例（n=8）：发送窗口 4、接收窗口 5，ACK 丢失后接收窗口已滑到能接收新的 0 号帧，重传来的旧 0 号帧就被误当新帧；反过来接收窗口过大也会同样失败。根子都是窗口之和超出了编号空间，新旧帧无法区分。</p>
+
+  <h4>同一故障下，GBN 和 SR 的差别</h4>
+  <div class="stepper" id="st-gbn">
+    <div class="stepbar"><div class="stepdots" style="display:flex;gap:8px;align-items:center;flex-wrap:wrap"></div></div>
+    <div class="stepbody"></div>
+    <div class="stepbtns"><button class="btn ghost prev">上一步</button><button class="btn next">下一步</button></div>
+  </div>
+
+  <h3>3.7 滑动窗口的效率与窗口大小选择</h3>
+  <p>不考虑应答帧丢失，GBN 正确传送一帧的平均时间 tV = tI + p·tW/(1−p)，传输效率：</p>
+  <div class="formula">η = tI/tV = (1−p) / [1 + p(tW/tI − 1)]</div>
+  <p>无差错时 p=0，η=100%；线路传播延时、应答帧时间越长，效率下降越多。课件两个算例很说明问题：</p>
+  <div class="tbl-wrap"><table class="tbl">
+    <tr><th>场景</th><th>停等效率</th><th>滑窗效率</th><th>结论</th></tr>
+    <tr><td>卫星通信，传播延迟大（p=0.01）</td><td>0.32</td><td>0.97</td><td>等待确认时间很长，滑窗远优于停等</td></tr>
+    <tr><td>广域网，传播延迟很小（p=0.01）</td><td>0.89</td><td>0.989</td><td>传播延迟小时，两者差别不明显</td></tr>
+  </table></div>
+  <p>窗口大小也要权衡：太大需要足够缓存；太小则第一个确认回来前窗口里的帧就发完了，发送方被迫干等。设一帧发送时间 tI、应答帧时间 tS、传播时间 tP，窗口大小 n 应满足：</p>
+  <div class="formula">n·tI ≥ tI + tS + 2tP</div>
+  <h3>3.8 三种协议一张表总结</h3>
+  <div class="tbl-wrap"><table class="tbl">
+    <tr><th>协议</th><th>发送窗口</th><th>接收窗口</th><th>效率</th><th>实现复杂度</th></tr>
+    <tr><td>停止等待</td><td>1</td><td>1</td><td>低</td><td>简单</td></tr>
+    <tr><td>回退 N</td><td>&gt;1</td><td>1</td><td>高</td><td>复杂</td></tr>
+    <tr><td>选择拒绝</td><td>&gt;1</td><td>&gt;1</td><td>高</td><td>更复杂</td></tr>
+  </table></div>
+</section>
+
+<!-- ===== 模块四 ===== -->
+<section id="m4">
+  <div class="modtag"><em>模块 4</em> 机制落到格式上：HDLC / PPP / LLC</div>
+  <h2>三个具体的数据链路控制协议</h2>
+
+  <h3>4.1 HDLC：第一本"通信规则手册"</h3>
+  <p>前面模块讲的停等、滑动窗口，都还只是"机制"。机制要真正跑起来，得有一本写死格式和流程的规则手册。HDLC 就是历史上第一本被广泛使用的手册，后来的 PPP、LLC 都在它的基础上改造。它的家谱是：1975 年 IBM 先做出 SDLC，1979 年 ISO 据此提出 HDLC，ITU-T 再发展出 LAPB、LAPD、LAPM 等。</p>
+  <p>HDLC 把一帧看成带定界符的连续比特流，含义完全由比特的位置和组合决定，所以叫<strong>面向比特</strong>的协议。下面我们不背术语，而是顺着"要让一群设备有秩序地对话，你会依次遇到什么问题"把这本手册读出来。</p>
+
+  <h4>第一个问题：谁有资格发号施令——先定角色</h4>
+  <p>想象一个中心设备带着几个终端。要避免乱套，第一件事是分配角色，于是手册里有了三种站点：</p>
+  <ul>
+    <li><strong>主站点</strong>：掌握控制权、负责发命令的"指挥官"；</li>
+    <li><strong>从站点</strong>：接受命令、发出响应的"士兵"；</li>
+    <li><strong>复合站点</strong>：既能指挥又能执行的"老兵"，主站和从站功能都具备。</li>
+  </ul>
+
+  <h4>第二个问题：物理上怎么连——再定配置</h4>
+  <p>角色定了，接下来是连线方式。<strong>非平衡式</strong>是一个主站带多个从站（多点）；<strong>对称式</strong>是点到点、双方各自保留一条主从关系的链路；<strong>平衡式</strong>是两个复合站平等相连（点到点）。</p>
+
+  <h4>第三个问题：什么时候允许士兵开口——定工作方式</h4>
+  <p>这是最容易混的三个缩写，其实只在回答"从站能不能主动说话"：</p>
+  <ul>
+    <li><strong>NRM 正常应答</strong>（非平衡）：最严格，士兵没被点到名字就不能说话，只有主站询问后才能发数据。</li>
+    <li><strong>ARM 异步应答</strong>（非平衡）：宽松一些，信道空闲时从站无需许可就能发；但初始化、建链、释放、差错恢复仍由主站负责，从站之间通信还要经主站转发。</li>
+    <li><strong>ABM 异步平衡</strong>（平衡）：两个平级复合站，任何一方都能随时发起传输，无需对方许可。</li>
+  </ul>
+
+  <h4>第四个问题：对话里要传哪几种话——定三类帧</h4>
+  <p>角色和规则齐了，再看"话"的种类。任何一次对话，无非三类内容，对应 HDLC 的三类帧：</p>
+  <div class="tbl-wrap"><table class="tbl">
+    <tr><th>帧类型</th><th>像什么</th><th>用途</th><th>含信息字段</th></tr>
+    <tr><td>信息帧 I-帧</td><td>装着正事的信件</td><td>承载数据及相关控制信息</td><td>有</td></tr>
+    <tr><td>监管帧 S-帧</td><td>"收到了 / 说慢点"的短回执</td><td>流量控制和差错控制</td><td>无</td></tr>
+    <tr><td>无编号帧 U-帧</td><td>"开始 / 解散"的行政命令</td><td>链路管理服务</td><td>管理信息</td></tr>
+  </table></div>
+
+  <h4>手册的具体格式：一帧由哪些字段拼成</h4>
+  <p>现在你已经理解了角色和三类话，字段就只是"把它们写进信封"的固定位置。</p>
+  <p><strong>标志字段</strong>：1 字节，模式 01111110，标志一帧的开始和结束并提供同步；成帧用比特填充法——发送方每见连续 5 个 1 就在后面插 0，接收方做相反操作。例如序列 01111101111110 发送时变成 0111110011111010。</p>
+  <p><strong>地址字段</strong>：填从站地址（或以从站方式运行的复合站地址）。主站发出的帧填接收从站地址，从站发出的帧填自己的地址。同一地址可分配给多个站点叫组地址，全 1 是包含所有站点的广播地址。地址可扩展：单字节时最后一位恒为 1；多字节时除最后一个字节外都以 0 结尾、最后一个字节以 1 结尾。</p>
+  <p><strong>控制字段</strong>：靠开头两位区分 I/S/U 帧。</p>
+  <ul>
+    <li><strong>I 帧</strong>：第 1 位为 0；接着 3 位 N(S) 是当前发送帧编号（0～7）；1 位 P/F（0 表示还有帧要发、1 表示发送结束）；3 位 N(R) 是捎带的应答，即期望收到的帧号。</li>
+    <li><strong>S 帧</strong>：开头 10，无信息字段，靠 2 位类别码区分四种监管帧，后接 P/F 和 N(R)。</li>
+    <li><strong>U 帧</strong>：开头 11，有 5 位编码位，可表示 32 种无编号帧，分方式设置、无序号交互、断开连接、启动模式、混杂形式五个功能类，P/F 一般置 1。</li>
+  </ul>
+  <h4>四种监管帧各自的含义</h4>
+  <div class="tbl-wrap"><table class="tbl">
+    <tr><th>编码</th><th>帧</th><th>作用与用法</th></tr>
+    <tr><td>00</td><td>RR 接收就绪</td><td>可作 ACK 应答、POLL 查询、对查询的否定应答（无数据）、对选择的肯定应答</td></tr>
+    <tr><td>10</td><td>RNR 接收未就绪</td><td>确认已收到 N(R) 之前的帧，同时要求暂停发送（直到收到 RR）；也用于选择及否定应答</td></tr>
+    <tr><td>01</td><td>REJ 拒绝</td><td>用于回退 N：N(R) 指明损坏帧，该帧及其后所有帧必须重发</td></tr>
+    <tr><td>11</td><td>SREJ 选择拒绝</td><td>用于选择拒绝：N(R) 指明被损坏帧，只重传这一帧</td></tr>
+  </table></div>
+  <details>
+    <summary>常见无编号帧（U-帧）速查</summary>
+    <ul>
+      <li>方式设置：SNRM/SNRME、SARM/SARME、SABM/SABME（带 E 的为扩展模式）；</li>
+      <li>无序号交互：UP（无序号轮询）、UI（无序号信息，常发状态信息）；</li>
+      <li>确认与断开：UA（无序号确认，确认模式设置/断开命令）、RD（请求断开）、DISC（断开连接，对方 UA 响应后完成）、DM（告知处于断连状态）；</li>
+      <li>其他：RIM（请求初始化）、SIM（初始化命令）、RSET（重启动）、XID（交换标识与状态）、FRMR（帧拒绝，用于同步错误）。</li>
+    </ul>
+  </details>
+  <p><strong>信息字段</strong>：I 帧里是用户数据，U 帧里是链路管理信息，S 帧没有该字段。把数据和应答确认放进同一帧的技术叫<strong>捎带确认</strong>。<strong>FCS 帧校验序列</strong>是错误检测域，含 2 字节或 4 字节 CRC，常用 CRC-CCITT（X¹⁶+X¹²+X⁵+1）。</p>
+  <h4>把手册从头走一遍：HDLC 通信实例</h4>
+  <p>理解了各部分，再看完整流程就很顺。课件给了三类：查询/响应（主站用 P/F=1 的 RR 轮询，从站用 I 帧应答）、选择/应答（主站 RNR 通知、从站 RR 同意后发数据）、对等通信（SABM 建链 → UA 确认 → 双方 I 帧交换 → RR 累积确认 → DISC 断链 → UA 确认），都严格对应"建立—交换—断开"三个阶段。</p>
+</section>
+
+<section id="m4b" style="scroll-margin-top:20px">
+  <h3>4.2 PPP：把规则做"轻"的点对点协议</h3>
+  <p>HDLC 功能很全，但确认、纠错、滑窗一套下来也很重。现实中大多数点对点链路（比如拨号上网、专线）出错率并不高，为每帧都做确认反而拖累效率。于是 IETF 做了一个更简单的选择——PPP，它在更早的串行协议 SLIP 基础上发展，1994 年成为正式标准（RFC 1661）。</p>
+  <p>和 HDLC 面向比特不同，PPP 是<strong>面向字节</strong>的：用字节填充，帧长一定是字节的整数倍。它只需要解决三件事，这正好对应它的三个组成部分。</p>
+  <h4>第一件事：怎么把不同内容装进同一条链路——封装</h4>
+  <p><strong>封装</strong>就是统一的信封格式，不管里面装的是 IP 还是其他网络层的包都能塞进去；同一链路既支持异步链路（无奇偶校验的 8 比特数据），也支持面向比特的同步链路。IP 数据包作为帧的信息部分，长度受 MTU 限制。</p>
+  <h4>第二件事：开口前先确认线路通不通——LCP</h4>
+  <p><strong>LCP 链路控制协议</strong>像打电话先拨号：负责建立、配置和测试数据链路，双方可以协商选项。</p>
+  <h4>第三件事：告诉对方我用哪种网络语言——NCP</h4>
+  <p><strong>NCP 网络控制协议</strong>是一组子协议，每个子协议支持一种网络层协议（IP、OSI、DECnet、AppleTalk 等）。</p>
+  <p>在这三件事之外，PPP 还能做：定界符成帧、填充实现透明传输、差错检测、链路配置、实时监测链路状态、设置 MTU、网络层地址协商、数据压缩协商、身份认证。</p>
+  <h4>PPP 帧格式</h4>
+  <div class="frame">
+    <div class="fseg h"><span class="b">F 标志</span><span class="s">0x7E</span></div>
+    <div class="fseg h"><span class="b">A 地址</span><span class="s">0xFF</span></div>
+    <div class="fseg h"><span class="b">C 控制</span><span class="s">0x03</span></div>
+    <div class="fseg h"><span class="b">协议</span><span class="s">2 字节</span></div>
+    <div class="fseg p"><span class="b">有效载荷</span><span class="s">≤1500 字节</span></div>
+    <div class="fseg t"><span class="b">校验和</span><span class="s">FCS</span></div>
+  </div>
+  <p>协议字段标识载荷种类：<strong>0x0021</strong>＝IP 数据报，<strong>0x8021</strong>＝网络控制数据，<strong>0xC021</strong>＝链路控制数据，<strong>0xC023</strong>＝鉴别数据。</p>
+  <div class="warn">
+    <p style="margin-bottom:0"><strong>这正是"做轻"的关键：PPP 有意不保证可靠传输。</strong>它只做差错检测，FCS 保证无差错的帧才交付，但<strong>不使用序号和确认机制，不保证帧不丢失</strong>。这不是缺陷，而是取舍——链路层出错概率不大时，简单比周全更划算；互联网环境下链路层本身就比 IP 层可靠得多，丢帧这类问题交给上层处理即可。</p>
+  </div>
+  <h4>PPP 和 HDLC 的区别</h4>
+  <div class="tbl-wrap"><table class="tbl">
+    <tr><th>维度</th><th>PPP</th><th>HDLC</th></tr>
+    <tr><td>标准</td><td>IETF</td><td>ISO</td></tr>
+    <tr><td>帧类型</td><td>面向字节，长度是字节整数倍</td><td>面向比特，长度可不按字节</td></tr>
+    <tr><td>成帧方法</td><td>字节填充</td><td>比特填充</td></tr>
+    <tr><td>差错处理</td><td>只检错、不纠错</td><td>检错并纠错</td></tr>
+    <tr><td>可靠性</td><td>无差错控制，不保证不丢帧</td><td>滑动窗口＋确认＋超时，保证不丢帧</td></tr>
+    <tr><td>适用</td><td>双工，仅点到点</td><td>半双工/双工，可点到点或多点</td></tr>
+  </table></div>
+
+  <h3>4.3 LLC：给上层一个"不用挑介质"的统一接口</h3>
+  <p>局域网有很多种传输介质：以太网、无线、令牌环……如果上层协议每接一种介质都要单独适配，软件会极其繁琐。IEEE 的解决办法是把数据链路层再切成两半，让上层只面对一个统一接口。</p>
+  <p>与 OSI 相比，IEEE 把物理层分成介质说明（下）和介质访问单元 MAU（上），把数据链路层分成 <strong>MAC（下）和 LLC（上）</strong>两个子层。加 MAC 是因为局域网各结点对称、支持广播，需要多点平衡配置；而 LLC 针对不同介质定义统一协议、屏蔽底层差异。</p>
+  <p>802 标准按介质给出不同 MAC：<strong>802.3 以太网、802.4 令牌总线、802.5 令牌环、802.11 无线 Wi-Fi</strong>；802.2 是 LLC，802.1 是网络互连。上层只管把数据交给 LLC，完全不用关心底下连的是哪种网，所以说 LLC 是"透明"的——只有下到 MAC 才知道接的是什么介质。</p>
+  <h4>一台机器上有多个进程要同时通信怎么办——SAP</h4>
+  <p><strong>SAP（服务访问点）</strong>就像同一栋办公楼里的不同部门分机：MAC 地址找到的是"哪栋楼"（哪台机器），SAP 再找到"楼里的哪个部门"（哪个进程/协议）。所以一台机器能同时用多个 SAP、复用同一 MAC 帧跟外界的不同进程通信。</p>
+  <h4>LLC 帧格式与地址</h4>
+  <p>LLC-PDU 含四个域：<strong>DSAP（目的服务访问点）、SSAP（源服务访问点）、控制域、信息域</strong>（来自网络层 PDU），整体再封装进 MAC 帧的数据部分。DSAP/SSAP 是<strong>逻辑地址</strong>，标明的是计算机上的协议栈/服务访问点，而 MAC 帧首里的目的、源站地址是站点的物理地址。</p>
+  <ul>
+    <li>DSAP 最高位：0＝单播、1＝组播；全 1 为广播。</li>
+    <li>SSAP 最高位：0＝命令帧、1＝响应帧。</li>
+    <li>一个站点可以有多个 SAP，每个 SAP 可对应一个进程，复用同一 MAC 帧与另一站点的不同 SAP 通信。</li>
+  </ul>
+  <h4>LLC 的帧类型与服务</h4>
+  <p>LLC 也分信息帧、监管帧、无编号帧（靠控制字段区分），功能与 HDLC 相同，但有两点区别：<strong>LLC 没有选择拒绝帧；LLC 帧本身不含 CRC，校验在 MAC 子层进行</strong>。</p>
+  <div class="tbl-wrap"><table class="tbl">
+    <tr><th>服务</th><th>场景</th></tr>
+    <tr><td>无确认无连接</td><td>差错率低的线路，如有线以太网；端到端差错/流控交给高层（传输层）</td></tr>
+    <tr><td>有确认无连接</td><td>不可靠信道，如 802.11 无线</td></tr>
+    <tr><td>有确认有连接</td><td>无复杂上层协议的简单终端，直接在链路层之上开展应用，如蓝牙</td></tr>
+  </table></div>
+</section>
+
+<!-- ===== 模块五 ===== -->
+<section id="m5">
+  <div class="modtag"><em>模块 5</em> 以太网：最成功的局域网技术</div>
+  <h2>共享总线、冲突与 CSMA/CD</h2>
+  <h3>5.1 以太网长什么样：从一根总线到一个中心</h3>
+  <p>以太网由 DEC、Intel、Xerox 三家联合开发（合称 DIX），是当今最成功的局域网技术。IEEE 802.3 定义了基带和宽带两类，基带类用数字信号、曼彻斯特编码，包含 10Base5、10Base2、10Base-T、1Base5、100Base-T 等标准。每个站点都有一块网络接口卡 <strong>NIC</strong>，卡上的物理地址长 6 字节，任意两块网卡地址都不同。</p>
+  <p>它的布线方式经历过一次关键变化，但有一点始终没变：</p>
+  <ul>
+    <li><strong>早期（1990 年前）</strong>：同轴电缆、总线形拓扑（10Base5、10Base2），大家真的共用一根物理电缆，总线两端接匹配电阻吸收信号。</li>
+    <li><strong>1990 年 802.3i</strong>：改用双绞线、星形拓扑（10BASE-T），中心是集线器，布线便宜灵活；但集线器内部仍把所有接口连在一起，<strong>本质还是共享介质的广播信道</strong>。</li>
+  </ul>
+
+  <h3>5.2 共用一条线，第一个麻烦就是"撞"</h3>
+  <p>既然大家共享一条信道，不加控制地同时发送，信号就会叠加、严重失真，无法恢复出有用信息，这就是<strong>冲突</strong>。多路访问（MA）指多个站点连在同一共享信道上、一个站点发的数据可被多个站点接收。</p>
+  <p>最直觉的办法是<strong>开口前先听</strong>：每个站点发送前先检测线路电压、判断信道忙闲，空闲才发、忙就避让，这就是<strong>载波侦听多路访问 CSMA</strong>。按避让时间怎么选，分非坚持、坚持、P-坚持三种。但光"先听"还不够——信号传播需要时间，你以为空闲时，别人的帧可能还在路上，所以冲突仍然会发生。</p>
+
+  <h3>5.3 那就边发边听：CSMA/CD 完整逻辑</h3>
+  <p>既然发送前听不保险，IEEE 802.3 又加了一招：发送过程中继续侦听，一旦发现冲突，立即停止发送、发一个阻塞信号，随机等一会再试。这就是<strong>带冲突检测的 CSMA/CD</strong>，一种动态随机接入方式。把它想象成一个没有主持人的圆桌会议：先听后说，可两人仍可能同时开口；一旦发现撞了，立刻闭嘴、喊一声"撞了"，再各自随机等一会。</p>
+  <h4>争用期（冲突检测窗口）</h4>
+  <p>因为传播延迟，A 需要<strong>单程传播时延的 2 倍</strong>时间才能确认自己和 B 有没有撞上。以太网端到端往返时延 <strong>2T 就叫争用期</strong>。只要过了争用期还没检测到冲突，就能确定这次发送不会再冲突。</p>
+  <h4>最短帧长</h4>
+  <p>为了让冲突一定能在帧发完之前被发现，帧不能太短。最短帧长＝争用期内能发出的比特数：</p>
+  <div class="formula">Lmin = 2t × R，其中 t = D/V（D 最大站距，V 传播速度，R 速率）</div>
+  <p>为什么要这样规定？一句话不能太短——短到"都说完了"还没发现和别人撞了，冲突就检测不到了。所以帧至少要长到"在说完之前一定能察觉冲突"。</p>
+  <div class="card">
+    <p style="margin-bottom:6px">10Mbps 以太网在争用期内可发 <strong>512 bit＝64 字节</strong>，这就是最短帧长。冲突一定发生在发送的前 64 字节内，凡短于 64 字节的帧都是冲突中止的无效帧。</p>
+    <p style="margin-bottom:0">单程端到端时延须小于争用期的一半（25.6 μs），按 200m/μs 传播速度折算，最大端到端长度约 5 km。</p>
+  </div>
+  <h4>二进制指数退避算法</h4>
+  <p>冲突后等待随机时间再试，以降低再次冲突概率。基本退避时间取一个争用期 2T。当某帧第 k 次冲突时，从整数集合 [1, …, 2^k] 中随机取一个数 r，等待时延 t = r×2T；参数 k = Min(重传次数, 10)。若重传 16 次仍不成功，就丢弃该帧并向高层报错。</p>
+  <div class="note">适用边界很重要：CSMA/CD 只适用于<strong>多站点共享信道、半双工</strong>的以太网（如多台主机经集线器互连）。点到点、无冲突的全双工通信（如主机经交换机互连）不需要它。</div>
+</section>
+
+<section id="m5b" style="scroll-margin-top:20px">
+  <h3>5.4 以太网 MAC 帧：两种标准</h3>
+  <p>两种帧格式通过第三个字段（长度/类型）的取值区分：<strong>该值 &gt; 0x0600 为 Ethernet II（DIX V2），≤ 0x0600 为 IEEE 802.3</strong>。最常用的是 Ethernet II。</p>
+  <h4>Ethernet II 帧的完整结构</h4>
+  <div class="frame">
+    <div class="fseg h"><span class="b">目的地址</span><span class="s">6B</span></div>
+    <div class="fseg h"><span class="b">源地址</span><span class="s">6B</span></div>
+    <div class="fseg h"><span class="b">类型</span><span class="s">2B</span></div>
+    <div class="fseg p"><span class="b">数据</span><span class="s">46~1500B</span></div>
+    <div class="fseg t"><span class="b">CRC</span><span class="s">4B</span></div>
+  </div>
+  <p>发送时硬件还会在帧前插入 8 字节：<strong>7 字节前导码</strong>用于快速实现比特同步，<strong>1 字节帧起始定界符 SFD</strong>表示后面就是 MAC 帧。</p>
+  <h4>MAC 地址（物理地址）</h4>
+  <p>MAC 地址长 48 比特（6 字节），分两半：前 3 字节是<strong>组织唯一标识符 OUI</strong>，由 IEEE 注册机构向厂商分配；后 3 字节是<strong>扩展唯一标识符</strong>，由厂商自行指派、保证不重复。</p>
+  <div class="story"><strong>把 MAC 地址想成网卡的"身份证号"：</strong>前 3 字节 OUI 像身份证里标识"哪个厂家/地区"的部分，后 3 字节是厂家给每张网卡的唯一编号，合起来保证全球每块网卡都不重名。单播＝点名某个人，组播＝点一个小组，广播＝喊全场（48 位全 1）。</div>
+  <ul>
+    <li><strong>单播</strong>：第一字节最低位为 0，仅一个站点拥有；</li>
+    <li><strong>组播</strong>：该位为 1，一组站点拥有；</li>
+    <li><strong>广播</strong>：48 位全为 1。组播和广播只能作目的地址。</li>
+  </ul>
+  <h4>类型字段与数据字段</h4>
+  <p>类型字段指明上层协议，接收方据此把数据交给正确的上层：<strong>0x0800＝IPv4，0x0806＝ARP，0x8100＝802.1Q 帧，0x86DD＝IPv6</strong>。数据字段装上层 PDU，最小 46 字节（不足则填充以满足 64 字节最小帧长），帧校验用 CRC-32。</p>
+  <h4>IEEE 802.3 帧与无效帧</h4>
+  <p>802.3 帧第三字段是"LLC-PDU 长度"，数据字段必须装 LLC 帧、长度 ≤1500 字节，这种标准在产业中已很少使用。有效 MAC 帧长度在 64～1518 字节之间，以下情形都算无效帧并被简单丢弃、无需重传：</p>
+  <ul>
+    <li>数据长度与长度字段值不一致；</li>
+    <li>帧长度不是整数个字节；</li>
+    <li>FCS 校验出错；</li>
+    <li>数据字段长度不在 46～1500 字节之间。</li>
+  </ul>
+
+  <h3>5.5 以太网的标准演进与产业生态</h3>
+  <p>速率标准从 1975 年起步，历经 10M、100M（1994）、千兆（1998/1999）、万兆（2002）、40G/100G（2010 前后），到 2015 年后的 400G 及更新的 800G/1.6T；同时 OAM（可管理维护）和 QoS（802.1Q 系列 TSN 标准）两条线并行演进，呈现"超宽、QoS 保证、可管理维护"三方并进。</p>
+  <p>围绕 IEEE 802 形成了庞大的产业组织生态：IEEE 802 工作组完成大部分标准制定；<strong>OIF</strong>（光互联论坛，1998 年成立）定义光电互联互通标准，成果包括 CEI 电接口协议和 Flex Ethernet；<strong>MEF</strong>（城域以太论坛）聚焦有 QoS 保证、可运营的城域以太网业务（E-Line、E-LAN），定义 SLA 所需 QoS 框架和管理接口；此外还有 Ethernet Alliance、IBTA、ITU-T 等，各组织之间开放、竞争又合作。</p>
+  <p>以太网凭借速率高、成本低、产业链成熟、标准开放统一，已广泛用于家庭、园区办公、运营商、数据中心、工业物联网和车载等场景；不同速率对应不同场景，如 100M/GE 用于桌面办公，2.5G/5G/25G 用于服务器，40G 以上用于数据中心核心和城域传输。</p>
+</section>
+
+<!-- ===== 模块六 ===== -->
+<section id="m6">
+  <div class="modtag"><em>模块 6</em> 空气里的规则：无线局域网</div>
+  <h2>WLAN、CSMA/CA 与无线个域网</h2>
+  <h3>6.1 WLAN 概述与标准演进</h3>
+  <p>无线局域网 WLAN 是用无线通信覆盖局部地理范围的网络，分有固定基站和无固定基站两类。802.11x 是 IEEE 为其制定的 MAC 层和物理层协议簇，使用 900MHz、2.4G、3.6G、5G、60G 等频段；Wi-Fi 联盟把基于 802.11、可无线接入的产品称为 Wi-Fi，Wi-Fi 与 WLAN 含义可互用。</p>
+  <p>从 1997 年第一代 802.11（2Mbps）起，历经 802.11b（11M）、802.11a/g（54M）、802.11n（引入 MIMO，最高 600M）、802.11ac（最高 3.2G），到 802.11ax（Wi-Fi 6，引入 OFDMA、最高 10G）；802.11ad 则用 60G 频段提升短距带宽。物理层介质包括 FHSS 跳频、DSSS 直序、红外线 IR，以及用于 a/g 的 OFDM 正交频分复用。</p>
+  <h3>6.2 拓扑与协调方式</h3>
+  <p>WLAN 最小构成单位是<strong>基本服务集 BSS</strong>，由运行相同 MAC 协议、竞争同一无线链路的站点组成，分独立 BSS（无 AP）和有 AP 的 BSS。MAC 层提供两种协调功能：</p>
+  <ul>
+    <li><strong>DCF 分布协调功能</strong>：用 CSMA/CA，属于争用服务；</li>
+    <li><strong>PCF 点协调功能</strong>：用集中控制算法把发送权轮流分配给各站，避免碰撞，属于无争用服务。</li>
+  </ul>
+  <h4>帧间间隔 IFS：优先级藏在等待时长里</h4>
+  <p>每站发完一帧后必须再等待一小段时间（继续侦听）才能发下一帧，这段时间叫 IFS。高优先级帧等待时间短，能优先获得发送权。三种 IFS 长度递增：</p>
+  <div class="tbl-wrap"><table class="tbl">
+    <tr><th>间隔</th><th>含义</th><th>用途</th></tr>
+    <tr><td>SIFS 短帧间间隔</td><td>最短，用于分隔一次对话中的各帧</td><td>ACK、CTS、分片数据帧、回答 AP 探询的帧</td></tr>
+    <tr><td>PIFS 点协调间隔</td><td>SIFS＋一个时隙</td><td>PCF 方式优先接入</td></tr>
+    <tr><td>DIFS 分布协调间隔</td><td>PIFS＋一个时隙，最长</td><td>DCF 方式发送数据帧和管理帧</td></tr>
+  </table></div>
+
+  <h3>6.3 CSMA/CA：既然检测不到，就提前避让</h3>
+  <p>以太网那套"边发边听"在无线环境里行不通，原因有两个：一是无线设备一发射，自己的信号就把接收耳朵盖住了，没法同时监听；二是即使发送端听着信道空闲，接收端那边仍可能冲突——这就是<strong>隐蔽站问题</strong>。把无线想成"大家互相看不见、只能靠对讲机说话"，你这边安静，不代表接收方那边也安静。</p>
+  <p>既然冲突检测不到，802.11 干脆换思路：不做事后检测，而是<strong>事前尽量避免</strong>，这就是 CSMA/CA（冲突避免），检测手段为能量检测、载波检测和二者混合。具体靠下面两个机制把冲突从源头压下去。</p>
+  <h4>机制一：开会先举手——RTS/CTS 预约信道</h4>
+  <p>源站先发一个很短的"请求发送 RTS"（写明本次通信要持续多久），接收方空闲就回"允许发送 CTS"（复制这个时长）。周围站点收到后，就把自己的<strong>网络分配向量 NAV</strong>设成"信道还要忙多久"，在这段时间里保持安静。这一招能有效解决隐蔽站问题。</p>
+  <h4>机制二：每句话都要回执——正向确认</h4>
+  <p>接收方正确收到数据后必须回一个确认帧，源站没收到确认就当没送到、重发一遍。</p>
+  <h4>工作原理</h4>
+  <ul>
+    <li>有数据要发先侦听：信道空闲，继续等一个 IFS 再侦听，仍空闲就立即发送；</li>
+    <li>信道忙，就持续侦听直到当前传输结束；</li>
+    <li>当前传输结束后再等 IFS，若仍空闲，按指数后退一个随机时间后再发。</li>
+  </ul>
+  <p>退避算法：第 i 次退避在 2^(2+i) 个时隙中随机选一个（第一次就是 8 个、第二次 16 个，不是从 2 个起），时隙数达到 255（第 6 次退避）后不再增加。</p>
+  <h4>两个经典问题</h4>
+  <ul>
+    <li><strong>隐蔽站问题</strong>：A 和 C 彼此在信号范围外、都检测不到对方，都以为 B 空闲而同时向 B 发数据，结果在 B 处冲突。</li>
+    <li><strong>暴露站问题</strong>：B 正在给 A 发数据，C 想和 D 通信却因侦听到信号而不敢发；其实 B→A 并不影响 C→D。它不影响协议工作，但降低了信道利用率。</li>
+  </ul>
+  <p>Wi-Fi 通信的基本特点：共享开放的无线介质、广播式发送；电波因反射、穿墙等不可靠，故用 ACK 牺牲部分流量换可靠性；同一时刻同一范围内只有一台设备能发，收发双方同频、不能同时传输，属于<strong>半双工</strong>。</p>
+</section>
+
+<section id="m6b" style="scroll-margin-top:20px">
+  <h3>6.4 802.11 MAC 帧结构</h3>
+  <div class="frame">
+    <div class="fseg h"><span class="b">帧控制</span><span class="s">2B</span></div>
+    <div class="fseg h"><span class="b">持续期</span><span class="s">2B</span></div>
+    <div class="fseg h"><span class="b">地址1</span><span class="s">6B</span></div>
+    <div class="fseg h"><span class="b">地址2</span><span class="s">6B</span></div>
+    <div class="fseg h"><span class="b">地址3</span><span class="s">6B</span></div>
+    <div class="fseg h"><span class="b">序号控制</span><span class="s">2B</span></div>
+    <div class="fseg h"><span class="b">地址4</span><span class="s">6B</span></div>
+    <div class="fseg p"><span class="b">帧主体</span><span class="s">0~2312B</span></div>
+    <div class="fseg t"><span class="b">CRC</span><span class="s">4B</span></div>
+  </div>
+  <p>MAC 首部共 30 字节。帧控制里包含协议版本（为 0）、类型（管理/控制/数据帧）、子类型（认证、连接、探测等）、到 DS/从 DS、更多分片、重试、功率管理、更多数据、WEP、顺序等标志位；持续期字段单位为微秒；序号控制含 12 位序号和 4 位分片子字段。</p>
+  <p>为什么需要最多四个地址？因为无线帧要经过 AP 转发，"到 DS/从 DS"两个方向位决定了三个地址的含义：</p>
+  <div class="tbl-wrap"><table class="tbl">
+    <tr><th>到 DS</th><th>从 DS</th><th>地址1</th><th>地址2</th><th>地址3</th></tr>
+    <tr><td>0</td><td>1</td><td>目的地址</td><td>AP 地址</td><td>源地址</td></tr>
+    <tr><td>1</td><td>0</td><td>AP 地址</td><td>源地址</td><td>目的地址</td></tr>
+  </table></div>
+  <p>课件示例：A 跨两个 BSS 向 B 发数据，A→AP 一段"到 DS=1、从 DS=0"，AP→B 一段方向相反，地址随方向重新排列。</p>
+
+  <h3>6.5 无线个域网 WPAN</h3>
+  <p>WPAN 在个人工作区域内把个人电子设备无线相连，范围约 10 米，无需接入点 AP。它与 WLAN 的区别：以个人为中心、低功率、小范围、低速率、低价格；而 WLAN 同时服务多用户、大功率、中范围、高速率。WPAN 没有 LLC 子层，MAC 层直接面向高层。注意 PAN 不一定是无线的。</p>
+  <div class="story"><strong>蓝牙和 ZigBee 都是"身边十来米的私人小网络"，但性格不同：</strong>蓝牙像手机和耳机之间的<strong>贴身对话</strong>，要同时传声音和数据、反应快；ZigBee 像家里的<strong>智能传感器</strong>（温感、门窗开关），平时休眠省电、一个网络能挂很多小设备，靠的是低功耗和大容量，而不是高速度。</div>
+  <h4>蓝牙</h4>
+  <p>蓝牙是 MAC 层直接面向应用层的 WPAN 协议，可同时传输语音和数据、抗干扰强、低成本低功耗。基本单元是<strong>微网</strong>，含一个主结点和多个活跃从结点，多个微网可通过桥结点相连。协议体系分物理层、数据链路层、应用层三层。</p>
+  <h4>ZigBee</h4>
+  <p>ZigBee 用于设备间短距无线通信，距离 10～80 米，速率低、成本低、功耗低（非工作时休眠），网络容量大（一个网络最多 255 个结点，一个主设备、其余从设备）。协议栈分四层：物理层、MAC 层（负责信道接入）、网络层（负责拓扑建立维护）、应用层。</p>
+</section>
+
+<!-- ===== 模块七 ===== -->
+<section id="m7">
+  <div class="modtag"><em>模块 7</em> 把网络连起来：网桥、交换机与 VLAN</div>
+  <h2>链路层网络互连</h2>
+  <h3>7.1 网桥：把几个网段连起来的"门卫"</h3>
+  <p>网络要扩大，就得把几个网段连起来。网桥同时作用在物理层和数据链路层，属于 DCE 级的端到端连接，在数据链路层对帧进行<strong>存储和转发</strong>，常用于局域网互连。它内部有站表、接口管理、网桥协议实体、缓存和多个接口。</p>
+  <p>它的工作方式像两个房间之间的门卫收发室：先把信件收下来看一眼地址（存储转发），只有该送到另一个房间的信才递过去，房间内部的对话不往外传。于是每个网段自成一个互不干扰的<strong>冲突域</strong>——这正是它和"什么都往外放大"的中继器最关键的区别。</p>
+  <h4>网桥的功能与好处</h4>
+  <ul>
+    <li><strong>帧路由</strong>：根据帧的目的地址决定是否接收、往哪转发；</li>
+    <li><strong>错误检测和帧格式转换</strong>：可对不一致的链路层帧格式进行转换，因此能互连不同物理层、不同 MAC 子层、不同速率的局域网；</li>
+    <li><strong>隔离通信</strong>：这是它和中继器的关键区别——网桥让各网段成为彼此隔离的<strong>冲突域</strong>，本地流量不会串到其他网段，从而过滤通信量、扩大物理范围。</li>
+  </ul>
+  <h4>缺点</h4>
+  <p>存储转发带来时延；MAC 子层没有流量控制功能；不同 MAC 网段桥接时延更大；只适合用户数不超过几百、通信量不太大的局域网。</p>
+
+  <h3>7.2 网桥的三种路由策略</h3>
+  <p>网桥决定转发哪个帧、往哪转发的过程叫"路由"，每个网桥都有一张路由表，记录到某站点的帧应转发到哪个局域网。三种策略对应三种网桥：</p>
+  <h4>固定路由（手工配置）</h4>
+  <p>路由表由人工配置，配置完成后不变。表中按"源局域网"分别列出每个目标应送往的下一个局域网，本地目标标为"--"（无需转发）。</p>
+  <h4>透明网桥（IEEE 802.1D，逆向学习）</h4>
+  <p>"透明"指站点完全不知道帧会经过哪些网桥。它是<strong>即插即用</strong>设备，用逆向学习算法自动生成和修改路由表（也称地址学习），要解决三个问题：</p>
+  <ul>
+    <li><strong>初始化</strong>：收到发往未知站点的帧时，用扩散算法向所有连接的局域网洪泛；</li>
+    <li><strong>自动修改</strong>：每收到一帧就检查其源地址，知道该站点可从帧到达的接口访问，据此建表；表项带定时器记录到达时间以处理拓扑变化，表满时按算法替换；</li>
+    <li><strong>帧循环</strong>：靠生成树算法解决。</li>
+  </ul>
+  <h4>源路由网桥（让源站决定路由）</h4>
+  <p>路由由发送站点的网络软件确定并写在帧里，由一系列<strong>路由指示</strong>组成，每个指示含一个局域网号和一个网桥 ID；网桥按指示逐段转发（如路由 L1:B5→L3:B4→L4）。路由通过"路由探索"生成：源站发全路由广播帧，目的站返回含路由的非广播帧。</p>
+
+  <h3>7.3 生成树协议 STP：逻辑上"锁"掉多余的门</h3>
+  <p>为了可靠，网络里通常会留冗余链路，但这也带来环路：帧会兜圈子、不断复制，最终"帧爆炸"堵死整个网络。STP（802.1D）的思路是<strong>不改变实际物理拓扑，而在逻辑上阻断冗余链路</strong>——就像楼里门太多会让信件绕圈，它不去拆墙，而是先锁上几扇多余的门，只留下一张"从任何房间到任何房间都不会绕圈"的路线图，这就是"生成树"。平时锁着的门当备用，活动链路故障时再打开恢复连通，根网桥还会定期更新拓扑。</p>
+  <h4>必须分清的几个名词</h4>
+  <ul>
+    <li><strong>BPDU</strong>：STP 的数据单元，格式为"根网桥 ID. 到根费用. 发送网桥 ID"；</li>
+    <li><strong>根网桥</strong>：网桥 ID 最小的网桥，是生成树的根；</li>
+    <li><strong>根端口</strong>：一个网桥上到根网桥路径费用最小的端口（费用相同则选端口 ID 最小）；</li>
+    <li><strong>指定网桥 / 指定端口</strong>：为每个局域网选到根费用最少的网桥（再比网桥 ID、端口 ID），它与该局域网相连的端口即指定端口。</li>
+  </ul>
+  <p>算法过程：先靠 BPDU 选出根网桥；每个网桥确定自己的根端口（链路带宽越大、成本越低）；再为每个局域网指定网桥和指定端口；既非根端口也非指定端口的端口被置为阻塞状态。课件的五端口示例中，P4 为根端口、P1/P2 为指定端口、P3/P5 阻塞；六桥完整实例还给出了各网桥根端口费用表和各网络指定网桥费用表，最终画出无环拓扑。</p>
+</section>
+
+<section id="m7b" style="scroll-margin-top:20px">
+  <h3>7.4 二层交换机：有很多扇独立门的"多接口网桥"</h3>
+  <p>网桥的端口很少，把它的端口数量做上去，就成了二层交换机——它本质就是<strong>多接口网桥</strong>，按以太网帧中的目的 MAC 地址寻址转发。它有多个端口，每个端口可接一台主机或另一台交换机、工作在全双工方式，各端口有独立带宽、并行工作，从而提高整体吞吐量。收到帧后立即在内存中的地址表（端口号—MAC 地址）查找目的网卡所在端口。</p>
+  <p>每扇门独占一条通道、能同时进出、互不抢道（每个端口独立冲突域、全双工）；而集线器是"所有人共用一个大喇叭"，N 个人平分带宽。所以交换机下主机独占带宽、不会冲突，也就不需要 CSMA/CD。</p>
+  <h4>地址学习与交换引擎</h4>
+  <p>交换机根据帧的<strong>源 MAC</strong> 进行地址学习，记住各主机连接的端口号，再通过交换引擎在两个端口之间建立帧交换。查不到目的 MAC 时就在所有端口广播。</p>
+  <h4>三种转发模式</h4>
+  <div class="tbl-wrap"><table class="tbl">
+    <tr><th>模式</th><th>做法</th><th>优点</th><th>缺点</th></tr>
+    <tr><td>直通式</td><td>读到目的地址就接通交叉处直接转发</td><td>不存储、延迟小、交换快</td><td>不做 CRC 校验、无缓存不能接不同速率端口、易丢包</td></tr>
+    <tr><td>存储转发</td><td>完整收下整帧、校验并处理错误后再转发</td><td>能检错、支持不同速率端口协同</td><td>延迟大</td></tr>
+    <tr><td>无碎片模式</td><td>等帧进入达到 64 字节后读首部地址转发</td><td>过滤冲突碎片，是前两者的折中</td><td>不做完整 CRC，不能完全避免错误帧</td></tr>
+  </table></div>
+  <h4>交换机 vs 集线器：冲突域与带宽</h4>
+  <p>集线器所有接口在同一冲突域，N 个用户共享带宽 B，平均每人只有 B/N；交换机每个接口是独立冲突域，为每个接口提供带宽 B，主机独占信道、无冲突通信，且交换机是即插即用设备。</p>
+
+  <h3>7.5 广播域还在，于是有了 VLAN</h3>
+  <p>交换机隔离了冲突域，但<strong>所有主机仍处于同一个广播域</strong>——当交换机不知道目的 MAC 所在路径而广播时，所有其他设备都会收到。广播域过大带来两个问题：大量广播报文消耗带宽和设备资源（规模越大越严重）；数据被广播到无关主机，造成信息泄露。</p>
+  <p>VLAN 就像在一个大开间办公室里，用逻辑隔断把人分成几个"虚拟部门"：谁在哪个部门跟座位（物理位置）无关，完全按需要划分。同一个部门里喊话大家都听得到（同一广播域、链路层互通），不同部门之间互相听不到、得走正式流程（网络层以上）才能沟通。这样广播被限制在小组内，既省带宽、又避免信息被无关的人听到。</p>
+  <h4>VLAN 的定义与五种划分方法</h4>
+  <p>IEEE 802.1Q 定义：VLAN 是由局域网网段构成、<strong>与物理位置无关的逻辑组</strong>。同一 VLAN 内的主机处于同一广播域、链路层可互通；不同 VLAN 在链路层相互隔离，只有网络层以上才能通信。每个帧都带明确标识符标明它属于哪个 VLAN。划分方法有五种：</p>
+  <div class="tbl-wrap"><table class="tbl">
+    <tr><th>依据</th><th>层次</th><th>特点</th></tr>
+    <tr><td>交换机端口</td><td>第一层，静态</td><td>最简单最常用，端口与 VLAN 绑定；不允许用户移动</td></tr>
+    <tr><td>MAC 地址</td><td>第二层，动态</td><td>允许用户移动；但需管理大量 MAC，地址变化要重新配置</td></tr>
+    <tr><td>协议类型</td><td>第二层，动态</td><td>按帧"类型"字段划分（如 IP、IPX）</td></tr>
+    <tr><td>IP 子网地址</td><td>第三层，动态</td><td>按类型字段和 IP 头源地址划分</td></tr>
+    <tr><td>高层应用或服务</td><td>动态</td><td>按应用及其组合划分（如 FTP、TELNET），更灵活也更复杂</td></tr>
+  </table></div>
+  <h4>802.1Q 帧格式</h4>
+  <p>802.3ac 标准在以太网帧中插入一个 <strong>4 字节 VLAN 标记</strong>：前 2 字节是标记类型 TPID＝0x8100，后 2 字节是 TCI 标记控制信息，含 3 位用户优先级 PRI、1 位规范格式指示符 CFI、12 位 VLAN 标识符（最多 4096 个 VLAN）。插入标记后帧最大长度从 1518 字节变为 1522 字节，VLAN 标记由交换机标识。</p>
+  <h4>VLAN 的优点</h4>
+  <ul>
+    <li>缩小广播域、减轻广播风暴影响，改善网络性能；</li>
+    <li>广播域被划小，网络总体规模可以扩大；</li>
+    <li>数据不再大范围扩散，提高安全性；</li>
+    <li>降低网络管理、维护和排障的技术难度。</li>
+  </ul>
+</section>
+
+<!-- ===== 知识地图回顾 ===== -->
+<section id="endmap">
+  <h2>最后：把整张知识地图收进脑子里</h2>
+  <div class="card">
+    <p style="margin-bottom:8px"><strong>一条主线</strong>：数据链路层在相邻结点之间提供可靠通信，把不可靠的物理链路变成可靠的逻辑链路，数据单元是帧。</p>
+    <p style="margin-bottom:8px"><strong>四件事</strong>：成帧（边界）、差错控制（对错）、流量控制（快慢）、介质访问（谁先）。</p>
+    <p style="margin-bottom:8px"><strong>两类实现技术</strong>：停止等待（简单低效）与滑动窗口（高效复杂）；窗口 ARQ 又分回退 N（接收窗 1、出错全重传）和选择拒绝（接收窗大、只重传错帧）。</p>
+    <p style="margin-bottom:8px"><strong>三个控制协议</strong>：HDLC 面向比特、三类帧、比特填充、CRC＋窗口确认；PPP 面向字节、只检错不保证可靠；LLC 统一接口、屏蔽介质差异。</p>
+    <p style="margin-bottom:8px"><strong>两大应用场景</strong>：以太网用 CSMA/CD（争用期、最短帧 64 字节、指数退避）、编码违禁定界、Ethernet II 帧；无线用 CSMA/CA（IFS、RTS/CTS、NAV、正向确认），另有蓝牙、ZigBee 等个域网。</p>
+    <p style="margin-bottom:0"><strong>组网三件套</strong>：网桥/交换机靠源 MAC 自学习、按目的 MAC 转发；STP 逻辑阻断冗余链路消除环路；VLAN 用 802.1Q 标记划分广播域。</p>
+  </div>
+</section>
+<footer><p>本资料基于课程课件整理，仅供学习交流使用，具体教学要求以任课教师通知为准。</p></footer>
+</div>
+<button class="topbtn" id="topBtn" onclick="window.scrollTo({top:0})">↑</button>
+</div>
+</div>
+<script>
+// tabs
+document.querySelectorAll('.tabs').forEach(function(g){
+  g.querySelectorAll('.tabbtn').forEach(function(b){
+    b.addEventListener('click',function(){
+      g.querySelectorAll('.tabbtn').forEach(function(x){x.classList.remove('on')});
+      g.querySelectorAll('.tabpanel').forEach(function(x){x.classList.remove('on')});
+      b.classList.add('on');
+      g.querySelector('#'+b.dataset.t).classList.add('on');
+    });
+  });
+});
+// 通用分步演示
+function createStepper(id,steps){
+  var cur=0,box=document.getElementById(id);
+  var dots=box.querySelector('.stepdots'),body=box.querySelector('.stepbody'),
+      prev=box.querySelector('.prev'),next=box.querySelector('.next');
+  steps.forEach(function(_,i){
+    if(i>0){var l=document.createElement('span');l.className='stepline';dots.appendChild(l);}
+    var d=document.createElement('span');d.className='stepdot';d.textContent=i+1;dots.appendChild(d);
+  });
+  function render(){
+    var ds=dots.querySelectorAll('.stepdot');
+    ds.forEach(function(d,i){d.classList.toggle('on',i<=cur)});
+    body.innerHTML='<div class="st">'+steps[cur].t+'</div>'+steps[cur].c;
+    prev.disabled=cur===0;
+    next.textContent=cur===steps.length-1?'已完成':'下一步';
+    next.classList.toggle('o',cur<steps.length-1);
+  }
+  prev.addEventListener('click',function(){if(cur>0){cur--;render();}});
+  next.addEventListener('click',function(){if(cur<steps.length-1){cur++;render();}});
+  render();
+}
+// GBN vs SR 分步演示
+createStepper('st-gbn',[
+  {t:'起点：发送方连续发出 0、1、2、3 四帧',c:'发送窗口大小为 4，四帧沿线路依次到达接收方。假设 1 号帧在途中损坏（或丢失），而 2、3 号帧本身完好。'},
+  {t:'GBN 的处理：2、3 号帧也被丢弃',c:'接收窗口为 1，接收方只按顺序收。1 号帧出错后，随后到达的 2、3 号帧属于乱序帧，全部丢弃且不确认；接收方发 NAK 1（或等发送方超时）。发送方从 1 号帧开始，把 1、2、3 全部重传一遍。'},
+  {t:'SR 的处理：2、3 号帧先存起来',c:'接收窗口大于 1，接收方把完好的 2、3 号帧暂存在窗口缓存里，只对 1 号帧发 NAK。发送方只重传 1 号帧这一帧。'},
+  {t:'结果对比：代价各在哪里',c:'GBN 逻辑简单、接收方不用缓存，但正确的 2、3 号帧被白白重传，浪费带宽；SR 只重传出错帧、更省带宽，但接收方要占更多缓存、还要排序，实现更复杂。'}
+]);
+// back to top
+var tb=document.getElementById('topBtn');
+window.addEventListener('scroll',function(){tb.style.display=window.scrollY>500?'block':'none';});
+// 点侧栏后收起移动端菜单
+document.querySelector('.side').addEventListener('click',function(e){
+  if(e.target.tagName==='A'&&window.innerWidth<=900)this.classList.remove('open');
+});
+</script>
+</body>
+</html>

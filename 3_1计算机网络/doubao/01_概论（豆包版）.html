@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>概论 · 计算机网络初学者精讲</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%23173b5e'/><circle cx='50' cy='50' r='26' fill='none' stroke='%23e8743b' stroke-width='7'/><circle cx='50' cy='50' r='7' fill='%23e8743b'/><path d='M50 24V8M50 92V76M24 50H8M92 50H76' stroke='%23e8743b' stroke-width='7' stroke-linecap='round'/></svg>">
+<style>
+:root{
+  --ink:#173b5e; --ink2:#2f5b83; --org:#e8743b; --org2:#f3a06f;
+  --blue-bg:#eef4f9; --org-bg:#fdf1e8; --line:#d8e2ec; --gray:#5f7185;
+  --paper:#ffffff; --soft:#f6f9fc; --green:#2e7d5b; --red:#c0392b;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;color:#233242;background:var(--paper);line-height:1.85;font-size:15px}
+h1,h2,h3,h4{font-family:Georgia,"Songti SC","SimSun",serif;color:var(--ink);line-height:1.35}
+a{color:var(--ink2);text-decoration:none}
+.layout{display:flex;min-height:100vh}
+.side{width:238px;background:var(--ink);color:#cfe0f0;padding:26px 0;position:fixed;top:0;bottom:0;left:0;overflow-y:auto;z-index:40}
+.side .brand{padding:0 22px 18px;border-bottom:1px solid rgba(255,255,255,.14);margin-bottom:14px}
+.side .brand b{display:block;color:#fff;font-size:17px;font-family:Georgia,serif}
+.side .brand span{font-size:12px;color:var(--org2);letter-spacing:1px}
+.side a{display:block;color:#c4d6e8;padding:9px 22px;font-size:13.5px;border-left:3px solid transparent}
+.side a:hover{background:rgba(255,255,255,.08);color:#fff;border-left-color:var(--org)}
+.side .grp{padding:14px 22px 5px;font-size:11px;color:#7fa3c4;letter-spacing:2px}
+.main{margin-left:238px;flex:1;min-width:0}
+.wrap{max-width:900px;margin:0 auto;padding:0 34px}
+.hero{background:linear-gradient(135deg,#173b5e 0%,#24557e 60%,#2f6896 100%);color:#eaf1f8;padding:58px 0 50px;margin-bottom:38px;position:relative;overflow:hidden}
+.hero::after{content:"";position:absolute;right:-60px;top:-60px;width:260px;height:260px;border:2px solid rgba(232,116,59,.35);border-radius:50%}
+.hero::before{content:"";position:absolute;right:30px;bottom:-90px;width:180px;height:180px;border:2px solid rgba(255,255,255,.12);border-radius:50%}
+.hero .kicker{font-size:12px;letter-spacing:3px;color:var(--org2);margin-bottom:14px;position:relative}
+.hero h1{color:#fff;font-size:34px;margin-bottom:16px;position:relative}
+.hero p{max-width:640px;color:#cfe0f0;font-size:15px;position:relative}
+section{margin-bottom:46px;scroll-margin-top:20px}
+.modtag{display:flex;align-items:center;gap:9px;background:var(--org);color:#fff;font-size:12px;font-weight:700;padding:7px 16px;border-radius:4px;letter-spacing:1px;margin-bottom:14px;width:100%}
+.modtag em{font-style:normal;background:rgba(255,255,255,.25);border-radius:2px;padding:0 7px;font-family:Georgia,serif}
+h2{font-size:26px;margin-bottom:14px;padding-bottom:10px;border-bottom:2px solid var(--line)}
+h3{font-size:19.5px;margin:26px 0 10px;color:var(--ink)}
+h4{font-size:16px;margin:18px 0 7px;color:var(--ink2)}
+p{margin-bottom:12px}
+ul,ol{margin:8px 0 14px 22px}
+li{margin-bottom:6px}
+strong{color:var(--ink)}
+.card{background:var(--soft);border:1px solid var(--line);border-radius:9px;padding:18px 20px;margin:16px 0}
+.story{background:var(--org-bg);border-left:4px solid var(--org);border-radius:0 8px 8px 0;padding:16px 20px;margin:16px 0}
+.story .t{font-weight:700;color:var(--org);margin-bottom:5px;font-size:14px}
+.note{background:var(--blue-bg);border-left:4px solid var(--ink2);border-radius:0 8px 8px 0;padding:14px 18px;margin:15px 0;font-size:14px}
+.warn{background:#fdeee9;border-left:4px solid var(--red);border-radius:0 8px 8px 0;padding:14px 18px;margin:15px 0;font-size:14px}
+.tbl{width:100%;border-collapse:collapse;margin:15px 0;font-size:13.5px;background:#fff}
+.tbl th{background:var(--ink);color:#fff;padding:10px 12px;text-align:left;font-weight:600}
+.tbl td{padding:9px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+.tbl tr:nth-child(even) td{background:var(--soft)}
+.tbl-wrap{overflow-x:auto}
+.frame{display:flex;flex-wrap:wrap;border:1px solid var(--line);border-radius:8px;overflow:hidden;margin:16px 0}
+.fseg{padding:12px 10px;text-align:center;min-width:64px;flex:1;border-right:1px solid var(--line)}
+.fseg .b{display:block;font-weight:700;font-size:13.5px;margin-bottom:3px}
+.fseg .s{display:block;font-size:11.5px;color:var(--gray)}
+.fseg.h{background:var(--blue-bg)}.fseg.h .b{color:var(--ink)}
+.fseg.p{background:#fff}.fseg.p .b{color:#333}
+.fseg.t{background:var(--org-bg)}.fseg.t .b{color:var(--org)}
+.tabs{margin:16px 0}
+.tabbtns{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:0}
+.tabbtn{padding:9px 18px;background:var(--blue-bg);border:1px solid var(--line);border-bottom:none;border-radius:8px 8px 0 0;cursor:pointer;font-size:13.5px;color:var(--ink2);font-family:inherit}
+.tabbtn.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.tabpanel{display:none;border:1px solid var(--line);border-radius:0 8px 8px 8px;padding:18px 20px;background:#fff}
+.tabpanel.on{display:block}
+details{background:var(--soft);border:1px solid var(--line);border-radius:8px;padding:12px 18px;margin:12px 0}
+summary{cursor:pointer;font-weight:700;color:var(--ink2)}
+details[open] summary{margin-bottom:9px}
+.stepper{background:#fff;border:1px solid var(--line);border-radius:10px;padding:20px;margin:16px 0}
+.stepbar{display:flex;gap:8px;align-items:center;margin-bottom:15px;flex-wrap:wrap}
+.stepdot{width:28px;height:28px;border-radius:50%;background:var(--line);color:var(--gray);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;font-family:Georgia,serif}
+.stepdot.on{background:var(--org);color:#fff}
+.stepline{flex:1;height:2px;background:var(--line);min-width:14px}
+.stepbody{min-height:92px;background:var(--soft);border-radius:8px;padding:15px 18px;margin-bottom:14px}
+.stepbody .st{font-weight:700;color:var(--ink);margin-bottom:5px}
+.stepbtns{display:flex;gap:10px}
+.btn{padding:8px 20px;background:var(--ink);color:#fff;border:none;border-radius:6px;cursor:pointer;font-family:inherit;font-size:13.5px}
+.btn.o{background:var(--org)}
+.btn.ghost{background:#fff;color:var(--ink2);border:1px solid var(--line)}
+.btn:disabled{opacity:.45;cursor:default}
+.bits{font-family:Consolas,"Courier New",monospace;font-size:13px;letter-spacing:1px;background:var(--blue-bg);padding:10px 14px;border-radius:6px;overflow-x:auto;margin:8px 0}
+.bits .ins{color:var(--org);font-weight:700}
+.bits .flag{color:var(--red);font-weight:700}
+.formula{background:var(--blue-bg);border-radius:7px;padding:12px 18px;font-family:Georgia,serif;text-align:center;margin:12px 0;color:var(--ink)}
+.pill{display:inline-block;background:var(--blue-bg);color:var(--ink);border:1px solid var(--line);border-radius:20px;padding:2px 12px;font-size:12.5px;margin:2px 3px}
+.pill.o{background:var(--org-bg);color:var(--org);border-color:#f0cdb4}
+footer{border-top:2px solid var(--line);padding:26px 0 40px;color:var(--gray);font-size:12.5px}
+.topbtn{position:fixed;right:26px;bottom:26px;width:44px;height:44px;border-radius:50%;background:var(--ink);color:#fff;border:none;cursor:pointer;font-size:18px;display:none;z-index:50}
+.menu-toggle{display:none}
+@media(max-width:900px){
+  .side{transform:translateX(-100%);transition:transform .25s;width:260px}
+  .side.open{transform:translateX(0)}
+  .main{margin-left:0}
+  .menu-toggle{display:flex;position:fixed;top:14px;left:14px;z-index:60;background:var(--ink);color:#fff;border:none;width:44px;height:44px;border-radius:8px;align-items:center;justify-content:center;font-size:20px}
+  .hero{padding:66px 0 38px}
+  .wrap{padding:0 18px}
+  .hero h1{font-size:26px}
+  .fseg{min-width:90px}
+}
+</style>
+</head>
+<body>
+<button class="menu-toggle" onclick="document.querySelector('.side').classList.toggle('open')" aria-label="打开目录"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+<div class="layout">
+<nav class="side">
+  <div class="brand"><b>概论</b><span>豆包版 · 初学者精讲</span></div>
+  <div class="grp">启程</div>
+  <a href="#start">这门课到底在学什么</a>
+  <div class="grp">九个模块</div>
+  <a href="#m1">一 · 网络是什么、怎么长大</a>
+  <a href="#m2">二 · 能干什么、由什么组成</a>
+  <a href="#m3">三 · 六种拓扑长相</a>
+  <a href="#m4">四 · 按范围给网络分家</a>
+  <a href="#m5">五 · 协议与分层思想</a>
+  <a href="#m6">六 · OSI 七层模型</a>
+  <a href="#m7">七 · 四类互连设备</a>
+  <a href="#m8">八 · 服务、数据单元与连接</a>
+  <a href="#m9">九 · 真正统治世界的 TCP/IP</a>
+  <a href="#endmap">知识地图回顾</a>
+</nav>
+<div class="main">
+<header class="hero">
+  <div class="wrap">
+    <div class="kicker">CHAPTER 1 · INTRODUCTION</div>
+    <h1>计算机网络概论：把散落在各地的计算机<br>连成一个会"对话"的整体</h1>
+    <p>这是全书的第一章，也是一次"登高望远"。我们不急着抠任何一个协议的细节，而是先回答几个最根本的问题：网络到底是什么？它由哪些部分组成？为什么要分层？OSI 七层和今天真正在用的 TCP/IP 又是什么关系？把这张全景图装进脑子，后面每一章你都知道自己站在哪一层。</p>
+  </div>
+</header>
+<div class="wrap">
+
+<!-- ===== 启程 ===== -->
+<section id="start">
+  <h2>先建立一个整体印象：这门课到底在学什么</h2>
+  <p>你现在用的手机、连的 Wi-Fi、刷的网页、开的视频会议，背后都是同一件事——把两台甚至成千上万台计算机连起来，让它们互相交换数据。课件给"计算机网络"下的定义是：<strong>计算机技术和通信技术相结合的产物</strong>，是<strong>独立自治、相互连接的计算机集合</strong>。把这句话拆开，有三个关键词值得记住：</p>
+  <div class="frame">
+    <div class="fseg h"><span class="b">独立自治</span><span class="s">每台计算机都能单独干活，不是谁的"终端附庸"</span></div>
+    <div class="fseg h"><span class="b">相互连接</span><span class="s">它们之间有物理或逻辑的线路连通</span></div>
+    <div class="fseg h"><span class="b">遵循协议</span><span class="s">按约定好的规则对话，才能数据交互、信息共享</span></div>
+  </div>
+  <div class="story">
+    <div class="t">用"一个班级"来类比</div>
+    <p style="margin-bottom:0">把网络想象成一个班级：每个同学（计算机）本来都能自己看书做题（独立自治）；为了讨论问题，大家坐进同一间教室、能互相听见（相互连接）；要想讨论不打架，就得约定发言规则——举手再说话、一个人说完再轮到下一个（协议）。计算机网络这门课，研究的就是"怎么把尽可能多的机器连起来、还能让它们有序地对话"。</p>
+  </div>
+  <h3>就在你身边：一座校园网长什么样</h3>
+  <p>课件用校园网做了个绝佳的例子。走进一所大学，你刷卡进的门、教室里投屏的屏幕、宿舍里刷的网课、查到的成绩单，背后是一整套层层叠叠的网络：各教学楼的<strong>核心交换机</strong>通过光纤连到中心机房的<strong>核心路由器</strong>，路由器再连学校的数据中心（跑成绩、排课、教务系统）；通过路由器还能连别的校区，或经过防火墙接到公众互联网。从你手里的手机，到墙上的 Wi-Fi AP、接入交换机、汇聚交换机，再到核心——这就是一个真实网络的缩影。</p>
+  <div class="note">这一章的主线：先认识"网络是什么、怎么发展起来、能干什么、长什么样、怎么分类"，再钻进最核心的思想武器——<strong>分层</strong>，最后用 OSI 和 TCP/IP 两张模型把整门课的地图画出来。</div>
+</section>
+
+<!-- ===== 模块一 ===== -->
+<section id="m1">
+  <div class="modtag"><em>模块 1</em> 网络是什么、它是怎么长大的</div>
+  <h2>从"一台大计算机带一堆终端"到"人人都有网"</h2>
+  <p>课件把网络的演变分成了四个阶段，理解这条时间线，你就能明白今天的互联网为什么长现在这个样子。</p>
+
+  <h3>四个发展阶段</h3>
+  <div class="tbl-wrap"><table class="tbl">
+    <tr><th>阶段</th><th>结构</th><th>解决了什么</th></tr>
+    <tr><td>联机系统</td><td>终端—通讯线路—计算机</td><td>多个人共用一台昂贵的主机，终端本身不做计算</td></tr>
+    <tr><td>分时系统</td><td>终端—集中器—计算机</td><td>用集中器把大量终端的线路汇到主机，多人轮流使用 CPU</td></tr>
+    <tr><td>计算机网络</td><td>独立的计算机互连</td><td>每台机器都是"独立自治"的，彼此平等连接、互相共享资源</td></tr>
+    <tr><td>标准化网络</td><td>开放式标准计算机网络</td><td>不同厂商的设备能互通，催生局域网（IEEE 802）、NFS、以太网、Wi-Fi、5G</td></tr>
+  </table></div>
+
+  <h3>互联网的老祖宗：ARPANET</h3>
+  <p>讲网络发展史，绕不开一个标志性事件。<strong>1969 年 11 月</strong>，美国国防部高级研究计划管理局（ARPA）建起了 <strong>ARPANET</strong>，最初只有 <strong>4 个节点</strong>，目的是试验<strong>分组交换</strong>网络的远程通信能力。</p>
+  <div class="story">
+    <div class="t">它诞生时的动机很"硬核"</div>
+    <p style="margin-bottom:0">冷战背景下，军方担心：如果老式电话网络有一个中心被炸毁，整个通信就瘫痪了。于是 ARPANET 的设计思想是——网络里每个节点都能做分组交换，<strong>即使其中几个节点被打坏，剩下的网络还能给边缘的计算机提供正常通信</strong>。这种"没有中心、处处能路由"的思路，正是今天互联网健壮性的源头。</p>
+  </div>
+  <p>之后互联网基础架构又经历了第二阶段（从扁平网络走向三级结构）和第三阶段（多层次 ISP 互联），才长成今天覆盖全球的样子。</p>
+
+  <h3>从"少数科研用途"到"第五空间"</h3>
+  <p>应用的发展也有一条清晰脉络：最早是 SAGES 系统这种雏形，接着在 ARPANET 上跑，然后 TCP/IP 协议标准化，再到 DNS、Email、FTP、WWW、搜索引擎、网络商店、即时通讯……直到今天，人类已经离不开网络。课件把网络称作人类活动的"<strong>第五空间</strong>"——排在陆、海、空、天之后；整个社会呈现数字化、网络化、信息化的特征；电信网、有线电视网、计算机网络走向多网融合；而云计算、大数据、物联网、移动互联网、人工智能（"云、大、物、移、智"）这一切，都<strong>以计算机网络为基础</strong>。</p>
+</section>
+
+<!-- ===== 模块二 ===== -->
+<section id="m2">
+  <div class="modtag"><em>模块 2</em> 网络能干什么、由什么组成</div>
+  <h2>五大功能与"两个子网"的划分</h2>
+
+  <h3>网络到底提供了哪些价值</h3>
+  <p>为什么要费这么大劲把计算机连起来？课件列出五大功能，其实就是回答"连起来比单机强在哪"：</p>
+  <ul>
+    <li><strong>数据通信</strong>：最基本的功能，机器之间能传消息；</li>
+    <li><strong>资源共享</strong>：硬件、软件、数据都能被别人用，不用人人配一份；</li>
+    <li><strong>并行和分布式处理</strong>：一个大任务拆给多台机器一起干；</li>
+    <li><strong>可靠性</strong>：一台机器坏了，还有别的机器顶上；</li>
+    <li><strong>可扩充性</strong>：需要更多能力时，加机器就行，不用推翻重来。</li>
+  </ul>
+  <p>今天这些能力已经渗透到服务业、金融业、企业管理、制造业、信息服务、社交娱乐等几乎所有领域。</p>
+
+  <h3>拆开看：网络 = 结点 + 链路</h3>
+  <p>一个最朴素的看法：<strong>网络就是若干结点加上连接它们的链路</strong>。</p>
+  <div class="frame">
+    <div class="fseg h"><span class="b">结点 node</span><span class="s">通信控制机，网络中的交换/连接点</span></div>
+    <div class="fseg h"><span class="b">链路 link</span><span class="s">连接两个结点的线路</span></div>
+    <div class="fseg h"><span class="b">主机 host</span><span class="s">连在网络上的计算机与其他设备</span></div>
+  </div>
+  <p>再按"结构和功能"把整个网络切成两半，这是本章一个非常重要的视角：</p>
+  <div class="tbl-wrap"><table class="tbl">
+    <tr><th>子网</th><th>职责</th><th>类比</th></tr>
+    <tr><td>资源子网</td><td>负责<strong>信息处理</strong>，向用户提供各种网络资源与服务</td><td>餐厅里的厨房和服务员——真正"做菜、上菜"的地方</td></tr>
+    <tr><td>通信子网</td><td>负责<strong>信息传递</strong>，完成数据的传输与转发</td><td>餐厅之间的外卖骑手——只负责把东西安全送到，不管做什么菜</td></tr>
+  </table></div>
+  <div class="note">记住这个分工：你关心"用什么应用、存什么数据"，那是资源子网的事；你关心"数据怎么从 A 送到 B、走哪条路、会不会丢"，那是通信子网的事。后面分层模型本质上也是在继续切这种"干活"和"跑腿"的边界。</div>
+</section>
+
+<!-- ===== 模块三 ===== -->
+<section id="m3">
+  <div class="modtag"><em>模块 3</em> 六种拓扑长相：网络的"几何布局"</div>
+  <h2>星、环、总线、网、树、混合</h2>
+  <p><strong>拓扑</strong>就是网络中各结点之间的互联模式，换句话说，是"链路和结点摆出来的几何形状"。形状选得对不对，直接决定了网络贵不贵、稳不稳、好不好修。课件给了六种基本拓扑，我们一个一个看它的优缺点。</p>
+
+  <h3>星状拓扑：一切都过"中心"</h3>
+  <p>每台设备都连到一个中心结点（路由器或交换机），任何两台设备通信都得经过这个中心转发。</p>
+  <ul>
+    <li><strong>优点</strong>：结构简单（每台设备只需一条线、一个接口）；健壮性好（一条线坏只影响那一台设备）；便于管理（中心结点监视线路状态，故障好定位隔离）。</li>
+    <li><strong>缺点</strong>：中心结点是整个网络可靠性的瓶颈——它一坏，全网瘫痪。</li>
+  </ul>
+
+  <h3>环状拓扑：手拉手围成一圈</h3>
+  <p>各设备通过一条首尾相连的链路接成闭合的环。</p>
+  <ul>
+    <li><strong>优点</strong>：容易安装和重新配置，加、删一台设备只动两条线。</li>
+    <li><strong>缺点</strong>：规模大时传输延迟明显，所以环的最大长度和设备数都要受限。</li>
+  </ul>
+
+  <h3>总线型拓扑：一根公共主干</h3>
+  <p>一条长电缆当主干，所有设备都挂在这根总线上。</p>
+  <ul>
+    <li><strong>优点</strong>：信息传输没有路由和转发问题；好安装，主干铺好后设备用引出线接上去即可。</li>
+    <li><strong>缺点</strong>：信号会衰减，总线长度和设备数受限；总线一断，所有传输都终止。</li>
+  </ul>
+
+  <h3>网状拓扑：两两都铺专线</h3>
+  <p>每台设备和其他每台设备之间都有一条专线。</p>
+  <ul>
+    <li><strong>优点</strong>：健壮性极好（局部链路或结点故障不会拖垮全网）；多条路径可负载分担、避免拥塞。</li>
+    <li><strong>缺点</strong>：两两互联需要的链路数和接口数巨大，成本高。</li>
+  </ul>
+
+  <h3>树状拓扑：分层的星状</h3>
+  <p>它是星状拓扑按层级关系向上扩展的结果。</p>
+  <ul>
+    <li><strong>优点</strong>：扩展性好，允许更多设备按层级接进来。</li>
+    <li><strong>缺点</strong>：可靠性较差——上一级结点是它下面所有设备的瓶颈，上一级坏了，下面整片就和上层断了联系。</li>
+  </ul>
+
+  <h3>混合型拓扑：现实中的选择</h3>
+  <p>实际组网时，很少用纯粹的某一种。人们会综合考虑地理位置、用户数量、业务重要程度、施工方便性、成本、运维便利，按<strong>混合型拓扑</strong>来建设。</p>
+
+  <h3>一个真实案例：企业/园区网的三层结构</h3>
+  <p>课件给了企业网分层设计的样板，这是拓扑思想在工程里的落地：</p>
+  <div class="tbl-wrap"><table class="tbl">
+    <tr><th>层次</th><th>位置</th><th>用什么设备</th></tr>
+    <tr><td>接入层</td><td>最底层，接用户终端</td><td>端口少、容量小的接入交换机（二层交换机）</td></tr>
+    <tr><td>汇聚层</td><td>汇聚多个接入交换机</td><td>中等容量的汇聚交换机（三层交换机）</td></tr>
+    <tr><td>核心层</td><td>把各汇聚交换机互联起来</td><td>核心三层交换机或高端路由器，通常网状组网；汇聚层双归到两个核心设备上提高可靠性</td></tr>
+  </table></div>
+  <div class="note">这套"接入—汇聚—核心"的分层，本质是把树状拓扑和网状拓扑结合起来：接入层追求便宜好接，核心层追求可靠不宕机。出口再接防火墙、连 Internet 和 DataCenter，旁边还有网管运维区。</div>
+</section>
+
+<!-- ===== 模块四 ===== -->
+<section id="m4">
+  <div class="modtag"><em>模块 4</em> 按覆盖范围给网络"分家"</div>
+  <h2>个域网 · 局域网 · 城域网 · 广域网</h2>
+  <p>分类有两个常见维度：按接入方式分，就是<strong>有线网络</strong>和<strong>无线网络</strong>；按覆盖范围分，就是从巴掌大到覆盖全球的四个档次。后者最常考，也最好理解——把范围从小到大排就记住了。</p>
+
+  <div class="tbl-wrap"><table class="tbl">
+    <tr><th>类型</th><th>覆盖范围</th><th>典型样子</th></tr>
+    <tr><td>个域网 PAN</td><td>一般 &lt; 10 米</td><td>围绕某个人搭建：一台电脑、一部手机、一个 PDA，靠蓝牙、Wi-Fi 或双绞线连成一圈，服务一个人而不是一个小组，可视为特殊的局域网</td></tr>
+    <tr><td>局域网 LAN</td><td>一个地点、一栋或一组建筑</td><td>台式机、打印机、服务器、存储设备；通常由单一组织管理，速率高；家庭里的家庭网络也属此类，常用无线路由器组网</td></tr>
+    <tr><td>城域网 MAN</td><td>一座城市或一个大型校园</td><td>用高容量骨干网（如光纤）把多个局域网互连起来；可能是单一网络（如有线电视网），也可能由多个局域网拼成；可由一家或多家公司运营</td></tr>
+    <tr><td>广域网 WAN</td><td>一个地区、国家甚至全球</td><td>长距离传输数据、声音、图像、视频；可组合公共、租赁、私有的链路；<strong>互联网就是最好的例子</strong></td></tr>
+  </table></div>
+
+  <div class="story">
+    <div class="t">用"外卖配送半径"来记</div>
+    <p style="margin-bottom:0">个域网像你自己手上的餐具（10 米内、只服务你一个人）；局域网像一栋楼里的餐厅自己传菜（一栋楼、一个老板）；城域网像同一个城市里的连锁配送（跨几个区、骨干光纤）；广域网像跨省跨国的物流（覆盖全国甚至全球，互联网就是那个最大的物流网）。范围越大，越要靠"复用"和"交换"来省钱——这正是后面复用、交换两章要解决的问题。</p>
+  </div>
+</section>
+
+<!-- ===== 模块五 ===== -->
+<section id="m5">
+  <div class="modtag"><em>模块 5</em> 全章的灵魂：协议与分层思想</div>
+  <h2>复杂系统，必须化繁为简</h2>
+
+  <h3>要解决的那个"大问题"</h3>
+  <p>课件抛出一个问题：处在网络边缘的 PC1 和 PC2，中间隔着一堆看不见的网络设备，它们到底怎么通信、怎么交换数据？整个网络是个复杂系统，直接想无从下手。办法就是建立一套逻辑清晰、化繁为简的<strong>体系结构</strong>。</p>
+
+  <h3>什么是网络协议</h3>
+  <p>为进行网络中的数据交换而建立的规则、标准或约定，就是<strong>网络协议</strong>。而<strong>计算机网络的体系结构，就是计算机网络各层及其协议的集合</strong>。协议有三个要素，课件用"两个人对话"打了个非常贴切的比方：</p>
+  <div class="tbl-wrap"><table class="tbl">
+    <tr><th>要素</th><th>规定什么</th><th>对话类比</th></tr>
+    <tr><td>语法</td><td>数据与控制信息的结构和格式</td><td>怎么讲、怎么表达对方才能听懂</td></tr>
+    <tr><td>语义</td><td>发出何种控制信息、完成何种动作、如何应答</td><td>讲什么，才能把意图讲清楚</td></tr>
+    <tr><td>时序</td><td>各种操作的先后顺序</td><td>双方讲话的顺序，条理清楚不混乱</td></tr>
+  </table></div>
+  <div class="note">一句话记：<strong>语法＝怎么说，语义＝说什么，时序＝按什么顺序说</strong>。三者缺一个，对话都会乱套。</div>
+
+  <h3>体系结构是抽象的，实现是具体的</h3>
+  <p>体系结构是"各层应完成哪些功能"的精确定义，它是抽象的；真正在运行的硬件和软件叫<strong>实现</strong>，是具体的。实现要在遵循体系结构的前提下，用硬件或软件完成预定功能。这个区分很重要——你设计图纸时想的是"该做什么"，施工时才关心"用什么螺丝钉"。</p>
+
+  <h3>为什么非要分层</h3>
+  <p>因为<strong>分层能把庞大复杂的问题，切成若干较小的局部问题</strong>，每个小问题就好研究、好处理多了。每层完成特定功能，各层协调起来就实现了整个网络系统。</p>
+  <div class="tbl-wrap"><table class="tbl">
+    <tr><th>分层的优点</th><th>分层的缺点</th></tr>
+    <tr><td>各层之间独立；灵活性好；结构上可分割；易于实现和维护；有利于标准化工作</td><td>可能降低效率；有些功能在不同层重复出现，产生额外开销</td></tr>
+  </table></div>
+  <p>分层不是随便切的，要遵循原则：不同等级的抽象建一层、功能相近的放一层、每层功能明确、层间交换的边界信息尽量少、层次数量适当——<strong>层数太少会让每层协议太复杂，层数太多又会在综合各层功能时遇到工程上的困难</strong>。目标是标准、对称、易于实现。</p>
+
+  <h3>层次栈、对等实体与接口</h3>
+  <p>把协议设计成一个层次栈，每一层都建立在它下一层的基础上。这里有三个名词必须分清：</p>
+  <ul>
+    <li><strong>对等实体</strong>：不同机器上、构成相应层次的实体。比如 A 机的第 4 层和 B 机的第 4 层，互为"对话对象"。</li>
+    <li><strong>接口</strong>：每一对相邻层之间的边界，定义了下层向上层提供哪些原语操作和服务。</li>
+    <li><strong>虚通信</strong>：相邻层之间是实打实的通信；而两台机器的对等层之间，看起来像在直接对话，其实是虚的（物理层除外）——它们的"对话"最终都要靠下层一层一层传下去。</li>
+  </ul>
+
+  <h3>谁在制定这些标准</h3>
+  <div class="tbl-wrap"><table class="tbl">
+    <tr><th>类别</th><th>组织</th><th>在数据通信领域的主要工作</th></tr>
+    <tr><td rowspan="3">官方国际组织</td><td>ITU-T 国际电信联盟</td><td>电信业务 IP 化、物联网</td></tr>
+    <tr><td>ISO 国际标准组织</td><td>网络互联模型（OSI 就是它搞的）</td></tr>
+    <tr><td>IEC 国际电工委员会</td><td>机械电气接口和互换性</td></tr>
+    <tr><td rowspan="3">民间国际组织</td><td>IETF 互联网工程任务组</td><td>网络互联协议，标准主导者（TCP/IP 的老家）</td></tr>
+    <tr><td>IEEE 电气电子工程师协会</td><td>Ethernet、WLAN</td></tr>
+    <tr><td>3GPP 第三代合作伙伴计划</td><td>无线 IP</td></tr>
+    <tr><td rowspan="3">区域性组织</td><td>CCSA 中国通信标准协会</td><td>设备形态、接口、标准支持</td></tr>
+    <tr><td>ETSI 欧洲电信标准化协会</td><td>宽带接入、终端</td></tr>
+    <tr><td>ANSI 美国国家标准局</td><td>美国标准审批</td></tr>
+  </table></div>
+</section>
+
+<!-- ===== 模块六 ===== -->
+<section id="m6">
+  <div class="modtag"><em>模块 6</em> OSI 七层模型：分层思想的经典范本</div>
+  <h2>从下往上，一层解决一个问题</h2>
+  <p><strong>国际标准组织 ISO 于 1984 年制定了开放系统互连参考模型 OSI</strong>。它要解决的问题是"网络之间不能兼容、不能通信"；办法是把计算机通信的过程拆成 7 个层次，<strong>每层解决一个问题</strong>，共同描述完整的通信过程。</p>
+
+  <div class="story">
+    <div class="t">为什么是 7 层而不是 3 层或 13 层</div>
+    <p style="margin-bottom:0">你可以把 OSI 想象成"寄国际快递"：最底下是卡车飞机怎么开（物理层），上面是箱子怎么打包、标签怎么贴（数据链路层），再上面是选哪条路线、跨几个国家（网络层），然后是保证整批包裹完整无损送到（传输层），再往上是双方约好几点交接、确认身份（会话层），然后是翻译——把中文单据译成英文（表示层），最后才是你真正要办的事（应用层）。每层只干自己那一段，下层对上一层屏蔽细节。</p>
+  </div>
+
+  <h3>一张表记住七层各管什么</h3>
+  <div class="tbl-wrap"><table class="tbl">
+    <tr><th>层</th><th>名称</th><th>核心任务</th><th>数据单位</th></tr>
+    <tr><td>7</td><td>应用层</td><td>应用程序的网络业务，处理用户数据、完成实际任务</td><td>—</td></tr>
+    <tr><td>6</td><td>表示层</td><td>数据表达：翻译、编码、变换，解决用户信息的语法问题</td><td>—</td></tr>
+    <tr><td>5</td><td>会话层</td><td>主机间通信：建立连接、互相确认身份、协商会话细节</td><td>—</td></tr>
+    <tr><td>4</td><td>传输层</td><td>端到端连接的可靠性，把数据从一端用户进程可靠送到另一端</td><td>报文 Message</td></tr>
+    <tr><td>3</td><td>网络层</td><td>地址和最佳路径：路由选择、拥塞控制、网际互连</td><td>分组 Packet</td></tr>
+    <tr><td>2</td><td>数据链路层</td><td>访问介质：相邻结点之间的数据传输</td><td>帧 Frame</td></tr>
+    <tr><td>1</td><td>物理层</td><td>二进制传输：导线、连接器、电压、速率等</td><td>比特 Bit</td></tr>
+  </table></div>
+
+  <h3>注意：中间结点只用到下面三层</h3>
+  <p>课件特别强调一个常被忽略的细节：OSI 七层是两台主机之间的完整视图；但<strong>途中经过的网络设备（中间结点）只实现下面三层</strong>——物理层、数据链路层、网络层，不往上实现会话层、表示层、应用层。换句话说，"端到端"的那几层（传输及以上）只在真正的主机上才有。</p>
+
+  <h3>自底向上，逐层细看</h3>
+  <h4>第 1 层 物理层</h4>
+  <p>负责"怎么把计算机连到通信媒体上"，数据单位是<strong>比特（Bit）</strong>。它规定了四个特性：机械特性（连接头尺寸、机械介质）、电气特性（信号电平、编码、数据传输率）、功能特性（信号之间的关系、数据线控制线）、规程特性（数据交换的控制步骤）。</p>
+  <h4>第 2 层 数据链路层</h4>
+  <p>处理<strong>相邻结点</strong>的数据传输，数据单元是<strong>帧（Frame）</strong>。功能包括：分帧与排序、差错控制（为上层提供可靠链路）、流量控制（处理输入数据速率）、链路管理（建立、维持、拆除）。</p>
+  <h4>第 3 层 网络层</h4>
+  <p>处理<strong>任意结点之间</strong>的数据传输，信息单位是<strong>分组（Packet）</strong>。任务三件事：路由选择、拥塞控制、网际互连。</p>
+  <h4>第 4 层 传输层</h4>
+  <p>做<strong>端到端</strong>的通信，把数据可靠地从一端用户进程送到另一端用户进程，信息单元是<strong>报文（Message）</strong>。任务是端到端的流量控制和差错控制。</p>
+  <h4>第 5 层 会话层</h4>
+  <p>负责两个计算机上的用户进程建立连接：双方互相确认身份、协商会话连接的细节。</p>
+  <h4>第 6 层 表示层</h4>
+  <p>解决用户信息的语法问题，对用户数据进行翻译、编码和变换，典型例子是"用一种标准方法对数据进行编码"。</p>
+  <h4>第 7 层 应用层</h4>
+  <p>处理用户的数据和信息，完成用户所希望的实际任务。你用的浏览器、邮件、文件传输，都在这一层。</p>
+
+  <div class="note">记忆口诀（从上往下念）：<strong>"应表会传网数物"</strong>——应用、表示、会话、传输、网络、数据链路、物理。再记一个分工：下面三层（网数物）管"怎么把比特从这送到那"，上面四层（应表会传）管"送到之后怎么把活干好"。</div>
+</section>
+
+<!-- ===== 模块七 ===== -->
+<section id="m7">
+  <div class="modtag"><em>模块 7</em> 四类互连设备：工作在哪一层，就能干什么活</div>
+  <h2>中继器、网桥、路由器、网关</h2>
+  <p>把网络连起来的硬件设备有四大类，它们正好对应 OSI 模型里不同层次的协议。<strong>一个设备工作在哪一层，决定了它能"看懂"多深的信息、能干多复杂的活</strong>——这是这一模块最核心的判断方法。</p>
+
+  <div class="tbl-wrap"><table class="tbl">
+    <tr><th>设备</th><th>工作层次</th><th>干什么</th><th>核心能力</th></tr>
+    <tr><td>中继器 Repeater</td><td>仅物理层</td><td>再生信号，扩展网络的物理网段；不以任何方式改变网络功能</td><td>只会"把信号放大重发"，不懂任何地址</td></tr>
+    <tr><td>网桥 Bridge</td><td>物理层 + 数据链路层</td><td>存储转发设备，在数据链路层对数据帧做存储和转发</td><td>能识别物理地址、具备寻址功能</td></tr>
+    <tr><td>路由器 Router</td><td>物理层 + 数据链路层 + 网络层</td><td>连接多个网络，从一个网络收包、转发到另一个网络</td><td>看得懂网络层地址，会选路</td></tr>
+    <tr><td>网关 Gateway</td><td>可工作在全部 7 层</td><td>协议转换器，能互连异类网络</td><td>常见用途：在局域网微机和大型机之间做"翻译"</td></tr>
+  </table></div>
+
+  <div class="story">
+    <div class="t">用"快递分拣中心的级别"来类比</div>
+    <p style="margin-bottom:0">中继器像路边的扩音喇叭，只负责把声音喊得更大传更远，根本不听你喊的是什么；网桥像小区门卫，能认出"这封信是本小区的还是外小区的"，决定要不要放出去；路由器像城市之间的转运中心，看得懂信封上的城市地址、规划最优路线；网关则像涉外翻译事务所，连对方国家的格式和语言都不一样，得全套翻译才能通邮。设备看得懂的"信息层级"越深，能干的事就越复杂。</p>
+  </div>
+</section>
+
+<!-- ===== 模块八 ===== -->
+<section id="m8">
+  <div class="modtag"><em>模块 8</em> 服务、协议与连接方式</div>
+  <h2>"水平的协议"和"垂直的服务"</h2>
+
+  <h3>两个方向，别搞混</h3>
+  <p>课件一句话点透：<strong>协议是"水平"的，服务是"垂直"的</strong>。</p>
+  <ul>
+    <li><strong>协议（水平）</strong>：同一层的对等实体之间交换信息所遵守的规则——A 机第 n 层和 B 机第 n 层"对话"的规矩。</li>
+    <li><strong>服务（垂直）</strong>：下层实体作为"服务提供者"，通过接口向上一层"服务用户"提供能力；上层实体通过接口使用下层服务。</li>
+  </ul>
+  <p>换句话说：实体用协议来实现自己承诺的服务；上层想干活，得通过接口调用下层的能力。</p>
+
+  <h3>几个绕口的缩写，其实很好懂</h3>
+  <p>课件一下子甩了五个缩写，别怕，它们是一层一层套上去的：</p>
+  <div class="tbl-wrap"><table class="tbl">
+    <tr><th>缩写</th><th>全称</th><th>含义</th></tr>
+    <tr><td>PDU</td><td>Protocol Data Unit 协议数据单元</td><td>对等层之间传送的数据单位＝本层 SDU 加上本层头部 Header</td></tr>
+    <tr><td>SDU</td><td>Service Data Unit 服务数据单元</td><td>下层要看的"纯数据"，即上层交给它的活儿</td></tr>
+    <tr><td>IDU</td><td>Interface Data Unit 接口数据单元</td><td>跨层接口上传送的单位＝SDU ＋ ICI</td></tr>
+    <tr><td>ICI</td><td>Interface Control Information 接口控制信息</td><td>跨层接口时附带的控制信息</td></tr>
+    <tr><td>SAP</td><td>Service Access Point 服务访问点</td><td>下层向上层提供服务的"窗口"地址</td></tr>
+  </table></div>
+  <div class="note">套娃关系一句话：(N+1) 层把数据交给 N 层时是 SDU(n)，N 层给它加上本层控制信息 PCI 后就变成 PDU(n)；这个 PDU(n) 再往下交给 N−1 层时，又成了 SDU(n−1)。每往下走一层，就多套一层"信封"——这正是数据在协议栈里"逐层封装"的过程。</div>
+
+  <h3>下层能向上层提供的两种服务</h3>
+  <h4>面向连接服务：像打电话</h4>
+  <p>分三个阶段：<strong>建立连接 → 数据交换 → 释放连接</strong>。先把线路占上，再通话，最后挂断。</p>
+  <h4>无连接服务：像寄信</h4>
+  <p>不用事先建立连接，直接把信扔出去。它又分三种：<strong>数据报</strong>（发完不管）、<strong>证实交付</strong>（可靠的数据报，要回执）、<strong>请求/响应</strong>（一问一答）。</p>
+  <div class="story">
+    <div class="t">打电话 vs 寄信</div>
+    <p style="margin-bottom:0">面向连接＝打电话：先拨通过去、确认对方在说话，聊完再挂；无连接＝寄信：写好地址直接投邮筒，每封信独立走，可能先后顺序都乱。两种方式各有适用场景，后面传输层的 TCP（面向连接）和 UDP（无连接）就是这两种思想的代表。</p>
+  </div>
+</section>
+
+<!-- ===== 模块九 ===== -->
+<section id="m9">
+  <div class="modtag"><em>模块 9</em> 真正统治世界的 TCP/IP</div>
+  <h2>OSI 没赢，TCP/IP 成了事实标准</h2>
+
+  <h3>为什么 OSI 输给了 TCP/IP</h3>
+  <p>课件说得很直白：<strong>OSI 参考模型概念清楚、理论完整，但过于复杂，没有得到市场认可</strong>；反而是与 OSI 思想接近的 <strong>TCP/IP 获得了最广泛的应用，成为事实上的国际标准</strong>。TCP/IP 参考模型是 ARPANET 所采用的，由 Vint Cerf 和 Bob Kahn 于 <strong>1974 年</strong>提出，以其中最主要的两个协议 TCP 和 IP 命名。</p>
+
+  <h3>三种模型怎么对应</h3>
+  <div class="tbl-wrap"><table class="tbl">
+    <tr><th>OSI 7 层</th><th>TCP/IP 4 层</th><th>教学常用 5 层</th></tr>
+    <tr><td>应用层 / 表示层 / 会话层</td><td>应用层</td><td>应用层</td></tr>
+    <tr><td>传输层</td><td>传输层</td><td>传输层</td></tr>
+    <tr><td>网络层</td><td>网络层（网际层）</td><td>网络层</td></tr>
+    <tr><td>数据链路层 / 物理层</td><td>网络接口层</td><td>数据链路层 + 物理层</td></tr>
+  </table></div>
+  <p>TCP/IP 四层模型自上而下是：应用层、传输层、网络层、网络接口层。教材为了好讲，常把"网络接口层"再拆成数据链路层和物理层，就成了五层模型。</p>
+
+  <h3>四层各自管什么</h3>
+  <ul>
+    <li><strong>链路层（网络接口层）</strong>：描述为了满足无连接的网络层需求，链路必须具备哪些功能——具体协议由底层网络自己定义。</li>
+    <li><strong>网络层</strong>：允许主机把数据包注入网络，让数据包独立地传到目的地，定义了数据包格式和协议（IPv4、IPv6）。</li>
+    <li><strong>传输层</strong>：允许源主机与目标主机上的对等实体做端到端数据传输，代表协议是 TCP 和 UDP。</li>
+    <li><strong>应用层</strong>：传输层之上的所有高层协议——DNS、HTTP、FTP、SMTP……</li>
+  </ul>
+  <p>课件还给了一张协议地图：传输层有 TCP、UDP；网络层有 IP、ARP、RARP、ICMP、IGMP；应用层密密麻麻列着 NNTP、POP、SNMP、HTTP、DNS、FTP、SMTP、TELNET。</p>
+
+  <h3>TCP/IP 的设计精髓：聪明终端 + 简单网络</h3>
+  <p>这是本章最值得品味的设计哲学。老式电话系统是"<strong>笨终端 + 聪明网络</strong>"——网络核心很复杂，终端很傻。TCP/IP 反其道而行，采用"<strong>聪明终端 + 简单网络</strong>"：由端系统上的 TCP 负责丢失恢复等可靠性工作，网络本身做得很简单，结果大大提升了可扩展性。它实现了一个绝妙的目标——<strong>在简单、不可靠的部件之上，构建出可靠的系统</strong>。</p>
+  <div class="story">
+    <div class="t">"沙漏模型"：为什么它能爆炸式增长</div>
+    <p style="margin-bottom:0">IP 分组交换有两个口号：<strong>IP over everything</strong>（能跑在各种底层物理网络上）和 <strong>Everything over IP</strong>（能支持各种上层应用）。每个 IP 分组自己带着目的地址，网络核心只靠路由表简单转发就行。于是不管底层换成光纤还是 Wi-Fi，不管上层是视频还是邮件，中间那一层（IP）都不动——这就是著名的"<strong>沙漏模型</strong>"：细细的腰就是 IP 层，上下可以无限扩张。这正是互联网能适应爆炸性增长的根本原因。</p>
+  </div>
+
+  <h3>标准是怎么产出来的：IETF 与 RFC</h3>
+  <p>TCP/IP 的标准由 IETF 制定，背后有一整套组织：最顶层是互联网协会 ISOC 提供法律支撑；互联网体系结构委员会 IAB 负责 TCP/IP 协议簇研究方向的指导；下面分互联网工程部 IETF（搞标准）和互联网研究部 IRTF（搞研究）；IETF 又划分为 Internet、路由、安全、网管、应用、实时应用、传输协议等多个领域，标准在动态创建和关闭的工作组（WG）里完成。</p>
+  <p>所有关于 Internet 的正式标准都以 <strong>RFC（Request for Comment，请求评论）</strong>文档出版，每篇 RFC 用一个数字标识（如 RFC 983），<strong>数字越大内容越新</strong>，全部 RFC 都可在网上免费获得。出版的初衷只是提供信息，却成了互联网标准的事实载体。</p>
+</section>
+
+<!-- ===== 知识地图回顾 ===== -->
+<section id="endmap">
+  <h2>最后：把整张知识地图收进脑子里</h2>
+  <div class="card">
+    <p style="margin-bottom:8px"><strong>一句话定义</strong>：计算机网络是把不同位置、相对独立的多台计算机，通过通信技术连成网络系统，让它们在遵循协议和通信架构的基础上数据交互、信息共享。</p>
+    <p style="margin-bottom:8px"><strong>发展史</strong>：联机系统 → 分时系统 → 独立计算机互连 → 标准化网络；互联网从 1969 年 4 节点的 ARPANET 起步，经历三级结构到多层次 ISP 互联。</p>
+    <p style="margin-bottom:8px"><strong>两大子网</strong>：资源子网管信息处理，通信子网管信息传递；网络＝结点＋链路，主机是连在网上的设备。</p>
+    <p style="margin-bottom:8px"><strong>拓扑六兄弟</strong>：星、环、总线、网状、树、混合；工程上企业网常按接入—汇聚—核心三层分层建设。</p>
+    <p style="margin-bottom:8px"><strong>分类四档</strong>：按覆盖范围从小到大——个域网（&lt;10 米）、局域网、城域网、广域网（互联网是最佳例子）。</p>
+    <p style="margin-bottom:8px"><strong>灵魂思想</strong>：协议三要素＝语法（怎么说）、语义（说什么）、时序（按什么顺序说）；分层把大问题切成小问题，对等层虚通信、相邻层靠接口服务。</p>
+    <p style="margin-bottom:8px"><strong>两个模型</strong>：OSI 七层（应表会传网数物，中间结点只用到下三层）理论完整但太复杂；TCP/IP 四层（应用/传输/网络/网络接口）思想相近却统治了世界，靠"聪明终端＋简单网络"的沙漏模型实现爆炸式增长。</p>
+    <p style="margin-bottom:0"><strong>四类设备</strong>：中继器（物理层，再生信号）、网桥（链路层，按物理地址转发）、路由器（网络层，选路）、网关（全层，协议转换）。</p>
+  </div>
+</section>
+
+<footer><p>本资料基于课程课件《计算机网络（胡亮 等编著）》第 1 章整理，仅供学习交流使用，具体教学要求以任课教师通知为准。</p></footer>
+</div>
+<button class="topbtn" id="topBtn" onclick="window.scrollTo({top:0})">↑</button>
+</div>
+</div>
+<script>
+// tabs
+document.querySelectorAll('.tabs').forEach(function(g){
+  g.querySelectorAll('.tabbtn').forEach(function(b){
+    b.addEventListener('click',function(){
+      g.querySelectorAll('.tabbtn').forEach(function(x){x.classList.remove('on')});
+      g.querySelectorAll('.tabpanel').forEach(function(x){x.classList.remove('on')});
+      b.classList.add('on');
+      g.querySelector('#'+b.dataset.t).classList.add('on');
+    });
+  });
+});
+function createStepper(id,steps){
+  var cur=0,box=document.getElementById(id);
+  if(!box)return;
+  var dots=box.querySelector('.stepdots'),body=box.querySelector('.stepbody'),
+      prev=box.querySelector('.prev'),next=box.querySelector('.next');
+  steps.forEach(function(_,i){
+    if(i>0){var l=document.createElement('span');l.className='stepline';dots.appendChild(l);}
+    var d=document.createElement('span');d.className='stepdot';d.textContent=i+1;dots.appendChild(d);
+  });
+  function render(){
+    var ds=dots.querySelectorAll('.stepdot');
+    ds.forEach(function(d,i){d.classList.toggle('on',i<=cur)});
+    body.innerHTML='<div class="st">'+steps[cur].t+'</div>'+steps[cur].c;
+    prev.disabled=cur===0;
+    next.textContent=cur===steps.length-1?'已完成':'下一步';
+    next.classList.toggle('o',cur<steps.length-1);
+  }
+  prev.addEventListener('click',function(){if(cur>0){cur--;render();}});
+  next.addEventListener('click',function(){if(cur<steps.length-1){cur++;render();}});
+  render();
+}
+var tb=document.getElementById('topBtn');
+window.addEventListener('scroll',function(){tb.style.display=window.scrollY>500?'block':'none';});
+document.querySelector('.side').addEventListener('click',function(e){
+  if(e.target.tagName==='A'&&window.innerWidth<=900)this.classList.remove('open');
+});
+</script>
+</body>
+</html>
