@@ -1,0 +1,857 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>网络层 · 豆包版</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%23173b5e'/><circle cx='30' cy='50' r='10' fill='%23e8743b'/><circle cx='70' cy='30' r='10' fill='%23e8743b'/><circle cx='70' cy='70' r='10' fill='%23e8743b'/><path d='M37 45 63 33M37 55 63 67' stroke='%23e8743b' stroke-width='5' fill='none' stroke-linecap='round'/></svg>">
+<style>
+:root{
+  --ink:#173b5e; --ink2:#2f5b83; --org:#e8743b; --org2:#f3a06f;
+  --blue-bg:#eef4f9; --org-bg:#fdf1e8; --line:#d8e2ec; --gray:#5f7185;
+  --paper:#ffffff; --soft:#f6f9fc; --green:#2e7d5b; --red:#c0392b;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;color:#233242;background:var(--paper);line-height:1.85;font-size:15px}
+h1,h2,h3,h4{font-family:Georgia,"Songti SC","SimSun",serif;color:var(--ink);line-height:1.35}
+a{color:var(--ink2);text-decoration:none}
+.layout{display:flex;min-height:100vh}
+.side{width:248px;background:var(--ink);color:#cfe0f0;padding:26px 0;position:fixed;top:0;bottom:0;left:0;overflow-y:auto;z-index:40}
+.side .brand{padding:0 22px 18px;border-bottom:1px solid rgba(255,255,255,.14);margin-bottom:14px}
+.side .brand b{display:block;color:#fff;font-size:17px;font-family:Georgia,serif}
+.side .brand span{font-size:12px;color:var(--org2);letter-spacing:1px}
+.side a{display:block;color:#c4d6e8;padding:8px 22px;font-size:13px;border-left:3px solid transparent}
+.side a:hover{background:rgba(255,255,255,.08);color:#fff;border-left-color:var(--org)}
+.side .grp{padding:14px 22px 5px;font-size:11px;color:#7fa3c4;letter-spacing:2px}
+.main{margin-left:248px;flex:1;min-width:0}
+.wrap{max-width:900px;margin:0 auto;padding:0 34px}
+.hero{background:linear-gradient(135deg,#173b5e 0%,#24557e 60%,#2f6896 100%);color:#eaf1f8;padding:58px 0 50px;margin-bottom:38px;position:relative;overflow:hidden}
+.hero::after{content:"";position:absolute;right:-60px;top:-60px;width:260px;height:260px;border:2px solid rgba(232,116,59,.35);border-radius:50%}
+.hero::before{content:"";position:absolute;right:30px;bottom:-90px;width:180px;height:180px;border:2px solid rgba(255,255,255,.12);border-radius:50%}
+.hero .kicker{font-size:12px;letter-spacing:3px;color:var(--org2);margin-bottom:14px;position:relative}
+.hero h1{color:#fff;font-size:34px;margin-bottom:16px;position:relative}
+.hero p{max-width:660px;color:#cfe0f0;font-size:15px;position:relative}
+section{margin-bottom:46px;scroll-margin-top:20px}
+.modtag{display:flex;align-items:center;gap:9px;background:var(--org);color:#fff;font-size:12px;font-weight:700;padding:7px 16px;border-radius:4px;letter-spacing:1px;margin-bottom:14px;width:100%}
+.modtag em{font-style:normal;background:rgba(255,255,255,.25);border-radius:2px;padding:0 7px;font-family:Georgia,serif}
+h2{font-size:26px;margin-bottom:14px;padding-bottom:10px;border-bottom:2px solid var(--line)}
+h3{font-size:19.5px;margin:26px 0 10px;color:var(--ink)}
+h4{font-size:16px;margin:18px 0 7px;color:var(--ink2)}
+p{margin-bottom:12px}
+ul,ol{margin:8px 0 14px 22px}
+li{margin-bottom:6px}
+strong{color:var(--ink)}
+.card{background:var(--soft);border:1px solid var(--line);border-radius:9px;padding:18px 20px;margin:16px 0}
+.story{background:var(--org-bg);border-left:4px solid var(--org);border-radius:0 8px 8px 0;padding:16px 20px;margin:16px 0}
+.story .t{font-weight:700;color:var(--org);margin-bottom:5px;font-size:14px}
+.note{background:var(--blue-bg);border-left:4px solid var(--ink2);border-radius:0 8px 8px 0;padding:14px 18px;margin:15px 0;font-size:14px}
+.warn{background:#fdeee9;border-left:4px solid var(--red);border-radius:0 8px 8px 0;padding:14px 18px;margin:15px 0;font-size:14px}
+.tbl{width:100%;border-collapse:collapse;margin:15px 0;font-size:13.5px;background:#fff}
+.tbl th{background:var(--ink);color:#fff;padding:10px 12px;text-align:left;font-weight:600}
+.tbl td{padding:9px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+.tbl tr:nth-child(even) td{background:var(--soft)}
+.tbl-wrap{overflow-x:auto}
+.frame{display:flex;flex-wrap:wrap;border:1px solid var(--line);border-radius:8px;overflow:hidden;margin:16px 0}
+.fseg{padding:12px 10px;text-align:center;min-width:64px;flex:1;border-right:1px solid var(--line)}
+.fseg .b{display:block;font-weight:700;font-size:13.5px;margin-bottom:3px}
+.fseg .s{display:block;font-size:11.5px;color:var(--gray)}
+.fseg.h{background:var(--blue-bg)}.fseg.h .b{color:var(--ink)}
+.fseg.p{background:#fff}.fseg.p .b{color:#333}
+.fseg.t{background:var(--org-bg)}.fseg.t .b{color:var(--org)}
+.tabs{margin:16px 0}
+.tabbtns{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:0}
+.tabbtn{padding:9px 18px;background:var(--blue-bg);border:1px solid var(--line);border-bottom:none;border-radius:8px 8px 0 0;cursor:pointer;font-size:13.5px;color:var(--ink2);font-family:inherit}
+.tabbtn.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.tabpanel{display:none;border:1px solid var(--line);border-radius:0 8px 8px 8px;padding:18px 20px;background:#fff}
+.tabpanel.on{display:block}
+details{background:var(--soft);border:1px solid var(--line);border-radius:8px;padding:12px 18px;margin:12px 0}
+summary{cursor:pointer;font-weight:700;color:var(--ink2)}
+details[open] summary{margin-bottom:9px}
+.stepper{background:#fff;border:1px solid var(--line);border-radius:10px;padding:20px;margin:16px 0}
+.stepbar{display:flex;gap:8px;align-items:center;margin-bottom:15px;flex-wrap:wrap}
+.stepdots{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.stepdot{width:28px;height:28px;border-radius:50%;background:var(--line);color:var(--gray);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;font-family:Georgia,serif}
+.stepdot.on{background:var(--org);color:#fff}
+.stepline{flex:1;height:2px;background:var(--line);min-width:14px}
+.stepbody{min-height:92px;background:var(--soft);border-radius:8px;padding:15px 18px;margin-bottom:14px}
+.stepbody .st{font-weight:700;color:var(--ink);margin-bottom:5px}
+.stepbtns{display:flex;gap:10px}
+.btn{padding:8px 20px;background:var(--ink);color:#fff;border:none;border-radius:6px;cursor:pointer;font-family:inherit;font-size:13.5px}
+.btn.o{background:var(--org)}
+.btn.ghost{background:#fff;color:var(--ink2);border:1px solid var(--line)}
+.btn:disabled{opacity:.45;cursor:default}
+.bits{font-family:Consolas,"Courier New",monospace;font-size:13px;letter-spacing:1px;background:var(--blue-bg);padding:10px 14px;border-radius:6px;overflow-x:auto;margin:8px 0;white-space:pre}
+.bits .ins{color:var(--org);font-weight:700}
+.bits .flag{color:var(--red);font-weight:700}
+.formula{background:var(--blue-bg);border-radius:7px;padding:12px 18px;font-family:Georgia,serif;text-align:center;margin:12px 0;color:var(--ink)}
+.pill{display:inline-block;background:var(--blue-bg);color:var(--ink);border:1px solid var(--line);border-radius:20px;padding:2px 12px;font-size:12.5px;margin:2px 3px}
+.pill.o{background:var(--org-bg);color:var(--org);border-color:#f0cdb4}
+footer{border-top:2px solid var(--line);padding:26px 0 40px;color:var(--gray);font-size:12.5px}
+.topbtn{position:fixed;right:26px;bottom:26px;width:44px;height:44px;border-radius:50%;background:var(--ink);color:#fff;border:none;cursor:pointer;font-size:18px;display:none;z-index:50}
+.menu-toggle{display:none}
+@media(max-width:900px){
+  .side{transform:translateX(-100%);transition:transform .25s;width:260px}
+  .side.open{transform:translateX(0)}
+  .main{margin-left:0}
+  .menu-toggle{display:flex;position:fixed;top:14px;left:14px;z-index:60;background:var(--ink);color:#fff;border:none;width:44px;height:44px;border-radius:8px;align-items:center;justify-content:center;font-size:20px}
+  .hero{padding:66px 0 38px}
+  .wrap{padding:0 18px}
+  .hero h1{font-size:26px}
+  .fseg{min-width:90px}
+}
+</style>
+</head>
+<body>
+<button class="menu-toggle" onclick="document.querySelector('.side').classList.toggle('open')" aria-label="打开目录"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+<div class="layout">
+<nav class="side">
+  <div class="brand"><b>网络层</b><span>豆包版 · 初学者精讲</span></div>
+  <div class="grp">启程</div>
+  <a href="#start">这一层在忙什么</a>
+  <div class="grp">十个模块</div>
+  <a href="#m1">一 · 服务与互连设备</a>
+  <a href="#m2">二 · 路由算法与 QoS</a>
+  <a href="#m3">三 · IPv4 编址与子网</a>
+  <a href="#m4">四 · DHCP 与 NAT</a>
+  <a href="#m5">五 · IP 数据报与分片</a>
+  <a href="#m6">六 · 转发与最长前缀匹配</a>
+  <a href="#m7">七 · ARP / ICMP / 多播</a>
+  <a href="#m8">八 · IPv6 协议</a>
+  <a href="#m9">九 · 自治系统与路由协议</a>
+  <a href="#m10">十 · SDN / MPLS / SRv6</a>
+  <a href="#endmap">知识地图回顾</a>
+</nav>
+<div class="main">
+<header class="hero">
+  <div class="wrap">
+    <div class="kicker">CHAPTER 5 · NETWORK LAYER</div>
+    <h1>网络层：把一封信<br>从一栋大楼送到另一座城市</h1>
+    <p>数据链路层只管"相邻两站"之间这一段，而网络层要回答的是一个更远大的问题：这台主机和千里之外那台主机之间，该怎么走过去？它给每个包裹贴上源地址和目的地址，在密密麻麻的路由器网络里选路、转发。这一版我们跟着"一个 IP 数据报的长途旅行"，把编址、路由、分片、过渡新技术一件一件弄明白。</p>
+  </div>
+</header>
+<div class="wrap">
+
+<!-- ===== 启程 ===== -->
+<section id="start">
+  <h2>先建立一个整体印象：网络层在忙什么</h2>
+  <p>想象你要从长春寄一个包裹到广州。邮局只负责"这一格邮筒到下一格分拣中心"这一小段（那是数据链路层），可你真正关心的是：这包裹最终能不能、走哪条路线、花多久到收件人手里。网络层干的就是这件"信源到信宿"的事——它把一条条物理链路串成一条完整的传输路径，让任意两个网络节点之间都能通信。</p>
+  <p>为了完成这件事，网络层要做两件最核心的事：</p>
+  <div class="frame">
+    <div class="fseg h"><span class="b">交换</span><span class="s">在两个或多个设备之间建立临时连接</span></div>
+    <div class="fseg h"><span class="b">路由</span><span class="s">为每个数据包选一条从源到目的的最佳路径</span></div>
+  </div>
+  <p>路由要成立，就得给包裹写地址。网络层在原始数据包上附加<strong>源地址和目的地址</strong>——注意，这和数据链路层那个"相邻上下节点的 MAC 地址"不是一回事：MAC 地址只解决这一跳怎么送，IP 地址解决的是"最终要去哪座城市"。</p>
+  <div class="story">
+    <div class="t">用"寄快递"来类比</div>
+    <p style="margin-bottom:0">IP 地址＝收件人/寄件人的城市门牌（端到端的逻辑地址）；MAC 地址＝快递在分拣中心之间交接时的临时交接单号（只对这一段有效）；路由＝快递网络里每一个分拣中心查地图、决定下一程发往哪个城市；交换＝把包裹从这一条传送带挪到那一条传送带。数据链路层管"这一段别丢别错"，网络层管"全程别走错路"。</p>
+  </div>
+  <h3>网络层的七项具体职责</h3>
+  <ul>
+    <li><strong>信源到信宿的传输</strong>：把多条物理链路连接成一条端到端路径；</li>
+    <li><strong>逻辑寻址</strong>：在包头加入源地址和目的地址；</li>
+    <li><strong>路由</strong>：选择发送数据包的最佳路径；</li>
+    <li><strong>地址转换</strong>：网络层地址与物理地址之间的翻译（这就是 ARP 干的事）；</li>
+    <li><strong>复用</strong>：同一条物理线路上同时跑多个设备的数据；</li>
+    <li><strong>流量与拥塞控制</strong>：调节发送速率、反馈网络状况；</li>
+    <li><strong>网络互连</strong>：解决把不同物理网络连成一个大网的问题。</li>
+  </ul>
+</section>
+
+<!-- ===== 模块一 ===== -->
+<section id="m1">
+  <div class="modtag"><em>模块 1</em> 网络层提供什么服务、靠什么设备互连</div>
+  <h2>先站队：是"先订好路线再走"，还是"每包自己找路"</h2>
+  <p>在正式讲 IP 之前，有一个争论贯穿了整个网络层的历史：<strong>可靠交付到底该由谁来负责——是网络本身，还是端系统？</strong>围绕这个问题，OSI 模型定义了两种服务类型。</p>
+
+  <h3>1.1 面向连接的虚电路（CONS）：像打固定电话</h3>
+  <p>类似传统电话：打电话前先拨号建立一条连接，通话期间这条线路就专属于你，打完再挂断。一次完整的数据传输分三步：<strong>建立连接 → 传输数据 → 拆除连接</strong>。同一次通信的所有数据包都沿着<strong>同一条虚电路</strong>走，因此路由器需要为这条连接保存状态信息，数据包按发送顺序到达。典型技术：ATM、帧中继、X.25。</p>
+
+  <h3>1.2 无连接的数据报（CLNS）：像寄平信</h3>
+  <p>类似邮政投递：不用事先打招呼，每封信独立投寄，邮局"尽最大努力"送到，不保证一定到、不保证顺序。同一个源发出的数据包可能各走各的路，一个节点坏了，后面的包可以绕道。这就是 IP 采用的模型。</p>
+  <div class="tbl-wrap"><table class="tbl">
+    <tr><th>对比维度</th><th>面向连接 虚电路 CONS</th><th>无连接 数据报 CLNS</th></tr>
+    <tr><td>是否先建连接</td><td>要，建连后才能传数据</td><td>不要，每个包独立发送</td></tr>
+    <tr><td>路由方式</td><td>建连时选一次路，之后都走这条</td><td>每个包独立选路</td></tr>
+    <tr><td>路由器要保存的状态</td><td>要保存连接状态</td><td>不保存端到端状态</td></tr>
+    <tr><td>包到达顺序</td><td>按发送顺序到达</td><td>可能乱序</td></tr>
+    <tr><td>路径上某节点故障</td><td>经过它的虚电路全部瘫痪</td><td>后续包可重新路由绕行</td></tr>
+    <tr><td>包头开销</td><td>包内控制信息少</td><td>每个包都要带完整目的地址</td></tr>
+    <tr><td>典型技术</td><td>ATM、帧中继、X.25</td><td>IP</td></tr>
+  </table></div>
+
+  <h3>1.3 互联网为什么赌了"无连接"这一边</h3>
+  <p>这是整个互联网最重要的设计决策之一。TCP/IP 的网络层向上只提供<strong>简单灵活、无连接、尽最大努力交付的数据报服务</strong>：发分组前不建连接，每个 IP 数据报独立发送、互不编号；网络层不承诺服务质量——数据报可能出错、丢失、重复、失序，也不保证时限。</p>
+  <div class="story">
+    <div class="t">为什么不把网络设计得"可靠"一点？</div>
+    <p style="margin-bottom:0">因为不同应用对"可靠"和"快"的要求是矛盾的：FTP、邮件这类应用宁可慢一点也要数据不出错；而实时语音、视频宁可丢几个包也不能容忍延迟。如果网络层强行搞虚电路，那些对延迟敏感的实时业务会被"建连、确认、重传"拖死，而需要可靠的应用也无法在虚电路之上再叠出高效的数据报服务。于是互联网把<strong>"可靠"这件事整个推给端系统的传输层</strong>（TCP 用差错处理、流量控制、超时重传去补），网络层本身则做得越简单越好——路由器不用维护海量连接状态，成本低、生存能力强、还能适应一切应用。互联网能长成今天的规模，证明了这个"端到端原则"是对的。</p>
+  </div>
+  <div class="note">一句话记住：<strong>网络层只管"尽力把包往下一跳扔"，丢不丢、乱不乱、要不要重传，全靠 TCP 在两端自己解决。</strong></div>
+
+  <h3>1.4 网络层的互连设备：集线器、交换机、路由器</h3>
+  <p>三种设备分别工作在协议栈的不同层次，能力依次增强：</p>
+  <div class="tbl-wrap"><table class="tbl">
+    <tr><th>设备</th><th>工作层次</th><th>转发依据</th><th>作用范围</th></tr>
+    <tr><td>集线器 Hub</td><td>物理层</td><td>无差别地把比特复制到所有端口</td><td>同一冲突域，不寻址</td></tr>
+    <tr><td>交换机 Switch</td><td>数据链路层</td><td>帧首部的 MAC 地址</td><td>同一网络（同一广播域内）内交换</td></tr>
+    <tr><td>路由器 Router</td><td>网络层</td><td>IP 数据报首部的目的 IP 地址</td><td>连接不同网络，跨网络路由</td></tr>
+  </table></div>
+  <p>一个直观的区分：<strong>交换机在同一网络内"交换"，路由器在不同网络间"路由"</strong>。比如 202.198.1.0/24 里的三台主机互通靠交换机；而要把包送到 202.198.2.0/24，就必须交给路由器。路由器在多个互连设备之间"中继包"：从一个网络接口收进来，查路由表，再从另一个网络接口发出去。</p>
+  <p>此外还有两种"跨界"设备：<strong>三层交换机</strong>兼具二层交换和三层路由功能，转发基于第三层地址、有完全交换能力、还能做报文过滤；<strong>网关</strong>则本质上是一个协议转换器，通常是装在路由器里的软件，可以工作在 OSI 模型的所有层。</p>
+
+  <h3>1.5 路由器内部长什么样</h3>
+  <p>路由器的任务说穿了就两件事：<strong>路由选择</strong>（算路）和<strong>分组转发</strong>（送包）。这两件事对应内部两套相对独立的子系统：</p>
+  <div class="frame">
+    <div class="fseg h"><span class="b">路由选择部分</span><span class="s">路由选择处理机 · 运行路由协议 · 生成路由表</span></div>
+    <div class="fseg p"><span class="b">交换结构</span><span class="s">把分组从入端口搬到出端口</span></div>
+    <div class="fseg h"><span class="b">分组转发部分</span><span class="s">输入端口 · 查转发表 · 输出端口排队</span></div>
+  </div>
+  <p>每个端口都做三层处理：<strong>物理层处理</strong>（收/发比特）→ <strong>数据链路层处理</strong>（拆帧、校验）→ <strong>网络层处理</strong>（提取目的 IP、查表、TTL 减一）。输入端口做完"查表和转发"决策后，分组经交换结构送到输出端口，在那里排队、做缓存管理后发往线路。路由选择部分在后台持续和邻居交换路由信息、更新路由表，而转发部分则要以线速处理每一个到达的分组——这就是为什么核心路由器要靠专用硬件加速查表。</p>
+</section>
+
+<!-- ===== 模块二 ===== -->
+<section id="m2">
+  <div class="modtag"><em>模块 2</em> 路由器怎么选路：两大算法与拥塞控制</div>
+  <h2>每个路由器手里都有一张地图，问题是这张地图怎么来的</h2>
+  <p>路由选择，就是网络中每个节点为到来的数据包选一条输出链路。这里有个根本区别：如果网络内部用<strong>数据报</strong>方式，就得为<strong>每一个到来的包</strong>做一次选路；如果用<strong>虚电路</strong>方式，只在建立虚电路时选一次，之后所有包都走同一条路。互联网是数据报模型，所以每个包都要查一次路由表。</p>
+  <p>一张好的路由表，理想算法要满足六条：<strong>正确性、简单性、坚定性</strong>（长时间跑不出故障）、<strong>稳定性</strong>（能收敛）、<strong>公平性</strong>（各节点用信道机会均等）、<strong>最佳性</strong>。而"最佳"的标准通常是：费用最小、传输延迟最小、数据速率最大，或这些因素的加权组合。</p>
+
+  <h3>2.1 两种策略：分布式 vs 集中式</h3>
+  <p><strong>分布式路由</strong>：每个节点自己存一张路由表，周期性地从相邻节点听消息、也把自己的路由告诉邻居，全网路由表动态变化。距离可以是链路数、延迟、费用。典型协议就是后面要讲的 RIP、OSPF。<strong>集中式路由</strong>：设一个网络控制中心 NCC 统一收集全网状态、算好路由再下发；节点自己不用算、好控流、易消环，但中心附近通信量大、可靠性差、网络规模受限。互联网走的是分布式这条路。</p>
+
+  <h3>2.2 距离向量路由：邻居之间"交换各自的整张地图"</h3>
+  <div class="story">
+    <div class="t">用"问路"来类比</div>
+    <p style="margin-bottom:0">想象你站在一个陌生的十字路口，不知道全城长什么样。你能做的只是问身边几个邻居："到火车站还有多远、往哪个方向拐？"每个邻居报给他自己知道的距离，你 +1 步就是自己到那里的距离。你并不了解全局拓扑，只知道三件事：哪些网是自己直连的、到各目的网络大概多远、该往哪个方向（哪个接口）转发。每隔 30 秒，不管路况变没变，大家再互相通报一遍。这就是距离向量路由。</p>
+  </div>
+  <p>每个路由器的路由表项格式是三段：<strong>目的网络 : 距离 : 下一跳</strong>。它周期性地把自己<strong>关于整个网络的全部路由信息</strong>发给邻居，自己也保存着全网的距离估计。算法优点是简单、适合小网；缺点是规模扩展性差、对链路变化反应慢、路由报文大、收敛轮数和路由器个数成正比。</p>
+
+  <h4>一张路由表是怎么"长"出来的（距离向量迭代）</h4>
+  <p>课件里 A~F 六个路由器连了 7 个网络，假设每条链路距离都是 1。刚开始（轮次 0），每个路由器只知道自己直连的网络，其余都是"距离无穷大、下一跳未知"。之后每轮大家交换信息，距离一步步被刷新。下面用分步演示看 A 的路由表如何收敛：</p>
+  <div class="stepper" id="st-dv">
+    <div class="stepbar"><div class="stepdots"></div></div>
+    <div class="stepbody"></div>
+    <div class="stepbtns"><button class="btn ghost prev">上一步</button><button class="btn next">下一步</button></div>
+  </div>
+
+  <h3>2.3 链路状态路由：把"我和谁相连"广播给全网</h3>
+  <p>距离向量的毛病在于"我只听邻居的二手消息"，容易被错误信息牵着走。链路状态路由换了个思路：<strong>每个路由器只把"我自己和哪些邻居相连、链路费用多少"这一小段事实，洪泛给全网所有路由器</strong>。于是每个路由器都拿到了全网同一份"地图"（链路状态数据库），再各自独立算最短路径。</p>
+  <div class="tbl-wrap"><table class="tbl">
+    <tr><th>对比</th><th>距离向量路由</th><th>链路状态路由</th></tr>
+    <tr><td>共享什么</td><td>自己关于整个网络的路由表</td><td>自己直连邻居的链路状态</td></tr>
+    <tr><td>发给谁</td><td>只发给邻居</td><td>洪泛给全网所有路由器</td></tr>
+    <tr><td>交换频率</td><td>固定周期（如每 30 秒），无论是否变化</td><td>变化时才发，平时约每 30 分钟刷新一次</td></tr>
+    <tr><td>谁算路</td><td>各节点被动拼凑</td><td>各节点拿同一份数据库独立算</td></tr>
+  </table></div>
+  <p>一个链路状态包 LSP 含四个信息域：<strong>广告者 ID、所影响的目标网络 ID、费用、邻居路由器 ID</strong>。路由器开机时先向邻居发"问候包"探活，据此生成自己的 LSP 并洪泛；每台路由器把收到的 LSP 存进链路状态数据库——因为大家收到的 LSP 集合相同，所以全网数据库一致。</p>
+
+  <h3>2.4 Dijkstra 最短路径算法</h3>
+  <p>有了全网地图，怎么算自己到各网络的最短路径？用迪科斯彻（Dijkstra）算法。它从"自己"这棵树根出发，一层层向外长，每一步都把当前费用最小的那个节点永久加入树中：</p>
+  <ol>
+    <li>以自己为根，标记为永久节点，把它的所有邻居先临时连到树上；</li>
+    <li>比较所有临时连接，选费用最小的那条，把它连同弧、节点标记为树的永久部分；</li>
+    <li>从这个新固化的节点出发，把它能到达的所有未永久节点临时加到树上；</li>
+    <li>若所有节点都已永久化就结束、去掉临时弧，否则回到第 2 步。</li>
+  </ol>
+  <div class="note">在网络层的图里，节点分两种（网络和路由器），弧也分两种：<strong>路由器→网络的链路费用有效计入，而网络→路由器的链路费用恒为 0</strong>。算完后得到一棵最短路径树，树里每个目的网络对应的费用和下一跳，就是路由表内容。课件例子里 A 算出：到网 1 费用 1、网 2 费用 3（经 B）、网 3 费用 3、网 4 费用 6（经 F）、网 5 费用 2、网 6 费用 5（经 B）、网 7 费用 4（经 E）。</div>
+
+  <h3>2.5 拥塞：路上车太多了</h3>
+  <p>当网络或其一部分里塞进了太多包，性能下降，就是<strong>拥塞</strong>。成因两头：节点处理速度慢会堵输入队列，输出链路传得慢会堵输出队列。后果是<strong>吞吐量下降、平均延迟增大</strong>。对策要么加资源、要么降负载。这里要分清两个常被混淆的概念：</p>
+  <div class="tbl-wrap"><table class="tbl">
+    <tr><th></th><th>流量控制</th><th>拥塞控制</th></tr>
+    <tr><td>范围</td><td>端到端（发送方↔接收方）</td><td>全局，涉及所有主机、所有路由器</td></tr>
+    <tr><td>目的</td><td>别让发送方发得超过接收方处理能力</td><td>别让全网被包淹没</td></tr>
+    <tr><td>位置</td><td>抑制发送端速率，接收端来得及收</td><td>涉及中间节点</td></tr>
+  </table></div>
+  <p>拥塞控制分两大类：<strong>开环控制</strong>靠事先设计（什么时候接受新流、什么时候丢包、节点调度策略），做决定时不看网络当前状态；<strong>闭环控制</strong>建立在反馈环上——先监视（看丢包率、平均队列长度、超时重传、延迟抖动）、再把拥塞信息传到能采取行动的地方（显式发警告包，或靠包头某位置位，或定期发探测包）、最后调整系统改正问题。</p>
+  <p>常见控拥塞手段：虚电路建连时预分配缓冲区；队列满时丢包（尾丢弃 DropTail、早期随机检测 RED）；设"许可证"限制网内总包数；让节点视输出链路拥塞程度向源端发阻塞包。课件还特别提到两类死锁：<strong>直接/间接存储转发死锁</strong>（两节点互等对方的缓冲区，靠"输入链路预留缓存＋允许丢包"解决）和<strong>重装死锁</strong>（重组分片的缓冲被占满，靠分配重装缓冲、预约缓冲解决）。</p>
+
+  <h3>2.6 服务质量 QoS</h3>
+  <p>QoS（Quality of Service）是针对不同业务的不同需求，提供端到端的服务质量保证。四类度量指标：<strong>带宽、时延、时延变化（抖动）、丢包率</strong>。不同业务要求差别很大：语音要时延 &lt;150ms、抖动 &lt;1ms，最高优先级；交易业务时延 &lt;4s/页，中优先级；文件传输时延 &lt;15s，低优先级尽力服务。</p>
+  <p>保证 QoS 的技术手段包括：<strong>过度配置</strong>（直接把网络建得够大）、<strong>流量整形</strong>（调节平均速率和突发速率，如漏桶/令牌桶）、<strong>数据包调度</strong>（在竞争流之间分配路由器资源）、资源预留。端到端 QoS 要求路上所有设备都遵循同一套模型，三种主流服务模型：</p>
+  <div class="tbl-wrap"><table class="tbl">
+    <tr><th>模型</th><th>核心思想</th><th>特点</th></tr>
+    <tr><td>Best-Effort 尽力而为</td><td>缺省模型，应用随时发包，网络尽最大努力送，不承诺时延/可靠性</td><td>最简单，适用于 FTP、邮件等绝大多数业务</td></tr>
+    <tr><td>IntServ 综合服务</td><td>发报前先用信令描述流量参数、沿途预留资源，确认预留成功后才开始发</td><td>每个流要在节点维护状态，可扩展差</td></tr>
+    <tr><td>DiffServ 区分服务</td><td>把流量分多类，边缘路由器分类打标记，核心路由器只认标记、按类调度</td><td>当前主流，扩展性好，免逐流信令</td></tr>
+  </table></div>
+</section>
+
+<!-- ===== 模块三 ===== -->
+<section id="m3">
+  <div class="modtag"><em>模块 3</em> IPv4 地址：门牌、子网与 CIDR</div>
+  <h2>先解决一个最基本的问题：网络上怎么认出一台主机</h2>
+  <p>路由器靠网络层报文头里的<strong>目的 IP 地址</strong>判断这个包裹要去哪座城市，再用目的 IP 查转发表决定从哪个接口扔出去。所以网络上每个独立主机、以及路由器的每个接口，都必须有一个唯一的 IP 地址。注意：路由器通常有好几个接口（高端核心路由器多至几十个），每个接口一个地址；主机一般一两个接口（有线网口＋Wi-Fi）。</p>
+  <p>IPv4 地址长 <strong>32 位（4 字节）</strong>，地址空间 2<sup>32</sup>，约 43 亿个。为了好读，常用三种写法：二进制、<strong>点分十进制</strong>（每个字节写成一个小于 256 的十进制数，用点隔开）、十六进制。</p>
+  <div class="bits">点分十进制:  129 . 16 . 6 . 31
+二进制:      10000001 . 00001110 . 00000110 . 00011111
+十六进制:    81 . 0E . 06 . 1F</div>
+
+  <h3>3.1 分类编址：把 32 位切成"网络号 + 主机号"</h3>
+  <p>早期 IP 地址是两级结构：<strong>网络号</strong>（标识主机连在哪个网络上）＋<strong>主机号</strong>（在该网络内唯一标识这台主机）。为了适配不同规模的组织，地址按开头的几位被分成五类：</p>
+  <div class="frame">
+    <div class="fseg t"><span class="b">A 类</span><span class="s">0 + 网络号7位 + 主机号24位</span></div>
+    <div class="fseg t"><span class="b">B 类</span><span class="s">10 + 网络号14位 + 主机号16位</span></div>
+    <div class="fseg t"><span class="b">C 类</span><span class="s">110 + 网络号21位 + 主机号8位</span></div>
+    <div class="fseg t"><span class="b">D 类</span><span class="s">1110 + 多播组号28位</span></div>
+    <div class="fseg t"><span class="b">E 类</span><span class="s">1111 + 1 + 保留27位</span></div>
+  </div>
+  <div class="tbl-wrap"><table class="tbl">
+    <tr><th>类别</th><th>地址范围</th><th>网络数</th><th>每网主机数</th></tr>
+    <tr><td>A</td><td>0.0.0.0 — 127.255.255.255</td><td>2<sup>7</sup></td><td>2<sup>24</sup>−2</td></tr>
+    <tr><td>B</td><td>128.0.0.0 — 191.255.255.255</td><td>2<sup>14</sup></td><td>2<sup>16</sup>−2</td></tr>
+    <tr><td>C</td><td>192.0.0.0 — 223.255.255.255</td><td>2<sup>21</sup></td><td>2<sup>8</sup>−2</td></tr>
+    <tr><td>D</td><td>224.0.0.0 — 239.255.255.255</td><td colspan="2">多播组地址</td></tr>
+    <tr><td>E</td><td>240.0.0.0 — 247.255.255.255</td><td colspan="2">保留实验</td></tr>
+  </table></div>
+  <div class="note">为什么主机数要减 2？因为<strong>主机号全 0 是"网络本身"的地址（不能分给某台主机），主机号全 1 是该网的广播地址</strong>，这两个都不能拿去当普通主机地址。</div>
+
+  <h3>3.2 那些"不能随便用"的特殊地址</h3>
+  <div class="tbl-wrap"><table class="tbl">
+    <tr><th>特殊地址</th><th>长什么样</th><th>用途</th></tr>
+    <tr><td>网络地址</td><td>主机号全 0，如 202.198.151.0</td><td>标识网络本身，供路由表查找，不分配给主机</td></tr>
+    <tr><td>32 位全 0（0.0.0.0）</td><td>不是真正地址，是个"收容所"</td><td>本机路由表里找不到去处时的缺省路由；DHCP 主机还没分到地址时当源地址</td></tr>
+    <tr><td>直接广播地址</td><td>主机号全 1，如 202.198.151.255</td><td>可跨网广播，路由器会转发</td></tr>
+    <tr><td>受限广播地址</td><td>32 位全 1（255.255.255.255）</td><td>仅限本网广播，路由器绝不转发</td></tr>
+    <tr><td>环回地址</td><td>首字节为 127，常用 127.0.0.1</td><td>本机软件测试、本机进程间通信，永不离开本机</td></tr>
+    <tr><td>私有地址</td><td>10.0.0.0/8、172.16.0.0/12、192.168.0.0/16</td><td>企业内网自用，经 NAT 上公网</td></tr>
+  </table></div>
+  <p>IP 地址由 ICANN 顶层分配，往下经五大区域注册机构 RIR（ARIN、AfriNIC、APNIC、LACNIC、RIPE-NCC）→ 国家/本地注册机构 NIR/LIR → ISP 层层下发。</p>
+
+  <h3>3.3 分类编址的三大毛病</h3>
+  <p>这套"非 A 即 B 即 C"的死板划分很快不够用了：一是<strong>地址利用率低</strong>——一个单位只要 500 台主机，拿不到 B 类（6 万多主机）也塞不进 C 类（254 台），被迫浪费；二是<strong>路由表膨胀</strong>——每个物理网络都占一个网络号，互联网核心路由表条目爆炸；三是<strong>两级结构不够灵活</strong>。于是 1985 年起引入"子网号"，把两级地址变成三级。</p>
+
+  <h3>3.4 子网划分：从主机号里借几位当子网号</h3>
+  <p>划分子网的思路很简单：<strong>把本来就属于某个单位的那一大块主机号，切出前面几位当"子网号"</strong>。比如一个 B 类地址（网络号 16 位），借 8 位当子网号，剩下 8 位主机号，就从一个大网切成了 256 个小网：</p>
+  <div class="frame">
+    <div class="fseg h"><span class="b">网络号 16 位</span><span class="s">全球统一分配</span></div>
+    <div class="fseg t"><span class="b">子网号 8 位</span><span class="s">本单位内部自己切</span></div>
+    <div class="fseg p"><span class="b">主机号 8 位</span><span class="s">该子网内的主机</span></div>
+  </div>
+  <p>光看 IP 数据报首部，根本看不出这个网有没有划分子网。那路由器怎么知道哪几位是网络＋子网、哪几位是主机？靠一个配套的东西——<strong>子网掩码</strong>。</p>
+
+  <h3>3.5 子网掩码：一把"对齐位"</h3>
+  <p>子网掩码是一个 32 比特数：<strong>值为 1 的位对应网络号和子网号，值为 0 的位对应主机号</strong>。把 IP 地址和掩码做"按位与"，掩掉的结果就是子网的网络地址。比如 172.16.1.10 配上 255.255.255.0，与的结果是 172.16.1.0——这就是它所在子网的网络地址。</p>
+  <div class="bits">IP:     172 . 16 . 1 . 10
+掩码:   255 . 255 . 255 . 0
+按位与: 172 . 16 . 1 . <span class="flag">0</span>   ← 子网网络地址</div>
+  <p>有了 IP 和掩码，主机就能判断对方在哪：目的地址和自己"网络＋子网"部分相同→同在本子网，直接交付；网络号相同但子网号不同→本网络另一子网；网络号都不同→得交给默认网关。子网掩码是每个路由表项的必备属性：路由器和邻居交换路由时必须把掩码一起带上。</p>
+
+  <h4>动手算：两个必考题</h4>
+  <p><strong>例 1：</strong>IP 为 192.168.100.5，掩码 255.255.255.0。算网络地址、广播地址、地址范围、主机数。</p>
+  <div class="card">
+    <p style="margin-bottom:6px">IP：  11000000 10101000 01100100 <span class="flag">00000101</span><br>
+    掩码：11111111 11111111 11111111 <span class="flag">00000000</span></p>
+    <p style="margin-bottom:0">网络地址＝192.168.100.0；广播地址（主机号全 1）＝192.168.100.255；可用范围＝.1～.254；主机数＝2<sup>8</sup>−2＝<strong>254</strong>。</p>
+  </div>
+  <p><strong>例 2：</strong>IP 为 192.168.150.122，掩码 255.255.255.248。注意这个掩码不是整字节，要按位算：</p>
+  <div class="stepper" id="st-subnet">
+    <div class="stepbar"><div class="stepdots"></div></div>
+    <div class="stepbody"></div>
+    <div class="stepbtns"><button class="btn ghost prev">上一步</button><button class="btn next">下一步</button></div>
+  </div>
+
+  <h3>3.6 无分类编址 CIDR：把"类别"彻底扔掉</h3>
+  <p>子网划分缓解了问题，但还是在"分类"的框框里打补丁。1993 年前后的 <strong>CIDR（无类别域间路由）</strong>干脆取消 A/B/C 类和子网的概念，改用<strong>任意长度的"网络前缀"</strong>来标识网络。记法是斜线记法：<strong>IP 地址/前缀位数</strong>，斜杠后的数字就是掩码里连续 1 的个数。例如 88.166.0.1/19 的掩码就是 19 个连续的 1。</p>
+  <div class="frame">
+    <div class="fseg h"><span class="b">网络前缀</span><span class="s">前面 /n 位</span></div>
+    <div class="fseg p"><span class="b">主机号</span><span class="s">剩下 32−n 位</span></div>
+  </div>
+  <div class="note">例：128.123.1.8/28。/28 表示前 28 位是前缀，对应掩码 255.255.255.240；整个地址块是 128.123.1.0/28，范围从 128.123.1.0 到 128.123.1.15，共 16 个地址（主机位 4 位＝2<sup>4</sup>）。</div>
+  <p>再比如 128.14.32.0/20：前缀 20 位，主机位 12 位，整块 2<sup>12</sup>＝4096 个地址；最小地址 128.14.32.0，最大地址 128.14.47.255。全 0、全 1 的主机号一般不用。</p>
+
+  <h3>3.7 路由聚合与超网：一条表项顶上千条</h3>
+  <p>CIDR 最厉害的用处是<strong>路由聚合</strong>：如果若干子网恰好能拼进一个更大的前缀，路由器就不必把每个明细子网都写进路由表，只发一条更大的聚合路由即可——这也叫<strong>构成超网</strong>。课件例子：R2 后面挂着 172.16.1.0/24、172.16.2.0/24、172.16.3.0/24 三个明细路由，聚合后只需一条 <code>172.16.0.0/16</code> 就全概括了。</p>
+  <div class="tbl-wrap"><table class="tbl">
+    <tr><th>写法</th><th>含义</th></tr>
+    <tr><td>明细路由</td><td>ip route-static 172.16.1.0 24 → 192.168.12.2（共 3 条）</td></tr>
+    <tr><td>聚合路由</td><td>ip route-static 172.16.0.0 16 → 192.168.12.2（1 条顶 3 条）</td></tr>
+  </table></div>
+  <div class="note">前缀长度 ≤23 位的 CIDR 块都包含多个 C 类网，合起来就构成超网。CIDR 块里的地址数一定是 2 的整数次幂：<strong>前缀越短，块越大、地址越多；划分子网是把前缀变长、切小</strong>。正是 CIDR＋路由聚合让核心路由器的表项数不至于爆炸。</div>
+</section>
+
+<!-- ===== 模块四 ===== -->
+<section id="m4">
+  <div class="modtag"><em>模块 4</em> 地址不够用、地址分下来：DHCP 与 NAT</div>
+  <h2>地址是怎么"发"到每台电脑上的，又是怎么"省"出来的</h2>
+  <p>一台主机要上网，得配齐五样东西：<strong>IP 地址、子网掩码、默认网关地址、DNS 服务器地址</strong>，外加其他参数。这五样怎么来？两种方式：</p>
+  <div class="tbl-wrap"><table class="tbl">
+    <tr><th></th><th>静态配置</th><th>动态配置（DHCP）</th></tr>
+    <tr><td>谁来分配</td><td>网管逐台手工规划</td><td>协议自动分配</td></tr>
+    <tr><td>地址复用</td><td>一台机器一个固定 IP，无法复用</td><td>暂时不用的 IP 可回收再分给别人</td></tr>
+    <tr><td>地址冲突</td><td>容易撞</td><td>协议避免冲突</td></tr>
+    <tr><td>工作量</td><td>每台都要手设，量大易错</td><td>只配好服务器，工作量小</td></tr>
+  </table></div>
+
+  <h3>4.1 DHCP：开机就自动领到一套网络参数</h3>
+  <p>协议栈在跑之前必须给每个参数赋值，这叫<strong>协议配置</strong>。DHCP（动态主机配置协议，RFC 2131）把这件事集中化：一台服务器统管所有地址，客户端来了就领、走了就还。它跑在 <strong>UDP</strong> 上——客户端发往服务器 <strong>67 号端口</strong>，服务器回应客户端 <strong>68 号端口</strong>。</p>
+  <div class="story">
+    <div class="t">用"住宾馆领房卡"来类比</div>
+    <p style="margin-bottom:0">你（DHCP 客户端）刚走进大堂，根本不知道前台在哪间办公室，于是对着整个大堂喊一嗓子："有人管分房吗？"（DISCOVER 广播）。前台（服务器）听到后回你一张房卡预订单（OFFER），上面写着给你留的房间号。你如果同时听到好几家前台报房，就选先到的那家，再当众宣布"我选这家"（REQUEST 广播，顺带告诉别家"不用给我留了"）。前台确认"就这么定了"（ACK），你拿卡入住。这就是经典的四步。</p>
+  </div>
+  <div class="stepper" id="st-dhcp">
+    <div class="stepbar"><div class="stepdots"></div></div>
+    <div class="stepbody"></div>
+    <div class="stepbtns"><button class="btn ghost prev">上一步</button><button class="btn next">下一步</button></div>
+  </div>
+  <h4>跨网段怎么办：DHCP 中继</h4>
+  <p>客户端最初的 DISCOVER 是广播（目的 255.255.255.255），而广播包路由器不转发。如果客户端和服务器不在同一网段，就得在中间放一台 <strong>DHCP 中继</strong>：在客户端眼里中继就是服务器（收到广播 DISCOVER 后改单播转发给真服务器），在服务器眼里中继就是客户端。这样一台服务器就能管好多网段。</p>
+  <h4>租期与续租</h4>
+  <p>动态分的 IP 是有<strong>租用期</strong>的，不是永久给你。续租分两道坎：租期到 <strong>50%（T1）</strong>时，客户端单播向原服务器发 REQUEST 续借，收到 ACK 就租期重新计时、收到 NACK 就重新发 DISCOVER；到 <strong>87.5%（T2）</strong>还没续成，就改成<strong>广播</strong>向所有服务器求续。不想用了（比如换地方）还可以主动发 RELEASE 释放。DHCP 支持三种分配：自动分配（永久 IP）、动态分配（临时租用 IP）、人工分配（管理员定好 IP，DHCP 只负责传达）。</p>
+
+  <h3>4.2 NAT：让全公司共用一个公网地址</h3>
+  <p>私有地址（10/8、172.16/12、192.168/16）在互联网上是不路由的。内网主机要访问公网，就得把私有地址"翻译"成公网地址——这就是 <strong>NAT（网络地址转换）</strong>。它像公司总机：几百个员工分机号（内网私网地址）对外只暴露一个总机号码（公网地址），外面的人打总机转分机，里面的人借总机打出去。NAT 让多个内网用户共用少量公网 IP，大大延缓了 IPv4 地址枯竭。</p>
+  <h4>Basic NAT：一对一，只换 IP</h4>
+  <p>一对一地把内网源 IP 换成公网 IP，不动端口。由于一个公网 IP 同时只能服务一个内网用户，没真正省地址，实际很少用。</p>
+  <h4>NAPT：IP＋端口，一对多（最常用）</h4>
+  <div class="story">
+    <div class="t">总机靠"分机号"区分不同员工</div>
+    <p style="margin-bottom:0">NAPT（网络地址端口转换）把"公网 IP＋端口号"当作一个槽位。Host A 内网地址 10.1.1.100:1025 出去，路由器换成 162.105.178.65:<strong>16384</strong>；Host B 10.1.1.200:1028 同时出去，换成同一个公网 IP 的 <strong>16400</strong> 端口。回来时服务器的响应目的端口是 16384，路由器查转换表就知道该送回给 Host A 的 1025 端口。一个公网 IP 就这样被几百个内网连接共用。</p>
+  </div>
+  <div class="tbl-wrap"><table class="tbl">
+    <tr><th>方向</th><th>转换前（内网）</th><th>转换后（公网）</th></tr>
+    <tr><td>Host A 出</td><td>10.1.1.100 : 1025</td><td>162.105.178.65 : 16384</td></tr>
+    <tr><td>回 Host A</td><td>162.105.178.65 : 16384</td><td>10.1.1.100 : 1025</td></tr>
+    <tr><td>Host B 出</td><td>10.1.1.200 : 1028</td><td>162.105.178.65 : 16400</td></tr>
+    <tr><td>回 Host B</td><td>162.105.178.65 : 16400</td><td>10.1.1.200 : 1028</td></tr>
+  </table></div>
+  <h4>NAT Server：给内网服务器开一扇"对外的窗"</h4>
+  <p>NAT 默认"屏蔽"内网主机，外网没法主动进来。但公司内网往往要对外提供服务（比如 192.168.1.68 的 Web 服务器）。这时手工配一条静态映射：公网的 <strong>209.102.1.68:80</strong> ↔ 内网的 <strong>192.168.1.68:80</strong>。外网访问公网这个地址时，路由器按映射把目的地址换成内网服务器；服务器回包时再把源地址换回公网地址。</p>
+  <div class="warn">NAT 的代价：它只改 IP 头地址和 TCP/UDP 头端口。像 FTP 这类协议会在<strong>报文数据部分</strong>里夹带 IP 地址/端口，NAT 就翻译不到位，需要网关支持 ALG（应用层网关）才能解开这个结。</div>
+</section>
+
+<!-- ===== 模块五 ===== -->
+<section id="m5">
+  <div class="modtag"><em>模块 5</em> 剥开 IP 数据报的信封</div>
+  <h2>每一个包裹头顶都写着这张"寄件单"</h2>
+  <p>IP 数据报由<strong>首部</strong>和<strong>数据</strong>两部分组成。首部固定部分 20 字节，后面可接最长 40 字节的可变选项，所以首部总长在 20～60 字节之间。我们按 32 位（4 字节）一行来数这张寄件单：</p>
+
+  <h3>5.1 IP 首部结构图</h3>
+  <div class="frame">
+    <div class="fseg h"><span class="b">版本 4 位</span><span class="s">IPv4 = 4</span></div>
+    <div class="fseg h"><span class="b">首部长度 IHL 4 位</span><span class="s">单位 4 字节；无选项 =5（即 20B）</span></div>
+    <div class="fseg h"><span class="b">区分服务 8 位</span><span class="s">原 TOS；前 6 位服务类别，后 2 位显式拥塞通知</span></div>
+    <div class="fseg h"><span class="b">总长度 16 位</span><span class="s">首部＋数据，最大 65535 字节</span></div>
+  </div>
+  <div class="frame">
+    <div class="fseg h"><span class="b">标识 16 位</span><span class="s">同一数据报的各分片共用同一标识</span></div>
+    <div class="fseg h"><span class="b">标志 3 位</span><span class="s">第1位保留；DF=不分片；MF=后面还有分片</span></div>
+    <div class="fseg h"><span class="b">片偏移 13 位</span><span class="s">以 8 字节为单位，本片数据在原报中的位置</span></div>
+  </div>
+  <div class="frame">
+    <div class="fseg h"><span class="b">生存时间 TTL 8 位</span><span class="s">初值 32 或 64，每过一个路由器减 1，减到 0 丢弃</span></div>
+    <div class="fseg h"><span class="b">协议 8 位</span><span class="s">上层协议：ICMP=1 TCP=6 UDP=17 OSPF=89</span></div>
+    <div class="fseg h"><span class="b">首部校验和 16 位</span><span class="s">只校验首部，16 位反码求和</span></div>
+  </div>
+  <div class="frame">
+    <div class="fseg p"><span class="b">源 IP 地址 32 位</span><span class="s"></span></div>
+    <div class="fseg p"><span class="b">目的 IP 地址 32 位</span><span class="s"></span></div>
+  </div>
+  <div class="frame">
+    <div class="fseg t"><span class="b">选项（0~40 字节）</span><span class="s">安全、记录路径、时间戳、源站选路</span></div>
+    <div class="fseg t"><span class="b">填充</span><span class="s">补齐到 32 位整数倍</span></div>
+  </div>
+
+  <h3>5.2 逐个字段讲清楚</h3>
+  <ul>
+    <li><strong>版本</strong>：4 位，IPv4 就是 4。</li>
+    <li><strong>首部长度 IHL</strong>：以 32 位为单位计数。无选项时是 20 字节，所以这个字段值为 5；首部最长 60 字节。</li>
+    <li><strong>区分服务</strong>：前身叫服务类型 TOS（基本没用过），1998 年重启并改名，前 6 位标记服务类别，后 2 位带显式拥塞通知。</li>
+    <li><strong>总长度</strong>：整个数据报（首部＋数据）的字节数。16 位意味着最大 65535 字节；分片后它指的是<strong>当前这一个分片</strong>的长度，不是原报。</li>
+    <li><strong>标识</strong>：每发一个数据报自动加 1；一旦分片，<strong>同一数据报的所有分片都带同一个标识号</strong>，接收方靠它把分片拼回原报。</li>
+    <li><strong>标志</strong>：只有后两位有意义。<strong>DF=1</strong> 命令路由器"不许分片"（目的端重组不了时用）；<strong>MF=1</strong> 表示"本片后面还有分片"，<strong>最后一个分片 MF=0</strong>。是否分片取决于链路 MTU。</li>
+    <li><strong>片偏移</strong>：本片数据在原数据报里的位置，<strong>以 8 字节为单位</strong>——偏移 1 对应字节 8，偏移 2 对应字节 16。所以每片数据长度必须能被 8 整除。</li>
+    <li><strong>生存时间 TTL</strong>：本数据报最多还能经过几个路由器。源主机初始设 32 或 64，每过一个路由器减 1，<strong>减到 0 就丢弃</strong>——这是为了防止包在路由环路里永远兜圈子。</li>
+    <li><strong>协议</strong>：告诉接收方这个包的数据该交给哪个上层协议。对照值：ICMP=1、IGMP=2、TCP=6、EGP=8、IGP=9、UDP=17、IPv6 封装=41、OSPF=89。</li>
+    <li><strong>首部校验和</strong>：只对 IP 首部算，不对后面的数据算。校验出错就丢弃，<strong>但不发 ICMP 差错报文</strong>，由上层自己发现丢包并重传。算法是 16 位反码求和。</li>
+    <li><strong>选项与填充</strong>：选项可变 0~40 字节（安全限制、记录路径、时间戳、宽松/严格源站选路），IPv4 里很少用；填充保证首部始终是 32 位的整数倍。</li>
+  </ul>
+
+  <h3>5.3 分片：大包裹拆成小包裹才能过窄桥</h3>
+  <p>不同链路能承受的最大帧长不一样，这叫 <strong>MTU（最大传送单元）</strong>。当一个 IP 数据报比出链路的 MTU 还大、且 DF=0 时，路由器就得把它<strong>分片</strong>，每个分片再各自带头部，到目的主机后<strong>重组</strong>。分片有个硬规矩：除最后一片外，每片的数据长度必须是 8 的倍数（因为片偏移以 8 字节为单位）。</p>
+  <div class="card">
+    <p style="margin-bottom:6px"><strong>课件例题：</strong>一个数据报总长度 3820 字节，数据部分 3800 字节（固定 20 字节首部），要分片成不超过 1420 字节的片（即每片数据最多 1400 字节）。</p>
+    <p style="margin-bottom:6px">数据被切成三段：0~1399、1400~2799、2800~3799。</p>
+    <p style="margin-bottom:0">片 1：数据字节 0–1399，片偏移 = 0/8 = <strong>0</strong>，MF=1；<br>
+    片 2：数据字节 1400–2799，片偏移 = 1400/8 = <strong>175</strong>，MF=1；<br>
+    片 3：数据字节 2800–3799，片偏移 = 2800/8 = <strong>350</strong>，MF=0（最后一片）。三片的<strong>标识都是 12345</strong>，接收方靠同一标识 + 偏移拼回原报。</p>
+  </div>
+  <div class="tbl-wrap"><table class="tbl">
+    <tr><th></th><th>总长度</th><th>标识</th><th>MF</th><th>DF</th><th>片偏移</th></tr>
+    <tr><td>原数据报</td><td>3280</td><td>12345</td><td>0</td><td>0</td><td>0</td></tr>
+    <tr><td>分片 1</td><td>1420</td><td>12345</td><td>1</td><td>0</td><td>0</td></tr>
+    <tr><td>分片 2</td><td>1420</td><td>12345</td><td>1</td><td>0</td><td>175</td></tr>
+    <tr><td>分片 3</td><td>1020</td><td>12345</td><td>0</td><td>0</td><td>350</td></tr>
+  </table></div>
+  <div class="note">注意一个易错点：分片可以发生多次——片 2 走到一条 MTU 只有 820 的窄链路时还会再被切一刀。<strong>每次分片都会复制一份原标识，片偏移在原有基础上累加，MF 标志按"后面还有没有"重设</strong>。重组只在最终目的主机做，中间路由器不重组——这就是课件问"如何恢复原数据报"的答案：靠相同标识 + 各片偏移排序拼接。</div>
+</section>
+
+<!-- ===== 模块六 ===== -->
+<section id="m6">
+  <div class="modtag"><em>模块 6</em> 包裹上路：路由器怎么转发、怎么选最长前缀</div>
+  <h2>主机很傻，路由器很忙：一个包的逐跳接力</h2>
+  <p>先看源主机这一侧，它的路由逻辑简单得出奇：<strong>如果目的主机和自己在同一个共享网络里，就直接送过去（直接交付）；不在，就扔给默认网关（默认路由器），剩下的事交给它。</strong>一个小网络只接一条路连互联网时，用默认路由（0.0.0.0/0）最合适——主机不必为全世界每个网络都建表项。</p>
+  <p>从源到目的的整段路上，交付分两种：<strong>直接交付</strong>（最后一跳，路由器把包送进目的主机所在的局域网）和<strong>间接交付</strong>（中间各跳，路由器把包转发给下一个路由器）。真正"忙"的是路由器：它内存里维护一张路由表，每收一个分组就查一次表，从一个接口搬到另一个接口。</p>
+
+  <h3>6.1 路由表长什么样</h3>
+  <p>每一行至少三样东西：<strong>目的网络前缀、下一跳路由器地址、出接口</strong>。课件里 R2 连了四个网络，路由表是这样的：</p>
+  <div class="tbl-wrap"><table class="tbl">
+    <tr><th>路由前缀</th><th>下一跳</th><th>出接口</th></tr>
+    <tr><td>20.0.0.0/8</td><td>Direct（直连）</td><td>接口 0</td></tr>
+    <tr><td>30.0.0.0/8</td><td>Direct（直连）</td><td>接口 1</td></tr>
+    <tr><td>10.0.0.0/8</td><td>20.0.0.7</td><td>接口 0</td></tr>
+    <tr><td>40.0.0.0/8</td><td>30.0.0.1</td><td>接口 1</td></tr>
+  </table></div>
+  <p>收到包后的标准动作是一条流水线：<strong>合法性检查 → 提取目的 IP 当 Key 查路由表 → 命中后把下一跳 IP 拿去查 ARP 表得到 MAC → 封装成帧 → 从指定接口发出去</strong>；查不到就丢弃。</p>
+
+  <h3>6.2 最长前缀匹配：一个地址可能命中好几条，选最长的</h3>
+  <div class="story">
+    <div class="t">用"写收件地址"来类比</div>
+    <p style="margin-bottom:0">假设你要寄到"172.16.1.1"。地址本里可能同时写着"172.16.0.0/16（172.16 开头都走 S1）"和"172.16.1.0/24（172.16.1 开头走 S0）"两条规则。两条都匹配，但"172.16.1.0/24"写得更具体——精确到了第三条字节，所以应该听它的。这就是<strong>最长前缀匹配（LPM）</strong>：把目的 IP 和每条路由<strong>逐位（bit-by-bit）</strong>比对，谁匹配的前缀最长，就用谁指导转发。</p>
+  </div>
+  <p>为什么必须"最长"？因为 CIDR 允许路由聚合，表项之间会有"包含"关系：一条 /16 可能同时涵盖好几条 /24。前缀越长＝地址块越小＝路由越具体，越该被优先采用。</p>
+  <div class="tbl-wrap"><table class="tbl">
+    <tr><th>路由前缀</th><th>出接口</th><th>说明</th></tr>
+    <tr><td>172.16.1.0/24</td><td>S0</td><td>最具体，优先</td></tr>
+    <tr><td>172.16.0.0/16</td><td>S1</td><td>更宽泛的聚合</td></tr>
+    <tr><td>0.0.0.0/0</td><td>S2</td><td>缺省路由，谁都能匹配</td></tr>
+  </table></div>
+  <h4>两个课件实例</h4>
+  <p>R1 路由表：<code>192.168.0.0/16 → 10.1.1.2</code>；<code>192.168.2.0/24 → 20.1.1.2</code>；<code>192.168.3.0/24 → 30.1.1.2</code>。</p>
+  <div class="stepper" id="st-lpm">
+    <div class="stepbar"><div class="stepdots"></div></div>
+    <div class="stepbody"></div>
+    <div class="stepbtns"><button class="btn ghost prev">上一步</button><button class="btn next">下一步</button></div>
+  </div>
+
+  <h3>6.3 路由器转发分组的完整算法（六步）</h3>
+  <ol>
+    <li>从分组首部提取目的 IP 地址 D，算出目的网络地址 N；</li>
+    <li>若网络 N 与本路由器<strong>直接相连</strong>，直接交付给目的主机 D；否则是间接交付，转第 3 步；</li>
+    <li>若表中有目的地址就是 D 的<strong>特定主机路由</strong>，发给指明的下一跳；否则第 4 步；</li>
+    <li>若表中有到达网络 N 的路由，发给指明的下一跳；否则第 5 步；</li>
+    <li>若有<strong>默认路由</strong>，发给默认路由器；否则第 6 步；</li>
+    <li>报告转发分组出错。</li>
+  </ol>
+  <div class="note">注意顺序：先看直连，再看"精确到主机"的特殊路由，再看网络路由，最后才落到默认路由。默认路由 0.0.0.0/0 能匹配任何地址，是兜底的最后一条。</div>
+</section>
+
+<!-- ===== 模块七 ===== -->
+<section id="m7">
+  <div class="modtag"><em>模块 7</em> IP 的三个配套伙伴：ARP、ICMP、IGMP</div>
+  <h2>知道了门牌，还得知道对方长什么样、路上出了问题谁喊一嗓子</h2>
+  <p>IP 协议是 TCP/IP 的核心，它为上层提供不可靠、无连接的数据报服务——所有 TCP、UDP、ICMP、IGMP 数据都装进 IP 数据报传输。但 IP 自己有三件事办不了，于是配了三个帮手：<strong>ARP</strong>（把 IP 翻译成 MAC）、<strong>ICMP</strong>（路上出问题时报信）、<strong>IGMP</strong>（管理多播组成员）。</p>
+
+  <h3>7.1 ARP：知道 IP，怎么找到那块网卡</h3>
+  <div class="story">
+    <div class="t">用"点名找人"来类比</div>
+    <p style="margin-bottom:0">IP 地址是"工号"，MAC 地址才是这个人本人。你在以太网里要把数据帧交给 172.16.1.20，但帧首部必须写目的 MAC——可你只知道人家工号。怎么办？你就在会议室里大喊："工号 172.16.1.20 的同事，你的工位号是多少？"（ARP 请求，广播）。整屋人都听到了，但只有 172.16.1.20 本人应答："我是，工位号是 0025-9301-0002"（ARP 应答，单播）。从此你把这对"工号↔工位号"记在自己的小本子上，下次直接查。</p>
+  </div>
+  <p><strong>ARP（地址解析协议）</strong>的基本功能就是：通过目的设备的 IP 地址，查出它的 MAC 地址。请求以广播发出，全网主机都收到；只有 IP 匹配的那台才单播应答。每台主机/三层设备都维护一张 <strong>ARP 高速缓存</strong>，存 IP↔MAC 映射，避免每次都广播。</p>
+  <h4>ARP 报文与封装</h4>
+  <p>ARP 帧在以太网里类型字段为 <strong>0x0806</strong>。ARP 报文关键字段：硬件类型（以太网=1）、协议类型（IP=0x0800）、硬件地址长度（6）、协议地址长度（4）、操作码（<strong>1=ARP 请求，2=ARP 应答</strong>），以及发送方硬件/协议地址、目的硬件/协议地址。</p>
+  <h4>缓存分两种，命令行能看能改</h4>
+  <ul>
+    <li><strong>动态 ARP</strong>：协议自动学来的，会到期删除、会被新报文更新、也能被静态表项覆盖；</li>
+    <li><strong>静态 ARP</strong>：管理员手工写死的映射，永不过期、不被动态项覆盖。Windows 下 <code>arp -a</code> 看缓存、<code>arp -d</code> 删某行、<code>arp -s</code> 手绑一条。</li>
+  </ul>
+  <h4>用 ARP 的四种典型场景</h4>
+  <ol>
+    <li>主机要发给<strong>本网</strong>另一台主机 → 用 ARP 找目的主机的 MAC；</li>
+    <li>主机要发给<strong>别网</strong>主机 → 用 ARP 找本网默认路由器的 MAC，剩下交给路由器；</li>
+    <li>路由器要转发到<strong>本网</strong>主机 → 用 ARP 找目的主机 MAC；</li>
+    <li>路由器要转发到<strong>别网</strong>主机 → 用 ARP 找本网下一跳路由器 MAC。</li>
+  </ol>
+  <div class="note">关键理解：你永远只 ARP"同一个 LAN 上下一跳"的 MAC——不管最终目的地多远，当前这一跳要交给谁，就解析谁的 MAC。</div>
+
+  <h3>7.2 ICMP：路上出事了，谁来报信</h3>
+  <p>IP 是尽最大努力的，不验证目的有没有收到。包在路上可能目的主机不响应、可能拥塞丢失。于是在 IP 层引入 <strong>ICMP（互联网控制报文协议）</strong>：当传输出问题时，主机或路由器向源端报告差错、附带异常信息，让上层做流量控制和差错控制。ICMP 报文本身<strong>封装在 IP 数据报里</strong>传输（协议字段值 1），分<strong>查询报文</strong>和<strong>差错报文</strong>两大类；对差错报文不再产生新的 ICMP 差错报文（避免差错无限套娃）。</p>
+  <div class="tbl-wrap"><table class="tbl">
+    <tr><th>类型</th><th>名称</th><th>用途</th></tr>
+    <tr><td>0 / 8</td><td>回显应答 / 回显请求</td><td>就是 ping：8 请求、0 应答</td></tr>
+    <tr><td>3</td><td>目的不可达</td><td>网络/主机/协议/端口不可达时丢弃包并报回源端</td></tr>
+    <tr><td>4</td><td>源点抑制</td><td>因拥塞丢包，通知源端放慢发送</td></tr>
+    <tr><td>5</td><td>重定向</td><td>路由器告诉主机"有一条更好的路由"</td></tr>
+    <tr><td>11</td><td>超时</td><td>TTL 减到 0 被丢弃时报回源端</td></tr>
+    <tr><td>13 / 14</td><td>时间戳请求 / 应答</td><td>测往返时间、对时钟</td></tr>
+    <tr><td>17 / 18</td><td>地址掩码请求 / 应答</td><td>向本网路由器问自己的子网掩码</td></tr>
+  </table></div>
+  <h4>两大日常工具</h4>
+  <p><strong>ping</strong>：发类型 8 回显请求、收类型 0 应答，测目的是否可达、往返延迟多大、丢包率多少。<strong>tracert</strong>：巧妙利用 TTL——先发 TTL=1 的包，第一跳路由器减到 0 丢弃并回 ICMP 超时，于是知道第一跳是谁；再发 TTL=2、3……逐个探一跳，直到到达目的，沿途打印出每一跳的地址和延迟，用来定位网络故障点。</p>
+
+  <h3>7.3 多播与 IGMP：一份包裹，一群人签收</h3>
+  <p>IP 地址有单播、广播、多播三种。<strong>多播（multicast）</strong>介于单播和广播之间：源主机只发<strong>一份</strong>报文，目的地址是一个多播组地址，<strong>加入了该组的所有主机</strong>都收到一份拷贝。这把"单点发、多点收"的带宽问题解决了——60 个组成员收同一份视频，源端只发一次，沿途路由器在需要的地方才复制，而不是给每台主机各发一份。</p>
+  <h4>多播编址：D 类地址</h4>
+  <p>多播组用 <strong>D 类地址 224.0.0.0~239.255.255.255</strong> 标识，高 4 位固定 <strong>1110</strong>，剩下 28 位是多播组号；多播地址<strong>只能做目的地址、不能做源地址</strong>。分段：224.0.0.0~224.0.0.255 为 IANA 预留（本地链路），224.0.1.0~238.255.255.255 全网有效，239.0.0.0~239.255.255.255 是本地管理范围。常用组地址：RIP v2 用 224.0.0.9，OSPF 用 224.0.0.5 和 .6，EIGRP 用 224.0.0.10。</p>
+  <h4>IP 多播地址怎么映射到 MAC 多播地址</h4>
+  <p>IANA 规定以太网多播 MAC 从 <strong>01:00:5E:00:00:00</strong> 到 <strong>01:00:5E:7F:FF:FF</strong>。方法：把 D 类 IP 地址的<strong>低 23 位</strong>直接抄到 MAC 地址的低 23 位，MAC 高 25 位固定为 01-00-5E；D 类 IP 中紧跟在 1110 后面的那 <strong>5 位不参与映射</strong>——所以 IP→MAC 的映射不是一对一，多个多播 IP 可能对应同一个 MAC。</p>
+  <div class="card">
+    <p style="margin-bottom:0"><strong>课件例题：</strong>主机加入多播组 225.128.47.81。把它的低 24 位写成二进制 10000000.00101111.01010001，取低 23 位拼到 01-00-5E 后面：<strong>MAC = 01-00-5E-00-2F-51</strong>。目的 MAC 是这个地址的帧到达时，网卡才会中断 CPU。</p>
+  </div>
+  <h4>IGMP：主机怎么告诉路由器"我想加入这个组"</h4>
+  <p><strong>IGMP（互联网组管理协议）</strong>工作在主机和相邻多播路由器之间，负责建立、维护多播组成员关系，有 v1/v2/v3 三个版本。工作机制分两阶段：主机加入新组时，向该多播组地址发 IGMP 报文声明"我是成员"，本地多播路由器再把成员关系转告其他多播路由器；之后路由器<strong>周期性轮询</strong>本组主机是否还在——只要有一台应答就认为组还活跃；连续几次没人应答就不再转发这个组的流量。为避免一堆主机同时应答造成混乱，主机在 0~N 秒间随机选一个延迟，<strong>谁先应了，同组其他主机就不必再应</strong>。</p>
+</section>
+
+<!-- ===== 模块八 ===== -->
+<section id="m8">
+  <div class="modtag"><em>模块 8</em> IPv6：地址多到用不完的下一代</div>
+  <h2>32 位地址分完了，于是把门牌从 32 位扩到 128 位</h2>
+  <p>2011 年 2 月，IANA 把最后 468 万个 IPv4 公网地址分给全球五大 RIR，此后再无可分。各大区陆续宣布地址耗尽（APNIC 2011.4、LACNIC 2011.4、RIPE 2012.9、ARIN 2014.6、AFRINIC 2015.9）。IPv6 的登场就是为了根治这个问题：地址长 <strong>128 位</strong>，地址空间大到近乎"无限"，够物联网时代每个灯泡都分到一个全球地址。</p>
+  <div class="tbl-wrap"><table class="tbl">
+    <tr><th>IPv6 优势</th><th>说明</th></tr>
+    <tr><td>海量地址空间</td><td>128 位，满足物联网等新业务、利于演进扩展</td></tr>
+    <tr><td>层次化地址结构</td><td>分配更规范，利于路由聚合、快速查表</td></tr>
+    <tr><td>即插即用</td><td>支持无状态自动配置 SLAAC，终端接入更简单</td></tr>
+    <tr><td>简化报文头</td><td>固定 40 字节基本头，转发更快；新功能走扩展头</td></tr>
+    <tr><td>安全特性</td><td>IPsec、真实源地址认证，避免 NAT 破坏端到端</td></tr>
+    <tr><td>移动性与 QoS</td><td>改进移动网络实时通信；流标签字段给特殊数据流分配资源</td></tr>
+  </table></div>
+
+  <h3>8.1 IPv6 基本头部：瘦了身</h3>
+  <p>IPv6 把基本头固定为 <strong>40 字节</strong>（IPv4 是 20~60 字节可变），把分片、选项、校验和这些"非每跳必需"的字段统统挪到扩展头里，路由器处理起来更快。对比着看：</p>
+  <div class="frame">
+    <div class="fseg h"><span class="b">版本 4 位</span><span class="s">IPv6 = 6</span></div>
+    <div class="fseg h"><span class="b">流类别 8 位</span><span class="s">类似 IPv4 DS，QoS</span></div>
+    <div class="fseg h"><span class="b">流标签 20 位</span><span class="s">区分实时数据流，新字段</span></div>
+  </div>
+  <div class="frame">
+    <div class="fseg h"><span class="b">有效载荷长度 16 位</span><span class="s">扩展头＋上层数据的字节数</span></div>
+    <div class="fseg h"><span class="b">下一头 8 位</span><span class="s">类似 IPv4 协议字段</span></div>
+    <div class="fseg h"><span class="b">跳数限制 8 位</span><span class="s">类似 TTL，每跳减 1，为 0 丢弃</span></div>
+  </div>
+  <div class="frame">
+    <div class="fseg p"><span class="b">源地址 128 位</span><span class="s"></span></div>
+  </div>
+  <div class="frame">
+    <div class="fseg p"><span class="b">目的地址 128 位</span><span class="s"></span></div>
+  </div>
+  <div class="note">和 IPv4 对照着记：<strong>取消了</strong>IHL、总长度（改叫有效载荷长度）、标识/标志/片偏移（挪到分片扩展头）、首部校验和；<strong>名字变了</strong> TTL→跳数限制、协议→下一头；<strong>新增了</strong>流标签。IPv6 基本头里<strong>没有分片字段</strong>——分片只在源端和目的端做，中间路由器不分片。</div>
+
+  <h3>8.2 扩展头：把可选项串成一条链</h3>
+  <p>IPv6 基本头后面可以跟零到多个<strong>扩展头</strong>，靠"下一头"字段像链表一样串起来：基本头的"下一头"告诉你后面是什么扩展头，扩展头自己的"下一头"再指向下一个。典型扩展头：</p>
+  <div class="tbl-wrap"><table class="tbl">
+    <tr><th>扩展头</th><th>下一头号</th><th>作用</th></tr>
+    <tr><td>逐跳选项 HBH</td><td>0</td><td>需要沿途每一跳都处理的信息</td></tr>
+    <tr><td>目的选项 DOH</td><td>60</td><td>交给目的节点处理的信息</td></tr>
+    <tr><td>路由头 RH</td><td>43</td><td>指定报文要依次经过的路径点（源路由）</td></tr>
+    <tr><td>分片头</td><td>44</td><td>携带各分片识别信息</td></tr>
+    <tr><td>认证头 AH</td><td>51</td><td>IPSec：完整性、源认证、防重放</td></tr>
+    <tr><td>封装安全载荷 ESP</td><td>50</td><td>IPSec：加数据加密</td></tr>
+    <tr><td>ICMPv6</td><td>58</td><td>控制报文</td></tr>
+    <tr><td>TCP / UDP</td><td>6 / 17</td><td>上层协议</td></tr>
+  </table></div>
+
+  <h3>8.3 IPv6 地址怎么写、怎么缩</h3>
+  <p>128 位太长，写成 <strong>8 段冒号十六进制</strong>，每段 16 位，字母大小写不敏感。例如 <code>2001:0DB8:2345:CD30:1230:4567:89AB:CDEF/64</code>，前 64 位是网络前缀 <code>2001:0DB8:2345:CD30::/64</code>，后 64 位是接口标识。缩写两条规矩：</p>
+  <ul>
+    <li>每段前面的 0 可省略（<code>0DB8</code>→<code>DB8</code>，<code>0800</code>→<code>800</code>），但整段全 0 至少留一个 0；</li>
+    <li>连续多段全 0 可用 <strong>::</strong> 压缩，但<strong>整个地址里 :: 只能出现一次</strong>——两次就没法还原了。</li>
+  </ul>
+  <div class="bits">缩写前: 2001:0DB8:0000:0000:FB00:1400:5000:45FF
+缩写后: 2001:DB8::FB00:1400:5000:45FF
+环回地址: 0000:...:0001  →  ::1
+未指定:   ::/128</div>
+
+  <h3>8.4 三类地址：单播、组播、任播（没有广播了）</h3>
+  <p>IPv6 只有<strong>单播、组播、任播</strong>三种，<strong>彻底取消了广播</strong>。单播地址分两部分：网络前缀（n 位，相当于 IPv4 网络号）＋ 接口标识（128−n 位，相当于主机号），常见全球单播前缀/接口标识各 64 位。</p>
+  <div class="tbl-wrap"><table class="tbl">
+    <tr><th>地址类型</th><th>前缀</th><th>用途</th></tr>
+    <tr><td>全球单播 GUA</td><td>2000::/3（001 开头）</td><td>相当于 IPv4 公网地址，全球唯一可路由</td></tr>
+    <tr><td>链路本地 LLA</td><td>FE80::/10</td><td>仅限本二层链路，不被路由器转发，每个接口必有一个</td></tr>
+    <tr><td>唯一本地 ULA</td><td>FC00::/7（实际用 FD00::/8）</td><td>相当于 IPv4 私网地址，只在内网用</td></tr>
+    <tr><td>组播</td><td>ff00::/8（11111111 开头）</td><td>一对多，只能做目的地址</td></tr>
+    <tr><td>环回</td><td>::1/128</td><td>本机测试</td></tr>
+  </table></div>
+  <h4>EUI-64：把 MAC 地址自动变成接口标识</h4>
+  <p>接口 ID 常用 EUI-64 自动生成：把 48 位 MAC 从中间一刀两断，中间插入 <strong>FFFE</strong>，再把第 7 位（全球/本地管理位）取反。例如 MAC <code>08-70-5A-90-1A-01</code> → 插入 FFFE → <code>08-70-5A-FF-FE-90-1A-01</code> → 第 7 位取反（08 的第 7 位 0 变 1）→ <strong>0A-70-5A-FF-FE-90-1A-01</strong>。</p>
+  <h4>任播：同一地址配给一组服务器，送到最近的那个</h4>
+  <p><strong>任播地址</strong>标识一组属于不同节点的接口，可以做源也可以做目的。多个 Web/DNS 服务器配同一个任播地址，网络沿最短路径把请求送到<strong>物理上最近</strong>的那一台，天然实现冗余和负载分担。</p>
+
+  <h3>8.5 ICMPv6 与 NDP：一个顶三个</h3>
+  <p>IPv6 的配套协议 <strong>ICMPv6（下一头号 58）</strong>功能比 ICMPv4 强大得多——它一个人取代了 IPv4 里的 ARP、IGMP 和 ICMPv4。差错类有：目的不可达(1)、包过长(2)、超时(3)、参数错误(4)；信息类有 Echo Request(128) / Echo Reply(129)。</p>
+  <p>最关键的是 <strong>NDP（邻居发现协议）</strong>：IPv6 取消了 ARP 的广播，改用 ICMPv6 的 <strong>NS 邻居请求(135)</strong> 和 <strong>NA 邻居通告(136)</strong> 做多播形式的地址解析。要解析某主机 MAC 时，把请求发到它对应的<strong>被请求节点组播地址 FF02::1:FFxx:xxxx/104</strong>（＝FF02::1:FF 加上单播地址低 24 位），只有目标本机会收。IPv6 组播 MAC 以 <strong>33-33</strong> 开头。</p>
+  <h4>网卡一启动的五个动作（SLAAC 即插即用）</h4>
+  <div class="stepper" id="st-ipv6">
+    <div class="stepbar"><div class="stepdots"></div></div>
+    <div class="stepbody"></div>
+    <div class="stepbtns"><button class="btn ghost prev">上一步</button><button class="btn next">下一步</button></div>
+  </div>
+
+  <h3>8.6 从 IPv4 过渡到 IPv6：三种机制</h3>
+  <div class="tbl-wrap"><table class="tbl">
+    <tr><th>机制</th><th>做法</th><th>适用阶段</th></tr>
+    <tr><td>双栈</td><td>设备同时跑 IPv4/IPv6 两套协议栈，按目的地址选栈</td><td>最基本，早期并存</td></tr>
+    <tr><td>隧道</td><td>把 IPv6 包整个塞进 IPv4 包里穿过 IPv4 网（或反过来）</td><td>IPv6 孤岛经 IPv4 骨干互通；后期反过来 IPv4 over IPv6</td></tr>
+    <tr><td>协议转换</td><td>NAT64＋DNS64 在纯 IPv4 和纯 IPv6 之间翻译地址协议</td><td>两纯栈网络要直接通信</td></tr>
+  </table></div>
+</section>
+
+<!-- ===== 模块九 ===== -->
+<section id="m9">
+  <div class="modtag"><em>模块 9</em> 把全世界组织成"自治系统"：OSPF 与 BGP</div>
+  <h2>一个机构管内部、机构之间讲政治：两级路由协议</h2>
+  <p>互联网太大了，不可能让每台路由器都跑同一个算法去算到全世界的路。于是按"管理机构"把路由器和网络切成一个个<strong>自治系统 AS</strong>——同一 AS 里的路由器互相连接、跑相同的路由协议；AS 之间再用另一套协议交换可达性信息。于是互联网有了两级路由：</p>
+  <div class="frame">
+    <div class="fseg h"><span class="b">内部网关协议 IGP</span><span class="s">AS 内部用，如 RIP、OSPF</span></div>
+    <div class="fseg t"><span class="b">外部网关协议 EGP</span><span class="s">AS 之间用，如 BGP-4</span></div>
+  </div>
+
+  <h3>9.1 OSPF：链路状态算法的工业级实现</h3>
+  <p><strong>OSPF（开放最短路径优先）</strong>是最典型的链路状态路由协议，也是互联网应用最广的 IGP 之一，它的基础就是模块二讲的 Dijkstra（SPF）算法。一条链路的费用（Cost）计算公式：</p>
+  <div class="formula">Cost = 100×10⁶ / 链路带宽(bps)</div>
+  <p>带宽越大、代价越小。它有三个核心要点：</p>
+  <ul>
+    <li>向本 AS <strong>所有</strong>路由器发送信息，用<strong>洪泛法</strong>；</li>
+    <li>发送的是"本路由器和哪些邻居相连、链路度量多少"的<strong>链路状态</strong>——只是自己知道的那部分事实，不是整张路由表；</li>
+    <li>只有链路状态<strong>变化时</strong>才洪泛，另外每隔约 30 分钟也刷新一次数据库。</li>
+  </ul>
+  <h4>分区：把洪泛圈在一个区域里</h4>
+  <p>OSPF 支持层次化区域划分。上层是<strong>主干区域（区域 0.0.0.0）</strong>，负责连通其他下层区域。把洪泛范围限制在区域内，大大减少全网通信量；区域内路由器只知道本区域完整拓扑，不用管其他区域。路由器角色分：内部路由器、区域边界路由器、骨干路由器、AS 边界路由器。</p>
+  <h4>OSPF 的其他特点</h4>
+  <p>不同链路可按 TOS 设不同代价；到同一目的有多条等代价路径时做<strong>多路径负载分担</strong>；路由器之间分组带鉴别（认证）；支持 VLSM 和 CIDR；每条链路状态带 32 位序号，越大越新。五类 OSPF 报文：<strong>Hello</strong>（发现邻居）、<strong>数据库描述 DD</strong>（通报有哪些更新）、<strong>链路状态请求 LSR</strong>、<strong>链路状态更新 LSU</strong>、<strong>链路状态确认 LSAck</strong>。</p>
+
+  <h3>9.2 BGP：AS 之间的"外交辞令"</h3>
+  <p><strong>BGP（边界网关协议）</strong>是典型的外部网关协议，完成 AS 之间的路由选择。它名义上也是一种距离向量协议，但和 RIP 那种"算最短距离"完全不同——AS 之间路径要穿好几个自治系统，根本没法算一个有意义的代价，所以 BGP 不追求"最佳路由"，只追求"一条能到目的、且不绕圈子的还行的路由"，并尊重各 AS 的<strong>策略</strong>（比如教育网不跑商业流量、某公司流量不经过对手公司中转）。</p>
+  <div class="story">
+    <div class="t">用"国家间的外交"来类比</div>
+    <p style="margin-bottom:0">OSPF 像一个国家内部统一的交通调度，追求全国最短路线。BGP 则像国与国之间的外交：每个国家（AS）选至少一个"发言人"（BGP 发言人，通常是边界路由器），国与国之间交换的不是"最短路径"，而是"可达性清单"——我这里能到哪些网络、中途经过哪些国家（AS 序列）。哪个方案对本国有利，由政治策略决定，而不是纯按距离。</p>
+  </div>
+  <h4>BGP 的关键事实</h4>
+  <ul>
+    <li>用 <strong>TCP</strong> 作传输协议（端口 179），因此自己不用做差错控制和重传；</li>
+    <li>用<strong>增量的、触发式</strong>更新——刚建邻时交换整张 BGP 路由表，之后只在变化时更新变化部分，不周期广播整张表；</li>
+    <li>通告前往目的网络要经过的<strong>一串 AS 号</strong>，靠它避免 AS 间环路；</li>
+    <li>交换信息的节点数量级是 AS 个数，远小于 AS 内的网络数，复杂度可控；</li>
+    <li>支持 CIDR，路由表项含目的网络前缀、下一跳、经过的 AS 序列。</li>
+  </ul>
+  <h4>BGP-4 的四种报文</h4>
+  <div class="tbl-wrap"><table class="tbl">
+    <tr><th>报文</th><th>作用</th></tr>
+    <tr><td>打开 OPEN</td><td>与相邻 BGP 发言人建立关系</td></tr>
+    <tr><td>更新 UPDATE</td><td>通告一条路由信息，或列出要撤销的多条路由</td></tr>
+    <tr><td>保活 KEEPALIVE</td><td>确认 OPEN、周期性证实邻站关系还活着</td></tr>
+    <tr><td>通知 NOTIFICATION</td><td>报告检测到的差错</td></tr>
+  </table></div>
+  <p>（RFC 2918 后又加了 ROUTE-REFRESH 报文，用来请求对等端重新通告。）</p>
+</section>
+
+<!-- ===== 模块十 ===== -->
+<section id="m10">
+  <div class="modtag"><em>模块 10</em> 新趋势：SDN、MPLS 与 SRv6</div>
+  <h2>把"算路"和"送包"彻底分开</h2>
+  <h3>10.1 SDN：软件定义网络</h3>
+  <p>传统网络里每台路由器自己一边算路由一边转发，像一群各自为政的小老板。<strong>SDN（软件定义网络）</strong>做的事是把网络设备的<strong>控制面与数据面解耦</strong>：转发设备（如 OpenFlow 交换机）只管闷头按表转发，"算路、编排、调度"的大脑收归一台集中的<strong>SDN 控制器</strong>。控制器向上通过<strong>北向接口</strong>对接网络应用，向下通过<strong>南向接口（如 OpenFlow）</strong>管理转发设备。</p>
+  <div class="frame">
+    <div class="fseg t"><span class="b">网络应用</span><span class="s">北向接口</span></div>
+    <div class="fseg h"><span class="b">SDN 控制器（大脑）</span><span class="s">全局视野、集中控制、编排</span></div>
+    <div class="fseg p"><span class="b">转发设备（手脚）</span><span class="s">OpenFlow · 只按流表转发</span></div>
+  </div>
+  <p>优点：<strong>网络可编程</strong>（用 API/编程指令管理网络）、<strong>抽象化</strong>（硬件变成资源池，不绑死厂商）、<strong>业务灵活调度</strong>、<strong>集中管理</strong>（管理员一眼看见全网状态、实时调优）、<strong>开放</strong>（开放 API 支持云编排，OpenFlow 还能跨厂商控设备）。工作流程：控制器和转发设备先建控制通道 → 收集设备/接口/标签资源信息、用拓扑协议摸清全网 → 控制器算好交换路径和转发表 → 下发给转发设备 → 状态一变就重算重下。</p>
+
+  <h3>10.2 MPLS：只在边缘看 IP，核心按标签转发</h3>
+  <p>传统路由器每跳都得拆开整个 IP 头、最长前缀匹配一次，慢。<strong>MPLS（多协议标签交换）</strong>的思路：IP 包进入 MPLS 网络时，入口<strong>标记边缘路由器</strong>分析一次 IP 头、给它压上一个短固定长度的<strong>标签</strong>；此后 MPLS 网内所有核心路由器<strong>只看标签、不看 IP</strong>，按标签快速交换转发；等包离开 MPLS 网络时，出口边缘路由器把标签弹出。这样昂贵的 IP 最长匹配只在网络边缘做一次，核心转发变成简单的标签查表，速度大增。</p>
+
+  <h3>10.3 SRv6：让源端自己写好全程路单</h3>
+  <p><strong>段路由 SRv6</strong>把转发路径切成一个个"分段"，在路径头结点处把<strong>段列表（Segment List）</strong>——一串要依次经过的 IPv6 地址——直接写进包里；中间节点不用维持任何路径状态，只按包里携带的段信息转发。它基于 IPv6 转发平面，复用 IPv6 简洁易扩展的首部，具备<strong>源路由、无状态、集中控制</strong>的特点。</p>
+  <p>技术实现上，IPv6 路由扩展头 RH 新增一种类型 <strong>SRH</strong>（基本头 Next Header=43，Routing Type=4），里面存着有序的段列表和一个 <strong>Segments Left（SL）</strong>指针。转发规则：<strong>每经过一个 SRv6 节点，SL 减 1，同时把 IPv6 目的地址 DA 换成 Segment List[SL]</strong>——比如出发时 DA=Segment List[n]、SL=n，每跳向列表尾部推进一格，直到 SL=0、DA=Segment List[0] 到达终点。SRH 中的段经过节点后不弹出，所以还能做路径回溯。</p>
+</section>
+
+<!-- ===== 知识地图 ===== -->
+<section id="endmap">
+  <h2>最后：把整张知识地图收进脑子里</h2>
+  <div class="card">
+    <p style="margin-bottom:8px"><strong>一条主线</strong>：网络层负责把数据包从信源端到信宿，核心两件事是交换（建临时连接）和路由（选最佳路径）。TCP/IP 选择了"无连接、尽最大努力"的数据报服务，把可靠性推给端系统 TCP。</p>
+    <p style="margin-bottom:8px"><strong>地址体系</strong>：IPv4 32 位，分类编址 A/B/C/D/E → 子网划分（借主机号当子网号＋子网掩码）→ CIDR（斜线记法、任意长度前缀、路由聚合/超网）；配地址靠 DHCP（DISCOVER/OFFER/REQUEST/ACK，租期 50%/87.5% 续租），省地址靠 NAT（Basic 一对一、NAPT 端口复用、NAT Server 对外映射）。</p>
+    <p style="margin-bottom:8px"><strong>IP 数据报</strong>：20 字节固定首部，版本/IHL/DS/总长度/标识/标志(MF,DF)/片偏移(8 字节为单位)/TTL(每跳减 1)/协议号/首部校验和/源目的 IP；MTU 不够就分片（同标识、偏移累加、MF 标记尾片），目的端重组。</p>
+    <p style="margin-bottom:8px"><strong>转发与选路</strong>：路由器查路由表，<strong>最长前缀匹配</strong>选最具体的那条；直连→特定主机路由→网络路由→默认路由六步流程。两大路由算法：距离向量（听邻居二手消息，RIP）与链路状态（洪泛全网地图＋各自 Dijkstra，OSPF）；AS 内跑 IGP、AS 间跑 BGP（讲策略、不追求最佳、跑在 TCP 上）。</p>
+    <p style="margin-bottom:8px"><strong>三个配套协议</strong>：ARP（广播请求 IP→MAC）、ICMP（差错报告，ping/tracert）、IGMP（多播组管理，D 类地址＋IP 低 23 位映射到 01-00-5E MAC）。</p>
+    <p style="margin-bottom:0"><strong>新技术方向</strong>：IPv6 128 位地址、固定 40 字节头、扩展头链表、ICMPv6/NDP 取代 ARP/IGMP/ICMPv4、双栈/隧道/NAT64 过渡；SDN 控制面与数据面分离；MPLS 边缘压标签核心按标签转；SRv6 源端写段列表、逐跳推进 SL。</p>
+  </div>
+</section>
+
+<footer><p>本资料基于课程课件《计算机网络（胡亮 等编著）》第 5 章整理，仅供学习交流使用，具体教学要求以任课教师通知为准。</p></footer>
+</div>
+<button class="topbtn" id="topBtn" onclick="window.scrollTo({top:0})">↑</button>
+</div>
+</div>
+<script>
+// tabs
+document.querySelectorAll('.tabs').forEach(function(g){
+  g.querySelectorAll('.tabbtn').forEach(function(b){
+    b.addEventListener('click',function(){
+      g.querySelectorAll('.tabbtn').forEach(function(x){x.classList.remove('on')});
+      g.querySelectorAll('.tabpanel').forEach(function(x){x.classList.remove('on')});
+      b.classList.add('on');
+      g.querySelector('#'+b.dataset.t).classList.add('on');
+    });
+  });
+});
+// 通用分步演示
+function createStepper(id,steps){
+  var cur=0,box=document.getElementById(id);
+  if(!box)return;
+  var dots=box.querySelector('.stepdots'),body=box.querySelector('.stepbody'),
+      prev=box.querySelector('.prev'),next=box.querySelector('.next');
+  steps.forEach(function(_,i){
+    if(i>0){var l=document.createElement('span');l.className='stepline';dots.appendChild(l);}
+    var d=document.createElement('span');d.className='stepdot';d.textContent=i+1;dots.appendChild(d);
+  });
+  function render(){
+    var ds=dots.querySelectorAll('.stepdot');
+    ds.forEach(function(d,i){d.classList.toggle('on',i<=cur)});
+    body.innerHTML='<div class="st">'+steps[cur].t+'</div>'+steps[cur].c;
+    prev.disabled=cur===0;
+    next.textContent=cur===steps.length-1?'已完成':'下一步';
+    next.classList.toggle('o',cur<steps.length-1);
+  }
+  prev.addEventListener('click',function(){if(cur>0){cur--;render();}});
+  next.addEventListener('click',function(){if(cur<steps.length-1){cur++;render();}});
+  render();
+}
+// 距离向量路由表收敛（A 的视角）
+createStepper('st-dv',[
+  {t:'轮次 0：只知道自己直连的网',c:'刚开机，A 只知道直连的网 1、网 3、网 5（距离 1，下一跳"-"表示直连）。其余网络 2、4、6、7 全是"距离无穷大、下一跳未知"。'},
+  {t:'轮次 1：把邻居的路由 +1 步',c:'A 从邻居 B、F、E 听到它们的距离。比如 B 说"我到网 2 距离 1"，A 到 B 是 1 步，所以 A 估"到网 2 距离 2，下一跳 B"。于是 A 的表：网 2:2:B、网 4:2:F、网 7:2:E。'},
+  {t:'轮次 2：继续扩散、刷新',c:'邻居们又带来新消息。A 从 B 得知"到网 6 距离 2"，+1 后 A 估网 6 距离 3、下一跳 B。此时 A 的网 6 变成 3:B，其余基本稳定。'},
+  {t:'轮次 3：收敛',c:'再交换一轮，各路由器的表不再变化——这就叫"收敛"。每个路由器都不知道全网真实拓扑，只知道三件事：直连哪些网、到各网大概多远、往哪个下一跳送。这就是距离向量的本质：听邻居的二手距离。'}
+]);
+// 子网划分 例2
+createStepper('st-subnet',[
+  {t:'第 1 步：拆出掩码 255.255.255.248 的最后一个字节',c:'248 的二进制 = 11111000。说明前 5 位是网络/子网位，后 3 位是主机位。所以可用主机数 = 2<sup>3</sup> − 2 = 6 台。'},
+  {t:'第 2 步：IP 最后一字节 122 与掩码 11111000 按位与',c:'122 的低 8 位：01111010。和掩码 11111000 做与，主机位（低 3 位）被掩成 0，得 01111000 = 120。<br>所以子网网络地址 = <strong>192.168.150.120</strong>。'},
+  {t:'第 3 步：广播地址 = 网络地址主机位全 1',c:'网络地址 192.168.150.120 的主机位（低 3 位）填全 1：01111<b>111</b> = 127。<br>所以广播地址 = <strong>192.168.150.127</strong>。'},
+  {t:'第 4 步：可用范围与主机数',c:'可用地址 = 网络地址+1 ～ 广播地址−1，即 <strong>192.168.150.121 ～ 192.168.150.126</strong>，共 6 个。主机数 = 2<sup>3</sup>−2 = <strong>6</strong>。'},
+  {t:'对照课件答案',c:'课件结果：子网地址 192.168.150.120，广播 192.168.150.127，范围 .121～.126，主机数 2<sup>3</sup>−2=6。完全吻合。'}
+]);
+// DHCP 四步
+createStepper('st-dhcp',[
+  {t:'① 发现 DISCOVER（客户端广播）',c:'新客户端不知道服务器在哪，向 255.255.255.255 广播 DHCP DISCOVER，包里带自己的 MAC、请求参数列表、广播标志。同一网段所有 DHCP 服务器都能听到。'},
+  {t:'② 提供 OFFER（服务器回应）',c:'服务器从与接收接口同网段的地址池挑一个可用 IP，回 DHCP OFFER 给客户端，预告"给你留这个地址"。'},
+  {t:'③ 选择 REQUEST（客户端广播宣布）',c:'客户端一般只收下第一个到的 OFFER，再广播 DHCP REQUEST，写明"我选这台服务器这个地址"。其他没被选的服务器听到后把预留地址收回。'},
+  {t:'④ 确认 ACK（服务器确认）',c:'被选中的服务器回 DHCP ACK，正式把这个 IP（连同掩码、网关、DNS、租期）分给客户端。客户端用起来，四步完成。'},
+  {t:'之后：续租 T1/T2',c:'租期到 50% 时客户端单播求续；到 87.5% 还没续上就改广播求续；收到 NACK 就重新发 DISCOVER。不想用了主动发 RELEASE 归还地址。'}
+]);
+// 最长前缀匹配
+createStepper('st-lpm',[
+  {t:'目的 192.168.2.2：两条路由都匹配',c:'192.168.0.0/16（前 16 位 192.168）匹配；192.168.2.0/24（前 24 位 192.168.2）也匹配。两条都命中。'},
+  {t:'选前缀更长的那条',c:'/24 比 /16 长，更具体。于是选择 192.168.2.0/24 这条，把包发给下一跳 <strong>20.1.1.2</strong>，而不是 /16 对应的 10.1.1.2。'},
+  {t:'目的 192.168.3.2：只有一条匹配',c:'/16 匹配；/24 里 192.168.2.0 不匹配（第三字节是 3 不是 2）；192.168.3.0/24 匹配。唯一命中的就是它，发给下一跳 <strong>30.1.1.2</strong>。'},
+  {t:'小结',c:'最长前缀匹配＝逐位比到最长的那条。/16 是聚合的"大路"，/24 是更精确的"小路"——能走小路就走小路，小路没有才退到大路，大路也没有才走默认路由。'}
+]);
+// IPv6 网卡启动五步
+createStepper('st-ipv6',[
+  {t:'第 1 步：自动生成链路本地地址',c:'网卡一启动就按算法（EUI-64 或随机）生成 FE80::/10 的链路本地地址，如 FE80::7207:12FF:FE34:5678。它只在本二层链路有效，不被路由器转发，用于自动配置和邻居发现。'},
+  {t:'第 2 步：生成被请求节点多播地址',c:'每个单播地址对应一个被请求节点多播地址 = FF02::1:FF + 单播地址低 24 位，如 ff02::1:ff34:5678。别人要解析我时，把请求发到这个多播地址。'},
+  {t:'第 3 步：多播成员报告',c:'用 MLDv2 单向声明"我要加入 ff02::1:ff34:5678 这个多播组"，不要求回应。目的是减少网络里多余的多播流量。'},
+  {t:'第 4 步：重复地址检测 DAD',c:'发一个 NS（邻居请求，135）去问"这个地址有人用吗"，目标就是自己刚生成的地址。等不到 NA 应答，就说明地址没冲突、可以放心用。'},
+  {t:'第 5 步：无状态自动配置 SLAAC',c:'主动发 RS（路由器请求）或等路由器定期发 RA（路由器通告），从 RA 拿到网络前缀，拼上自己的接口标识自动生成全球单播地址，并把网关指向路由器的链路本地地址——全程无需 DHCP 服务器。'}
+]);
+// back to top
+var tb=document.getElementById('topBtn');
+window.addEventListener('scroll',function(){tb.style.display=window.scrollY>500?'block':'none';});
+document.querySelector('.side').addEventListener('click',function(e){
+  if(e.target.tagName==='A'&&window.innerWidth<=900)this.classList.remove('open');
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>应用层 · 豆包版</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%23173b5e'/><path d='M28 30h44v14H28z M28 52h44v14H28z M28 74h28v12H28z' fill='%23e8743b'/></svg>">
+<style>
+:root{
+  --ink:#173b5e; --ink2:#2f5b83; --org:#e8743b; --org2:#f3a06f;
+  --blue-bg:#eef4f9; --org-bg:#fdf1e8; --line:#d8e2ec; --gray:#5f7185;
+  --paper:#ffffff; --soft:#f6f9fc; --green:#2e7d5b; --red:#c0392b;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;color:#233242;background:var(--paper);line-height:1.85;font-size:15px}
+h1,h2,h3,h4{font-family:Georgia,"Songti SC","SimSun",serif;color:var(--ink);line-height:1.35}
+a{color:var(--ink2);text-decoration:none}
+.layout{display:flex;min-height:100vh}
+.side{width:238px;background:var(--ink);color:#cfe0f0;padding:26px 0;position:fixed;top:0;bottom:0;left:0;overflow-y:auto;z-index:40}
+.side .brand{padding:0 22px 18px;border-bottom:1px solid rgba(255,255,255,.14);margin-bottom:14px}
+.side .brand b{display:block;color:#fff;font-size:17px;font-family:Georgia,serif}
+.side .brand span{font-size:12px;color:var(--org2);letter-spacing:1px}
+.side a{display:block;color:#c4d6e8;padding:9px 22px;font-size:13.5px;border-left:3px solid transparent}
+.side a:hover{background:rgba(255,255,255,.08);color:#fff;border-left-color:var(--org)}
+.side .grp{padding:14px 22px 5px;font-size:11px;color:#7fa3c4;letter-spacing:2px}
+.main{margin-left:238px;flex:1;min-width:0}
+.wrap{max-width:900px;margin:0 auto;padding:0 34px}
+.hero{background:linear-gradient(135deg,#173b5e 0%,#24557e 60%,#2f6896 100%);color:#eaf1f8;padding:58px 0 50px;margin-bottom:38px;position:relative;overflow:hidden}
+.hero::after{content:"";position:absolute;right:-60px;top:-60px;width:260px;height:260px;border:2px solid rgba(232,116,59,.35);border-radius:50%}
+.hero::before{content:"";position:absolute;right:30px;bottom:-90px;width:180px;height:180px;border:2px solid rgba(255,255,255,.12);border-radius:50%}
+.hero .kicker{font-size:12px;letter-spacing:3px;color:var(--org2);margin-bottom:14px;position:relative}
+.hero h1{color:#fff;font-size:34px;margin-bottom:16px;position:relative}
+.hero p{max-width:640px;color:#cfe0f0;font-size:15px;position:relative}
+section{margin-bottom:46px;scroll-margin-top:20px}
+.modtag{display:flex;align-items:center;gap:9px;background:var(--org);color:#fff;font-size:12px;font-weight:700;padding:7px 16px;border-radius:4px;letter-spacing:1px;margin-bottom:14px;width:100%}
+.modtag em{font-style:normal;background:rgba(255,255,255,.25);border-radius:2px;padding:0 7px;font-family:Georgia,serif}
+h2{font-size:26px;margin-bottom:14px;padding-bottom:10px;border-bottom:2px solid var(--line)}
+h3{font-size:19.5px;margin:26px 0 10px;color:var(--ink)}
+h4{font-size:16px;margin:18px 0 7px;color:var(--ink2)}
+p{margin-bottom:12px}
+ul,ol{margin:8px 0 14px 22px}
+li{margin-bottom:6px}
+strong{color:var(--ink)}
+.card{background:var(--soft);border:1px solid var(--line);border-radius:9px;padding:18px 20px;margin:16px 0}
+.story{background:var(--org-bg);border-left:4px solid var(--org);border-radius:0 8px 8px 0;padding:16px 20px;margin:16px 0}
+.story .t{font-weight:700;color:var(--org);margin-bottom:5px;font-size:14px}
+.note{background:var(--blue-bg);border-left:4px solid var(--ink2);border-radius:0 8px 8px 0;padding:14px 18px;margin:15px 0;font-size:14px}
+.warn{background:#fdeee9;border-left:4px solid var(--red);border-radius:0 8px 8px 0;padding:14px 18px;margin:15px 0;font-size:14px}
+.tbl{width:100%;border-collapse:collapse;margin:15px 0;font-size:13.5px;background:#fff}
+.tbl th{background:var(--ink);color:#fff;padding:10px 12px;text-align:left;font-weight:600}
+.tbl td{padding:9px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+.tbl tr:nth-child(even) td{background:var(--soft)}
+.tbl-wrap{overflow-x:auto}
+.frame{display:flex;flex-wrap:wrap;border:1px solid var(--line);border-radius:8px;overflow:hidden;margin:16px 0}
+.fseg{padding:12px 10px;text-align:center;min-width:64px;flex:1;border-right:1px solid var(--line)}
+.fseg .b{display:block;font-weight:700;font-size:13.5px;margin-bottom:3px}
+.fseg .s{display:block;font-size:11.5px;color:var(--gray)}
+.fseg.h{background:var(--blue-bg)}.fseg.h .b{color:var(--ink)}
+.fseg.p{background:#fff}.fseg.p .b{color:#333}
+.fseg.t{background:var(--org-bg)}.fseg.t .b{color:var(--org)}
+.tabs{margin:16px 0}
+.tabbtns{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:0}
+.tabbtn{padding:9px 18px;background:var(--blue-bg);border:1px solid var(--line);border-bottom:none;border-radius:8px 8px 0 0;cursor:pointer;font-size:13.5px;color:var(--ink2);font-family:inherit}
+.tabbtn.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.tabpanel{display:none;border:1px solid var(--line);border-radius:0 8px 8px 8px;padding:18px 20px;background:#fff}
+.tabpanel.on{display:block}
+details{background:var(--soft);border:1px solid var(--line);border-radius:8px;padding:12px 18px;margin:12px 0}
+summary{cursor:pointer;font-weight:700;color:var(--ink2)}
+details[open] summary{margin-bottom:9px}
+.stepper{background:#fff;border:1px solid var(--line);border-radius:10px;padding:20px;margin:16px 0}
+.stepbar{display:flex;gap:8px;align-items:center;margin-bottom:15px;flex-wrap:wrap}
+.stepdot{width:28px;height:28px;border-radius:50%;background:var(--line);color:var(--gray);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;font-family:Georgia,serif}
+.stepdot.on{background:var(--org);color:#fff}
+.stepline{flex:1;height:2px;background:var(--line);min-width:14px}
+.stepbody{min-height:92px;background:var(--soft);border-radius:8px;padding:15px 18px;margin-bottom:14px}
+.stepbody .st{font-weight:700;color:var(--ink);margin-bottom:5px}
+.stepbtns{display:flex;gap:10px}
+.btn{padding:8px 20px;background:var(--ink);color:#fff;border:none;border-radius:6px;cursor:pointer;font-family:inherit;font-size:13.5px}
+.btn.o{background:var(--org)}
+.btn.ghost{background:#fff;color:var(--ink2);border:1px solid var(--line)}
+.btn:disabled{opacity:.45;cursor:default}
+.bits{font-family:Consolas,"Courier New",monospace;font-size:13px;letter-spacing:1px;background:var(--blue-bg);padding:10px 14px;border-radius:6px;overflow-x:auto;margin:8px 0}
+.bits .ins{color:var(--org);font-weight:700}
+.bits .flag{color:var(--red);font-weight:700}
+.formula{background:var(--blue-bg);border-radius:7px;padding:12px 18px;font-family:Georgia,serif;text-align:center;margin:12px 0;color:var(--ink)}
+.pill{display:inline-block;background:var(--blue-bg);color:var(--ink);border:1px solid var(--line);border-radius:20px;padding:2px 12px;font-size:12.5px;margin:2px 3px}
+.pill.o{background:var(--org-bg);color:var(--org);border-color:#f0cdb4}
+footer{border-top:2px solid var(--line);padding:26px 0 40px;color:var(--gray);font-size:12.5px}
+.topbtn{position:fixed;right:26px;bottom:26px;width:44px;height:44px;border-radius:50%;background:var(--ink);color:#fff;border:none;cursor:pointer;font-size:18px;display:none;z-index:50}
+.menu-toggle{display:none}
+@media(max-width:900px){
+  .side{transform:translateX(-100%);transition:transform .25s;width:260px}
+  .side.open{transform:translateX(0)}
+  .main{margin-left:0}
+  .menu-toggle{display:flex;position:fixed;top:14px;left:14px;z-index:60;background:var(--ink);color:#fff;border:none;width:44px;height:44px;border-radius:8px;align-items:center;justify-content:center;font-size:20px}
+  .hero{padding:66px 0 38px}
+  .wrap{padding:0 18px}
+  .hero h1{font-size:26px}
+  .fseg{min-width:90px}
+}
+</style>
+</head>
+<body>
+<button class="menu-toggle" onclick="document.querySelector('.side').classList.toggle('open')" aria-label="打开目录"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+<div class="layout">
+<nav class="side">
+  <div class="brand"><b>应用层</b><span>豆包版 · 初学者精讲</span></div>
+  <div class="grp">启程</div>
+  <a href="#start">应用程序怎么对话</a>
+  <div class="grp">七个模块</div>
+  <a href="#m1">一 · DNS 域名系统</a>
+  <a href="#m2">二 · 电子邮件</a>
+  <a href="#m3">三 · 文件传输 FTP/TFTP</a>
+  <a href="#m4">四 · WWW 与 HTTP</a>
+  <a href="#m5">五 · 流媒体应用</a>
+  <a href="#m6">六 · CDN 与 P2P</a>
+  <a href="#endmap">知识地图回顾</a>
+</nav>
+<div class="main">
+<header class="hero">
+  <div class="wrap">
+    <div class="kicker">CHAPTER 7 · APPLICATION LAYER</div>
+    <h1>应用层：真正为你所用的<br>那些网络服务，都长在这一层</h1>
+    <p>前面几层都是"铺路"，到了应用层才是你每天真正在用的东西——上网查域名、收发邮件、浏览网页、下载文件、看视频。这一层不再讲底层怎么传比特，而是规定"两个应用进程之间该按什么规矩对话"。这一版我们把 DNS、邮件、HTTP、FTP、流媒体、CDN/P2P 一条线串起来，看每种服务到底在解决什么问题。</p>
+  </div>
+</header>
+<div class="wrap">
+
+<!-- ===== 启程 ===== -->
+<section id="start">
+  <h2>先建立整体印象：应用程序怎么对话</h2>
+  <p>在 TCP/IP 分层模型里，应用层在传输层之上，是最高层——再往上就是某个具体应用了。它要做的事很朴素：规定不同主机上的应用进程通信时该遵循的协议和约定。那两个进程到底怎么分工？课件给出三种模式。</p>
+  <div class="frame">
+    <div class="fseg h"><span class="b">C/S 客户/服务器</span><span class="s">主从式，服务器一直等着服务</span></div>
+    <div class="fseg h"><span class="b">B/S 浏览器/服务器</span><span class="s">C/S 的特例，客户端就是浏览器</span></div>
+    <div class="fseg h"><span class="b">P2P 对等</span><span class="s">每个节点既服务别人，也请求服务</span></div>
+  </div>
+  <h3>C/S：服务与被服务的关系</h3>
+  <p>C/S 是主从架构：<strong>服务器是"主"，一直运行着、被动等待请求；客户是"从"，主动发起请求</strong>。客户必须知道服务器的 IP 地址才能发请求；服务器却不需要事先知道客户在哪，谁来都接。服务器以多进程方式同时服务多个客户，是个可缩放的架构。传统的文件传输、电子邮件、远程登录大多基于 C/S。</p>
+  <h3>B/S：把客户端换成浏览器</h3>
+  <p>B/S 就是 C/S 的特例——客户端软件换成了浏览器，采取"浏览器请求、服务器响应"。通常是三层架构：<strong>展现层</strong>（浏览器只管显示网页）、<strong>处理层</strong>（Web 服务器跑业务逻辑）、<strong>数据层</strong>（数据库服务器管数据）。好处是界面统一、升级只需改服务器端、用标准 TCP/IP+HTTP 易扩展。</p>
+  <h3>P2P：人人都是客户，人人也是服务器</h3>
+  <p>P2P 是分布式对等模型：任意两个运行 P2P 软件的主机都能直接通信，不区分谁是请求方、谁是提供方。从本质看它仍用了 C/S，但强调"对等"——每个进程既当客户又当服务器。音视频流量推动了 P2P 的发展，它把网络流量从"垂直方向（都找中心服务器）"变成"水平方向（节点之间互传）"。</p>
+  <div class="story">
+    <div class="t">用"餐厅"来类比三种模式</div>
+    <p style="margin-bottom:0">C/S 是你（客户）主动去餐厅（服务器）点餐，餐厅一直开门等着；B/S 是你不用装专门的点餐 App，直接用浏览器这个"万能客户端"下单；P2P 则像一个聚餐群，群里每个人既可以把自己家的菜分享给别人，也能从别人那里夹菜——没有一个固定的"大厨中心"。</p>
+  </div>
+  <h3>服务器怎么同时伺候很多人：循环 vs 并发</h3>
+  <div class="tbl-wrap"><table class="tbl">
+    <tr><th>工作方式</th><th>典型协议</th><th>做法</th></tr>
+    <tr><td>循环方式 iterative</td><td>无连接 UDP</td><td>一次只服务一个客户，请求在队列里排队，按先后顺序处理（阻塞）</td></tr>
+    <tr><td>并发方式 concurrent</td><td>面向连接 TCP</td><td>主进程在熟知端口等连接，每来一个客户就 fork 一个从属进程用临时套接字专门伺候，主进程继续等下一个</td></tr>
+  </table></div>
+  <div class="note">记住：UDP 简单、常配循环服务；TCP 连接多、常配并发服务（主进程＋从属进程）。后面每个应用协议，你都可以带着"它是 C/S 还是 P2P、用 TCP 还是 UDP、端口是几号"这三个问题去看。</div>
+</section>
+
+<!-- ===== 模块一：DNS ===== -->
+<section id="m1">
+  <div class="modtag"><em>模块 1</em> DNS 域名系统</div>
+  <h2>把好记的名字，翻译成机器用的 IP 地址</h2>
+  <p>计算机之间通信靠的是 IP 地址，可 IP 地址又长又没语义、谁也记不住。于是人们给机器取了有意义的名字（域名），但通信时还得用 IP。<strong>DNS 域名系统就是来解决这个矛盾的：把域名映射成 IP 地址。</strong></p>
+  <div class="story">
+    <div class="t">DNS 就像 114 查号台</div>
+    <p style="margin-bottom:0">你想给"吉林大学官网"打电话，可你只记得名字、不记得号码。你拨 114 查号台（本地域名服务器），查号台要么自己查到号码告诉你（递归），要么说"这个我得帮你问总台、总台告诉你问哪个分台"（迭代）。DNS 是一个联机的、<strong>分布式数据库系统</strong>，不是哪一台机器单打独斗。</p>
+  </div>
+  <h3>1.1 域名是一棵倒过来的树</h3>
+  <p>早期 ARPANET 靠一个 hosts.txt 文件列出所有主机名和 IP，主机都去一个站点下载。互联网一变大，这文件就臃肿到没法管了。1987 年 RFC 1034/1035 发布 DNS，改用<strong>层次化、基于域的命名树</strong>加分布式数据库。域名从右往左、从大到小：</p>
+  <div class="frame">
+    <div class="fseg h"><span class="b">根（.）</span><span class="s">树根</span></div>
+    <div class="fseg h"><span class="b">顶级域</span><span class="s">.com .cn .edu …</span></div>
+    <div class="fseg h"><span class="b">二级域名</span><span class="s">.jlu .tsinghua …</span></div>
+    <div class="fseg h"><span class="b">三级/四级</span><span class="s">www mail cs …</span></div>
+  </div>
+  <p>域名各分量用小数点 "." 隔开，总长不超过 255 个字符，每个分量不超过 63 字符，合法域名至少含一个点。例如 www.jlu.edu.cn：cn 是国家顶级域、edu 是二级域、jlu 是三级、www 是四级。</p>
+  <h4>顶级域名分三类</h4>
+  <div class="tbl-wrap"><table class="tbl">
+    <tr><th>类别</th><th>例子</th><th>说明</th></tr>
+    <tr><td>国家顶级域 ccTLD</td><td>.cn 中国 / .us 美国 / .uk 英国</td><td>目前 300 多个</td></tr>
+    <tr><td>基础设施域 .arpa</td><td>in-addr.arpa、ip6.arpa</td><td>专用于互联网基础设施（如反向解析）</td></tr>
+    <tr><td>通用顶级域 gTLD</td><td>.com .net .org .edu .gov .mil .info …</td><td>早期 20 个，2012 年起公司名也可做顶级域，截至 2020 已 1200 多个</td></tr>
+  </table></div>
+  <p>我国 .cn 下的二级域名分三类：<strong>类别域名 7 个</strong>（.edu.cn 教育、.gov.cn 政府、.org.cn 非营利、.net.cn 网络、.com.cn 工商金融、.ac.cn 科研、.mil.cn 国防）；<strong>行政区域名 34 个</strong>（bj 北京、he 河北……每个两个字母）；以及无类别域名。域名由 ICANN 统一管理，.edu.cn 下三级域名归 CERNET 管，其余归 CNNIC 管。</p>
+
+  <h3>1.2 四类域名服务器</h3>
+  <div class="tbl-wrap"><table class="tbl">
+    <tr><th>类型</th><th>管什么</th></tr>
+    <tr><td>根域名服务器</td><td>知道<strong>所有</strong>顶级域服务器的地址；全球共 13 套（a~m.rootservers.net），靠任播部署成 1700 多个节点。它不直接给 IP，而是告诉你下一步去找哪个顶级域服务器</td></tr>
+    <tr><td>顶级域服务器 TLD</td><td>管理该顶级域下所有二级域，收到查询给最终结果或指下一步</td></tr>
+    <tr><td>权限域名服务器</td><td>保存所辖"区（zone）"里主机名到 IP 的映射，主机都在它这里注册登记</td></tr>
+    <tr><td>本地域名服务器</td><td>每个 ISP 至少一个，离用户最近；主机发查询先交给它，也叫递归解析器</td></tr>
+  </table></div>
+
+  <h3>1.3 递归查询 vs 迭代查询</h3>
+  <p>主机向本地域名服务器查，一般用<strong>递归查询</strong>（你就帮我查到到底，别让我来回跑）；本地服务器向根服务器查，一般用<strong>迭代查询</strong>（你告诉我下一步找谁，我自己再去）。DNS 查询用 <strong>UDP 数据报，目的端口 53</strong>（用 UDP 是为了省开销）。</p>
+  <div class="stepper" id="st-dns">
+    <div class="stepbar"><div class="stepdots" style="display:flex;gap:8px;align-items:center;flex-wrap:wrap"></div></div>
+    <div class="stepbody"></div>
+    <div class="stepbtns"><button class="btn ghost prev">上一步</button><button class="btn next">下一步</button></div>
+  </div>
+  <div class="note">课件实例：查 <strong>www.jlu.edu.cn</strong> → 客户机先问本地服务器（递归）→ 本地服务器迭代地问根 → .cn → .edu.cn → 权限服务器，最终拿到 IP <strong>202.198.16.80</strong>，客户再用这个 IP 去发 HTTP 请求。</div>
+
+  <h3>1.4 DNS 报文长什么样</h3>
+  <p>DNS 报文分三部分：<strong>首部（基础结构）＋问题部分＋资源记录</strong>。查询和响应结构基本相同。首部 6 个字段各 2 字节：</p>
+  <div class="frame">
+    <div class="fseg h"><span class="b">标识 ID</span><span class="s">2B，请求与响应相同</span></div>
+    <div class="fseg h"><span class="b">标志 Flags</span><span class="s">2B</span></div>
+    <div class="fseg h"><span class="b">问题数</span><span class="s">2B</span></div>
+    <div class="fseg h"><span class="b">资源记录数</span><span class="s">2B</span></div>
+    <div class="fseg h"><span class="b">授权数</span><span class="s">2B</span></div>
+    <div class="fseg h"><span class="b">附加数</span><span class="s">2B</span></div>
+  </div>
+  <p>标志字段按位分：<strong>QR</strong>（0 请求 / 1 响应）、<strong>Opcode</strong>（0 标准查询 / 1 反向 / 2 服务器状态）、<strong>AA</strong>（授权应答）、<strong>TC</strong>（响应超 512 字节被截断）、<strong>RD</strong>（期望递归）、<strong>RA</strong>（服务器支持递归）、Z（保留必须为 0）、<strong>Rcode</strong>（返回码：0 无错 / 1 格式错 / 2 服务器失败 / 3 域名不存在 / 4 不支持查询类型 / 5 拒绝）。</p>
+  <p><strong>问题部分</strong>：查询名（要查的域名）＋查询类型＋查询类（通常 1=IN 互联网地址）。<strong>资源记录</strong>只有响应里才有，格式是：域名、类型、类、生存时间 TTL、资源数据长度、资源数据。</p>
+  <h4>常见资源记录类型</h4>
+  <div class="tbl-wrap"><table class="tbl">
+    <tr><th>类型</th><th>name 是什么</th><th>value 是什么</th></tr>
+    <tr><td>A</td><td>主机名</td><td>IPv4 地址</td></tr>
+    <tr><td>AAAA</td><td>主机名</td><td>IPv6 地址</td></tr>
+    <tr><td>CNAME</td><td>别名</td><td>规范主机名</td></tr>
+    <tr><td>NS</td><td>域名</td><td>管理它的权限域名服务器主机名</td></tr>
+    <tr><td>MX</td><td>域名</td><td>关联的 SMTP 邮件服务器名</td></tr>
+    <tr><td>PTR</td><td>IP 地址</td><td>对应的域名（反向解析）</td></tr>
+    <tr><td>SOA</td><td>域名</td><td>该 DNS 区域的权限信息</td></tr>
+    <tr><td>TXT</td><td>域名</td><td>说明文字</td></tr>
+  </table></div>
+  <div class="note"><strong>高速缓存</strong>：每个域名服务器都缓存最近用过的名字映射，靠 TTL 决定缓存多久（课件举例每项约存两天），大大减轻根服务器负担、减少网络往返。<strong>DNSSEC</strong> 则用私钥签名、公钥验证（RRSIG/DNSKEY/DS），保证应答真实完整、防篡改。</div>
+</section>
+<!-- ===== 模块二：电子邮件 ===== -->
+<section id="m2">
+  <div class="modtag"><em>模块 2</em> 电子邮件：SMTP / POP3 / IMAP / MIME</div>
+  <h2>异步通信的鼻祖：把信写好，慢慢送到</h2>
+  <p>电子邮件是互联网上最广泛的应用之一，是一种<strong>异步</strong>通信——你发完不用等对方立刻看。它有三个主要构件：<strong>用户代理</strong>（邮件客户端，写/发/读邮件）、<strong>邮件服务器</strong>（保存和转发邮件）、<strong>邮件传输协议</strong>。</p>
+  <div class="story">
+    <div class="t">寄信的类比</div>
+    <p style="margin-bottom:0">你写好信（用户代理），先丢进自己这边邮局的邮筒（发件方邮件服务器的缓存队列）；邮局之间按 <strong>SMTP</strong> 把信一站站转到对方城市的邮局（收件方邮件服务器），存进你朋友的邮箱；朋友再用 <strong>POP3/IMAP</strong> 从自己邮局把信取回家看。注意：送信（SMTP）和取信（POP3/IMAP）是两套完全不同的协议。</p>
+  </div>
+  <h3>2.1 一封邮件是怎么跑完的（六步）</h3>
+  <ol>
+    <li>发件人在用户代理里撰写、编辑邮件；</li>
+    <li>用户代理用 <strong>SMTP</strong> 把邮件发给发件方邮件服务器；</li>
+    <li>SMTP 服务器把邮件临时存进<strong>邮件缓存队列</strong>等待发送；</li>
+    <li>发件方 SMTP 客户与收件方 SMTP 服务器建立 TCP 连接，把队列里邮件依次发出；</li>
+    <li>收件方 SMTP 服务器收到后，放进收件人的<strong>用户邮箱</strong>等待读取；</li>
+    <li>收件人用用户代理、通过 <strong>POP3 或 IMAP</strong> 把邮件从服务器取回。</li>
+  </ol>
+  <h3>2.2 邮件的组成：信封＋内容</h3>
+  <div class="frame">
+    <div class="fseg t"><span class="b">信封</span><span class="s">MAIL FROM / RCPT TO（传输靠它）</span></div>
+    <div class="fseg h"><span class="b">首部 header</span><span class="s">From/To/Date/Subject/Cc…</span></div>
+    <div class="fseg p"><span class="b">空行</span><span class="s">分隔首部与主体</span></div>
+    <div class="fseg p"><span class="b">主体 body</span><span class="s">邮件正文</span></div>
+  </div>
+  <p>信封上最重要的是收件人地址，传输全靠它；用户打开邮箱后才看到内容。邮件地址格式是 <strong>邮箱名@邮箱所在主机域名</strong>（@读"at"），如 jcst@jlu.edu.cn——主机域名在全球唯一，用户名在该域内唯一。RFC 5322 规定首部格式（From、To 必选，Subject、Cc、Date、Reply-To 可选），正文自由写。</p>
+
+  <h3>2.3 SMTP：送信协议，端口 25</h3>
+  <p>SMTP（简单邮件传送协议）基于 <strong>TCP，熟知端口 25</strong>，是基于 ASCII 文本的"命令—响应"协议。它分三个阶段：<strong>连接建立 → 邮件传送 → 连接释放</strong>。一个邮件服务器既能当客户（往外发）也能当服务器（收别人的）。下面分步看一次完整对话。</p>
+  <div class="stepper" id="st-smtp">
+    <div class="stepbar"><div class="stepdots" style="display:flex;gap:8px;align-items:center;flex-wrap:wrap"></div></div>
+    <div class="stepbody"></div>
+    <div class="stepbtns"><button class="btn ghost prev">上一步</button><button class="btn next">下一步</button></div>
+  </div>
+  <div class="bits">S: 220 Service Ready<br>C: HELO abc.edu.cn<br>S: 250 OK<br>C: MAIL FROM: Ling@jlu.edu.cn<br>S: 250 OK<br>C: RCPT TO: Wang@abc.com<br>S: 250 OK<br>C: DATA<br>S: 354 Start mail input; end with &lt;CRLF&gt;.&lt;CRLF&gt;<br>C: From/To/Date/Subject/正文… .<br>S: 250 OK<br>C: QUIT<br>S: 221 Service closed</div>
+  <p>应答是三位数代码：<strong>2xx 成功</strong>（220 服务就绪、250 操作完成、221 关闭信道）、<strong>3xx 中间</strong>（354 开始输入、以 "." 结束）、<strong>4xx 临时失败</strong>、<strong>5xx 永久失败</strong>（550 邮箱不可用等）。</p>
+
+  <h3>2.4 取信协议：POP3 vs IMAP</h3>
+  <div class="tbl-wrap"><table class="tbl">
+    <tr><th></th><th>POP3（邮局协议 v3）</th><th>IMAP（网际报文存取协议）</th></tr>
+    <tr><td>端口</td><td>110（RFC 1939）</td><td>143（RFC 2060）</td></tr>
+    <tr><td>工作方式</td><td>客户/服务器，基于 TCP</td><td>客户/服务器，基于 TCP，<strong>联机协议</strong>，要先联网</td></tr>
+    <tr><td>邮件存哪</td><td>一般下载到本地后服务器可删除</td><td>留在服务器上，用户在服务器上建/管文件夹</td></tr>
+    <tr><td>特点</td><td>三阶段：认证（user/pass）→ 事务（list/retr/dele）→ 更新（quit）；响应 +OK / -ERR</td><td>只下载邮件首部（部分下载）、可按条件搜索、可只取 MIME 的一部分、维护会话状态</td></tr>
+  </table></div>
+
+  <h3>2.5 MIME：让邮件能发图片和附件</h3>
+  <p>原始 SMTP 只能传 7 位 ASCII 文本。<strong>MIME（多用途互联网邮件扩展）</strong>沿用 RFC 822 格式，加上消息体结构和非 ASCII 编码规则，就能传多媒体、二进制文件了，还用原来的邮件程序和协议传送。</p>
+  <ul>
+    <li><strong>Quoted-Printable</strong>：可打印 ASCII 不动；等号和 &gt;127 的字节，用两个十六进制数字前加 "=" 表示。如"系统"的 GB 码 CFB5CDB3 编码为 =CF=B5=CD=B3，等号本身编码为 =3D。</li>
+    <li><strong>Base64</strong>：把 24 位二进制分成 4 个 6 位组（0~63），依次用 A~Z、a~z、0~9、+、/ 表示，末尾不足补 =。如 01001001 00110001 01111001 分成 010010 010011 000101 111001，编码为 STE5。</li>
+  </ul>
+  <p>Content-Type 由类型/子类型组成：独立媒体五大类——text、image、audio、video、application；复合类型 multipart（mixed 混合 / alternative 选择 / parallel 并行 / digest 摘要）和 message。</p>
+</section>
+<!-- ===== 模块三：FTP / TFTP ===== -->
+<section id="m3">
+  <div class="modtag"><em>模块 3</em> 文件传输：FTP 与 TFTP</div>
+  <h2>跨不同系统传文件：FTP 的两条连接</h2>
+  <p>不同计算机存储格式、目录结构、命令、访问控制都不一样，直接传文件很麻烦。<strong>FTP（文件传输协议，RFC 959）</strong>就是为屏蔽这些系统细节而生，让异构网络中任意计算机之间都能传文件，基于 TCP 提供可靠传输。</p>
+  <div class="story">
+    <div class="t">FTP 的巧妙之处：用两条连接，而不是一条</div>
+    <p style="margin-bottom:0">你去邮局寄大包裹：一条专线（<strong>控制连接，端口 21</strong>）一直开着，专门用来"对话"——你发什么命令、我回什么话；真正搬包裹时，另开一条临时的<strong>数据连接（端口 20）</strong>，搬完就拆。这样"说事儿"和"干活"互不干扰。控制连接在整个会话期间保持，数据连接传完文件就关闭。</p>
+  </div>
+  <div class="frame">
+    <div class="fseg h"><span class="b">控制连接</span><span class="s">TCP 21 端口，全程保持，传命令不传输文件</span></div>
+    <div class="fseg t"><span class="b">数据连接</span><span class="s">TCP 20 端口，传完即关，真正传文件</span></div>
+  </div>
+  <p>服务器主进程打开 21 端口等连接，客户用任意本地端口连上来；主进程收到请求后启动从属进程处理，处理完就结束，主进程回去继续等下一个客户（和前面"并发服务"一致）。</p>
+  <h3>两种工作模式：谁主动发起数据连接</h3>
+  <div class="tbl-wrap"><table class="tbl">
+    <tr><th>模式</th><th>数据连接谁发起</th><th>做法</th></tr>
+    <tr><td>主动模式 PORT</td><td>服务器发起</td><td>服务器用 20 端口去连客户用 PORT 命令告诉它的端口 Y</td></tr>
+    <tr><td>被动模式 PASV</td><td>客户端发起</td><td>服务器被动监听一个端口 Z，客户主动连 Z（常用于客户在防火墙/NAT 后）</td></tr>
+  </table></div>
+  <h4>常用命令速查</h4>
+  <div class="tbl-wrap"><table class="tbl">
+    <tr><th>命令</th><th>作用</th></tr>
+    <tr><td>USER / PASS</td><td>发用户名 / 口令登录</td></tr>
+    <tr><td>LIST</td><td>列目录文件清单（经数据端口返回）</td></tr>
+    <tr><td>RETR file</td><td>从服务器取回文件（get）</td></tr>
+    <tr><td>STOR file</td><td>把文件上传到服务器（put）</td></tr>
+    <tr><td>TYPE A / I</td><td>文件类型：A=ASCII 码，I=图像（二进制）</td></tr>
+    <tr><td>PORT / QUIT / ABOR / SYST</td><td>告知客户地址端口 / 注销 / 放弃当前传输 / 返回系统类型</td></tr>
+  </table></div>
+  <p>应答码和 SMTP 类似按位：1yz 肯定预备、2yz 完成、3yz 中间、4yz 暂时否定、5yz 永久否定。</p>
+  <h3>TFTP：极简的 UDP 文件传输</h3>
+  <p><strong>TFTP（简单文件传输协议）</strong>很小、易实现，用 <strong>C/S ＋ UDP</strong>（服务器端口 69），因为 UDP 不可靠所以它自己要做差错控制。它没有命令集、不能列目录、不做身份鉴别，只支持文件读写；每传一个 512 字节的"块（block）"就等确认（类似停止等待），块从 1 编号；最后一个不足 512 字节的块天然标志文件结束——若文件正好是 512 的整数倍，还要补发一个空数据块表示结束。</p>
+</section>
+<!-- ===== 模块四：WWW 与 HTTP ===== -->
+<section id="m4">
+  <div class="modtag"><em>模块 4</em> 万维网 WWW 与 HTTP</div>
+  <h2>你每天在浏览器里做的事，就是这一层</h2>
+  <p>Web 应用由三部分组成：<strong>Web 服务器</strong>（存着所有资源）、<strong>浏览器</strong>（在客户机上请求、解释并显示页面）、<strong>HTTP</strong>（客户浏览网页资源用的协议）。浏览器点一个链接后发生的事：分析 URL → 让 DNS 解析出 IP → 建立 TCP 连接 → 发 HTTP 请求 → 服务器返回 HTML 响应 → 浏览器解释显示 → 释放 TCP 连接。</p>
+  <div class="story">
+    <div class="t">HTTP 就像"按固定格式点菜"</div>
+    <p style="margin-bottom:0">你（浏览器）走进餐厅（服务器），不能随便说"给我来点吃的"，得照格式报：<strong>方法＋菜名（URL）＋协议版本</strong>；后厨回你也照格式：<strong>状态码＋说明＋菜（内容）</strong>。一来一回就是一次 HTTP 事务。这套规矩就是 HTTP。</p>
+  </div>
+
+  <h3>4.1 URL：互联网资源的唯一地址</h3>
+  <div class="formula">&lt;协议&gt;://&lt;主机&gt;:&lt;端口&gt;/&lt;路径&gt;</div>
+  <p>例如 <span class="bits" style="display:inline;padding:2px 8px">http://www.XXXXX.com:8000/comics.php</span>：协议是 http，主机是 www.XXXXX.com，端口 8000，路径是 /comics.php。确定主机后端口和路径可省略。浏览器还常帮你自动补全省略的 http:// 和 www。</p>
+
+  <h3>4.2 HTTP 是什么：无状态、面向事务、跑在 TCP 上</h3>
+  <p>HTTP 在传输层用 <strong>TCP，默认 80 端口</strong>，是<strong>面向事务的客户/服务器协议</strong>，能可靠交换文本、声音、图像等各类多媒体。两个关键性质：<strong>无状态</strong>——服务器不保留之前请求的状态；HTTP 本身"无连接"，虽然它用的 TCP 是面向连接的。</p>
+  <div class="tbl-wrap"><table class="tbl">
+    <tr><th>版本</th><th>标准</th><th>特点</th></tr>
+    <tr><td>HTTP/1.0</td><td>RFC 1945（1996）</td><td>无状态，默认非持久连接</td></tr>
+    <tr><td>HTTP/1.1</td><td>RFC 2616（1999）</td><td>默认持久连接＋流水线，缓存优化、断点续传</td></tr>
+    <tr><td>HTTPS</td><td>HTTP＋TLS</td><td>在 TCP 之上加 TLS 层提供安全</td></tr>
+    <tr><td>HTTP/2</td><td>RFC 7540（2015）</td><td>二进制格式、多路复用、头压缩、服务端推送，降延迟提带宽利用率</td></tr>
+  </table></div>
+
+  <h3>4.3 非持久连接 vs 持久连接</h3>
+  <div class="tbl-wrap"><table class="tbl">
+    <tr><th></th><th>非持久连接（HTTP/1.0 默认）</th><th>持久连接（HTTP/1.1 默认）</th></tr>
+    <tr><td>一个对象</td><td>两阶段：建 TCP 连接 → 请求/传对象 → 关闭</td><td>同一 TCP 连接上反复请求/响应，传完保持连接</td></tr>
+    <tr><td>慢启动</td><td>每个对象都要经历一次 TCP 慢启动</td><td>经历较少慢启动，省往返时间</td></tr>
+    <tr><td>流水线</td><td>不支持</td><td>支持流水线，但响应要按序</td></tr>
+  </table></div>
+  <div class="warn">课件算例：一个页面含 index.html 加 2 幅 jpg 图像——HTTP/1.0 非持久要<strong>三次完整的 TCP 连接</strong>（三次握手＋三次 HTTP）。若一页有 100 张图呢？这就是非持久连接的痛点，也是 1.1 持久连接要解决的问题。</div>
+
+  <h3>4.4 HTTP 报文：三部分结构</h3>
+  <p>请求报文和响应报文都由<strong>开始行＋首部行＋实体主体</strong>三部分组成，各部分之间用空行（CRLF）分隔。</p>
+  <h4>请求报文的开始行 = 请求行：方法  URL  版本</h4>
+  <div class="tbl-wrap"><table class="tbl">
+    <tr><th>方法</th><th>含义</th></tr>
+    <tr><td>GET</td><td>请求读取由 URL 标识的信息（最常用）</td></tr>
+    <tr><td>HEAD</td><td>只读取该信息的首部</td></tr>
+    <tr><td>POST</td><td>给服务器添加信息（如提交表单、注释）</td></tr>
+    <tr><td>PUT</td><td>在指定 URL 下存储一个文档</td></tr>
+    <tr><td>DELETE</td><td>删除指定 URL 标识的资源</td></tr>
+    <tr><td>OPTIONS / TRACE / CONNECT</td><td>请求选项信息 / 环回测试 / 用于代理服务器</td></tr>
+  </table></div>
+  <h4>响应报文的开始行 = 状态行：版本  状态码  短语</h4>
+  <div class="tbl-wrap"><table class="tbl">
+    <tr><th>状态码</th><th>类别含义</th><th>典型例子</th></tr>
+    <tr><td>1xx</td><td>通知信息：请求收到/正在处理</td><td>—</td></tr>
+    <tr><td>2xx</td><td>成功</td><td><strong>200 OK</strong>：请求成功，对象在响应数据里</td></tr>
+    <tr><td>3xx</td><td>重定向，需进一步动作</td><td><strong>301 Moved Permanently</strong>：对象永久移走，新地址在 Location</td></tr>
+    <tr><td>4xx</td><td>客户差错</td><td><strong>400 Bad Request</strong>：服务器看不懂；<strong>404 Not Found</strong>：找不到文档</td></tr>
+    <tr><td>5xx</td><td>服务器差错</td><td><strong>505 HTTP Version Not Supported</strong>：不支持该 HTTP 版本</td></tr>
+  </table></div>
+
+  <h3>4.5 无状态带来的两件事：认证与 Cookie</h3>
+  <p>HTTP 无状态，服务器默认记不住你是谁。要保护页面，常用 HTTP 认证：请求里不带凭证，服务器回 <strong>401 + WWW-authenticate</strong>，浏览器下次在请求头带上 <strong>Authorization: &lt;凭证&gt;</strong>。</p>
+  <p>但光认证还不够——你登录淘宝后一连点好几个页面，服务器怎么知道还是同一个人？这就靠 <strong>Cookie</strong>：服务器在响应首部用 <strong>Set-Cookie</strong> 发一个唯一编号给浏览器；之后浏览器每次请求都在请求头里带上这个 Cookie；Cookie 存在用户主机上，由浏览器管理，服务器后端数据库把它当关键字记录用户。</p>
+  <div class="card">
+    <p style="margin-bottom:6px"><strong>Cookie 一般 5 个字段：</strong>域（来自何方）、路径（服务器文件树中哪些部分可用）、内容（"名字=值"，最多 4K，只是字符串、不是可执行程序）、安全（只向安全连接返回）等。</p>
+    <p style="margin-bottom:0">Cookie 是把双刃剑：能做个性化推荐、记录购物车、保持登录；也能跨站跟踪用户浏览痕迹、泄露隐私。用户可以在浏览器里限制 Cookie。（注意：Cookie 里存的只是文本串，不是病毒，"Cookie 能嵌间谍程序"是误区。）</p>
+  </div>
+
+  <h3>4.6 代理服务器 / Web 缓存</h3>
+  <p>代理服务器又叫<strong>万维网高速缓存（Web cache）</strong>，代理浏览器向源服务器发请求，把最近请求过的响应暂存在本地。新请求来时，若缓存里已有该对象就直接返回，不必再绕远路去互联网找——<strong>减少访问互联网服务器的时延、节省出口带宽</strong>。课件用校园网出口举例：所有流量本来都挤在一条 2 Mbit/s 的大链路上，放了缓存后，很多重复对象根本不用出校园。</p>
+  <div class="note">附带一提：网页本身分<strong>静态文档</strong>（存好就不变）和<strong>动态/活动文档</strong>（服务器或浏览器端实时生成，典型技术 AJAX＝HTML+CSS＋DOM＋XML＋异步＋JavaScript）；浏览器架构则含用户界面、浏览器引擎、渲染引擎、网络、JS 解析器、数据存储（Cookie）等部件。</div>
+</section>
+<!-- ===== 模块五：流媒体 ===== -->
+<section id="m5">
+  <div class="modtag"><em>模块 5</em> 流媒体应用</div>
+  <h2>边下边播：为什么能不下载完就开始看</h2>
+  <p>你在线看视频时，不用把整集下载完就能从头播——这就是<strong>流式存储媒体</strong>。课件把三种流媒体应用按延迟分了档：<strong>点播</strong>（&lt;10 秒延迟，从任一点开始播）、<strong>直播</strong>（几秒延迟，像电视）、<strong>实时交互式会议</strong>（&lt;400 ms，VR 要求 &lt;25 ms，差一点就听着别扭）。</p>
+  <div class="story">
+    <div class="t">和"整集下载"对比</div>
+    <p style="margin-bottom:0">整集下载像先把整本书买回来才开始读；流式媒体像"读到第 1 页、同时后台在送第 2 页"。它在播放端设一个<strong>缓存</strong>：先攒一小段再播，网络偶尔抖一下，缓存里的余量就能顶住——把网络抖动抹平。代价是多了一点播放延迟。</p>
+  </div>
+  <h3>5.1 视频怎么压：MPEG 的帧间编码</h3>
+  <p>原始视频太大（一张 1024×768×24bit 图片 ≈ 2.4 MB，每秒 30 帧就是约 72 MB/s）。MPEG 视频压缩利用了相邻帧大同小异的特点，三种帧：</p>
+  <div class="tbl-wrap"><table class="tbl">
+    <tr><th>帧</th><th>名字</th><th>怎么编</th></tr>
+    <tr><td>I 帧</td><td>帧内编码</td><td>单独压缩成完整静态图像；必须周期性插入，是随机存取的入口</td></tr>
+    <tr><td>P 帧</td><td>前向预测</td><td>只记录和前一个 I/P 帧相比的变化</td></tr>
+    <tr><td>B 帧</td><td>双向预测</td><td>参考前后两个帧</td></tr>
+  </table></div>
+  <p>一组连续帧叫 <strong>GOP（图像组）</strong>：1 个 I 帧后跟一串 P/B 帧，循环往复。I 帧是"完整锚点"，P/B 帧都依赖它——这就是为什么流里<strong>必须周期性插入 I 帧</strong>，否则一旦丢个关键帧后面就花了。</p>
+
+  <h3>5.2 流式媒体的协议栈</h3>
+  <div class="tbl-wrap"><table class="tbl">
+    <tr><th>层</th><th>协议</th><th>干什么</th></tr>
+    <tr><td>信令/播放控制</td><td>RTSP / SIP / H.323</td><td>控制播放、录制、暂停</td></tr>
+    <tr><td>实时数据传输</td><td>RTP（在 UDP 上）</td><td>端到端实时多媒体数据，不带 QoS 保证</td></tr>
+    <tr><td>QoS 监控</td><td>RTCP</td><td>监视服务质量、反馈、多流同步</td></tr>
+    <tr><td>媒体描述</td><td>SDP</td><td>描述会话信息</td></tr>
+  </table></div>
+  <h4>RTSP：互联网录像机的遥控器</h4>
+  <p><strong>RTSP（实时流协议）</strong>用一组方法控制播放（播放/录制/暂停），但它<strong>本身不传送媒体数据</strong>——数据走 RTP/RTCP。它是一个<strong>有状态的协议</strong>，会记录"这个用户现在在播第几秒"；而 HTTP 默认无状态。可以把 RTSP 想成"互联网录像机遥控器"。</p>
+  <h4>RTP 与 RTCP：一对搭档</h4>
+  <p><strong>RTP</strong> 在端到端之间传输实时多媒体数据，不提供服务质量保证（没有重传）；<strong>RTCP</strong> 在 RTP 传数据的同时做 QoS 监视、反馈和多流（比如视频流＋音频流）同步。RTP 和 RTCP 配合使用，RTP 数据端口和 RTCP 控制端口紧挨。</p>
+  <h4>WebRTC：浏览器里直接 P2P 通话</h4>
+  <p><strong>WebRTC</strong>（Google 捐出）让浏览器之间直接通音视频（实时交互式应用），用 SRTP/SRTCP 加密；还解决了"两边都在内网，怎么直接连"的问题：用 ICE 框架＋STUN（穿透 NAT 拿外网地址）＋TURN（实在打不通就中继）做内网穿透。</p>
+
+  <h3>5.3 自适应码率：根据网速动态调清晰度</h3>
+  <p><strong>DASH</strong> 把一个视频编码成多个版本，切成 <strong>2~10 秒</strong>的片段，放在 HTTP 服务器上；客户端根据网络情况自动切换版本码率，就是 <strong>ABR（自适应码率流）</strong>。</p>
+  <ul>
+    <li><strong>基于吞吐量</strong>：吞吐量变了，就切到更高/更低码率的版本。</li>
+    <li><strong>基于缓冲</strong>：靠播放缓冲区填得快不快判断——攒得快就切高码率（看着清晰），攒得慢就切低码率（不卡顿）。</li>
+  </ul>
+  <p><strong>SVC（可伸缩视频编码）</strong>是另一条路：把视频分成"一个基础层＋多个增强层"，解码端只收自己收得动的层数——这样同一份编码就能适应不同带宽，不用为每种码率单独编码。</p>
+</section>
+
+<!-- ===== 模块六：CDN 与 P2P ===== -->
+<section id="m6">
+  <div class="modtag"><em>模块 6</em> CDN 与 P2P</div>
+  <h2>让内容离你更近，让节点互相帮忙</h2>
+  <h3>6.1 CDN：把内容搬到离用户最近的地方</h3>
+  <p>假设你在长春看一个架在广州的视频源，光把数据搬过来就慢。<strong>CDN（内容分发网络）</strong>在全国各城市部署一堆<strong>边缘服务器（CDN 节点）</strong>，把热门内容缓存到边缘；用户就近访问，时延大降，还能分担源服务器压力、防 DDoS。</p>
+  <p>它怎么把用户"引导"到最近节点？靠 <strong>GSLB（全局服务器负载均衡）＋CNAME 解析</strong>：网站把自己的域名 CNAME 到 CDN 域名，用户向 DNS 查询时，GSLB 根据用户位置返回最近的 CDN 边缘服务器地址，于是流量就被吸引到就近节点，减轻原始服务器负担。</p>
+  <h3>6.2 P2P：节点之间互相传</h3>
+  <p>互联网上的计算机本来都是独立的，P2P 应用把它们的<strong>虚拟连接</strong>组织成一张"覆盖网络（overlay network）"——逻辑上互联，物理上可能隔着千山万水。任意两个节点都能直接通信，不区分客户/服务器，每个节点既下载又上传。按结构分三类：</p>
+  <div class="tbl-wrap"><table class="tbl">
+    <tr><th>结构</th><th>特点</th><th>例子</th></tr>
+    <tr><td>集中式目录</td><td>有个中心服务器记录"谁在哪、有什么资源"（但数据传输不经过它）</td><td>早期 Napster</td></tr>
+    <tr><td>非集中式（洪泛）</td><td>没有中心，请求在覆盖网络里逐跳广播，靠带宽大的超级节点</td><td>Gnutella 早期</td></tr>
+    <tr><td>混合式</td><td>超级节点＋集中目录＋洪泛结合</td><td>Skype</td></tr>
+  </table></div>
+  <h4>BitTorrent：把文件切块，人人互传</h4>
+  <p>下载者拿到一个小的<strong>种子文件 torrent</strong>，先找 <strong>tracker</strong>（跟踪服务器），它记录当前有哪些节点有这个文件。整个大文件被切成固定大小的<strong>块（block，通常 256 KB）</strong>；每个节点只持有部分块，大家互相交换自己缺的块——你上传的同时也在下载。</p>
+  <h4>DHT：连 tracker 都不要</h4>
+  <p><strong>DHT（分布式哈希表）</strong>用 Kademlia 算法，给每个节点一个 <strong>160 位的节点 ID</strong>；文件也用哈希算出一个 160 位的"info hash"，谁存这个文件就把自己的节点 ID 和这个 hash 关联起来。查资源时，用"后继节点 successor"的思路，一步步把请求送到 ID 最接近该 hash 的节点，就能在一张巨大的 P2P 网络里找到谁有这个文件——完全不需要中心 tracker。</p>
+  <div class="note">一句话收束：CDN 是"中心化地把内容推到边缘"，P2P 是"去中心化地让节点互传"；前者靠 GSLB/CNAME 就近引流，后者靠覆盖网络、分块和 DHT 自组织。两者都是为了把内容更快地送到用户手里。</div>
+</section>
+
+<!-- ===== 知识地图回顾 ===== -->
+<section id="endmap">
+  <h2>最后：把整张知识地图收进脑子里</h2>
+  <div class="card">
+    <p style="margin-bottom:8px"><strong>模式与端口</strong>：C/S（服务器一直等、客户主动发）/ B/S（客户端是浏览器）/ P2P（对等互传）；服务器可循环（UDP）或并发（TCP 主进程＋从属进程）。</p>
+    <p style="margin-bottom:8px"><strong>DNS</strong>：域名→IP 的分布式数据库；层次命名树（根→顶级域→二级→…），四类服务器（根/TLD/权限/本地）；主机→本地用递归、本地→根用迭代，UDP 端口 53；报文＝首部(标识/标志/计数)＋问题＋资源记录；RR 类型 A/AAAA/CNAME/NS/MX/PTR/SOA；缓存靠 TTL。</p>
+    <p style="margin-bottom:8px"><strong>电子邮件</strong>：用户代理＋邮件服务器＋协议；信封(MAIL FROM/RCPT TO)＋内容(首部/空行/主体)；<strong>SMTP 端口25</strong> 送信（连接建立/传送/释放，命令 HELO/MAIL/RCPT/DATA/QUIT，应答 2xx/3xx/4xx/5xx）；<strong>POP3 端口110</strong> 下载、<strong>IMAP 端口143</strong> 服务器上管理；<strong>MIME</strong> 用 Quoted-Printable/Base64 编码多媒体。</p>
+    <p style="margin-bottom:8px"><strong>FTP/TFTP</strong>：FTP 两条 TCP 连接——控制连接 21 端口全程保持、数据连接 20 端口传完即关；主动 PORT/被动 PASV；RETR=get、STOR=put；TFTP 用 UDP 69 端口、512 字节块、停止等待。</p>
+    <p style="margin-bottom:8px"><strong>WWW/HTTP</strong>：URL＝协议://主机:端口/路径；HTTP 跑 TCP 80、无状态、面向事务；1.0 非持久、1.1 持久＋流水线；报文＝开始行＋首部行＋实体主体；方法 GET/POST/PUT/DELETE…；状态码 2xx 成功/3xx 重定向/4xx 客户错/5xx 服务器错（200/301/400/404/505）；Cookie 维持状态，代理/Web 缓存就近服务。</p>
+    <p style="margin-bottom:0"><strong>流媒体与分发</strong>：MPEG 用 I/P/B 帧、GOP 里周期插 I 帧；RTSP 只控播放不传数据、有状态，RTP 传实时数据、RTCP 管 QoS 同步，WebRTC 浏览器 P2P 通话；DASH/ABR 自适应码率、SVC 分层；CDN 边缘节点＋GSLB/CNAME 就近引流，P2P 覆盖网络、BitTorrent 分块(256KB)、DHT(Kademlia 160 位) 去中心化查找。</p>
+  </div>
+</section>
+<footer><p>本资料基于课程课件整理，仅供学习交流使用，具体教学要求以任课教师通知为准。</p></footer>
+</div>
+<button class="topbtn" id="topBtn" onclick="window.scrollTo({top:0})">↑</button>
+</div>
+</div>
+<script>
+// tabs
+document.querySelectorAll('.tabs').forEach(function(g){
+  g.querySelectorAll('.tabbtn').forEach(function(b){
+    b.addEventListener('click',function(){
+      g.querySelectorAll('.tabbtn').forEach(function(x){x.classList.remove('on')});
+      g.querySelectorAll('.tabpanel').forEach(function(x){x.classList.remove('on')});
+      b.classList.add('on');
+      g.querySelector('#'+b.dataset.t).classList.add('on');
+    });
+  });
+});
+// 通用分步演示
+function createStepper(id,steps){
+  var cur=0,box=document.getElementById(id);
+  var dots=box.querySelector('.stepdots'),body=box.querySelector('.stepbody'),
+      prev=box.querySelector('.prev'),next=box.querySelector('.next');
+  steps.forEach(function(_,i){
+    if(i>0){var l=document.createElement('span');l.className='stepline';dots.appendChild(l);}
+    var d=document.createElement('span');d.className='stepdot';d.textContent=i+1;dots.appendChild(d);
+  });
+  function render(){
+    var ds=dots.querySelectorAll('.stepdot');
+    ds.forEach(function(d,i){d.classList.toggle('on',i<=cur)});
+    body.innerHTML='<div class="st">'+steps[cur].t+'</div>'+steps[cur].c;
+    prev.disabled=cur===0;
+    next.textContent=cur===steps.length-1?'已完成':'下一步';
+    next.classList.toggle('o',cur<steps.length-1);
+  }
+  prev.addEventListener('click',function(){if(cur>0){cur--;render();}});
+  next.addEventListener('click',function(){if(cur<steps.length-1){cur++;render();}});
+  render();
+}
+// ===== stepper 调用 =====
+// DNS 解析分步演示（查 www.jlu.edu.cn → 202.198.16.80）
+createStepper('st-dns',[
+  {t:'① 客户机问本地域名服务器（递归）',c:'你在浏览器输入 www.jlu.edu.cn。主机先把查询发给最近的本地域名服务器。这次用的是<strong>递归查询</strong>："我不管你怎么查，帮我查到到底、直接告诉我结果。"本地服务器这下揽下了活儿。'},
+  {t:'② 本地服务器问根服务器（迭代）',c:'本地服务器自己不知道答案，就去问根域名服务器。根不知道具体 IP，但它管着 .cn 这个顶级域，于是回答："我不知道，但你去找 .cn 顶级域服务器，地址是……"——这就是<strong>迭代查询</strong>：给个下一步，不帮你跑完。'},
+  {t:'③ 本地服务器问 .cn 顶级域服务器',c:'本地服务器按根给的地址，去问 .cn 服务器。.cn 说："这个归 .edu.cn 管，你去找它，地址是……" 又一次迭代，每次只往下指一层。'},
+  {t:'④ 本地服务器问 .edu.cn 权限服务器',c:'接着问 .edu.cn 服务器。它知道 jlu.edu.cn 这个域由哪台权限服务器管，再把你引到 <strong>www.jlu.edu.cn 的权限服务器</strong>。'},
+  {t:'⑤ 拿到 IP：202.198.16.80',c:'终于到了真正记录这台主机的权限服务器，它返回 IP <strong>202.198.16.80</strong>。本地服务器把这个结果记进自己的高速缓存（按 TTL 存放），再返回给你的主机。下次再查同一个域名，直接命中缓存、不用再走这一大圈。'},
+  {t:'⑥ 主机用 IP 发 HTTP 请求',c:'你手里终于有了 IP，浏览器这才向 202.198.16.80 建立 TCP 连接、发 HTTP 请求，网页开始加载。整个 DNS 过程走 UDP、端口 53。'}
+]);
+// SMTP 三阶段对话分步
+createStepper('st-smtp',[
+  {t:'阶段一：连接建立（握手）',c:'发件方邮件服务器（SMTP 客户）向收件方 25 端口发起 TCP 连接。服务器先打招呼 "220 Service Ready"；客户发 "HELO" 自我介绍，服务器回 "250 OK"。连接建立阶段结束。'},
+  {t:'阶段二：MAIL FROM —— 谁寄的',c:'客户发 "MAIL FROM: Ling@jlu.edu.cn" 说明发件人地址，为邮件标识提供源路径；服务器回 "250 OK"。这是信封上的"寄件人"。'},
+  {t:'阶段二：RCPT TO —— 寄给谁',c:'客户发 "RCPT TO: Wang@abc.com" 指明收件人（信封上的"收件人"），服务器回 "250 OK"。若一封信寄给多人，就发多个 RCPT TO。'},
+  {t:'阶段二：DATA —— 开始写信封里的内容',c:'客户发 "DATA" 表示接下来要传邮件内容了。服务器回 "354 Start mail input; end with <CRLF>.<CRLF>"——意思是：开始吧，用一个单独的 "." 行表示信写完了。'},
+  {t:'阶段二：发完正文，以 "." 结束',c:'客户依次发出邮件首部（From/To/Date/Subject…）、空行、正文，最后单独发一行 "."。服务器收到这个结束符后，把邮件存进收件人邮箱，回 "250 OK"。一封邮件传送完成。'},
+  {t:'阶段三：连接释放',c:'客户发 "QUIT" 请求结束，服务器回 "221 Service closed"，关闭这条 TCP 连接。三个阶段——连接建立、邮件传送、连接释放——全部走完。'}
+]);
+// back to top
+var tb=document.getElementById('topBtn');
+window.addEventListener('scroll',function(){tb.style.display=window.scrollY>500?'block':'none';});
+document.querySelector('.side').addEventListener('click',function(e){
+  if(e.target.tagName==='A'&&window.innerWidth<=900)this.classList.remove('open');
+});
+</script>
+</body>
+</html>

@@ -187,6 +187,10 @@ def append_directory(lines: list[str], directory: Path, level: int) -> None:
         indent = "  " * level
         reading = "https://goya4140.github.io/JLU_CS_Course/" + quote((directory / "index.html").relative_to(ROOT).as_posix(), safe="/")
         lines.append(f"{indent}- [图文交互阅读版]({reading} ':ignore')")
+        doubao = directory / "doubao" / "index.html"
+        if doubao.is_file():
+            reading = "https://goya4140.github.io/JLU_CS_Course/" + quote(doubao.relative_to(ROOT).as_posix(), safe="/")
+            lines.append(f"{indent}- [豆包版学习资料]({reading} ':ignore')")
     if directory.name == MICRO_COURSE_DIR:
         append_microcomputer_directory(lines, directory, level)
         return

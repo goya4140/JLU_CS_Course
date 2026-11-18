@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>数据通信基础 · 计算机网络初学者精讲</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%23173b5e'/><path d='M15 70 Q30 30 45 55 T75 55' stroke='%23e8743b' stroke-width='8' fill='none' stroke-linecap='round'/></svg>">
+<style>
+:root{
+  --ink:#173b5e; --ink2:#2f5b83; --org:#e8743b; --org2:#f3a06f;
+  --blue-bg:#eef4f9; --org-bg:#fdf1e8; --line:#d8e2ec; --gray:#5f7185;
+  --paper:#ffffff; --soft:#f6f9fc; --green:#2e7d5b; --red:#c0392b;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;color:#233242;background:var(--paper);line-height:1.85;font-size:15px}
+h1,h2,h3,h4{font-family:Georgia,"Songti SC","SimSun",serif;color:var(--ink);line-height:1.35}
+a{color:var(--ink2);text-decoration:none}
+.layout{display:flex;min-height:100vh}
+.side{width:238px;background:var(--ink);color:#cfe0f0;padding:26px 0;position:fixed;top:0;bottom:0;left:0;overflow-y:auto;z-index:40}
+.side .brand{padding:0 22px 18px;border-bottom:1px solid rgba(255,255,255,.14);margin-bottom:14px}
+.side .brand b{display:block;color:#fff;font-size:17px;font-family:Georgia,serif}
+.side .brand span{font-size:12px;color:var(--org2);letter-spacing:1px}
+.side a{display:block;color:#c4d6e8;padding:9px 22px;font-size:13.5px;border-left:3px solid transparent}
+.side a:hover{background:rgba(255,255,255,.08);color:#fff;border-left-color:var(--org)}
+.side .grp{padding:14px 22px 5px;font-size:11px;color:#7fa3c4;letter-spacing:2px}
+.main{margin-left:238px;flex:1;min-width:0}
+.wrap{max-width:900px;margin:0 auto;padding:0 34px}
+.hero{background:linear-gradient(135deg,#173b5e 0%,#24557e 60%,#2f6896 100%);color:#eaf1f8;padding:58px 0 50px;margin-bottom:38px;position:relative;overflow:hidden}
+.hero::after{content:"";position:absolute;right:-60px;top:-60px;width:260px;height:260px;border:2px solid rgba(232,116,59,.35);border-radius:50%}
+.hero::before{content:"";position:absolute;right:30px;bottom:-90px;width:180px;height:180px;border:2px solid rgba(255,255,255,.12);border-radius:50%}
+.hero .kicker{font-size:12px;letter-spacing:3px;color:var(--org2);margin-bottom:14px;position:relative}
+.hero h1{color:#fff;font-size:34px;margin-bottom:16px;position:relative}
+.hero p{max-width:640px;color:#cfe0f0;font-size:15px;position:relative}
+section{margin-bottom:46px;scroll-margin-top:20px}
+.modtag{display:flex;align-items:center;gap:9px;background:var(--org);color:#fff;font-size:12px;font-weight:700;padding:7px 16px;border-radius:4px;letter-spacing:1px;margin-bottom:14px;width:100%}
+.modtag em{font-style:normal;background:rgba(255,255,255,.25);border-radius:2px;padding:0 7px;font-family:Georgia,serif}
+h2{font-size:26px;margin-bottom:14px;padding-bottom:10px;border-bottom:2px solid var(--line)}
+h3{font-size:19.5px;margin:26px 0 10px;color:var(--ink)}
+h4{font-size:16px;margin:18px 0 7px;color:var(--ink2)}
+p{margin-bottom:12px}
+ul,ol{margin:8px 0 14px 22px}
+li{margin-bottom:6px}
+strong{color:var(--ink)}
+.card{background:var(--soft);border:1px solid var(--line);border-radius:9px;padding:18px 20px;margin:16px 0}
+.story{background:var(--org-bg);border-left:4px solid var(--org);border-radius:0 8px 8px 0;padding:16px 20px;margin:16px 0}
+.story .t{font-weight:700;color:var(--org);margin-bottom:5px;font-size:14px}
+.note{background:var(--blue-bg);border-left:4px solid var(--ink2);border-radius:0 8px 8px 0;padding:14px 18px;margin:15px 0;font-size:14px}
+.warn{background:#fdeee9;border-left:4px solid var(--red);border-radius:0 8px 8px 0;padding:14px 18px;margin:15px 0;font-size:14px}
+.tbl{width:100%;border-collapse:collapse;margin:15px 0;font-size:13.5px;background:#fff}
+.tbl th{background:var(--ink);color:#fff;padding:10px 12px;text-align:left;font-weight:600}
+.tbl td{padding:9px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+.tbl tr:nth-child(even) td{background:var(--soft)}
+.tbl-wrap{overflow-x:auto}
+.frame{display:flex;flex-wrap:wrap;border:1px solid var(--line);border-radius:8px;overflow:hidden;margin:16px 0}
+.fseg{padding:12px 10px;text-align:center;min-width:64px;flex:1;border-right:1px solid var(--line)}
+.fseg .b{display:block;font-weight:700;font-size:13.5px;margin-bottom:3px}
+.fseg .s{display:block;font-size:11.5px;color:var(--gray)}
+.fseg.h{background:var(--blue-bg)}.fseg.h .b{color:var(--ink)}
+.fseg.p{background:#fff}.fseg.p .b{color:#333}
+.fseg.t{background:var(--org-bg)}.fseg.t .b{color:var(--org)}
+.tabs{margin:16px 0}
+.tabbtns{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:0}
+.tabbtn{padding:9px 18px;background:var(--blue-bg);border:1px solid var(--line);border-bottom:none;border-radius:8px 8px 0 0;cursor:pointer;font-size:13.5px;color:var(--ink2);font-family:inherit}
+.tabbtn.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.tabpanel{display:none;border:1px solid var(--line);border-radius:0 8px 8px 8px;padding:18px 20px;background:#fff}
+.tabpanel.on{display:block}
+details{background:var(--soft);border:1px solid var(--line);border-radius:8px;padding:12px 18px;margin:12px 0}
+summary{cursor:pointer;font-weight:700;color:var(--ink2)}
+details[open] summary{margin-bottom:9px}
+.stepper{background:#fff;border:1px solid var(--line);border-radius:10px;padding:20px;margin:16px 0}
+.stepbar{display:flex;gap:8px;align-items:center;margin-bottom:15px;flex-wrap:wrap}
+.stepdot{width:28px;height:28px;border-radius:50%;background:var(--line);color:var(--gray);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;font-family:Georgia,serif}
+.stepdot.on{background:var(--org);color:#fff}
+.stepline{flex:1;height:2px;background:var(--line);min-width:14px}
+.stepbody{min-height:92px;background:var(--soft);border-radius:8px;padding:15px 18px;margin-bottom:14px}
+.stepbody .st{font-weight:700;color:var(--ink);margin-bottom:5px}
+.stepbtns{display:flex;gap:10px}
+.btn{padding:8px 20px;background:var(--ink);color:#fff;border:none;border-radius:6px;cursor:pointer;font-family:inherit;font-size:13.5px}
+.btn.o{background:var(--org)}
+.btn.ghost{background:#fff;color:var(--ink2);border:1px solid var(--line)}
+.btn:disabled{opacity:.45;cursor:default}
+.bits{font-family:Consolas,"Courier New",monospace;font-size:13px;letter-spacing:1px;background:var(--blue-bg);padding:10px 14px;border-radius:6px;overflow-x:auto;margin:8px 0}
+.bits .ins{color:var(--org);font-weight:700}
+.bits .flag{color:var(--red);font-weight:700}
+.formula{background:var(--blue-bg);border-radius:7px;padding:12px 18px;font-family:Georgia,serif;text-align:center;margin:12px 0;color:var(--ink)}
+.pill{display:inline-block;background:var(--blue-bg);color:var(--ink);border:1px solid var(--line);border-radius:20px;padding:2px 12px;font-size:12.5px;margin:2px 3px}
+.pill.o{background:var(--org-bg);color:var(--org);border-color:#f0cdb4}
+footer{border-top:2px solid var(--line);padding:26px 0 40px;color:var(--gray);font-size:12.5px}
+.topbtn{position:fixed;right:26px;bottom:26px;width:44px;height:44px;border-radius:50%;background:var(--ink);color:#fff;border:none;cursor:pointer;font-size:18px;display:none;z-index:50}
+.menu-toggle{display:none}
+@media(max-width:900px){
+  .side{transform:translateX(-100%);transition:transform .25s;width:260px}
+  .side.open{transform:translateX(0)}
+  .main{margin-left:0}
+  .menu-toggle{display:flex;position:fixed;top:14px;left:14px;z-index:60;background:var(--ink);color:#fff;border:none;width:44px;height:44px;border-radius:8px;align-items:center;justify-content:center;font-size:20px}
+  .hero{padding:66px 0 38px}
+  .wrap{padding:0 18px}
+  .hero h1{font-size:26px}
+  .fseg{min-width:90px}
+}
+</style>
+</head>
+<body>
+<button class="menu-toggle" onclick="document.querySelector('.side').classList.toggle('open')" aria-label="打开目录"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+<div class="layout">
+<nav class="side">
+  <div class="brand"><b>数据通信基础</b><span>豆包版 · 初学者精讲</span></div>
+  <div class="grp">启程</div>
+  <a href="#start">比特怎么跑在线上</a>
+  <div class="grp">七个模块</div>
+  <a href="#m1">一 · 把 0/1 变成电信号</a>
+  <a href="#m2">二 · 用正弦波载数字</a>
+  <a href="#m3">三 · 模数转换与带宽</a>
+  <a href="#m4">四 · 奈氏准则与香农定理</a>
+  <a href="#m5">五 · 多路复用：一条线大家共用</a>
+  <a href="#m6">六 · 数据交换：电路 / 报文 / 分组</a>
+  <a href="#m7">七 · 差错检测：怎么知道传错了</a>
+  <a href="#endmap">知识地图回顾</a>
+</nav>
+<div class="main">
+<header class="hero">
+  <div class="wrap">
+    <div class="kicker">CHAPTER 2 · DATA COMMUNICATION</div>
+    <h1>数据通信基础：0 和 1 到底怎么<br>变成信号、跑过线路、还不出错</h1>
+    <p>计算机里只有 0 和 1，但线路上跑的是电压、电流、电磁波。这一章要解决四个根本问题：怎么把数字编成信号（编码）、一条线路怎么同时让很多人用（复用）、数据怎么从这头转到那头（交换）、以及传错了怎么发现（差错检测）。这里有两组必背公式——奈氏准则和香农定理，跟着推导走一遍就会了。</p>
+  </div>
+</header>
+<div class="wrap">
+
+<!-- ===== 启程 ===== -->
+<section id="start">
+  <h2>先建立一个整体印象：通信系统在忙什么</h2>
+  <p>课件开门见山：<strong>计算机网络技术，是计算机技术和数据通信技术相结合的产物</strong>。而数据通信本身又站在数学、物理学、电气工程这些学科的肩膀上。一个完整的数据通信系统，由五段拼起来：</p>
+  <div class="frame">
+    <div class="fseg h"><span class="b">信源</span><span class="s">产生要发送数据的设备</span></div>
+    <div class="fseg h"><span class="b">发送设备</span><span class="s">对数据进行编码/调制</span></div>
+    <div class="fseg h"><span class="b">传输系统</span><span class="s">传输线路或网络</span></div>
+    <div class="fseg h"><span class="b">接收设备</span><span class="s">把信号变回数据</span></div>
+    <div class="fseg h"><span class="b">信宿</span><span class="s">接收数据的目的地</span></div>
+  </div>
+  <div class="story">
+    <div class="t">用"寄快递"来类比</div>
+    <p style="margin-bottom:0">信源＝你写信；发送设备＝把信折好装进信封、写上地址；传输系统＝横跨城市的物流网络；接收设备＝物流站拆包分拣；信宿＝收信人。课件给的真实例子是两台 PC 机通过调制解调器和公用电话网通信：电脑输出数字比特流，调制解调器把它变成模拟信号送上电话线，对端调制解调器再变回数字比特流交给电脑。</p>
+  </div>
+
+  <h3>模拟传输 vs 数字传输</h3>
+  <div class="tbl-wrap"><table class="tbl">
+    <tr><th></th><th>模拟传输</th><th>数字传输</th></tr>
+    <tr><td>关心什么</td><td>不关心信号内容，只关心尽量减少衰减和噪声</td><td>关心信号的内容</td></tr>
+    <tr><td>长距离中继</td><td>用<strong>放大器</strong>，信号和噪声一起被放大，噪声会累积</td><td>用<strong>转发器</strong>，可消除噪声累积，重新生成干净的数字信号</td></tr>
+  </table></div>
+
+  <h3>系统要解决的问题与技术指标</h3>
+  <p>课件列了一长串待解决问题：提高传输系统利用率、接口/编码/同步、交换管理、差错控制、流量控制、寻址和路由、恢复、报文格式、网络管理。衡量一套通信系统好坏的主要技术指标有四个：<strong>码元速率、数据传输率、误码率、误比特率</strong>——其中码元速率和数据传输率的关系，正是模块四要讲的核心。</p>
+</section>
+
+<!-- ===== 模块一 ===== -->
+<section id="m1">
+  <div class="modtag"><em>模块 1</em> 把 0/1 变成电信号：数字—数字编码</div>
+  <h2>信号长什么样，又怎么用电压表示比特</h2>
+  <p>计算机网络里传的是 0、1 的数字信息，但线路上必须靠电磁或光信号才能传出去。表示数字信息的信号，既可以是模拟信号，也可以是数字信号。先认清这两类信号。</p>
+
+  <h3>模拟信号 vs 数字信号</h3>
+  <p><strong>模拟信号</strong>是随时间连续变化的信号。最简单的是正弦波：</p>
+  <div class="formula">x(t) = A · sin(2πft + φ)</div>
+  <p>三个参数：振幅 A（波多高）、频率 f（每秒振荡多少次，与周期 T=1/f 互为倒数）、相位 φ（波形在时间轴上的偏移）。复杂模拟信号是很多正弦波叠加出来的。</p>
+  <p><strong>数字信号</strong>则是离散的、取值跳变瞬时发生的信号。课件给了两个关键定义：<strong>比特间隙</strong>＝发送 1 个比特所用的时间；<strong>比特率</strong>＝每秒发送的比特数（bps）。例子：1 秒里有 8 个比特间隙，比特率就是 8 bps。</p>
+
+  <h3>编码的四种方式</h3>
+  <p>编码就是"用信号表示信息的方法"。按信息和信号各自是数字还是模拟，正好四种组合：</p>
+  <div class="frame">
+    <div class="fseg h"><span class="b">数字—数字</span><span class="s">用数字信号表示数字信息（本节）</span></div>
+    <div class="fseg h"><span class="b">数字—模拟</span><span class="s">用模拟载波载数字（模块二）</span></div>
+    <div class="fseg h"><span class="b">模拟—数字</span><span class="s">把声音采样成数字（模块三）</span></div>
+    <div class="fseg h"><span class="b">模拟—模拟</span><span class="s">对模拟信号本身调制（模块三）</span></div>
+  </div>
+
+  <h3>数字—数字编码的三大流派</h3>
+  <p>计算机产生的 0/1 比特序列，要变成一串能在导线上传输的脉冲电压。常见方案分三类：单极性、极化、双极性。</p>
+
+  <h4>单极性编码</h4>
+  <p>电压只有单极性：高电平表示 1、低电平表示 0。缺点很明显：有直流电平、要求高带宽；而且无法自己同步，需要额外一根线传时钟。</p>
+
+  <h4>极化编码（用正负两个电压）</h4>
+  <p>改用正、负两个电压，减轻了单极性的直流分量问题。它又分好几种子方案：</p>
+  <ul>
+    <li><strong>非归零电平编码 NRZ-L</strong>：信号的<strong>电平本身</strong>代表比特——高电平就是 1，低电平就是 0。</li>
+    <li><strong>非归零反相编码 NRZ-I</strong>：电平<strong>翻转</strong>代表 1，不翻转代表 0。</li>
+  </ul>
+  <div class="warn">NRZ 的共同毛病：连续一串 0（或连续一串 1）时，电平长时间不动，接收方就会"时钟丢失"——数不清到底过了几个比特。这正是后面各种改进编码要解决的问题。</div>
+
+  <h4>4B/5B 编码：为了能同步</h4>
+  <p>它的思路是<strong>用 5 bit 的码来表示 4 bit 的数据</strong>。4 位有 16 种组合，5 位有 32 种，挑哪些有讲究：每个 5 比特码组里<strong>不含多于 3 个 0</strong>，或者说<strong>不少于 2 个 1</strong>。这样就保证电平有足够的跳变用于同步，代价是多花了 25% 的位。</p>
+
+  <h4>归零编码 RZ</h4>
+  <p>用正、负、零三个电平：每个比特间隙中间信号都归零。<strong>正电压到零的跳变代表 1，负电压到零的跳变代表 0</strong>——比特中间的跳变天然可以用来同步。</p>
+
+  <h4>双相位编码：每个比特中间都跳变</h4>
+  <p>信号在每比特间隙中间翻转到相反极性（不归零），中间的跳变同时携带同步信息。两种方式：</p>
+  <div class="tbl-wrap"><table class="tbl">
+    <tr><th>编码</th><th>怎么用跳变表示比特</th></tr>
+    <tr><td>曼彻斯特编码 MPE</td><td>中间负→正跳变代表比特 <strong>1</strong>，中间正→负跳变代表比特 <strong>0</strong>（电平本身携带数据）</td></tr>
+    <tr><td>差分曼彻斯特编码 DME</td><td>中间跳变只负责同步；每个比特<strong>开始处</strong>有跳变代表 <strong>0</strong>，没有跳变代表 <strong>1</strong></td></tr>
+  </table></div>
+  <p>课件还给了 MPE 信号的生成方法：把时钟和数据做 <strong>XOR 运算</strong>就得到编码信号。真值表：时钟 0 数据 0 → 0；时钟 1 数据 0 → 1；时钟 0 数据 1 → 1；时钟 1 数据 1 → 0。</p>
+  <div class="note">差分编码的特点：它不看绝对电平，而看"这一位开头有没有跳变"。这样即使线路上电平整体歪了，也能正确解码，抗干扰更强——以太网早期就用过曼彻斯特编码。</div>
+
+  <h4>双极性编码（三电平：正、负、零）</h4>
+  <p>电平 0 代表比特 0，正负电平交替代表比特 1。三种具体实现：</p>
+  <ul>
+    <li><strong>信号交替反转码 AMI</strong>：比特 1 由交替出现的正负电平表示，比特 0 是零电平。</li>
+    <li><strong>8 零替换码 B8ZS</strong>：解决长串 0 无法同步的问题。</li>
+    <li><strong>高密度双极性 3 零编码 HDB3</strong>：也是为了在连 0 时强行制造跳变。</li>
+  </ul>
+</section>
+
+<!-- ===== 模块二 ===== -->
+<section id="m2">
+  <div class="modtag"><em>模块 2</em> 用正弦波当"货车"：数字—模拟编码</div>
+  <h2>ASK / FSK / PSK / QAM</h2>
+  <p>很多信道（比如电话线、无线）只能传模拟信号，这时就得用<strong>调制技术</strong>：拿一个高频正弦波当载波，去改变它的振幅、频率或相位，让它代替数字 1 和 0。正弦波 x(t)=A·sin(2πft+φ) 正好三个可调参数，对应三种键控方式，再加一个组合。</p>
+
+  <h3>四种调制机制</h3>
+  <div class="tbl-wrap"><table class="tbl">
+    <tr><th>机制</th><th>改变哪个参数</th><th>怎么表示 0/1</th><th>特点</th></tr>
+    <tr><td>ASK 幅移键控</td><td>振幅</td><td>高幅表示一种比特、低幅（或零幅）表示另一种</td><td>实现简单，但<strong>抗干扰能力差</strong></td></tr>
+    <tr><td>FSK 频移键控</td><td>频率</td><td>高频表示一种比特、低频表示另一种</td><td>比 ASK 抗干扰好</td></tr>
+    <tr><td>PSK 相移键控</td><td>相位</td><td>不同相位表示 0/1（如相位 0 表示 0、相位 180° 表示 1）</td><td>调制技术的主要应用方向</td></tr>
+    <tr><td>QAM 正交调幅</td><td>振幅＋相位</td><td>把 ASK 和 PSK 结合起来</td><td>每个码元能载更多比特，效率最高</td></tr>
+  </table></div>
+
+  <h3>为什么 PSK 能"一个符号载好几个比特"</h3>
+  <p>ASK/FSK 一次只能表示 1 个比特，太浪费。PSK 可以用更多种相位状态：比如用 0° 表示 00、90° 表示 01、180° 表示 10、270° 表示 11——<strong>每种相位就代表两位二进制</strong>。状态越多，一个码元承载的比特就越多。课件用星座图展示了这个"状态数翻倍"的过程：</p>
+  <div class="tbl-wrap"><table class="tbl">
+    <tr><th>星座图</th><th>状态数</th><th>每个码元携带</th></tr>
+    <tr><td>2-PSK</td><td>2 个相位</td><td>1 个比特</td></tr>
+    <tr><td>4-PSK</td><td>4 个相位（00/01/10/11）</td><td>2 个比特</td></tr>
+    <tr><td>8-PSK</td><td>8 个相位</td><td>3 个比特</td></tr>
+  </table></div>
+  <p>QAM 则更进一步，在一张星座图里同时用振幅和相位把状态排得更密（课件给了两种 16 相位 QAM 星座图）。状态排得越密，单位码元传得越多，但对噪声也越敏感——这是后面香农定理要量化的权衡。</p>
+  <div class="story">
+    <div class="t">用"调座位"来理解星座图</div>
+    <p style="margin-bottom:0">把每个码元想象成一个座位。2-PSK 只有 2 个座位，每趟车只能送 1 比特；8-PSK 有 8 个座位，每趟送 3 比特；16-QAM 有 16 个座位，每趟送 4 比特。座位越多、排得越挤，同样的"车速"（波特率）下运量（比特率）就越大——但人挤人时，一点噪声（颠簸）就容易把 A 座位看成 B 座位。</p>
+  </div>
+</section>
+
+<!-- ===== 模块三 ===== -->
+<section id="m3">
+  <div class="modtag"><em>模块 3</em> 把声音变成数字，以及"带宽"到底是什么</div>
+  <h2>采样定理、傅里叶分析与基带/带通</h2>
+
+  <h3>模拟—数字：A/D 采集三步走</h3>
+  <p>要把连续的声音（模拟信号）搬进计算机，主要分三步，广泛用于自动控制系统：</p>
+  <ol>
+    <li><strong>采样</strong>：把连续的模拟信号按时间点取样，离散化；</li>
+    <li><strong>量化</strong>：把采样值用二进制位数四舍五入到离它最近的离散电平；</li>
+    <li><strong>编码</strong>：对量化后的数据做二进制编码。</li>
+  </ol>
+  <div class="formula">采样定理：采样频率 必须 &gt; 信号最高频率的 2 倍</div>
+  <div class="note">为什么是 2 倍？采样不够密，高频信号就会被"糊"成低频的假信号（混叠）。采样率至少是最高频率两倍，才能完整还原原始波形。这是整个数字音频/视频的物理基石。</div>
+
+  <h3>模拟—模拟：对声音本身做调制</h3>
+  <p>传统有线电视、电话系统都是模拟—模拟传输。人耳能听到的声音频率范围是 <strong>20Hz～20kHz</strong>，但主要能量集中在 <strong>300Hz～3000Hz</strong>——这正是电话语音信道的带宽来历。</p>
+
+  <h3>傅里叶分析：任何信号都是正弦波的叠加</h3>
+  <p>一个关键认识：<strong>复杂模拟信号可以分解成多个正弦波的叠加</strong>。比如课件的例子：S(t)=sin(2πft) 是基波，叠上一个幅度 1/3、频率 3f 的谐波 1/3·sin(2π·3f·t)，波形就从光滑正弦变成了带棱角的样子。频率越高的谐波，决定了波形的"细节"和"陡峭程度"。</p>
+
+  <h3>带宽相关的四个概念，一次分清</h3>
+  <div class="tbl-wrap"><table class="tbl">
+    <tr><th>概念</th><th>单位</th><th>含义</th></tr>
+    <tr><td>介质带宽</td><td>Hz</td><td>传输介质只能通过某段频率范围内的信号</td></tr>
+    <tr><td>有效带宽</td><td>Hz</td><td>数字信号由多个频率叠加，只要把有重要振幅分量的频率传过去、输出端能合理还原信号，这个上限频率就是有效带宽</td></tr>
+    <tr><td>信道</td><td>—</td><td>向某一个方向传送信息的媒体</td></tr>
+    <tr><td>信道容量</td><td>bps</td><td>传输介质能达到的最大比特率，依赖于编码技术</td></tr>
+  </table></div>
+  <div class="warn">注意单位区别：带宽的单位是赫兹 Hz（频率范围），信道容量的单位是 bps（每秒比特数）。两者相关但不是一回事——带宽决定上限，编码决定你离上限有多近。</div>
+
+  <h3>基带信号与带通信号</h3>
+  <p><strong>基带信号</strong>是来自信源、没做频谱搬移的信号，比如计算机输出的代表文字、图像的数据信号。它的麻烦是<strong>含很多低频甚至直流成分，而很多信道根本传不了这些低频分量</strong>。</p>
+  <p>解决办法：发送设备产生一个高频信号当"基波"（载波）来承载信息信号。<strong>用载波把基带信号搬到高频的过程叫调制（modulation），调制后的信号叫带通信号</strong>。这就解释了模块二为什么要用正弦波当货车——不是为了好看，是为了把信号搬到信道能传的频段上。</p>
+</section>
+
+<!-- ===== 模块四 ===== -->
+<section id="m4">
+  <div class="modtag"><em>模块 4</em> 本章的两座高峰：奈氏准则与香农定理</div>
+  <h2>波特率、比特率和信道上限</h2>
+
+  <h3>先把三个名词钉死</h3>
+  <p>这一章最容易混的就是"码元、波特率、比特率"，先一个个定义清楚：</p>
+  <ul>
+    <li><strong>码元</strong>：携带数据信息的信号单元。数字通信里用时间间隔相同的符号来表示数字，这个固定间隔就叫码元长度。</li>
+    <li><strong>码元速率（信号速率、波特率）</strong>：每秒通过信道传输的码元数，单位是波特（Baud）。</li>
+    <li><strong>比特率（数据传输率）</strong>：每秒传的比特数，单位 bps。</li>
+  </ul>
+  <p>关键洞察：<strong>一个码元不必只载 1 个比特</strong>。如果码元有 N 种状态（比如 4 种电平、8 种相位），那一个码元就能载 log₂N 个比特。</p>
+  <div class="tbl-wrap"><table class="tbl">
+    <tr><th>例子（都是 1 秒）</th><th>波特率</th><th>码元状态数</th><th>比特率</th></tr>
+    <tr><td>每个码元 2 种状态</td><td>8 波特</td><td>2</td><td>8 bps</td></tr>
+    <tr><td>同样 16 个码元、2 种状态</td><td>16 波特</td><td>2</td><td>16 bps</td></tr>
+    <tr><td>16 个码元、4 种状态（±5/±2 四电平）</td><td>16 波特</td><td>4</td><td>32 bps</td></tr>
+  </table></div>
+
+  <h3>奈氏准则：无噪声时，波特率的上限</h3>
+  <p>在<strong>无噪声（理想）</strong>情况下，波特率 B 和信道带宽 W 的关系是：</p>
+  <div class="formula">奈氏准则：B = 2 × W （Baud）</div>
+  <p>也就是说，理想信道里每秒最多能发 2W 个码元。再乘上每个码元载的比特数，就得到最大比特率：</p>
+  <div class="formula">S = B × log₂N = 2 × W × log₂N</div>
+  <p>其中 N 是码元状态数。含义：在固定带宽 W 下，想提高比特率，唯一办法是让每个码元多载比特（增大 N）——这就是模块二拼命往星座图里塞状态的理论依据。</p>
+
+  <h3>香农定理：有噪声时，比特率的上限</h3>
+  <p>信道总要受噪声干扰。香农定理给出<strong>噪声环境中</strong>，有限带宽信道的最大传输速率 C：</p>
+  <div class="formula">香农定理：C = W × log₂(1 + S/N) （bps）</div>
+  <p>其中 W 是信道带宽，S 是平均信号功率，N 是平均噪声功率。工程上信噪比常用分贝（dB）表示：</p>
+  <div class="formula">信噪比(dB) = 10 × log₁₀(S/N)</div>
+
+  <h3>两道课件原题，跟着算一遍</h3>
+  <div class="card">
+    <p style="margin-bottom:6px"><strong>题 1（用奈氏准则）</strong>：电话线带宽 3.5 kHz，每个码元可取 16 个值，求最大数据传输率。</p>
+    <p style="margin-bottom:0">N=16，log₂16=4。<br>
+    S = 2 × W × log₂N = 2 × 3.5k × 4 = <strong>28 kbps</strong>。</p>
+  </div>
+  <div class="card">
+    <p style="margin-bottom:6px"><strong>题 2（用香农定理）</strong>：电话系统模拟部分典型参数，信噪比 30 dB、带宽 3.5 kHz，求最大数据传输率。</p>
+    <p style="margin-bottom:0">先把 dB 换成比值：30 = 10·log₁₀(S/N)，得 S/N = 1000。<br>
+    C = W × log₂(1 + S/N) = 3.5k × log₂(1001) ≈ 3.5k × 9.97 ≈ <strong>35 kbps</strong>。</p>
+  </div>
+  <div class="note">两个定理管的事不同：<strong>奈氏准则</strong>管"无噪声时波特率/比特率的理论上限"，<strong>香农定理</strong>管"有噪声时信道容量的硬上限"。香农上限只由带宽和信噪比决定，跟你用几种状态无关——你可以把星座图塞得再密，也突破不了噪声给的天花板。</div>
+</section>
+
+<!-- ===== 模块五 ===== -->
+<section id="m5">
+  <div class="modtag"><em>模块 5</em> 一条线大家共用：多路复用</div>
+  <h2>FDM / TDM / WDM / CDM</h2>
+  <p>一条高速干线很贵，让它只跑一路信号太浪费。<strong>多路复用</strong>就是利用一条链路同时传输多路信号，把系统的传输能力最大限度利用起来。发送端有个<strong>复用器</strong>把多路信号合成一路，接收端再用<strong>解复用器</strong>分开。怎么"分"，就有了四种技术。</p>
+
+  <h3>频分复用 FDM：分频率</h3>
+  <p>把线路的整个频率范围切成若干互不重叠的小频段，每个用户固定占一段。<strong>所有用户在同样的时间占用不同的频率带宽</strong>，适用于模拟信号。用户分到频带后，通信全程都占着它；频段之间还要留"警戒频带"防止串扰。</p>
+  <div class="note">这里说的"带宽"是频率带宽（Hz），不是数据发送速率——别和 bps 搞混。有线电视一根线能看几十个台，就是 FDM。</div>
+
+  <h3>时分复用 TDM：分时间</h3>
+  <p>把时间切成一个个等长的小时间片，每个时间片由一路信号占用，适用于数字信号。每个用户占用的时隙周期性出现，这个周期就是一帧（TDM 帧）。<strong>所有用户在不同的时间占用同样的频带宽度</strong>。</p>
+  <h4>同步 TDM：时隙固定给你</h4>
+  <p>每路设备在每一帧里都有固定位置。问题是：如果某路设备这会儿没数据可发，分给它的时隙就空着浪费了。课件例子里，用户 1、2、3、4 轮流占 A/B/C/D 四个位置，哪怕某用户这一帧没数据，位置也照样留着。</p>
+  <h4>异步 TDM（统计复用 STDM）：按需分配</h4>
+  <p>改进办法：<strong>每帧的时间片数量少于输入设备数量</strong>，谁有数据才分给谁。代价是每个信息单元必须附带<strong>地址信息</strong>，复用器要有一定存储容量，节点还要有管理队列的能力。换来的是系统利用率大幅提高。</p>
+  <div class="tbl-wrap"><table class="tbl">
+    <tr><th></th><th>同步 TDM</th><th>异步 TDM（统计复用）</th></tr>
+    <tr><td>帧长</td><td>固定</td><td>按需变化</td></tr>
+    <tr><td>控制/实时性</td><td>控制简单、实时性好</td><td>需地址和缓存，复杂一些</td></tr>
+    <tr><td>信道效率</td><td>差（有空时隙浪费）</td><td>高</td></tr>
+  </table></div>
+
+  <h3>波分复用 WDM：光纤版的频分</h3>
+  <p>本质就是<strong>光的频分复用</strong>：在一条光纤上，用多个激光器同时发送不同波长的激光。课件例子：8 路波长 1550～1557nm，每路 2.5 Gb/s，合起来一根光纤跑 20 Gb/s，经光放大器传 120 km。发送端光调制器调制、合波器合波，接收端分波器分开、光解调器解调。</p>
+
+  <h3>码分复用 CDM：靠"码型"区分</h3>
+  <p>它又叫码分多址 CDMA。和 FDM（分频率）、TDM（分时隙）都不同：<strong>各个用户用同一频率、占相同带宽，靠不同的码型来区分</strong>——这正是手机通话能同时挤在一个频段里还不串话的原因。</p>
+  <h4>码片与码片序列</h4>
+  <p>把每个比特时间再细分成 m 个更短的间隔，每个短间隔叫一个<strong>码片</strong>；每个站点分配一个 m 位码片序列。规则：</p>
+  <ul>
+    <li>发送比特 <strong>1</strong>，就发送自己的码片序列；</li>
+    <li>发送比特 <strong>0</strong>，就发送码片序列的反码；</li>
+    <li>双极型表示：序列里 0→−1，1→+1。</li>
+  </ul>
+  <div class="bits">站点 A 的码片序列：( 0 0 0 1 1 0 1 1 )<br>双极型：<span class="ins">( −1 −1 −1 +1 +1 −1 +1 +1 )</span><br>它的反码：( +1 +1 +1 −1 −1 +1 −1 −1 )</div>
+  <h4>正交性：为什么收得回来</h4>
+  <p>各站点的码片序列彼此<strong>正交</strong>——两个不同站点码片序列的规格化内积为 0，自己和自己的内积为 1。于是路上虽然信号叠加在一起，接收方只要用自己的码片序列和收到的叠加信号做内积，就能把属于自己的那一路"过滤"出来，别人的全部抵消为 0。课件的算例：S1=C 时内积得 1；S2=B+C 时和 C 内积得 1；S3=A+B 时和 C 内积得 0（C 没发，滤掉了）；S6 与 C 内积得 −1，表示 C 发的是比特 0。</p>
+
+  <h3>三种复用一张图对比</h3>
+  <div class="tbl-wrap"><table class="tbl">
+    <tr><th>复用方式</th><th>靠什么区分用户</th><th>适用信号</th></tr>
+    <tr><td>FDM</td><td>不同频率段</td><td>模拟</td></tr>
+    <tr><td>TDM</td><td>不同时间片</td><td>数字</td></tr>
+    <tr><td>CDM</td><td>不同码型（同频同时）</td><td>数字（无线）</td></tr>
+  </table></div>
+</section>
+
+<!-- ===== 模块六 ===== -->
+<section id="m6">
+  <div class="modtag"><em>模块 6</em> 数据怎么转过去：交换技术</div>
+  <h2>电路交换 · 报文交换 · 分组交换</h2>
+  <p>当设备很多、两两之间没有直接拉线时，怎么让任意两台都能通信？答案就是<strong>交换</strong>——把多条物理链路连起来，在两个设备间临时拼出一条通信路径。三种基本方式，外加 ATM 信元交换、帧中继等其他技术。</p>
+
+  <h3>电路交换：先占线，再通话</h3>
+  <p>在两个设备之间建一条临时的物理连接，整条通路在通信期间被双方<strong>完全独占</strong>。可以把电路交换机看成一个多路开关。过程分三步：<strong>电路建立 → 数据传输 → 电路拆除</strong>。像打电话：先拨通占线，说完挂断。缺点是线路独占、利用率低。</p>
+
+  <h3>报文交换：存储转发（已淘汰）</h3>
+  <p>又叫存储转发。中间节点把整个报文先<strong>存下来、检查正确性和完整性</strong>，再发往下一跳。缺点：报文很长，整体存储转发延迟大。<strong>报文交换技术已被淘汰</strong>——它的思想被分组交换继承了。</p>
+
+  <h3>分组交换：把大报文切小块</h3>
+  <p>把较长的报文切成较短的数据单元，每块加上通信控制信息，形成一个<strong>信息包（packet，分组）</strong>。通信以包为单位发送、存储、转发。关键好处：<strong>包一到就能转发，不必等整个报文到齐，大大缩短延迟</strong>。</p>
+  <div class="tbl-wrap"><table class="tbl">
+    <tr><th>对比维度</th><th>分组交换相对电路交换</th></tr>
+    <tr><td>线路利用</td><td>共享传输链路，提高使用效率</td></tr>
+    <tr><td>拥塞</td><td>有流量和拥塞控制，不会死锁，但延迟会增大</td></tr>
+    <tr><td>工作方式</td><td>可工作于广播和多播，能互连多种通信设备</td></tr>
+  </table></div>
+
+  <h3>分组交换的两种类型</h3>
+  <div class="tabs">
+    <div class="tabbtns">
+      <button class="tabbtn on" data-t="tg-dg">数据报</button>
+      <button class="tabbtn" data-t="tg-vc">虚电路</button>
+    </div>
+    <div class="tabpanel on" id="tg-dg">
+      <p><strong>数据报</strong>：每个包独立于其他包处理，各包可以走不同路径。一条链路可同时为多对设备服务。代价是<strong>同一批数据报可能不按顺序到达</strong>，重新排序的活儿交给传输层。</p>
+    </div>
+    <div class="tabpanel" id="tg-vc">
+      <p><strong>虚电路</strong>：属于同一次通信的所有包，关系被维持住；路径在数据传输开始之前就选定。它和电路交换的区别是——<strong>虚电路的"电路"可以同时被多个设备共享</strong>，而电路交换的物理通路是独占的。</p>
+    </div>
+  </div>
+
+  <h4>虚电路的两种形式</h4>
+  <ul>
+    <li><strong>交换虚电路 SVC</strong>：需要时才创建，只在这次通信期间存在；</li>
+    <li><strong>永久虚电路 PVC</strong>：像租用的专线，两点之间那条虚电路总是预先建好的。</li>
+  </ul>
+  <p>虚电路的好处：<strong>只在建立时需要完整目的地址，之后每个包只需带一个虚电路号</strong>，大大减少了包的控制信息和额外开销。</p>
+
+  <h3>三种交换方式一图总结</h3>
+  <div class="tbl-wrap"><table class="tbl">
+    <tr><th></th><th>电路交换</th><th>报文交换</th><th>分组交换</th></tr>
+    <tr><td>连接建立</td><td>需要（独占通路）</td><td>不需要</td><td>虚电路需 / 数据报不需要</td></tr>
+    <tr><td>传送单位</td><td>比特流直达终点</td><td>整个报文</td><td>一个个分组</td></tr>
+    <tr><td>转发方式</td><td>—（直通）</td><td>存储转发整报文</td><td>存储转发分组</td></tr>
+    <tr><td>线路占用</td><td>全程独占</td><td>逐段共享</td><td>逐段共享</td></tr>
+    <tr><td>延迟</td><td>建立长、传输快</td><td>很大</td><td>较小、并行流水线</td></tr>
+  </table></div>
+</section>
+
+<!-- ===== 模块七 ===== -->
+<section id="m7">
+  <div class="modtag"><em>模块 7</em> 传错了怎么知道：差错检测编码</div>
+  <h2>奇偶校验 · CRC · 校验和</h2>
+
+  <h3>基本原理：加一点冗余，换一份安心</h3>
+  <p>思路很朴素：发送方按约定规则给数据<strong>多附几位冗余码</strong>，把数据和冗余一起发；接收方按同样规则检查。数据信息占整个发送信息的比重叫<strong>编码效率</strong>。冗余码分两类：<strong>检错码</strong>（只发现错）和<strong>纠错码</strong>（还能纠正错）。错误类型有三种：单比特错误、多比特错误、突发错误。</p>
+
+  <h3>奇偶校验码</h3>
+  <p>常用于串行通信。规则：数一数数据里 1 的个数，再附加一个校验位 r，让 1 的总数变成偶数（偶校验）或奇数（奇校验）。</p>
+  <div class="formula">偶校验：r = b₁ ⊕ b₂ ⊕ b₃ ⊕ … ⊕ bₘ　　奇校验：再 ⊕ 1</div>
+  <p>在实际使用中可以二维叠加：</p>
+  <ul>
+    <li><strong>垂直（纵向）偶校验</strong>：每一块数据加一个校验位；</li>
+    <li><strong>水平（横向）偶校验</strong>：各块数据相同位置的比特一起算校验；</li>
+    <li><strong>纵横（水平垂直）偶校验</strong>：两个方向都加。</li>
+  </ul>
+  <p>检错能力逐级增强：垂直偶校验能发现数据单元内单比特错、以及奇数个比特错；水平偶校验能发现同一位上奇数个错和单个单元内的突发错；<strong>纵横偶校验除了"偶数个数据单元中偶数个相同位出错"这种特殊情况外，其他错误基本都能检出</strong>。</p>
+
+  <h3>循环冗余校验 CRC（重点）</h3>
+  <p>CRC 常用于数据链路层。步骤是：双方先约定一个<strong>生成多项式 G(x)</strong>，最高阶为 m。</p>
+  <div class="card">
+    <p style="margin-bottom:6px"><strong>发送方三步：</strong></p>
+    <p style="margin-bottom:6px">① 把待发送信息 U(x) 后面添 m 个 0（即乘以 xᵐ）；<br>
+    ② 用它模 2 除以 G(x)，得到 m 位余数 R(x)；<br>
+    ③ 把 R(x) 接在 U(x) 后面一起发。</p>
+    <p style="margin-bottom:0"><strong>接收方：</strong>把收到的数据再除以 G(x)。余数为 0 ＝没传错；不为 0 ＝传错了。</p>
+  </div>
+  <div class="warn">除法是<strong>模 2 除法</strong>：没有借位，加减就是异或——1−1=0，1−0=1，0−0=0，0−1=1。别按普通十进制长除法借位。</div>
+
+  <h4>课件完整算例（跟着算一遍）</h4>
+  <p>U(x)=1101011，G(x)=x⁴+x³+1=11001，即 m=4。</p>
+  <p>先在 U 后面添 4 个 0：<strong>1101011 0000</strong>。再用模 2 长除法除以 11001，最后得到余数 R(x)=<strong>1010</strong>。于是真正发送的数据是：</p>
+  <div class="bits">发送数据 = U(x) 后面接余数 = <span class="ins">1101011 1010</span></div>
+  <p>接收方拿 11010111010 除以同一个 G(x)，余数为 0，就说明传输无误。</p>
+
+  <h4>CRC 为什么厉害</h4>
+  <p>选合适的 G(x)（最高阶 r），能检出：所有奇数位突发错误；所有长度小于 r 的突发错误；以 (2^(r−1)−1)/2^(r−1) 的概率检出长度为 r+1 的突发错误；以 2^(r−1)/2^r 的概率检出长度更大的突发错误。著名的 <strong>CRC-32</strong> 多项式为 x³²+x²⁶+x²³+x²²+x¹⁶+x¹²+x¹¹+x¹⁰+x⁸+x⁷+x⁵+x⁴+x²+x+1，能以 <strong>99.99999998%</strong> 的准确率检出所有长度大于 33 的突发错误——以太网就用它。</p>
+
+  <h3>校验和 Checksum</h3>
+  <p>常用于高层协议（如 IP、TCP、UDP 的校验和）。做法：</p>
+  <ul>
+    <li><strong>发送方</strong>：把整个数据单元切成 n 比特一段（一般 n=16），用<strong>反码加法</strong>加起来，把结果<strong>取反</strong>得到 n 比特校验和，附在数据末尾一起发。</li>
+    <li><strong>接收方</strong>：把收到的所有段（含校验和）再用反码加一遍，若结果是 n 个全 1，就说明无差错。</li>
+  </ul>
+  <p>课件算例：四段 1100111、1011101、0111001、0101001 反码相加得 0101000，取反得 1010111 作校验和；接收方把这五段再加一遍，结果全 1，判定无差错。</p>
+
+  <div class="note">三种检错码定位不同：<strong>奇偶校验</strong>最简单、能力最弱，串行通信够用；<strong>CRC</strong>检错能力最强，用在数据链路层；<strong>校验和</strong>计算快、适合高层协议。它们都只检错，纠错靠后面传输层的重传来兜底。</div>
+</section>
+
+<!-- ===== 知识地图回顾 ===== -->
+<section id="endmap">
+  <h2>最后：把整章串成一条线</h2>
+  <div class="card">
+    <p style="margin-bottom:8px"><strong>一条主线</strong>：计算机网络是五部分组成的数据通信系统（信源→发送设备→传输系统→接收设备→信宿）；0/1 比特必须先变成物理信号才能在线路上传。</p>
+    <p style="margin-bottom:8px"><strong>编码四象限</strong>：数字—数字（单极性/极化/双极性，NRZ、RZ、曼彻斯特、差分曼彻斯特、4B/5B、AMI/B8ZS/HDB3）；数字—模拟（ASK/FSK/PSK/QAM，靠星座图多载比特）；模拟—数字（采样、量化、编码，采样率要大于最高频率 2 倍）；模拟—模拟（有线电视、电话）。</p>
+    <p style="margin-bottom:8px"><strong>两座公式高峰</strong>：奈氏准则 B=2W、S=2W·log₂N（无噪声下的波特率/比特率上限）；香农定理 C=W·log₂(1+S/N)（有噪声下信道容量硬上限，信噪比 dB=10·log₁₀(S/N)）。</p>
+    <p style="margin-bottom:8px"><strong>四种复用</strong>：FDM 分频率（模拟）、TDM 分时间（数字，含同步 TDM 与统计复用 STDM）、WDM 光的频分、CDM 靠码型正交（CDMA）。</p>
+    <p style="margin-bottom:8px"><strong>三种交换</strong>：电路交换（独占、先建后传再拆）、报文交换（整报文存储转发，已淘汰）、分组交换（切小包、流水线转发；分数据报与虚电路 SVC/PVC）。</p>
+    <p style="margin-bottom:0"><strong>三类检错码</strong>：奇偶校验（简单、能力弱）、CRC（模 2 除法、检错最强、数据链路层）、校验和（反码加法取反、高层协议）。</p>
+  </div>
+</section>
+
+<footer><p>本资料基于课程课件《计算机网络（胡亮 等编著）》第 2 章整理，仅供学习交流使用，具体教学要求以任课教师通知为准。</p></footer>
+</div>
+<button class="topbtn" id="topBtn" onclick="window.scrollTo({top:0})">↑</button>
+</div>
+</div>
+<script>
+document.querySelectorAll('.tabs').forEach(function(g){
+  g.querySelectorAll('.tabbtn').forEach(function(b){
+    b.addEventListener('click',function(){
+      g.querySelectorAll('.tabbtn').forEach(function(x){x.classList.remove('on')});
+      g.querySelectorAll('.tabpanel').forEach(function(x){x.classList.remove('on')});
+      b.classList.add('on');
+      g.querySelector('#'+b.dataset.t).classList.add('on');
+    });
+  });
+});
+function createStepper(id,steps){
+  var cur=0,box=document.getElementById(id);
+  if(!box)return;
+  var dots=box.querySelector('.stepdots'),body=box.querySelector('.stepbody'),
+      prev=box.querySelector('.prev'),next=box.querySelector('.next');
+  steps.forEach(function(_,i){
+    if(i>0){var l=document.createElement('span');l.className='stepline';dots.appendChild(l);}
+    var d=document.createElement('span');d.className='stepdot';d.textContent=i+1;dots.appendChild(d);
+  });
+  function render(){
+    var ds=dots.querySelectorAll('.stepdot');
+    ds.forEach(function(d,i){d.classList.toggle('on',i<=cur)});
+    body.innerHTML='<div class="st">'+steps[cur].t+'</div>'+steps[cur].c;
+    prev.disabled=cur===0;
+    next.textContent=cur===steps.length-1?'已完成':'下一步';
+    next.classList.toggle('o',cur<steps.length-1);
+  }
+  prev.addEventListener('click',function(){if(cur>0){cur--;render();}});
+  next.addEventListener('click',function(){if(cur<steps.length-1){cur++;render();}});
+  render();
+}
+var tb=document.getElementById('topBtn');
+window.addEventListener('scroll',function(){tb.style.display=window.scrollY>500?'block':'none';});
+document.querySelector('.side').addEventListener('click',function(e){
+  if(e.target.tagName==='A'&&window.innerWidth<=900)this.classList.remove('open');
+});
+</script>
+</body>
+</html>
