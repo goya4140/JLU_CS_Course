@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>01 编译引论 · 编译原理学习资料</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23173b5e'/%3E%3Ctext x='16' y='22' font-size='16' text-anchor='middle' fill='%23e8743b' font-family='Georgia'%3E1%3C/text%3E%3C/svg%3E">
+<style>
+:root{
+  --ink:#173b5e; --org:#e8743b; --blue-bg:#eef4f9; --org-bg:#fdf1e8;
+  --line:#d8e2ec; --text:#233242; --gray:#5f7185; --red:#b03a2e; --red-bg:#fbeae8;
+  --green:#2e7d52; --green-bg:#e9f5ee;
+  --serif:Georgia,"Songti SC","SimSun",serif;
+  --sans:"Segoe UI","Microsoft YaHei","PingFang SC",sans-serif;
+  --mono:Consolas,"Courier New",monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--sans);color:var(--text);background:#fff;font-size:15px;line-height:1.85}
+h1,h2,h3,h4{font-family:var(--serif);color:var(--ink);line-height:1.4}
+a{color:var(--ink);text-decoration:none}
+::selection{background:var(--org);color:#fff}
+
+/* ===== 布局 ===== */
+.layout{display:flex;min-height:100vh}
+.sidebar{width:248px;flex-shrink:0;background:var(--ink);color:#cdd9e6;padding:26px 0;position:fixed;top:0;bottom:0;left:0;overflow-y:auto;z-index:40}
+.sidebar .brand{padding:0 22px 18px;border-bottom:1px solid rgba(255,255,255,.14);margin-bottom:14px}
+.sidebar .brand .chap{font-family:var(--serif);font-size:26px;color:#fff;display:block}
+.sidebar .brand .sub{font-size:12px;color:#9fb4c8;letter-spacing:2px;margin-top:2px}
+.nav-item{display:flex;align-items:center;gap:10px;padding:9px 22px;color:#c3d1de;font-size:13.5px;cursor:pointer;border-left:3px solid transparent;transition:all .18s}
+.nav-item:hover{background:rgba(255,255,255,.08);color:#fff}
+.nav-item.active{background:rgba(232,116,59,.18);border-left-color:var(--org);color:#fff}
+.nav-item .n{font-family:var(--mono);font-size:11px;color:var(--org);width:20px;flex-shrink:0}
+.main{margin-left:248px;flex:1;min-width:0}
+.wrap{max-width:860px;margin:0 auto;padding:0 34px}
+.hamburger{display:none;position:fixed;top:14px;left:14px;z-index:50;width:42px;height:42px;background:var(--ink);border:none;border-radius:8px;padding:10px;cursor:pointer}
+.hamburger svg{width:100%;height:100%;stroke:#fff;stroke-width:2;fill:none}
+.backdrop{display:none;position:fixed;inset:0;background:rgba(20,35,50,.5);z-index:35}
+
+/* ===== Hero ===== */
+.hero{background:linear-gradient(160deg,#173b5e 0%,#1f4d78 100%);color:#fff;padding:64px 0 54px;position:relative;overflow:hidden}
+.hero::before{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.05) 1px,transparent 1px);background-size:34px 34px}
+.hero .wrap{position:relative}
+.hero .eyebrow{font-size:12.5px;letter-spacing:4px;color:#f0b594;margin-bottom:14px}
+.hero h1{color:#fff;font-size:38px;margin-bottom:14px}
+.hero p.lead{color:#d3e0ec;font-size:15.5px;max-width:640px}
+.pipeline{display:flex;align-items:stretch;gap:0;margin-top:34px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.16);border-radius:12px;padding:18px 16px}
+.p-node{flex:1;text-align:center;position:relative;z-index:2}
+.p-node .box{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);border-radius:8px;padding:12px 6px;font-size:12px;font-family:var(--mono);min-height:66px;display:flex;flex-direction:column;justify-content:center;gap:4px}
+.p-node .box b{font-family:var(--sans);font-size:13px;color:#fff}
+.p-node .box span{font-size:10.5px;color:#bcd0e2}
+.p-node.mid .box{background:rgba(232,116,59,.28);border-color:#f0a076}
+.p-arrow{display:flex;align-items:center;justify-content:center;width:30px;flex-shrink:0}
+.p-arrow svg{width:24px;height:24px;stroke:#f0b594;stroke-width:2;fill:none}
+.p-arrow .tick{stroke-dasharray:30;animation:flow 1.6s linear infinite}
+@keyframes flow{0%{stroke-dashoffset:30}100%{stroke-dashoffset:0}}
+.packet{position:absolute;top:-6px;width:9px;height:9px;border-radius:50%;background:var(--org);opacity:0;animation:packet 3.2s ease-in-out infinite}
+@keyframes packet{0%{left:0;opacity:0}15%{opacity:1}85%{opacity:1}100%{left:calc(100% - 9px);opacity:0}}
+
+/* ===== 章节块 ===== */
+section.block{padding:46px 0 10px}
+.block-head{display:flex;align-items:baseline;gap:14px;margin-bottom:20px;border-bottom:2px solid var(--line);padding-bottom:12px}
+.block-head .idx{font-family:var(--mono);font-size:14px;color:#fff;background:var(--org);border-radius:6px;padding:2px 9px}
+.block-head h2{font-size:26px}
+.block-head .en{font-size:12px;color:var(--gray);letter-spacing:1.5px;margin-left:auto;font-family:var(--sans)}
+h3.sec{font-size:19px;margin:30px 0 12px;padding-left:12px;border-left:4px solid var(--org)}
+h4{font-size:16px;margin:20px 0 8px}
+p{margin-bottom:12px}
+p .term{color:var(--ink);font-weight:700}
+ul,ol{margin:8px 0 14px 22px}
+li{margin-bottom:6px}
+
+/* ===== 提示框 ===== */
+.box-tip{border-radius:10px;padding:14px 18px;margin:16px 0;font-size:14.5px}
+.box-tip .bt-title{display:flex;align-items:center;gap:8px;font-weight:700;margin-bottom:6px;font-family:var(--serif)}
+.box-tip .bt-title svg{width:18px;height:18px;flex-shrink:0}
+.analogy{background:var(--org-bg);border:1px solid #f3d2bd}
+.analogy .bt-title{color:#b85623}
+.analogy .bt-title svg{stroke:#c96a2e;fill:none;stroke-width:1.8}
+.note{background:var(--blue-bg);border:1px solid #cddded}
+.note .bt-title{color:var(--ink)}
+.note .bt-title svg{stroke:var(--ink);fill:none;stroke-width:1.8}
+.warn{background:var(--red-bg);border:1px solid #ecc9c3}
+.warn .bt-title{color:var(--red)}
+.warn .bt-title svg{stroke:var(--red);fill:none;stroke-width:1.8}
+.good{background:var(--green-bg);border:1px solid #c2e0d0}
+.good .bt-title{color:var(--green)}
+.good .bt-title svg{stroke:var(--green);fill:none;stroke-width:1.8}
+
+/* ===== 表格 ===== */
+.tbl-scroll{overflow-x:auto;margin:16px 0;border:1px solid var(--line);border-radius:10px}
+table.data{width:100%;border-collapse:collapse;font-size:13.5px;table-layout:fixed}
+table.data caption{text-align:left;font-size:12.5px;color:var(--gray);padding:10px 14px 0}
+table.data th{background:var(--ink);color:#fff;font-weight:600;padding:10px 12px;text-align:left;font-size:13px}
+table.data td{padding:9px 12px;border-top:1px solid var(--line);vertical-align:top;word-break:break-word}
+table.data tr:nth-child(even) td{background:#f6f9fc}
+table.data .mono-cell{font-family:var(--mono);font-size:12.5px}
+
+/* ===== 代码 ===== */
+.code{background:#1d3550;color:#dce7f2;border-radius:10px;padding:16px 18px;font-family:var(--mono);font-size:13px;line-height:1.9;overflow-x:auto;margin:14px 0;white-space:pre}
+.code .kw{color:#f0a076}
+.code .cm{color:#7f9bb5}
+.quad-list{display:flex;flex-direction:column;gap:7px;margin:14px 0}
+.quad{font-family:var(--mono);font-size:13px;background:var(--blue-bg);border:1px solid #cddded;border-radius:8px;padding:8px 14px;display:flex;gap:10px;align-items:baseline}
+.quad .qn{color:var(--org);font-weight:700;flex-shrink:0}
+.quad .qb{color:var(--ink)}
+.quad.new{background:var(--org-bg);border-color:#f0c3a6}
+.formula{text-align:center;font-family:var(--serif);font-size:17px;color:var(--ink);background:#f6f9fc;border:1px dashed var(--line);border-radius:10px;padding:16px;margin:16px 0}
+
+/* ===== 结构块 ===== */
+.struct{display:flex;border:1px solid var(--line);border-radius:10px;overflow:hidden;margin:14px 0}
+.struct .seg{padding:10px 14px;font-size:13px;text-align:center;flex:1;border-right:1px solid var(--line)}
+.struct .seg:last-child{border-right:none}
+.struct .seg b{display:block;font-family:var(--mono);font-size:13.5px;margin-bottom:2px}
+.struct .seg span{font-size:11.5px;color:var(--gray)}
+.seg-op{background:var(--ink);color:#fff}
+.seg-op span{color:#a9c2d8}
+.seg-arg{background:var(--blue-bg)}
+.seg-arg b{color:var(--ink)}
+.seg-res{background:var(--org-bg)}
+.seg-res b{color:#b85623}
+
+/* ===== 时间轴 ===== */
+.timeline{position:relative;margin:22px 0 8px;padding-left:30px}
+.timeline::before{content:"";position:absolute;left:9px;top:6px;bottom:6px;width:2px;background:var(--line)}
+.tl-item{position:relative;margin-bottom:22px}
+.tl-item:last-child{margin-bottom:0}
+.tl-item .dot3{position:absolute;left:-30px;top:4px;width:20px;height:20px;border-radius:50%;background:var(--ink);border:3px solid #fff;box-shadow:0 0 0 2px var(--line);display:flex;align-items:center;justify-content:center}
+.tl-item .dot3 span{font-family:var(--mono);font-size:10px;color:#fff}
+.tl-item.later .dot3{background:var(--org);box-shadow:0 0 0 2px var(--org)}
+.tl-item h4{margin:0 0 4px}
+.tl-item .tl-body{font-size:14px;color:var(--text)}
+.tl-item .tl-tag{font-family:var(--mono);font-size:12px;color:var(--org)}
+
+/* ===== 分步交互 ===== */
+.stepper{border:1px solid var(--line);border-radius:12px;overflow:hidden;margin:18px 0}
+.stepper-bar{display:flex;align-items:center;gap:8px;background:#f6f9fc;padding:12px 16px;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.dots{display:flex;gap:7px;flex-wrap:wrap}
+.dot{width:26px;height:26px;border-radius:50%;border:2px solid var(--line);background:#fff;color:var(--gray);font-family:var(--mono);font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s}
+.dot.done{background:var(--ink);border-color:var(--ink);color:#fff}
+.dot.cur{background:var(--org);border-color:var(--org);color:#fff;transform:scale(1.12)}
+.step-btns{margin-left:auto;display:flex;gap:8px}
+.step-btns button{border:1px solid var(--ink);background:#fff;color:var(--ink);border-radius:7px;padding:6px 16px;font-size:13px;cursor:pointer;font-family:var(--sans)}
+.step-btns button.go{background:var(--ink);color:#fff}
+.step-btns button:disabled{opacity:.35;cursor:not-allowed}
+.step-body{padding:18px 20px;min-height:150px}
+.step-body .st-title{font-family:var(--serif);font-weight:700;color:var(--ink);font-size:16px;margin-bottom:8px}
+.tok-vis{display:flex;gap:6px;flex-wrap:wrap;margin:12px 0}
+.tok-cell{background:var(--blue-bg);border:1px solid #b9d2e6;border-radius:8px;padding:8px 12px;font-family:var(--mono);font-size:13px;color:var(--ink);text-align:center}
+.tok-cell.hot{background:var(--org-bg);border-color:var(--org);color:#b85623;font-weight:700}
+
+/* ===== 折叠面板 ===== */
+.acc{border:1px solid var(--line);border-radius:10px;margin:12px 0;overflow:hidden}
+.acc-head{width:100%;display:flex;align-items:center;gap:10px;background:#f6f9fc;padding:12px 16px;border:none;cursor:pointer;font-size:14px;font-family:var(--sans);color:var(--ink);font-weight:600;text-align:left}
+.acc-head svg{width:16px;height:16px;stroke:var(--org);stroke-width:2;fill:none;transition:transform .25s;flex-shrink:0}
+.acc.open .acc-head svg{transform:rotate(90deg)}
+.acc-body{display:none;padding:14px 18px;border-top:1px solid var(--line)}
+.acc.open .acc-body{display:block}
+
+/* ===== 双栏卡片 ===== */
+.cards2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:16px 0}
+.mini-card{border:1px solid var(--line);border-radius:10px;padding:16px;background:#fff}
+.mini-card h4{margin-top:0;display:flex;align-items:center;gap:8px}
+.mini-card h4 svg{width:17px;height:17px;stroke:var(--org);fill:none;stroke-width:1.8}
+.mini-card.alt{background:var(--blue-bg);border-color:#cddded}
+
+/* ===== 章末 ===== */
+.summary-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:16px 0}
+.sum-item{border-left:4px solid var(--org);background:#f6f9fc;padding:12px 16px;border-radius:0 8px 8px 0;font-size:14px}
+.sum-item b{color:var(--ink);font-family:var(--serif)}
+footer.foot{border-top:2px solid var(--line);margin-top:46px;padding:26px 0 40px;color:var(--gray);font-size:12.5px}
+footer.foot .src{font-family:var(--mono);font-size:12px}
+
+/* ===== 响应式 ===== */
+@media (max-width:900px){
+  .sidebar{transform:translateX(-100%);transition:transform .25s;width:230px}
+  .sidebar.show{transform:translateX(0)}
+  .backdrop.show{display:block}
+  .main{margin-left:0}
+  .hamburger{display:block}
+  .wrap{padding:0 20px}
+  .hero{padding:70px 0 40px}
+  .hero h1{font-size:28px}
+  .pipeline{flex-direction:column;gap:10px}
+  .p-arrow{width:100%;height:24px;transform:rotate(90deg)}
+  .cards2,.summary-grid{grid-template-columns:1fr}
+  .block-head .en{display:none}
+  table.data{font-size:12.5px}
+}
+</style>
+</head>
+<body>
+<button class="hamburger" aria-label="打开目录"><svg viewBox="0 0 24 24"><path d="M3 6h18M3 12h18M3 18h18"/></svg></button>
+<div class="backdrop"></div>
+<div class="layout">
+<nav class="sidebar" id="sidebar">
+  <div class="brand">
+    <span class="chap">第一章</span>
+    <span class="sub">INTRODUCTION</span>
+  </div>
+  <a class="nav-item" href="#top"><span class="n">00</span>本章开篇</a>
+  <a class="nav-item" href="#m1"><span class="n">01</span>程序设计语言的演进</a>
+  <a class="nav-item" href="#m2"><span class="n">02</span>高级语言的三种实现</a>
+  <a class="nav-item" href="#m3"><span class="n">03</span>编译器的内部全景</a>
+  <a class="nav-item" href="#m4"><span class="n">04</span>词法分析</a>
+  <a class="nav-item" href="#m5"><span class="n">05</span>语法分析</a>
+  <a class="nav-item" href="#m6"><span class="n">06</span>语义分析</a>
+  <a class="nav-item" href="#m7"><span class="n">07</span>中间代码生成与优化</a>
+  <a class="nav-item" href="#m8"><span class="n">08</span>目标代码生成</a>
+  <a class="nav-item" href="#m9"><span class="n">09</span>遍、前端与后端</a>
+  <a class="nav-item" href="#m10"><span class="n">10</span>编译器的实现方法</a>
+  <a class="nav-item" href="#end"><span class="n">11</span>章末速查与学习意义</a>
+</nav>
+
+<main class="main" id="top">
+<!-- ===== Hero ===== -->
+<header class="hero">
+  <div class="wrap">
+    <div class="eyebrow">编译原理 · 第一章</div>
+    <h1>编译引论</h1>
+    <p class="lead">我们写的每一行高级语言代码，计算机都无法直接理解。它要先经过一个叫“编译器”的复杂系统软件，一步步翻译成机器能执行的指令。这一章先建立全课程的地图：语言为什么需要翻译、编译器内部由哪些阶段构成、以及编译器本身是怎么造出来的。</p>
+    <div class="pipeline">
+      <div class="p-node"><div class="box"><b>源程序</b><span>字符流</span></div></div>
+      <div class="p-arrow"><svg viewBox="0 0 24 24" class="tick"><path d="M4 12h16M15 6l6 6-6 6"/></svg><span class="packet"></span></div>
+      <div class="p-node mid"><div class="box"><b>五个阶段</b><span>分析与综合</span></div></div>
+      <div class="p-arrow"><svg viewBox="0 0 24 24" class="tick"><path d="M4 12h16M15 6l6 6-6 6"/></svg><span class="packet"></span></div>
+      <div class="p-node"><div class="box"><b>目标程序</b><span>机器指令</span></div></div>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+<!-- ===== 模块一：程序设计语言的演进 ===== -->
+<section class="block" id="m1">
+  <div class="block-head"><span class="idx">01</span><h2>程序设计语言的演进</h2><span class="en">LANGUAGE ERAS</span></div>
+  <p>要理解编译器，先得弄明白一件事：<span class="term">计算机只认识二进制</span>。可我们今天写的是 x = f(i,j) 这样接近数学的代码，从“人能看懂的符号”到“机器能执行的 0/1”，中间隔着一道必须有人架桥的鸿沟。程序设计语言的三代演进，就是一部不断把这道鸿沟交给工具去填平的历史。</p>
+
+  <div class="analogy box-tip">
+    <div class="bt-title"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16h.01"/></svg>生活类比</div>
+    机器语言像让你直接用“通断”两种电信号说话，普通人根本没法交流；汇编语言给这些信号起了代号，好比给每个电话号码存了联系人名字；高级语言则进一步让你直接说“我要做什么”，具体怎么拨号交给系统去处理。
+  </div>
+
+  <h3 class="sec">1.1 三代语言：从二进制到接近自然语言</h3>
+  <div class="timeline">
+    <div class="tl-item">
+      <div class="dot3"><span>1</span></div>
+      <h4>第一代：机器语言</h4>
+      <div class="tl-tag">00000000001000100011000000100000</div>
+      <p class="tl-body">机器指令由<span class="term">操作码 + 操作数地址</span>两部分组成，全部是二进制编码，计算机可以直接执行。它的优点是机器跑得最快、最直接，但人读起来极其痛苦，难记、难写、难改，还跟具体硬件死死绑定。</p>
+    </div>
+    <div class="tl-item">
+      <div class="dot3"><span>2</span></div>
+      <h4>第二代：汇编语言</h4>
+      <div class="tl-tag">STO id2 R2　LDA c R1　ADDF id3 R1</div>
+      <p class="tl-body">汇编指令是<span class="term">符号化的机器指令</span>，用助记符代替了二进制操作码。计算机不能直接执行它，必须先用一个叫<span class="term">汇编程序</span>的工具把它汇编成机器语言程序，才能运行。可读性好了很多，但本质上仍是“一条指令对应一个机器动作”，离人的思维还是很远。</p>
+    </div>
+    <div class="tl-item later">
+      <div class="dot3"><span>3</span></div>
+      <h4>第三代：高级语言</h4>
+      <div class="tl-tag">x = f(i, j)</div>
+      <p class="tl-body">高级语言用接近数学和自然语言的方式描述问题，一条语句往往对应很多条机器动作。计算机同样不能直接执行，需要用<span class="term">翻译程序</span>把它翻译成机器语言程序后才能运行。我们这门课研究的，正是这个翻译过程。</p>
+    </div>
+  </div>
+
+  <div class="note box-tip">
+    <div class="bt-title"><svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg>一条主线</div>
+    越往后发展，语言越贴近人的思维、越远离硬件细节；而“把人能看懂的代码变回机器能执行的指令”这件事，就越来越依赖专门的翻译工具。编译器就是其中最核心的一种。
+  </div>
+</section>
+<!-- ===== 模块二：高级语言的三种实现 ===== -->
+<section class="block" id="m2">
+  <div class="block-head"><span class="idx">02</span><h2>高级语言的三种实现方式</h2><span class="en">IMPLEMENTATION</span></div>
+  <p>所谓<span class="term">“实现”</span>，就是让一份高级语言程序能够在计算机上真正运行起来。承担这件事的程序统称<span class="term">翻译程序</span>：它能把汇编语言或高级语言写的程序，转换成<span class="term">语义等价</span>的机器语言程序。根据处理对象和方式不同，翻译程序又分成不同的角色。</p>
+
+  <h3 class="sec">2.1 翻译程序的一个家族</h3>
+  <ul>
+    <li><span class="term">汇编程序（Assembler，汇编器）</span>：专门负责把汇编语言程序翻译成机器语言。</li>
+    <li><span class="term">编译程序（Compiler，编译器）</span>：把高级语言程序整体翻译成低级语言程序。</li>
+    <li><span class="term">解释程序（Interpreter，解释器）</span>：把高级语言逐条语句边翻译边执行。</li>
+  </ul>
+
+  <h3 class="sec">2.2 编译方式：程序到程序的翻译</h3>
+  <p>编译程序把某种高级语言写的程序，翻译成<span class="term">语义等价的低级语言程序</span>。这里有一组必须分清的术语：被翻译的高级语言程序叫<span class="term">源程序</span>，翻译得到的低级语言程序叫<span class="term">目标程序</span>（可以是机器语言或汇编语言）；书写源程序的语言叫<span class="term">源语言</span>，目标程序对应的语言叫<span class="term">目标语言</span>。</p>
+  <div class="struct">
+    <div class="seg seg-arg"><b>源程序</b><span>*.c / *.pas</span></div>
+    <div class="seg seg-op"><b>编译程序</b><span>整体翻译</span></div>
+    <div class="seg seg-res"><b>目标程序</b><span>*.obj / *.exe</span></div>
+  </div>
+  <p>关键在于：编译过程是<span class="term">“程序到程序”</span>的翻译——先一次性把整个目标程序生成出来，之后这个目标程序可以脱离编译器、拿着输入数据反复运行，每次运行不必重新翻译。</p>
+
+  <h3 class="sec">2.3 解释方式：语句到执行结果</h3>
+  <p>解释程序则是把源程序<span class="term">逐条语句地</span>翻译成目标指令序列，而且<span class="term">边翻译边执行</span>：当翻译完成时，执行也随之结束。它<span class="term">不会生成目标程序</span>，自然也没有可单独保存、反复运行的产物。</p>
+  <div class="struct">
+    <div class="seg seg-arg"><b>源程序</b><span>*.bas / *.class / *.pyc</span></div>
+    <div class="seg seg-op"><b>解释程序</b><span>边翻译边执行</span></div>
+    <div class="seg seg-res"><b>计算结果</b><span>无目标程序</span></div>
+  </div>
+  <p>所以解释过程是<span class="term">“语句到执行结果”</span>的过程，下次想再跑一遍，只能从头再解释一次。</p>
+
+  <div class="acc">
+    <button class="acc-head"><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg>展开：编译方式与解释方式的完整对比</button>
+    <div class="acc-body">
+      <p><b>相同点：</b>二者实现技术相似，都需要经过词法、语法、语义、代码生成等环节，核心技术是相通的。</p>
+      <div class="tbl-scroll">
+        <table class="data">
+          <colgroup><col style="width:26%"><col style="width:37%"><col style="width:37%"></colgroup>
+          <thead><tr><th>对比维度</th><th>编译方式</th><th>解释方式</th></tr></thead>
+          <tbody>
+            <tr><td>本质区别</td><td>生成目标程序</td><td>不生成目标程序</td></tr>
+            <tr><td>实现机制</td><td>翻译：程序到程序</td><td>解释：语句到指令序列</td></tr>
+            <tr><td>执行速度</td><td>一次翻译后直接运行，速度快</td><td>边翻译边执行，速度更慢</td></tr>
+            <tr><td>空间开销</td><td>相对较小</td><td>需保存的信息较多，开销大</td></tr>
+            <tr><td>可移植性</td><td>目标程序绑定具体机器</td><td>可移植性更好</td></tr>
+            <tr><td>诊断与交互</td><td>集中在编译期报错</td><td>错误诊断效果好、可动态修改，利于人机交互</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="font-size:13.5px">结论是没有绝对的好坏，要按实际需求选择；程序经常运行就编译，程序简单、随时改动则解释更灵活。<span class="term">大多数高级语言采用编译方式</span>，像 Java 则是先编译成字节码、再由虚拟机解释执行，两种方式结合使用。</p>
+    </div>
+  </div>
+
+  <h3 class="sec">2.4 转换方式：站在已有编译器的肩膀上</h3>
+  <p>开发一个编译器代价非常昂贵。如果已经有了 A 语言的编译程序，又想为 B 语言开发编译器，可以先把<span class="term"> B 语言程序转换成等价的 A 语言程序</span>，再借用 A 的编译器翻译成目标程序，这就是转换方式。</p>
+  <div class="warn box-tip">
+    <div class="bt-title"><svg viewBox="0 0 24 24"><path d="M12 3l9 16H3z"/><path d="M12 10v4M12 17h.01"/></svg>转换方式的两个前提</div>
+    一是已经存在 A 语言的编译程序；二是 B 语言与 A 语言的近似度很高，或者 B 本身就是 A 的扩展。课件给出的范例是 <span class="term">C++ 语言的实现</span>——它在 C 的基础上扩展，通过预处理转换后再走 C 的编译链路。
+  </div>
+</section>
+<!-- ===== 模块三：编译器的内部全景 ===== -->
+<section class="block" id="m3">
+  <div class="block-head"><span class="idx">03</span><h2>编译器的内部全景</h2><span class="en">COMPILER OVERVIEW</span></div>
+  <p>编译器是复杂的系统软件，不同编译器的实现千差万别，但它们的<span class="term">基本逻辑结构大体相同</span>。理解这个结构最好的办法，是拿自然语言翻译做类比。</p>
+
+  <div class="analogy box-tip">
+    <div class="bt-title"><svg viewBox="0 0 24 24"><path d="M4 5h16M4 12h10M4 19h16"/></svg>把一句中文翻译成英文</div>
+    拿到“你能够通过自己的努力实现你的梦想”这句话，翻译者会先<span class="term">识别单词</span>，再<span class="term">检查语法</span>（词和词搭得对不对），接着<span class="term">检查语义</span>（意思通不通），最后才<span class="term">生成译文</span>，追求“信、达、雅”。编译器翻译程序，几乎是一模一样的套路。
+  </div>
+
+  <h3 class="sec">3.1 五个阶段：先分析，后综合</h3>
+  <p>编译器的工作分成前后两半。前半段叫<span class="term">分析</span>，负责读懂源程序、把它拆成结构并登记信息；后半段叫<span class="term">综合</span>，根据分析结果一步步构造出目标程序。</p>
+  <div class="timeline">
+    <div class="tl-item">
+      <div class="dot3"><span>1</span></div>
+      <h4>词法分析 · 分析</h4>
+      <p class="tl-body">把字符流切分成一个个单词，转成内部表示 Token，同时检查词法错误。</p>
+    </div>
+    <div class="tl-item">
+      <div class="dot3"><span>2</span></div>
+      <h4>语法分析 · 分析</h4>
+      <p class="tl-body">按语法规则检查程序构成，通常把源程序表示成抽象语法树。</p>
+    </div>
+    <div class="tl-item">
+      <div class="dot3"><span>3</span></div>
+      <h4>语义分析 · 分析</h4>
+      <p class="tl-body">为标识符建立含属性的符号表，做静态语义检查，如未声明、重复声明、类型是否匹配。</p>
+    </div>
+    <div class="tl-item later">
+      <div class="dot3"><span>4</span></div>
+      <h4>中间代码生成与优化 · 综合</h4>
+      <p class="tl-body">先把源程序转成便于优化和移植的中间表示，再对其改造使目标代码更高效。这两步<span class="term">不是必经阶段</span>。</p>
+    </div>
+    <div class="tl-item later">
+      <div class="dot3"><span>5</span></div>
+      <h4>目标代码生成 · 综合</h4>
+      <p class="tl-body">把中间代码变换成特定机器上的机器指令或汇编指令，得到最终目标程序。</p>
+    </div>
+  </div>
+
+  <div class="note box-tip">
+    <div class="bt-title"><svg viewBox="0 0 24 24"><path d="M12 3v18M3 12h18"/></svg>关于“必经阶段”</div>
+    词法、语法、语义分析和目标代码生成是任何编译器都要做的主干；而中间代码生成和优化并非必需——不考虑优化和移植时，语义分析之后可以直接生成目标代码。是否优化、优化到什么程度，要看对运行效率的要求和性价比。
+  </div>
+
+  <h3 class="sec">3.2 两项贯穿始终的工作</h3>
+  <div class="cards2">
+    <div class="mini-card">
+      <h4><svg viewBox="0 0 24 24"><path d="M12 9v4M12 16h.01M10 3h4l7 16a2 2 0 01-2 3H5a2 2 0 01-2-3z"/></svg>错误处理</h4>
+      <p style="font-size:13.5px;margin-bottom:0">编译的每个阶段都可能发现错误。错误处理模块负责给出诊断和解决方案，让编译器能够尽量继续往下走，而不是一出错就停机，方便使用者定位和修改。</p>
+    </div>
+    <div class="mini-card alt">
+      <h4><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18M8 4v16"/></svg>表格管理</h4>
+      <p style="font-size:13.5px;margin-bottom:0">编译过程会产生大量表格，如符号表、类型信息表、常量表等。表格管理程序专门负责这些表的构造、查找和更新，让各阶段能随时存取信息。</p>
+    </div>
+  </div>
+  <p>接下来的模块四到模块八，我们就沿着这条流水线，用课件里同一个例子 <span class="term">sum = first + count * 10</span> 逐阶段看它是怎么被加工的。</p>
+</section>
+<!-- ===== 模块四：词法分析 ===== -->
+<section class="block" id="m4">
+  <div class="block-head"><span class="idx">04</span><h2>词法分析：从字符到单词</h2><span class="en">LEXICAL</span></div>
+  <p>编译器拿到的源程序，本质上只是一串连续的字符。<span class="term">词法分析</span>要做的，就是从这串字符里识别出一个个有意义的<span class="term">单词</span>，把它们转成内部表示，同时检查有没有词法错误。</p>
+
+  <div class="analogy box-tip">
+    <div class="bt-title"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg>生活类比</div>
+    就像读一篇没有空格的古文，你要根据经验判断哪几个字凑成一个词——“源代码”不是“源/代/码”三个独立的字，而是一个词。词法分析器就是程序世界里做这种“断词”的角色。
+  </div>
+
+  <h3 class="sec">4.1 三个核心概念</h3>
+  <ul>
+    <li><span class="term">单词</span>：具有独立意义的、最小的语义单位，比如一个标识符、一个常数、一个运算符。</li>
+    <li><span class="term">Token</span>：一种数据结构，把单词的信息（类别、属性值等）存储起来，交给后面的语法分析程序使用。</li>
+    <li><span class="term">词法错误</span>：不符合单词构成规则的字符序列，课件示例为 <span class="term">L@7</span>——@ 不能出现在合法单词里，无法被识别。</li>
+  </ul>
+  <p>以课件中的 <span class="term">x1 = 100;</span> 为例，在机器眼里它一开始只是六个独立字符：</p>
+  <div class="code">机器视角：'x'  '1'  '='  '1'  '0'  '0'  ';'</div>
+  <p>词法分析器要判断出：x 和 1 应合并成一个标识符 <span class="term">x1</span>，= 是一个运算符，100 三个数字合并成一个常数，最后的 ; 是分隔符。下面这个分步演示展示了完整过程。</p>
+
+  <div class="stepper" id="tokenStep">
+    <div class="stepper-bar">
+      <div class="dots"></div>
+      <div class="step-btns"><button class="prev">上一步</button><button class="next go">下一步</button></div>
+    </div>
+    <div class="step-body"></div>
+  </div>
+
+  <div class="note box-tip">
+    <div class="bt-title"><svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg>为什么要先“断词”</div>
+    后面的语法分析关心的是“主语、谓语、宾语”这样的成分，而不是一个个孤立的字母。把字符预先整理成 Token 序列，语法分析才能在正确的抽象层次上工作。至于断词的具体规则和自动化方法，正是第二章词法分析的主题。
+  </div>
+</section>
+<!-- ===== 模块五：语法分析 ===== -->
+<section class="block" id="m5">
+  <div class="block-head"><span class="idx">05</span><h2>语法分析：拼出程序的结构</h2><span class="en">SYNTAX</span></div>
+  <p>断出单词之后，<span class="term">语法分析</span>要根据语言定义的语法规则，检验这些单词串起来的程序是否存在语法错误，并通常把源程序表示成一棵能体现其结构的<span class="term">抽象语法树</span>。</p>
+
+  <h3 class="sec">5.1 每个语言都有自己的语法约定</h3>
+  <p>写程序必须符合该语言的语法，否则无法编译。同样表达“把 i 加一”，不同语言写法不同：</p>
+  <div class="tbl-scroll">
+    <table class="data">
+      <colgroup><col style="width:30%"><col style="width:35%"><col style="width:35%"></colgroup>
+      <thead><tr><th>写法</th><th>C 语言</th><th>Pascal 语言</th></tr></thead>
+      <tbody>
+        <tr><td class="mono-cell">i++</td><td>合法</td><td>不合法</td></tr>
+        <tr><td class="mono-cell">i := i + 1</td><td>—</td><td>合法</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3 class="sec">5.2 语法树：一眼看清谁是谁的操作数</h3>
+  <p>以贯穿例子 <span class="term">sum = first + count * 10</span> 为例，语法分析后得到下面这棵树。顶层是赋值语句，左孩子是被赋值的 sum，右孩子是等号右边的表达式；乘法 count*10 作为加法的一个分支，正好体现了“乘法优先结合”的语法结构。</p>
+  <div class="tbl-scroll">
+    <svg viewBox="0 0 720 320" style="width:100%;min-width:560px;font-family:var(--sans)" aria-label="sum=first+count*10 的语法树">
+      <g fill="none" stroke="#8aa6c0" stroke-width="1.6">
+        <path d="M360 40 L360 68 L100 68 L100 96"/>
+        <path d="M360 40 L360 68 L480 68 L480 96"/>
+        <path d="M480 130 L480 158 L340 158 L340 186"/>
+        <path d="M480 130 L480 158 L595 158 L595 186"/>
+        <path d="M595 220 L595 248 L510 248 L510 276"/>
+        <path d="M595 220 L595 248 L675 248 L675 276"/>
+      </g>
+      <g font-size="13" text-anchor="middle">
+        <rect x="320" y="6" width="80" height="34" rx="7" fill="#173b5e"/><text x="360" y="28" fill="#fff">赋值语句</text>
+        <rect x="450" y="96" width="60" height="34" rx="7" fill="#173b5e"/><text x="480" y="118" fill="#fff">+</text>
+        <rect x="565" y="186" width="60" height="34" rx="7" fill="#173b5e"/><text x="595" y="208" fill="#fff">*</text>
+        <rect x="65" y="96" width="70" height="34" rx="7" fill="#eef4f9" stroke="#8aa6c0"/><text x="100" y="118" fill="#173b5e">sum</text>
+        <rect x="305" y="186" width="70" height="34" rx="7" fill="#eef4f9" stroke="#8aa6c0"/><text x="340" y="208" fill="#173b5e">first</text>
+        <rect x="475" y="276" width="70" height="34" rx="7" fill="#fdf1e8" stroke="#e8743b"/><text x="510" y="298" fill="#b85623">count</text>
+        <rect x="645" y="276" width="60" height="34" rx="7" fill="#fdf1e8" stroke="#e8743b"/><text x="675" y="298" fill="#b85623">10</text>
+      </g>
+    </svg>
+  </div>
+  <div class="analogy box-tip">
+    <div class="bt-title"><svg viewBox="0 0 24 24"><path d="M12 3v18M6 9l6-6 6 6M6 15l6 6 6-6"/></svg>生活类比</div>
+    语法分析就像给一句话画句子成分图：主语是谁、谓语是谁、宾语里又套了什么从句。程序语言严格规定、不允许有二义性，所以这棵树的结构是唯一确定的；语法上一旦说不通，后面就没必要继续了。
+  </div>
+</section>
+<!-- ===== 模块六：语义分析 ===== -->
+<section class="block" id="m6">
+  <div class="block-head"><span class="idx">06</span><h2>语义分析：意思到底通不通</h2><span class="en">SEMANTIC</span></div>
+  <p>语法正确只保证“句子搭得对”，但搭对的句子可能意思上仍然有问题。<span class="term">语义分析</span>要为各类标识符构建包含其属性的<span class="term">符号表</span>，并做<span class="term">静态语义检查</span>——变量有没有未声明就使用、有没有重复声明、运算两边的类型是否匹配等等。</p>
+
+  <div class="analogy box-tip">
+    <div class="bt-title"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9 10h.01M15 10h.01M9 15c1 1 2 1.5 3 1.5s2-.5 3-1.5"/></svg>生活类比</div>
+    “温度喝了一杯水”这句话语法上没毛病（名词+动词+名词），但语义荒唐——温度不能喝水。语义分析就是专门抓这种“结构对但意思不对”的问题。
+  </div>
+
+  <h3 class="sec">6.1 语义分析其实做两件事</h3>
+  <ul>
+    <li><span class="term">为后续工作做准备</span>：把标识符的类型、作用域等属性登记进符号表，后面好据此为变量分配存储单元、生成代码。</li>
+    <li><span class="term">检查语义错误</span>：这些错误语法分析查不出来，必须结合符号表里的属性信息才能判断。</li>
+  </ul>
+
+  <h3 class="sec">6.2 同一个例子，两种语言的报错</h3>
+  <p>还是 sum = first + count * 10，课件分别给出了 Pascal 和 C 的程序片段与诊断结果。</p>
+  <div class="cards2">
+    <div class="mini-card">
+      <h4>Pascal 版本</h4>
+      <div class="code" style="font-size:12px">VAR
+  first: real;
+  count: char;
+BEGIN
+  sum := first
+    + count * 10
+END.</div>
+      <div class="warn box-tip" style="margin:8px 0 0">
+        <p style="margin:0;font-size:13px">1. sum 有使用而无定义；<br>2. count 是字符类型，<b>不能进行乘法运算</b>。</p>
+      </div>
+    </div>
+    <div class="mini-card alt">
+      <h4>C 语言版本</h4>
+      <div class="code" style="font-size:12px">float first;
+char count;
+
+sum = first
+  + count * 10;</div>
+      <div class="warn box-tip" style="margin:8px 0 0">
+        <p style="margin:0;font-size:13px">1. sum 有使用而无定义。</p>
+      </div>
+    </div>
+  </div>
+  <div class="note box-tip">
+    <div class="bt-title"><svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg>注意两种语言的差异</div>
+    Pascal 里字符型 count 直接参与乘法属于类型错误，所以报两条；而 C 语言中 char 可以隐式转换为数值参与算术运算，因此只报“sum 未定义”这一条。这说明语义规则是<span class="term">随语言而定</span>的，做语义分析前必须先弄清源语言的语义规定。
+  </div>
+</section>
+<!-- ===== 模块七：中间代码生成与优化 ===== -->
+<section class="block" id="m7">
+  <div class="block-head"><span class="idx">07</span><h2>中间代码生成与优化</h2><span class="en">IR &amp; OPT</span></div>
+  <p>通过语义分析后，编译器已经掌握了全部信息。接下来它可以把源程序转换成一种叫<span class="term">中间代码</span>的内部表示。这一步不是必经阶段，价值在于<span class="term">便于优化、便于移植</span>。课件采用的中间代码是四元式，形如 (op, addr1, addr2, result)。</p>
+
+  <h3 class="sec">7.1 生成中间代码：先把整数 10 转成实数</h3>
+  <p>把变量都正确声明为 real 后，sum := first + count * 10 生成如下四元式。注意 count、first 是实数，而 10 是整数，所以第 1 条先用 <span class="term">int-to-real</span> 把 10 转成实数 t1，之后才能在实数运算里使用。</p>
+  <div class="quad-list">
+    <div class="quad"><span class="qn">1</span><span class="qb">(int-to-real , 10 , - , t1)</span></div>
+    <div class="quad"><span class="qn">2</span><span class="qb">(* , count , t1 , t2)</span></div>
+    <div class="quad"><span class="qn">3</span><span class="qb">(+ , first , t2 , t3)</span></div>
+    <div class="quad"><span class="qn">4</span><span class="qb">(:= , t3 , - , sum)</span></div>
+  </div>
+
+  <h3 class="sec">7.2 中间代码优化：把转换直接折叠进常数</h3>
+  <p><span class="term">中间代码优化</span>是在不改变程序语义的前提下变换、改造中间代码，使生成的目标代码更高效，即节省运行时间和存储空间。它针对的是程序运行时的内部组织，<span class="term">与程序算法本身的高效无关</span>；而且优化要付出代价，需要考虑性价比。</p>
+  <p>课件里的优化动作是：既然 10 转实数的结果固定就是 10.0，编译器可以直接把这个转换折叠掉，省掉第 1 条四元式，在乘法里直接写 <span class="term">10.0</span>。优化后序列变成：</p>
+  <div class="quad-list">
+    <div class="quad new"><span class="qn">2</span><span class="qb">(* , count , 10.0 , t2)</span></div>
+    <div class="quad"><span class="qn">3</span><span class="qb">(+ , first , t2 , t3)</span></div>
+    <div class="quad"><span class="qn">4</span><span class="qb">(:= , t3 , - , sum)</span></div>
+  </div>
+  <div class="warn box-tip">
+    <div class="bt-title"><svg viewBox="0 0 24 24"><path d="M12 3l9 16H3z"/><path d="M12 10v4M12 17h.01"/></svg>优化不是“把代码改得更聪明”</div>
+    课件特别强调，这里的优化不等于对代码的精雕细琢、也不改变程序要做的事，而是在保证结果完全相同的前提下，把同样的计算组织得更省指令、更省空间。当对目标代码效率要求较高时才值得做，这也是它属于非必经阶段的原因。
+  </div>
+</section>
+<!-- ===== 模块八：目标代码生成 ===== -->
+<section class="block" id="m8">
+  <div class="block-head"><span class="idx">08</span><h2>目标代码生成：落到具体机器</h2><span class="en">CODE GEN</span></div>
+  <p>编译流水线的最后一站，是<span class="term">目标代码生成</span>：把中间代码变换成特定机器上的机器指令代码或汇编指令代码。这一步与具体硬件紧密相关，要决定数据放在哪个寄存器、指令怎么调度。</p>
+  <p>承接优化后的四元式，课件给出的汇编代码如下，共 5 条指令，使用 R1、R2 两个寄存器：</p>
+  <div class="code">1. MOV   count , R1
+2. MULT  R1 , #10.0
+3. MOV   first , R2
+4. ADD   R1 , R2
+5. MOV   R1 , sum</div>
+  <p>它和四元式的对应关系非常清楚：</p>
+  <div class="quad-list">
+    <div class="quad"><span class="qb">(* , count , 10.0 , t2)</span><span style="font-size:12px;color:var(--gray)">→ 指令 1、2：取 count 到 R1，乘 10.0</span></div>
+    <div class="quad"><span class="qb">(+ , first , t2 , t3)</span><span style="font-size:12px;color:var(--gray)">→ 指令 3、4：取 first 到 R2，与 R1 相加</span></div>
+    <div class="quad"><span class="qb">(:= , t3 , - , sum)</span><span style="font-size:12px;color:var(--gray)">→ 指令 5：把结果存入 sum</span></div>
+  </div>
+  <div class="analogy box-tip">
+    <div class="bt-title"><svg viewBox="0 0 24 24"><path d="M4 12h16M14 6l6 6-6 6"/></svg>回顾这趟完整旅程</div>
+    同一句 sum = first + count * 10，从字符流被断成 Token、搭成语法树、查出语义问题、写成四元式、优化压缩，最后变成 5 条真实的汇编指令。这就是一个编译器从“读懂程序”到“产出可执行代码”的完整闭环，也是后面所有章节要逐一深入的内容。
+  </div>
+</section>
+<!-- ===== 模块九：遍、前端与后端 ===== -->
+<section class="block" id="m9">
+  <div class="block-head"><span class="idx">09</span><h2>遍、前端与后端</h2><span class="en">PASSES &amp; ENDS</span></div>
+
+  <h3 class="sec">9.1 什么是“遍”</h3>
+  <p>所谓<span class="term">“遍”</span>，就是对源程序或它的某种中间表示形式（如 Token 序列、语法树、四元式中间代码等）<span class="term">从头到尾扫描一次</span>，并作加工处理，生成新的中间结果或目标程序。<span class="term">分遍</span>就是把这个过程扫描几遍：每一遍专注一部分工作，上一遍的输出作为下一遍的输入。</p>
+  <div class="analogy box-tip">
+    <div class="bt-title"><svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg>为什么要分遍</div>
+    早期计算机内存很小，没法一次装下整个编译过程，只能分块来回处理，历史上甚至有编译器分了几十遍；而 Pascal-P4 编译器只用一遍就完成全部工作。分多少遍没有定论，要结合内存条件和逻辑清晰度权衡。本课程出于教学目的，按词法、语法、语义、中间代码这样的阶段来组织，让逻辑更清楚——实际产品里词法语法往往是一起做的。
+  </div>
+
+  <h3 class="sec">9.2 前端与后端：按“是否依赖目标机”切分</h3>
+  <div class="cards2">
+    <div class="mini-card">
+      <h4><svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h10M4 18h16"/></svg>前端 front end</h4>
+      <p style="font-size:13.5px">编译程序中<span class="term">与源语言有关、与目标程序无关</span>的部分。</p>
+      <p style="font-size:13.5px;margin-bottom:0">通常包括：词法分析、语法分析、语义分析、中间代码生成，以及与目标机无关的中间代码优化。</p>
+    </div>
+    <div class="mini-card alt">
+      <h4><svg viewBox="0 0 24 24"><path d="M4 12h16M14 6l6 6-6 6"/></svg>后端 back end</h4>
+      <p style="font-size:13.5px">编译程序中<span class="term">与源语言无关、与目标程序有关</span>的部分。</p>
+      <p style="font-size:13.5px;margin-bottom:0">通常包括：与目标机有关的中间代码优化、目标代码生成等。</p>
+    </div>
+  </div>
+  <div class="note box-tip">
+    <div class="bt-title"><svg viewBox="0 0 24 24"><path d="M12 3v18M3 12h18"/></svg>这种切分的工程价值</div>
+    把与机器无关的分析工作集中在前端、与机器相关的工作集中在后端，要把同一门语言移植到新机器时，只需重写后端、前端基本可以复用；要为同一台机器支持新语言时，则可以复用后端。这正是编译器便于移植、便于复用的关键设计。
+  </div>
+</section>
+<!-- ===== 模块十：编译器的实现方法 ===== -->
+<section class="block" id="m10">
+  <div class="block-head"><span class="idx">10</span><h2>编译器本身是怎么造出来的</h2><span class="en">BUILD METHODS</span></div>
+  <p>编译器也是软件，那第一个编译器又是怎么来的？课件归纳了几类典型的实现方法。</p>
+
+  <h3 class="sec">10.1 自展法：像滚雪球一样长大</h3>
+  <p><span class="term">自展法（雪球法）</span>的核心思想是：先从目标语言 L 中挑一个很小的子集 L0，用机器语言写出 L0 的编译器；然后一步步扩大语言，每一级都用已经能工作的上一级语言，来写下一级的编译器，像滚雪球一样最终得到完整 L 的编译器。</p>
+  <div class="stepper" id="bootStep">
+    <div class="stepper-bar">
+      <div class="dots"></div>
+      <div class="step-btns"><button class="prev">上一步</button><button class="next go">下一步</button></div>
+    </div>
+    <div class="step-body"></div>
+  </div>
+
+  <h3 class="sec">10.2 其它实现方法</h3>
+  <ul>
+    <li><span class="term">用机器语言直接写</span>：最原始的方式，最贴近硬件但开发极其困难。</li>
+    <li><span class="term">移植法</span>：让一门语言跨平台运行，课件给出三条具体途径，见下方折叠。</li>
+    <li><span class="term">转换法（预处理法）</span>：即前面讲的转换方式，把新语言先转换成相近的已有语言，范例是 C++。</li>
+    <li><span class="term">自动生成（工具法）</span>：利用 Flex、Yacc、LLGen、Bison 等工具自动生成词法分析器、语法分析器，大幅减少手工开发量。</li>
+  </ul>
+
+  <div class="acc">
+    <button class="acc-head"><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg>展开：移植法的三条途径</button>
+    <div class="acc-body">
+      <p>设在 A 机器上已有 L 语言的编译器 CCA，以及用 L 写的 CCA 源码 SA，想在指令集不同的 B 机器上实现 L：</p>
+      <ol>
+        <li><b>途径一：目标代码转换</b>——把 A 的目标代码直接转换成 B 的目标代码。</li>
+        <li><b>途径二：交叉编译</b>——修改 SA 的目标代码生成部分，使其产生 B 机器代码得到 SB；把 SB 交给 CCA 编译，得到一个在 A 上运行、却能生成 B 代码的交叉编译器 CCB；再用 CCB 编译源程序，得到 B 可运行的目标程序。</li>
+        <li><b>途径三：虚拟机移植</b>——借助虚拟机屏蔽底层机器差异来实现移植。</li>
+      </ol>
+    </div>
+  </div>
+
+  <div class="acc">
+    <button class="acc-head"><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg>展开：大模型在编译器开发中的应用（课件调研主题）</button>
+    <div class="acc-body">
+      <p>课件把大模型列为调研方向，涉及 DeepSeek、ChatGPT、文心一言、通义千问、天工、讯飞星火、ChatGLM 等在生成编译各阶段程序时的表现，需要从现状、优势、不足三个角度去考察。它可以辅助生成词法/语法分析等代码，但在正确性保证和复杂语义处理上仍有局限。</p>
+    </div>
+  </div>
+
+  <h3 class="sec">10.3 开发编译器要注意的问题</h3>
+  <div class="summary-grid">
+    <div class="sum-item"><b>准确理解源语言</b>：语法、语义都要吃透，理解偏差会直接导致编译器出错。</div>
+    <div class="sum-item"><b>确定目标语言</b>：弄清是汇编、机器语言还是虚拟机指令，先定目标再动手。</div>
+    <div class="sum-item"><b>确定编译要求</b>：如何分遍、是否优化、优化到什么程度，属于需求分析。</div>
+    <div class="sum-item"><b>具体设计</b>：确定各类表结构和所用算法，再进入实现。</div>
+  </div>
+</section>
+<!-- ===== 章末：速查与学习意义 ===== -->
+<section class="block" id="end">
+  <div class="block-head"><span class="idx">11</span><h2>章末速查与学习意义</h2><span class="en">REVIEW</span></div>
+
+  <h3 class="sec">11.1 一页带走全章</h3>
+  <div class="summary-grid">
+    <div class="sum-item"><b>三代语言</b>：机器语言（可直接执行）→ 汇编语言（需汇编器）→ 高级语言（需翻译程序）。</div>
+    <div class="sum-item"><b>三种实现</b>：编译（程序到程序，生成目标程序）、解释（边翻译边执行，不生成）、转换（借相近语言的编译器）。</div>
+    <div class="sum-item"><b>五个阶段</b>：词法、语法、语义分析（分析）+ 中间代码生成与优化、目标代码生成（综合）。</div>
+    <div class="sum-item"><b>两项贯穿</b>：错误处理与表格管理，支撑编译全过程。</div>
+    <div class="sum-item"><b>遍</b>：对源程序或中间表示从头到尾扫描一次；分遍次数按内存与逻辑需要决定。</div>
+    <div class="sum-item"><b>前端 / 后端</b>：前端依赖源语言、后端依赖目标机，切分带来可移植、可复用。</div>
+  </div>
+
+  <h3 class="sec">11.2 为什么要学编译原理</h3>
+  <ul>
+    <li><span class="term">加深对高级程序设计语言的理解和认识</span>：弄清语言里各种约定（声明、类型、作用域）背后的道理。</li>
+    <li><span class="term">它是一种元级程序设计</span>：处理的对象本身就是程序，是“写程序的程序”。</li>
+    <li><span class="term">提高程序、尤其是大型程序的设计能力</span>，培养抽象能力与形式化描述能力。</li>
+  </ul>
+  <p>编译技术还广泛应用于实际开发：<span class="term">深度学习、代码安全、并行计算优化、游戏引擎优化、程序语言新功能的扩展与优化、云计算优化</span>等领域都离不开它。</p>
+  <div class="good box-tip">
+    <div class="bt-title"><svg viewBox="0 0 24 24"><path d="M12 2l3 7h7l-5.5 4 2 8L12 17l-6.5 4 2-8L2 9h7z"/></svg>科技自主</div>
+    编译器是基础软件的关键一环，长期面临“卡脖子”问题。学好编译原理、推动国产编译器开发，正是科技自主创新在软件工程领域的具体体现。
+  </div>
+
+  <footer class="foot">
+    <p>本资料依据《编译原理》第一章课件（01. 绪论，共 34 页）整理，知识点、四元式序列、汇编代码与数值均来自课件原文。</p>
+    <p class="src">编译原理学习资料（豆包版） · 01_编译引论</p>
+  </footer>
+</section>
+</div>
+</main>
+</div>
+<script>
+/* ===== 移动端目录 ===== */
+var sidebar=document.getElementById('sidebar'),backdrop=document.querySelector('.backdrop'),burger=document.querySelector('.hamburger');
+function toggleNav(show){sidebar.classList.toggle('show',show);backdrop.classList.toggle('show',show);}
+burger.addEventListener('click',function(){toggleNav(!sidebar.classList.contains('show'));});
+backdrop.addEventListener('click',function(){toggleNav(false);});
+document.querySelectorAll('.nav-item').forEach(function(a){a.addEventListener('click',function(){toggleNav(false);});});
+/* ===== 导航高亮 ===== */
+var navItems=document.querySelectorAll('.nav-item');
+window.addEventListener('scroll',function(){
+  var pos=window.scrollY+120,cur=navItems[0];
+  document.querySelectorAll('section.block').forEach(function(s){if(s.offsetTop<=pos){var a=document.querySelector('.nav-item[href="#'+s.id+'"]');if(a)cur=a;}});
+  navItems.forEach(function(a){a.classList.remove('active');});
+  if(cur)cur.classList.add('active');
+});
+/* ===== 折叠面板 ===== */
+document.querySelectorAll('.acc-head').forEach(function(h){h.addEventListener('click',function(){h.parentElement.classList.toggle('open');});});
+/* ===== 通用分步交互 ===== */
+function makeStepper(id,steps){
+  var el=document.getElementById(id),idx=0;
+  function render(){
+    var s=steps[idx];
+    el.querySelector('.dots').innerHTML=steps.map(function(_,i){
+      return '<button class="dot '+(i<idx?'done':i===idx?'cur':'')+'" data-i="'+i+'">'+(i+1)+'</button>';
+    }).join('');
+    el.querySelector('.step-body').innerHTML='<div class="st-title">'+s.t+'</div>'+s.c;
+    el.querySelector('.prev').disabled=(idx===0);
+    el.querySelector('.next').disabled=(idx===steps.length-1);
+    el.querySelectorAll('.dot').forEach(function(d){d.addEventListener('click',function(){idx=+d.dataset.i;render();});});
+  }
+  el.querySelector('.prev').addEventListener('click',function(){if(idx>0){idx--;render();}});
+  el.querySelector('.next').addEventListener('click',function(){if(idx<steps.length-1){idx++;render();}});
+  render();
+}
+/* ===== x1=100 词法切分 ===== */
+function tokHtml(arr){
+  if(!arr.length)return '<div class="tok-vis"><span class="tok-cell" style="background:#f6f9fc;color:var(--gray)">尚未识别出 Token</span></div>';
+  return '<div class="tok-vis">'+arr.map(function(v,i){
+    return '<div class="tok-cell '+(i===arr.length-1?'hot':'')+'">'+v+'</div>';
+  }).join('')+'</div>';
+}
+makeStepper('tokenStep',[
+  {t:'第 1 步：原始字符流',c:'<p>词法分析器拿到的是一串连续字符，还没有任何单词的概念。</p>'+tokHtml([])+'<div class="code">待处理：x  1  =  1  0  0  ;</div>'},
+  {t:'第 2 步：x 与 1 合并成标识符 x1',c:'<p>首字符 x 是字母，继续读后面的 1，字母加数字构成一个完整标识符，识别为 <b>x1</b>。</p>'+tokHtml(['&lt;id, x1&gt;'])+'<div class="code">剩余：=  1  0  0  ;</div>'},
+  {t:'第 3 步：= 识别为赋值运算符',c:'<p>= 单独构成一个运算符单词，识别为赋值符。</p>'+tokHtml(['&lt;id, x1&gt;','&lt;op, =&gt;'])+'<div class="code">剩余：1  0  0  ;</div>'},
+  {t:'第 4 步：1、0、0 合并成常数 100',c:'<p>连续读到三个数字，它们属于同一个数值，合并识别为整数常数 <b>100</b>。</p>'+tokHtml(['&lt;id, x1&gt;','&lt;op, =&gt;','&lt;num, 100&gt;'])+'<div class="code">剩余：;</div>'},
+  {t:'第 5 步：; 识别为语句分隔符',c:'<p>分号是一个界符单词，标志这条语句结束。</p>'+tokHtml(['&lt;id, x1&gt;','&lt;op, =&gt;','&lt;num, 100&gt;','&lt;delim, ;&gt;'])+'<div class="code">字符流处理完毕</div>'},
+  {t:'第 6 步：输出完整 Token 序列',c:'<p>六个字符被整理成四个 Token，交给语法分析程序。整个过程没有发现词法错误。</p>'+tokHtml(['&lt;id, x1&gt;','&lt;op, =&gt;','&lt;num, 100&gt;','&lt;delim, ;&gt;'])}
+]);
+
+/* ===== 自展法雪球 ===== */
+makeStepper('bootStep',[
+  {t:'第 1 步：从最小子集 L0 起步',c:'<p>L0 是目标语言 L 的一个很小的子集，结构简单到可以直接用<b>机器语言</b>写出它的编译器。这是整个雪球的内核。</p><div class="code">机器语言 → 编译器 C0（能编译 L0）</div>'},
+  {t:'第 2 步：扩展到 L1，用 L0 写 L1 的编译器',c:'<p>把 L0 扩充成更大的 L1；因为 L0 已经能工作，就用 L0 本身来写 L1 的编译器，再用 C0 把它编译出来。</p><div class="code">L0 编写 → L1 编译器 C1</div>'},
+  {t:'第 3 步：继续扩展到 L2',c:'<p>再把 L1 扩充为 L2，用已经能工作的 L1 写 L2 的编译器，雪球进一步变大。</p><div class="code">L1 编写 → L2 编译器 C2</div>'},
+  {t:'第 4 步：一路扩展到完整语言 L',c:'<p>重复“扩展语言、用上级写下级编译器”的过程，直到 Li 扩展成完整的 L，最终用 Li 写出 L 的编译器。<b>仅凭一个机器语言写的小编译器，就自举得到了完整语言的编译器。</b></p><div class="code">Li 编写 → 完整 L 的编译器</div>'}
+]);
+</script>
+</body>
+</html>

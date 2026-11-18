@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>06 运行时存储空间管理 · 编译原理学习资料</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23173b5e'/%3E%3Ctext x='16' y='22' font-size='16' text-anchor='middle' fill='%23e8743b' font-family='Georgia'%3E6%3C/text%3E%3C/svg%3E">
+<style>
+:root{
+  --ink:#173b5e; --org:#e8743b; --blue-bg:#eef4f9; --org-bg:#fdf1e8;
+  --line:#d8e2ec; --text:#233242; --gray:#5f7185; --red:#b03a2e; --red-bg:#fbeae8;
+  --green:#2e7d52; --green-bg:#e9f5ee;
+  --serif:Georgia,"Songti SC","SimSun",serif;
+  --sans:"Segoe UI","Microsoft YaHei","PingFang SC",sans-serif;
+  --mono:Consolas,"Courier New",monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--sans);color:var(--text);background:#fff;font-size:15px;line-height:1.85}
+h1,h2,h3,h4{font-family:var(--serif);color:var(--ink);line-height:1.4}
+a{color:var(--ink);text-decoration:none}
+::selection{background:var(--org);color:#fff}
+
+.layout{display:flex;min-height:100vh}
+.sidebar{width:248px;flex-shrink:0;background:var(--ink);color:#cdd9e6;padding:26px 0;position:fixed;top:0;bottom:0;left:0;overflow-y:auto;z-index:40}
+.sidebar .brand{padding:0 22px 18px;border-bottom:1px solid rgba(255,255,255,.14);margin-bottom:14px}
+.sidebar .brand .chap{font-family:var(--serif);font-size:26px;color:#fff;display:block}
+.sidebar .brand .sub{font-size:12px;color:#9fb4c8;letter-spacing:2px;margin-top:2px}
+.nav-item{display:flex;align-items:center;gap:10px;padding:9px 22px;color:#c3d1de;font-size:13.5px;cursor:pointer;border-left:3px solid transparent;transition:all .18s}
+.nav-item:hover{background:rgba(255,255,255,.08);color:#fff}
+.nav-item.active{background:rgba(232,116,59,.18);border-left-color:var(--org);color:#fff}
+.nav-item .n{font-family:var(--mono);font-size:11px;color:var(--org);width:20px;flex-shrink:0}
+.main{margin-left:248px;flex:1;min-width:0}
+.wrap{max-width:860px;margin:0 auto;padding:0 34px}
+.hamburger{display:none;position:fixed;top:14px;left:14px;z-index:50;width:42px;height:42px;background:var(--ink);border:none;border-radius:8px;padding:10px;cursor:pointer}
+.hamburger svg{width:100%;height:100%;stroke:#fff;stroke-width:2;fill:none}
+.backdrop{display:none;position:fixed;inset:0;background:rgba(20,35,50,.5);z-index:35}
+
+.hero{background:linear-gradient(160deg,#173b5e 0%,#1f4d78 100%);color:#fff;padding:64px 0 54px;position:relative;overflow:hidden}
+.hero::before{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.05) 1px,transparent 1px);background-size:34px 34px}
+.hero .wrap{position:relative}
+.hero .eyebrow{font-size:12.5px;letter-spacing:4px;color:#f0b594;margin-bottom:14px}
+.hero h1{color:#fff;font-size:38px;margin-bottom:14px}
+.hero p.lead{color:#d3e0ec;font-size:15.5px;max-width:660px}
+.mem-flow{display:flex;align-items:center;gap:10px;margin-top:32px;flex-wrap:wrap}
+.mf-node{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.25);border-radius:8px;padding:12px 16px;font-family:var(--mono);font-size:12.5px;text-align:center;min-width:96px}
+.mf-node b{display:block;font-family:var(--sans);font-size:13.5px;color:#fff;margin-bottom:2px}
+.mf-node.mid{background:rgba(232,116,59,.28);border-color:#f0a076}
+.mf-arrow{color:#f0b594;font-size:20px}
+
+section.block{padding:46px 0 10px}
+.block-head{display:flex;align-items:baseline;gap:14px;margin-bottom:20px;border-bottom:2px solid var(--line);padding-bottom:12px}
+.block-head .idx{font-family:var(--mono);font-size:14px;color:#fff;background:var(--org);border-radius:6px;padding:2px 9px}
+.block-head h2{font-size:26px}
+.block-head .en{font-size:12px;color:var(--gray);letter-spacing:1.5px;margin-left:auto;font-family:var(--sans)}
+h3.sec{font-size:19px;margin:30px 0 12px;padding-left:12px;border-left:4px solid var(--org)}
+h4{font-size:16px;margin:20px 0 8px}
+p{margin-bottom:12px}
+p .term{color:var(--ink);font-weight:700}
+ul,ol{margin:8px 0 14px 22px}
+li{margin-bottom:6px}
+
+.box-tip{border-radius:10px;padding:14px 18px;margin:16px 0;font-size:14.5px}
+.box-tip .bt-title{display:flex;align-items:center;gap:8px;font-weight:700;margin-bottom:6px;font-family:var(--serif)}
+.box-tip .bt-title svg{width:18px;height:18px;flex-shrink:0}
+.analogy{background:var(--org-bg);border:1px solid #f3d2bd}
+.analogy .bt-title{color:#b85623}
+.analogy .bt-title svg{stroke:#c96a2e;fill:none;stroke-width:1.8}
+.note{background:var(--blue-bg);border:1px solid #cddded}
+.note .bt-title{color:var(--ink)}
+.note .bt-title svg{stroke:var(--ink);fill:none;stroke-width:1.8}
+.warn{background:var(--red-bg);border:1px solid #ecc9c3}
+.warn .bt-title{color:var(--red)}
+.warn .bt-title svg{stroke:var(--red);fill:none;stroke-width:1.8}
+.good{background:var(--green-bg);border:1px solid #c2e0d0}
+.good .bt-title{color:var(--green)}
+.good .bt-title svg{stroke:var(--green);fill:none;stroke-width:1.8}
+
+.tbl-scroll{overflow-x:auto;margin:16px 0;border:1px solid var(--line);border-radius:10px}
+table.data{width:100%;border-collapse:collapse;font-size:13.5px;table-layout:fixed}
+table.data th{background:var(--ink);color:#fff;font-weight:600;padding:10px 12px;text-align:left;font-size:13px}
+table.data td{padding:9px 12px;border-top:1px solid var(--line);vertical-align:top;word-break:break-word}
+table.data tr:nth-child(even) td{background:#f6f9fc}
+table.data .mono-cell{font-family:var(--mono);font-size:12.5px}
+
+.code{background:#1d3550;color:#dce7f2;border-radius:10px;padding:16px 18px;font-family:var(--mono);font-size:13px;line-height:1.9;overflow-x:auto;margin:14px 0;white-space:pre}
+.code .cm{color:#7f9bb5}
+.formula{text-align:center;font-family:var(--serif);font-size:16px;color:var(--ink);background:#f6f9fc;border:1px dashed var(--line);border-radius:10px;padding:14px;margin:14px 0}
+
+.mem-map{border:1px solid var(--line);border-radius:10px;overflow:hidden;margin:16px 0;font-family:var(--mono);font-size:12.5px}
+.mm-row{display:flex;justify-content:space-between;padding:9px 16px;border-top:1px solid var(--line)}
+.mm-row:first-child{border-top:none}
+.mm-row.hi{background:var(--org-bg)}
+.mm-row.lo{background:var(--blue-bg)}
+
+.stepper{border:1px solid var(--line);border-radius:12px;overflow:hidden;margin:18px 0}
+.stepper-bar{display:flex;align-items:center;gap:8px;background:#f6f9fc;padding:12px 16px;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.dots{display:flex;gap:7px;flex-wrap:wrap}
+.dot{width:26px;height:26px;border-radius:50%;border:2px solid var(--line);background:#fff;color:var(--gray);font-family:var(--mono);font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s}
+.dot.done{background:var(--ink);border-color:var(--ink);color:#fff}
+.dot.cur{background:var(--org);border-color:var(--org);color:#fff;transform:scale(1.12)}
+.step-btns{margin-left:auto;display:flex;gap:8px}
+.step-btns button{border:1px solid var(--ink);background:#fff;color:var(--ink);border-radius:7px;padding:6px 16px;font-size:13px;cursor:pointer;font-family:var(--sans)}
+.step-btns button.go{background:var(--ink);color:#fff}
+.step-btns button:disabled{opacity:.35;cursor:not-allowed}
+.step-body{padding:18px 20px;min-height:150px}
+.step-body .st-title{font-family:var(--serif);font-weight:700;color:var(--ink);font-size:16px;margin-bottom:8px}
+
+.acc{border:1px solid var(--line);border-radius:10px;margin:12px 0;overflow:hidden}
+.acc-head{width:100%;display:flex;align-items:center;gap:10px;background:#f6f9fc;padding:12px 16px;border:none;cursor:pointer;font-size:14px;font-family:var(--sans);color:var(--ink);font-weight:600;text-align:left}
+.acc-head svg{width:16px;height:16px;stroke:var(--org);stroke-width:2;fill:none;transition:transform .25s;flex-shrink:0}
+.acc.open .acc-head svg{transform:rotate(90deg)}
+.acc-body{display:none;padding:14px 18px;border-top:1px solid var(--line)}
+.acc.open .acc-body{display:block}
+
+.cards2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:16px 0}
+.mini-card{border:1px solid var(--line);border-radius:10px;padding:16px;background:#fff}
+.mini-card h4{margin-top:0;display:flex;align-items:center;gap:8px}
+.mini-card h4 svg{width:17px;height:17px;stroke:var(--org);fill:none;stroke-width:1.8}
+.mini-card.alt{background:var(--blue-bg);border-color:#cddded}
+
+.summary-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:16px 0}
+.sum-item{border-left:4px solid var(--org);background:#f6f9fc;padding:12px 16px;border-radius:0 8px 8px 0;font-size:14px}
+.sum-item b{color:var(--ink);font-family:var(--serif)}
+footer.foot{border-top:2px solid var(--line);margin-top:46px;padding:26px 0 40px;color:var(--gray);font-size:12.5px}
+footer.foot .src{font-family:var(--mono);font-size:12px}
+
+@media (max-width:900px){
+  .sidebar{transform:translateX(-100%);transition:transform .25s;width:230px}
+  .sidebar.show{transform:translateX(0)}
+  .backdrop.show{display:block}
+  .main{margin-left:0}
+  .hamburger{display:block}
+  .wrap{padding:0 20px}
+  .hero{padding:70px 0 40px}
+  .hero h1{font-size:28px}
+  .cards2,.summary-grid{grid-template-columns:1fr}
+  .block-head .en{display:none}
+  table.data{font-size:12.5px}
+}
+</style>
+</head>
+<body>
+<button class="hamburger" aria-label="打开目录"><svg viewBox="0 0 24 24"><path d="M3 6h18M3 12h18M3 18h18"/></svg></button>
+<div class="backdrop"></div>
+<div class="layout">
+<nav class="sidebar" id="sidebar">
+  <div class="brand">
+    <span class="chap">第六章</span>
+    <span class="sub">RUNTIME MEMORY</span>
+  </div>
+  <a class="nav-item" href="#top"><span class="n">00</span>本章开篇</a>
+  <a class="nav-item" href="#m1"><span class="n">01</span>运行时管理概述</a>
+  <a class="nav-item" href="#m2"><span class="n">02</span>内存五区</a>
+  <a class="nav-item" href="#m3"><span class="n">03</span>分配策略</a>
+  <a class="nav-item" href="#m4"><span class="n">04</span>静态分配</a>
+  <a class="nav-item" href="#m5"><span class="n">05</span>栈式分配</a>
+  <a class="nav-item" href="#m6"><span class="n">06</span>活动记录结构</a>
+  <a class="nav-item" href="#m7"><span class="n">07</span>调用链与动态链</a>
+  <a class="nav-item" href="#m8"><span class="n">08</span>变量访问环境</a>
+  <a class="nav-item" href="#m9"><span class="n">09</span>Display 表</a>
+  <a class="nav-item" href="#m10"><span class="n">10</span>静态链与比较</a>
+  <a class="nav-item" href="#end"><span class="n">11</span>章末速查</a>
+</nav>
+
+<main class="main" id="top">
+<header class="hero">
+  <div class="wrap">
+    <div class="eyebrow">编译原理 · 第六章</div>
+    <h1>运行时存储空间管理</h1>
+    <p class="lead">程序运行时，内存被划分为代码、静态、栈、堆等区域。这一章解决核心问题：如何把变量的抽象地址映射到真实存储地址。栈式管理用过程活动记录随调用压栈、随返回退栈，再通过 Display 表或静态链构造变量访问环境，实现包括非局部变量在内的所有变量寻址。</p>
+    <div class="mem-flow">
+      <div class="mf-node"><b>静态</b>编译期固定</div>
+      <span class="mf-arrow">→</span>
+      <div class="mf-node mid"><b>栈式</b>AR 压栈退栈</div>
+      <span class="mf-arrow">→</span>
+      <div class="mf-node"><b>堆式</b>动态申请</div>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+<!-- ===== 模块一：概述 ===== -->
+<section class="block" id="m1">
+  <div class="block-head"><span class="idx">01</span><h2>运行时管理概述</h2><span class="en">OVERVIEW</span></div>
+  <p>运行时存储空间管理，指目标程序运行时存储空间如何管理。核心问题是如何把变量的抽象地址与存储空间中的真实地址进行映射：运行时空间怎么划分管理，存储空间如何访问。</p>
+  <div class="analogy box-tip">
+    <div class="bt-title"><svg viewBox="0 0 24 24"><path d="M12 21V9M7 14l5-5 5 5M5 3h14"/></svg>生活类比</div>
+    抽象地址像“某小区某栋某层”的门牌描述，运行时管理则是真正把这个门牌对应到地面上的具体位置：先有小区地块（内存分区），再按门牌找到房间（地址映射）。
+  </div>
+  <p>存储分配的本质是建立变量名与存储位置的关联，该位置用于容纳变量的值。源语言的结构、数据类型、作用域和生存期规则，决定了分配策略的复杂程度。</p>
+</section>
+
+<!-- ===== 模块二：内存五区 ===== -->
+<section class="block" id="m2">
+  <div class="block-head"><span class="idx">02</span><h2>目标程序运行时的内存划分</h2><span class="en">MEMORY LAYOUT</span></div>
+  <div class="mem-map">
+    <div class="mm-row hi"><span>库代码区 library</span><span>标准库代码</span></div>
+    <div class="mm-row hi"><span>目标代码区 code</span><span>编译生成的程序</span></div>
+    <div class="mm-row hi"><span>静态区 static</span><span>全局/静态变量</span></div>
+    <div class="mm-row lo"><span>堆区 heap</span><span>动态申请</span></div>
+    <div class="mm-row lo"><span>栈区 stack</span><span>过程活动记录</span></div>
+  </div>
+  <ul>
+    <li><span class="term">库代码区</span>：存放标准库函数目标代码，如 sin、cos 及 #include 包含的库代码；</li>
+    <li><span class="term">目标代码区</span>：存放连接装配后的目标程序；</li>
+    <li><span class="term">静态区</span>：编译时可确定地址、能编进目标代码的数据，如静态变量、全局变量；</li>
+    <li><span class="term">栈区</span>：存放过程活动记录，调用压栈、结束退栈；</li>
+    <li><span class="term">堆区</span>：非连续模式的动态分配，存放 malloc/free、new/delete 管理的数据。</li>
+  </ul>
+  <div class="note box-tip">
+    <div class="bt-title"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16v.5"/></svg>总原则</div>
+    尽可能多做静态分配以缩短运行时间；必须动态分配的，也尽量放栈区，因为堆区分配代价高于栈区。各区边界不固定，栈、堆相遇即内存溢出。
+  </div>
+</section>
+<!-- ===== 模块三：分配策略 ===== -->
+<section class="block" id="m3">
+  <div class="block-head"><span class="idx">03</span><h2>存储管理模式分类</h2><span class="en">STRATEGY</span></div>
+  <p>影响分配策略的语言特征：过程能否递归、返回后局部变量是否保留、能否访问非局部数据、参数传递方式、过函能否作为结果传递、存储块能否动态分配、是否必须显式释放。</p>
+  <div class="cards2">
+    <div class="mini-card"><h4>静态存储分配</h4><p style="font-size:13.5px;margin:0">编译时分配，运行时保持不变。</p></div>
+    <div class="mini-card alt"><h4>栈式动态分配</h4><p style="font-size:13.5px;margin:0">把存储器当栈管理，AR 随调用压栈。</p></div>
+  </div>
+  <div class="mini-card"><h4>堆式动态分配</h4><p style="font-size:13.5px;margin:0">把存储器当堆管理，支持自由申请释放，常与栈式组合使用。</p></div>
+</section>
+
+<!-- ===== 模块四：静态分配 ===== -->
+<section class="block" id="m4">
+  <div class="block-head"><span class="idx">04</span><h2>静态存储分配</h2><span class="en">STATIC</span></div>
+  <p>完全采用静态分配的语言必须满足：</p>
+  <ol>
+    <li>不允许递归过程；</li>
+    <li>数据对象长度和内存位置编译时可知；</li>
+    <li>不允许动态建立的数据结构（动态数组、指针）。</li>
+  </ol>
+  <p>现代语言可分配在静态区的有：全局变量（运行期间大小固定）、C 的 static 变量（全局/局部）、常量及信息表（常量表）。</p>
+  <div class="code">int sum=0;
+int square(int i){ int j; j=i*i; return j; }
+void main(){ int j; j=square(n); sum=sum+j; }
+<span class="cm">// 静态分配：sum、i、j、t1 等位置编译期固定</span></div>
+</section>
+<!-- ===== 模块五：栈式分配 ===== -->
+<section class="block" id="m5">
+  <div class="block-head"><span class="idx">05</span><h2>栈式动态存储分配</h2><span class="en">STACK</span></div>
+  <p>最常见的模式：每调用一个函数，其活动记录就动态分配在栈顶，退出即释放。每个 AR 的大小和内容项是静态确定的。</p>
+  <ul>
+    <li>不支持动态申请（new、malloc），不支持可变长数组；</li>
+    <li>生命周期长于函数的变量不能用栈式，如 static 变量；</li>
+    <li>栈式解决了递归问题，也解决了空间共享问题。</li>
+  </ul>
+  <p>栈区设两个指针（通常在寄存器中）：<span class="term">sp</span> 指向当前活动记录起始位置，<span class="term">top</span> 指向第一个可用存储单元。因为各函数 AR 大小不同，需要两个指针才能正确退栈。</p>
+  <div class="warn box-tip">
+    <div class="bt-title"><svg viewBox="0 0 24 24"><path d="M12 3l9 16H3z"/><path d="M12 10v4M12 17v.5"/></svg>堆式何时需要</div>
+    若空间使用不服从“先申请后释放、后申请先释放”，就不能用栈式。如 malloc 后指针长期保留，需在堆区管理；堆区申请释放代价大，非必要不用。
+  </div>
+</section>
+
+<!-- ===== 模块六：AR 结构 ===== -->
+<section class="block" id="m6">
+  <div class="block-head"><span class="idx">06</span><h2>过程活动记录的结构</h2><span class="en">AR STRUCTURE</span></div>
+  <p>活动记录是为管理过程一次活动所需信息而在栈区分配的连续空间。从高地址到低地址包含：</p>
+  <div class="acc">
+    <button class="acc-head"><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg>数据区（临时变量、局部变量、形参）</button>
+    <div class="acc-body">
+      <p><b>临时变量区</b>：寄存器不足时存放表达式中间结果；<b>局部变量区</b>：保存过程局部声明的数据；<b>形参变量区</b>：存放调用提供的实参。</p>
+    </div>
+  </div>
+  <div class="acc">
+    <button class="acc-head"><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg>管理信息区（访问环境、寄存器、返回链等）</button>
+    <div class="acc-body">
+      <ul>
+        <li><b>变量访问环境</b>：提供非局部变量访问环境；</li>
+        <li><b>AR 大小、过程层数</b>：无 top 时用 sp+size 算栈顶；层数辅助寻址；</li>
+        <li><b>寄存器状态</b>：保存调用前机器状态（程序计数器、寄存器值）；</li>
+        <li><b>返回值</b>：存放返回值的空间地址；<b>返回地址</b>：调用指令下一条；</li>
+        <li><b>动态链指针（控制链）</b>：指向调用者的 AR，返回时恢复。</li>
+      </ul>
+    </div>
+  </div>
+  <div class="note box-tip">
+    <div class="bt-title"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16v.5"/></svg>AR 不含全部信息</div>
+    非局部数据不在 AR 中；运行时生成的动态变量也不在 AR 中，通常堆式分配。
+  </div>
+</section>
+<!-- ===== 模块七：调用链与动态链 ===== -->
+<section class="block" id="m7">
+  <div class="block-head"><span class="idx">07</span><h2>AR 申请释放、调用链与动态链</h2><span class="en">CALL CHAIN</span></div>
+  <h3 class="sec">7.1 申请与释放</h3>
+  <ul>
+    <li><span class="term">申请（call）</span>：①产生新 AR，sp=top，top=top+size；②保存现场、填写管理信息（返回地址、动态链指针）；</li>
+    <li><span class="term">释放（return/endfunc）</span>：①恢复现场；②释放当前 AR，top=sp，sp=动态链指针；③按返回地址生成跳转。</li>
+  </ul>
+  <h3 class="sec">7.2 调用链与动态链</h3>
+  <p><span class="term">调用链</span>是过程名序列，头是主程序名 M；R 中调用 S 则链延长。同一过程的调用链不唯一，每个对应一个动态调用序列。<span class="term">动态链</span>是调用链对应的 AR 序列 [AR(M),…,AR(S)]。</p>
+  <div class="stepper" id="chainStep">
+    <div class="stepper-bar">
+      <div class="dots"></div>
+      <div class="step-btns"><button class="prev">上一步</button><button class="next go">下一步</button></div>
+    </div>
+    <div class="step-body"></div>
+  </div>
+</section>
+<!-- ===== 模块八：变量访问环境 ===== -->
+<section class="block" id="m8">
+  <div class="block-head"><span class="idx">08</span><h2>变量访问环境</h2><span class="en">VISIT ENV</span></div>
+  <h3 class="sec">8.1 活跃活动记录 LAR</h3>
+  <p>一个过程 S 在动态链中可有多个 AR，但只有最新的 AR(S) 可访问，称活跃活动记录 LiveAR(S)。</p>
+  <h3 class="sec">8.2 声明链与访问环境</h3>
+  <p><span class="term">声明链 DeclaChain</span>是过程声明的嵌套序列；若 DeclaChain(Q)=(M,…,P,Q)，则 Q 的变量访问环境为各层活跃 AR 序列 [LAR(M),…,LAR(P),LAR(Q)]。</p>
+  <div class="formula">变量访问由声明链决定，而非调用链</div>
+  <p>例：R 的声明链 (M,P,Q,R)，调用链 (M,P1,P2,Q1,R1,R2,R3)，则 R 的访问环境是 [AR(M),AR(P2),AR(Q1),AR(R3)]——取的是各静态外层的活跃 AR。</p>
+  <h3 class="sec">8.3 非局部变量访问</h3>
+  <p>Q 中定义在 Q、M、P 的变量，地址分别为对应 LAR 起始地址加各自偏移。只要知道 AR 的访问环境，就能访问包括非局部变量在内的所有变量。</p>
+  <div class="acc">
+    <button class="acc-head"><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg>四种调用情形（点击展开）</button>
+    <div class="acc-body">
+      <ul>
+        <li><b>递归</b>：Pi 与 Pi+1 同层，声明链相同；</li>
+        <li><b>同层调用</b>：P、Q 层数相同，有共同外层；</li>
+        <li><b>直接外层</b>：P 层数 N−1 调用 N 层 Q；</li>
+        <li><b>内嵌多层</b>：P 层数大于 Q。</li>
+      </ul>
+      <p>定理：VarVisitEnv(AR(Q)) = VarVisitEnv(AR(P)) 的前 N 项 ⊕ AR(Q)，即可由先行过程的访问环境求得。</p>
+    </div>
+  </div>
+</section>
+<!-- ===== 模块九：Display 表 ===== -->
+<section class="block" id="m9">
+  <div class="block-head"><span class="idx">09</span><h2>Display 表方法</h2><span class="en">DISPLAY</span></div>
+  <h3 class="sec">9.1 局部 Display 表</h3>
+  <p>对每个 AR 求出变量访问环境，以地址表（Display 表）保存在 AR 中，每个 AR 自带。若 P 的访问环境为 [AR0,…,ARn]，则 [ar0,…,arn] 是其 Display 表。</p>
+  <div class="formula">NewAR.Display = CurrentAR.Display 的前 N 项 ⊕ newsp</div>
+  <p>变量 X(L+1,off) 地址：</p>
+  <ul>
+    <li>L 等于当前层：addr(X) = sp + off（局部变量）；</li>
+    <li>否则：addr(X) = CurrentAR.Display[L] + off。</li>
+  </ul>
+  <h3 class="sec">9.2 全局 Display 表</h3>
+  <p>每个程序设一个总 Display 表，长度为最大嵌套层数，D[i] 存放第 i 层最新 AR 指针。依据：任何一点相同层数的声明只能有一个有效。AR 中设 Resume 单元临时保存旧 D[i]。</p>
+  <ul>
+    <li>调用 j 层 Q：NewAR.ResumeAddr = D[j]，再 D[j] = NewAR 地址；</li>
+    <li>退出 Q：D[j] = CurrentAR.ResumeAddr；</li>
+    <li>变量访问：addr(X) = D[L] + off。</li>
+  </ul>
+</section>
+<!-- ===== 模块十：静态链与比较 ===== -->
+<section class="block" id="m10">
+  <div class="block-head"><span class="idx">10</span><h2>静态链方法与比较</h2><span class="en">STATIC CHAIN</span></div>
+  <p>局部 Display 表中每个 AR 都存一整张地址表，较费空间。静态链方法把它压缩成一个单元：<span class="term">静态链指针</span>指向当前层过程的静态外层活跃 AR 起始地址，实践中放在原动态链指针位置。</p>
+  <div class="formula">k = CurrentAR.level − NewAR.level + 1<br>NewAR.StaticChainPointer = Indir(sp, k)（sp 的 k 次间接内容）</div>
+  <p>变量 X(L+1,off) 地址：</p>
+  <ul>
+    <li>L 等于当前层：addr(X) = sp + off；</li>
+    <li>否则：k = CurrentAR.level − L，addr(X) = Indir(sp,k) + off。</li>
+  </ul>
+  <h3 class="sec">10.1 三种方法比较</h3>
+  <div class="tbl-scroll">
+    <table class="data">
+      <colgroup><col style="width:24%"><col style="width:38%"><col style="width:38%"></colgroup>
+      <tr><th>方法</th><th>代价</th><th>特点</th></tr>
+      <tr><td>局部 Display</td><td>产生花空间</td><td>返回时无需恢复环境</td></tr>
+      <tr><td>全局 Display</td><td>产生、返回都花时间</td><td>节省存储单元</td></tr>
+      <tr><td>静态链</td><td>产生花时间</td><td>共享化的局部 Display，返回无需恢复，省单元</td></tr>
+    </table>
+  </div>
+  <p style="font-size:13.5px">寄存器较少时用 Display 表合适；机器间接操作能力强时可选静态链。</p>
+</section>
+<!-- ===== 章末总结 ===== -->
+<section class="block" id="end">
+  <div class="block-head"><span class="idx">11</span><h2>章末速查</h2><span class="en">SUMMARY</span></div>
+  <div class="summary-grid">
+    <div class="sum-item"><b>核心问题</b> 抽象地址到真实地址的映射。</div>
+    <div class="sum-item"><b>内存五区</b> 库代码、目标代码、静态、堆、栈。</div>
+    <div class="sum-item"><b>三策略</b> 静态、栈式、堆式。</div>
+    <div class="sum-item"><b>静态分配</b> 无递归、无动态结构，编译期固定。</div>
+    <div class="sum-item"><b>栈式</b> AR 压栈退栈，解决递归与共享。</div>
+    <div class="sum-item"><b>AR 结构</b> 数据区 + 管理信息，sp/top 指针。</div>
+    <div class="sum-item"><b>调用链/动态链</b> 调用序列与对应 AR 序列。</div>
+    <div class="sum-item"><b>访问环境</b> 由声明链决定，LAR 序列。</div>
+    <div class="sum-item"><b>Display</b> 局部自带表 / 全局 D[i]。</div>
+    <div class="sum-item"><b>静态链</b> 指针指向静态外层，省单元。</div>
+  </div>
+  <footer class="foot">
+    <p>本资料依据编译原理课件 20、21（运行时空间管理，34+30 共 64 页）整理，仅用于课程学习。</p>
+    <p class="src">数据来源：编译原理课件 20 / 21</p>
+  </footer>
+</section>
+</div>
+</main>
+</div>
+<script>
+var sidebar=document.getElementById('sidebar'),backdrop=document.querySelector('.backdrop'),burger=document.querySelector('.hamburger');
+function toggleNav(show){sidebar.classList.toggle('show',show);backdrop.classList.toggle('show',show);}
+burger.addEventListener('click',function(){toggleNav(!sidebar.classList.contains('show'));});
+backdrop.addEventListener('click',function(){toggleNav(false);});
+document.querySelectorAll('.nav-item').forEach(function(a){a.addEventListener('click',function(){toggleNav(false);});});
+var navItems=document.querySelectorAll('.nav-item');
+window.addEventListener('scroll',function(){
+  var pos=window.scrollY+120,cur=navItems[0];
+  document.querySelectorAll('section.block').forEach(function(s){if(s.offsetTop<=pos){var a=document.querySelector('.nav-item[href="#'+s.id+'"]');if(a)cur=a;}});
+  navItems.forEach(function(a){a.classList.remove('active');});
+  if(cur)cur.classList.add('active');
+});
+document.querySelectorAll('.acc-head').forEach(function(h){h.addEventListener('click',function(){h.parentElement.classList.toggle('open');});});
+function makeStepper(id,steps){
+  var el=document.getElementById(id),idx=0;
+  function render(){
+    var s=steps[idx];
+    el.querySelector('.dots').innerHTML=steps.map(function(_,i){
+      return '<button class="dot '+(i<idx?'done':i===idx?'cur':'')+'" data-i="'+i+'">'+(i+1)+'</button>';
+    }).join('');
+    el.querySelector('.step-body').innerHTML='<div class="st-title">'+s.t+'</div>'+s.c;
+    el.querySelector('.prev').disabled=(idx===0);
+    el.querySelector('.next').disabled=(idx===steps.length-1);
+    el.querySelectorAll('.dot').forEach(function(d){d.addEventListener('click',function(){idx=+d.dataset.i;render();});});
+  }
+  el.querySelector('.prev').addEventListener('click',function(){if(idx>0){idx--;render();}});
+  el.querySelector('.next').addEventListener('click',function(){if(idx<steps.length-1){idx++;render();}});
+  render();
+}
+makeStepper('chainStep',[
+  {t:'主程序 P 开始执行',c:'<div class="code">调用链：(P)\n动态链：[ AR(P) ]\nsp 指向 AR(P)，动态链指针为 NIL。</div>'},
+  {t:'P 中调用 S',c:'<div class="code">调用链：(P, S)\n动态链：[ AR(P), AR(S) ]\n申请：sp=top，top=top+size；\nAR(S) 动态链指针指向 AR(P)。</div>'},
+  {t:'S 中调用 Q',c:'<div class="code">调用链：(P, S, Q)\n动态链：[ AR(P), AR(S), AR(Q) ]\nAR(Q) 压入栈顶。</div>'},
+  {t:'Q 中调用 R',c:'<div class="code">调用链：(P, S, Q, R)\n动态链：[ AR(P), AR(S), AR(Q), AR(R) ]</div>'},
+  {t:'R 递归调用 R',c:'<div class="code">调用链：(P, S, Q, R, R)\n动态链：[ AR(P), AR(S), AR(Q), AR(R), AR(R) ]\n同一条递归链上出现两个 AR(R)，\n只有最新一个是活跃活动记录 LAR。</div>'}
+]);
+</script>
+</body>
+</html>

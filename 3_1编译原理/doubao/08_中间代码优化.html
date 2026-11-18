@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>08 中间代码优化 · 编译原理学习资料</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23173b5e'/%3E%3Ctext x='16' y='22' font-size='16' text-anchor='middle' fill='%23e8743b' font-family='Georgia'%3E8%3C/text%3E%3C/svg%3E">
+<style>
+:root{
+  --ink:#173b5e; --org:#e8743b; --blue-bg:#eef4f9; --org-bg:#fdf1e8;
+  --line:#d8e2ec; --text:#233242; --gray:#5f7185; --red:#b03a2e; --red-bg:#fbeae8;
+  --green:#2e7d52; --green-bg:#e9f5ee;
+  --serif:Georgia,"Songti SC","SimSun",serif;
+  --sans:"Segoe UI","Microsoft YaHei","PingFang SC",sans-serif;
+  --mono:Consolas,"Courier New",monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--sans);color:var(--text);background:#fff;font-size:15px;line-height:1.85}
+h1,h2,h3,h4{font-family:var(--serif);color:var(--ink);line-height:1.4}
+a{color:var(--ink);text-decoration:none}
+::selection{background:var(--org);color:#fff}
+
+.layout{display:flex;min-height:100vh}
+.sidebar{width:248px;flex-shrink:0;background:var(--ink);color:#cdd9e6;padding:26px 0;position:fixed;top:0;bottom:0;left:0;overflow-y:auto;z-index:40}
+.sidebar .brand{padding:0 22px 18px;border-bottom:1px solid rgba(255,255,255,.14);margin-bottom:14px}
+.sidebar .brand .chap{font-family:var(--serif);font-size:26px;color:#fff;display:block}
+.sidebar .brand .sub{font-size:12px;color:#9fb4c8;letter-spacing:2px;margin-top:2px}
+.nav-item{display:flex;align-items:center;gap:10px;padding:9px 22px;color:#c3d1de;font-size:13.5px;cursor:pointer;border-left:3px solid transparent;transition:all .18s}
+.nav-item:hover{background:rgba(255,255,255,.08);color:#fff}
+.nav-item.active{background:rgba(232,116,59,.18);border-left-color:var(--org);color:#fff}
+.nav-item .n{font-family:var(--mono);font-size:11px;color:var(--org);width:20px;flex-shrink:0}
+.main{margin-left:248px;flex:1;min-width:0}
+.wrap{max-width:860px;margin:0 auto;padding:0 34px}
+.hamburger{display:none;position:fixed;top:14px;left:14px;z-index:50;width:42px;height:42px;background:var(--ink);border:none;border-radius:8px;padding:10px;cursor:pointer}
+.hamburger svg{width:100%;height:100%;stroke:#fff;stroke-width:2;fill:none}
+.backdrop{display:none;position:fixed;inset:0;background:rgba(20,35,50,.5);z-index:35}
+
+.hero{background:linear-gradient(160deg,#173b5e 0%,#1f4d78 100%);color:#fff;padding:64px 0 54px;position:relative;overflow:hidden}
+.hero::before{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.05) 1px,transparent 1px);background-size:34px 34px}
+.hero .wrap{position:relative}
+.hero .eyebrow{font-size:12.5px;letter-spacing:4px;color:#f0b594;margin-bottom:14px}
+.hero h1{color:#fff;font-size:38px;margin-bottom:14px}
+.hero p.lead{color:#d3e0ec;font-size:15.5px;max-width:660px}
+.opt-flow{display:flex;align-items:center;gap:10px;margin-top:32px;flex-wrap:wrap}
+.of-node{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.25);border-radius:8px;padding:12px 16px;font-family:var(--mono);font-size:12.5px;text-align:center;min-width:96px}
+.of-node b{display:block;font-family:var(--sans);font-size:13.5px;color:#fff;margin-bottom:2px}
+.of-node.mid{background:rgba(232,116,59,.28);border-color:#f0a076}
+.of-arrow{color:#f0b594;font-size:20px}
+
+section.block{padding:46px 0 10px}
+.block-head{display:flex;align-items:baseline;gap:14px;margin-bottom:20px;border-bottom:2px solid var(--line);padding-bottom:12px}
+.block-head .idx{font-family:var(--mono);font-size:14px;color:#fff;background:var(--org);border-radius:6px;padding:2px 9px}
+.block-head h2{font-size:26px}
+.block-head .en{font-size:12px;color:var(--gray);letter-spacing:1.5px;margin-left:auto;font-family:var(--sans)}
+h3.sec{font-size:19px;margin:30px 0 12px;padding-left:12px;border-left:4px solid var(--org)}
+h4{font-size:16px;margin:20px 0 8px}
+p{margin-bottom:12px}
+p .term{color:var(--ink);font-weight:700}
+ul,ol{margin:8px 0 14px 22px}
+li{margin-bottom:6px}
+
+.box-tip{border-radius:10px;padding:14px 18px;margin:16px 0;font-size:14.5px}
+.box-tip .bt-title{display:flex;align-items:center;gap:8px;font-weight:700;margin-bottom:6px;font-family:var(--serif)}
+.box-tip .bt-title svg{width:18px;height:18px;flex-shrink:0}
+.analogy{background:var(--org-bg);border:1px solid #f3d2bd}
+.analogy .bt-title{color:#b85623}
+.analogy .bt-title svg{stroke:#c96a2e;fill:none;stroke-width:1.8}
+.note{background:var(--blue-bg);border:1px solid #cddded}
+.note .bt-title{color:var(--ink)}
+.note .bt-title svg{stroke:var(--ink);fill:none;stroke-width:1.8}
+.warn{background:var(--red-bg);border:1px solid #ecc9c3}
+.warn .bt-title{color:var(--red)}
+.warn .bt-title svg{stroke:var(--red);fill:none;stroke-width:1.8}
+.good{background:var(--green-bg);border:1px solid #c2e0d0}
+.good .bt-title{color:var(--green)}
+.good .bt-title svg{stroke:var(--green);fill:none;stroke-width:1.8}
+
+.tbl-scroll{overflow-x:auto;margin:16px 0;border:1px solid var(--line);border-radius:10px}
+table.data{width:100%;border-collapse:collapse;font-size:13.5px;table-layout:fixed}
+table.data th{background:var(--ink);color:#fff;font-weight:600;padding:10px 12px;text-align:left;font-size:13px}
+table.data td{padding:9px 12px;border-top:1px solid var(--line);vertical-align:top;word-break:break-word}
+table.data tr:nth-child(even) td{background:#f6f9fc}
+table.data .mono-cell{font-family:var(--mono);font-size:12.5px}
+
+.code{background:#1d3550;color:#dce7f2;border-radius:10px;padding:16px 18px;font-family:var(--mono);font-size:13px;line-height:1.9;overflow-x:auto;margin:14px 0;white-space:pre}
+.code .cm{color:#7f9bb5}
+.formula{text-align:center;font-family:var(--serif);font-size:16px;color:var(--ink);background:#f6f9fc;border:1px dashed var(--line);border-radius:10px;padding:14px;margin:14px 0}
+
+.stepper{border:1px solid var(--line);border-radius:12px;overflow:hidden;margin:18px 0}
+.stepper-bar{display:flex;align-items:center;gap:8px;background:#f6f9fc;padding:12px 16px;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.dots{display:flex;gap:7px;flex-wrap:wrap}
+.dot{width:26px;height:26px;border-radius:50%;border:2px solid var(--line);background:#fff;color:var(--gray);font-family:var(--mono);font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s}
+.dot.done{background:var(--ink);border-color:var(--ink);color:#fff}
+.dot.cur{background:var(--org);border-color:var(--org);color:#fff;transform:scale(1.12)}
+.step-btns{margin-left:auto;display:flex;gap:8px}
+.step-btns button{border:1px solid var(--ink);background:#fff;color:var(--ink);border-radius:7px;padding:6px 16px;font-size:13px;cursor:pointer;font-family:var(--sans)}
+.step-btns button.go{background:var(--ink);color:#fff}
+.step-btns button:disabled{opacity:.35;cursor:not-allowed}
+.step-body{padding:18px 20px;min-height:150px}
+.step-body .st-title{font-family:var(--serif);font-weight:700;color:var(--ink);font-size:16px;margin-bottom:8px}
+
+.acc{border:1px solid var(--line);border-radius:10px;margin:12px 0;overflow:hidden}
+.acc-head{width:100%;display:flex;align-items:center;gap:10px;background:#f6f9fc;padding:12px 16px;border:none;cursor:pointer;font-size:14px;font-family:var(--sans);color:var(--ink);font-weight:600;text-align:left}
+.acc-head svg{width:16px;height:16px;stroke:var(--org);stroke-width:2;fill:none;transition:transform .25s;flex-shrink:0}
+.acc.open .acc-head svg{transform:rotate(90deg)}
+.acc-body{display:none;padding:14px 18px;border-top:1px solid var(--line)}
+.acc.open .acc-body{display:block}
+
+.cards2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:16px 0}
+.mini-card{border:1px solid var(--line);border-radius:10px;padding:16px;background:#fff}
+.mini-card h4{margin-top:0;display:flex;align-items:center;gap:8px}
+.mini-card h4 svg{width:17px;height:17px;stroke:var(--org);fill:none;stroke-width:1.8}
+.mini-card.alt{background:var(--blue-bg);border-color:#cddded}
+
+.summary-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:16px 0}
+.sum-item{border-left:4px solid var(--org);background:#f6f9fc;padding:12px 16px;border-radius:0 8px 8px 0;font-size:14px}
+.sum-item b{color:var(--ink);font-family:var(--serif)}
+footer.foot{border-top:2px solid var(--line);margin-top:46px;padding:26px 0 40px;color:var(--gray);font-size:12.5px}
+footer.foot .src{font-family:var(--mono);font-size:12px}
+
+@media (max-width:900px){
+  .sidebar{transform:translateX(-100%);transition:transform .25s;width:230px}
+  .sidebar.show{transform:translateX(0)}
+  .backdrop.show{display:block}
+  .main{margin-left:0}
+  .hamburger{display:block}
+  .wrap{padding:0 20px}
+  .hero{padding:70px 0 40px}
+  .hero h1{font-size:28px}
+  .cards2,.summary-grid{grid-template-columns:1fr}
+  .block-head .en{display:none}
+  table.data{font-size:12.5px}
+}
+</style>
+</head>
+<body>
+<button class="hamburger" aria-label="打开目录"><svg viewBox="0 0 24 24"><path d="M3 6h18M3 12h18M3 18h18"/></svg></button>
+<div class="backdrop"></div>
+<div class="layout">
+<nav class="sidebar" id="sidebar">
+  <div class="brand">
+    <span class="chap">第八章</span>
+    <span class="sub">CODE OPTIMIZATION</span>
+  </div>
+  <a class="nav-item" href="#top"><span class="n">00</span>本章开篇</a>
+  <a class="nav-item" href="#m1"><span class="n">01</span>优化概述</a>
+  <a class="nav-item" href="#m2"><span class="n">02</span>优化分类</a>
+  <a class="nav-item" href="#m3"><span class="n">03</span>常见优化种类</a>
+  <a class="nav-item" href="#m4"><span class="n">04</span>基本块</a>
+  <a class="nav-item" href="#m5"><span class="n">05</span>划分原则</a>
+  <a class="nav-item" href="#m6"><span class="n">06</span>划分实例</a>
+  <a class="nav-item" href="#m7"><span class="n">07</span>常表达式节省</a>
+  <a class="nav-item" href="#m8"><span class="n">08</span>公共子表达式</a>
+  <a class="nav-item" href="#m9"><span class="n">09</span>循环不变式外提</a>
+  <a class="nav-item" href="#m10"><span class="n">10</span>综合应用</a>
+  <a class="nav-item" href="#end"><span class="n">11</span>章末速查</a>
+</nav>
+
+<main class="main" id="top">
+<header class="hero">
+  <div class="wrap">
+    <div class="eyebrow">编译原理 · 第八章</div>
+    <h1>中间代码优化</h1>
+    <p class="lead">优化是在保证语义正确的前提下，让程序运行更快、占空间更少。这一章以基本块为最小单位，讲清三种核心技术：常表达式节省（编译期算好）、公共子表达式节省（相同结果只算一次）、循环不变式外提（循环外算一次），并介绍值编码、循环定值表等支撑方法。</p>
+    <div class="opt-flow">
+      <div class="of-node"><b>常表达式</b>编译期算</div>
+      <span class="of-arrow">→</span>
+      <div class="of-node mid"><b>公共子表达式</b>只算一次</div>
+      <span class="of-arrow">→</span>
+      <div class="of-node"><b>不变式外提</b>循环外算</div>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+<!-- ===== 模块一：概述 ===== -->
+<section class="block" id="m1">
+  <div class="block-head"><span class="idx">01</span><h2>代码优化概述</h2><span class="en">OVERVIEW</span></div>
+  <p>提高源程序运行速度要经过几个阶段的优化：用户对源程序做算法层优化（数据结构、算法选择），编译器前端对中间代码优化，后端对目标代码优化（寄存器、目标指令）。本课程关注中间代码优化。</p>
+  <ul>
+    <li>优化角度：执行效率（时间）、存储（空间）；</li>
+    <li>意义：程序一次编译、多次执行，优化有性价比；实时控制、导航等领域对效率要求高。</li>
+  </ul>
+  <div class="warn box-tip">
+    <div class="bt-title"><svg viewBox="0 0 24 24"><path d="M12 3l9 16H3z"/><path d="M12 10v4M12 17v.5"/></svg>第一原则</div>
+    优化最重要的原则是一定不能出错，可能出错就不优化。保证正确的前提下，再在一定程度上提高效率，而非追求“最优”。
+  </div>
+</section>
+
+<!-- ===== 模块二：分类 ===== -->
+<section class="block" id="m2">
+  <div class="block-head"><span class="idx">02</span><h2>中间代码优化的分类</h2><span class="en">CATEGORY</span></div>
+  <div class="tbl-scroll">
+    <table class="data">
+      <colgroup><col style="width:22%"><col style="width:46%"><col style="width:32%"></colgroup>
+      <tr><th>范围</th><th>内容</th><th>特点</th></tr>
+      <tr><td>局部优化</td><td>基本块上的优化：常表达式节省、公共子表达式节省</td><td>最小单位，成本低，常用</td></tr>
+      <tr><td>循环优化</td><td>循环不变式外提（重点）、削减运算强度</td><td>循环操作随层数倍增，是重点</td></tr>
+      <tr><td>全局优化</td><td>全局数据流分析</td><td>代价高、效果不明显，特殊系统才用</td></tr>
+    </table>
+  </div>
+</section>
+<!-- ===== 模块三：常见优化种类 ===== -->
+<section class="block" id="m3">
+  <div class="block-head"><span class="idx">03</span><h2>常见的编译优化种类</h2><span class="en">TECHNIQUES</span></div>
+  <div class="acc">
+    <button class="acc-head"><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg>数学优化与表达式短路</button>
+    <div class="acc-body">
+      <p><b>数学优化：</b>可不计算的直接删去四元式，高强度运算转低强度。如 a−0=a、a*1=a 直接删；2*a 转 a+a（机器用加法模拟乘法，更快）；a² 转 a*a。</p>
+      <p><b>表达式短路：</b>or 运算前项已知 true，结果必为 true，后项略过；and 运算前项已知 false，结果必为 false，后项略过。</p>
+    </div>
+  </div>
+  <div class="acc">
+    <button class="acc-head"><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg>消除冗余、寄存器与中间变量</button>
+    <div class="acc-body">
+      <p><b>消除无用语句：</b>if 条件恒 true，则 else 分支不可能执行，可删。</p>
+      <p><b>寄存器优化：</b>目标机寄存器的分配与剥夺策略，与目标机相关。</p>
+      <p><b>中间变量优化（空间）：</b>两个临时变量的活动区不相交，可共用同一存储单元，本质是存储空间优化。</p>
+      <p><b>目标代码优化：</b>减少指令个数，如两分量都在寄存器中可直接计算，不必存内存。</p>
+    </div>
+  </div>
+</section>
+<!-- ===== 模块四：基本块 ===== -->
+<section class="block" id="m4">
+  <div class="block-head"><span class="idx">04</span><h2>基本块的定义与特点</h2><span class="en">BASIC BLOCK</span></div>
+  <p>基本块是程序中一组顺序执行的语句序列，只有一个出口和一个入口：入口是第一条语句，出口是最后一条语句。</p>
+  <ul>
+    <li>执行时只能从入口进入、出口退出；内部语句要么全执行，要么全不执行，不能中间转出或转入；</li>
+    <li>可基于源代码、中间代码、目标代码划分。</li>
+  </ul>
+  <div class="analogy box-tip">
+    <div class="bt-title"><svg viewBox="0 0 24 24"><path d="M12 21V9M7 14l5-5 5 5M5 3h14"/></svg>为什么在基本块上优化</div>
+    基本块内顺序执行，变量的值怎么获得、怎么传播都能判定。若有额外入口（goto 跳入），变量值就无法确定；基本块封闭后性质可判定，优化才安全。
+  </div>
+</section>
+
+<!-- ===== 模块五：划分原则 ===== -->
+<section class="block" id="m5">
+  <div class="block-head"><span class="idx">05</span><h2>基本块的划分原则</h2><span class="en">PARTITION</span></div>
+  <ol>
+    <li>整个四元式序列的第一个四元式为入口；</li>
+    <li>遇转移性四元式，结束当前块，该四元式作为出口，下一条作为新块入口；</li>
+    <li>遇标号性四元式，结束当前块，该四元式作为新块入口；</li>
+    <li>遇对地址引用型变量赋值的四元式，结束当前块并作为出口。</li>
+  </ol>
+  <div class="acc">
+    <button class="acc-head"><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg>转移性与标号性四元式（点击展开）</button>
+    <div class="acc-body">
+      <p><b>转移性（生成目标代码时必产生跳转）：</b>JMP、CALL、RETURN、ENDPROC、ENDFUNC、THEN、ELSE、DO、ENDWHILE。</p>
+      <p><b>标号性（定位，不产生跳转）：</b>LABEL、ENTRY、WHILE、ENDIF，标记循环或条件语句位置。</p>
+      <p>地址引用型变量能改变原变量的值（如 *y=10），为保证性质可判定需在此断块。</p>
+    </div>
+  </div>
+</section>
+<!-- ===== 模块六：划分实例 ===== -->
+<section class="block" id="m6">
+  <div class="block-head"><span class="idx">06</span><h2>基本块划分实例与程序流图</h2><span class="en">EXAMPLE</span></div>
+  <p>源程序含赋值、if 条件、while 循环，转成四元式后按标号和转移断块：</p>
+  <div class="code">B1：(ASSIGN,1,_,y)
+B2：(LABEL,...,L) (AND,A,B,t0) (THEN,t0,...)
+B3：(ASSIGN,0,_,x)
+B4：(ELSE,...) (ASSIGN,0,_,y)
+B5：(ENDIF,...) (+,x,1,t1) ... (-,y,1,t2)
+B6：(WHILE,...) (ADDI,x,y,t3) (GT,t3,0,t4) (DO,t4,...)
+B7：(-,x,1,t5) (ASSIGN,t5,_,x)
+B8：(ENDWHILE,...) (ASSIGN,0,_,z)</div>
+  <p><span class="term">程序流图</span>是以基本块为节点的有向图，节点间有向边代表控制流，了解即可。</p>
+</section>
+
+<!-- ===== 模块七：常表达式节省 ===== -->
+<section class="block" id="m7">
+  <div class="block-head"><span class="idx">07</span><h2>常表达式节省</h2><span class="en">CONSTANT FOLDING</span></div>
+  <p>常表达式是编译过程中能算出常量值的表达式。处理思想：若运算型四元式 (w,A,B,T) 两分量都取常数，计算 A w B 并用值代替，删掉原四元式。</p>
+  <p>例：m 总取常数 10，a=m+10、b=a+m、c=a+b−d 优化为 a=20、b=30、c=50−d。</p>
+  <h3 class="sec">7.1 常量定值表 ConstDef</h3>
+  <p>表元素 (Var,Val)：若有 (V,c)，表示变量此时一定取常数 c，V 被更改前出现的 V 都可替换为 c。</p>
+  <div class="acc">
+    <button class="acc-head"><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg>局部优化算法（点击展开）</button>
+    <div class="acc-body">
+      <ol>
+        <li>块入口置 ConstDef 为空；读当前四元式，用 ConstDef 代换分量得新四元式；</li>
+        <li>运算型 (w,A,B,t)：A、B 都是常数则算值 v，填 (t,v)，删除当前四元式；</li>
+        <li>赋值型 (ASSIGN,A,_,B)：A 是常数则填 (B,A)（已有则改值）；A 非常数则删除 B 的登记。</li>
+      </ol>
+    </div>
+  </div>
+  <div class="stepper" id="constStep">
+    <div class="stepper-bar">
+      <div class="dots"></div>
+      <div class="step-btns"><button class="prev">上一步</button><button class="next go">下一步</button></div>
+    </div>
+    <div class="step-body"></div>
+  </div>
+</section>
+<!-- ===== 模块八：公共子表达式 ===== -->
+<section class="block" id="m8">
+  <div class="block-head"><span class="idx">08</span><h2>公共子表达式节省</h2><span class="en">COMMON SUBEXPR</span></div>
+  <p>两个四元式 (w1,a,b,t1)、(w2,c,d,t2)，若 w1=w2 且 V(a)=V(c)、V(b)=V(d)，则等价。基本块中多个等价四元式，除第一个外其余是可节省的公共代码 ECC。</p>
+  <div class="warn box-tip">
+    <div class="bt-title"><svg viewBox="0 0 24 24"><path d="M12 3l9 16H3z"/><path d="M12 10v4M12 17v.5"/></svg>抛开表面看本质</div>
+    形式相同未必等价（中间变量被重新赋值），形式不同未必不等价（赋值后两变量同值）。所以用值编码标识“值”而非名字。
+  </div>
+
+  <h3 class="sec">8.1 基于值编码的方法</h3>
+  <p>对每个值确定一个编码，使具有相同值的运算分量编码相同。</p>
+  <ul>
+    <li><b>值编码表</b>：分量已有编码直接用，没有则新建；</li>
+    <li><b>性质</b>：相同常量编码相同、不同常量编码不同；变量被赋值就得到新编码，直到再被赋值；</li>
+    <li><b>映象码</b>：四元式各部分用值编码表示，映象码相同即公共表达式；</li>
+    <li><b>PAIR 表</b>：(ti,tj) 表示 tj=ti，节省时用 ti 替换 tj。</li>
+  </ul>
+  <div class="acc">
+    <button class="acc-head"><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg>算法流程（点击展开）</button>
+    <div class="acc-body">
+      <ol>
+        <li>块入口置 ValueNum、UsableExpr、PAIR 为空；</li>
+        <li>运算型：先做 PAIR 替换，若 UsableExpr 有相似代码则删除并填 (ti,tj)，否则给结果新编码并加入；</li>
+        <li>赋值型：令结果编码等于右部编码。</li>
+      </ol>
+    </div>
+  </div>
+  <p style="font-size:13.5px">例 a=b*c+b*c：第二个 b*c 映象码与第一个相同，节省；下标地址计算中此类重用最常见。</p>
+</section>
+<!-- ===== 模块九：循环不变式外提 ===== -->
+<section class="block" id="m9">
+  <div class="block-head"><span class="idx">09</span><h2>循环不变式外提</h2><span class="en">LOOP HOISTING</span></div>
+  <p>变量 x 的值在循环中不改变即循环不变量；表达式 (w,a,b,t) 两分量都是循环不变量，即循环不变式。外提就是把它提到本层循环入口处，循环里只引用结果。</p>
+  <p>循环识别：基于文本（扫描 WHILE/DO/ENDWHILE，成本低）或基于程序流图（开销大）。</p>
+
+  <h3 class="sec">9.1 两遍扫描</h3>
+  <ul>
+    <li><b>第一遍建定值表 LoopDef</b>：运算型把结果 t 记入，赋值型把左部 b 记入；</li>
+    <li><b>第二遍外提</b>：运算型若 A、B 都不在 LoopDef 中，即不变式，提到循环入口，并把 t 从 LoopDef 删去。</li>
+  </ul>
+  <div class="code">i:=1; while i<=100 do
+  z:=i*k*5; a:=2*k+2*k*2; i:=i+1;
+<span class="cm">// 2*k、(2*k)*2 等与 i 无关，外提到循环入口</span></div>
+
+  <h3 class="sec">9.2 外提安全性</h3>
+  <div class="acc">
+    <button class="acc-head"><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg>四类不外提（点击展开）</button>
+    <div class="acc-body">
+      <ul>
+        <li><b>除法不外提</b>：可能除零，如 if(y≠0) 内 1/y，外提脱离保护；</li>
+        <li><b>赋值不外提</b>：循环可能 0 次，外提至少执行 1 次，改变结果；</li>
+        <li><b>非良性循环不外提</b>：含过函调用或间接变量赋值，副作用无法构造准确定值表，整个循环都不外提；</li>
+        <li><b>分量是间接变量的运算不外提</b>：指针本身不变，但指向地址里的值在变；若只取指针本身做地址加则可外提。</li>
+      </ul>
+    </div>
+  </div>
+  <h3 class="sec">9.3 外提策略与多层循环</h3>
+  <p>外提必经代码没问题；非必经代码若循环一次不执行，外提反成多余计算。多层循环从最内层开始、逐层向外提，LoopDef 也嵌套，用栈记住每层开始。矩阵乘法中下标变量地址外提收益巨大，是主要外提对象。</p>
+</section>
+<!-- ===== 模块十：综合应用 ===== -->
+<section class="block" id="m10">
+  <div class="block-head"><span class="idx">10</span><h2>三种技术的综合应用</h2><span class="en">INTEGRATION</span></div>
+  <div class="code">a:=0; j:=(a+1)*5;
+while j<100 do
+  a:=a+A[3];
+  if a<10 then k:=0
+  else k:=x*y+x*y/5;
+  j:=j+1;</div>
+  <p>先划分基本块，再依次应用：①常表达式节省，(a+1)*5 直接得 j=5；②公共子表达式节省，两个 x*y 合并；③循环不变式外提，A[3] 地址、x*y 提到循环外。</p>
+  <div class="code">(:=,0,_,a) (:=,5,_,j)
+(AADD,A,2,t6) (*,x,y,t9)
+(WHILE,...) ...
+  (+,a,t6,t7) ...
+  (/,t9,5,t11) (+,t9,t11,t12) ...</div>
+</section>
+
+<!-- ===== 章末速查 ===== -->
+<section class="block" id="end">
+  <div class="block-head"><span class="idx">11</span><h2>章末速查</h2><span class="en">SUMMARY</span></div>
+  <div class="summary-grid">
+    <div class="sum-item"><b>优化分类</b>：局部（基本块）、循环（重点）、全局。</div>
+    <div class="sum-item"><b>基本块</b>：单入口单出口，内部全执行或全不执行。</div>
+    <div class="sum-item"><b>划分四原则</b>：首条入口、转移断块、标号断块、间接赋值断块。</div>
+    <div class="sum-item"><b>常表达式</b>：两分量都是常数，编译期算值，靠 ConstDef。</div>
+    <div class="sum-item"><b>公共子表达式</b>：映象码相同即等价，靠值编码与 PAIR。</div>
+    <div class="sum-item"><b>循环外提</b>：两遍扫描建 LoopDef，除法/赋值/非良性/间接分量不外提。</div>
+  </div>
+  <footer class="foot">
+    <p class="src">数据来源：编译原理课件 18（中间代码优化1）、19（中间代码优化2），共 64 页。</p>
+    <p>本资料为单文件自包含 HTML，所有样式与脚本均内联，可离线打开。</p>
+  </footer>
+</section>
+</div>
+</main>
+</div>
+<script>
+var sidebar=document.getElementById('sidebar'),backdrop=document.querySelector('.backdrop'),burger=document.querySelector('.hamburger');
+function toggleNav(show){sidebar.classList.toggle('show',show);backdrop.classList.toggle('show',show);}
+burger.addEventListener('click',function(){toggleNav(!sidebar.classList.contains('show'));});
+backdrop.addEventListener('click',function(){toggleNav(false);});
+document.querySelectorAll('.nav-item').forEach(function(a){a.addEventListener('click',function(){toggleNav(false);});});
+var navItems=document.querySelectorAll('.nav-item');
+window.addEventListener('scroll',function(){
+  var pos=window.scrollY+120,cur=navItems[0];
+  document.querySelectorAll('section.block').forEach(function(s){if(s.offsetTop<=pos){var a=document.querySelector('.nav-item[href="#'+s.id+'"]');if(a)cur=a;}});
+  navItems.forEach(function(a){a.classList.remove('active');});
+  if(cur)cur.classList.add('active');
+});
+document.querySelectorAll('.acc-head').forEach(function(h){h.addEventListener('click',function(){h.parentElement.classList.toggle('open');});});
+function makeStepper(id,steps){
+  var el=document.getElementById(id),idx=0;
+  function render(){
+    var s=steps[idx];
+    el.querySelector('.dots').innerHTML=steps.map(function(_,i){
+      return '<button class="dot '+(i<idx?'done':i===idx?'cur':'')+'" data-i="'+i+'">'+(i+1)+'</button>';
+    }).join('');
+    el.querySelector('.step-body').innerHTML='<div class="st-title">'+s.t+'</div>'+s.c;
+    el.querySelector('.prev').disabled=(idx===0);
+    el.querySelector('.next').disabled=(idx===steps.length-1);
+    el.querySelectorAll('.dot').forEach(function(d){d.addEventListener('click',function(){idx=+d.dataset.i;render();});});
+  }
+  el.querySelector('.prev').addEventListener('click',function(){if(idx>0){idx--;render();}});
+  el.querySelector('.next').addEventListener('click',function(){if(idx<steps.length-1){idx++;render();}});
+  render();
+}
+makeStepper('constStep',[
+  {t:'初始：ConstDef 为空',c:'<p>基本块入口，常量定值表为空。待处理四元式：</p><div class="code">a:=1\nb:=a+1\na:=x\nc:=b+5</div>'},
+  {t:'第1条 a:=1',c:'<p>赋值型，右部是常数 1，登记 (a,1)。此后 a 出现处都可替换为 1。</p><div class="code">ConstDef = { (a,1) }</div>'},
+  {t:'第2条 b:=a+1',c:'<p>先用表把 a 替换为 1，两分量都是常数，算出 1+1=2，删除原四元式，登记 (b,2)。</p><div class="code">ConstDef = { (a,1), (b,2) }</div>'},
+  {t:'第3条 a:=x',c:'<p>右部 x 不是常数，无法确定 a 的常量值，删除 (a,1) 的登记。</p><div class="code">ConstDef = { (b,2) }</div>'},
+  {t:'第4条 c:=b+5',c:'<p>用表把 b 替换为 2，两分量都是常数，算出 2+5=7，删除原四元式，登记 (c,7)。</p><div class="code">ConstDef = { (b,2), (c,7) }</div>'},
+  {t:'优化结果',c:'<p>原四条运算/赋值只剩常数赋值，运算在编译期完成：</p><div class="code">a:=1\nc:=7\nb、c 的运算四元式均已删除</div>'}
+]);
+</script>
+</body>
+</html>

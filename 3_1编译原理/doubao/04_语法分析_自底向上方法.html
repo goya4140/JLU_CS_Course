@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>04 语法分析 · 自底向上方法 · 编译原理学习资料</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23173b5e'/%3E%3Ctext x='16' y='22' font-size='16' text-anchor='middle' fill='%23e8743b' font-family='Georgia'%3E4%3C/text%3E%3C/svg%3E">
+<style>
+:root{
+  --ink:#173b5e; --org:#e8743b; --blue-bg:#eef4f9; --org-bg:#fdf1e8;
+  --line:#d8e2ec; --text:#233242; --gray:#5f7185; --red:#b03a2e; --red-bg:#fbeae8;
+  --green:#2e7d52; --green-bg:#e9f5ee;
+  --serif:Georgia,"Songti SC","SimSun",serif;
+  --sans:"Segoe UI","Microsoft YaHei","PingFang SC",sans-serif;
+  --mono:Consolas,"Courier New",monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--sans);color:var(--text);background:#fff;font-size:15px;line-height:1.85}
+h1,h2,h3,h4{font-family:var(--serif);color:var(--ink);line-height:1.4}
+a{color:var(--ink);text-decoration:none}
+::selection{background:var(--org);color:#fff}
+
+.layout{display:flex;min-height:100vh}
+.sidebar{width:248px;flex-shrink:0;background:var(--ink);color:#cdd9e6;padding:26px 0;position:fixed;top:0;bottom:0;left:0;overflow-y:auto;z-index:40}
+.sidebar .brand{padding:0 22px 18px;border-bottom:1px solid rgba(255,255,255,.14);margin-bottom:14px}
+.sidebar .brand .chap{font-family:var(--serif);font-size:26px;color:#fff;display:block}
+.sidebar .brand .sub{font-size:12px;color:#9fb4c8;letter-spacing:2px;margin-top:2px}
+.nav-item{display:flex;align-items:center;gap:10px;padding:9px 22px;color:#c3d1de;font-size:13.5px;cursor:pointer;border-left:3px solid transparent;transition:all .18s}
+.nav-item:hover{background:rgba(255,255,255,.08);color:#fff}
+.nav-item.active{background:rgba(232,116,59,.18);border-left-color:var(--org);color:#fff}
+.nav-item .n{font-family:var(--mono);font-size:11px;color:var(--org);width:20px;flex-shrink:0}
+.main{margin-left:248px;flex:1;min-width:0}
+.wrap{max-width:860px;margin:0 auto;padding:0 34px}
+.hamburger{display:none;position:fixed;top:14px;left:14px;z-index:50;width:42px;height:42px;background:var(--ink);border:none;border-radius:8px;padding:10px;cursor:pointer}
+.hamburger svg{width:100%;height:100%;stroke:#fff;stroke-width:2;fill:none}
+.backdrop{display:none;position:fixed;inset:0;background:rgba(20,35,50,.5);z-index:35}
+
+.hero{background:linear-gradient(160deg,#173b5e 0%,#1f4d78 100%);color:#fff;padding:64px 0 54px;position:relative;overflow:hidden}
+.hero::before{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.05) 1px,transparent 1px);background-size:34px 34px}
+.hero .wrap{position:relative}
+.hero .eyebrow{font-size:12.5px;letter-spacing:4px;color:#f0b594;margin-bottom:14px}
+.hero h1{color:#fff;font-size:38px;margin-bottom:14px}
+.hero p.lead{color:#d3e0ec;font-size:15.5px;max-width:660px}
+.tree-flow{display:flex;align-items:center;gap:10px;margin-top:32px;flex-wrap:wrap}
+.tf-node{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.25);border-radius:8px;padding:12px 16px;font-family:var(--mono);font-size:12.5px;text-align:center;min-width:96px}
+.tf-node b{display:block;font-family:var(--sans);font-size:13.5px;color:#fff;margin-bottom:2px}
+.tf-node.mid{background:rgba(232,116,59,.28);border-color:#f0a076}
+.tf-arrow{color:#f0b594;font-size:20px}
+
+section.block{padding:46px 0 10px}
+.block-head{display:flex;align-items:baseline;gap:14px;margin-bottom:20px;border-bottom:2px solid var(--line);padding-bottom:12px}
+.block-head .idx{font-family:var(--mono);font-size:14px;color:#fff;background:var(--org);border-radius:6px;padding:2px 9px}
+.block-head h2{font-size:26px}
+.block-head .en{font-size:12px;color:var(--gray);letter-spacing:1.5px;margin-left:auto;font-family:var(--sans)}
+h3.sec{font-size:19px;margin:30px 0 12px;padding-left:12px;border-left:4px solid var(--org)}
+h4{font-size:16px;margin:20px 0 8px}
+p{margin-bottom:12px}
+p .term{color:var(--ink);font-weight:700}
+ul,ol{margin:8px 0 14px 22px}
+li{margin-bottom:6px}
+
+.box-tip{border-radius:10px;padding:14px 18px;margin:16px 0;font-size:14.5px}
+.box-tip .bt-title{display:flex;align-items:center;gap:8px;font-weight:700;margin-bottom:6px;font-family:var(--serif)}
+.box-tip .bt-title svg{width:18px;height:18px;flex-shrink:0}
+.analogy{background:var(--org-bg);border:1px solid #f3d2bd}
+.analogy .bt-title{color:#b85623}
+.analogy .bt-title svg{stroke:#c96a2e;fill:none;stroke-width:1.8}
+.note{background:var(--blue-bg);border:1px solid #cddded}
+.note .bt-title{color:var(--ink)}
+.note .bt-title svg{stroke:var(--ink);fill:none;stroke-width:1.8}
+.warn{background:var(--red-bg);border:1px solid #ecc9c3}
+.warn .bt-title{color:var(--red)}
+.warn .bt-title svg{stroke:var(--red);fill:none;stroke-width:1.8}
+.good{background:var(--green-bg);border:1px solid #c2e0d0}
+.good .bt-title{color:var(--green)}
+.good .bt-title svg{stroke:var(--green);fill:none;stroke-width:1.8}
+
+.tbl-scroll{overflow-x:auto;margin:16px 0;border:1px solid var(--line);border-radius:10px}
+table.data{width:100%;border-collapse:collapse;font-size:13.5px;table-layout:fixed}
+table.data caption{text-align:left;font-size:12.5px;color:var(--gray);padding:10px 14px 0}
+table.data th{background:var(--ink);color:#fff;font-weight:600;padding:10px 12px;text-align:left;font-size:13px}
+table.data td{padding:9px 12px;border-top:1px solid var(--line);vertical-align:top;word-break:break-word}
+table.data tr:nth-child(even) td{background:#f6f9fc}
+table.data .mono-cell{font-family:var(--mono);font-size:12.5px}
+
+.code{background:#1d3550;color:#dce7f2;border-radius:10px;padding:16px 18px;font-family:var(--mono);font-size:13px;line-height:1.9;overflow-x:auto;margin:14px 0;white-space:pre}
+.code .cm{color:#7f9bb5}
+.formula{text-align:center;font-family:var(--serif);font-size:16px;color:var(--ink);background:#f6f9fc;border:1px dashed var(--line);border-radius:10px;padding:14px;margin:14px 0}
+
+.item-box{background:#f6f9fc;border:1px solid var(--line);border-radius:10px;padding:12px 16px;font-family:var(--mono);font-size:13px;margin:10px 0}
+.item-box .st{color:var(--ink);font-weight:700}
+.item-box.reduce{background:var(--red-bg);border-color:#ecc9c3}
+.item-box.shift{background:var(--blue-bg);border-color:#cddded}
+
+.stepper{border:1px solid var(--line);border-radius:12px;overflow:hidden;margin:18px 0}
+.stepper-bar{display:flex;align-items:center;gap:8px;background:#f6f9fc;padding:12px 16px;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.dots{display:flex;gap:7px;flex-wrap:wrap}
+.dot{width:26px;height:26px;border-radius:50%;border:2px solid var(--line);background:#fff;color:var(--gray);font-family:var(--mono);font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s}
+.dot.done{background:var(--ink);border-color:var(--ink);color:#fff}
+.dot.cur{background:var(--org);border-color:var(--org);color:#fff;transform:scale(1.12)}
+.step-btns{margin-left:auto;display:flex;gap:8px}
+.step-btns button{border:1px solid var(--ink);background:#fff;color:var(--ink);border-radius:7px;padding:6px 16px;font-size:13px;cursor:pointer;font-family:var(--sans)}
+.step-btns button.go{background:var(--ink);color:#fff}
+.step-btns button:disabled{opacity:.35;cursor:not-allowed}
+.step-body{padding:18px 20px;min-height:150px}
+.step-body .st-title{font-family:var(--serif);font-weight:700;color:var(--ink);font-size:16px;margin-bottom:8px}
+
+.acc{border:1px solid var(--line);border-radius:10px;margin:12px 0;overflow:hidden}
+.acc-head{width:100%;display:flex;align-items:center;gap:10px;background:#f6f9fc;padding:12px 16px;border:none;cursor:pointer;font-size:14px;font-family:var(--sans);color:var(--ink);font-weight:600;text-align:left}
+.acc-head svg{width:16px;height:16px;stroke:var(--org);stroke-width:2;fill:none;transition:transform .25s;flex-shrink:0}
+.acc.open .acc-head svg{transform:rotate(90deg)}
+.acc-body{display:none;padding:14px 18px;border-top:1px solid var(--line)}
+.acc.open .acc-body{display:block}
+
+.cards2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:16px 0}
+.mini-card{border:1px solid var(--line);border-radius:10px;padding:16px;background:#fff}
+.mini-card h4{margin-top:0;display:flex;align-items:center;gap:8px}
+.mini-card h4 svg{width:17px;height:17px;stroke:var(--org);fill:none;stroke-width:1.8}
+.mini-card.alt{background:var(--blue-bg);border-color:#cddded}
+
+.summary-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:16px 0}
+.sum-item{border-left:4px solid var(--org);background:#f6f9fc;padding:12px 16px;border-radius:0 8px 8px 0;font-size:14px}
+.sum-item b{color:var(--ink);font-family:var(--serif)}
+footer.foot{border-top:2px solid var(--line);margin-top:46px;padding:26px 0 40px;color:var(--gray);font-size:12.5px}
+footer.foot .src{font-family:var(--mono);font-size:12px}
+
+@media (max-width:900px){
+  .sidebar{transform:translateX(-100%);transition:transform .25s;width:230px}
+  .sidebar.show{transform:translateX(0)}
+  .backdrop.show{display:block}
+  .main{margin-left:0}
+  .hamburger{display:block}
+  .wrap{padding:0 20px}
+  .hero{padding:70px 0 40px}
+  .hero h1{font-size:28px}
+  .cards2,.summary-grid{grid-template-columns:1fr}
+  .block-head .en{display:none}
+  table.data{font-size:12.5px}
+}
+</style>
+</head>
+<body>
+<button class="hamburger" aria-label="打开目录"><svg viewBox="0 0 24 24"><path d="M3 6h18M3 12h18M3 18h18"/></svg></button>
+<div class="backdrop"></div>
+<div class="layout">
+<nav class="sidebar" id="sidebar">
+  <div class="brand">
+    <span class="chap">第四章</span>
+    <span class="sub">BOTTOM-UP PARSING</span>
+  </div>
+  <a class="nav-item" href="#top"><span class="n">00</span>本章开篇</a>
+  <a class="nav-item" href="#m1"><span class="n">01</span>自底向上分析</a>
+  <a class="nav-item" href="#m2"><span class="n">02</span>活前缀与可归前缀</a>
+  <a class="nav-item" href="#m3"><span class="n">03</span>LR(0) 项目</a>
+  <a class="nav-item" href="#m4"><span class="n">04</span>闭包与 GO 函数</a>
+  <a class="nav-item" href="#m5"><span class="n">05</span>LR(0) 状态机构造</a>
+  <a class="nav-item" href="#m6"><span class="n">06</span>LR(0) 分析与冲突</a>
+  <a class="nav-item" href="#m7"><span class="n">07</span>SLR(1) 方法</a>
+  <a class="nav-item" href="#m8"><span class="n">08</span>SLR 局限</a>
+  <a class="nav-item" href="#m9"><span class="n">09</span>LR(1) 方法</a>
+  <a class="nav-item" href="#m10"><span class="n">10</span>LALR(1) 方法</a>
+  <a class="nav-item" href="#end"><span class="n">11</span>方法总结</a>
+</nav>
+
+<main class="main" id="top">
+<header class="hero">
+  <div class="wrap">
+    <div class="eyebrow">编译原理 · 第四章</div>
+    <h1>语法分析 · 自底向上方法</h1>
+    <p class="lead">自底向上分析从输入串出发，自左向右扫描，反复找到当前句型的句柄并归约，直到归约为开始符。LR 类方法用“带圆点的项目”构造识别活前缀的状态机，把“句柄在哪、用哪条产生式”变成查表动作；从 LR(0) 到 SLR、LR(1)、LALR，逐步利用输入信息、化解冲突。</p>
+    <div class="tree-flow">
+      <div class="tf-node"><b>输入串</b>终极符</div>
+      <span class="tf-arrow">→</span>
+      <div class="tf-node mid"><b>移入-归约</b>找句柄</div>
+      <span class="tf-arrow">→</span>
+      <div class="tf-node"><b>开始符</b>归约成功</div>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+<!-- ===== 模块一：自底向上分析 ===== -->
+<section class="block" id="m1">
+  <div class="block-head"><span class="idx">01</span><h2>自底向上的语法分析</h2><span class="en">SHIFT-REDUCE</span></div>
+  <p>基本思想（移入-归约分析）：从待分析符号串开始，自左向右扫描、自下而上分析，通过反复查找当前句型的句柄，并把找到的句柄归约为相应产生式左部的非终极符，直到把输入串归约为开始符。</p>
+
+  <div class="analogy box-tip">
+    <div class="bt-title"><svg viewBox="0 0 24 24"><path d="M12 21V9M7 14l5-5 5 5M5 3h14"/></svg>生活类比</div>
+    像拆毛衣：先把线头一个个挑到针上（移入），当针上凑成完整的一圈（句柄），就把这一圈收成一针（归约）；反复收针，整件毛衣最后收成一个线团（开始符）。
+  </div>
+
+  <h3 class="sec">1.1 分析动作</h3>
+  <ul>
+    <li><span class="term">移入</span>：把输入流的头符压入符号栈；</li>
+    <li><span class="term">归约</span>：把符号栈栈顶的句柄，用某一非终极符替换；</li>
+    <li><span class="term">成功</span>：归约到开始符；<span class="term">失败</span>：无法继续。</li>
+  </ul>
+  <div class="warn box-tip">
+    <div class="bt-title"><svg viewBox="0 0 24 24"><path d="M12 3l9 16H3z"/><path d="M12 10v4M12 17v.5"/></svg>核心问题</div>
+    ①如何判断符号栈栈顶出现了句柄？②替换时用哪个产生式？关键是确定句柄——不同找句柄的方法构成不同的自底向上方法：算符优先、简单优先、LR 类。
+  </div>
+
+  <h3 class="sec">1.2 LR 类方法的基本思想</h3>
+  <p>L 表示从左到右扫描输入串，R 表示分析过程是最右推导的逆过程（最左归约）。LR 分析法对文法限制很少，大多数能用 CFG 描述的程序语言都可有效分析，且能准确及时发现错误。包括 LR(0)、SLR(1)、LR(1)、LALR(1)。</p>
+
+  <h3 class="sec">1.3 移入-归约过程演示</h3>
+  <div class="stepper" id="srStep">
+    <div class="stepper-bar">
+      <div class="dots"></div>
+      <div class="step-btns"><button class="prev">上一步</button><button class="next go">下一步</button></div>
+    </div>
+    <div class="step-body"></div>
+  </div>
+</section>
+<!-- ===== 模块二：活前缀与可归前缀 ===== -->
+<section class="block" id="m2">
+  <div class="block-head"><span class="idx">02</span><h2>规范活前缀与可归前缀</h2><span class="en">VIABLE PREFIX</span></div>
+  <ul>
+    <li><span class="term">规范句型</span>：用最右推导导出的句型，也称右句型；</li>
+    <li><span class="term">规范前缀</span>：若存在规范句型 αβ，且 β 是终极符串或空串，则称 α 为规范前缀；</li>
+    <li><span class="term">规范活前缀（活前缀）</span>：规范前缀 α 不含句柄，或含一个句柄且形式为 α'π（π 是句柄）；</li>
+    <li><span class="term">归约规范活前缀（可归前缀）</span>：含句柄的活前缀，且句柄在最右端，即 α = α'π。</li>
+  </ul>
+  <p>LR 分析过程就是不断判断符号栈内容是否为可归前缀：不是则移入一个符号再判断，是则对栈顶句柄归约，直至归约为开始符。</p>
+
+  <h3 class="sec">2.1 可归前缀的派生定理</h3>
+  <ol>
+    <li>开始符产生式的右部是可归前缀；</li>
+    <li>若 αAβ 是可归前缀，且 A→π 是产生式，则 απ 也是可归前缀；</li>
+    <li>任何可归前缀都可按上述方法派生。</li>
+  </ol>
+  <p>例 4.3：文法 S→aAc[1]、A→dbb[2]、A→b[3]，可归前缀为 aAc、adbb、ab。</p>
+</section>
+<!-- ===== 模块三：LR(0) 项目 ===== -->
+<section class="block" id="m3">
+  <div class="block-head"><span class="idx">03</span><h2>LR(0) 项目</h2><span class="en">LR(0) ITEM</span></div>
+  <p>LR(0) 项目是带一个圆点的产生式，每个项目标志分析时的某一状态。圆点像一个“进度条”，表示已经识别了产生式右部的多少。</p>
+  <p>产生式 S→aAc 对应四个项目：</p>
+  <div class="item-box shift">S → •aAc &nbsp;<span class="cm">符号栈不含句柄任何部分</span></div>
+  <div class="item-box shift">S → a•Ac &nbsp;<span class="cm">包含句柄中的 a</span></div>
+  <div class="item-box shift">S → aA•c &nbsp;<span class="cm">包含句柄中的 aA</span></div>
+  <div class="item-box reduce">S → aAc• &nbsp;<span class="cm">包含完整句柄 aAc，可归约</span></div>
+
+  <h3 class="sec">3.1 项目的两种类型</h3>
+  <ul>
+    <li><span class="term">归约型项目</span>：形如 A→π•，圆点在最右，已识别完整右部，应归约；</li>
+    <li><span class="term">移入型项目</span>：形如 A→α•β，圆点后还有符号，应继续移入。</li>
+  </ul>
+  <div class="note box-tip">
+    <div class="bt-title"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16v.5"/></svg>空产生式</div>
+    空产生式 A→ε 对应的项目只有一个 A→•，且为归约型项目（右部为空，圆点已在末尾）。
+  </div>
+</section>
+<!-- ===== 模块四：闭包与 GO ===== -->
+<section class="block" id="m4">
+  <div class="block-head"><span class="idx">04</span><h2>项目集的闭包与 GO 函数</h2><span class="en">CLOSURE &amp; GO</span></div>
+
+  <h3 class="sec">4.1 投影</h3>
+  <p>项目集 IS 关于符号 X 的投影集：把圆点跨过 X 的项目挑出来。</p>
+  <div class="formula">IS(X) = { A→αX•β | A→α•Xβ ∈ IS }</div>
+  <p>例：IS 含 S→a•Ac、A→•dbb、A→•b，则 IS(A)={S→aA•c}，IS(d)={A→d•bb}，IS(b)={A→b•}。</p>
+
+  <h3 class="sec">4.2 闭包</h3>
+  <p>圆点后面是非终极符时，意味着接下来要识别它，于是把它的所有产生式（圆点在最左）加入：</p>
+  <div class="formula">CLOSURE(IS) = IS ∪ { A→•π | Y→β•Aη ∈ CLOSURE(IS)，A→π 是产生式 }</div>
+  <div class="item-box">CLOSURE({S→a•Ac}) = { S→a•Ac，A→•dbb，A→•b }</div>
+
+  <h3 class="sec">4.3 GO 函数</h3>
+  <p>GO 表示读入一个符号 X 后到达的新项目集，即先投影再求闭包：</p>
+  <div class="formula">GO(IS, X) = CLOSURE(IS(X))</div>
+  <div class="item-box">GO({S→•aAc}, a) = CLOSURE({S→a•Ac}) = { S→a•Ac，A→•dbb，A→•b }</div>
+</section>
+<!-- ===== 模块五：LR(0) 状态机构造 ===== -->
+<section class="block" id="m5">
+  <div class="block-head"><span class="idx">05</span><h2>LR(0) 状态机的构造</h2><span class="en">BUILD LRSM0</span></div>
+  <p>为使“成功”状态易于识别，LR 文法要求开始符唯一且不出现在产生式右部，因此先加拓广产生式 Z→S，Z 为新开始符。</p>
+
+  <h3 class="sec">5.1 构造步骤</h3>
+  <ol>
+    <li><span class="term">Step 1</span>：构造初始状态 IS0 = CLOSURE({Z→•S})，标记 NO；</li>
+    <li><span class="term">Step 2</span>：任选一个标 NO 的状态 IS，删除标记，对每个符号 X 令 ISj = CLOSURE(IS(X))；ISj 非空时，若已存在则画 X 边，若不存在则作为新状态并标 NO，同样画 X 边；</li>
+    <li>重复 Step 2，直到没有标 NO 的状态。</li>
+  </ol>
+  <p>每个状态对应一个饱和项目集：一部分由先驱分出（基本项目），一部分由基本项目扩展（派生项目），派生项目的圆点在产生式右部最左侧。</p>
+
+  <h3 class="sec">5.2 状态机生长演示</h3>
+  <div class="stepper" id="buildStep">
+    <div class="stepper-bar">
+      <div class="dots"></div>
+      <div class="step-btns"><button class="prev">上一步</button><button class="next go">下一步</button></div>
+    </div>
+    <div class="step-body"></div>
+  </div>
+</section>
+<!-- ===== 模块六：LR(0) 分析与冲突 ===== -->
+<section class="block" id="m6">
+  <div class="block-head"><span class="idx">06</span><h2>LR(0) 分析方法与冲突</h2><span class="en">LR(0) TABLE</span></div>
+  <p>LR(0) 是 LR(k) 中 k=0 的情况：每一步仅根据当前符号栈的状态，无需向前看输入符号即可确定动作。真正的 LR 用状态栈（而非符号栈），分析表分 Action 和 Goto 两部分。</p>
+
+  <h3 class="sec">6.1 Action 与 Goto 表</h3>
+  <ul>
+    <li><span class="term">Action（状态×终极符）</span>：移入 S、归约 R、接受 Acc、出错；</li>
+    <li><span class="term">Goto（状态×非终极符）</span>：归约后转向的状态。</li>
+  </ul>
+  <p>例：文法 S→aAd[1]、A→Bc[2]、B→b[3]，其 Action 表（归约型状态对所有终极符都填同一归约动作，因为不看输入）：</p>
+  <div class="tbl-scroll">
+    <table class="data" style="text-align:center">
+      <colgroup><col style="width:14%"><col span="5" style="width:17.2%"></colgroup>
+      <tr><th></th><th>a</th><th>b</th><th>c</th><th>d</th><th>#</th></tr>
+      <tr><td>0</td><td>S1</td><td></td><td></td><td></td><td></td></tr>
+      <tr><td>1</td><td></td><td>S2</td><td></td><td></td><td></td></tr>
+      <tr><td>2</td><td>R3</td><td>R3</td><td>R3</td><td>R3</td><td>R3</td></tr>
+      <tr><td>3</td><td></td><td></td><td></td><td>S5</td><td></td></tr>
+      <tr><td>4</td><td></td><td></td><td>S6</td><td></td><td></td></tr>
+      <tr><td>5</td><td></td><td></td><td></td><td></td><td>Acc</td></tr>
+      <tr><td>6</td><td>R2</td><td>R2</td><td>R2</td><td>R2</td><td>R2</td></tr>
+    </table>
+  </div>
+
+  <h3 class="sec">6.2 冲突与 LR(0) 文法</h3>
+  <ul>
+    <li><span class="term">归约/归约冲突</span>：一个状态含两个或以上归约项目；</li>
+    <li><span class="term">移入/归约冲突</span>：同时含移入项目和归约项目；</li>
+  </ul>
+  <p>有冲突的状态称二义性状态；没有二义性状态的文法称 LR(0) 文法。</p>
+  <div class="warn box-tip">
+    <div class="bt-title"><svg viewBox="0 0 24 24"><path d="M12 3l9 16H3z"/><path d="M12 10v4M12 17v.5"/></svg>冲突根源</div>
+    状态 T→F• 与 T→F•*T 共存：到底归约还是等 * 移入？LR(0) 完全不看输入流，无法判断。这正是它的局限——通过引入输入信息，发展出 SLR、LR(1)、LALR。
+  </div>
+</section>
+<!-- ===== 模块七：SLR(1) 方法 ===== -->
+<section class="block" id="m7">
+  <div class="block-head"><span class="idx">07</span><h2>SLR(1) 方法</h2><span class="en">SIMPLE LR</span></div>
+  <p>SLR(1) 的状态机与 LR(0) 结构完全相同，区别只在归约时向前看一个符号，用 Follow 集化解冲突。</p>
+
+  <h3 class="sec">7.1 冲突如何解决</h3>
+  <ul>
+    <li><span class="term">移入-归约</span>：状态含 A→α• 与 D→μ•dγ；当前输入符在 Follow(A) 中则归约，为 d 则移入；若 d 也在 Follow(A) 则无法解决；</li>
+    <li><span class="term">归约-归约</span>：状态含 A→α•、B→β•；输入符在 Follow(A) 则按 A 归约，在 Follow(B) 则按 B 归约；同时属于两者则无法解决。</li>
+  </ul>
+  <div class="formula">SLR(1) 条件：各归约项目的 Follow(A1)…Follow(An) 与移入符 {a1…am} 两两不相交</div>
+
+  <h3 class="sec">7.2 分析表构造</h3>
+  <p>归约项目 A→α• 不再对所有列填归约，而只对 Follow(A) 中的终极符填 Rj；移入、Accept、Goto 规则同 LR(0)。</p>
+  <p>例：M→T、T→F、T→F*T、F→a，Follow(M)={#}、Follow(T)={#}、Follow(F)={*,#}：</p>
+  <div class="tbl-scroll">
+    <table class="data" style="text-align:center">
+      <colgroup><col style="width:14%"><col span="3" style="width:16%"><col span="2" style="width:19%"></colgroup>
+      <tr><th></th><th>a</th><th>*</th><th>#</th><th>T</th><th>F</th></tr>
+      <tr><td>0</td><td>S2</td><td></td><td></td><td>1</td><td>3</td></tr>
+      <tr><td>1</td><td></td><td></td><td>Acc</td><td></td><td></td></tr>
+      <tr><td>2</td><td></td><td>R4</td><td>R4</td><td></td><td></td></tr>
+      <tr><td>3</td><td></td><td>S4</td><td>R2</td><td></td><td></td></tr>
+      <tr><td>4</td><td>S2</td><td></td><td></td><td>5</td><td>3</td></tr>
+      <tr><td>5</td><td></td><td></td><td>R3</td><td></td><td></td></tr>
+    </table>
+  </div>
+  <p style="font-size:13.5px">分析表单值、无冲突即 SLR(1) 文法。它比 LR(0) 强，因为用 Follow 集考虑了输入符。</p>
+</section>
+<!-- ===== 模块八：SLR 局限 ===== -->
+<section class="block" id="m8">
+  <div class="block-head"><span class="idx">08</span><h2>SLR(1) 的分析过程与局限</h2><span class="en">SLR LIMITATION</span></div>
+
+  <h3 class="sec">8.1 分析过程</h3>
+  <p>驱动方式与 LR(0) 相同：状态栈、符号栈、输入串。以 a*a*a 为例，关键格局：</p>
+  <div class="code">0    #        a*a*a#   S2
+02   #a       *a*a#    R4 → 3
+03   #F       *a*a#    S4
+034  #F*      a*a#     S2
+...（不断移入、归约）...
+01   #T       #        Acc</div>
+
+  <h3 class="sec">8.2 SLR 的问题：不区分不同出现</h3>
+  <p>文法 Z→B1aB2bB3c，B→d。B 在右部出现三次：B1 的后继只能是 a，B2 的后继只能是 b，B3 的后继只能是 c。但 Follow(B) = {a,b,c} 把三者混在一起，SLR 据此归约就失去了精度。</p>
+  <div class="note box-tip">
+    <div class="bt-title"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16v.5"/></svg>改进方向</div>
+    一个非终极符在不同位置出现，允许的后继符不同。LR(1) 针对不同产生式上的非终极符分别定义后继符集（展望符），从而减少冲突。
+  </div>
+</section>
+<!-- ===== 模块九：LR(1) 方法 ===== -->
+<section class="block" id="m9">
+  <div class="block-head"><span class="idx">09</span><h2>LR(1) 方法</h2><span class="en">CANONICAL LR</span></div>
+  <p>LR(1) 对非终极符的每个不同出现求后继符，而不是给每个非终极符一个统一 Follow，这就是<span class="term">展望符集</span>。</p>
+
+  <h3 class="sec">9.1 LR(1) 项目</h3>
+  <p>项目是 LR(0) 项目加一个展望符的二元组 [A→α•β, a]，其中 a ∈ VT∪{#}。初始项 Z→•α 的展望符为 #。</p>
+  <div class="acc">
+    <button class="acc-head"><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg>投影、闭包与 GO（点击展开）</button>
+    <div class="acc-body">
+      <p><b>投影：</b>IS(X) = {[A→αX•β,a] | [A→α•Xβ,a] ∈ IS}。</p>
+      <p><b>闭包：</b>CLOSURE(IS) = IS ∪ {[A→•β,a] | [B→α1•Aα2,b] ∈ CLOSURE，A→β 是产生式，a ∈ First(α2 b)}。新添项目的展望符由后面符号串求 First 得到（可空则用 b）。</p>
+      <p><b>GO：</b>GO(IS,X) = CLOSURE(IS(X))。构造步骤与 LR(0) 相同，初始 IS0 = CLOSURE({[Z→•S,#]})。</p>
+    </div>
+  </div>
+
+  <h3 class="sec">9.2 分析表与 LR(1) 文法</h3>
+  <ul>
+    <li>归约项 [A→α•, a]：只在展望符 a 列填 Rj；</li>
+    <li>移入项 [A→α•aβ, b]：Action 填 S；Goto 同前；[Z→α•,#] 填 Acc。</li>
+  </ul>
+  <p>例：Z→BB、B→aB、B→b，其分析表（注意状态数比 LR(0) 多）：</p>
+  <div class="tbl-scroll">
+    <table class="data" style="text-align:center">
+      <colgroup><col style="width:18%"><col span="3" style="width:18%"><col style="width:28%"></colgroup>
+      <tr><th></th><th>a</th><th>b</th><th>#</th><th>B</th></tr>
+      <tr><td>0</td><td>S6</td><td>S4</td><td></td><td>1</td></tr>
+      <tr><td>1</td><td>S5</td><td>S3</td><td></td><td>2</td></tr>
+      <tr><td>2</td><td></td><td></td><td>Acc</td><td></td></tr>
+      <tr><td>3</td><td></td><td></td><td>R3</td><td></td></tr>
+      <tr><td>4</td><td>R3</td><td>R3</td><td></td><td></td></tr>
+      <tr><td>6</td><td>S6</td><td>S4</td><td></td><td>7</td></tr>
+      <tr><td>7</td><td></td><td></td><td>R2</td><td></td></tr>
+    </table>
+  </div>
+  <p>表中无冲突动作即 LR(1) 文法。它最精确，但状态数最多。</p>
+</section>
+<!-- ===== 模块十：LALR(1) 方法 ===== -->
+<section class="block" id="m10">
+  <div class="block-head"><span class="idx">10</span><h2>LALR(1) 方法</h2><span class="en">LOOK-AHEAD LR</span></div>
+  <p>LR(1) 最主要问题是状态太多，大语言难以在资源有限的机器上实现。LR(1) 状态机中有许多同心状态，LALR(1) 把它们合并以减少状态数。</p>
+
+  <h3 class="sec">10.1 心与同心状态</h3>
+  <ul>
+    <li><span class="term">项目的心</span>：LR(1) 项目 [A→α•β,b] 中的 LR(0) 部分 A→α•β；</li>
+    <li><span class="term">状态心 Core(S)</span>：状态所有项目心之和；</li>
+    <li><span class="term">同心状态</span>：两个状态具有相同的心（仅展望符不同）。</li>
+  </ul>
+  <p>构造时先建 LR(1) 状态机再合并同心状态，或边构造边合并。例文法中 4 和 9、5 和 11、6 和 12 等均为同心状态，合并后展望符取并集。</p>
+
+  <h3 class="sec">10.2 LALR 的定位</h3>
+  <div class="cards2">
+    <div class="mini-card"><h4>状态数</h4><p style="font-size:13.5px;margin:0">与 LR(0)、SLR 相同，远少于 LR(1)。</p></div>
+    <div class="mini-card alt"><h4>分析能力</h4><p style="font-size:13.5px;margin:0">介于 SLR(1) 与 LR(1) 之间，兼具状态少与适用广。</p></div>
+  </div>
+
+  <h3 class="sec">10.3 合并可能带来的冲突</h3>
+  <p>合并同心状态时一定不会产生移入/归约冲突，但可能产生归约/归约冲突。例子文法 Z→aAd、Z→bAc、Z→aBc、Z→bBd、A→e、B→e：LR(1) 图中无冲突，但把对应同心状态合并后，A→e 与 B→e 的展望符发生交集，产生归约/归约冲突。</p>
+  <div class="good box-tip">
+    <div class="bt-title"><svg viewBox="0 0 24 24"><path d="M5 12l4 4 10-10"/></svg>实际地位</div>
+    实际中合并引发冲突的情况不多，而状态数大幅下降，因此 LALR(1) 是目前应用最广泛的 LR 方法。分析表、驱动程序与分析过程均与 LR(1) 相同。
+  </div>
+</section>
+<!-- ===== 章末总结 ===== -->
+<section class="block" id="end">
+  <div class="block-head"><span class="idx">11</span><h2>LR 方法总结</h2><span class="en">SUMMARY</span></div>
+  <div class="formula">分析能力：LR(0) &lt; SLR(1) &lt; LALR(1) &lt; LR(1)</div>
+  <div class="formula">状态数：LR(0) = SLR(1) = LALR(1) &lt; LR(1)</div>
+  <div class="summary-grid">
+    <div class="sum-item"><b>移入-归约</b> 反复找句柄归约，直到开始符；四动作。</div>
+    <div class="sum-item"><b>可归前缀</b> 句柄在最右端的活前缀，是归约信号。</div>
+    <div class="sum-item"><b>LR(0) 项目</b> 带圆点产生式；归约型/移入型。</div>
+    <div class="sum-item"><b>闭包 GO</b> 闭包补非终极符产生式，GO=投影再闭包。</div>
+    <div class="sum-item"><b>LR(0)</b> 不看输入，易冲突，理论意义。</div>
+    <div class="sum-item"><b>SLR(1)</b> 用 Follow 集看一个符号解冲突。</div>
+    <div class="sum-item"><b>LR(1)</b> 项目带展望符，最精确、状态最多。</div>
+    <div class="sum-item"><b>LALR(1)</b> 合并同心状态，应用最广。</div>
+  </div>
+  <footer class="foot">
+    <p>本资料依据编译原理课件 11、12-1、12-2（LR(0)、SLR(1)/LR(1)、LALR(1)，共 80 页）整理，仅用于课程学习。</p>
+    <p class="src">数据来源：编译原理课件 11 / 12-1 / 12-2</p>
+  </footer>
+</section>
+</div>
+</main>
+</div>
+<script>
+var sidebar=document.getElementById('sidebar'),backdrop=document.querySelector('.backdrop'),burger=document.querySelector('.hamburger');
+function toggleNav(show){sidebar.classList.toggle('show',show);backdrop.classList.toggle('show',show);}
+burger.addEventListener('click',function(){toggleNav(!sidebar.classList.contains('show'));});
+backdrop.addEventListener('click',function(){toggleNav(false);});
+document.querySelectorAll('.nav-item').forEach(function(a){a.addEventListener('click',function(){toggleNav(false);});});
+var navItems=document.querySelectorAll('.nav-item');
+window.addEventListener('scroll',function(){
+  var pos=window.scrollY+120,cur=navItems[0];
+  document.querySelectorAll('section.block').forEach(function(s){if(s.offsetTop<=pos){var a=document.querySelector('.nav-item[href="#'+s.id+'"]');if(a)cur=a;}});
+  navItems.forEach(function(a){a.classList.remove('active');});
+  if(cur)cur.classList.add('active');
+});
+document.querySelectorAll('.acc-head').forEach(function(h){h.addEventListener('click',function(){h.parentElement.classList.toggle('open');});});
+function makeStepper(id,steps){
+  var el=document.getElementById(id),idx=0;
+  function render(){
+    var s=steps[idx];
+    el.querySelector('.dots').innerHTML=steps.map(function(_,i){
+      return '<button class="dot '+(i<idx?'done':i===idx?'cur':'')+'" data-i="'+i+'">'+(i+1)+'</button>';
+    }).join('');
+    el.querySelector('.step-body').innerHTML='<div class="st-title">'+s.t+'</div>'+s.c;
+    el.querySelector('.prev').disabled=(idx===0);
+    el.querySelector('.next').disabled=(idx===steps.length-1);
+    el.querySelectorAll('.dot').forEach(function(d){d.addEventListener('click',function(){idx=+d.dataset.i;render();});});
+  }
+  el.querySelector('.prev').addEventListener('click',function(){if(idx>0){idx--;render();}});
+  el.querySelector('.next').addEventListener('click',function(){if(idx<steps.length-1){idx++;render();}});
+  render();
+}
+makeStepper('srStep',[
+  {t:'开始：栈为空，先移入',c:'<div class="code">符号栈：#\n输入流：( a + t ) * c #\n动作：移入 (，再移入 a\n栈：# ( a</div>'},
+  {t:'a 是句柄，连续归约到 E',c:'<div class="code">栈顶 a 归约：a → F\nF → T\nT → E\n栈：# ( E   输入：+ t ) * c #</div><p>归约用的是产生式 F→i、T→F、E→T。</p>'},
+  {t:'移入 + 与 t',c:'<div class="code">动作：移入 +，移入 t\n栈：# ( E + t\n输入：) * c #</div>'},
+  {t:'t 归约为 T',c:'<div class="code">t → F → T\n栈：# ( E + T\n输入：) * c #</div>'},
+  {t:'归约括号表达式，再处理 * c',c:'<div class="code">移入 )，E+T 归约：(E+T) → E\n移入 *，移入 c，c 归约为 F、T\n栈：# E * T</div>'},
+  {t:'整体归约为开始符，成功',c:'<div class="code">E*T 归约为 E（按 T*F 等产生式）\n栈：# E   输入：#\n归约到开始符，分析成功</div>'}
+]);
+makeStepper('buildStep',[
+  {t:'初始状态 IS0',c:'<div class="item-box">IS0：S → •aAc</div><p>圆点在最左，等待读入 a。</p>'},
+  {t:'读 a，求闭包得到 IS1',c:'<div class="code">GO(IS0,a) = CLOSURE(投影)\nIS1：\n  S → a•Ac\n  A → •dbb\n  A → •b</div><p>圆点后是 A，闭包补入 A 的两条产生式。</p>'},
+  {t:'IS1 读 b 到达归约状态',c:'<div class="item-box reduce">IS4：A → b•　（产生式 [3]）</div><p>圆点在末尾，是归约型项目。</p>'},
+  {t:'IS1 读 d，逐步识别 dbb',c:'<div class="code">IS2：A → d•bb\n再读 b → IS5：A → db•b\n再读 b → IS6：A → dbb•　（[2]）</div>'},
+  {t:'IS1 读 A 到达 IS3',c:'<div class="item-box">IS3：S → aA•c</div><p>非终极符 A 作为 Goto 转向。</p>'},
+  {t:'IS3 读 c 到达接受状态',c:'<div class="item-box reduce">IS7：S → aAc•　（产生式 [1]）</div><p>所有可归前缀 aAc、adbb、ab 均被状态机识别。</p>'}
+]);
+</script>
+</body>
+</html>

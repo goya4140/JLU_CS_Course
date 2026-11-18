@@ -1,0 +1,867 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>02 词法分析 · 编译原理学习资料</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23173b5e'/%3E%3Ctext x='16' y='22' font-size='16' text-anchor='middle' fill='%23e8743b' font-family='Georgia'%3E2%3C/text%3E%3C/svg%3E">
+<style>
+:root{
+  --ink:#173b5e; --org:#e8743b; --blue-bg:#eef4f9; --org-bg:#fdf1e8;
+  --line:#d8e2ec; --text:#233242; --gray:#5f7185; --red:#b03a2e; --red-bg:#fbeae8;
+  --green:#2e7d52; --green-bg:#e9f5ee;
+  --serif:Georgia,"Songti SC","SimSun",serif;
+  --sans:"Segoe UI","Microsoft YaHei","PingFang SC",sans-serif;
+  --mono:Consolas,"Courier New",monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--sans);color:var(--text);background:#fff;font-size:15px;line-height:1.85}
+h1,h2,h3,h4{font-family:var(--serif);color:var(--ink);line-height:1.4}
+a{color:var(--ink);text-decoration:none}
+::selection{background:var(--org);color:#fff}
+
+.layout{display:flex;min-height:100vh}
+.sidebar{width:248px;flex-shrink:0;background:var(--ink);color:#cdd9e6;padding:26px 0;position:fixed;top:0;bottom:0;left:0;overflow-y:auto;z-index:40}
+.sidebar .brand{padding:0 22px 18px;border-bottom:1px solid rgba(255,255,255,.14);margin-bottom:14px}
+.sidebar .brand .chap{font-family:var(--serif);font-size:26px;color:#fff;display:block}
+.sidebar .brand .sub{font-size:12px;color:#9fb4c8;letter-spacing:2px;margin-top:2px}
+.nav-item{display:flex;align-items:center;gap:10px;padding:9px 22px;color:#c3d1de;font-size:13.5px;cursor:pointer;border-left:3px solid transparent;transition:all .18s}
+.nav-item:hover{background:rgba(255,255,255,.08);color:#fff}
+.nav-item.active{background:rgba(232,116,59,.18);border-left-color:var(--org);color:#fff}
+.nav-item .n{font-family:var(--mono);font-size:11px;color:var(--org);width:20px;flex-shrink:0}
+.main{margin-left:248px;flex:1;min-width:0}
+.wrap{max-width:860px;margin:0 auto;padding:0 34px}
+.hamburger{display:none;position:fixed;top:14px;left:14px;z-index:50;width:42px;height:42px;background:var(--ink);border:none;border-radius:8px;padding:10px;cursor:pointer}
+.hamburger svg{width:100%;height:100%;stroke:#fff;stroke-width:2;fill:none}
+.backdrop{display:none;position:fixed;inset:0;background:rgba(20,35,50,.5);z-index:35}
+
+.hero{background:linear-gradient(160deg,#173b5e 0%,#1f4d78 100%);color:#fff;padding:64px 0 54px;position:relative;overflow:hidden}
+.hero::before{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.05) 1px,transparent 1px);background-size:34px 34px}
+.hero .wrap{position:relative}
+.hero .eyebrow{font-size:12.5px;letter-spacing:4px;color:#f0b594;margin-bottom:14px}
+.hero h1{color:#fff;font-size:38px;margin-bottom:14px}
+.hero p.lead{color:#d3e0ec;font-size:15.5px;max-width:640px}
+.pipeline{display:flex;align-items:stretch;gap:0;margin-top:34px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.16);border-radius:12px;padding:18px 16px}
+.p-node{flex:1;text-align:center;position:relative;z-index:2}
+.p-node .box{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);border-radius:8px;padding:12px 6px;font-size:12px;font-family:var(--mono);min-height:66px;display:flex;flex-direction:column;justify-content:center;gap:4px}
+.p-node .box b{font-family:var(--sans);font-size:13px;color:#fff}
+.p-node .box span{font-size:10.5px;color:#bcd0e2}
+.p-node.mid .box{background:rgba(232,116,59,.28);border-color:#f0a076}
+.p-arrow{display:flex;align-items:center;justify-content:center;width:30px;flex-shrink:0}
+.p-arrow svg{width:24px;height:24px;stroke:#f0b594;stroke-width:2;fill:none}
+.p-arrow .tick{stroke-dasharray:30;animation:flow 1.6s linear infinite}
+@keyframes flow{0%{stroke-dashoffset:30}100%{stroke-dashoffset:0}}
+.packet{position:absolute;top:-6px;width:9px;height:9px;border-radius:50%;background:var(--org);opacity:0;animation:packet 3.2s ease-in-out infinite}
+@keyframes packet{0%{left:0;opacity:0}15%{opacity:1}85%{opacity:1}100%{left:calc(100% - 9px);opacity:0}}
+
+section.block{padding:46px 0 10px}
+.block-head{display:flex;align-items:baseline;gap:14px;margin-bottom:20px;border-bottom:2px solid var(--line);padding-bottom:12px}
+.block-head .idx{font-family:var(--mono);font-size:14px;color:#fff;background:var(--org);border-radius:6px;padding:2px 9px}
+.block-head h2{font-size:26px}
+.block-head .en{font-size:12px;color:var(--gray);letter-spacing:1.5px;margin-left:auto;font-family:var(--sans)}
+h3.sec{font-size:19px;margin:30px 0 12px;padding-left:12px;border-left:4px solid var(--org)}
+h4{font-size:16px;margin:20px 0 8px}
+p{margin-bottom:12px}
+p .term{color:var(--ink);font-weight:700}
+ul,ol{margin:8px 0 14px 22px}
+li{margin-bottom:6px}
+
+.box-tip{border-radius:10px;padding:14px 18px;margin:16px 0;font-size:14.5px}
+.box-tip .bt-title{display:flex;align-items:center;gap:8px;font-weight:700;margin-bottom:6px;font-family:var(--serif)}
+.box-tip .bt-title svg{width:18px;height:18px;flex-shrink:0}
+.analogy{background:var(--org-bg);border:1px solid #f3d2bd}
+.analogy .bt-title{color:#b85623}
+.analogy .bt-title svg{stroke:#c96a2e;fill:none;stroke-width:1.8}
+.note{background:var(--blue-bg);border:1px solid #cddded}
+.note .bt-title{color:var(--ink)}
+.note .bt-title svg{stroke:var(--ink);fill:none;stroke-width:1.8}
+.warn{background:var(--red-bg);border:1px solid #ecc9c3}
+.warn .bt-title{color:var(--red)}
+.warn .bt-title svg{stroke:var(--red);fill:none;stroke-width:1.8}
+.good{background:var(--green-bg);border:1px solid #c2e0d0}
+.good .bt-title{color:var(--green)}
+.good .bt-title svg{stroke:var(--green);fill:none;stroke-width:1.8}
+
+.tbl-scroll{overflow-x:auto;margin:16px 0;border:1px solid var(--line);border-radius:10px}
+table.data{width:100%;border-collapse:collapse;font-size:13.5px;table-layout:fixed}
+table.data caption{text-align:left;font-size:12.5px;color:var(--gray);padding:10px 14px 0}
+table.data th{background:var(--ink);color:#fff;font-weight:600;padding:10px 12px;text-align:left;font-size:13px}
+table.data td{padding:9px 12px;border-top:1px solid var(--line);vertical-align:top;word-break:break-word}
+table.data tr:nth-child(even) td{background:#f6f9fc}
+table.data .mono-cell{font-family:var(--mono);font-size:12.5px}
+
+.code{background:#1d3550;color:#dce7f2;border-radius:10px;padding:16px 18px;font-family:var(--mono);font-size:13px;line-height:1.9;overflow-x:auto;margin:14px 0;white-space:pre}
+.code .cm{color:#7f9bb5}
+.quad-list{display:flex;flex-direction:column;gap:7px;margin:14px 0}
+.quad{font-family:var(--mono);font-size:13px;background:var(--blue-bg);border:1px solid #cddded;border-radius:8px;padding:8px 14px;display:flex;gap:10px;align-items:baseline}
+.quad .qn{color:var(--org);font-weight:700;flex-shrink:0}
+.quad .qb{color:var(--ink)}
+.quad.new{background:var(--org-bg);border-color:#f0c3a6}
+.formula{text-align:center;font-family:var(--serif);font-size:16px;color:var(--ink);background:#f6f9fc;border:1px dashed var(--line);border-radius:10px;padding:14px;margin:14px 0}
+
+.struct{display:flex;border:1px solid var(--line);border-radius:10px;overflow:hidden;margin:14px 0}
+.struct .seg{padding:10px 14px;font-size:13px;text-align:center;flex:1;border-right:1px solid var(--line)}
+.struct .seg:last-child{border-right:none}
+.struct .seg b{display:block;font-family:var(--mono);font-size:13.5px;margin-bottom:2px}
+.struct .seg span{font-size:11.5px;color:var(--gray)}
+.seg-op{background:var(--ink);color:#fff}
+.seg-op span{color:#a9c2d8}
+.seg-arg{background:var(--blue-bg)}
+.seg-arg b{color:var(--ink)}
+.seg-res{background:var(--org-bg)}
+.seg-res b{color:#b85623}
+
+.stepper{border:1px solid var(--line);border-radius:12px;overflow:hidden;margin:18px 0}
+.stepper-bar{display:flex;align-items:center;gap:8px;background:#f6f9fc;padding:12px 16px;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.dots{display:flex;gap:7px;flex-wrap:wrap}
+.dot{width:26px;height:26px;border-radius:50%;border:2px solid var(--line);background:#fff;color:var(--gray);font-family:var(--mono);font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s}
+.dot.done{background:var(--ink);border-color:var(--ink);color:#fff}
+.dot.cur{background:var(--org);border-color:var(--org);color:#fff;transform:scale(1.12)}
+.step-btns{margin-left:auto;display:flex;gap:8px}
+.step-btns button{border:1px solid var(--ink);background:#fff;color:var(--ink);border-radius:7px;padding:6px 16px;font-size:13px;cursor:pointer;font-family:var(--sans)}
+.step-btns button.go{background:var(--ink);color:#fff}
+.step-btns button:disabled{opacity:.35;cursor:not-allowed}
+.step-body{padding:18px 20px;min-height:150px}
+.step-body .st-title{font-family:var(--serif);font-weight:700;color:var(--ink);font-size:16px;margin-bottom:8px}
+.tok-vis{display:flex;gap:6px;flex-wrap:wrap;margin:12px 0}
+.tok-cell{background:var(--blue-bg);border:1px solid #b9d2e6;border-radius:8px;padding:8px 12px;font-family:var(--mono);font-size:12.5px;color:var(--ink);text-align:center}
+.tok-cell.hot{background:var(--org-bg);border-color:var(--org);color:#b85623;font-weight:700}
+
+.acc{border:1px solid var(--line);border-radius:10px;margin:12px 0;overflow:hidden}
+.acc-head{width:100%;display:flex;align-items:center;gap:10px;background:#f6f9fc;padding:12px 16px;border:none;cursor:pointer;font-size:14px;font-family:var(--sans);color:var(--ink);font-weight:600;text-align:left}
+.acc-head svg{width:16px;height:16px;stroke:var(--org);stroke-width:2;fill:none;transition:transform .25s;flex-shrink:0}
+.acc.open .acc-head svg{transform:rotate(90deg)}
+.acc-body{display:none;padding:14px 18px;border-top:1px solid var(--line)}
+.acc.open .acc-body{display:block}
+
+.cards2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:16px 0}
+.mini-card{border:1px solid var(--line);border-radius:10px;padding:16px;background:#fff}
+.mini-card h4{margin-top:0;display:flex;align-items:center;gap:8px}
+.mini-card h4 svg{width:17px;height:17px;stroke:var(--org);fill:none;stroke-width:1.8}
+.mini-card.alt{background:var(--blue-bg);border-color:#cddded}
+
+.summary-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:16px 0}
+.sum-item{border-left:4px solid var(--org);background:#f6f9fc;padding:12px 16px;border-radius:0 8px 8px 0;font-size:14px}
+.sum-item b{color:var(--ink);font-family:var(--serif)}
+footer.foot{border-top:2px solid var(--line);margin-top:46px;padding:26px 0 40px;color:var(--gray);font-size:12.5px}
+footer.foot .src{font-family:var(--mono);font-size:12px}
+
+@media (max-width:900px){
+  .sidebar{transform:translateX(-100%);transition:transform .25s;width:230px}
+  .sidebar.show{transform:translateX(0)}
+  .backdrop.show{display:block}
+  .main{margin-left:0}
+  .hamburger{display:block}
+  .wrap{padding:0 20px}
+  .hero{padding:70px 0 40px}
+  .hero h1{font-size:28px}
+  .pipeline{flex-direction:column;gap:10px}
+  .p-arrow{width:100%;height:24px;transform:rotate(90deg)}
+  .cards2,.summary-grid{grid-template-columns:1fr}
+  .block-head .en{display:none}
+  table.data{font-size:12.5px}
+}
+</style>
+</head>
+<body>
+<button class="hamburger" aria-label="打开目录"><svg viewBox="0 0 24 24"><path d="M3 6h18M3 12h18M3 18h18"/></svg></button>
+<div class="backdrop"></div>
+<div class="layout">
+<nav class="sidebar" id="sidebar">
+  <div class="brand">
+    <span class="chap">第二章</span>
+    <span class="sub">LEXICAL ANALYSIS</span>
+  </div>
+  <a class="nav-item" href="#top"><span class="n">00</span>本章开篇</a>
+  <a class="nav-item" href="#m1"><span class="n">01</span>词法分析概述</a>
+  <a class="nav-item" href="#m2"><span class="n">02</span>形式语言基础</a>
+  <a class="nav-item" href="#m3"><span class="n">03</span>正则表达式</a>
+  <a class="nav-item" href="#m4"><span class="n">04</span>确定有限自动机 DFA</a>
+  <a class="nav-item" href="#m5"><span class="n">05</span>DFA 接受的语言</a>
+  <a class="nav-item" href="#m6"><span class="n">06</span>DFA 的实现</a>
+  <a class="nav-item" href="#m7"><span class="n">07</span>非确定有限自动机 NFA</a>
+  <a class="nav-item" href="#m8"><span class="n">08</span>NFA 到 DFA 确定化</a>
+  <a class="nav-item" href="#m9"><span class="n">09</span>DFA 最小化</a>
+  <a class="nav-item" href="#m10"><span class="n">10</span>正则与自动机互转</a>
+  <a class="nav-item" href="#m11"><span class="n">11</span>词法分析器设计</a>
+  <a class="nav-item" href="#end"><span class="n">12</span>章末速查</a>
+</nav>
+
+<main class="main" id="top">
+<header class="hero">
+  <div class="wrap">
+    <div class="eyebrow">编译原理 · 第二章</div>
+    <h1>词法分析</h1>
+    <p class="lead">编译的第一步，是把连续的字符流“断”成一个个有意义的单词，并用 Token 把它们表示出来。这一章围绕一个核心——词法分析器设计，掌握两个工具——正则表达式与有限自动机，以及三个转换算法——NFA 确定化、自动机最小化、正则与自动机互转。</p>
+    <div class="pipeline">
+      <div class="p-node"><div class="box"><b>字符流</b><span>源程序</span></div></div>
+      <div class="p-arrow"><svg viewBox="0 0 24 24" class="tick"><path d="M4 12h16M15 6l6 6-6 6"/></svg><span class="packet"></span></div>
+      <div class="p-node mid"><div class="box"><b>词法分析器</b><span>Scanner</span></div></div>
+      <div class="p-arrow"><svg viewBox="0 0 24 24" class="tick"><path d="M4 12h16M15 6l6 6-6 6"/></svg><span class="packet"></span></div>
+      <div class="p-node"><div class="box"><b>Token 流</b><span>交语法分析</span></div></div>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+<!-- ===== 模块一：词法分析概述 ===== -->
+<section class="block" id="m1">
+  <div class="block-head"><span class="idx">01</span><h2>词法分析概述</h2><span class="en">OVERVIEW</span></div>
+  <p><span class="term">词法分析程序</span>是编译程序的一部分，是整个编译过程的第一步工作。它的作用可以概括成三件事：<span class="term">分离单词、生成 Token、检查词法错误</span>。</p>
+
+  <h3 class="sec">1.1 什么是单词</h3>
+  <p><span class="term">单词</span>是具有独立含义的最小语义单位。注意“最小”这个限定——它不能再往下拆，拆开就没有独立意义了。看课件里这段程序：</p>
+  <div class="code">int main( )
+{  int x1;
+   x1 = 1;
+   if ( x1 > 0 )
+      x1 = x1 + 10;
+}</div>
+  <ul>
+    <li><span class="term">int</span> 是一个单词（保留字），<span class="term">main</span>、<span class="term">x1</span> 各是一个单词（标识符）；单独的 x 或 1 不是单词，没有独立意义。</li>
+    <li><span class="term">10</span> 是一个单词（常量），分开的 1 和 0 不是单词；<span class="term">(</span>、<span class="term">)</span>、<span class="term">{</span>、<span class="term">+</span>、<span class="term">=</span>、<span class="term">;</span> 各自是一个单词。</li>
+    <li><span class="term">x1 &gt; 0</span> 不是一个单词，因为它不是最小单位，还能继续拆成 x1、&gt;、0 三个单词。</li>
+  </ul>
+
+  <h3 class="sec">1.2 什么是 Token</h3>
+  <p><span class="term">Token</span> 是单词的具体表示，是一种数据结构。它应包含哪些信息没有统一规定，通常有两种设计：</p>
+  <div class="struct">
+    <div class="seg seg-arg"><b>两元组</b><span>&lt;单词类别（语法），单词内容（语义）&gt;</span></div>
+    <div class="seg seg-res"><b>三元组</b><span>&lt;行号，单词类别，单词内容&gt;</span></div>
+  </div>
+  <p>类别信息用于语法分析，告诉后面这个单词在语法上扮演什么角色；内容信息用于语义分析，记录它具体是哪个标识符、什么数值。例如课件里的 Token 可写成 (1,id,main)、(1,(,-) 这样的形式。</p>
+
+  <div class="analogy box-tip">
+    <div class="bt-title"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg>生活类比</div>
+    词法分析就像给一整段话逐词加词性标注：先把句子切成词，再给每个词标上“名词、动词、标点”这类标签，同时记下它具体是哪个词。后面的语法分析拿到的就是这串带标注的词，而不是一个个孤立的字母。
+  </div>
+</section>
+<!-- ===== 模块二：形式语言基础 ===== -->
+<section class="block" id="m2">
+  <div class="block-head"><span class="idx">02</span><h2>形式语言基础</h2><span class="en">FORMAL LANGUAGE</span></div>
+  <p>在描述单词之前，先要建立一套严格的概念体系，否则后面的规则容易产生二义性。这一节从字母表出发，一步步走到闭包。</p>
+
+  <h3 class="sec">2.1 字母表与符号串</h3>
+  <h4>（1）字母表 alphabet</h4>
+  <p>字母表是元素的<span class="term">非空有穷集合</span>，其中一个元素称为一个字母，也叫符号或字符。字母表具有非空性和有穷性，通常用 ∑ 表示。</p>
+  <div class="formula">Σ = {a, b, c, d}　　Σ = {0, 1}　　Σ = {男, 女}　　Σ = ASCII</div>
+  <p>抽象来看，任何一种程序设计语言都有一个标准字符集，它就是一个字母表。</p>
+  <h4>（2）符号串</h4>
+  <p>由字母表中的符号组成的任何<span class="term">有穷序列</span>，称为该字母表上的符号串，一般用 α、β、x、y、z 表示。<span class="term">ε</span> 表示空串，对任一字母表，ε 都是它上面的符号串。</p>
+
+  <h3 class="sec">2.2 前缀、后缀与子串</h3>
+  <p>设 x = yz 是符号串，则 y 是 x 的<span class="term">前缀</span>，z 是 x 的<span class="term">后缀</span>。当 z ≠ ε 时，y 是真前缀；当 y ≠ ε 时，z 是真后缀。</p>
+  <div class="tbl-scroll">
+    <table class="data">
+      <colgroup><col style="width:22%"><col style="width:78%"></colgroup>
+      <tr><th>概念（以 x = abc 为例）</th><th>具体内容</th></tr>
+      <tr><td>前缀</td><td class="mono-cell">ε, a, ab, abc</td></tr>
+      <tr><td>真前缀</td><td class="mono-cell">ε, a, ab（不含 abc 本身）</td></tr>
+      <tr><td>后缀</td><td class="mono-cell">abc, bc, c, ε</td></tr>
+      <tr><td>真后缀</td><td class="mono-cell">bc, c, ε</td></tr>
+      <tr><td>子串</td><td class="mono-cell">abc, ab, bc, a, b, c, ε</td></tr>
+    </table>
+  </div>
+  <p><span class="term">子字符串</span>：一个非空字符串删去它的一个前缀和一个后缀后得到的字符串。如果删去的前缀和后缀不同时为 ε，称为真子串。特别注意：<span class="term">ac 并不是 abc 的子串</span>，因为子串必须是连续的一段。</p>
+
+  <h3 class="sec">2.3 连接与方幂</h3>
+  <h4>（1）符号串连接</h4>
+  <p>把 β 的所有符号顺次接在 α 的所有符号之后，记为 α·β，点可省略即 αβ。例如 α = abc、β = de，则 αβ = abcde；α·ε = α。</p>
+  <h4>（2）符号串的方幂</h4>
+  <p>把 α 自身连接 n 次得到的符号串，称为 α 的 n 次幂，记作 α<sup>n</sup>。</p>
+  <div class="formula">α<sup>0</sup> = ε　　α<sup>1</sup> = α　　α<sup>2</sup> = αα　　α<sup>n</sup> = αα…α（n 个 α）</div>
+
+  <h3 class="sec">2.4 符号串集合及其乘积</h3>
+  <p>若集合 A 中所有元素都是某字母表上的符号串，则称 A 为该字母表上的符号串集合，用 A、B、C 表示。两个集合的乘积定义为：</p>
+  <div class="formula">AB = { xy | x ∈ A 且 y ∈ B }</div>
+  <p>例：A = {a, bc}，B = {de, f}，则 AB = {ade, af, bcde, bcf}，注意 AB ≠ BA。两条特殊规则：</p>
+  <ul>
+    <li><span class="term">∅A = A∅ = ∅</span>，其中 ∅ 是空集——一个集合取不到元素，乘积自然为空。</li>
+    <li><span class="term">{ε}A = A{ε} = A</span>。</li>
+  </ul>
+  <div class="warn box-tip">
+    <div class="bt-title"><svg viewBox="0 0 24 24"><path d="M12 3L2 21h20L12 3z"/><path d="M12 10v5M12 18.5v.5"/></svg>易混点</div>
+    空集 ∅ 不同于空串集 {ε}。∅ 里面什么都没有，而 {ε} 是一个含有空串的集合，二者在集合运算中的行为完全不同。
+  </div>
+  <p>集合的方幂：A<sup>0</sup> = {ε}，A<sup>1</sup> = A，A<sup>2</sup> = AA，依此类推。例如 A = {a, b}，则 A<sup>2</sup> = {aa, ab, ba, bb}。</p>
+
+  <h3 class="sec">2.5 正闭包与星闭包</h3>
+  <p>方幂只能表示固定次数。要表达“任意次数”乃至无穷多种情况，需要闭包。</p>
+  <div class="cards2">
+    <div class="mini-card">
+      <h4><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12l7-7 7 7"/></svg>正闭包 A+</h4>
+      <p class="mono-cell" style="font-size:13px">A+ = A<sup>1</sup> ∪ A<sup>2</sup> ∪ A<sup>3</sup> …</p>
+      <p style="font-size:13.5px">至少出现一次，由 A 中元素组成的任意长度串。</p>
+    </div>
+    <div class="mini-card alt">
+      <h4><svg viewBox="0 0 24 24"><path d="M12 4l8 8-8 8M4 4l8 8-8 8"/></svg>星闭包 A*</h4>
+      <p class="mono-cell" style="font-size:13px">A* = A<sup>0</sup> ∪ A<sup>1</sup> ∪ A<sup>2</sup> …</p>
+      <p style="font-size:13.5px">又称自反闭包、Kleene 闭包，即 A* = A<sup>0</sup> ∪ A+，多包含一个空串。</p>
+    </div>
+  </div>
+  <p>例：A = {ab, cd}，则 A+ = {ab, cd, abab, abcd, cdab, cdcd, …}，而 A* 比 A+ 仅多一个 ε。</p>
+</section>
+<!-- ===== 模块三：正则表达式 ===== -->
+<section class="block" id="m3">
+  <div class="block-head"><span class="idx">03</span><h2>正则表达式</h2><span class="en">REGULAR EXPRESSION</span></div>
+  <p><span class="term">正则表达式</span>是符号串的描述工具，它所表示的符号串集合称为<span class="term">正则集</span>（正规集），记为 L(r)。</p>
+
+  <h3 class="sec">3.1 正则表达式与正则集的递归定义</h3>
+  <p>设 ∑ 为字母表，∑ 上的正则表达式和正则集递归定义如下：</p>
+  <ol>
+    <li><span class="term">ε 和 ∅</span> 是 ∑ 上的正则表达式，所表示的正则集分别为 {ε} 和 ∅；</li>
+    <li>对任何 a ∈ ∑，<span class="term">a</span> 是正则表达式，所表示的正则集为 {a}；</li>
+    <li>若 r、s 都是正则表达式，正则集分别为 R、S，则 <span class="term">(r)、r|s、r·s、r*、r+</span> 也是正则表达式，正则集分别为 R、R∪S、RS、R*、R+；</li>
+    <li>有限次使用上述规则构成的表达式，才是 ∑ 上的正则表达式。</li>
+  </ol>
+  <div class="note box-tip">
+    <div class="bt-title"><svg viewBox="0 0 24 24"><path d="M12 9v4M12 17v.5"/><circle cx="12" cy="12" r="9"/></svg>为什么要规定 ε 和 ∅</div>
+    它们是为了保证运算的封闭性而引入的两个特殊符号，让任何正则运算的结果仍然是合法的正则表达式。
+  </div>
+
+  <h3 class="sec">3.2 运算符优先级与结合性</h3>
+  <div class="formula">优先级：( ) 最高　→　*　→　·　→　|　最低　　结合性：左结合</div>
+  <p>例：∑ = {a, b}，则 a|b 表示 {a, b}，a·b 表示 {ab}，a* 表示 {ε, a, aa, aaa, …}。</p>
+  <div class="tbl-scroll">
+    <table class="data">
+      <colgroup><col style="width:42%"><col style="width:58%"></colgroup>
+      <tr><th>正则表达式 r</th><th>正则集 L(r)</th></tr>
+      <tr><td class="mono-cell">(a|b)(a|b)</td><td class="mono-cell">{aa, ab, ba, bb}</td></tr>
+      <tr><td class="mono-cell">ab*</td><td class="mono-cell">{a, ab, abb, …} = {ab<sup>n</sup> | n ≥ 0}</td></tr>
+      <tr><td class="mono-cell">a(a|b)+</td><td class="mono-cell">{a(a|b)<sup>n</sup> | n ≥ 1}</td></tr>
+    </table>
+  </div>
+
+  <h3 class="sec">3.3 等价与性质</h3>
+  <p>若两个正则表达式的正则集相等，即 L(r) = L(s)，则称 r 和 s 等价，记作 r = s。例如 a*a = aa*，b(ab)* = (ba)*b。</p>
+  <div class="acc">
+    <button class="acc-head"><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg>正则表达式的五条性质（点击展开）</button>
+    <div class="acc-body">
+      <ol>
+        <li><span class="term">交换律</span>：A | B = B | A</li>
+        <li><span class="term">结合律</span>：A | (B | C) = (A | B) | C；A(BC) = (AB)C</li>
+        <li><span class="term">分配律</span>：A(B | C) = AB | AC；(A | B)C = AC | BC</li>
+        <li><span class="term">同一律</span>：Aε = εA = A</li>
+        <li><span class="term">幂等律</span>：A** = A*</li>
+      </ol>
+      <p>利用这些性质，可以对正则表达式进行等价变换和化简。</p>
+    </div>
+  </div>
+
+  <h3 class="sec">3.4 经典构造例题</h3>
+  <h4>例 1：值为 2 的倍数的二进制数（∑ = {0,1}）</h4>
+  <p>思路是“宽泛 → 严格”逐步缩小范围。所有串为 (1|0)*；二进制数表示为 1(1|0)* | 0；能被 2 整除的数末位必为 0：</p>
+  <div class="formula">1(1|0)*0 | 0</div>
+  <h4>例 2：包含偶数个 x 的串（∑ = {x,y,z}）</h4>
+  <p>0 个 x 时基本元是 (y|z)；含 x 则至少两个，基本元为 (y|z)*x(y|z)*x；整体可重复若干次：</p>
+  <div class="formula">((y|z)*x(y|z)*x)*(y|z)*</div>
+  <h4>例 3：不包含连续两个 y 的串</h4>
+  <p>有一个 y 就必须跟一个 x 或 z，基本元为 x | z | yx | yz；末尾还可单独留一个 y 或空：</p>
+  <div class="formula">(x | z | yx | yz)*(y | ε)</div>
+  <h4>练习</h4>
+  <ul>
+    <li>长度为偶数的串：<span class="mono-cell">((0|1)(0|1))*</span>，不能写成 (0|1)*，后者长度不限。</li>
+    <li>以 1 结尾且不含子串 00：<span class="mono-cell">(01|1)+</span>。写成 (01|1)* 会包含 ε，写成 (01|1)*1 会漏掉 01 的情况。</li>
+  </ul>
+
+  <h3 class="sec">3.5 用正则表达式描述单词</h3>
+  <p>设 L 表示所有字母，D 表示所有数字，各类单词的正则描述如下：</p>
+  <div class="tbl-scroll">
+    <table class="data">
+      <colgroup><col style="width:20%"><col style="width:80%"></colgroup>
+      <tr><th>单词类型</th><th>正则表达式</th></tr>
+      <tr><td>标识符</td><td class="mono-cell">L(L|D)*，其中 L = A|B|…|a|b|…|z，D = 0|1|…|9</td></tr>
+      <tr><td>整数</td><td class="mono-cell">(+|-|ε)(D1D*) | 0，其中 D1 = 1|2|…|9</td></tr>
+      <tr><td>实数</td><td class="mono-cell">(+|-|ε)(D1D* | 0).D*</td></tr>
+      <tr><td>保留字</td><td class="mono-cell">while | if | for | …</td></tr>
+      <tr><td>运算符</td><td class="mono-cell">+ | - | * | …</td></tr>
+      <tr><td>分界符</td><td class="mono-cell">{ | } | ; | [ | ] | ( | ) | …</td></tr>
+      <tr><td>控制符</td><td class="mono-cell">\t | \0 | \n …</td></tr>
+    </table>
+  </div>
+  <p>特殊符号数量有限，用枚举方式表示即可。</p>
+
+  <h3 class="sec">3.6 正则表达式的局限性与应用</h3>
+  <div class="cards2">
+    <div class="mini-card">
+      <h4><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M15 9l-6 6M9 9l6 6"/></svg>两个局限</h4>
+      <ul style="font-size:13.5px;margin-left:18px">
+        <li>不能描述<span class="term">配对结构</span>：如 {α c α}，无法保证两边的 α 是同一个串。</li>
+        <li>不能描述<span class="term">嵌套结构</span>：如算术表达式的嵌套。</li>
+      </ul>
+    </div>
+    <div class="mini-card alt">
+      <h4><svg viewBox="0 0 24 24"><path d="M4 4h16v16H4z"/><path d="M8 9h8M8 13h8M8 17h5"/></svg>典型应用</h4>
+      <ul style="font-size:13.5px;margin-left:18px">
+        <li>文本的查找、替换；</li>
+        <li>号码地区识别软件；</li>
+        <li>软件安全检测；</li>
+        <li>程序分析；网络爬虫。</li>
+      </ul>
+    </div>
+  </div>
+</section>
+<!-- ===== 模块四：DFA 定义与表示 ===== -->
+<section class="block" id="m4">
+  <div class="block-head"><span class="idx">04</span><h2>确定有限自动机 DFA</h2><span class="en">DETERMINISTIC FA</span></div>
+  <p>正则表达式抽象、精确，但从实现角度看不易直接落地。有限自动机是另一种单词描述工具，它更接近程序，也更便于实现。</p>
+
+  <h3 class="sec">4.1 DFA 的五元组定义</h3>
+  <div class="formula">M = ( S , ∑ , f , S0 , Z )</div>
+  <ul>
+    <li><span class="term">S</span>：有穷状态集，每个元素称为一个状态；</li>
+    <li><span class="term">∑</span>：有穷字母表，每个元素称为一个输入字符；</li>
+    <li><span class="term">f</span>：状态转换函数 S × ∑ → S，是<span class="term">单值函数</span>。f(Si, a) = Sk 表示当前状态 Si 遇到字符 a 时，唯一地转换到后继状态 Sk；</li>
+    <li><span class="term">S0</span> ∈ S：唯一的初始状态；</li>
+    <li><span class="term">Z</span> ⊆ S：终止状态集（可接受状态集），Z 可以为空。</li>
+  </ul>
+  <div class="warn box-tip">
+    <div class="bt-title"><svg viewBox="0 0 24 24"><path d="M12 3L2 21h20L12 3z"/><path d="M12 10v5M12 18.5v.5"/></svg>“确定性”的三个体现</div>
+    <ul style="margin:4px 0 0 18px">
+      <li>初始状态唯一；</li>
+      <li>转换函数 f 是单值函数，对任何状态和符号，至多确定一个后继状态；</li>
+      <li>转换边上不能标 ε，即不允许没有任何输入就进行状态转换。</li>
+    </ul>
+  </div>
+  <p>“有限性”则体现在：定义在有限状态集和有穷字母表上。</p>
+
+  <h3 class="sec">4.2 表示方法一：状态转换矩阵</h3>
+  <p>用状态作行标、∑ 中的字符作列标，矩阵元素表示转换函数。约定第一行表示开始状态，或在右上角标“+”；标“*”或“-”的状态为终止状态；空白部分表示函数无定义，即非法转换。</p>
+  <div class="tbl-scroll">
+    <table class="data">
+      <colgroup><col style="width:34%"><col style="width:33%"><col style="width:33%"></colgroup>
+      <tr><th>状态</th><th>a</th><th>b</th></tr>
+      <tr><td class="mono-cell">0+</td><td class="mono-cell">1</td><td class="mono-cell">2</td></tr>
+      <tr><td class="mono-cell">1</td><td class="mono-cell">2</td><td class="mono-cell">（空白）</td></tr>
+      <tr><td class="mono-cell">2*</td><td class="mono-cell">（空白）</td><td class="mono-cell">（空白）</td></tr>
+    </table>
+  </div>
+
+  <h3 class="sec">4.3 表示方法二：状态转换图</h3>
+  <p>用有向图表示自动机：结点表示状态，非终止状态用单圆圈、终止状态用双圆圈，开始状态由一个箭头指向；有向边表示转换函数，f(Si, a) = Sk 就从 Si 画一条标 a 的边到 Sk。</p>
+  <p>下面是 DFA M1 的状态转换图（S = {0,1,2}，f(0,a)=1，f(0,b)=2，f(1,a)=2，S0 = 0，Z = {2}）：</p>
+  <svg viewBox="0 0 720 220" style="width:100%;height:auto;margin:10px 0" role="img" aria-label="DFA M1 状态转换图">
+    <defs><marker id="arr" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><path d="M0,0 L9,4.5 L0,9 z" fill="#173b5e"/></marker></defs>
+    <circle cx="150" cy="120" r="42" fill="#fff" stroke="#173b5e" stroke-width="2"/>
+    <text x="150" y="127" text-anchor="middle" font-size="18" fill="#173b5e" font-family="Georgia">0</text>
+    <circle cx="380" cy="120" r="42" fill="#fff" stroke="#173b5e" stroke-width="2"/>
+    <text x="380" y="127" text-anchor="middle" font-size="18" fill="#173b5e" font-family="Georgia">1</text>
+    <circle cx="600" cy="120" r="40" fill="#fff" stroke="#173b5e" stroke-width="2"/>
+    <circle cx="600" cy="120" r="33" fill="none" stroke="#173b5e" stroke-width="2"/>
+    <text x="600" y="127" text-anchor="middle" font-size="18" fill="#173b5e" font-family="Georgia">2</text>
+    <line x1="40" y1="120" x2="104" y2="120" stroke="#173b5e" stroke-width="2" marker-end="url(#arr)"/>
+    <line x1="190" y1="110" x2="340" y2="110" stroke="#173b5e" stroke-width="2" marker-end="url(#arr)"/>
+    <text x="265" y="100" text-anchor="middle" font-size="15" fill="#e8743b" font-family="Consolas">a</text>
+    <path d="M172 148 Q375 250 562 148" fill="none" stroke="#173b5e" stroke-width="2" marker-end="url(#arr)"/>
+    <text x="375" y="232" text-anchor="middle" font-size="15" fill="#e8743b" font-family="Consolas">b</text>
+    <line x1="418" y1="105" x2="562" y2="105" stroke="#173b5e" stroke-width="2" marker-end="url(#arr)"/>
+    <text x="490" y="95" text-anchor="middle" font-size="15" fill="#e8743b" font-family="Consolas">a</text>
+  </svg>
+</section>
+<!-- ===== 模块五：DFA 接受的语言 ===== -->
+<section class="block" id="m5">
+  <div class="block-head"><span class="idx">05</span><h2>DFA 接受的语言</h2><span class="en">LANGUAGE L(M)</span></div>
+
+  <h3 class="sec">5.1 接受串的定义</h3>
+  <p>对 ∑* 中的任何字符串 α，若存在一条从初始结点到某一终止结点的路径，且这条路上所有弧的标记符连接成的字符串等于 α，则称 α 可被 DFA M 接受（识别）。M 所能接受的全部字符串，称为它识别的语言，记为 <span class="term">L(M)</span>。</p>
+  <div class="warn box-tip">
+    <div class="bt-title"><svg viewBox="0 0 24 24"><path d="M12 3L2 21h20L12 3z"/><path d="M12 10v5M12 18.5v.5"/></svg>关键理解：终态不是“进入即停”</div>
+    识别过程并不是进入终止状态就终止，而是当自动机处理完整个输入串时，恰好停留在终止状态，才接受这个串。因此“接受状态”比“结束状态”更准确——终止状态上仍可以继续发生转换。
+  </div>
+  <p>特别地，若初始状态同时又是终止状态，则空字符串 ε 可被接受。</p>
+  <div class="tbl-scroll">
+    <table class="data">
+      <colgroup><col style="width:24%"><col style="width:76%"></colgroup>
+      <tr><th>自动机</th><th>接受的语言</th></tr>
+      <tr><td class="mono-cell">L(M1)</td><td class="mono-cell">{ε, b, bb, bbb, …} = {b<sup>n</sup> | n ≥ 0}</td></tr>
+      <tr><td class="mono-cell">L(M2)</td><td class="mono-cell">{a, ab, abb, …} = {ab<sup>n</sup> | n ≥ 0}</td></tr>
+      <tr><td class="mono-cell">L(M3)</td><td class="mono-cell">{aba, abaa, abab, …} = {aba(a|b)<sup>n</sup> | n ≥ 0}</td></tr>
+    </table>
+  </div>
+
+  <h3 class="sec">5.2 应用实例：描述离散状态系统</h3>
+  <p>DFA 能描述任何“有限状态、靠事件驱动切换”的系统。课件举了咖啡机的例子：待机、待选择、冲调、待取、金额不足等状态，靠投币、选择、金额充足、超时、退款等事件相互转换。</p>
+  <h4>例：能被 3 整除的合法二进制数（不含先导 0）</h4>
+  <p>一个二进制数模 3 的余数只有 0、1、2 三种，因此设三个状态分别表示余数。二进制左移一位相当于乘 2，末位再加 0 或 1，于是：</p>
+  <div class="formula">新余数 = (旧余数 × 2 + 新位) mod 3</div>
+  <p>从余数 0 状态出发、处理完输入后回到余数 0 状态，就说明该数能被 3 整除。</p>
+
+  <h3 class="sec">5.3 用 DFA 描述单词</h3>
+  <p>用 L 表示字母、D 表示数字，可以分别画出标识符、无符号整数、带符号整数、实数、特殊符号的自动机。它们的思路完全一致：</p>
+  <ul>
+    <li><span class="term">标识符</span>：初态读到字母进入状态 1，之后读到字母或数字都停在状态 1（终态）。</li>
+    <li><span class="term">整数</span>：初态读到非零数字 D1 后进入循环读数字的状态；单独的 0 也可直接到终态。</li>
+    <li><span class="term">实数</span>：在整数路径上读到小数点 “.” 后，再进入读小数位数字的状态。</li>
+    <li><span class="term">特殊符号</span>：如 {、+、EOF 等，靠枚举从初态直接转到对应终态。</li>
+  </ul>
+  <div class="note box-tip">
+    <div class="bt-title"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16v.5"/></svg>如何区分单词类型</div>
+    实际词法分析程序把这些小自动机的初始状态合并成一个大自动机。停在不同终止状态上，就反映识别出不同类型的单词；是否可接受看是否到达终态，是哪类单词看停在哪个终态。
+  </div>
+</section>
+<!-- ===== 模块六：DFA 的实现 ===== -->
+<section class="block" id="m6">
+  <div class="block-head"><span class="idx">06</span><h2>DFA 的实现</h2><span class="en">IMPLEMENTATION</span></div>
+  <p>自动机的实现，就是用程序完成自动机的功能：对任意输入串，判断它能否被接受。抽象机器由<span class="term">输入带、读头、有限状态控制器</span>组成。初态时读头指向输入带最左单元，每读一个字符就进入下一状态；读完全部字符后，若停在终态则接受，否则报错。</p>
+
+  <h3 class="sec">6.1 直接转向法（基于状态转换图）</h3>
+  <p>这是<span class="term">程序中心法</span>：把自动机看成流程图，每个状态对应一个带标号的条件语句，转向边对应 goto 语句。</p>
+  <div class="code">Li: switch ( CurrentChar ) {
+      case 'a': NextChar(); goto Lj;
+      case 'b': NextChar(); goto Lk;
+      default : Error();
+  }   <span class="cm">// 非终止状态的 switch</span>
+
+Li: switch ( CurrentChar ) {
+      case 'a' : NextChar(); goto Lj;
+      case 'b' : NextChar(); goto Lk;
+      case 'EOF': Accept();
+      default  : Error();
+  }   <span class="cm">// 终止状态的 switch：多了 EOF → Accept</span></div>
+
+  <h3 class="sec">6.2 状态转换矩阵法（基于矩阵）</h3>
+  <p>这是<span class="term">数据中心法</span>：把自动机看成一种数据结构（二维数组），由一个统一的控制程序驱动字符在表上运行。</p>
+  <ol>
+    <li>当前状态 State 置为初始状态；</li>
+    <li>读一个字符 CurrentChar；</li>
+    <li>若 CurrentChar ≠ EOF 且 T(State, CurrentChar) ≠ error，则 State = T(State, CurrentChar)，读下一字符，重复本步；</li>
+    <li>若当前字符为 EOF 且当前状态属于终止状态，则接受；否则报错。</li>
+  </ol>
+
+  <h3 class="sec">6.3 两种方法对比</h3>
+  <div class="tbl-scroll">
+    <table class="data">
+      <colgroup><col style="width:24%"><col style="width:38%"><col style="width:38%"></colgroup>
+      <tr><th>对比项</th><th>直接转向法</th><th>状态转换矩阵法</th></tr>
+      <tr><td>中心</td><td>程序中心（流程图）</td><td>数据中心（数据结构）</td></tr>
+      <tr><td>优点</td><td>占存储空间少</td><td>程序短，不同 DFA 主体相同，只换矩阵表</td></tr>
+      <tr><td>不足</td><td>程序较长，换自动机需全部重写</td><td>需存储转换矩阵，占存储多</td></tr>
+      <tr><td>适用</td><td>状态数较少的情形</td><td>通用，换机只换表</td></tr>
+    </table>
+  </div>
+  <div class="warn box-tip">
+    <div class="bt-title"><svg viewBox="0 0 24 24"><path d="M12 3L2 21h20L12 3z"/><path d="M12 10v5M12 18.5v.5"/></svg>共同前提</div>
+    两种方法的基础都是 DFA 转换的确定性。如果某状态遇到给定字符可能到达不同状态（即 NFA 的情形），就无法直接用这两种方法实现，必须先确定化。
+  </div>
+</section>
+<!-- ===== 模块七：NFA ===== -->
+<section class="block" id="m7">
+  <div class="block-head"><span class="idx">07</span><h2>非确定有限自动机 NFA</h2><span class="en">NON-DETERMINISTIC FA</span></div>
+  <p>有时用 DFA 描述问题并不方便：某些情况下转换函数不是单值，或需要多个起点、空边。于是引入非确定有限自动机。</p>
+
+  <h3 class="sec">7.1 NFA 的五元组</h3>
+  <div class="formula">NFA = ( S , ∑ , f , S0 , Z )</div>
+  <ul>
+    <li><span class="term">f</span>：从 S × (∑ ∪ {ε}) 到 S 的<span class="term">子集</span>的映射，即 S × (∑ ∪ {ε}) → 2<sup>S</sup>，一次转换可能到达一个状态集合；</li>
+    <li><span class="term">S0</span> ⊆ S：是初始状态<span class="term">集</span>，可以有多个初始状态；</li>
+    <li>Z ⊆ S：终止状态集。</li>
+  </ul>
+  <div class="cards2">
+    <div class="mini-card">
+      <h4><svg viewBox="0 0 24 24"><path d="M4 12h16M4 6h16M4 18h16"/></svg>与 DFA 的三点区别</h4>
+      <ul style="font-size:13.5px;margin-left:18px">
+        <li>一个状态遇相同符号可转向多个状态，f 不再单值；</li>
+        <li>允许有多个初始状态；</li>
+        <li>允许有 ε 边。</li>
+      </ul>
+    </div>
+    <div class="mini-card alt">
+      <h4><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg>接受的语言</h4>
+      <p style="font-size:13.5px">定义与 DFA 相同：从任意初态到任意终态所接受的串集合。但同一串往往有多条路径，都要测试，因此实现比 DFA 困难。</p>
+    </div>
+  </div>
+
+  <h3 class="sec">7.2 ε 边让描述更简洁</h3>
+  <p>课件用一个带 ε 边的 NFA 描述所有整数（无符号和有符号），比 DFA 更直观易懂：起点先经可选的正负号，再汇入读数字的主干。</p>
+  <svg viewBox="0 0 720 200" style="width:100%;height:auto;margin:10px 0" role="img" aria-label="带ε边的整数NFA">
+    <defs><marker id="arr2" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><path d="M0,0 L9,4.5 L0,9 z" fill="#173b5e"/></marker></defs>
+    <circle cx="90" cy="110" r="34" fill="#fff" stroke="#173b5e" stroke-width="2"/>
+    <text x="90" y="117" text-anchor="middle" font-size="16" fill="#173b5e" font-family="Georgia">0</text>
+    <circle cx="250" cy="110" r="34" fill="#fff" stroke="#173b5e" stroke-width="2"/>
+    <text x="250" y="117" text-anchor="middle" font-size="16" fill="#173b5e" font-family="Georgia">1</text>
+    <circle cx="450" cy="110" r="34" fill="#fff" stroke="#173b5e" stroke-width="2"/>
+    <text x="450" y="117" text-anchor="middle" font-size="16" fill="#173b5e" font-family="Georgia">2</text>
+    <circle cx="620" cy="110" r="32" fill="#fff" stroke="#173b5e" stroke-width="2"/>
+    <circle cx="620" cy="110" r="26" fill="none" stroke="#173b5e" stroke-width="2"/>
+    <text x="620" y="117" text-anchor="middle" font-size="16" fill="#173b5e" font-family="Georgia">3</text>
+    <line x1="40" y1="110" x2="52" y2="110" stroke="#173b5e" stroke-width="2" marker-end="url(#arr2)"/>
+    <path d="M108 82 Q175 40 232 82" fill="none" stroke="#173b5e" stroke-width="2" marker-end="url(#arr2)"/>
+    <text x="170" y="52" text-anchor="middle" font-size="14" fill="#e8743b" font-family="Consolas">+ | -</text>
+    <line x1="112" y1="122" x2="216" y2="122" stroke="#173b5e" stroke-width="2" marker-end="url(#arr2)"/>
+    <text x="164" y="140" text-anchor="middle" font-size="14" fill="#5f7185" font-family="Consolas">ε</text>
+    <line x1="282" y1="110" x2="416" y2="110" stroke="#173b5e" stroke-width="2" marker-end="url(#arr2)"/>
+    <text x="350" y="100" text-anchor="middle" font-size="14" fill="#e8743b" font-family="Consolas">D</text>
+    <path d="M468 80 Q540 40 602 82" fill="none" stroke="#173b5e" stroke-width="2" marker-end="url(#arr2)"/>
+    <text x="540" y="50" text-anchor="middle" font-size="14" fill="#e8743b" font-family="Consolas">D</text>
+    <line x1="484" y1="110" x2="586" y2="110" stroke="#173b5e" stroke-width="2" marker-end="url(#arr2)"/>
+  </svg>
+  <div class="note box-tip">
+    <div class="bt-title"><svg viewBox="0 0 24 24"><path d="M12 9v4M12 17v.5"/><circle cx="12" cy="12" r="9"/></svg>NFA 怎么实现</div>
+    方法是转换成等价的 DFA。下一节先给出“自动机等价”的结论，再讲确定化算法。
+  </div>
+</section>
+<!-- ===== 模块八：NFA 到 DFA 确定化 ===== -->
+<section class="block" id="m8">
+  <div class="block-head"><span class="idx">08</span><h2>NFA 到 DFA 确定化</h2><span class="en">DETERMINIZATION</span></div>
+
+  <h3 class="sec">8.1 自动机等价</h3>
+  <p>设 A1、A2 是同一字母表上的自动机，若 L(A1) = L(A2)，则称它们等价。<span class="term">定理：对于每一个非确定自动机 A，都存在一个确定自动机 A'，使 L(A) = L(A')。</span>下面给出的确定化算法，就是这个定理的构造性方法。</p>
+
+  <h3 class="sec">8.2 两个关键运算</h3>
+  <h4>（1）状态集 I 的 ε 闭包 ε_CLOSURE(I)</h4>
+  <ul>
+    <li>若 q ∈ I，则 q ∈ ε_CLOSURE(I)；</li>
+    <li>若 q ∈ I，那么从 q 出发经<span class="term">任意条 ε 弧</span>能到达的任何状态 q'，也都属于 ε_CLOSURE(I)。</li>
+  </ul>
+  <p>例：ε_CLOSURE({1}) = {1, 2}；ε_CLOSURE({1, 5}) = {1, 5, 2, 6}。</p>
+  <h4>（2）状态集 I 的 a 转换</h4>
+  <p>若 I = {S1, …, Sm}，a ∈ ∑，则定义 Ia = ε_CLOSURE(J)，其中 J = f(S1, a) ∪ … ∪ f(Sm, a)。即先把 I 中各状态经 a 边能到的状态全部并起来，再求它们的 ε 闭包。</p>
+
+  <h3 class="sec">8.3 确定化算法</h3>
+  <ol>
+    <li>令 <span class="term">I0 = ε_CLOSURE(S0)</span> 作为 DFA 的初始状态；</li>
+    <li>若每个状态都处理过则转步骤 3；否则任选一个未处理状态 Si，对每个 a ∈ ∑：计算 Sj = Ia；若 Sj ≠ ∅，则令 f(Si, a) = Sj，若 Sj 还不是 DFA 状态就把它加为新状态；重复本步；</li>
+    <li>若某个 DFA 状态中<span class="term">包含 NFA 的任一终止状态</span>，就把它定为 DFA 的终止状态。</li>
+  </ol>
+  <div class="analogy box-tip">
+    <div class="bt-title"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg>核心思想</div>
+    把 NFA 的“一个状态集合”整体看成 DFA 的“一个状态”。由于 NFA 状态数有限，其所有子集也有限，所以构造过程一定会在某个时刻收敛、不再产生新状态。
+  </div>
+  <p>下面用分步交互演示课件例 2.10 的子集构造过程。</p>
+  <div class="stepper" id="detStep">
+    <div class="stepper-bar"><div class="dots"></div><div class="step-btns"><button class="prev">上一步</button><button class="next go">下一步</button></div></div>
+    <div class="step-body"></div>
+  </div>
+</section>
+<!-- ===== 模块九：DFA 最小化 ===== -->
+<section class="block" id="m9">
+  <div class="block-head"><span class="idx">09</span><h2>DFA 最小化</h2><span class="en">MINIMIZATION</span></div>
+
+  <h3 class="sec">9.1 为什么要化简</h3>
+  <p>同一个语言可以对应多个 DFA，它们的复杂程度差别很大。DFA 的化简，就是找到一个<span class="term">状态数最少</span>的 DFA M'，使 L(M') = L(M)。状态数直接影响两种实现方法的开销，所以越少越好。</p>
+
+  <h3 class="sec">9.2 三类关键状态</h3>
+  <h4>（1）等价状态与可区分状态</h4>
+  <p>对两个状态 q1、q2，如果从它们出发，对任意输入串 x，总是同时到达接受状态或拒绝状态，则称 q1、q2 等价；否则称它们<span class="term">可区分</span>。显然，终止状态和非终止状态一定可区分。</p>
+  <h4>（2）无关状态</h4>
+  <p>若从初始状态开始没有到达状态 S 的路径，或从 S 开始没有到达终止状态的路径，则 S 是<span class="term">无关状态</span>。这类状态可直接删除。</p>
+  <h4>（3）最小自动机</h4>
+  <p>如果一个 DFA 既没有无关状态，也没有等价状态，就称为<span class="term">最小自动机</span>。任一 DFA 都可以化为最简自动机。</p>
+
+  <h3 class="sec">9.3 状态分离法</h3>
+  <p>判断两个状态等价很难（要穷举所有串），但判断它们不等价相对容易。状态分离法的思路是：先把肯定不等价的终态与非终态分开，再不断把转换到不同组的状态拆开，直到每组都不能再分。</p>
+  <div class="formula">目标：SS = SS1 ∪ SS2 ∪ … ∪ SSn，各组互不相交，且每组内状态全部等价</div>
+  <p><span class="term">算法三步：</span></p>
+  <ol>
+    <li>STEP 1 求初始划分：SS = 非终止状态集 ∪ 终止状态集；</li>
+    <li>STEP 2 若每个子集对每个字符 a 都不可区分则转 STEP 3；否则对可分的子集按相应字符划分，重复 STEP 2；</li>
+    <li>STEP 3 每个子集合并为一个状态，含初态的集合为初态，含任一终态的集合为终态，对边作相应调整。</li>
+  </ol>
+  <p>下面用分步交互演示课件例 1 把 8 态自动机化简为 3 态的完整过程。</p>
+  <div class="stepper" id="minStep">
+    <div class="stepper-bar"><div class="dots"></div><div class="step-btns"><button class="prev">上一步</button><button class="next go">下一步</button></div></div>
+    <div class="step-body"></div>
+  </div>
+</section>
+<!-- ===== 模块十：正则与自动机互转 ===== -->
+<section class="block" id="m10">
+  <div class="block-head"><span class="idx">10</span><h2>正则与自动机互转</h2><span class="en">EQUIVALENCE</span></div>
+  <p>正则表达式和有限自动机是<span class="term">等价</span>的两种描述工具，可以互相转换。</p>
+
+  <h3 class="sec">10.1 正则表达式 → 自动机（Thompson 构造）</h3>
+  <p><span class="term">定理 1：对 ∑ 上每个正则表达式 R，都存在一个 NFA M，使 L(M) = L(R)。</span></p>
+  <p>构造方法：</p>
+  <ol>
+    <li>STEP 1：先构造 NFA 的初始状态 S 和终止状态 Z，由 S 发出一条指向 Z 的弧，标记整个正则表达式 R；</li>
+    <li>STEP 2：反复利用替换规则对 R 分解，直到所有弧上标记的都是 ∑ 中的单个元素或 ε 为止。</li>
+  </ol>
+  <div class="acc">
+    <button class="acc-head"><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg>三种基本替换规则（连接、并、闭包）</button>
+    <div class="acc-body">
+      <ul>
+        <li><span class="term">连接 ab</span>：状态 1 经 a 到中间状态，再经 b 到状态 2，两段串接；</li>
+        <li><span class="term">并 a|b</span>：引入上下两条并行路径，分别标 a、b，两端用 ε 边汇合；</li>
+        <li><span class="term">闭包 b*</span>：新增状态，用 ε 边构成回路，允许重复零次或多次。</li>
+      </ul>
+    </div>
+  </div>
+  <p>课件例：为 (a|b)*aa 构造等价 NFA，先拆成 (a|b)* 与 aa 的连接，再分别把闭包和并展开，最终所有边都只剩单个字符或 ε。</p>
+  <div class="warn box-tip">
+    <div class="bt-title"><svg viewBox="0 0 24 24"><path d="M12 3L2 21h20L12 3z"/><path d="M12 10v5M12 18.5v.5"/></svg>a* 的 ε 边何时不能省</div>
+    当 a* 是独立的正则表达式时，转换中的 ε 边可以省略；但当 a* 并非独立、要与其他部分连接时（如 ab|d*），ε 边不可省，否则会让本来不该接的字符错误地接上。这些 ε 边最后可通过确定化算法消除。
+  </div>
+
+  <h3 class="sec">10.2 自动机 → 正则表达式（状态消解法）</h3>
+  <p><span class="term">定理 2：对 ∑ 上每个 NFA M，都存在正则表达式 R，使 L(R) = L(M)。</span>M 也可以是 DFA，因为 DFA 是 NFA 的特例。</p>
+  <ol>
+    <li>STEP 1：在状态图中加入唯一的开始节点 S 和终止节点 Z，从 S 用 ε 弧连到所有初始状态，从所有终止状态用 ε 弧连到 Z；</li>
+    <li>STEP 2：反复用替换规则消解中间状态，直到只剩 S 和 Z，S 指向 Z 的弧上标记的表达式就是答案。</li>
+  </ol>
+  <p>课件例：对一个含 6 个状态的 NFA，逐步消解中间节点，最终得到正则表达式 <span class="mono-cell">a(ab|ba)a*b</span>。</p>
+
+  <h3 class="sec">10.3 综合例：求最简 DFA</h3>
+  <p>课件给出与正则表达式 (a|b)(c|d)*(e|f) 等价的最简 DFA，完整走一遍“正则 → NFA → 确定化 → 最小化”的链条：</p>
+  <ol>
+    <li>先用 Thompson 法构造 NFA；</li>
+    <li>确定化得到含 A、B、C、D 四个状态的 DFA；</li>
+    <li>最小化时先划分 {A,B,C} 与 {D}，再把 {A,B,C} 拆成 {A} 与 {B,C}，最终得到 3 个状态的最简 DFA。</li>
+  </ol>
+</section>
+<!-- ===== 模块十一：词法分析器设计 ===== -->
+<section class="block" id="m11">
+  <div class="block-head"><span class="idx">11</span><h2>词法分析器设计</h2><span class="en">SCANNER DESIGN</span></div>
+  <p>掌握了两个工具和三个转换算法，最终目标是设计一个真正可用的词法分析器。设计步骤共六步：</p>
+  <ol>
+    <li>确定手工编写还是自动生成词法分析程序；</li>
+    <li>确定词法分析器与语法分析器的接口；</li>
+    <li>确定单词的种别；</li>
+    <li>确定 Token 的结构；</li>
+    <li>给出单词的描述；</li>
+    <li>设计算法。</li>
+  </ol>
+
+  <h3 class="sec">11.1 与语法分析器的两种接口</h3>
+  <div class="cards2">
+    <div class="mini-card">
+      <h4><svg viewBox="0 0 24 24"><path d="M4 5h16v14H4z"/><path d="M4 10h16"/></svg>作为独立的一遍</h4>
+      <p style="font-size:13.5px">词法分析的输出放在一个中间文件中，语法分析再从该文件读取 Token。简化编译器设计、使语法逻辑更清晰，也便于单独优化读写效率。</p>
+    </div>
+    <div class="mini-card alt">
+      <h4><svg viewBox="0 0 24 24"><path d="M7 7h10v10H7z"/><path d="M12 3v4M12 17v4"/></svg>作为语法分析的子程序</h4>
+      <p style="font-size:13.5px">每当语法分析需要单词时，就调用词法分析程序输出一个 Token。省去中间文件和取送符号的工作，<span class="term">大多数编译器都采用这种方式</span>。</p>
+    </div>
+  </div>
+
+  <h3 class="sec">11.2 确定单词种别</h3>
+  <p>不同语言的单词种类和构成略有差别，需要考虑关键字是否保留。单词类型的划分<span class="term">基于语义而非构成</span>，整体分为四大类：</p>
+  <div class="tbl-scroll">
+    <table class="data">
+      <colgroup><col style="width:22%"><col style="width:40%"><col style="width:38%"></colgroup>
+      <tr><th>大类</th><th>子类 / 说明</th><th>例子</th></tr>
+      <tr><td>保留字</td><td>语言预先定义</td><td class="mono-cell">if / while / for / do</td></tr>
+      <tr><td>标识符</td><td>用户命名</td><td class="mono-cell">x / y / area / age</td></tr>
+      <tr><td>常量</td><td>各种字面量</td><td class="mono-cell">10 / 1.0 / 'a' / true</td></tr>
+      <tr><td>特殊符号</td><td>运算符、界限符、格式符</td><td class="mono-cell">+ / ( / ; / 空格 / TAB</td></tr>
+    </table>
+  </div>
+
+  <h3 class="sec">11.3 Token 结构与四张表</h3>
+  <p>各类单词的种别与内容可以这样设计：</p>
+  <ul>
+    <li><span class="term">保留字</span>：一个保留字作为一类，类别即代表内容，如 (if,-)；或所有保留字作一类、用内容区分，如 (rev,if)。</li>
+    <li><span class="term">标识符</span>：所有标识符作一类，用内容区分，如 (id,x)、(id,y2)。</li>
+    <li><span class="term">常量</span>：所有常量作一类，或按类型分类，如 (intC,1000)、(realC,3.14)。</li>
+    <li><span class="term">运算符 / 界限符</span>：每个作为一类，如 (plus-op,-)、(comma,-)。</li>
+  </ul>
+  <p>课件给出一种可行方案：事先建好保留字表、特殊符号表，随词法分析进行建立标识符索引表、常量索引表。标识符种别填 1、常量种别填 2，内容填其在索引表中的位置；保留字和特殊符号的种别填对应数字，内容填空。</p>
+
+  <h3 class="sec">11.4 实例：if (x &gt; 10) y = x ; 的 Token 序列</h3>
+  <p>结合四张表（4=if，15=(，16=)，17=&gt;，18==，19=;；标识符 1=x、2=y；常量 1=10），下面逐步演示每个单词如何查表得到 Token。</p>
+  <div class="stepper" id="tokStep">
+    <div class="stepper-bar"><div class="dots"></div><div class="step-btns"><button class="prev">上一步</button><button class="next go">下一步</button></div></div>
+    <div class="step-body"></div>
+  </div>
+
+  <h3 class="sec">11.5 词法分析器的工作过程</h3>
+  <p>把前面所有工具串起来，Scanner 的完整工作链条是：</p>
+  <div class="struct">
+    <div class="seg seg-arg"><b>字符流</b><span>输入</span></div>
+    <div class="seg seg-op"><b>正则描述</b><span>单词规则</span></div>
+    <div class="seg seg-arg"><b>NFA → DFA</b><span>构造与确定化</span></div>
+    <div class="seg seg-res"><b>TokenList</b><span>输出 / 报错</span></div>
+  </div>
+  <h3 class="sec">11.6 实现时应注意的问题</h3>
+  <div class="acc">
+    <button class="acc-head"><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg>七个实现要点（点击展开）</button>
+    <div class="acc-body">
+      <ul>
+        <li><span class="term">保留字的识别</span>：可建保留字表，或在自动机上区分；</li>
+        <li><span class="term">复合单词的识别</span>：如 &gt;= 拆开仍是单词，需读后续字符判断；</li>
+        <li><span class="term">数的转换</span>：识别出的是字符而不是数，要明确这个概念并做转换；</li>
+        <li><span class="term">向前看若干字符</span>：如正负号需结合上下文判断；</li>
+        <li><span class="term">格式字符的处理</span>：对执行无意义，但对调试很重要；</li>
+        <li><span class="term">注释的处理</span>：词法分析时直接忽略；</li>
+        <li>其他：C 语言的宏替换、#include 等预处理。</li>
+      </ul>
+    </div>
+  </div>
+</section>
+<!-- ===== 章末速查 ===== -->
+<section class="block" id="end">
+  <div class="block-head"><span class="idx">12</span><h2>章末速查</h2><span class="en">SUMMARY</span></div>
+  <p>这一章的内容可以用“一个核心、两个工具、三个转换算法”完整收束。</p>
+  <div class="summary-grid">
+    <div class="sum-item"><b>一个核心</b><br>词法分析器的设计：分离单词、生成 Token、检查词法错误。</div>
+    <div class="sum-item"><b>两个工具</b><br>正则表达式与有限自动机（DFA / NFA），二者等价、可互转。</div>
+    <div class="sum-item"><b>转换算法一</b><br>NFA 到 DFA：ε 闭包 + a 转换，子集构造确定化。</div>
+    <div class="sum-item"><b>转换算法二</b><br>DFA 最小化：状态分离法，删无关状态、合并等价状态。</div>
+    <div class="sum-item"><b>转换算法三</b><br>正则与自动机互转：Thompson 构造与状态消解法。</div>
+    <div class="sum-item"><b>最终产物</b><br>字符流经 NFA→DFA 驱动，输出 Token 序列交语法分析。</div>
+  </div>
+  <footer class="foot">
+    <p>本资料依据编译原理第二章课件（02 正则表达式、03 DFA、04 NFA 与最小化、05 词法分析器设计，共 116 页）整理，知识点均来自课件。</p>
+    <p class="src">数据源：02 / 03 / 04 / 05 号课件</p>
+  </footer>
+</section>
+</div>
+</main>
+</div>
+<script>
+var sidebar=document.getElementById('sidebar'),backdrop=document.querySelector('.backdrop'),burger=document.querySelector('.hamburger');
+function toggleNav(show){sidebar.classList.toggle('show',show);backdrop.classList.toggle('show',show);}
+burger.addEventListener('click',function(){toggleNav(!sidebar.classList.contains('show'));});
+backdrop.addEventListener('click',function(){toggleNav(false);});
+document.querySelectorAll('.nav-item').forEach(function(a){a.addEventListener('click',function(){toggleNav(false);});});
+var navItems=document.querySelectorAll('.nav-item');
+window.addEventListener('scroll',function(){
+  var pos=window.scrollY+120,cur=navItems[0];
+  document.querySelectorAll('section.block').forEach(function(s){if(s.offsetTop<=pos){var a=document.querySelector('.nav-item[href="#'+s.id+'"]');if(a)cur=a;}});
+  navItems.forEach(function(a){a.classList.remove('active');});
+  if(cur)cur.classList.add('active');
+});
+document.querySelectorAll('.acc-head').forEach(function(h){h.addEventListener('click',function(){h.parentElement.classList.toggle('open');});});
+function makeStepper(id,steps){
+  var el=document.getElementById(id),idx=0;
+  function render(){
+    var s=steps[idx];
+    el.querySelector('.dots').innerHTML=steps.map(function(_,i){
+      return '<button class="dot '+(i<idx?'done':i===idx?'cur':'')+'" data-i="'+i+'">'+(i+1)+'</button>';
+    }).join('');
+    el.querySelector('.step-body').innerHTML='<div class="st-title">'+s.t+'</div>'+s.c;
+    el.querySelector('.prev').disabled=(idx===0);
+    el.querySelector('.next').disabled=(idx===steps.length-1);
+    el.querySelectorAll('.dot').forEach(function(d){d.addEventListener('click',function(){idx=+d.dataset.i;render();});});
+  }
+  el.querySelector('.prev').addEventListener('click',function(){if(idx>0){idx--;render();}});
+  el.querySelector('.next').addEventListener('click',function(){if(idx<steps.length-1){idx++;render();}});
+  render();
+}
+makeStepper('detStep',[
+  {t:'第 1 步：求 DFA 的初态',c:'<p>对 NFA 的初始状态集 S0 求 ε 闭包，得到 DFA 的第一个状态：</p><div class="quad-list"><div class="quad"><span class="qb">I0 = ε_CLOSURE(S0) =</span><span class="qn">{1, 2}</span></div></div><p>把 {1,2} 标记为 DFA 的初始状态（对应课件表中的 “+”）。</p>'},
+  {t:'第 2 步：处理 {1,2}，产生两个新状态',c:'<p>对 {1,2} 分别求 a、b 两个字符的转换：</p><div class="quad-list"><div class="quad new"><span class="qn">a</span><span class="qb">{1,2}a = {2,4,5,6,7}</span></div><div class="quad new"><span class="qn">b</span><span class="qb">{1,2}b = {3,8}</span></div></div><p>这两个子集此前不存在，于是作为 DFA 的两个新状态加入。</p>'},
+  {t:'第 3 步：继续处理新状态',c:'<p>对 {2,4,5,6,7}：a 转换为空集 ∅（非法转换），b 转换为新状态 {3,8,9}。</p><p>对 {3,8}：a 转换为新状态 {9}，b 转换为空集。</p><div class="quad-list"><div class="quad"><span class="qn">{2,4,5,6,7}b</span><span class="qb">{3,8,9}</span></div><div class="quad"><span class="qn">{3,8}a</span><span class="qb">{9}</span></div></div>'},
+  {t:'第 4 步：标记终止状态',c:'<p>检查每个 DFA 状态是否包含 NFA 的终止状态：</p><div class="tok-vis"><div class="tok-cell hot">{2,4,5,6,7} 含终态</div><div class="tok-cell hot">{3,8,9} 含终态</div><div class="tok-cell hot">{9} 是终态</div></div><p>这三个子集都标为 DFA 的终止状态（对应课件表中的 “-”）。</p>'},
+  {t:'第 5 步：重命名，得到 5 态 DFA',c:'<p>对五个状态集重新命名：</p><div class="tbl-scroll"><table class="data"><colgroup><col style="width:50%"><col style="width:50%"></colgroup><tr><th>状态子集</th><th>新名</th></tr><tr><td class="mono-cell">{1,2}</td><td class="mono-cell">1</td></tr><tr><td class="mono-cell">{2,4,5,6,7}</td><td class="mono-cell">2</td></tr><tr><td class="mono-cell">{3,8}</td><td class="mono-cell">3</td></tr><tr><td class="mono-cell">{3,8,9}</td><td class="mono-cell">4</td></tr><tr><td class="mono-cell">{9}</td><td class="mono-cell">5</td></tr></table></div>'}
+]);
+makeStepper('minStep',[
+  {t:'第 1 步：初始划分（先分终态）',c:'<p>终止状态和非终止状态一定可区分，所以先把 8 个状态分成两组：</p><div class="tok-vis"><div class="tok-cell hot">{1, 2, 3, 5} 非终态</div><div class="tok-cell">{4, 6, 7, 8} 终态</div></div>'},
+  {t:'第 2 步：检查非终态组，发现可分',c:'<p>检查 {1,2,3,5} 对各字符的去向：经 a 转换，1、3 转到同一组，而 2 转到另一组；经 b 转换，1、3 也与 2、5 不同。于是把它拆开：</p><div class="tok-vis"><div class="tok-cell hot">{1, 3}</div><div class="tok-cell hot">{2, 5}</div></div>'},
+  {t:'第 3 步：得到三个组，逐一复查',c:'<p>当前划分：</p><div class="tok-vis"><div class="tok-cell">{1, 3}</div><div class="tok-cell">{2, 5}</div><div class="tok-cell">{4, 6, 7, 8}</div></div><p>{1,3} 对 a、b 都转到同一组，{2,5} 同理，{4,6,7,8} 内部也不可再分——划分到此收敛。</p>'},
+  {t:'第 4 步：合并为 3 态并重命名',c:'<p>每个等价组合并成一个状态，重新命名为 S0、S1、S2：</p><div class="quad-list"><div class="quad"><span class="qn">{1,3}</span><span class="qb">→ S0（含初态，为初态）</span></div><div class="quad"><span class="qn">{2,5}</span><span class="qb">→ S1</span></div><div class="quad"><span class="qn">{4,6,7,8}</span><span class="qb">→ S2（终态）</span></div></div><p>8 态自动机被化简为只有 3 个状态的等价自动机。</p>'}
+]);
+makeStepper('tokStep',[
+  {t:'单词 1：if',c:'<p>if 是保留字，查保留字表得种别 4，内容为空：</p><div class="quad-list"><div class="quad"><span class="qn">&lt;4, -&gt;</span><span class="qb">保留字 if</span></div></div>'},
+  {t:'单词 2：(',c:'<p>左括号是特殊符号，查特殊符号表得种别 15：</p><div class="quad-list"><div class="quad"><span class="qn">&lt;15, -&gt;</span><span class="qb">界限符 (</span></div></div>'},
+  {t:'单词 3：x',c:'<p>x 是标识符，所有标识符种别为 1；它在标识符索引表中位于第 1 项：</p><div class="quad-list"><div class="quad"><span class="qn">&lt;1, 1&gt;</span><span class="qb">标识符 x（索引表位置 1）</span></div></div>'},
+  {t:'单词 4：&gt;',c:'<p>大于号是特殊符号，查表得种别 17：</p><div class="quad-list"><div class="quad"><span class="qn">&lt;17, -&gt;</span><span class="qb">运算符 &gt;</span></div></div>'},
+  {t:'单词 5：10',c:'<p>10 是常量，所有常量种别为 2；它在常量索引表中位于第 1 项：</p><div class="quad-list"><div class="quad"><span class="qn">&lt;2, 1&gt;</span><span class="qb">常量 10（索引表位置 1）</span></div></div>'},
+  {t:'单词 6：)',c:'<p>右括号是特殊符号，查表得种别 16：</p><div class="quad-list"><div class="quad"><span class="qn">&lt;16, -&gt;</span><span class="qb">界限符 )</span></div></div>'},
+  {t:'单词 7：y',c:'<p>y 是标识符，种别为 1；它在标识符索引表中位于第 2 项：</p><div class="quad-list"><div class="quad"><span class="qn">&lt;1, 2&gt;</span><span class="qb">标识符 y（索引表位置 2）</span></div></div>'},
+  {t:'单词 8：=',c:'<p>等号是特殊符号，查表得种别 18：</p><div class="quad-list"><div class="quad"><span class="qn">&lt;18, -&gt;</span><span class="qb">运算符 =</span></div></div>'},
+  {t:'单词 9：x',c:'<p>x 已在标识符索引表中，仍是种别 1、位置 1：</p><div class="quad-list"><div class="quad"><span class="qn">&lt;1, 1&gt;</span><span class="qb">标识符 x</span></div></div>'},
+  {t:'单词 10：;',c:'<p>分号是特殊符号，查表得种别 19。完整 Token 序列为：</p><div class="quad-list"><div class="quad"><span class="qn">&lt;4,-&gt; &lt;15,-&gt; &lt;1,1&gt; &lt;17,-&gt; &lt;2,1&gt; &lt;16,-&gt; &lt;1,2&gt; &lt;18,-&gt; &lt;1,1&gt; &lt;19,-&gt;</span></div></div>'}
+]);
+</script>
+</body>
+</html>

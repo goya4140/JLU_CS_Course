@@ -293,6 +293,7 @@
     - [06 传输层](/3_1%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/06_%E4%BC%A0%E8%BE%93%E5%B1%82.md)
     - [07 应用层](/3_1%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/07_%E5%BA%94%E7%94%A8%E5%B1%82.md)
   - **编译原理**
+    - [豆包版学习资料](https://goya4140.github.io/JLU_CS_Course/3_1%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/doubao/index.html ':ignore')
     - **图文阅读版（HTML）**
       - [00 学习导航](https://goya4140.github.io/JLU_CS_Course/3_1%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/00_%E5%AD%A6%E4%B9%A0%E5%AF%BC%E8%88%AA.html ':ignore')
       - [01 编译引论](https://goya4140.github.io/JLU_CS_Course/3_1%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/01_%E7%BC%96%E8%AF%91%E5%BC%95%E8%AE%BA.html ':ignore')

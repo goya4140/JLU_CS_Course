@@ -144,6 +144,10 @@ def build_sidebar() -> str:
 
 def append_compiler_directory(lines: list[str], directory: Path, level: int) -> None:
     indent = "  " * level
+    doubao = directory / "doubao" / "index.html"
+    if doubao.is_file():
+        reading = "https://goya4140.github.io/JLU_CS_Course/" + quote(doubao.relative_to(ROOT).as_posix(), safe="/")
+        lines.append(f"{indent}- [豆包版学习资料]({reading} ':ignore')")
     lines.append(f"{indent}- **图文阅读版（HTML）**")
     for path in sorted(directory.glob("[0-9][0-9]_*.html")):
         url = "https://goya4140.github.io/JLU_CS_Course/" + quote(path.relative_to(ROOT).as_posix(), safe="/")

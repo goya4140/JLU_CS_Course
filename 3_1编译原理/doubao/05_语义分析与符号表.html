@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>05 语义分析与符号表 · 编译原理学习资料</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23173b5e'/%3E%3Ctext x='16' y='22' font-size='16' text-anchor='middle' fill='%23e8743b' font-family='Georgia'%3E5%3C/text%3E%3C/svg%3E">
+<style>
+:root{
+  --ink:#173b5e; --org:#e8743b; --blue-bg:#eef4f9; --org-bg:#fdf1e8;
+  --line:#d8e2ec; --text:#233242; --gray:#5f7185; --red:#b03a2e; --red-bg:#fbeae8;
+  --green:#2e7d52; --green-bg:#e9f5ee;
+  --serif:Georgia,"Songti SC","SimSun",serif;
+  --sans:"Segoe UI","Microsoft YaHei","PingFang SC",sans-serif;
+  --mono:Consolas,"Courier New",monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--sans);color:var(--text);background:#fff;font-size:15px;line-height:1.85}
+h1,h2,h3,h4{font-family:var(--serif);color:var(--ink);line-height:1.4}
+a{color:var(--ink);text-decoration:none}
+::selection{background:var(--org);color:#fff}
+
+.layout{display:flex;min-height:100vh}
+.sidebar{width:248px;flex-shrink:0;background:var(--ink);color:#cdd9e6;padding:26px 0;position:fixed;top:0;bottom:0;left:0;overflow-y:auto;z-index:40}
+.sidebar .brand{padding:0 22px 18px;border-bottom:1px solid rgba(255,255,255,.14);margin-bottom:14px}
+.sidebar .brand .chap{font-family:var(--serif);font-size:26px;color:#fff;display:block}
+.sidebar .brand .sub{font-size:12px;color:#9fb4c8;letter-spacing:2px;margin-top:2px}
+.nav-item{display:flex;align-items:center;gap:10px;padding:9px 22px;color:#c3d1de;font-size:13.5px;cursor:pointer;border-left:3px solid transparent;transition:all .18s}
+.nav-item:hover{background:rgba(255,255,255,.08);color:#fff}
+.nav-item.active{background:rgba(232,116,59,.18);border-left-color:var(--org);color:#fff}
+.nav-item .n{font-family:var(--mono);font-size:11px;color:var(--org);width:20px;flex-shrink:0}
+.main{margin-left:248px;flex:1;min-width:0}
+.wrap{max-width:860px;margin:0 auto;padding:0 34px}
+.hamburger{display:none;position:fixed;top:14px;left:14px;z-index:50;width:42px;height:42px;background:var(--ink);border:none;border-radius:8px;padding:10px;cursor:pointer}
+.hamburger svg{width:100%;height:100%;stroke:#fff;stroke-width:2;fill:none}
+.backdrop{display:none;position:fixed;inset:0;background:rgba(20,35,50,.5);z-index:35}
+
+.hero{background:linear-gradient(160deg,#173b5e 0%,#1f4d78 100%);color:#fff;padding:64px 0 54px;position:relative;overflow:hidden}
+.hero::before{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.05) 1px,transparent 1px);background-size:34px 34px}
+.hero .wrap{position:relative}
+.hero .eyebrow{font-size:12.5px;letter-spacing:4px;color:#f0b594;margin-bottom:14px}
+.hero h1{color:#fff;font-size:38px;margin-bottom:14px}
+.hero p.lead{color:#d3e0ec;font-size:15.5px;max-width:660px}
+.tree-flow{display:flex;align-items:center;gap:10px;margin-top:32px;flex-wrap:wrap}
+.tf-node{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.25);border-radius:8px;padding:12px 16px;font-family:var(--mono);font-size:12.5px;text-align:center;min-width:96px}
+.tf-node b{display:block;font-family:var(--sans);font-size:13.5px;color:#fff;margin-bottom:2px}
+.tf-node.mid{background:rgba(232,116,59,.28);border-color:#f0a076}
+.tf-arrow{color:#f0b594;font-size:20px}
+
+section.block{padding:46px 0 10px}
+.block-head{display:flex;align-items:baseline;gap:14px;margin-bottom:20px;border-bottom:2px solid var(--line);padding-bottom:12px}
+.block-head .idx{font-family:var(--mono);font-size:14px;color:#fff;background:var(--org);border-radius:6px;padding:2px 9px}
+.block-head h2{font-size:26px}
+.block-head .en{font-size:12px;color:var(--gray);letter-spacing:1.5px;margin-left:auto;font-family:var(--sans)}
+h3.sec{font-size:19px;margin:30px 0 12px;padding-left:12px;border-left:4px solid var(--org)}
+h4{font-size:16px;margin:20px 0 8px}
+p{margin-bottom:12px}
+p .term{color:var(--ink);font-weight:700}
+ul,ol{margin:8px 0 14px 22px}
+li{margin-bottom:6px}
+
+.box-tip{border-radius:10px;padding:14px 18px;margin:16px 0;font-size:14.5px}
+.box-tip .bt-title{display:flex;align-items:center;gap:8px;font-weight:700;margin-bottom:6px;font-family:var(--serif)}
+.box-tip .bt-title svg{width:18px;height:18px;flex-shrink:0}
+.analogy{background:var(--org-bg);border:1px solid #f3d2bd}
+.analogy .bt-title{color:#b85623}
+.analogy .bt-title svg{stroke:#c96a2e;fill:none;stroke-width:1.8}
+.note{background:var(--blue-bg);border:1px solid #cddded}
+.note .bt-title{color:var(--ink)}
+.note .bt-title svg{stroke:var(--ink);fill:none;stroke-width:1.8}
+.warn{background:var(--red-bg);border:1px solid #ecc9c3}
+.warn .bt-title{color:var(--red)}
+.warn .bt-title svg{stroke:var(--red);fill:none;stroke-width:1.8}
+.good{background:var(--green-bg);border:1px solid #c2e0d0}
+.good .bt-title{color:var(--green)}
+.good .bt-title svg{stroke:var(--green);fill:none;stroke-width:1.8}
+
+.tbl-scroll{overflow-x:auto;margin:16px 0;border:1px solid var(--line);border-radius:10px}
+table.data{width:100%;border-collapse:collapse;font-size:13.5px;table-layout:fixed}
+table.data th{background:var(--ink);color:#fff;font-weight:600;padding:10px 12px;text-align:left;font-size:13px}
+table.data td{padding:9px 12px;border-top:1px solid var(--line);vertical-align:top;word-break:break-word}
+table.data tr:nth-child(even) td{background:#f6f9fc}
+table.data .mono-cell{font-family:var(--mono);font-size:12.5px}
+
+.code{background:#1d3550;color:#dce7f2;border-radius:10px;padding:16px 18px;font-family:var(--mono);font-size:13px;line-height:1.9;overflow-x:auto;margin:14px 0;white-space:pre}
+.code .cm{color:#7f9bb5}
+.formula{text-align:center;font-family:var(--serif);font-size:16px;color:var(--ink);background:#f6f9fc;border:1px dashed var(--line);border-radius:10px;padding:14px;margin:14px 0}
+
+.field-row{display:flex;flex-direction:column;gap:6px;margin:12px 0}
+.fr{display:flex;gap:10px;align-items:baseline;border:1px solid var(--line);border-radius:8px;padding:7px 14px;font-family:var(--mono);font-size:12.5px;background:#f6f9fc;flex-wrap:wrap}
+.fr .fn{color:var(--org);font-weight:700;min-width:70px}
+.fr .fd{color:var(--text)}
+
+.stepper{border:1px solid var(--line);border-radius:12px;overflow:hidden;margin:18px 0}
+.stepper-bar{display:flex;align-items:center;gap:8px;background:#f6f9fc;padding:12px 16px;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.dots{display:flex;gap:7px;flex-wrap:wrap}
+.dot{width:26px;height:26px;border-radius:50%;border:2px solid var(--line);background:#fff;color:var(--gray);font-family:var(--mono);font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s}
+.dot.done{background:var(--ink);border-color:var(--ink);color:#fff}
+.dot.cur{background:var(--org);border-color:var(--org);color:#fff;transform:scale(1.12)}
+.step-btns{margin-left:auto;display:flex;gap:8px}
+.step-btns button{border:1px solid var(--ink);background:#fff;color:var(--ink);border-radius:7px;padding:6px 16px;font-size:13px;cursor:pointer;font-family:var(--sans)}
+.step-btns button.go{background:var(--ink);color:#fff}
+.step-btns button:disabled{opacity:.35;cursor:not-allowed}
+.step-body{padding:18px 20px;min-height:150px}
+.step-body .st-title{font-family:var(--serif);font-weight:700;color:var(--ink);font-size:16px;margin-bottom:8px}
+
+.acc{border:1px solid var(--line);border-radius:10px;margin:12px 0;overflow:hidden}
+.acc-head{width:100%;display:flex;align-items:center;gap:10px;background:#f6f9fc;padding:12px 16px;border:none;cursor:pointer;font-size:14px;font-family:var(--sans);color:var(--ink);font-weight:600;text-align:left}
+.acc-head svg{width:16px;height:16px;stroke:var(--org);stroke-width:2;fill:none;transition:transform .25s;flex-shrink:0}
+.acc.open .acc-head svg{transform:rotate(90deg)}
+.acc-body{display:none;padding:14px 18px;border-top:1px solid var(--line)}
+.acc.open .acc-body{display:block}
+
+.cards2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:16px 0}
+.mini-card{border:1px solid var(--line);border-radius:10px;padding:16px;background:#fff}
+.mini-card h4{margin-top:0;display:flex;align-items:center;gap:8px}
+.mini-card h4 svg{width:17px;height:17px;stroke:var(--org);fill:none;stroke-width:1.8}
+.mini-card.alt{background:var(--blue-bg);border-color:#cddded}
+
+.summary-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:16px 0}
+.sum-item{border-left:4px solid var(--org);background:#f6f9fc;padding:12px 16px;border-radius:0 8px 8px 0;font-size:14px}
+.sum-item b{color:var(--ink);font-family:var(--serif)}
+footer.foot{border-top:2px solid var(--line);margin-top:46px;padding:26px 0 40px;color:var(--gray);font-size:12.5px}
+footer.foot .src{font-family:var(--mono);font-size:12px}
+
+@media (max-width:900px){
+  .sidebar{transform:translateX(-100%);transition:transform .25s;width:230px}
+  .sidebar.show{transform:translateX(0)}
+  .backdrop.show{display:block}
+  .main{margin-left:0}
+  .hamburger{display:block}
+  .wrap{padding:0 20px}
+  .hero{padding:70px 0 40px}
+  .hero h1{font-size:28px}
+  .cards2,.summary-grid{grid-template-columns:1fr}
+  .block-head .en{display:none}
+  table.data{font-size:12.5px}
+}
+</style>
+</head>
+<body>
+<button class="hamburger" aria-label="打开目录"><svg viewBox="0 0 24 24"><path d="M3 6h18M3 12h18M3 18h18"/></svg></button>
+<div class="backdrop"></div>
+<div class="layout">
+<nav class="sidebar" id="sidebar">
+  <div class="brand">
+    <span class="chap">第五章</span>
+    <span class="sub">SEMANTIC &amp; SYMBOL TABLE</span>
+  </div>
+  <a class="nav-item" href="#top"><span class="n">00</span>本章开篇</a>
+  <a class="nav-item" href="#m1"><span class="n">01</span>语义分析概述</a>
+  <a class="nav-item" href="#m2"><span class="n">02</span>语义错误检查</a>
+  <a class="nav-item" href="#m3"><span class="n">03</span>标识符的出现</a>
+  <a class="nav-item" href="#m4"><span class="n">04</span>标识符的种类</a>
+  <a class="nav-item" href="#m5"><span class="n">05</span>标识符属性与表示</a>
+  <a class="nav-item" href="#m6"><span class="n">06</span>变量的内部表示</a>
+  <a class="nav-item" href="#m7"><span class="n">07</span>过函的内部表示</a>
+  <a class="nav-item" href="#m8"><span class="n">08</span>类型的语义表示</a>
+  <a class="nav-item" href="#m9"><span class="n">09</span>抽象地址</a>
+  <a class="nav-item" href="#m10"><span class="n">10</span>作用域与局部化</a>
+  <a class="nav-item" href="#m11"><span class="n">11</span>符号表管理</a>
+  <a class="nav-item" href="#end"><span class="n">12</span>章末速查</a>
+</nav>
+
+<main class="main" id="top">
+<header class="hero">
+  <div class="wrap">
+    <div class="eyebrow">编译原理 · 第五章</div>
+    <h1>语义分析与符号表</h1>
+    <p class="lead">语法正确不代表有意义。语义分析在变量的声明与使用之间建立联系，检查重复声明、未声明和类型相容等问题；它把标识符和类型的属性组织成内部表示，用“层数+偏移”的抽象地址描述位置，并通过符号表与作用域管理，让每个名字在有效范围内可查、出了范围失效。</p>
+    <div class="tree-flow">
+      <div class="tf-node"><b>声明</b>建立符号表</div>
+      <span class="tf-arrow">→</span>
+      <div class="tf-node mid"><b>语义检查</b>一致性/类型</div>
+      <span class="tf-arrow">→</span>
+      <div class="tf-node"><b>地址分配</b>抽象地址</div>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+<!-- ===== 模块一：语义分析概述 ===== -->
+<section class="block" id="m1">
+  <div class="block-head"><span class="idx">01</span><h2>语义分析概述</h2><span class="en">OVERVIEW</span></div>
+  <p>词法管允许出现哪些字符和单词，语法管结构上合法的程序，<span class="term">语义</span>则管结构合法的程序的意义。一个语法正确的程序不能保证有意义，常见语义错误有标识符未声明、重复声明、操作数类型与操作符不匹配等。</p>
+
+  <h3 class="sec">1.1 静态语义与动态语义</h3>
+  <ul>
+    <li><span class="term">静态语义</span>：编译阶段可检查的语义，如未声明、重复声明、把变量当函数用；</li>
+    <li><span class="term">动态语义</span>：运行时才能检查的语义，如除零溢出、数组下标越界。</li>
+  </ul>
+  <div class="note box-tip">
+    <div class="bt-title"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16v.5"/></svg>边界</div>
+    编译程序只能进行静态语义检查；动态语义错误要等目标程序运行时才暴露。
+  </div>
+
+  <h3 class="sec">1.2 语义分析的主要任务</h3>
+  <ol>
+    <li>根据声明部分建立符号表。符号表是保存源程序各种信息的数据结构，每个条目含一个标识符的属性，可据此检查语义错误和分配地址；</li>
+    <li>在整个程序范围内检查常见语义错误，主要是与标识符声明和使用相关的错误。</li>
+  </ol>
+
+  <h3 class="sec">1.3 语义分析的实现</h3>
+  <ul>
+    <li><span class="term">不独立成遍</span>：一般语义检查与语法分析结合，遇声明查重复声明并填表，遇语句查未声明；类型检查可安排在中间代码生成时；</li>
+    <li><span class="term">独立成遍</span>：以语法分析树和符号表为输入，判定是否有语义错误。无论哪种，都可用语法制导方法完成。</li>
+  </ul>
+</section>
+<!-- ===== 模块二：语义错误检查 ===== -->
+<section class="block" id="m2">
+  <div class="block-head"><span class="idx">02</span><h2>语义错误检查</h2><span class="en">ERROR CHECK</span></div>
+  <p>一般语义错误集中在标识符的声明与使用：重复声明、未声明，以及类型相关的语义错误。</p>
+  <h3 class="sec">2.1 类型相关的检查清单</h3>
+  <div class="tbl-scroll">
+    <table class="data">
+      <colgroup><col style="width:34%"><col style="width:66%"></colgroup>
+      <tr><th>检查对象</th><th>检查内容</th></tr>
+      <tr><td>条件表达式</td><td>类型是否为 boolean</td></tr>
+      <tr><td>运算符分量</td><td>类型是否相容</td></tr>
+      <tr><td>赋值语句</td><td>左右部类型是否相容</td></tr>
+      <tr><td>形参实参</td><td>类型是否相容</td></tr>
+      <tr><td>下标表达式</td><td>类型是否为所允许的类型</td></tr>
+      <tr><td>函数返回值</td><td>函数类型与返回值类型是否一致</td></tr>
+      <tr><td class="mono-cell">V[E]</td><td>V 是否变量且为数组类型</td></tr>
+      <tr><td class="mono-cell">V.id</td><td>V 是否变量且为结构体，id 是否其成员</td></tr>
+      <tr><td class="mono-cell">*V</td><td>V 是否指针或文件变量</td></tr>
+      <tr><td class="mono-cell">f(...)</td><td>f 是否函数名，形参个数与实参个数是否一致</td></tr>
+    </table>
+  </div>
+</section>
+<!-- ===== 模块三：标识符的出现 ===== -->
+<section class="block" id="m3">
+  <div class="block-head"><span class="idx">03</span><h2>标识符在程序中的出现</h2><span class="en">OCCURRENCE</span></div>
+  <ul>
+    <li><span class="term">声明性出现</span>：变量声明、函数声明部分出现的标识符。如 <code>int x;</code>、<code>int a[10];</code> 中的 x、a，<code>int f(int m,int* n){...}</code> 中的 f、m、n；</li>
+    <li><span class="term">使用性出现</span>：表达式、语句部分出现的标识符。如 <code>x=x+1;</code> 中的 x，<code>a[0]=x+f(a[2]);</code> 中的 a、x、f。</li>
+  </ul>
+  <div class="analogy box-tip">
+    <div class="bt-title"><svg viewBox="0 0 24 24"><path d="M12 21V9M7 14l5-5 5 5M5 3h14"/></svg>生活类比</div>
+    声明性出现像在前台登记名字，使用性出现像之后凭登记的名字办事。没登记就办事（未声明），或同一名字登记两次（重复声明），都会被拦下。
+  </div>
+</section>
+<!-- ===== 模块四：标识符的种类 ===== -->
+<section class="block" id="m4">
+  <div class="block-head"><span class="idx">04</span><h2>标识符的种类</h2><span class="en">KIND</span></div>
+  <div class="tbl-scroll">
+    <table class="data">
+      <colgroup><col style="width:22%"><col style="width:40%"><col style="width:38%"></colgroup>
+      <tr><th>种类</th><th>说明</th><th>示例</th></tr>
+      <tr><td>常量标识符</td><td>代表一个值，不对应存储单元、不能赋值</td><td class="mono-cell">const r=3</td></tr>
+      <tr><td>类型标识符</td><td>给类型起的名字</td><td class="mono-cell">typedef int t; typedef int ta[10]</td></tr>
+      <tr><td>实在变量</td><td>声明的真实变量</td><td class="mono-cell">int x; int a[10]</td></tr>
+      <tr><td>形参变量</td><td>值参（传值）/ 变参（传地址）</td><td class="mono-cell">f(int x, int* y)</td></tr>
+      <tr><td>实在过函</td><td>有自己的函数体</td><td class="mono-cell">f</td></tr>
+      <tr><td>形式过函</td><td>无自己的函数体，作为函数形参</td><td class="mono-cell">g</td></tr>
+      <tr><td>域名标识符</td><td>结构体中的域，属于独立局部化区</td><td class="mono-cell">s.age, s.name</td></tr>
+    </table>
+  </div>
+  <div class="note box-tip">
+    <div class="bt-title"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16v.5"/></svg>形参的两种传递</div>
+    值参（传值）把实参的值传给形参，形参改动不影响实参；变参（传地址）把实参地址传给形参，形参通过地址间接操作实参。
+  </div>
+</section>
+<!-- ===== 模块五：标识符属性与表示 ===== -->
+<section class="block" id="m5">
+  <div class="block-head"><span class="idx">05</span><h2>标识符的属性与语义表示</h2><span class="en">ATTRIBUTE</span></div>
+  <p>标识符的主要信息包括：名字、种类信息 kind、类型信息 type，以及针对不同种类的特有信息（数组的下界上界元素类型，函数的形参类型和传递方式等）。</p>
+
+  <h3 class="sec">5.1 常量标识符</h3>
+  <p>例 <code>#define pai 3.14</code>、<code>#define count 100</code>：</p>
+  <div class="field-row">
+    <div class="fr"><span class="fn">Name</span><span class="fd">pai（常量的名字）</span></div>
+    <div class="fr"><span class="fn">Kind</span><span class="fd">constKind，表明是常量标识符</span></div>
+    <div class="fr"><span class="fn">Type</span><span class="fd">realPtr，指向具体类型的内部表示</span></div>
+    <div class="fr"><span class="fn">Value</span><span class="fd">指向常量值 &lt;3.14&gt; 的内部表示</span></div>
+  </div>
+
+  <h3 class="sec">5.2 类型标识符</h3>
+  <p>例 <code>typedef int t1;</code>、<code>typedef int t2[10];</code>：</p>
+  <div class="field-row">
+    <div class="fr"><span class="fn">Name</span><span class="fd">t1 / t2</span></div>
+    <div class="fr"><span class="fn">Kind</span><span class="fd">typeKind，表明是类型标识符</span></div>
+    <div class="fr"><span class="fn">Type</span><span class="fd">指向所指代类型：t1→intPtr；t2→数组类型（Low 0、Up 9、Size 10、ElemType intPtr）</span></div>
+  </div>
+</section>
+<!-- ===== 模块六：变量的内部表示 ===== -->
+<section class="block" id="m6">
+  <div class="block-head"><span class="idx">06</span><h2>变量标识符的内部表示</h2><span class="en">VARIABLE</span></div>
+  <p>例 <code>int x=10; float y; float* z;</code>，当前层 L、当前偏移 off：</p>
+  <div class="field-row">
+    <div class="fr"><span class="fn">Name</span><span class="fd">x / y / z</span></div>
+    <div class="fr"><span class="fn">Kind</span><span class="fd">varKind，表明是变量标识符</span></div>
+    <div class="fr"><span class="fn">Access</span><span class="fd">dir 直接变量；indir 间接变量（地址引用形参、指针变量、计算地址的临时变量）</span></div>
+    <div class="fr"><span class="fn">Level</span><span class="fd">声明所在主程序/函数/过程的层数</span></div>
+    <div class="fr"><span class="fn">Off</span><span class="fd">相对所在内存块起始地址的偏移量</span></div>
+    <div class="fr"><span class="fn">Value</span><span class="fd">有初值则指向初值内部表示（如 x 指向 &lt;10&gt;），否则为空</span></div>
+  </div>
+  <div class="code">x：dir，L，off，    intPtr，  &lt;10&gt;
+y：dir，L，off+1，  realPtr， NULL
+z：indir，L，off+3，pointTy， NULL</div>
+</section>
+<!-- ===== 模块七：过函的内部表示 ===== -->
+<section class="block" id="m7">
+  <div class="block-head"><span class="idx">07</span><h2>过程/函数标识符的内部表示</h2><span class="en">ROUTINE</span></div>
+  <div class="field-row">
+    <div class="fr"><span class="fn">Name</span><span class="fd">过函名字</span></div>
+    <div class="fr"><span class="fn">Kind</span><span class="fd">routKind</span></div>
+    <div class="fr"><span class="fn">Type</span><span class="fd">函数返回值类型的内部表示；过程为 NULL</span></div>
+    <div class="fr"><span class="fn">Level</span><span class="fd">过函的层数</span></div>
+    <div class="fr"><span class="fn">Off</span><span class="fd">仅形式过函有效，其在所属过函内存块中的偏移</span></div>
+    <div class="fr"><span class="fn">Param</span><span class="fd">参数表指针，结构同符号表；可填符号表或单独参数表</span></div>
+    <div class="fr"><span class="fn">Class</span><span class="fd">actual 实在过函；formal 形式过函</span></div>
+    <div class="fr"><span class="fn">Code</span><span class="fd">仅实在过函，目标代码起始地址，生成时回填；形式为 NULL</span></div>
+    <div class="fr"><span class="fn">Size</span><span class="fd">仅实在过函，过程活动记录大小，生成后回填</span></div>
+    <div class="fr"><span class="fn">Forward</span><span class="fd">仅实在过函，true 为超前声明（函数原型），false 为否</span></div>
+  </div>
+  <div class="analogy box-tip">
+    <div class="bt-title"><svg viewBox="0 0 24 24"><path d="M12 21V9M7 14l5-5 5 5M5 3h14"/></svg>为什么需要超前声明</div>
+    间接递归中两个函数互相调用，总会有一个先被调用、后被定义。函数原型只写函数头、函数体在后面，先登记名字，就避免了“先使用后声明”的问题。
+  </div>
+</section>
+<!-- ===== 模块八：类型的语义表示 ===== -->
+<section class="block" id="m8">
+  <div class="block-head"><span class="idx">08</span><h2>类型的语义表示</h2><span class="en">TYPE</span></div>
+  <p>类型语义信息有两个作用：类型的语义检查、确定分配空间的大小。约定 RealSize=2，IntSize、BoolSize、CharSize=1。</p>
+  <div class="cards2">
+    <div class="mini-card"><h4>标准类型</h4><p style="font-size:13.5px;margin:0">含 Kind、Size：intTy/boolTy/charTy 大小 1，realTy 大小 2。</p></div>
+    <div class="mini-card alt"><h4>指针类型</h4><p style="font-size:13.5px;margin:0">pointTy，Size 为地址长度（一般 1），BaseType 指向所指类型。</p></div>
+  </div>
+
+  <h3 class="sec">8.1 数组类型</h3>
+  <div class="formula">Size = (Up − Low + 1) × sizeof(ElemType)</div>
+  <ul>
+    <li>Kind=ArrayTy；Low 下标下界（C 为 0），Up 上界；ElemType 指向成分类型；</li>
+    <li>例 <code>int A[10]</code>：Low0、Up9、Size10；<code>char B[5][10]</code>：Low0、Up4、Size50，元素为 10 字符数组。</li>
+  </ul>
+
+  <h3 class="sec">8.2 结构体与联合体</h3>
+  <p>structTy/unionTy，RecBody 是域链表，每个域含 Name、Type、Off（相对结构体起始的偏移；联合体各域偏移相同可省）、link。</p>
+  <ul>
+    <li><code>struct Date{year,month,day}</code>：域偏移 0/1/2，Size 3；</li>
+    <li><code>union{ch,i,f}</code>：各域共用同一偏移，Size 取最大者 2。</li>
+  </ul>
+
+  <h3 class="sec">8.3 枚举类型</h3>
+  <p>enumTy，ElemList 指向枚举常量表，每常量含 Name 和 Value（整数）。</p>
+  <ul>
+    <li><code>enum color{red,yellow,blue}</code>：值 0/1/2；</li>
+    <li><code>{red=10,yellow=red+2,blue}</code>：值 10/12/13。</li>
+  </ul>
+</section>
+<!-- ===== 模块九：抽象地址 ===== -->
+<section class="block" id="m9">
+  <div class="block-head"><span class="idx">09</span><h2>抽象地址</h2><span class="en">ABSTRACT ADDRESS</span></div>
+  <h3 class="sec">9.1 静态分配与动态分配</h3>
+  <ul>
+    <li><span class="term">静态分配</span>：编译期就为所有数据对象分配固定地址，运行时不变；直观但不支持动态申请（指针、递归）；</li>
+    <li><span class="term">动态分配</span>：编译期分配的是抽象地址而非真实地址，运行时再映射为物理地址。</li>
+  </ul>
+
+  <h3 class="sec">9.2 过程活动记录 AR</h3>
+  <p>每次函数被调用时分配的一片空间，存储顺序即处理先后顺序；运行时通过 AR 起始地址 sp + 偏移 offset 找到变量。</p>
+  <div class="code">┌──────────────┐ 高地址
+│  临时变量区  │
+├──────────────┤
+│  局部变量区  │
+├──────────────┤
+│    形参区    │
+├──────────────┤
+│  管理信息    │  固定大小（返回地址、寄存器现场）
+└──────────────┘ 低地址  sp</div>
+
+  <h3 class="sec">9.3 层数定义</h3>
+  <ul>
+    <li><span class="term">嵌套式（Pascal）</span>：主程序 0 层，其直接定义的函数 1 层，L 层函数直接定义的为 L+1 层；</li>
+    <li><span class="term">并列式（C）</span>：全局变量和所有函数为 0 层，函数中声明的变量为 1 层。</li>
+  </ul>
+
+  <h3 class="sec">9.4 抽象地址结构与分配原则</h3>
+  <p>抽象地址是二元组 <b>(层数, 偏移)</b>：层数帮助确定 AR 起始地址 sp，偏移是相对 AR 的相对偏移。</p>
+  <div class="tbl-scroll">
+    <table class="data" style="text-align:center">
+      <colgroup><col style="width:34%"><col style="width:66%"></colgroup>
+      <tr><th>对象</th><th>分配单元</th></tr>
+      <tr><td>值参</td><td>按类型大小分</td></tr>
+      <tr><td>变参</td><td>分 1 个单元（存地址）</td></tr>
+      <tr><td>过/函形参</td><td>分 2 个单元（入口地址、Display 表信息）</td></tr>
+      <tr><td>局部变量</td><td>按类型大小（int 1、float 2、char 1）</td></tr>
+      <tr><td>临时变量</td><td>分 1 个单元（假设）</td></tr>
+    </table>
+  </div>
+</section>
+<!-- ===== 模块十：作用域与局部化 ===== -->
+<section class="block" id="m10">
+  <div class="block-head"><span class="idx">10</span><h2>作用域与局部化单位</h2><span class="en">SCOPE</span></div>
+  <p><span class="term">作用域</span>是标识符有效的程序段，在作用域内标识符有效、可见。<span class="term">局部化单位</span>是允许有声明的部分，通常是子程序或分程序；局部化单位可以嵌套，不能交叉。</p>
+  <div class="warn box-tip">
+    <div class="bt-title"><svg viewBox="0 0 24 24"><path d="M12 3l9 16H3z"/><path d="M12 10v4M12 17v.5"/></svg>嵌套作用域原则</div>
+    标识符的作用域从声明位置开始，到所在局部化单位结束。若内层有与外层同名的标识符，外层标识符的作用域要把内层单位剔除——内层同名者“遮蔽”外层。
+  </div>
+  <p>局部化处理的本质：在程序某点 P 处，对它有效的声明是包含 P 的嵌套局部化单位中的声明。因此编译器要在每点判断哪些表项有效。</p>
+
+  <h3 class="sec">10.1 局部化处理的基本思想</h3>
+  <ol>
+    <li>进入一个局部化单位，用 Scope 栈记住本层符号表起始地址；</li>
+    <li>遇声明性标识符，查本层符号表，有同名则报错，否则填入；</li>
+    <li>遇使用性标识符，从当前位置向前查整个符号表，查不到则报错；</li>
+    <li>结束一个局部化单位，“删除”本层符号表。</li>
+  </ol>
+  <div class="note box-tip">
+    <div class="bt-title"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16v.5"/></svg>两个“层”别混淆</div>
+    这里的层是局部化单位嵌套引起的 Scope 栈层次；抽象地址里的层数是函数定义层数，二者概念不同。
+  </div>
+</section>
+<!-- ===== 模块十一：符号表管理 ===== -->
+<section class="block" id="m11">
+  <div class="block-head"><span class="idx">11</span><h2>符号表管理</h2><span class="en">TABLE MANAGEMENT</span></div>
+  <p>符号表在编译各阶段都要用：语义分析时用于语义检查，中间代码生成时用于类型检查和强制转换，目标代码生成时作为地址分配依据。</p>
+  <p>组织符号表要解决三个问题：总体组织（单表/多表）、表项排列（线性表/散列表/有序表）、局部化（局部/全局）。</p>
+
+  <h3 class="sec">11.1 全局式与局部式</h3>
+  <ul>
+    <li><span class="term">全局式</span>：整个程序一个符号表，建表查表单位是整个表，用 Scope 栈记录各层起始地址；</li>
+    <li><span class="term">局部式</span>：每个局部化单位一张独立表，作为建表查表单位。</li>
+  </ul>
+
+  <h3 class="sec">11.2 “删除”的两种实现</h3>
+  <ul>
+    <li><span class="term">真删除法</span>：物理删除，退出时把本层表项从表中弹出，直到 Scope 栈顶指向位置；</li>
+    <li><span class="term">驻留法</span>：保留表项但加标记，或在末尾加跳转项 (#,ptr)，ptr 指向本层第一个表项的前一项，从后向前访问时跳过失效区。</li>
+  </ul>
+  <div class="note box-tip">
+    <div class="bt-title"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16v.5"/></svg>适用范围</div>
+    删除法、驻留法之分基于全局表；局部表只有删除法。
+  </div>
+
+  <h3 class="sec">11.3 局部化处理过程演示</h3>
+  <div class="stepper" id="scopeStep">
+    <div class="stepper-bar">
+      <div class="dots"></div>
+      <div class="step-btns"><button class="prev">上一步</button><button class="next go">下一步</button></div>
+    </div>
+    <div class="step-body"></div>
+  </div>
+
+  <h3 class="sec">11.4 C 与 Pascal 的比较</h3>
+  <ul>
+    <li><span class="term">C（并列式）</span>：函数并列，主程序/函数/分程序是局部化区；全局量和函数为 0 层，局部量为 1 层；分程序嵌套不影响层数；</li>
+    <li><span class="term">Pascal（嵌套式）</span>：过函嵌套，主程序/函数是局部化区；L 层函数中声明的标识符为 L+1 层，处理更复杂。</li>
+  </ul>
+</section>
+<!-- ===== 章末总结 ===== -->
+<section class="block" id="end">
+  <div class="block-head"><span class="idx">12</span><h2>章末速查</h2><span class="en">SUMMARY</span></div>
+  <div class="summary-grid">
+    <div class="sum-item"><b>语义分析</b> 建符号表、查语义错误；只做静态语义检查。</div>
+    <div class="sum-item"><b>两类出现</b> 声明性出现（登记）、使用性出现（办事）。</div>
+    <div class="sum-item"><b>五类标识符</b> 常量、类型、变量、过函、域名。</div>
+    <div class="sum-item"><b>三属性</b> 名字、种类 Kind、类型 Type，加特有信息。</div>
+    <div class="sum-item"><b>变量表示</b> Access、Level、Off、Value。</div>
+    <div class="sum-item"><b>过函表示</b> Param、Class、Code、Size、Forward。</div>
+    <div class="sum-item"><b>类型表示</b> 标准/数组/结构/联合/指针/枚举，含 Size。</div>
+    <div class="sum-item"><b>抽象地址</b> (层数, 偏移)，运行时 sp+offset。</div>
+    <div class="sum-item"><b>作用域</b> 嵌套作用域原则，内层同名遮蔽外层。</div>
+    <div class="sum-item"><b>符号表</b> Scope 栈；全局/局部，真删除/驻留。</div>
+  </div>
+  <footer class="foot">
+    <p>本资料依据编译原理课件 13（语义表示基础，37 页）、14（抽象地址和符号表，46 页）整理，共 83 页，仅用于课程学习。</p>
+    <p class="src">数据来源：编译原理课件 13 / 14</p>
+  </footer>
+</section>
+</div>
+</main>
+</div>
+<script>
+var sidebar=document.getElementById('sidebar'),backdrop=document.querySelector('.backdrop'),burger=document.querySelector('.hamburger');
+function toggleNav(show){sidebar.classList.toggle('show',show);backdrop.classList.toggle('show',show);}
+burger.addEventListener('click',function(){toggleNav(!sidebar.classList.contains('show'));});
+backdrop.addEventListener('click',function(){toggleNav(false);});
+document.querySelectorAll('.nav-item').forEach(function(a){a.addEventListener('click',function(){toggleNav(false);});});
+var navItems=document.querySelectorAll('.nav-item');
+window.addEventListener('scroll',function(){
+  var pos=window.scrollY+120,cur=navItems[0];
+  document.querySelectorAll('section.block').forEach(function(s){if(s.offsetTop<=pos){var a=document.querySelector('.nav-item[href="#'+s.id+'"]');if(a)cur=a;}});
+  navItems.forEach(function(a){a.classList.remove('active');});
+  if(cur)cur.classList.add('active');
+});
+document.querySelectorAll('.acc-head').forEach(function(h){h.addEventListener('click',function(){h.parentElement.classList.toggle('open');});});
+function makeStepper(id,steps){
+  var el=document.getElementById(id),idx=0;
+  function render(){
+    var s=steps[idx];
+    el.querySelector('.dots').innerHTML=steps.map(function(_,i){
+      return '<button class="dot '+(i<idx?'done':i===idx?'cur':'')+'" data-i="'+i+'">'+(i+1)+'</button>';
+    }).join('');
+    el.querySelector('.step-body').innerHTML='<div class="st-title">'+s.t+'</div>'+s.c;
+    el.querySelector('.prev').disabled=(idx===0);
+    el.querySelector('.next').disabled=(idx===steps.length-1);
+    el.querySelectorAll('.dot').forEach(function(d){d.addEventListener('click',function(){idx=+d.dataset.i;render();});});
+  }
+  el.querySelector('.prev').addEventListener('click',function(){if(idx>0){idx--;render();}});
+  el.querySelector('.next').addEventListener('click',function(){if(idx<steps.length-1){idx++;render();}});
+  render();
+}
+makeStepper('scopeStep',[
+  {t:'进入全局局部化区',c:'<div class="code">Scope 栈：[ 0 ]\n符号表：（空）\n本层起始地址入栈，等待声明。</div>'},
+  {t:'声明全局变量 x、y',c:'<div class="code">符号表：x ... | y ...\n每次声明先查本层有无同名，\n无重复则填入标识符及属性。</div>'},
+  {t:'进入函数 f，声明形参 z',c:'<div class="code">Scope 栈：[ 0 ] → [ 0 , 1 ]\n符号表：x | y | f | z\n本层起始地址入栈，f 与 z 依次填入。</div>'},
+  {t:'遇使用性标识符，从后向前查',c:'<div class="code">x = x + 1：查 x → 命中全局 x\nreturn z*z：查 z → 命中本层形参\n从当前位置向前查，第一个同名即有效；\n查不到则报“未声明”。</div>'},
+  {t:'退出 f，“删除”本层',c:'<div class="code">真删除：弹出 z、f 的表项\nScope 栈：[ 0 , 1 ] → [ 0 ]\n驻留法：则添加跳转项 (#,ptr) 跳过本区。</div>'},
+  {t:'进入 main，查表调用',c:'<div class="code">Scope 栈：[ 0 , 1 ]\nmain 中 g(x,f(2))：\ng、f、x 均在有效表中可查，\n内层同名会遮蔽外层（嵌套作用域原则）。</div>'}
+]);
+</script>
+</body>
+</html>
