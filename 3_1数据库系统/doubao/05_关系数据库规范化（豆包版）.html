@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>05 关系数据库规范化（豆包版）</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath d='M4 27V14l12-9 12 9v13' fill='%23173b5e'/%3E%3Crect x='13' y='18' width='6' height='9' fill='%23e8743b'/%3E%3C/svg%3E">
+<style>
+:root{
+  --ink:#173b5e; --ink2:#24527e; --org:#e8743b; --org-deep:#c95a24;
+  --blue-bg:#eef4f9; --org-bg:#fdf1e8; --line:#d8e2ec;
+  --text:#233242; --gray:#5f7185; --warn-bg:#fdeceb; --warn-line:#d9534f;
+  --ok:#2e7d5b; --shadow:0 6px 22px rgba(23,59,94,.10);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;color:var(--text);background:#fff;line-height:1.85;font-size:16px}
+h1,h2,h3,h4{font-family:Georgia,"Songti SC","SimSun",serif;color:var(--ink);line-height:1.4}
+a{color:var(--ink2);text-decoration:none}
+::selection{background:var(--org);color:#fff}
+.sidebar{position:fixed;left:0;top:0;bottom:0;width:262px;background:var(--ink);color:#cfe0f0;padding:26px 0;overflow-y:auto;z-index:60;transition:transform .3s}
+.sidebar .brand{padding:0 24px 20px;border-bottom:1px solid rgba(255,255,255,.14);margin-bottom:14px}
+.sidebar .brand .db{display:flex;align-items:center;gap:10px;font-family:Georgia,serif;font-size:19px;color:#fff;letter-spacing:.5px}
+.sidebar .brand small{display:block;margin-top:6px;font-size:12px;color:#9fb8d0;letter-spacing:1px}
+.sidebar nav a{display:flex;align-items:center;gap:10px;padding:9px 24px;color:#c4d6e8;font-size:14px;border-left:3px solid transparent;transition:all .2s}
+.sidebar nav a:hover{background:rgba(255,255,255,.08);color:#fff}
+.sidebar nav a.active{background:rgba(232,116,59,.18);border-left-color:var(--org);color:#fff}
+.sidebar nav a svg{flex:none;opacity:.85}
+.sidebar .unit-no{font-size:11px;color:#86a3bf;letter-spacing:1px;padding:16px 24px 4px}
+.main{margin-left:262px;min-height:100vh}
+.wrap{max-width:880px;margin:0 auto;padding:0 34px}
+.topbar{display:none;position:sticky;top:0;background:var(--ink);color:#fff;z-index:55;padding:12px 18px;align-items:center;gap:12px}
+.topbar button{background:none;border:none;cursor:pointer;padding:4px}
+.topbar span{font-family:Georgia,serif;font-size:16px}
+.overlay{display:none;position:fixed;inset:0;background:rgba(10,25,40,.45);z-index:55}
+.hero{background:linear-gradient(135deg,#173b5e 0%,#24527e 62%,#2f6494 100%);color:#fff;padding:64px 0 58px;margin-bottom:40px;position:relative;overflow:hidden}
+.hero::after{content:"";position:absolute;right:-60px;top:-60px;width:260px;height:260px;border:26px solid rgba(232,116,59,.25);border-radius:50%}
+.hero .kicker{font-size:13px;letter-spacing:3px;color:var(--org);font-weight:600;margin-bottom:14px}
+.hero h1{color:#fff;font-size:36px;margin-bottom:16px}
+.hero p{max-width:660px;color:#d6e4f2;font-size:16.5px}
+.hero .meta{margin-top:26px;display:flex;flex-wrap:wrap;gap:10px}
+.hero .meta span{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.22);padding:6px 14px;border-radius:20px;font-size:13px}
+section{padding:16px 0 28px;scroll-margin-top:20px}
+.sec-head{display:flex;align-items:center;gap:14px;margin-bottom:16px}
+.sec-num{flex:none;width:46px;height:46px;border-radius:12px;background:var(--org);color:#fff;display:flex;align-items:center;justify-content:center;font-family:Georgia,serif;font-size:20px;box-shadow:var(--shadow)}
+.sec-head h2{font-size:25px}
+h3{font-size:19.5px;margin:24px 0 9px;padding-left:12px;border-left:4px solid var(--org)}
+h4{font-size:16px;margin:16px 0 7px;color:var(--ink2)}
+p{margin:9px 0}
+.lead{font-size:17px;color:var(--ink)}
+ul,ol{margin:9px 0 9px 26px}
+li{margin:5px 0}
+strong{color:var(--ink)}
+.em{color:var(--org-deep);font-weight:700}
+.goal-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin:18px 0}
+.goal-card{background:var(--blue-bg);border:1px solid var(--line);border-radius:12px;padding:15px 18px;display:flex;gap:12px}
+.goal-card svg{flex:none;margin-top:3px}
+.goal-card b{color:var(--ink)}
+.tbl-scroll{overflow-x:auto;margin:15px 0;border-radius:10px;border:1px solid var(--line)}
+table{width:100%;border-collapse:collapse;font-size:14px;min-width:460px}
+thead th{background:var(--ink);color:#fff;padding:11px 13px;text-align:left;font-weight:600;letter-spacing:.5px}
+tbody td{padding:10px 13px;border-bottom:1px solid var(--line);vertical-align:top}
+tbody tr:nth-child(even){background:#f6f9fc}
+tbody tr:hover{background:var(--org-bg)}
+.callout{border-radius:12px;padding:15px 19px;margin:15px 0;display:flex;gap:14px;border:1px solid}
+.callout .ico{flex:none;margin-top:2px}
+.callout .ct{font-weight:700;margin-bottom:4px;font-family:Georgia,serif;letter-spacing:.5px}
+.callout p{margin:4px 0}
+.analogy{background:var(--org-bg);border-color:#f0c9ac}
+.analogy .ct{color:var(--org-deep)}
+.knowledge{background:var(--blue-bg);border-color:var(--line)}
+.knowledge .ct{color:var(--ink)}
+.warning{background:var(--warn-bg);border-color:#eeb4b2}
+.warning .ct{color:var(--warn-line)}
+.struct{display:flex;gap:0;margin:15px 0;border-radius:10px;overflow:hidden;flex-wrap:wrap}
+.struct .cell{flex:1;min-width:100px;padding:13px 10px;text-align:center;color:#fff;font-size:13px}
+.struct .cell small{display:block;font-size:11px;opacity:.82;margin-top:4px}
+.struct .c1{background:#173b5e}.struct .c2{background:#24527e}.struct .c3{background:#2f6494}.struct .c4{background:#3d78ad}.struct .c5{background:#5588bb}
+.code{background:#12283d;color:#dce9f5;border-radius:10px;padding:15px 18px;font-family:Consolas,"Courier New",monospace;font-size:13px;line-height:1.7;overflow-x:auto;margin:13px 0;white-space:pre}
+.inline-code{font-family:Consolas,monospace;background:var(--blue-bg);border:1px solid var(--line);border-radius:5px;padding:1px 7px;font-size:13px;color:var(--ink2)}
+.formula{background:var(--blue-bg);border:1px solid var(--line);border-left:4px solid var(--ink);border-radius:8px;padding:11px 18px;margin:10px 0;font-family:Georgia,serif;font-size:15px;color:var(--ink)}
+.card-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:13px;margin:15px 0}
+.mini-card{border:1px solid var(--line);border-radius:12px;padding:15px;background:#fff;box-shadow:0 2px 8px rgba(23,59,94,.06)}
+.mini-card h4{display:flex;align-items:center;gap:8px;margin:0 0 7px}
+.mini-card p{font-size:13.5px;margin:4px 0;color:var(--gray)}
+.quiz{background:var(--blue-bg);border:1px solid var(--line);border-radius:14px;padding:21px 23px;margin:17px 0}
+.quiz .q{font-weight:700;color:var(--ink);margin-bottom:11px}
+.quiz .opt{display:block;width:100%;text-align:left;border:1px solid var(--line);background:#fff;border-radius:9px;padding:10px 15px;margin:7px 0;cursor:pointer;font-size:14px;transition:.15s}
+.quiz .opt:hover{border-color:var(--org)}
+.quiz .opt.right{background:#e6f4ec;border-color:var(--ok);color:var(--ok);font-weight:700}
+.quiz .opt.wrong{background:var(--warn-bg);border-color:var(--warn-line);color:var(--warn-line)}
+.quiz .fb{margin-top:9px;font-size:13.5px;display:none}
+.quiz .fb.show{display:block}
+.summary-box{background:linear-gradient(135deg,var(--blue-bg),#fff);border:1px solid var(--line);border-radius:16px;padding:25px 27px;margin:23px 0}
+.oneline{background:var(--ink);color:#fff;border-radius:10px;padding:13px 19px;margin:13px 0;font-size:15px}
+.oneline b{color:var(--org)}
+.totop{position:fixed;right:26px;bottom:26px;width:46px;height:46px;border-radius:50%;background:var(--org);border:none;cursor:pointer;box-shadow:var(--shadow);display:none;align-items:center;justify-content:center;z-index:40}
+.totop.show{display:flex}
+footer{border-top:1px solid var(--line);padding:26px 0 40px;color:var(--gray);font-size:13px}
+@media (max-width:900px){
+  .sidebar{transform:translateX(-100%)}
+  .sidebar.open{transform:translateX(0)}
+  .main{margin-left:0}
+  .topbar{display:flex}
+  .overlay.show{display:block}
+  .wrap{padding:0 20px}
+  .hero{padding:44px 0 40px}
+  .hero h1{font-size:27px}
+  .goal-grid,.card-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<aside class="sidebar" id="sidebar">
+  <div class="brand">
+    <div class="db">
+      <svg width="26" height="26" viewBox="0 0 32 32"><path d="M4 27V14l12-9 12 9v13" fill="#fff"/><rect x="13" y="18" width="6" height="9" fill="#e8743b"/></svg>
+      数据库系统
+    </div>
+    <small>DATABASE SYSTEM CONCEPTS</small>
+  </div>
+  <div class="unit-no">第 05 单元 · 目录</div>
+  <nav id="nav">
+    <a href="#intro"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 8v5l3 2"/></svg>开篇导读</a>
+    <a href="#s1"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h10M4 18h13"/></svg>原子域与第一范式</a>
+    <a href="#s2"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-1.7 1.7"/></svg>函数依赖</a>
+    <a href="#s3"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/></svg>依赖闭包与公理</a>
+    <a href="#s4"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2 2 7l10 5 10-5z"/></svg>BCNF</a>
+    <a href="#s5"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>第三范式</a>
+    <a href="#s6"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-1.7 1.7"/></svg>无损连接分解</a>
+    <a href="#s7"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/></svg>依赖保持</a>
+    <a href="#s8"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/></svg>分解算法与规范覆盖</a>
+    <a href="#s9"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17l10-10"/></svg>多值依赖</a>
+    <a href="#s10"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/></svg>第四范式</a>
+    <a href="#s11"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3 7h7l-5.5 4.5L18 21l-6-4-6 4 1.5-7.5L2 9h7z"/></svg>更高范式</a>
+    <a href="#s12"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18M7 14l5-5 5 5"/></svg>设计流程与时态数据</a>
+    <a href="#sum"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/></svg>本章小结与自测</a>
+  </nav>
+</aside>
+<div class="overlay" id="overlay"></div>
+
+<div class="topbar">
+  <button id="hamburger" aria-label="打开目录">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+  </button>
+  <span>05 关系数据库规范化</span>
+</div>
+
+<div class="main">
+  <header class="hero">
+    <div class="wrap">
+      <div class="kicker">CHAPTER 08 · RELATIONAL DATABASE DESIGN</div>
+      <h1>关系数据库规范化</h1>
+      <p>一张表把所有信息塞在一起，往往带来重复、更新异常和插入异常。规范化用函数依赖和多值依赖作为"尺子"，判断一个关系设计得好不好，并在不好时把它无损地分解成一组更小、更好的关系。这一章是理论性最强、也最考验逻辑推导的部分。</p>
+      <div class="meta"><span>对应课件：第 8 章</span><span>课件页数：92 页</span><span>建议学习：6 小时</span><span>重点：范式判定与分解</span></div>
+    </div>
+  </header>
+
+  <div class="wrap">
+
+  <section id="intro">
+    <div class="sec-head"><div class="sec-num">0</div><h2>开篇导读：好设计与坏设计</h2></div>
+    <p class="lead">先直观感受"合并表"的代价。把 instructor 和 department 合成一个 inst_dept，一位教师对应一行，而一个部门的楼、预算要在该部门每位教师的行上重复一遍，这就是信息重复。</p>
+    <p>但不是所有合并都有重复：把 sec_class(sec_id, building, room_number) 和 section 合并，因为教学班和教室是一一对应的，就不会重复。所以"该不该合"取决于数据之间的依赖关系，而不是凭感觉。</p>
+    <p>反过来，从一个大表出发，怎么知道该怎么拆？课件指出：不是所有分解都好。把 employee 拆成 employee1(ID,name) 和 employee2(name,street,city,salary)，因为 name 可能重复，连接后无法还原原始关系，这是<strong>有损分解（lossy）</strong>；而能还原的才叫<strong>无损连接分解（lossless-join）</strong>。整章的目标就是：判断 R 是否"好"，不好就分解成一组既好又无损、最好还能保持依赖的关系。</p>
+    <div class="goal-grid">
+      <div class="goal-card"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="#e8743b" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg><div><b>识别坏设计</b><br><small>冗余、更新/插入/删除异常</small></div></div>
+      <div class="goal-card"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="#e8743b" stroke-width="2"><path d="M12 2 2 7l10 5 10-5z"/></svg><div><b>掌握范式</b><br><small>1NF、BCNF、3NF、4NF 的判定</small></div></div>
+      <div class="goal-card"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="#e8743b" stroke-width="2"><path d="M9 11l3 3L22 4"/></svg><div><b>会做分解</b><br><small>无损、依赖保持的分解算法</small></div></div>
+      <div class="goal-card"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="#e8743b" stroke-width="2"><path d="M3 12h18"/></svg><div><b>理解依赖理论</b><br><small>函数依赖、多值依赖、公理</small></div></div>
+    </div>
+  </section>
+
+  <section id="s1">
+    <div class="sec-head"><div class="sec-num">1</div><h2>原子域与第一范式</h2></div>
+    <p>如果一个域的元素被认为是不可再分的单元，它就是<strong>原子域（atomic domain）</strong>。非原子域的例子有：名字的集合、复合属性，以及像 CS101 这种可以拆成系别代码和编号的身份证号。</p>
+    <p>如果关系模式 R 的所有属性域都是原子的，R 就属于<strong>第一范式（1NF）</strong>。非原子值会让存储变复杂，还会助长重复存储，比如给每个客户存一个账户集合、给每个账户存一个所有者集合。课件默认所有关系都在第一范式。</p>
+    <div class="callout knowledge"><svg class="ico" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#173b5e" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 8v5l3 2"/></svg><div><div class="ct">原子性其实取决于"怎么用"</div><p>字符串通常被认为不可再分，但如果学号是 CS0012 这种形式、你还要截取前两个字符来判断系别，那这个域就不再原子。课件说这是个坏主意：它把信息编码进了应用程序，而不是放进数据库本身。</p></div></div>
+  </section>
+
+  <section id="s2">
+    <div class="sec-head"><div class="sec-num">2</div><h2>函数依赖</h2></div>
+    <p><strong>函数依赖（functional dependency，FD）</strong>是对合法关系集合的一种约束，它要求一组属性的值能唯一确定另一组属性的值。它是"键"这个概念的推广。</p>
+    <div class="formula">α → β 成立 ⇔ 任意两个元组 t₁、t₂，若 t₁[α] = t₂[α]，则 t₁[β] = t₂[β]</div>
+    <p>也就是说，只要两行在 α 上取相同值，它们在 β 上也必须相同。课件给的 r(A,B) 例子里，A→B 不成立（因为 A=1 对应了 B=4 和 B=5 两个值），但 B→A 成立。</p>
+    <h3>用函数依赖重新理解键</h3>
+    <div class="formula">K 是超键 ⇔ K → R；K 是候选键 ⇔ K → R，且对任何真子集 α ⊂ K，α ↛ R</div>
+    <p>函数依赖能表达超键表达不了的约束。在 inst_dept 上，我们期待 dept_name→building、ID→building 成立，但不期待 dept_name→salary 成立——因为一个部门里有多种工资。</p>
+    <h3>满足、成立与平凡依赖</h3>
+    <p>一个具体关系 r 在依赖集 F 下合法，就说 r <strong>满足</strong> F；如果 R 上所有合法关系都满足 F，就说 F 在 R 上<strong>成立</strong>。注意某个具体实例可能碰巧满足一个依赖，即使它并非对所有实例成立，比如某个 instructor 实例碰巧满足 name→ID。</p>
+    <p>如果一个依赖被所有关系实例满足，它就是<strong>平凡依赖（trivial）</strong>，比如 ID,name→ID、name→name。一般地，α→β 平凡当且仅当 β ⊆ α，右边完全是左边的子集。</p>
+  </section>
+
+  <section id="s3">
+    <div class="sec-head"><div class="sec-num">3</div><h2>依赖闭包与 Armstrong 公理</h2></div>
+    <p>给定依赖集 F，有些依赖是 F 逻辑蕴含的，比如 A→B 且 B→C，就能推出 A→C。所有被 F 逻辑蕴含的依赖构成 F 的<strong>闭包 F⁺</strong>，它是 F 的超集。</p>
+    <h3>Armstrong 三公理</h3>
+    <div class="card-grid">
+      <div class="mini-card"><h4>自反律 reflexivity</h4><p>若 β ⊆ α，则 α → β。</p></div>
+      <div class="mini-card"><h4>增广律 augmentation</h4><p>若 α → β，则 γα → γβ。</p></div>
+      <div class="mini-card"><h4>传递律 transitivity</h4><p>若 α → β 且 β → γ，则 α → γ。</p></div>
+    </div>
+    <p>这三条公理既是<strong>可靠的</strong>（只推出真正成立的依赖），又是<strong>完备的</strong>（能推出所有成立的依赖）。</p>
+    <h3>附加规则与属性闭包</h3>
+    <p>由三公理还能推出：<strong>合并律</strong>（α→β、α→γ 则 α→βγ）、<strong>分解律</strong>（α→βγ 则 α→β、α→γ）、<strong>伪传递律</strong>（α→β、γβ→δ 则 αγ→δ）。</p>
+    <p>逐条枚举 F⁺ 很麻烦，更实用的是<strong>属性闭包 α⁺</strong>：即被 α 函数确定的所有属性的集合。算法从 result:=α 开始，反复扫描每个 β→γ，只要 β ⊆ result 就把 γ 并进来，直到不再变化。课件的 (AG)⁺ 例子依次扩展为 AG → ABCG → ABCGH → ABCGHI，最终包含全部属性，从而判断 AG 是候选键。</p>
+    <p>属性闭包有三大用途：判断超键（α⁺ 是否含全部属性）、检验函数依赖（α→β 是否成立只看 β ⊆ α⁺）、以及计算 F 的闭包。</p>
+  </section>
+
+  <section id="s4">
+    <div class="sec-head"><div class="sec-num">4</div><h2>BCNF（Boyce-Codd 范式）</h2></div>
+    <p>对 F⁺ 中每个形如 α→β 的依赖，R 属于 BCNF 当且仅当至少满足下列之一：</p>
+    <div class="struct">
+      <div class="cell c1">α→β 是平凡的<small>β ⊆ α</small></div>
+      <div class="cell c2">α 是 R 的超键<small>α⁺ 含全部属性</small></div>
+    </div>
+    <p>instr_dept 不在 BCNF，因为 dept_name→building,budget 成立，但 dept_name 不是超键。这意味着同一个部门的楼和预算可能在多行上重复。</p>
+    <h3>怎样分解成 BCNF</h3>
+    <p>当一个非平凡依赖 α→β 违反 BCNF，把 R 分解成两个模式：</p>
+    <div class="formula">(α ∪ β) 和 (R − (β − α))</div>
+    <p>例子中 α=dept_name、β=building,budget，inst_dept 被替换成 (dept_name, building, budget) 和 (ID, name, salary, dept_name)，两个都满足 BCNF。</p>
+  </section>
+
+  <section id="s5">
+    <div class="sec-head"><div class="sec-num">5</div><h2>第三范式（3NF）</h2></div>
+    <p>对 F⁺ 中每个 α→β，R 属于 3NF 当且仅当至少满足下列之一：</p>
+    <ul>
+      <li>α→β 是平凡的（β ⊆ α）；</li>
+      <li>α 是 R 的超键；</li>
+      <li>β−α 中的每个属性 A 都包含在 R 的某个候选键中（不同属性可以在不同候选键里）。</li>
+    </ul>
+    <p>BCNF 一定属于 3NF，因为前两个条件在 BCNF 里必满足其一。第三个条件是对 BCNF 的最小放松，目的是保证依赖保持。</p>
+    <h3>为什么需要 3NF</h3>
+    <p>有些情况下 BCNF 分解无法保持依赖，而更新时高效检查依赖又很重要。3NF 允许一定冗余，却能在单个关系上、不做连接就检查函数依赖，而且总能找到既无损又保持依赖的 3NF 分解。dept_advisor 例子中 i_ID→dept_name 虽不满足前两条，但 dept_name 包含在候选键里，所以它属于 3NF。代价是存在信息重复、有时还得用 null 表示关系。</p>
+  </section>
+
+  <section id="s6">
+    <div class="sec-head"><div class="sec-num">6</div><h2>无损连接分解</h2></div>
+    <p>把 R 分解成 R₁、R₂，要求对所有可能的关系 r，都有 r = ΠR₁(r) ⋈ ΠR₂(r)。判定条件是：F⁺ 中至少存在下列依赖之一：</p>
+    <div class="formula">R₁ ∩ R₂ → R₁ 或 R₁ ∩ R₂ → R₂</div>
+    <p>即两个模式的公共属性能函数确定其中一方。课件的例子：R=(A,B,C)、F={A→B, B→C}，拆成 (A,B) 和 (B,C) 时公共属性是 B，B→BC 成立，所以无损且保持依赖；拆成 (A,B) 和 (A,C) 时公共属性是 A，A→AB 成立故无损，但无法保持 B→C。</p>
+  </section>
+
+  <section id="s7">
+    <div class="sec-head"><div class="sec-num">7</div><h2>依赖保持</h2></div>
+    <p>设 Fᵢ 是 F⁺ 中只含 Rᵢ 里属性的依赖。一个分解是<strong>依赖保持</strong>的，当且仅当：</p>
+    <div class="formula">(F₁ ∪ F₂ ∪ … ∪ Fₙ)⁺ = F⁺</div>
+    <p>如果不保持，更新时检查函数依赖是否被违反，可能需要先做连接，代价很高。课件给了一个多项式时间的测试：从 result=α 出发，反复对每个 Rᵢ 计算 (result ∩ Rᵢ)⁺ ∩ Rᵢ 并并入 result，若最终含 β 全部属性，则 α→β 被保持。这比直接算 F⁺ 的指数时间要快。</p>
+  </section>
+
+  <section id="s8">
+    <div class="sec-head"><div class="sec-num">8</div><h2>分解算法与规范覆盖</h2></div>
+    <h3>无关属性与规范覆盖</h3>
+    <p>依赖集里可能有冗余：比如 {A→B, B→C, A→C} 中 A→C 是冗余的；依赖的某一侧也可能有冗余属性。<strong>规范覆盖（canonical cover）F_c</strong> 就是与 F 等价、不含任何冗余依赖或冗余部分的"最小"依赖集，每个依赖的左部唯一。</p>
+    <p>判断一个属性是否<strong>无关（extraneous）</strong>：对左部 α 中的 A，若 (α−A)⁺ 已含 β，则 A 无关；对右部 β 中的 A，去掉 A 后若仍能推出 A，则 A 无关。计算规范覆盖时反复用合并律合并同左部的依赖，再删无关属性，直到不再变化。课件例子最终化简为 A→B、B→C。</p>
+    <h3>BCNF 与 3NF 分解算法</h3>
+    <p><strong>BCNF 算法</strong>：从 {R} 出发，只要某个 Rᵢ 不在 BCNF，就找一个非平凡依赖 α→β，把 Rᵢ 替换成 (Rᵢ−β) 和 (α,β)，最终每个模式都在 BCNF 且整体无损。</p>
+    <p><strong>3NF 算法</strong>：先求规范覆盖 F_c，对其中每个 α→β 建一个模式 αβ；若没有任何模式含 R 的候选键，再单独加一个候选键模式；最后删除被其他模式包含的冗余关系。它保证每个模式都在 3NF，且分解既无损又保持依赖。</p>
+    <div class="callout warning"><svg class="ico" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#d9534f" stroke-width="2"><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/><path d="M12 9v4"/></svg><div><div class="ct">分解中判断 BCNF 不能只看原始 F</div><p>对分解后的 Rᵢ，只检查 F 里的依赖可能误判，因为 F⁺ 里可能有只含 Rᵢ 属性的新依赖（如 AC→D）。要用 F 在 Rᵢ 上的限制来判断。</p></div></div>
+  </section>
+
+  <section id="s9">
+    <div class="sec-head"><div class="sec-num">9</div><h2>多值依赖</h2></div>
+    <p>回到 inst_info(ID, child_name, phone_number)：一位教师有多个孩子、多部电话。它在 BCNF 里（没有非平凡函数依赖），但加一部电话就得为每个孩子各插一行，产生插入异常。问题根源是孩子集合和电话集合彼此独立，却被塞进了同一行。</p>
+    <p><strong>多值依赖（multivalued dependency，MVD）</strong> α→→β 表示：若 t₁、t₂ 在 α 上相同，则必存在 t₃、t₄，使它们在 α 上相同，而 β 上的值和其余属性上的值被"交换组合"。直观说：给定 α，它对应一个 β 的值集合和一个其余属性的值集合，这两个集合相互独立。</p>
+    <div class="formula">若 ⟨y,z₁,w₁⟩、⟨y,z₂,w₂⟩ 都在 r 中，则 ⟨y,z₁,w₂⟩、⟨y,z₂,w₁⟩ 也必须在 r 中</div>
+    <p>因为 Z 和 W 地位相同，Y→→Z 等价于 Y→→W。例子中 ID→→child_name、ID→→phone_number。重要关系：每个函数依赖也是多值依赖（α→β 蕴含 α→→β）。若关系不满足某 MVD，可以通过补元组构造出满足它的关系 r′。</p>
+  </section>
+
+  <section id="s10">
+    <div class="sec-head"><div class="sec-num">10</div><h2>第四范式（4NF）</h2></div>
+    <p>对 D⁺ 中每个 α→→β，R 属于 4NF 当且仅当至少满足下列之一：</p>
+    <div class="struct">
+      <div class="cell c1">α→→β 平凡<small>β ⊆ α 或 α∪β = R</small></div>
+      <div class="cell c2">α 是 R 的超键</div>
+    </div>
+    <p>属于 4NF 的关系一定属于 BCNF。4NF 分解算法与 BCNF 类似：遇到非平凡且左部不是超键的 α→→β，就把 Rᵢ 替换成 (Rᵢ−β) 和 (α,β)，保证每个模式都在 4NF 且分解无损。这样 inst_info 被拆成 inst_child(ID, child_name) 和 inst_phone(ID, phone)，彻底消除了"独立属性交叉相乘"造成的冗余。</p>
+  </section>
+
+  <section id="s11">
+    <div class="sec-head"><div class="sec-num">11</div><h2>更高范式</h2></div>
+    <p><strong>连接依赖（join dependency）</strong>是多值依赖的推广，它引出投影-连接范式（PJNF，也称第五范式 5NF）。还有一类更一般的约束引出域-键范式（DKNF）。</p>
+    <p>这些广义约束的问题是：很难推理，也不存在一套可靠且完备的推理规则，因此实际中很少使用。课程要求理解它们在范式层级中的位置即可。</p>
+  </section>
+
+  <section id="s12">
+    <div class="sec-head"><div class="sec-num">12</div><h2>设计流程、反规范化与时态数据</h2></div>
+    <h3>整体设计流程</h3>
+    <p>待规范化的模式 R 可能来自：ER 图转换出的表、包含全部感兴趣属性的单一"通用关系"（universal relation），或某个临时设计的关系。规范化再把 R 拆成更小的关系。</p>
+    <p>ER 与规范化的关系：如果 ER 图设计得足够仔细、正确识别了所有实体，转换出的表通常不需要再规范化；但不完美的设计里，实体内部可能存在非键属性到其他属性的函数依赖（如员工实体里 department_name→building），好设计本应把部门单独做成实体。</p>
+    <h3>为性能反规范化</h3>
+    <p>有时为了查询性能会故意用非规范化结构，比如显示课程和先修课要做连接，反规范化能加快查询，代价是多占空间、更新更慢、程序员要写额外代码且容易出错；用物化视图可达到类似效果，还能避免额外编码。</p>
+    <p>有些坏设计规范化管不到：按年份拆成 earnings_2004、2005、2006 各表，或把年份做成列名的交叉表，它们虽在 BCNF，却让跨年查询困难、每年都要改结构。</p>
+    <h3>时态数据</h3>
+    <p>时态数据带有一个数据有效的时间区间，某一时刻的数据值叫快照。加入时间维度后，ID→street 这类依赖不再成立，因为地址随时间变化；<strong>时态函数依赖</strong>要求该依赖在所有快照上都成立。实践中设计师给关系加起始、结束时间属性，并约束两行有效时间不重叠（很难高效执行）；外键也可能引用当前版本或历史某时刻的数据，比如成绩单应引用选课时的课程信息。</p>
+  </section>
+
+  <section id="sum">
+    <div class="sec-head"><div class="sec-num">13</div><h2>本章小结与自测</h2></div>
+    <div class="summary-box">
+      <h3 style="margin-top:0">范式层级与分解三要求</h3>
+      <p><strong>范式从低到高</strong>：1NF（原子域）→ BCNF（每个非平凡依赖左部是超键）→ 3NF（增加"属性在候选键中"的放松）→ 4NF（针对多值依赖）→ PJNF/5NF、DKNF。</p>
+      <p><strong>分解的三个目标</strong>：每个模式都在好的范式、分解无损连接、最好保持依赖。BCNF 分解不一定保持依赖，3NF 总能同时满足无损和保持；多值依赖刻画两个独立属性集合，4NF 消除其交叉冗余。</p>
+    </div>
+    <div class="oneline"><b>一句话记忆：</b>规范化用依赖当尺子，把"大而重复"的表拆成"小而不丢信息"的表。</div>
+
+    <div class="quiz" id="q1">
+      <div class="q">1. 关系模式 R 属于 BCNF 的条件是，对每个非平凡函数依赖 α→β：</div>
+      <button class="opt" data-k="a">A. β 必须是单个属性</button>
+      <button class="opt" data-k="b">B. α 必须是 R 的超键</button>
+      <button class="opt" data-k="c">C. β 必须包含在某个候选键中</button>
+      <button class="opt" data-k="d">D. α 和 β 必须互不相交</button>
+      <div class="fb"></div>
+    </div>
+
+    <div class="quiz" id="q2">
+      <div class="q">2. 把 R 分解成 R₁、R₂，无损连接的判定条件是？</div>
+      <button class="opt" data-k="a">A. R₁ 和 R₂ 的属性个数相同</button>
+      <button class="opt" data-k="b">B. 公共属性 R₁∩R₂ 能函数确定 R₁ 或 R₂</button>
+      <button class="opt" data-k="c">C. 两个模式都包含 R 的主键</button>
+      <button class="opt" data-k="d">D. 只要 R₁、R₂ 都在 BCNF 就一定无损</button>
+      <div class="fb"></div>
+    </div>
+
+    <div class="quiz" id="q3">
+      <div class="q">3. 关于多值依赖和第四范式，下列说法正确的是？</div>
+      <button class="opt" data-k="a">A. 一个在 BCNF 的关系必然在 4NF</button>
+      <button class="opt" data-k="b">B. 多值依赖描述两个相互独立的属性集合，每个函数依赖也是多值依赖</button>
+      <button class="opt" data-k="c">C. 4NF 允许左部不是超键的非平凡多值依赖</button>
+      <button class="opt" data-k="d">D. 多值依赖无法通过分解来消除冗余</button>
+      <div class="fb"></div>
+    </div>
+  </section>
+
+  </div>
+</div>
+
+<button class="totop" id="totop" aria-label="回到顶部">
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4"><path d="M18 15l-6-6-6 6"/></svg>
+</button>
+<footer><div class="wrap">数据库系统学习资料（豆包版）· 第 05 单元 · 依据课程课件第 8 章整理，所有概念、规则与示例均来自课件原文</div></footer>
+
+<script>
+var sidebar=document.getElementById('sidebar'),overlay=document.getElementById('overlay');
+function closeSidebar(){sidebar.classList.remove('open');overlay.classList.remove('show')}
+document.getElementById('hamburger').onclick=function(){sidebar.classList.add('open');overlay.classList.add('show')};
+overlay.onclick=closeSidebar;
+document.querySelectorAll('#nav a').forEach(function(a){a.addEventListener('click',closeSidebar)});
+var links=document.querySelectorAll('#nav a'),secs=document.querySelectorAll('section');
+var obs=new IntersectionObserver(function(entries){
+  entries.forEach(function(e){if(e.isIntersecting){
+    links.forEach(function(l){l.classList.toggle('active',l.getAttribute('href')==='#'+e.target.id)})
+  }})
+},{rootMargin:'-20% 0px -70% 0px'});
+secs.forEach(function(s){obs.observe(s)});
+var totop=document.getElementById('totop');
+window.addEventListener('scroll',function(){totop.classList.toggle('show',window.scrollY>500)});
+totop.onclick=function(){window.scrollTo({top:0,behavior:'smooth'})};
+function makeQuiz(id,answer,explain){
+  var box=document.getElementById(id);
+  box.querySelectorAll('.opt').forEach(function(btn){
+    btn.onclick=function(){
+      if(box.dataset.done)return;
+      box.dataset.done='1';
+      var pick=btn.dataset.k;
+      box.querySelectorAll('.opt').forEach(function(b){
+        if(b.dataset.k===answer)b.classList.add('right');
+      });
+      if(pick!==answer)btn.classList.add('wrong');
+      var fb=box.querySelector('.fb');fb.classList.add('show');
+      fb.innerHTML=(pick===answer?'<span style="color:#2e7d5b;font-weight:700">回答正确。</span> ':'<span style="color:#d9534f;font-weight:700">回答有误。</span> ')+explain;
+    }
+  });
+}
+makeQuiz('q1','b','BCNF 要求每个非平凡依赖的左部 α 是超键；β 含在候选键中是 3NF 的放松条件。');
+makeQuiz('q2','b','无损连接要求公共属性 R₁∩R₂ 能函数确定 R₁ 或 R₂；都在 BCNF 并不自动保证无损。');
+makeQuiz('q3','b','MVD 刻画两个独立属性集合，FD 是 MVD 的特例；4NF 要求非平凡 MVD 左部是超键，4NF 蕴含 BCNF。');
+</script>
+</body>
+</html>

@@ -280,6 +280,7 @@
       - [05 关系数据库规范化](https://goya4140.github.io/JLU_CS_Course/3_1%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F/05_%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E8%A7%84%E8%8C%83%E5%8C%96.html ':ignore')
       - [06 事务](https://goya4140.github.io/JLU_CS_Course/3_1%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F/06_%E4%BA%8B%E5%8A%A1.html ':ignore')
       - [07 并发控制](https://goya4140.github.io/JLU_CS_Course/3_1%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F/07_%E5%B9%B6%E5%8F%91%E6%8E%A7%E5%88%B6.html ':ignore')
+    - [豆包版学习资料](https://goya4140.github.io/JLU_CS_Course/3_1%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F/doubao/index.html ':ignore')
   - **计算机网络**
     - [图文交互阅读版](https://goya4140.github.io/JLU_CS_Course/3_1%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/index.html ':ignore')
     - [豆包版学习资料](https://goya4140.github.io/JLU_CS_Course/3_1%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/doubao/index.html ':ignore')

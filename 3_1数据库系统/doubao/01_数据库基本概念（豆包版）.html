@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>01 数据库基本概念（豆包版）</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cellipse cx='16' cy='7' rx='12' ry='5' fill='%23173b5e'/%3E%3Cpath d='M4 7v9c0 2.8 5.4 5 12 5s12-2.2 12-5V7' fill='none' stroke='%23173b5e' stroke-width='2.5'/%3E%3Cpath d='M4 16v9c0 2.8 5.4 5 12 5s12-2.2 12-5v-9' fill='none' stroke='%23e8743b' stroke-width='2.5'/%3E%3C/svg%3E">
+<style>
+:root{
+  --ink:#173b5e; --ink2:#24527e; --org:#e8743b; --org-deep:#c95a24;
+  --blue-bg:#eef4f9; --org-bg:#fdf1e8; --line:#d8e2ec;
+  --text:#233242; --gray:#5f7185; --warn-bg:#fdeceb; --warn-line:#d9534f;
+  --ok:#2e7d5b; --shadow:0 6px 22px rgba(23,59,94,.10);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;color:var(--text);background:#fff;line-height:1.85;font-size:16px}
+h1,h2,h3,h4{font-family:Georgia,"Songti SC","SimSun",serif;color:var(--ink);line-height:1.4}
+a{color:var(--ink2);text-decoration:none}
+::selection{background:var(--org);color:#fff}
+
+/* ===== 侧边栏 ===== */
+.sidebar{position:fixed;left:0;top:0;bottom:0;width:262px;background:var(--ink);color:#cfe0f0;padding:26px 0;overflow-y:auto;z-index:60;transition:transform .3s}
+.sidebar .brand{padding:0 24px 20px;border-bottom:1px solid rgba(255,255,255,.14);margin-bottom:14px}
+.sidebar .brand .db{display:flex;align-items:center;gap:10px;font-family:Georgia,serif;font-size:19px;color:#fff;letter-spacing:.5px}
+.sidebar .brand small{display:block;margin-top:6px;font-size:12px;color:#9fb8d0;letter-spacing:1px}
+.sidebar nav a{display:flex;align-items:center;gap:10px;padding:10px 24px;color:#c4d6e8;font-size:14.5px;border-left:3px solid transparent;transition:all .2s}
+.sidebar nav a:hover{background:rgba(255,255,255,.08);color:#fff}
+.sidebar nav a.active{background:rgba(232,116,59,.18);border-left-color:var(--org);color:#fff}
+.sidebar nav a svg{flex:none;opacity:.85}
+.sidebar .unit-no{font-size:11px;color:#86a3bf;letter-spacing:1px;padding:16px 24px 4px}
+
+/* ===== 主区域 ===== */
+.main{margin-left:262px;min-height:100vh}
+.wrap{max-width:880px;margin:0 auto;padding:0 34px}
+.topbar{display:none;position:sticky;top:0;background:var(--ink);color:#fff;z-index:55;padding:12px 18px;align-items:center;gap:12px}
+.topbar button{background:none;border:none;cursor:pointer;padding:4px}
+.topbar span{font-family:Georgia,serif;font-size:16px}
+.overlay{display:none;position:fixed;inset:0;background:rgba(10,25,40,.45);z-index:55}
+
+.hero{background:linear-gradient(135deg,#173b5e 0%,#24527e 62%,#2f6494 100%);color:#fff;padding:64px 0 58px;margin-bottom:40px;position:relative;overflow:hidden}
+.hero::after{content:"";position:absolute;right:-60px;top:-60px;width:260px;height:260px;border:26px solid rgba(232,116,59,.25);border-radius:50%}
+.hero .kicker{font-size:13px;letter-spacing:3px;color:var(--org);font-weight:600;margin-bottom:14px}
+.hero h1{color:#fff;font-size:36px;margin-bottom:16px}
+.hero p{max-width:640px;color:#d6e4f2;font-size:16.5px}
+.hero .meta{margin-top:26px;display:flex;flex-wrap:wrap;gap:10px}
+.hero .meta span{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.22);padding:6px 14px;border-radius:20px;font-size:13px}
+
+/* ===== 章节 ===== */
+section{padding:18px 0 30px;scroll-margin-top:20px}
+.sec-head{display:flex;align-items:center;gap:14px;margin-bottom:18px}
+.sec-num{flex:none;width:46px;height:46px;border-radius:12px;background:var(--org);color:#fff;display:flex;align-items:center;justify-content:center;font-family:Georgia,serif;font-size:20px;box-shadow:var(--shadow)}
+.sec-head h2{font-size:26px}
+h3{font-size:20px;margin:26px 0 10px;padding-left:12px;border-left:4px solid var(--org)}
+h4{font-size:16.5px;margin:18px 0 8px;color:var(--ink2)}
+p{margin:10px 0}
+.lead{font-size:17px;color:var(--ink)}
+ul,ol{margin:10px 0 10px 26px}
+li{margin:6px 0}
+strong{color:var(--ink)}
+.em{color:var(--org-deep);font-weight:700}
+
+/* 目标卡片 */
+.goal-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin:18px 0}
+.goal-card{background:var(--blue-bg);border:1px solid var(--line);border-radius:12px;padding:16px 18px;display:flex;gap:12px}
+.goal-card svg{flex:none;margin-top:3px}
+.goal-card b{color:var(--ink)}
+
+/* 表格 */
+.tbl-scroll{overflow-x:auto;margin:16px 0;border-radius:10px;border:1px solid var(--line)}
+table{width:100%;border-collapse:collapse;font-size:14.5px;min-width:480px}
+thead th{background:var(--ink);color:#fff;padding:12px 14px;text-align:left;font-weight:600;letter-spacing:.5px}
+tbody td{padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+tbody tr:nth-child(even){background:#f6f9fc}
+tbody tr:hover{background:var(--org-bg)}
+table .mono{font-family:Consolas,monospace;font-size:13.5px}
+
+/* 提示框 */
+.callout{border-radius:12px;padding:16px 20px;margin:16px 0;display:flex;gap:14px;border:1px solid}
+.callout .ico{flex:none;margin-top:2px}
+.callout .ct{font-weight:700;margin-bottom:4px;font-family:Georgia,serif;letter-spacing:.5px}
+.callout p{margin:4px 0}
+.analogy{background:var(--org-bg);border-color:#f0c9ac}
+.analogy .ct{color:var(--org-deep)}
+.knowledge{background:var(--blue-bg);border-color:var(--line)}
+.knowledge .ct{color:var(--ink)}
+.warning{background:var(--warn-bg);border-color:#eeb4b2}
+.warning .ct{color:var(--warn-line)}
+
+/* 结构块 */
+.struct{display:flex;gap:0;margin:16px 0;border-radius:10px;overflow:hidden;flex-wrap:wrap}
+.struct .cell{flex:1;min-width:130px;padding:14px 12px;text-align:center;color:#fff;font-size:14px}
+.struct .cell small{display:block;font-size:11.5px;opacity:.82;margin-top:4px}
+.struct .c1{background:#173b5e}.struct .c2{background:#24527e}.struct .c3{background:#2f6494}
+
+/* 代码块 */
+.code{background:#12283d;color:#dce9f5;border-radius:10px;padding:16px 18px;font-family:Consolas,"Courier New",monospace;font-size:13.5px;line-height:1.7;overflow-x:auto;margin:14px 0}
+.code .kw{color:#f0a06e}.code .st{color:#9ec98a}.code .cm{color:#7b94ab;font-style:italic}
+.inline-code{font-family:Consolas,monospace;background:var(--blue-bg);border:1px solid var(--line);border-radius:5px;padding:1px 7px;font-size:13.5px;color:var(--ink2)}
+
+/* 分步交互 */
+.stepbox{border:1px solid var(--line);border-radius:14px;overflow:hidden;margin:18px 0;box-shadow:var(--shadow)}
+.stepbox .sb-body{padding:22px 24px;min-height:150px;background:#fff}
+.stepbox .sb-body h4{margin-top:0;color:var(--org-deep);font-size:17px}
+.stepbox .sb-dots{display:flex;gap:8px;padding:14px 24px;background:var(--blue-bg);align-items:center;flex-wrap:wrap}
+.dot{width:30px;height:30px;border-radius:50%;border:2px solid var(--ink);background:#fff;color:var(--ink);font-weight:700;font-size:13px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.dot.on{background:var(--org);border-color:var(--org);color:#fff}
+.sb-btns{margin-left:auto;display:flex;gap:8px}
+.sb-btns button{border:1px solid var(--ink);background:#fff;color:var(--ink);padding:7px 18px;border-radius:8px;cursor:pointer;font-size:14px;transition:.2s}
+.sb-btns button:hover:not(:disabled){background:var(--ink);color:#fff}
+.sb-btns button:disabled{opacity:.4;cursor:not-allowed}
+.sb-progress{font-size:12.5px;color:var(--gray);margin-left:6px}
+
+/* 折叠 */
+details.fold{border:1px solid var(--line);border-radius:10px;margin:10px 0;background:#fff;overflow:hidden}
+details.fold summary{cursor:pointer;padding:13px 18px;font-weight:700;color:var(--ink);background:var(--blue-bg);list-style:none;display:flex;align-items:center;gap:10px}
+details.fold summary::-webkit-details-marker{display:none}
+details.fold summary .arrow{margin-left:auto;transition:transform .25s}
+details.fold[open] summary .arrow{transform:rotate(180deg)}
+details.fold .fold-body{padding:16px 20px}
+
+/* 小卡片网格 */
+.card-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin:16px 0}
+.mini-card{border:1px solid var(--line);border-radius:12px;padding:16px;background:#fff;box-shadow:0 2px 8px rgba(23,59,94,.06)}
+.mini-card h4{display:flex;align-items:center;gap:8px;margin:0 0 8px}
+.mini-card p{font-size:14px;margin:4px 0;color:var(--gray)}
+
+/* 测验 */
+.quiz{background:var(--blue-bg);border:1px solid var(--line);border-radius:14px;padding:22px 24px;margin:18px 0}
+.quiz .q{font-weight:700;color:var(--ink);margin-bottom:12px}
+.quiz .opt{display:block;width:100%;text-align:left;border:1px solid var(--line);background:#fff;border-radius:9px;padding:11px 16px;margin:8px 0;cursor:pointer;font-size:14.5px;transition:.15s}
+.quiz .opt:hover{border-color:var(--org)}
+.quiz .opt.right{background:#e6f4ec;border-color:var(--ok);color:var(--ok);font-weight:700}
+.quiz .opt.wrong{background:var(--warn-bg);border-color:var(--warn-line);color:var(--warn-line)}
+.quiz .fb{margin-top:10px;font-size:14px;display:none}
+.quiz .fb.show{display:block}
+.quiz .fb b{color:var(--ink)}
+
+/* 小结 */
+.summary{background:linear-gradient(135deg,var(--blue-bg),#fff);border:1px solid var(--line);border-radius:16px;padding:26px 28px;margin:24px 0}
+.oneline{background:var(--ink);color:#fff;border-radius:10px;padding:14px 20px;margin:14px 0;font-size:15.5px}
+.oneline b{color:var(--org)}
+
+.totop{position:fixed;right:26px;bottom:26px;width:46px;height:46px;border-radius:50%;background:var(--org);border:none;cursor:pointer;box-shadow:var(--shadow);display:none;align-items:center;justify-content:center;z-index:40}
+.totop.show{display:flex}
+footer{border-top:1px solid var(--line);padding:26px 0 40px;color:var(--gray);font-size:13px}
+
+@media (max-width:900px){
+  .sidebar{transform:translateX(-100%)}
+  .sidebar.open{transform:translateX(0)}
+  .main{margin-left:0}
+  .topbar{display:flex}
+  .overlay.show{display:block}
+  .wrap{padding:0 20px}
+  .hero{padding:44px 0 40px}
+  .hero h1{font-size:27px}
+  .goal-grid,.card-grid{grid-template-columns:1fr}
+  .sb-btns{margin-left:0;width:100%}
+}
+</style>
+</head>
+<body>
+
+<aside class="sidebar" id="sidebar">
+  <div class="brand">
+    <div class="db">
+      <svg width="26" height="26" viewBox="0 0 32 32"><ellipse cx="16" cy="7" rx="12" ry="5" fill="#fff"/><path d="M4 7v9c0 2.8 5.4 5 12 5s12-2.2 12-5V7" fill="none" stroke="#fff" stroke-width="2.5"/><path d="M4 16v9c0 2.8 5.4 5 12 5s12-2.2 12-5v-9" fill="none" stroke="#e8743b" stroke-width="2.5"/></svg>
+      数据库系统
+    </div>
+    <small>DATABASE SYSTEM CONCEPTS</small>
+  </div>
+  <div class="unit-no">第 01 单元 · 目录</div>
+  <nav id="nav">
+    <a href="#intro"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 8v5l3 2"/></svg>开篇导读</a>
+    <a href="#s1"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="6" rx="8" ry="3.5"/><path d="M4 6v12c0 1.9 3.6 3.5 8 3.5s8-1.6 8-3.5V6"/></svg>数据库与 DBMS</a>
+    <a href="#s2"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>文件系统的痛点</a>
+    <a href="#s3"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2 2 7l10 5 10-5z"/><path d="M2 17l10 5 10-5M2 12l10 5 10-5"/></svg>数据抽象三层</a>
+    <a href="#s4"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>数据模型家族</a>
+    <a href="#s5"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7h16M4 12h16M4 17h10"/></svg>DML 与 DDL</a>
+    <a href="#s6"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg>数据库设计</a>
+    <a href="#s7"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.6 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.6a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>系统内部三大件</a>
+    <a href="#s8"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>架构、用户与历史</a>
+    <a href="#sum"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>本章小结与自测</a>
+  </nav>
+</aside>
+<div class="overlay" id="overlay"></div>
+
+<div class="topbar">
+  <button id="hamburger" aria-label="打开目录">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+  </button>
+  <span>01 数据库基本概念</span>
+</div>
+
+<div class="main">
+  <header class="hero">
+    <div class="wrap">
+      <div class="kicker">CHAPTER 01 · INTRODUCTION</div>
+      <h1>数据库基本概念</h1>
+      <p>这一章是整门课的"地图"。我们不急着背术语，而是先弄明白一个问题：数据放在普通文件里也能用，人们为什么还要专门发明数据库管理系统？沿着这个问题，你会依次认识数据抽象、数据模型、查询语言、数据库设计以及系统内部的几大部件。</p>
+      <div class="meta"><span>对应课件：第 1 章</span><span>课件页数：33 页</span><span>建议学习：2 小时</span><span>难度：入门</span></div>
+    </div>
+  </header>
+
+  <div class="wrap">
+
+  <!-- 开篇导读 -->
+  <section id="intro">
+    <div class="sec-head"><div class="sec-num">0</div><h2>开篇导读：这一章学什么</h2></div>
+    <p class="lead">你可以把这一章想象成逛一个大型园区之前先看的导览图。导览图不会教你某栋楼里怎么干活，但它会告诉你每栋楼在哪、楼和楼之间怎么连通，后面所有章节的学习，都需要时不时回到这张图上来定位。</p>
+    <p>课件这一章并没有涉及具体的 SQL 语法或算法，而是在回答四个更根本的问题：<strong>数据库是什么、为什么需要它、它靠什么概念把数据组织起来、一个完整的数据库系统内部由哪些部件构成</strong>。学完之后，你应该能达到下面几个目标：</p>
+    <div class="goal-grid">
+      <div class="goal-card"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#e8743b" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg><div><b>说清 DBMS 的三件套</b><br><small>相互关联的数据、访问数据的程序、方便高效的使用环境</small></div></div>
+      <div class="goal-card"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#e8743b" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg><div><b>列出文件系统的七大痛点</b><br><small>并能各举一个生活里的例子</small></div></div>
+      <div class="goal-card"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#e8743b" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg><div><b>区分三层抽象与模式、实例</b><br><small>理解物理数据独立性意味着什么</small></div></div>
+      <div class="goal-card"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#e8743b" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg><div><b>建立整部教材的部件地图</b><br><small>存储、查询、事务三大部件各自负责什么</small></div></div>
+    </div>
+  </section>
+
+  <!-- 第一节 -->
+  <section id="s1">
+    <div class="sec-head"><div class="sec-num">1</div><h2>数据库与数据库管理系统</h2></div>
+
+    <h3>1.1 先从一个最朴素的说法开始</h3>
+    <p>想象一下学校的档案室：一排排柜子里装着学生的学籍卡、教师的人事卡、课程表和成绩单。柜子本身只是存放东西的地方，真正让档案"好用"的，是那套分类规则、索引卡片和借阅制度。数据库管理系统（<span class="inline-code">DBMS，Database Management System</span>）在计算机世界里扮演的，就是"柜子加整套管理制度"的角色。</p>
+    <p>课件给 DBMS 下的定义包含三个缺一不可的部分，你可以把它记成"数据、程序、环境"三件套：</p>
+    <div class="struct">
+      <div class="cell c1">相互关联的数据<small>关于某个特定企业/组织的信息集合</small></div>
+      <div class="cell c2">访问数据的一组程序<small>负责增删改查与管理</small></div>
+      <div class="cell c3">方便而高效的使用环境<small>让用户不必关心底层细节</small></div>
+    </div>
+    <p>注意这里的"企业（enterprise）"是个广义说法，不一定指公司，任何一个需要管理信息的组织都算，比如一所大学、一家银行、一个电商平台。数据库里存放的，就是关于这个组织的、彼此之间存在联系的数据。</p>
+
+    <h3>1.2 数据库其实就在你身边</h3>
+    <p>课件特意列出了一批数据库应用场景，因为很多人平时感觉不到数据库的存在，其实它几乎渗透了日常生活的每个角落：</p>
+    <div class="tbl-scroll">
+      <table>
+        <thead><tr><th>应用领域</th><th>典型数据库任务</th></tr></thead>
+        <tbody>
+          <tr><td>银行业</td><td>交易处理（转账、取款、余额）</td></tr>
+          <tr><td>航空业</td><td>机票预订、航班时刻表</td></tr>
+          <tr><td>大学</td><td>注册选课、成绩管理</td></tr>
+          <tr><td>销售行业</td><td>客户、商品、采购信息</td></tr>
+          <tr><td>在线零售</td><td>订单跟踪、个性化推荐</td></tr>
+          <tr><td>制造业</td><td>生产、库存、订单、供应链</td></tr>
+          <tr><td>人力资源</td><td>员工档案、工资、个税扣减记录</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout analogy">
+      <svg class="ico" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#c95a24" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22V12h6v10"/></svg>
+      <div><div class="ct">生活类比</div><p>你在手机银行 App 上点一下"转账"，背后是银行的数据库在同时改两个账户；你在购物网站看到的"猜你喜欢"，是数据库根据你过去的订单算出来的；你选课系统里看到的剩余名额，也是数据库实时统计的结果。这些场景有一个共同点：<strong>数据量大、要长期保存、还要被很多人同时使用</strong>，这正是数据库要解决的典型问题。</p></div>
+    </div>
+
+    <h3>1.3 贯穿全书的"大学数据库"例子</h3>
+    <p>为了让概念有个具体的落点，课件用一个大学数据库当贯穿全书的例子。它需要支持的应用程序包括：</p>
+    <ul>
+      <li>添加新的学生、教师和课程；</li>
+      <li>给学生注册课程，并生成班级花名册（class roster）；</li>
+      <li>录入学生成绩、计算平均学分绩点（GPA），并生成成绩单（transcript）。</li>
+    </ul>
+    <p>这个例子看起来简单，但它背后会牵出后面所有章节的内容：怎么把这些信息组织成一张张表（关系模型）、怎么用 SQL 提问、怎么设计才能避免冗余、多人同时选课时怎么保证名额不出错。课件同时提醒了一个历史背景：<strong>早期的数据库应用，是直接搭建在文件系统之上的</strong>——这正好引出下一节的问题。</p>
+  </section>
+
+  <!-- 第二节 -->
+  <section id="s2">
+    <div class="sec-head"><div class="sec-num">2</div><h2>文件系统的七大痛点</h2></div>
+    <p>在数据库出现之前，程序员确实是用操作系统提供的文件来存数据的：需要什么信息就定义一个文件，写专门的程序去读写。这不是不能用，但随着数据规模和使用人数增长，麻烦会一个接一个冒出来。课件把这些麻烦归纳成七个方面，它们也是理解"为什么需要 DBMS"的核心论据。</p>
+
+    <h3>2.1 前四个痛点：数据本身管不好</h3>
+    <div class="card-grid">
+      <div class="mini-card">
+        <h4><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#e8743b" stroke-width="2"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1"/></svg>数据冗余与不一致</h4>
+        <p>同一份信息在不同文件里重复存放，而且文件格式还各不相同。比如学生的地址在学籍文件和宿舍文件里各存一份，搬一次家就得改两处，漏改一处就对不上了。</p>
+      </div>
+      <div class="mini-card">
+        <h4><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#e8743b" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.3-4.3"/></svg>数据访问困难</h4>
+        <p>每来一个新的查询需求，就得新写一个程序。想临时查"所有工资超过一万元的教师"，如果现成程序没这个功能，只能临时开发，非常死板。</p>
+      </div>
+      <div class="mini-card">
+        <h4><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#e8743b" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-1.7 1.7"/><path d="M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7 7l1.7-1.7"/></svg>数据孤立</h4>
+        <p>数据散落在多个文件、多种格式里，彼此之间是"孤岛"。想把学生信息和成绩信息连起来回答问题，得先费劲地处理格式差异。</p>
+      </div>
+      <div class="mini-card">
+        <h4><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#e8743b" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg>完整性问题</h4>
+        <p>像"账户余额必须大于 0"这样的完整性约束，被"埋"在程序代码里，而不是显式地写在数据旁边。想新增或修改一条约束，往往要改动很多程序。</p>
+      </div>
+    </div>
+
+    <h3>2.2 后三个痛点：更新、并发与安全</h3>
+
+    <h4>痛点五：更新的原子性没法保证</h4>
+    <p>"原子性"这个词后面讲事务时还会反复出现，它的意思是：<strong>一组操作要么全部做完，要么就像完全没发生过</strong>，不能停在中间。课件用转账举例：从一个账户扣钱、往另一个账户加钱，这两步本该是一个整体。如果系统在两步之间崩溃，钱就凭空消失了，数据库会停在一个自相矛盾的状态。普通文件系统没有义务帮你守住这条底线。</p>
+
+    <h4>痛点六：多用户并发访问会互相打架</h4>
+    <p>为了性能，数据库必须允许多个用户同时访问，但不加控制的并发会制造不一致。课件给了一个很经典的例子：两个人同时读同一个余额（比如 100），又同时各取 50。两个程序都按"100 减 50"去算，最后余额变成 50，而正确结果应该是 0——系统少扣了 50。</p>
+    <div class="callout warning">
+      <svg class="ico" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#d9534f" stroke-width="2"><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/><path d="M12 9v4M12 17h.01"/></svg>
+      <div><div class="ct">易混点提醒</div><p>"并发"本身不是坏事，恰恰相反，让很多人同时用是提升性能的必要手段。真正出问题的是<strong>不受控制的并发</strong>。所以数据库要做的不是禁止并发，而是设计一套并发控制机制，让大家在并发的同时仍然得到正确结果——这是第 15 章的主题。</p></div>
+    </div>
+
+    <h4>痛点七：安全性难以保证</h4>
+    <p>现实中经常需要让用户"只能看到一部分数据"。比如普通员工可以查同事的办公电话，但不应该看到每个人的工资。在文件系统里想做到这种细粒度的访问控制非常困难，而数据库系统把授权机制做成了标准功能。</p>
+
+    <div class="callout knowledge">
+      <svg class="ico" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#173b5e" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+      <div><div class="ct">知识点说明</div><p>课件在讲完七个痛点后给出一句总结：<strong>数据库系统对上述所有问题都提供了解决方案</strong>。这句话其实是整门课的"目录索引"——冗余问题靠规范化和 ER 设计解决，访问问题靠 SQL 解决，原子性靠事务管理解决，并发问题靠并发控制解决，安全问题靠授权机制解决。学到后面每一章时，你都可以回头看看它对应这里的哪个痛点。</p></div>
+    </div>
+
+    <h3>2.3 交互演示：并发取款为什么会出错</h3>
+    <p>下面这个分步演示把"两人同时取 50"的过程拆开，你可以一步步点，看看错误是在哪一步埋下的。</p>
+    <div class="stepbox" id="step-draw">
+      <div class="sb-body"></div>
+      <div class="sb-dots">
+        <button class="btn-prev">上一步</button>
+        <button class="btn-next">下一步</button>
+        <span class="sb-progress"></span>
+      </div>
+    </div>
+  </section>
+
+  <!-- 第三节 -->
+  <section id="s3">
+    <div class="sec-head"><div class="sec-num">3</div><h2>数据抽象的三个层次</h2></div>
+    <p>数据库要同时伺候两类差别很大的使用者：写底层存储程序的工程师关心字节在磁盘上怎么摆，而做成绩查询的教务人员只想知道"某个学生考了多少分"。如果让所有人都面对全部细节，系统会复杂到没法用。解决办法是<strong>分层抽象</strong>——不同的人只看不同详细程度的视图。</p>
+
+    <h3>3.1 物理层、逻辑层、视图层</h3>
+    <div class="tbl-scroll">
+      <table>
+        <thead><tr><th>层次</th><th>回答的问题</th><th>课件中的说明</th></tr></thead>
+        <tbody>
+          <tr><td><b>物理层</b><br>physical level</td><td>一条记录在磁盘上到底怎么存？</td><td>描述一条记录（例如客户记录）的实际存储方式，是最底层的细节</td></tr>
+          <tr><td><b>逻辑层</b><br>logical level</td><td>数据库里存了哪些数据？它们之间什么关系？</td><td>用记录类型描述数据及数据间的关系，例如教师记录由 ID、姓名、系名、工资四个字段组成</td></tr>
+          <tr><td><b>视图层</b><br>view level</td><td>某个具体用户能看到什么？</td><td>应用程序隐藏数据类型细节；视图还能出于安全目的隐藏信息，比如把员工工资藏起来</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>课件在逻辑层给了一个教师记录类型的伪代码，你可以直观感受一下"逻辑层描述"长什么样：</p>
+    <div class="code"><span class="kw">type</span> instructor = <span class="kw">record</span>
+&nbsp;&nbsp;ID&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span class="kw">string</span>;
+&nbsp;&nbsp;name&nbsp;&nbsp;&nbsp;&nbsp;: <span class="kw">string</span>;
+&nbsp;&nbsp;dept_name: <span class="kw">string</span>;
+&nbsp;&nbsp;salary&nbsp;&nbsp;: <span class="kw">integer</span>;
+<span class="kw">end</span>;</div>
+
+    <div class="callout analogy">
+      <svg class="ico" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#c95a24" stroke-width="2"><path d="M3 3h18v18H3z"/><path d="M3 9h18M9 21V9"/></svg>
+      <div><div class="ct">生活类比</div><p>用手机点外卖时，你看到的是菜品名称、图片和价格（视图层）；餐厅内部的进销存系统记录了每份食材的供应商和库存（逻辑层）；而仓库管理员还要操心每种食材放在哪个货架、用什么容器装（物理层）。同一套数据，三个层次的人各看各的，互不干扰。</p></div>
+    </div>
+
+    <h3>3.2 模式与实例：像"类型"和"变量"一样</h3>
+    <p>课件用编程语言里的"类型"和"变量"来类比这两个概念，有编程基础的话会非常好理解：</p>
+    <ul>
+      <li><strong>模式（schema）</strong>：数据库的<em>逻辑结构</em>，相当于程序里的类型信息。比如"数据库由客户、账户以及它们之间的关系组成"，这句话描述的就是模式。模式又分物理模式（物理层的设计）和逻辑模式（逻辑层的设计）。</li>
+      <li><strong>实例（instance）</strong>：数据库在某个特定时刻的<em>实际内容</em>，相当于变量在某一时刻的取值。今天数据库里有 1000 名学生，明年变成 1200 名，变的是实例，而"学生由哪些字段构成"这个模式通常不变。</li>
+    </ul>
+
+    <h3>3.3 物理数据独立性</h3>
+    <p>这是分层抽象带来的一个重要好处。<strong>物理数据独立性</strong>指的是：修改物理模式（比如换一种磁盘存储方式、调整文件组织）时，<em>不需要改变逻辑模式</em>。因为应用程序依赖的是逻辑模式，底层存储怎么优化，上层应用完全不用重写。</p>
+    <p>课件还顺带总结了一个通用设计思想：各个层次和部件之间的接口应该定义清晰，这样改动某些部分时才不会严重波及其他部分。这和软件工程里"高内聚、低耦合"的思路是一脉相承的。</p>
+    <div class="callout warning">
+      <svg class="ico" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#d9534f" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
+      <div><div class="ct">易混点提醒</div><p>物理独立性说的是"物理层变了，逻辑层不用跟着变"，而不是"逻辑层可以随便改"。逻辑模式的变更（比如新增一个字段）同样可能影响应用程序，只是这类影响在数据库里也有相应机制（如视图）来缓冲，不要把两层的独立性混为一谈。</p></div>
+    </div>
+  </section>
+
+  <!-- 第四节 -->
+  <section id="s4">
+    <div class="sec-head"><div class="sec-num">4</div><h2>数据模型家族</h2></div>
+    <p>盖房子需要图纸语言，组织数据也需要一套"描述语言"。<strong>数据模型</strong>就是这样一组工具，它用来描述四个方面：数据本身、数据之间的关系、数据的语义（含义）、数据上的约束。课件把常见的数据模型分成几大类，它们恰好对应教材的不同章节。</p>
+
+    <h3>4.1 四类主流模型</h3>
+    <div class="tbl-scroll">
+      <table>
+        <thead><tr><th>数据模型</th><th>特点与用途</th><th>教材位置</th></tr></thead>
+        <tbody>
+          <tr><td><b>关系模型</b></td><td>用一张张二维表组织数据，是当今绝对主流的模型</td><td>第 2 章</td></tr>
+          <tr><td><b>实体-联系模型（ER）</b></td><td>主要用于数据库设计阶段，把企业建模成实体和联系的集合</td><td>第 7 章</td></tr>
+          <tr><td><b>基于对象的模型</b></td><td>包括面向对象模型和对象-关系模型，吸收了面向对象的思想</td><td>概念扩展</td></tr>
+          <tr><td><b>半结构化数据模型</b></td><td>典型代表是 XML，数据不要求严格固定的模式</td><td>数据交换</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>另外课件还提到两类更老的模型：<strong>网状模型（network model）和层次模型（hierarchical model）</strong>，它们在关系模型普及之前被广泛使用，现在主要作为历史背景了解即可。</p>
+
+    <h3>4.2 关系模型：一张表就是一个关系</h3>
+    <p>关系模型里的数据以表格形式呈现，<strong>列（columns）描述字段，行（rows）描述一条条具体记录</strong>。比如教师表的每一行是一位教师，每一列分别是 ID、姓名、系名、工资。这种表示方式直观、有坚实的数学基础（关系代数），而且配合 SQL 使用非常方便，所以成为主流。课件还展示了一个完整的示例关系数据库，由多张相互关联的表组成，这会在第 2 章详细展开。</p>
+
+    <h3>4.3 对象-关系模型与 XML</h3>
+    <h4>对象-关系数据模型</h4>
+    <p>经典关系模型要求值是"扁平的、原子的"，一个格子里只能放一个不可再分的值。对象-关系模型在关系模型的基础上加入面向对象的特性，允许元组的属性拥有复杂类型，甚至嵌套关系这种非原子值；同时它保留了关系模型的根基，尤其是声明式的数据访问方式，并与已有的关系语言保持向上兼容。</p>
+    <h4>XML：可扩展标记语言</h4>
+    <p>XML 由万维网联盟（W3C）定义，最初是作为文档标记语言而不是数据库语言设计的。但它允许自定义标签、建立嵌套的标签结构，这让它成为一种非常好的<strong>数据交换方式</strong>，而不只是文档格式。课件指出，XML 已经成为新一代数据交换格式的基础，围绕它有一整套解析、浏览和查询工具。</p>
+    <div class="callout knowledge">
+      <svg class="ico" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#173b5e" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+      <div><div class="ct">知识点说明</div><p>初学者容易把"数据模型"和"数据库"当成一回事。数据模型是<strong>描述数据的一套规则和工具</strong>，相当于语法；数据库是按照某种模型组织起来的具体数据，相当于用语法写成的文章。同一个数据库管理系统可以支持一种或多种模型，理清这层关系，后面学关系模型时就不会发懵。</p></div>
+    </div>
+  </section>
+
+  <!-- 第五节 -->
+  <section id="s5">
+    <div class="sec-head"><div class="sec-num">5</div><h2>DML 与 DDL：数据库的两类语言</h2></div>
+    <p>和数据库打交道离不开语言，而数据库语言按用途分成两大块：一块负责"存取操作数据"，一块负责"定义数据结构"。这两个缩写在整门课里会反复出现，先在这里把它们分清楚。</p>
+
+    <h3>5.1 数据操纵语言 DML</h3>
+    <p><strong>DML（Data Manipulation Language，数据操纵语言）</strong>用来访问和操纵按照某种数据模型组织好的数据，它也叫查询语言（query language）。按"用户要告诉系统多少细节"，DML 分成两类：</p>
+    <div class="tbl-scroll">
+      <table>
+        <thead><tr><th>类别</th><th>用户需要说明什么</th><th>特点</th></tr></thead>
+        <tbody>
+          <tr><td><b>过程化</b><br>procedural</td><td>需要什么数据 <em>以及</em> 怎么拿到这些数据</td><td>用户要规定获取步骤，控制力强但更费心</td></tr>
+          <tr><td><b>声明式（非过程化）</b><br>declarative</td><td>只说需要什么数据，<em>不说</em>怎么拿</td><td>用户只描述目标，具体执行由系统决定，更简单</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>课件明确指出：<strong>SQL 是使用最广泛的查询语言</strong>，它整体上属于声明式语言——你写一句"找出 ID 为 22222 的教师姓名"，不用管系统是怎么翻表、走不走索引的。</p>
+
+    <h3>5.2 数据定义语言 DDL 与数据字典</h3>
+    <p><strong>DDL（Data Definition Language，数据定义语言）</strong>是用来定义数据库模式的一套记法。课件给出的例子是建一张教师表：</p>
+    <div class="code"><span class="kw">create table</span> instructor (
+&nbsp;&nbsp;ID&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">char</span>(5),
+&nbsp;&nbsp;name&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">varchar</span>(20),
+&nbsp;&nbsp;dept_name <span class="kw">varchar</span>(20),
+&nbsp;&nbsp;salary&nbsp;&nbsp;<span class="kw">numeric</span>(8,2))</div>
+    <p>DDL 编译器会生成一组表，存放在<strong>数据字典（data dictionary）</strong>里。数据字典里装的是"关于数据的数据"，也就是<strong>元数据（metadata）</strong>，主要包括：</p>
+    <ul>
+      <li><strong>数据库模式</strong>：定义了有哪些表、每张表有哪些字段；</li>
+      <li><strong>完整性约束</strong>：比如主键约束（ID 能唯一标识一位教师）、参照完整性（例如任何教师元组里的系名，都必须在院系关系中真实出现）；</li>
+      <li><strong>授权信息</strong>：谁有权限访问哪些数据。</li>
+    </ul>
+
+    <h3>5.3 SQL 长什么样，应用程序怎么连数据库</h3>
+    <p>课件给了两个 SQL 例子，让你先有个直观印象。第一个是找出 ID 为 22222 的教师姓名：</p>
+    <div class="code"><span class="kw">select</span> name
+<span class="kw">from</span>&nbsp;&nbsp;instructor
+<span class="kw">where</span>&nbsp;instructor.ID = <span class="st">'22222'</span></div>
+    <p>第二个是找出预算超过 95000 的系里所有教师的 ID 和系名：</p>
+    <div class="code"><span class="kw">select</span> instructor.ID, department.dept_name
+<span class="kw">from</span>&nbsp;&nbsp;instructor, department
+<span class="kw">where</span>&nbsp;instructor.dept_name = department.dept_name
+&nbsp;&nbsp;<span class="kw">and</span> department.budget &gt; 95000</div>
+    <p>应用程序一般通过两条途径访问数据库：一是<strong>嵌入式 SQL</strong>，也就是对编程语言做扩展，把 SQL 写进程序里；二是<strong>应用程序接口</strong>，比如 ODBC/JDBC，程序通过接口把 SQL 查询发给数据库。这些内容对应教材第 3、4、5 章。</p>
+    <div class="callout warning">
+      <svg class="ico" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#d9534f" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
+      <div><div class="ct">易混点提醒</div><p>DML 和 DDL 不是两种互相独立的语言，而是同一种数据库语言（SQL）里的两类功能。SQL 里既有 <span class="inline-code">select/insert/update/delete</span> 这些 DML 语句，也有 <span class="inline-code">create/alter/drop</span> 这些 DDL 语句，考试时让你判断某条语句属于哪类，看它是"操作数据"还是"定义结构"即可。</p></div>
+    </div>
+  </section>
+
+  <!-- 第六节 -->
+  <section id="s6">
+    <div class="sec-head"><div class="sec-num">6</div><h2>数据库设计：决定数据的总体结构</h2></div>
+    <p>数据库设计指的是设计数据库的总体结构，课件把它分成逻辑设计和物理设计两个层面，又把要做的决策分成"业务决策"和"计算机科学决策"。</p>
+
+    <h3>6.1 逻辑设计与物理设计</h3>
+    <ul>
+      <li><strong>逻辑设计（Logical Design）</strong>：决定数据库模式，也就是要找到一组"好的"关系模式。这里面又分两种决策：
+        <ul>
+          <li><em>业务决策</em>：数据库里到底应该记录哪些属性？这取决于组织的业务需求，比如要不要记录学生的家庭住址；</li>
+          <li><em>计算机科学决策</em>：应该有哪些关系模式？这些属性怎么分配到不同的关系模式中？这是技术层面的取舍。</li>
+        </ul>
+      </li>
+      <li><strong>物理设计（Physical Design）</strong>：决定数据库的物理布局，比如数据在磁盘上怎么组织、建哪些索引。</li>
+    </ul>
+
+    <h3>6.2 为什么要纠结"好的模式"</h3>
+    <p>课件抛出了一个问题："这个设计有什么毛病吗？"最容易想到的坏设计，就是把所有字段塞进一张大表。比如把教师 ID、姓名、系名、系预算全放在教师表里：系里有 50 位教师，系预算就重复存 50 份；一旦调整预算，50 个地方都得改，漏改就不一致。这就是前面说的冗余痛点在设计阶段的具体表现。</p>
+
+    <h3>6.3 两条设计路线：规范化理论与 ER 模型</h3>
+    <div class="card-grid">
+      <div class="mini-card">
+        <h4><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#e8743b" stroke-width="2"><path d="M3 3v18h18"/><path d="M7 14l4-4 4 4 5-6"/></svg>规范化理论（第 8 章）</h4>
+        <p>把"什么样的设计是坏的"形式化下来，并给出检测方法。它通过函数依赖和各级范式，让你能判断一个模式是否存在冗余、该怎么分解。</p>
+      </div>
+      <div class="mini-card">
+        <h4><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#e8743b" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><path d="M10 6.5h4M17.5 10v4"/></svg>实体-联系模型（第 7 章）</h4>
+        <p>把企业建模成实体和联系的集合。实体是企业中可区分的"事物"，用一组属性描述；联系是几个实体之间的关联，用 ER 图直观表示。</p>
+      </div>
+    </div>
+    <p>课件在讲 ER 模型时还埋了一个伏笔：在 ER 建模之后，教师和学生表里原本的 <span class="inline-code">dept_name</span> 字段发生了变化——它被"联系"取代了。这正是 ER 模型用来消除冗余的方式，第 7 章会详细讲怎么把 ER 图转换成关系表。</p>
+    <div class="callout knowledge">
+      <svg class="ico" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#173b5e" stroke-width="2"><path d="M12 2 2 7l10 5 10-5z"/><path d="M2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+      <div><div class="ct">知识点说明</div><p>ER 模型和规范化理论不是二选一的竞争关系，更像是设计流程里配合使用的两个工具：先用 ER 模型把现实世界的需求画出来，再把 ER 图转换成关系模式，最后用规范化理论检查这些模式是否足够"好"、需不需要进一步分解。</p></div>
+    </div>
+  </section>
+
+  <!-- 第七节 -->
+  <section id="s7">
+    <div class="sec-head"><div class="sec-num">7</div><h2>数据库系统内部的三大件</h2></div>
+    <p>从外部看，数据库是一个整体；打开这个"黑箱"，里面有三个核心部件分工协作：<strong>存储管理、查询处理、事务管理</strong>。这一节先建立整体印象，后面的章节会逐个深入。</p>
+
+    <h3>7.1 存储管理：管数据怎么落盘</h3>
+    <p><strong>存储管理器（storage manager）</strong>是一个程序模块，它在底层存储的数据，与上层提交的应用程序和查询之间提供接口。它负责两类任务：与文件管理器交互，以及高效地存储、检索和更新数据。涉及的核心问题有三个：存储访问、文件组织、索引与散列。换句话说，数据最终怎么写到磁盘、怎么快速找回来，都是存储管理器的事。</p>
+
+    <h3>7.2 查询处理：把一句提问变成结果</h3>
+    <p>当你写出一条 SQL，系统并不是直接"理解"了它，而是要走三步：</p>
+    <div class="struct">
+      <div class="cell c1">解析与翻译<small>parsing and translation</small></div>
+      <div class="cell c2">优化<small>optimization</small></div>
+      <div class="cell c3">执行<small>evaluation</small></div>
+    </div>
+    <p>同一个查询往往有多种等价的表达方式，每种运算又有不同的算法可选。课件特别强调：<strong>好的执行方式和坏的执行方式，成本差距可能大得惊人</strong>。所以系统需要估算各个运算的成本，而这又高度依赖数据库维护的关系统计信息，还要估算中间结果的统计量，才能算出复杂表达式的总成本。这正是查询优化这一大块内容的由来。</p>
+
+    <h3>7.3 事务管理：管故障和并发</h3>
+    <p>这一部件回答两个吓人的问题：<strong>系统崩了怎么办？多个人同时改同一份数据怎么办？</strong>先明确事务的定义：事务是一组操作的集合，它在数据库应用中完成一个单一的逻辑功能。比如转账这件事，涉及的所有读写合起来就是一个事务。</p>
+    <ul>
+      <li><strong>事务管理部件</strong>保证即使发生系统故障（断电、操作系统崩溃）或事务自身失败，数据库仍能保持一致（正确）的状态；</li>
+      <li><strong>并发控制管理器</strong>控制并发事务之间的相互影响，保证数据库的一致性。</li>
+    </ul>
+    <div class="callout analogy">
+      <svg class="ico" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#c95a24" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.6 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.6a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+      <div><div class="ct">生活类比</div><p>把数据库想象成一家餐厅：存储管理器是后厨的仓库管理员，负责食材分门别类、随用随取；查询处理器是前台接单和出餐的调度，要选最快的做菜路线；事务管理器则像一套应急预案，既保证停电恢复后账目不乱，也保证多个服务员同时点单时不会把同一道菜卖重。</p></div>
+    </div>
+  </section>
+
+  <!-- 第八节 -->
+  <section id="s8">
+    <div class="sec-head"><div class="sec-num">8</div><h2>体系结构、用户与管理员、发展史</h2></div>
+
+    <h3>8.1 数据库体系结构</h3>
+    <p>数据库系统的架构很大程度上受它运行的计算机系统影响，课件列出四种形态：</p>
+    <div class="tbl-scroll">
+      <table>
+        <thead><tr><th>架构</th><th>直观含义</th></tr></thead>
+        <tbody>
+          <tr><td>集中式（centralized）</td><td>所有功能集中在一台机器上</td></tr>
+          <tr><td>客户-服务器（client-server）</td><td>客户端负责交互，服务器负责数据管理</td></tr>
+          <tr><td>并行（parallel，多处理器）</td><td>多处理器协同工作，提升处理能力</td></tr>
+          <tr><td>分布式（distributed）</td><td>数据分散在多个地点，逻辑上仍是一个整体</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>8.2 数据库用户与管理员</h3>
+    <p>使用数据库的人角色不同，关心的层次也不同。课件区分了普通数据库用户和<strong>数据库管理员（DBA，Database Administrator）</strong>。DBA 对整个系统负有集中管理职责，这类职责包括：模式定义、存储结构与访问方式定义、数据访问授权、日常运维（如性能调优、备份恢复、用户管理）。普通用户则主要通过应用程序或查询语言与数据打交道，不需要关心底层结构。</p>
+
+    <h3>8.3 数据库系统发展简史</h3>
+    <p>课件按年代梳理了这条技术演进线，了解它有助于你理解各种模型为什么会出现：</p>
+    <div class="tbl-scroll">
+      <table>
+        <thead><tr><th>年代</th><th>关键进展</th></tr></thead>
+        <tbody>
+          <tr><td>1950 年代至 1960 年代初</td><td>用磁带做存储，只能顺序访问；用穿孔卡片输入，数据处理方式原始</td></tr>
+          <tr><td>1960 年代末至 1970 年代</td><td>硬盘出现，支持直接访问；网状、层次模型广泛使用；Ted Codd 提出关系数据模型（后来因此获图灵奖）；IBM 启动 System R、加州大学伯克利分校启动 Ingres 原型；出现了当时高性能的事务处理</td></tr>
+          <tr><td>1980 年代</td><td>关系原型走向商业化，SQL 成为工业标准；并行与分布式数据库、面向对象数据库出现</td></tr>
+          <tr><td>1990 年代</td><td>大型决策支持与数据挖掘应用兴起；出现数 TB 级的大型数据仓库；电子商务出现</td></tr>
+          <tr><td>2000 年代初</td><td>XML 与 XQuery 标准；自动化数据库管理</td></tr>
+          <tr><td>2000 年代后期</td><td>巨型数据存储系统出现，如 Google BigTable、Yahoo PNuts、Amazon 的相关系统</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="callout knowledge">
+      <svg class="ico" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#173b5e" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+      <div><div class="ct">知识点说明</div><p>注意这条历史主线背后的驱动力：<strong>存储介质的进步（磁带→硬盘）打开了新的数据访问方式，而应用规模的增长又不断催生新的数据模型和架构</strong>。关系模型能取代网状、层次模型，靠的是更简单的逻辑和坚实的数学基础；后来的大数据系统则是在互联网规模下对新问题的回应。</p></div>
+    </div>
+  </section>
+
+  <!-- 小结 -->
+  <section id="sum">
+    <div class="sec-head"><div class="sec-num">9</div><h2>本章小结与自测</h2></div>
+    <div class="summary">
+      <h3 style="margin-top:0">把整章串成一条线</h3>
+      <p>这一章从"DBMS 是什么"出发，先用文件系统的七个痛点说明数据库为什么必要；再用三层抽象、模式与实例、数据模型解释数据库怎么组织数据；接着介绍 DML/DDL 两类语言和数据库设计的两条路线；最后打开系统黑箱，认识存储、查询、事务三大部件，并了解架构、用户和发展史。</p>
+      <div class="oneline">一句话记忆：<b>数据库系统 = 用分层抽象和数据模型组织数据，用查询语言访问数据，用存储/查询/事务三大件保证数据好用、正确、可靠。</b></div>
+    </div>
+
+    <h3>动手测一测</h3>
+    <div class="quiz" id="quiz1">
+      <div class="q">1. 下列哪一项<strong>不属于</strong>课件列举的文件系统存储数据的痛点？</div>
+      <button class="opt" data-k="a">A. 数据冗余与不一致</button>
+      <button class="opt" data-k="b">B. 数据访问困难</button>
+      <button class="opt" data-k="c">C. 硬盘容量过大导致成本上升</button>
+      <button class="opt" data-k="d">D. 完整性约束被埋在程序代码中</button>
+      <div class="fb"></div>
+    </div>
+    <div class="quiz" id="quiz2">
+      <div class="q">2. 在数据抽象的三个层次中，"一条记录在磁盘上如何存储"属于哪一层？</div>
+      <button class="opt" data-k="a">A. 视图层</button>
+      <button class="opt" data-k="b">B. 逻辑层</button>
+      <button class="opt" data-k="c">C. 物理层</button>
+      <button class="opt" data-k="d">D. 数据字典层</button>
+      <div class="fb"></div>
+    </div>
+    <div class="quiz" id="quiz3">
+      <div class="q">3. 关于 DML 与 DDL，下列说法正确的是？</div>
+      <button class="opt" data-k="a">A. DML 用来定义数据库模式，DDL 用来查询数据</button>
+      <button class="opt" data-k="b">B. 声明式 DML 只需要说明要什么数据，不必说明怎么获取</button>
+      <button class="opt" data-k="c">C. DDL 编译器生成的表存放在用户的应用程序里</button>
+      <button class="opt" data-k="d">D. SQL 中只有 DML，没有 DDL</button>
+      <div class="fb"></div>
+    </div>
+
+    <details class="fold">
+      <summary>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#173b5e" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>
+        查看自测答案与解析
+        <svg class="arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#173b5e" stroke-width="2.4"><path d="M6 9l6 6 6-6"/></svg>
+      </summary>
+      <div class="fold-body">
+        <p><strong>第 1 题：C。</strong>课件列举的痛点包括冗余与不一致、访问困难、数据孤立、完整性问题、原子性、并发访问、安全性，共七个，"硬盘容量过大"不在其中。</p>
+        <p><strong>第 2 题：C。</strong>物理层描述记录的实际存储方式；逻辑层描述存了哪些数据及关系；视图层只给具体用户展示该看的部分。</p>
+        <p><strong>第 3 题：B。</strong>声明式（非过程化）DML 只描述目标数据，获取方式由系统决定；A 把 DML/DDL 用途说反了，C 的表应存放在数据字典中，D 忽略了 SQL 里的 create/alter 等 DDL 语句。</p>
+      </div>
+    </details>
+  </section>
+  </div>
+</div>
+
+<button class="totop" id="totop" aria-label="回到顶部">
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4"><path d="M18 15l-6-6-6 6"/></svg>
+</button>
+<footer><div class="wrap">数据库系统学习资料（豆包版）· 第 01 单元 · 依据课程课件第 1 章整理，所有概念与数值均来自课件原文</div></footer>
+
+<script>
+// 侧边栏开关
+var sidebar=document.getElementById('sidebar'),overlay=document.getElementById('overlay');
+function closeSidebar(){sidebar.classList.remove('open');overlay.classList.remove('show')}
+document.getElementById('hamburger').onclick=function(){sidebar.classList.add('open');overlay.classList.add('show')};
+overlay.onclick=closeSidebar;
+document.querySelectorAll('#nav a').forEach(function(a){a.addEventListener('click',closeSidebar)});
+
+// 目录高亮
+var links=document.querySelectorAll('#nav a'),secs=document.querySelectorAll('section');
+var obs=new IntersectionObserver(function(entries){
+  entries.forEach(function(e){if(e.isIntersecting){
+    links.forEach(function(l){l.classList.toggle('active',l.getAttribute('href')==='#'+e.target.id)})
+  }})
+},{rootMargin:'-20% 0px -70% 0px'});
+secs.forEach(function(s){obs.observe(s)});
+
+// 回到顶部
+var totop=document.getElementById('totop');
+window.addEventListener('scroll',function(){totop.classList.toggle('show',window.scrollY>500)});
+totop.onclick=function(){window.scrollTo({top:0,behavior:'smooth'})};
+
+/* 通用分步演示控制器 */
+function makeStepper(id,steps){
+  var box=document.getElementById(id),idx=0;
+  var body=box.querySelector('.sb-body'),dots=box.querySelector('.sb-dots');
+  var prev=box.querySelector('.btn-prev'),next=box.querySelector('.btn-next'),prog=box.querySelector('.sb-progress');
+  var dotEls=[];
+  steps.forEach(function(_,i){
+    var d=document.createElement('div');d.className='dot';d.textContent=i+1;
+    d.onclick=function(){idx=i;render()};
+    dots.insertBefore(d,prev.parentNode);dotEls.push(d);
+  });
+  function render(){
+    body.innerHTML=steps[idx].html;
+    dotEls.forEach(function(d,i){d.classList.toggle('on',i===idx)});
+    prev.disabled=idx===0;next.disabled=idx===steps.length-1;
+    prog.textContent='第 '+(idx+1)+' / '+steps.length+' 步';
+  }
+  prev.onclick=function(){if(idx>0){idx--;render()}};
+  next.onclick=function(){if(idx<steps.length-1){idx++;render()}};
+  render();
+}
+
+/* 通用单题测验 */
+function makeQuiz(id,answer,explain){
+  var box=document.getElementById(id);
+  box.querySelectorAll('.opt').forEach(function(btn){
+    btn.onclick=function(){
+      if(box.dataset.done)return;
+      box.dataset.done='1';
+      var pick=btn.dataset.k;
+      box.querySelectorAll('.opt').forEach(function(b){
+        if(b.dataset.k===answer)b.classList.add('right');
+      });
+      if(pick!==answer)btn.classList.add('wrong');
+      var fb=box.querySelector('.fb');fb.classList.add('show');
+      fb.innerHTML=(pick===answer?'<span style="color:#2e7d5b;font-weight:700">回答正确。</span> ':'<span style="color:#d9534f;font-weight:700">回答有误。</span> ')+explain;
+    }
+  });
+}
+
+/* 并发取款分步演示 */
+makeStepper('step-draw',[
+  {html:'<h4>初始状态：账户余额 100</h4><p>账户里有 100 元。用户甲和用户乙几乎同时发起取款，各取 50。正确的最终余额应该是 0，因为总共取走了 100。接下来看看不受控制的并发是怎么把结果算错的。</p>'},
+  {html:'<h4>两人同时读取余额：都读到 100</h4><p>甲的程序执行 read，读到 100；乙的程序也执行 read，同样读到 100。因为两个读操作互不冲突，系统允许它们并发进行，这一步看起来毫无问题。</p>'},
+  {html:'<h4>两人各自在本地计算：100 − 50 = 50</h4><p>甲用自己读到的 100 减去 50，得到新余额 50；乙也用<em>自己读到的 100</em> 减去 50，同样得到 50。注意：乙并不知道甲已经取过钱，它手里的 100 是一个正在变旧的数字。</p>'},
+  {html:'<h4>甲先写回：余额变成 50</h4><p>甲把 50 写回数据库，这一步本身是对的——甲确实取走了 50。</p>'},
+  {html:'<h4>乙也写回：余额又被覆盖成 50</h4><p>乙把自己算出的 50 也写回，<strong>直接覆盖了甲的结果</strong>。最终余额停在 50，而不是正确的 0，系统凭空"少扣"了 50。</p>'},
+  {html:'<h4>问题根源与解决方向</h4><p>错误的根源是：<strong>两个事务基于同一个旧值做修改，而写回时没有任何协调</strong>。数据库的并发控制机制（比如加锁、两阶段锁协议）会强制让这类冲突操作排队执行，从而保证结果正确。这正是第 15 章要学的内容。</p>'}
+]);
+
+makeQuiz('quiz1','c','课件列举的七个痛点里没有"硬盘容量过大"这一项，存储成本问题与文件系统的结构性缺陷是两回事。');
+makeQuiz('quiz2','c','物理层负责描述记录在磁盘上的实际存储方式，是最底层的抽象。');
+makeQuiz('quiz3','b','声明式 DML 只说要什么数据、不说怎么拿；其余选项分别把 DML/DDL 用途、数据字典位置和 SQL 的组成说错了。');
+</script>
+</body>
+</html>

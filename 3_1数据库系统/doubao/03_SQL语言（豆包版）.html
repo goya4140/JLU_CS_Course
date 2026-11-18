@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>03 SQL 语言（豆包版）</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cellipse cx='16' cy='7' rx='12' ry='5' fill='%23173b5e'/%3E%3Cpath d='M4 7v9c0 2.8 5.4 5 12 5s12-2.2 12-5V7' fill='none' stroke='%23173b5e' stroke-width='2.5'/%3E%3Cpath d='M4 16v9c0 2.8 5.4 5 12 5s12-2.2 12-5v-9' fill='none' stroke='%23e8743b' stroke-width='2.5'/%3E%3C/svg%3E">
+<style>
+:root{
+  --ink:#173b5e; --ink2:#24527e; --org:#e8743b; --org-deep:#c95a24;
+  --blue-bg:#eef4f9; --org-bg:#fdf1e8; --line:#d8e2ec;
+  --text:#233242; --gray:#5f7185; --warn-bg:#fdeceb; --warn-line:#d9534f;
+  --ok:#2e7d5b; --shadow:0 6px 22px rgba(23,59,94,.10);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;color:var(--text);background:#fff;line-height:1.85;font-size:16px}
+h1,h2,h3,h4{font-family:Georgia,"Songti SC","SimSun",serif;color:var(--ink);line-height:1.4}
+a{color:var(--ink2);text-decoration:none}
+::selection{background:var(--org);color:#fff}
+.sidebar{position:fixed;left:0;top:0;bottom:0;width:262px;background:var(--ink);color:#cfe0f0;padding:26px 0;overflow-y:auto;z-index:60;transition:transform .3s}
+.sidebar .brand{padding:0 24px 20px;border-bottom:1px solid rgba(255,255,255,.14);margin-bottom:14px}
+.sidebar .brand .db{display:flex;align-items:center;gap:10px;font-family:Georgia,serif;font-size:19px;color:#fff;letter-spacing:.5px}
+.sidebar .brand small{display:block;margin-top:6px;font-size:12px;color:#9fb8d0;letter-spacing:1px}
+.sidebar nav a{display:flex;align-items:center;gap:10px;padding:9px 24px;color:#c4d6e8;font-size:14px;border-left:3px solid transparent;transition:all .2s}
+.sidebar nav a:hover{background:rgba(255,255,255,.08);color:#fff}
+.sidebar nav a.active{background:rgba(232,116,59,.18);border-left-color:var(--org);color:#fff}
+.sidebar nav a svg{flex:none;opacity:.85}
+.sidebar .unit-no{font-size:11px;color:#86a3bf;letter-spacing:1px;padding:16px 24px 4px}
+.main{margin-left:262px;min-height:100vh}
+.wrap{max-width:880px;margin:0 auto;padding:0 34px}
+.topbar{display:none;position:sticky;top:0;background:var(--ink);color:#fff;z-index:55;padding:12px 18px;align-items:center;gap:12px}
+.topbar button{background:none;border:none;cursor:pointer;padding:4px}
+.topbar span{font-family:Georgia,serif;font-size:16px}
+.overlay{display:none;position:fixed;inset:0;background:rgba(10,25,40,.45);z-index:55}
+.hero{background:linear-gradient(135deg,#173b5e 0%,#24527e 62%,#2f6494 100%);color:#fff;padding:64px 0 58px;margin-bottom:40px;position:relative;overflow:hidden}
+.hero::after{content:"";position:absolute;right:-60px;top:-60px;width:260px;height:260px;border:26px solid rgba(232,116,59,.25);border-radius:50%}
+.hero .kicker{font-size:13px;letter-spacing:3px;color:var(--org);font-weight:600;margin-bottom:14px}
+.hero h1{color:#fff;font-size:36px;margin-bottom:16px}
+.hero p{max-width:660px;color:#d6e4f2;font-size:16.5px}
+.hero .meta{margin-top:26px;display:flex;flex-wrap:wrap;gap:10px}
+.hero .meta span{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.22);padding:6px 14px;border-radius:20px;font-size:13px}
+section{padding:16px 0 28px;scroll-margin-top:20px}
+.sec-head{display:flex;align-items:center;gap:14px;margin-bottom:16px}
+.sec-num{flex:none;width:46px;height:46px;border-radius:12px;background:var(--org);color:#fff;display:flex;align-items:center;justify-content:center;font-family:Georgia,serif;font-size:20px;box-shadow:var(--shadow)}
+.sec-head h2{font-size:25px}
+h3{font-size:19.5px;margin:24px 0 9px;padding-left:12px;border-left:4px solid var(--org)}
+h4{font-size:16px;margin:16px 0 7px;color:var(--ink2)}
+p{margin:9px 0}
+.lead{font-size:17px;color:var(--ink)}
+ul,ol{margin:9px 0 9px 26px}
+li{margin:5px 0}
+strong{color:var(--ink)}
+.em{color:var(--org-deep);font-weight:700}
+.goal-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin:18px 0}
+.goal-card{background:var(--blue-bg);border:1px solid var(--line);border-radius:12px;padding:15px 18px;display:flex;gap:12px}
+.goal-card svg{flex:none;margin-top:3px}
+.goal-card b{color:var(--ink)}
+.tbl-scroll{overflow-x:auto;margin:15px 0;border-radius:10px;border:1px solid var(--line)}
+table{width:100%;border-collapse:collapse;font-size:14px;min-width:460px}
+thead th{background:var(--ink);color:#fff;padding:11px 13px;text-align:left;font-weight:600;letter-spacing:.5px}
+tbody td{padding:10px 13px;border-bottom:1px solid var(--line);vertical-align:top}
+tbody tr:nth-child(even){background:#f6f9fc}
+tbody tr:hover{background:var(--org-bg)}
+.callout{border-radius:12px;padding:15px 19px;margin:15px 0;display:flex;gap:14px;border:1px solid}
+.callout .ico{flex:none;margin-top:2px}
+.callout .ct{font-weight:700;margin-bottom:4px;font-family:Georgia,serif;letter-spacing:.5px}
+.callout p{margin:4px 0}
+.analogy{background:var(--org-bg);border-color:#f0c9ac}
+.analogy .ct{color:var(--org-deep)}
+.knowledge{background:var(--blue-bg);border-color:var(--line)}
+.knowledge .ct{color:var(--ink)}
+.warning{background:var(--warn-bg);border-color:#eeb4b2}
+.warning .ct{color:var(--warn-line)}
+.struct{display:flex;gap:0;margin:15px 0;border-radius:10px;overflow:hidden;flex-wrap:wrap}
+.struct .cell{flex:1;min-width:120px;padding:13px 12px;text-align:center;color:#fff;font-size:13.5px}
+.struct .cell small{display:block;font-size:11px;opacity:.82;margin-top:4px}
+.struct .c1{background:#173b5e}.struct .c2{background:#24527e}.struct .c3{background:#2f6494}.struct .c4{background:#3d78ad}
+.code{background:#12283d;color:#dce9f5;border-radius:10px;padding:15px 18px;font-family:Consolas,"Courier New",monospace;font-size:13px;line-height:1.7;overflow-x:auto;margin:13px 0;white-space:pre}
+.code .kw{color:#f0a06e}.code .st{color:#9ec98a}.code .cm{color:#7b94ab}
+.inline-code{font-family:Consolas,monospace;background:var(--blue-bg);border:1px solid var(--line);border-radius:5px;padding:1px 7px;font-size:13px;color:var(--ink2)}
+details.fold{border:1px solid var(--line);border-radius:10px;margin:10px 0;background:#fff;overflow:hidden}
+details.fold summary{cursor:pointer;padding:12px 18px;font-weight:700;color:var(--ink);background:var(--blue-bg);list-style:none;display:flex;align-items:center;gap:10px}
+details.fold summary::-webkit-details-marker{display:none}
+details.fold summary .arrow{margin-left:auto;transition:transform .25s}
+details.fold[open] summary .arrow{transform:rotate(180deg)}
+details.fold .fold-body{padding:15px 20px}
+.card-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:13px;margin:15px 0}
+.mini-card{border:1px solid var(--line);border-radius:12px;padding:15px;background:#fff;box-shadow:0 2px 8px rgba(23,59,94,.06)}
+.mini-card h4{display:flex;align-items:center;gap:8px;margin:0 0 7px}
+.mini-card p{font-size:13.5px;margin:4px 0;color:var(--gray)}
+.quiz{background:var(--blue-bg);border:1px solid var(--line);border-radius:14px;padding:21px 23px;margin:17px 0}
+.quiz .q{font-weight:700;color:var(--ink);margin-bottom:11px}
+.quiz .opt{display:block;width:100%;text-align:left;border:1px solid var(--line);background:#fff;border-radius:9px;padding:10px 15px;margin:7px 0;cursor:pointer;font-size:14px;transition:.15s}
+.quiz .opt:hover{border-color:var(--org)}
+.quiz .opt.right{background:#e6f4ec;border-color:var(--ok);color:var(--ok);font-weight:700}
+.quiz .opt.wrong{background:var(--warn-bg);border-color:var(--warn-line);color:var(--warn-line)}
+.quiz .fb{margin-top:9px;font-size:13.5px;display:none}
+.quiz .fb.show{display:block}
+.summary-box{background:linear-gradient(135deg,var(--blue-bg),#fff);border:1px solid var(--line);border-radius:16px;padding:25px 27px;margin:23px 0}
+.oneline{background:var(--ink);color:#fff;border-radius:10px;padding:13px 19px;margin:13px 0;font-size:15px}
+.oneline b{color:var(--org)}
+.totop{position:fixed;right:26px;bottom:26px;width:46px;height:46px;border-radius:50%;background:var(--org);border:none;cursor:pointer;box-shadow:var(--shadow);display:none;align-items:center;justify-content:center;z-index:40}
+.totop.show{display:flex}
+footer{border-top:1px solid var(--line);padding:26px 0 40px;color:var(--gray);font-size:13px}
+@media (max-width:900px){
+  .sidebar{transform:translateX(-100%)}
+  .sidebar.open{transform:translateX(0)}
+  .main{margin-left:0}
+  .topbar{display:flex}
+  .overlay.show{display:block}
+  .wrap{padding:0 20px}
+  .hero{padding:44px 0 40px}
+  .hero h1{font-size:27px}
+  .goal-grid,.card-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<aside class="sidebar" id="sidebar">
+  <div class="brand">
+    <div class="db">
+      <svg width="26" height="26" viewBox="0 0 32 32"><ellipse cx="16" cy="7" rx="12" ry="5" fill="#fff"/><path d="M4 7v9c0 2.8 5.4 5 12 5s12-2.2 12-5V7" fill="none" stroke="#fff" stroke-width="2.5"/><path d="M4 16v9c0 2.8 5.4 5 12 5s12-2.2 12-5v-9" fill="none" stroke="#e8743b" stroke-width="2.5"/></svg>
+      数据库系统
+    </div>
+    <small>DATABASE SYSTEM CONCEPTS</small>
+  </div>
+  <div class="unit-no">第 03 单元 · 目录</div>
+  <nav id="nav">
+    <a href="#intro"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 8v5l3 2"/></svg>开篇导读</a>
+    <a href="#s1"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>数据定义与域类型</a>
+    <a href="#s2"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>基本查询结构</a>
+    <a href="#s3"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-1.7 1.7"/><path d="M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7 7l1.7-1.7"/></svg>连接查询与重命名</a>
+    <a href="#s4"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7h16M4 12h10M4 17h13"/></svg>字符串、排序与集合</a>
+    <a href="#s5"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v4M12 18v4M2 12h4M18 12h4M12 12"/></svg>空值与聚集函数</a>
+    <a href="#s6"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M7 12h10M7 8h10M7 16h6"/></svg>嵌套子查询</a>
+    <a href="#s7"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg>数据库修改</a>
+    <a href="#s8"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-1.7 1.7"/><path d="M3 3v18h18"/></svg>外连接与视图</a>
+    <a href="#s9"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg>完整性约束</a>
+    <a href="#s10"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3 7h7l-5.5 4.5L18 21l-6-4-6 4 1.5-7.5L2 9h7z"/></svg>数据类型与授权</a>
+    <a href="#s11"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>JDBC、ODBC 与嵌入式</a>
+    <a href="#s12"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M9 13h6M9 17h4"/></svg>过程化结构与触发器</a>
+    <a href="#s13"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>递归查询</a>
+    <a href="#s14"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>高级聚集与 OLAP</a>
+    <a href="#sum"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>本章小结与自测</a>
+  </nav>
+</aside>
+<div class="overlay" id="overlay"></div>
+
+<div class="topbar">
+  <button id="hamburger" aria-label="打开目录">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+  </button>
+  <span>03 SQL 语言</span>
+</div>
+
+<div class="main">
+  <header class="hero">
+    <div class="wrap">
+      <div class="kicker">CHAPTER 03, 04 &amp; 05 · SQL</div>
+      <h1>SQL 语言</h1>
+      <p>SQL 是这门课的"普通话"，也是数据库行业几十年不变的标准语言。这一单元从最基础的 select 三要素讲起，一路走到外连接、视图、完整性约束、授权，再到 JDBC/ODBC、存储过程、触发器、递归查询和 OLAP，完整覆盖入门、中级、高级三个层次。</p>
+      <div class="meta"><span>对应课件：第 3、4、5 章</span><span>课件页数：78 + 51 + 78 页</span><span>建议学习：8 小时</span><span>难度：中高</span></div>
+    </div>
+  </header>
+
+  <div class="wrap">
+
+  <section id="intro">
+    <div class="sec-head"><div class="sec-num">0</div><h2>开篇导读：SQL 从哪里来</h2></div>
+    <p class="lead">SQL 最初叫 Sequel，是 IBM 圣何塞研究室 System R 项目的一部分，后来才改名为结构化查询语言（Structured Query Language）。它的标准由 ANSI 和 ISO 维护，课件列出的版本依次是 SQL-86、SQL-89、SQL-92、SQL:1999、SQL:2003。</p>
+    <p>商业系统大多提供 SQL-92 的绝大部分功能，再加上后续标准的部分特性和各自的私有扩展，所以课件提醒：不是这里的每个例子都能在你手头的系统上直接运行。学习时要抓"标准语法和核心思想"，把具体系统的差异当成实现细节。</p>
+    <div class="goal-grid">
+      <div class="goal-card"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="#e8743b" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg><div><b>写对查询</b><br><small>熟练掌握 select/from/where 及连接、分组、子查询</small></div></div>
+      <div class="goal-card"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="#e8743b" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg><div><b>理解约束与安全</b><br><small>完整性、视图、授权各自解决什么问题</small></div></div>
+      <div class="goal-card"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="#e8743b" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg><div><b>打通程序与数据库</b><br><small>JDBC/ODBC、预编译与注入防护</small></div></div>
+      <div class="goal-card"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="#e8743b" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg><div><b>掌握高级能力</b><br><small>过程、触发器、递归、OLAP</small></div></div>
+    </div>
+  </section>
+
+  <section id="s1">
+    <div class="sec-head"><div class="sec-num">1</div><h2>数据定义语言与域类型</h2></div>
+    <p>SQL 的第一大类语句是数据定义语言（DDL），负责建表、删表、改表。建表之前先得知道：每一列可以放什么类型的数据。</p>
+    <h3>内置域类型</h3>
+    <div class="tbl-scroll">
+      <table>
+        <thead><tr><th>类型</th><th>含义</th><th>注意点</th></tr></thead>
+        <tbody>
+          <tr><td><span class="inline-code">char(n)</span></td><td>定长字符串，长度 n</td><td>短了会自动补空格，比较时系统会把空格因素考虑进去</td></tr>
+          <tr><td><span class="inline-code">varchar(n)</span></td><td>变长字符串，上限 n</td><td>有多长存多长，不补空格</td></tr>
+          <tr><td><span class="inline-code">int / integer</span></td><td>整数</td><td>依赖机器的有限精度</td></tr>
+          <tr><td><span class="inline-code">smallint</span></td><td>小整数</td><td>同样是机器相关精度，占空间更小</td></tr>
+          <tr><td><span class="inline-code">numeric(p,d)</span></td><td>定点数，共 p 位、小数 d 位</td><td>如 numeric(3,1) 能存 44.5，要求精确金额时用它</td></tr>
+          <tr><td><span class="inline-code">real / double precision</span></td><td>单精度、双精度浮点数</td><td>机器相关精度，有舍入误差</td></tr>
+          <tr><td><span class="inline-code">float(n)</span></td><td>至少 n 位精度的浮点数</td><td>精度仍可能与机器有关</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <h3>create table 建表</h3>
+    <p>建表时要给出表名、每一列的名字和类型，还可以在列上直接写约束。以部门表为例：</p>
+    <div class="code"><span class="kw">create table</span> department
+  (dept_name   <span class="kw">varchar</span>(20),
+   building    <span class="kw">varchar</span>(15),
+   budget      <span class="kw">numeric</span>(12,2),
+   <span class="kw">primary key</span> (dept_name));
+
+<span class="kw">create table</span> instructor
+  (ID          <span class="kw">varchar</span>(5),
+   name        <span class="kw">varchar</span>(20) <span class="kw">not null</span>,
+   dept_name   <span class="kw">varchar</span>(20),
+   salary      <span class="kw">numeric</span>(8,2),
+   <span class="kw">primary key</span> (ID),
+   <span class="kw">foreign key</span> (dept_name) <span class="kw">references</span> department);</div>
+    <p>这里出现了三种约束：<strong>not null</strong> 表示这一列不允许空值；<strong>primary key</strong> 声明主键，系统会保证主键非空且唯一；<strong>foreign key … references</strong> 声明外键，意思是 instructor 里的 dept_name 必须能在 department 表的主键里找到，否则这条数据插不进去。</p>
+    <div class="callout warning"><svg class="ico" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#d9534f" stroke-width="2"><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/><path d="M12 9v4M12 17h.01"/></svg><div><div class="ct">注意：外键默认是"立即检查"</div><p>先建被引用的 department 表、再建引用它的 instructor 表，顺序不能反。往 instructor 里插数据时，对应部门必须已经存在。</p></div></div>
+    <h3>删表与改表</h3>
+    <p><span class="inline-code">drop table r</span> 把表 r 连同里面的数据一起删掉；<span class="inline-code">delete from r</span> 只清空数据、保留表结构。<span class="inline-code">alter table r add …</span> 可以给已有表加列，比如：</p>
+    <div class="code"><span class="kw">alter table</span> instructor <span class="kw">add</span> A D;   <span class="cm">-- A 是列名，D 是类型</span></div>
+    <p>新列在已有元组上的取值一律为空。</p>
+  </section>
+
+  <section id="s2">
+    <div class="sec-head"><div class="sec-num">2</div><h2>基本查询结构：select-from-where</h2></div>
+    <div class="callout analogy"><svg class="ico" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#c95a24" stroke-width="2"><path d="M3 7h18M3 12h18M3 17h18"/></svg><div><div class="ct">生活类比</div><p>把一次查询想象成"填表三步"：先告诉系统<strong>从哪张表取</strong>（from），再说明<strong>要哪些列</strong>（select），最后给出<strong>筛选条件</strong>（where）。几乎所有 SQL 查询都是这三个部分的组合。</p></div></div>
+    <h3>三个子句各管什么</h3>
+    <div class="struct">
+      <div class="cell c1">select<small>列出结果里要出现的属性</small></div>
+      <div class="cell c2">from<small>涉及哪些关系（表）</small></div>
+      <div class="cell c3">where<small>用条件过滤元组</small></div>
+    </div>
+    <p>例如"找出所有教师的名字"：</p>
+    <div class="code"><span class="kw">select</span> name
+<span class="kw">from</span> instructor;</div>
+    <p>SQL 里关系是<strong>多集（multiset）</strong>，不是严格集合：默认不会去重，所以多个同名教师会出现多行。<span class="inline-code">select distinct</span> 才强制去重，<span class="inline-code">select all</span> 显式保留重复（也是默认行为）。</p>
+    <div class="code"><span class="kw">select distinct</span> dept_name
+<span class="kw">from</span> instructor;</div>
+    <p><span class="inline-code">select *</span> 里的星号表示"所有列"，常用于快速查看整张表。</p>
+    <h3>where 子句与算术表达式</h3>
+    <p>where 里可以用逻辑连接词 and、or、not，以及比较运算符 =、≠、&lt;、≤、&gt;、≥。还可以对数值列做算术运算，比如给每位教师涨 10% 工资后显示：</p>
+    <div class="code"><span class="kw">select</span> ID, name, dept_name, salary * 1.1
+<span class="kw">from</span> instructor
+<span class="kw">where</span> dept_name = <span class="st">'Comp. Sci.'</span>;</div>
+    <p>select 后面允许出现 <strong>+、−、*、/</strong> 组成的算术表达式，作用在常量或列上。注意这只是"显示值变了"，原表数据并没有被修改。</p>
+  </section>
+
+  <section id="s3">
+    <div class="sec-head"><div class="sec-num">3</div><h2>连接查询与重命名</h2></div>
+    <p>真实问题往往要同时用到多张表。比如"列出计算机系教师的名字和他们所在的教学楼"，名字在 instructor 表，楼在 department 表，就得把两张表拼起来。</p>
+    <h3>笛卡尔积：先全部配对，再过滤</h3>
+    <p>在 from 里写两个表，系统先做笛卡尔积——把 instructor 的每一行和 department 的每一行两两配对，再用 where 挑出"部门名相同"的那些配对：</p>
+    <div class="code"><span class="kw">select</span> name, instructor.dept_name, building
+<span class="kw">from</span> instructor, department
+<span class="kw">where</span> instructor.dept_name = department.dept_name
+  <span class="kw">and</span> salary &gt; 70000;</div>
+    <p>当两张表有同名列（比如都叫 dept_name）时，必须用<strong>表名.列名</strong>消歧，否则系统不知道你指哪一个。</p>
+    <h3>自然连接：让系统自动按同名列配对</h3>
+    <p><span class="inline-code">natural join</span> 会自动找出两张表中所有同名的列，只保留这些列取值完全相等的配对，并且同名列在结果里只留一份：</p>
+    <div class="code"><span class="kw">select</span> name, course_id
+<span class="kw">from</span> instructor <span class="kw">natural join</span> teaches
+<span class="kw">natural join</span> section
+<span class="kw">where</span> semester = <span class="st">'Fall'</span>;</div>
+    <div class="callout warning"><svg class="ico" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#d9534f" stroke-width="2"><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/><path d="M12 9v4M12 17h.01"/></svg><div><div class="ct">自然连接的陷阱：同名不一定同义</div><p>natural join 会按<strong>所有</strong>同名列匹配。如果两张表恰好有一个同名列但含义不同（比如都叫 name，一个是教师名一个是学生名），系统照样拿它当匹配条件，结果可能错得离谱。课件特别强调了这个风险。</p></div></div>
+    <h3>as 重命名：表别名与列别名</h3>
+    <p><span class="inline-code">as</span> 有两个用途。给表起短别名，让长查询更简洁；给列或表达式起别名，让结果表头更友好。</p>
+    <div class="code"><span class="kw">select</span> T.name <span class="kw">as</span> instructor_name,
+       S.dept_name,
+       T.salary * 1.1 <span class="kw">as</span> new_salary
+<span class="kw">from</span> instructor <span class="kw">as</span> T, department <span class="kw">as</span> S
+<span class="kw">where</span> T.dept_name = S.dept_name;</div>
+    <p>表别名在同一个查询里还能让一张表"扮演两个角色"，这在自连接（比如员工表里找"谁和谁同部门"）时必不可少。</p>
+  </section>
+
+  <section id="s4">
+    <div class="sec-head"><div class="sec-num">4</div><h2>字符串、排序与集合运算</h2></div>
+    <h3>字符串匹配：like 与两个通配符</h3>
+    <p>精确匹配用等号，模糊匹配用 <span class="inline-code">like</span>。它有两个通配符：<strong>百分号 %</strong> 代表任意长度（包括零长度）的任意字符，<strong>下划线 _</strong> 代表恰好一个字符。</p>
+    <div class="code"><span class="kw">select</span> name
+<span class="kw">from</span> instructor
+<span class="kw">where</span> name <span class="kw">like</span> <span class="st">'%dar%'</span>;   <span class="cm">-- 名字里含 dar</span>
+
+<span class="kw">where</span> name <span class="kw">like</span> <span class="st">'_dar%'</span>;      <span class="cm">-- 第二个字符起是 dar</span></div>
+    <p>字符串里还可以用 <span class="inline-code">||</span> 做拼接，用 <span class="inline-code">upper()</span>、<span class="inline-code">lower()</span> 转大小写。如果要匹配的内容本身就含 % 或 _，可以用 <span class="inline-code">escape</span> 指定一个转义字符，比如 <span class="inline-code">like 'ab\%cd%' escape '\'</span> 中第一个 % 就是字面的百分号。</p>
+    <h3>排序：order by</h3>
+    <p>SQL 不保证查询结果的默认顺序，想要有序输出必须显式写 <span class="inline-code">order by</span>。<strong>asc</strong> 升序（默认），<strong>desc</strong> 降序，还可以按多列依次排：</p>
+    <div class="code"><span class="kw">select</span> *
+<span class="kw">from</span> instructor
+<span class="kw">order by</span> salary <span class="kw">desc</span>, name <span class="kw">asc</span>;</div>
+    <p>含义是：先按工资从高到低，工资相同的再按名字字母顺序排。</p>
+    <h3>between 与元组比较</h3>
+    <p><span class="inline-code">between</span> 是闭区间的简写，<span class="inline-code">salary between 90000 and 100000</span> 等价于 salary ≥ 90000 且 salary ≤ 100000。SQL 还支持<strong>元组比较</strong>，可以把多个值打包比较：</p>
+    <div class="code"><span class="kw">where</span> (dept_name, salary) = (<span class="st">'Biology'</span>, 70000)
+<span class="kw">where</span> (dept_name, salary) <span class="kw">in</span>
+      (<span class="kw">select</span> dept_name, salary <span class="kw">from</span> instructor <span class="kw">where</span> name=<span class="st">'Einstein'</span>)</div>
+    <h3>集合运算：并、交、差</h3>
+    <p>两个结构相容的查询结果可以做集合运算，注意这三个运算<strong>默认自动去重</strong>：</p>
+    <div class="tbl-scroll">
+      <table>
+        <thead><tr><th>运算</th><th>写法</th><th>含义</th></tr></thead>
+        <tbody>
+          <tr><td>并</td><td><span class="inline-code">union</span></td><td>出现在任一结果里的元组</td></tr>
+          <tr><td>交</td><td><span class="inline-code">intersect</span></td><td>两个结果里都有的元组</td></tr>
+          <tr><td>差</td><td><span class="inline-code">except</span></td><td>在第一个结果里、但不在第二个里</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>带上 all 后缀——<span class="inline-code">union all</span>、<span class="inline-code">intersect all</span>、<span class="inline-code">except all</span>——则保留重复，按副本计数规则处理。比如某元组在第一个结果出现 3 次、第二个出现 1 次，except all 后它还剩 2 次。</p>
+  </section>
+
+  <section id="s5">
+    <div class="sec-head"><div class="sec-num">5</div><h2>空值与聚集函数</h2></div>
+    <h3>null 与三值逻辑</h3>
+    <p>null 表示"值未知或不存在"，它不是 0，也不是空字符串。判断空值不能用等号，要用专门的 <span class="inline-code">is null</span> 和 <span class="inline-code">is not null</span>。</p>
+    <p>一旦比较里混进 null，结果就不再是简单的真或假，而是出现第三种逻辑值 <strong>unknown</strong>。where 子句只保留条件为真的行，所以 unknown 按假处理。课件给出的规则是：unknown and true = unknown，unknown and false = false，unknown or true = true，unknown or false = unknown，not unknown = unknown。</p>
+    <h3>聚集函数</h3>
+    <p>聚集函数把多行"聚成一个数"。标准的五个是：</p>
+    <div class="struct">
+      <div class="cell c1">avg<small>平均值</small></div>
+      <div class="cell c2">min/max<small>最小/最大</small></div>
+      <div class="cell c3">sum<small>求和</small></div>
+      <div class="cell c4">count<small>计数</small></div>
+    </div>
+    <div class="code"><span class="kw">select</span> avg(salary)
+<span class="kw">from</span> instructor
+<span class="kw">where</span> dept_name = <span class="st">'Comp. Sci.'</span>;</div>
+    <p>关键规则：除了 <span class="inline-code">count(*)</span>，所有聚集函数在计算前都会<strong>先把 null 丢掉</strong>。如果丢掉后没有值了，count 返回 0，其他函数返回 null。</p>
+    <h3>分组：group by 与 having</h3>
+    <p>想求"每个系"的平均工资，而不是全表一个数，就要用 group by 按部门分组：</p>
+    <div class="code"><span class="kw">select</span> dept_name, avg(salary) <span class="kw">as</span> avg_sal
+<span class="kw">from</span> instructor
+<span class="kw">group by</span> dept_name
+<span class="kw">having</span> avg(salary) &gt; 42000;</div>
+    <div class="callout knowledge"><svg class="ico" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#173b5e" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 8v5l3 2"/></svg><div><div class="ct">两条必须记住的规则</div><p>① select 里出现的<strong>非聚集属性</strong>，必须出现在 group by 里——否则同一组里它可能有多个值，系统不知道取哪个。② where 是分组前对行过滤，<strong>having 是分组后对组过滤</strong>，所以 having 里可以用聚集函数，where 里不能。</p></div></div>
+  </section>
+
+  <section id="s6">
+    <div class="sec-head"><div class="sec-num">6</div><h2>嵌套子查询</h2></div>
+    <p>子查询就是套在另一个查询里的 select。它让复杂问题可以拆成"先查一个小集合，再拿它去筛大表"。</p>
+    <h3>in 与 not in</h3>
+    <p>比如"找出 2009 年秋季学期开过课的教师"，先从 section 查出该学期的课程号，再到 teaches 里匹配：</p>
+    <div class="code"><span class="kw">select distinct</span> ID
+<span class="kw">from</span> teaches
+<span class="kw">where</span> (course_id, sec_id, semester, year) <span class="kw">in</span>
+      (<span class="kw">select</span> course_id, sec_id, semester, year
+       <span class="kw">from</span> section
+       <span class="kw">where</span> semester=<span class="st">'Fall'</span> <span class="kw">and</span> year=2009);</div>
+    <h3>some 与 all</h3>
+    <p>把子查询结果当成一组值来比较。<span class="inline-code">&gt; some</span> 表示"大于其中至少一个"，<span class="inline-code">&gt; all</span> 表示"大于全部"。经典例子"找出工资比生物系所有教师都高的教师"：</p>
+    <div class="code"><span class="kw">where</span> salary &gt; <span class="kw">all</span>
+      (<span class="kw">select</span> salary <span class="kw">from</span> instructor
+       <span class="kw">where</span> dept_name=<span class="st">'Biology'</span>);</div>
+    <h3>exists 与相关子查询</h3>
+    <p><span class="inline-code">exists</span> 只判断子查询有没有返回行，返回真或假。当子查询引用了外层查询的变量时，就叫<strong>相关子查询</strong>，它会对外层的每一行重新求值。not exists 配合全称语义能表达"所有……都……"这类问题。</p>
+    <h3>其他工具</h3>
+    <ul>
+      <li><strong>unique</strong>：判断子查询结果里有没有重复元组，没有重复才为真。</li>
+      <li><strong>派生关系</strong>：from 里直接放一个子查询，用 as 给它起表名，当成临时表用。</li>
+      <li><strong>with 子句</strong>：把一个子查询命名后在主查询里反复使用，避免重复书写，逻辑更清晰。</li>
+      <li><strong>标量子查询</strong>：只返回单个值的子查询，可以出现在任何需要一个值的位置。</li>
+      <li><strong>lateral</strong>：让 from 里的子查询能引用同一 from 中其他表的属性（SQL:2003）。</li>
+    </ul>
+  </section>
+
+  <section id="s7">
+    <div class="sec-head"><div class="sec-num">7</div><h2>数据库修改：增、删、改</h2></div>
+    <h3>delete 删除</h3>
+    <p>delete 可以带 where 只删满足条件的行，不带 where 就清空整表。还可以用子查询做条件，比如删除数学系教师的所有开课记录：</p>
+    <div class="code"><span class="kw">delete from</span> instructor
+<span class="kw">where</span> dept_name = <span class="st">'Finance'</span>;</div>
+    <p>课件提醒一个易错点：删除时 where 里引用的是<strong>删除前</strong>的关系，所以可以先做一次 select 子查询再删，不会因为边删边查而混乱。</p>
+    <h3>insert 插入</h3>
+    <p>既可以直接给值，也可以把一个查询的结果批量插入：</p>
+    <div class="code"><span class="kw">insert into</span> instructor
+  <span class="kw">values</span> (<span class="st">'10211'</span>, <span class="st">'Smith'</span>, <span class="st">'Biology'</span>, 66000);
+
+<span class="kw">insert into</span> instructor
+  <span class="kw">select</span> ID, name, dept_name, 18000
+  <span class="kw">from</span> student
+  <span class="kw">where</span> dept_name=<span class="st">'Music'</span> <span class="kw">and</span> tot_cred&gt;144;</div>
+    <p>没给全的列会被置为 null（前提是该列允许空）。</p>
+    <h3>update 更新与 case</h3>
+    <p>update 用 set 改值，同样可以配合子查询。需要按不同条件给不同值时，用 <span class="inline-code">case</span> 一次性表达：</p>
+    <div class="code"><span class="kw">update</span> instructor
+<span class="kw">set</span> salary = <span class="kw">case</span>
+  <span class="kw">when</span> salary &lt;= 100000 <span class="kw">then</span> salary * 1.05
+  <span class="kw">else</span> salary * 1.03
+<span class="kw">end</span>;</div>
+    <p>case 按顺序判断，取第一个满足的分支，都不满足则走 else。标量子查询也能出现在 set 里，实现"用另一张表的统计结果更新这张表"。</p>
+  </section>
+
+  <section id="s8">
+    <div class="sec-head"><div class="sec-num">8</div><h2>连接表达式与视图</h2></div>
+    <h3>外连接：不让信息丢失</h3>
+    <p>普通（内）连接只保留两边都匹配上的行。可现实中有些行暂时没有匹配对象——比如某门课还没登记先修课，这些行会在内连接里直接消失。外连接就是为了"不丢信息"，把没匹配上的行也保留，缺的列用 null 补齐。</p>
+    <div class="tbl-scroll">
+      <table>
+        <thead><tr><th>类型</th><th>写法</th><th>保留哪些行</th></tr></thead>
+        <tbody>
+          <tr><td>左外连接</td><td><span class="inline-code">left outer join</span></td><td>左表全部行，右表没匹配上就补 null</td></tr>
+          <tr><td>右外连接</td><td><span class="inline-code">right outer join</span></td><td>右表全部行</td></tr>
+          <tr><td>全外连接</td><td><span class="inline-code">full outer join</span></td><td>两边所有行都保留</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="code"><span class="kw">select</span> *
+<span class="kw">from</span> course <span class="kw">natural left outer join</span> prereq;</div>
+    <p>连接条件除了 natural，还可以用 <span class="inline-code">on</span> 写任意条件（<span class="inline-code">inner join prereq on course.course_id = prereq.course_id</span>），或用 <span class="inline-code">using (course_id)</span> 指定只按某几个同名列匹配，从而避开自然连接"全部同名列"的陷阱。</p>
+    <h3>视图：看得见但不实际存储的"虚表"</h3>
+    <p>不是每个用户都该看到全部数据。比如发工资的人之外，其他人只需要知道教师的工号、姓名、部门，不该看到工资。视图就是把一个查询包装成一张"虚拟关系"呈现给用户：</p>
+    <div class="code"><span class="kw">create view</span> faculty <span class="kw">as</span>
+  <span class="kw">select</span> ID, name, dept_name
+  <span class="kw">from</span> instructor;</div>
+    <p>关键理解：建视图<strong>不是把查询结果存成一张新表</strong>，而是保存了一个表达式。以后查询用到 faculty 时，系统把这个定义替换进去（这叫<strong>视图展开</strong>），再对真实表执行。视图可以建立在其他视图之上，由此形成依赖关系；一个视图若依赖自己，就叫递归视图。</p>
+    <h3>视图能不能更新</h3>
+    <p>往 faculty 插一行，系统可以翻译成往 instructor 插一行、工资列补 null。但很多视图的更新无法唯一翻译，比如由两张表连接而成的视图，插入一行时根本不知道该往哪张表补数据。所以多数系统只允许更新<strong>简单视图</strong>：</p>
+    <ul>
+      <li>from 里只有一个真实关系；</li>
+      <li>select 里只有直接的列名，没有表达式、聚集、distinct；</li>
+      <li>没列出的列可以置 null；</li>
+      <li>没有 group by 或 having。</li>
+    </ul>
+    <p>还有一种情况完全不允许：往"只含历史系教师"的视图里插入一个生物系教师，这行插入后会立刻从视图里消失，语义上自相矛盾，系统直接拒绝。</p>
+  </section>
+
+  <section id="s9">
+    <div class="sec-head"><div class="sec-num">9</div><h2>完整性约束</h2></div>
+    <p>完整性约束的作用，是替数据库把住"合法数据"这道关，让经过授权的修改也不会破坏数据一致性。比如支票账户余额必须高于某个数、雇员工资不能低于法定时薪、客户必须有非空电话。</p>
+    <h3>单表上的四种约束</h3>
+    <div class="card-grid">
+      <div class="mini-card"><h4>not null</h4><p>该列不允许空值，如姓名、预算。</p></div>
+      <div class="mini-card"><h4>primary key</h4><p>主键，非空且唯一。</p></div>
+      <div class="mini-card"><h4>unique</h4><p>声明候选键，允许为 null（这是它和主键的区别）。</p></div>
+      <div class="mini-card"><h4>check (P)</h4><p>谓词 P 必须为真，如学期只能是四个值之一。</p></div>
+    </div>
+    <div class="code"><span class="kw">check</span> (semester <span class="kw">in</span> (<span class="st">'Fall'</span>, <span class="st">'Winter'</span>, <span class="st">'Spring'</span>, <span class="st">'Summer'</span>))</div>
+    <h3>参照完整性与级联动作</h3>
+    <p>外键保证一个表里出现的引用值，在被引用表的主键里一定存在。定义外键时可以指定"被引用行被删/被改时怎么办"：</p>
+    <div class="code"><span class="kw">foreign key</span> (dept_name) <span class="kw">references</span> department
+  <span class="kw">on delete cascade</span>
+  <span class="kw">on update cascade</span></div>
+    <p>cascade 表示跟着级联删除或更新；另外两个可选动作是 <strong>set null</strong>（置空）和 <strong>set default</strong>（置为默认值）。</p>
+    <h3>事务中的约束检查与复杂约束</h3>
+    <p>有些表自引用（比如 person 表的父母 ID 也指向 person 自己），第一行数据无论先插谁都会违反外键。这时可以把约束声明为 <strong>deferred（延迟检查）</strong>，让它到事务提交时才检查，给中间过程留余地。</p>
+    <p>check 里写子查询能表达更复杂的条件（如"每个教学班至少有一名教师"），但课件指出：<strong>几乎没有数据库支持 check 里放子查询</strong>，独立的 create assertion 断言机制也没人真正实现，实际中这类需求改用触发器完成。</p>
+  </section>
+
+  <section id="s10">
+    <div class="sec-head"><div class="sec-num">10</div><h2>数据类型进阶与授权</h2></div>
+    <h3>日期时间类型</h3>
+    <div class="tbl-scroll">
+      <table>
+        <thead><tr><th>类型</th><th>含义</th><th>示例</th></tr></thead>
+        <tbody>
+          <tr><td>date</td><td>年、月、日</td><td>date '2005-7-27'</td></tr>
+          <tr><td>time</td><td>时、分、秒（可带小数）</td><td>time '09:00:30.75'</td></tr>
+          <tr><td>timestamp</td><td>日期加时间</td><td>timestamp '2005-7-27 09:00:30.75'</td></tr>
+          <tr><td>interval</td><td>一段时间</td><td>interval '1' day</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>两个日期相减得到 interval，interval 又能加回日期。列还可以用 <span class="inline-code">default</span> 给默认值，用 <span class="inline-code">create index</span> 建索引加速查询。</p>
+    <h3>大对象、自定义类型与域</h3>
+    <p>照片、视频这类大块数据用 <strong>blob</strong>（二进制大对象，解释权交给应用程序）和 <strong>clob</strong>（字符大对象）存放，查询返回的是指针而非整个对象。<span class="inline-code">create type</span> 能定义用户自定义类型（如把 Dollars 定义为 numeric(12,2)），<span class="inline-code">create domain</span> 能定义带约束的域（如限定学位只能是三个值之一）。</p>
+    <h3>授权：谁能对数据做什么</h3>
+    <p>对数据本身有四类权限：<strong>read</strong>（读）、<strong>insert</strong>（插入）、<strong>update</strong>（改）、<strong>delete</strong>（删）。修改模式结构另有四类：<strong>index</strong>（建删索引）、<strong>resources</strong>（建新关系）、<strong>alteration</strong>（增删列）、<strong>drop</strong>（删关系）。</p>
+    <div class="code"><span class="kw">grant</span> <span class="kw">select</span> <span class="kw">on</span> instructor <span class="kw">to</span> U1, U2, U3;
+<span class="kw">revoke</span> <span class="kw">select</span> <span class="kw">on</span> instructor <span class="kw">from</span> U1, U2, U3;</div>
+    <p>授权对象可以是具体用户、<strong>public</strong>（所有合法用户）或<strong>角色</strong>。角色可以授予用户，也可以授予另一个角色，形成层级。在视图上授权并不自动带来底层表的权限。此外还有 <strong>references</strong> 权限（控制能否建外键引用该表）和 <strong>grant option</strong>（允许被授权者再把权限转授他人）；收回权限时，依赖它的权限会被连带收回，cascade 与 restrict 控制这种连带行为。</p>
+  </section>
+
+  <section id="s11">
+    <div class="sec-head"><div class="sec-num">11</div><h2>从编程语言访问数据库</h2></div>
+    <p>SQL 擅长数据操作，但没有完整的循环、界面、文件处理能力。实际系统用通用编程语言写界面和逻辑，再通过标准接口调用 SQL。</p>
+    <h3>JDBC：Java 数据库连接</h3>
+    <p>JDBC 是 Java 与支持 SQL 的数据库通信的 API，通信模型四步：<strong>打开连接 → 创建 statement 对象 → 用它执行查询或更新 → 用异常机制处理错误</strong>。</p>
+    <div class="code">Connection conn = DriverManager.getConnection(url, user, passwd);
+Statement stmt = conn.createStatement();
+ResultSet rset = stmt.executeQuery(
+    "select dept_name, avg(salary) from instructor group by dept_name");
+while (rset.next()) {
+    System.out.println(rset.getString("dept_name") + " " + rset.getFloat(2));
+}</div>
+    <p>结果字段可以按列名或按位置取（getFloat(2) 表示第二列）。null 值要用专门的 wasNull() 判断。更新操作用 executeUpdate，返回受影响行数。</p>
+    <h3>预编译语句与 SQL 注入</h3>
+    <div class="callout warning"><svg class="ico" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#d9534f" stroke-width="2"><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/><path d="M12 9v4M12 17h.01"/></svg><div><div class="ct">永远不要拼接用户输入</div><p>课件给出的注入例子：用户不输入名字，而输入 <span class="inline-code">X' or 'Y' = 'Y</span>，拼进字符串后 where 条件恒真，整张表被读走；甚至能插入 <span class="inline-code">X'; update instructor set salary=salary+10000; --</span> 这样的破坏性语句。</p></div></div>
+    <p>正确做法是用 PreparedStatement，用问号占位，再把用户输入作为参数传入，驱动会负责转义，注入字符串被当成普通数据：</p>
+    <div class="code">PreparedStatement p = conn.prepareStatement(
+    "insert into instructor values(?,?,?,?)");
+p.setString(1, "88877"); p.setString(2, "Perry");
+p.setString(3, "Finance"); p.setInt(4, 125000);
+p.executeUpdate();</div>
+    <p>JDBC 还能通过元数据接口查询库里有哪些表、列名和类型；事务控制用 setAutoCommit(false) 关闭自动提交，再显式 commit() 或 rollback()；调用存储过程用 CallableStatement；大对象用 getBlob/getClob。SQLJ 则是把 SQL 直接嵌进 Java、让编译器提前查错的方案。</p>
+    <h3>ODBC 与嵌入式 SQL</h3>
+    <p>ODBC（开放数据库连接）是更早的标准 API，供 C、C++、C#、Visual Basic 等使用，每个数据库厂商提供自己的驱动库；ADO.NET 等接口就构建在 ODBC 之上。程序先分配环境句柄和连接句柄，再 SQLConnect 连接，用 SQLExecDirect 发命令、SQLFetch 取行、SQLBindCol 把结果列绑定到 C 变量。标准分 Core、Level 1、Level 2 三个一致性级别。</p>
+    <p>嵌入式 SQL 用 <span class="inline-code">EXEC SQL … END_EXEC</span> 把 SQL 写进宿主语言，由预处理器处理。查询返回多行时要声明<strong>游标（cursor）</strong>：open 执行查询，fetch 逐行取到宿主变量，SQLSTATE 变成 '02000' 表示没有更多数据，close 删除临时结果。游标还能声明 for update，配合 <span class="inline-code">where current of c</span> 更新当前行。动态 SQL 则允许程序在运行时构造并 prepare 一条带占位符的语句再 execute。</p>
+  </section>
+
+  <section id="s12">
+    <div class="sec-head"><div class="sec-num">12</div><h2>过程化结构与触发器</h2></div>
+    <h3>函数与存储过程</h3>
+    <p>SQL:1999 支持函数和过程，可以用 SQL 本身写，也可以用外部语言写。函数返回一个值，比如给定客户名返回其账户数：</p>
+    <div class="code"><span class="kw">create function</span> account_count(customer_name varchar(20))
+<span class="kw">returns integer</span>
+<span class="kw">begin</span>
+  <span class="kw">declare</span> a_count integer;
+  <span class="kw">select count</span>(*) <span class="kw">into</span> a_count
+  <span class="kw">from</span> depositor
+  <span class="kw">where</span> depositor.customer_name = customer_name;
+  <span class="kw">return</span> a_count;
+<span class="kw">end</span></div>
+    <p>SQL:2003 增加了表函数，能返回一整张关系，用 <span class="inline-code">from table(函数名(...))</span> 调用。过程用 in/out 参数，通过 call 调用。同名函数允许重载，只要参数个数或类型不同。</p>
+    <h3>过程化控制结构</h3>
+    <ul>
+      <li><strong>复合语句</strong> begin … end，里面可声明局部变量；</li>
+      <li><strong>循环</strong>：while、repeat（until 条件）、for（直接遍历一个查询的结果行）；</li>
+      <li><strong>条件</strong>：if-then-elseif-else，以及类似 C 的 case；</li>
+      <li><strong>异常</strong>：declare condition 定义条件，declare handler 声明处理器，signal 抛出异常，exit 型处理器会退出所在的 begin/end。</li>
+    </ul>
+    <p>也可以声明用 C/C++ 等写的外部语言例程，优点是效率高、表达力强，缺点是代码在数据库地址空间运行有破坏和泄密风险。安全对策是用沙箱（如 Java 这种安全语言）或放进独立进程、通过进程间通信传递参数，两者都有性能开销。</p>
+    <h3>触发器：修改引发的自动动作</h3>
+    <p>触发器是系统在数据库被修改时<strong>自动执行</strong>的语句。设计触发器要规定两件事：在什么条件下执行（触发事件 insert/delete/update），以及执行什么动作。课件的透支例子：账户更新后若余额为负，就把余额清零、同时按透支金额建一笔贷款：</p>
+    <div class="code"><span class="kw">create trigger</span> overdraft_trigger <span class="kw">after update on</span> account
+  <span class="kw">referencing new row as</span> nrow
+  <span class="kw">for each row</span> <span class="kw">when</span> nrow.balance &lt; 0
+  <span class="kw">begin atomic</span>
+    <span class="kw">insert into</span> loan <span class="kw">values</span>
+      (nrow.account_number, nrow.branch_name, -nrow.balance);
+    <span class="kw">update</span> account <span class="kw">set</span> balance = 0
+      <span class="kw">where</span> account.account_number = nrow.account_number;
+  <span class="kw">end</span></div>
+    <p>update 触发器可以限定到具体列；用 referencing old row / new row 引用修改前后的值；before 触发器能充当额外约束（比如把空格转成 null）。除了行级 for each row，还有<strong>语句级</strong> for each statement，用过渡表 old table/new table 一次性处理所有受影响行，批量更新时效率更高。</p>
+    <p>课件也指出触发器不该滥用：过去用它维护汇总数据、做数据库复制，如今物化视图和内置复制设施是更好的选择；能用封装方法解决的，也尽量不用触发器。</p>
+  </section>
+
+  <section id="s13">
+    <div class="sec-head"><div class="sec-num">13</div><h2>递归查询</h2></div>
+    <p>有一类问题普通查询很难表达：在员工-经理关系里，找出"直接或间接"汇报给某经理的所有人，也就是经理的经理、经理的经理的经理……层级数事先不知道。SQL:1999 用递归视图解决，写法是 with recursive：</p>
+    <div class="code"><span class="kw">with recursive</span> empl(employee_name, manager_name) <span class="kw">as</span> (
+  <span class="kw">select</span> employee_name, manager_name <span class="kw">from</span> manager
+  <span class="kw">union</span>
+  <span class="kw">select</span> manager.employee_name, empl.manager_name
+  <span class="kw">from</span> manager, empl
+  <span class="kw">where</span> manager.manager_name = empl.employee_name
+)
+<span class="kw">select</span> * <span class="kw">from</span> empl;</div>
+    <p>第一部分是<strong>基查询</strong>（直接上下级），第二部分是<strong>递归部分</strong>（在已有结果上再连一层）。系统迭代地一遍遍执行，直到不再产生新元组，最终结果叫递归定义的<strong>不动点（fixed point）</strong>，数学上就是 manager 关系的传递闭包。</p>
+    <div class="callout knowledge"><svg class="ico" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#173b5e" stroke-width="2"><path d="M12 2v4M12 18v4M2 12h4M18 12h4"/></svg><div><div class="ct">为什么必须有递归</div><p>不递归、不迭代的程序只能把 manager 自连固定次数，也就只能查固定层数；总能构造一个层数更多的数据库让它失效。递归视图还要求<strong>单调性</strong>：增加输入元组后，结果只能变多、不能变少。</p></div></div>
+  </section>
+
+  <section id="s14">
+    <div class="sec-head"><div class="sec-num">14</div><h2>高级聚集与 OLAP</h2></div>
+    <h3>cube 与 rollup</h3>
+    <p><span class="inline-code">cube</span> 对指定属性的<strong>每个子集</strong>都做一次 group by 再取并集。三个属性就产生 2³ = 8 种分组，包括空列表（= 全表总计）：</p>
+    <div class="code"><span class="kw">select</span> item_name, color, size, <span class="kw">sum</span>(number)
+<span class="kw">from</span> sales
+<span class="kw">group by cube</span>(item_name, color, size);</div>
+    <p><span class="inline-code">rollup</span> 则只对属性列表的<strong>每个前缀</strong>分组，三个属性产生 4 种分组，天然适合层级汇总（如"商品 → 类别 → 总计"）。分组里缺失的属性用 null 表示，函数 <span class="inline-code">grouping()</span> 返回 1 标明这是"代表全部"的 null，配合 decode 可以把它显示成 all。</p>
+    <h3>排名与窗口函数</h3>
+    <p>排名函数配合 over (order by …) 使用。<strong>rank</strong> 会留空挡（两个并列第 1，下一个就是第 3），<strong>dense_rank</strong> 不留空挡（下一个是第 2）；还有 percent_rank、cume_dist（累计分布）、row_number（重复时结果不确定）、ntile(n)（把行均分成 n 个桶）。加 partition by 可以在每个分区内单独排名，nulls first / nulls last 控制空值位置。</p>
+    <div class="code"><span class="kw">select</span> student_id,
+       <span class="kw">rank</span>() <span class="kw">over</span> (<span class="kw">order by</span> marks <span class="kw">desc</span>) <span class="kw">as</span> s_rank
+<span class="kw">from</span> student_marks;</div>
+    <p>窗口函数还能做滑动计算，比如移动平均：用 <span class="inline-code">between rows 1 preceding and 1 following</span> 框住当前行及前后各一行；用 rows unbounded preceding 可以对账户流水逐行累计余额。</p>
+    <h3>OLAP：联机分析处理</h3>
+    <p>OLAP 指以可忽略的延迟，对数据做交互式、多角度的汇总分析。数据被分成<strong>度量属性</strong>（可被聚合的数值，如销量）和<strong>维度属性</strong>（观察角度，如商品、颜色、尺寸），合称多维数据。</p>
+    <p>交叉表（cross-tab，也称透视表）把一个维度放行表头、另一个放列表头，单元格里放聚合值；数据立方体是它在 n 个维度上的推广，交叉表可看作立方体上的一个视图。常见操作有：<strong>pivoting</strong>（换维度）、<strong>slicing/dicing</strong>（固定一个或多个维度取值后切片）、<strong>roll up</strong>（从细粒度汇总到粗粒度）、<strong>drill down</strong>（反向钻取细节）。</p>
+    <p>实现上分三类：用内存多维数组存立方体的 <strong>MOLAP</strong>，只用关系数据库特性的 <strong>ROLAP</strong>，以及部分汇总放内存、基础数据放关系库的混合 <strong>HOLAP</strong>。预计算全部聚合代价很高（2ⁿ 种分组），实际只预计算部分聚合，其余从已算好的粗粒度结果推导（中位数等少数"不可分解"聚合除外），并用一次排序同时算出多种分组来优化。</p>
+  </section>
+
+  <section id="sum">
+    <div class="sec-head"><div class="sec-num">15</div><h2>本章小结与自测</h2></div>
+    <div class="summary-box">
+      <h3 style="margin-top:0">三句话串起整个 SQL</h3>
+      <p><strong>基础层</strong>：select-from-where 是一切查询的骨架，配合连接、分组、聚集、子查询能表达绝大多数检索需求，null 带来三值逻辑、聚集默认丢弃空值。</p>
+      <p><strong>中级层</strong>：外连接保证信息不丢，视图用"存表达式"的方式隔离和隐藏数据，完整性约束（含外键级联）和授权机制共同守住数据的合法与安全。</p>
+      <p><strong>高级层</strong>：JDBC/ODBC 让程序与数据库对接，预编译语句防注入；过程化结构和触发器把逻辑搬进数据库；递归查询求传递闭包，cube/rollup 与 OLAP 支撑多维分析。</p>
+    </div>
+    <div class="oneline"><b>一句话记忆：</b>SQL 不只是查询语言，它同时管定义、约束、安全、过程逻辑和分析。</div>
+
+    <div class="quiz" id="q1">
+      <div class="q">1. 关于聚集函数和空值，下列说法正确的是？</div>
+      <button class="opt" data-k="a">A. avg(salary) 会把 null 工资当成 0 参与平均</button>
+      <button class="opt" data-k="b">B. 除 count(*) 外，聚集函数计算前都会先丢弃 null</button>
+      <button class="opt" data-k="c">C. 没有任何非空值时，sum 返回 0</button>
+      <button class="opt" data-k="d">D. count(*) 也会先丢弃全为 null 的行</button>
+      <div class="fb"></div>
+    </div>
+
+    <div class="quiz" id="q2">
+      <div class="q">2. 关于视图，下列哪一项是正确的？</div>
+      <button class="opt" data-k="a">A. create view 会把查询结果实体化成一张新表存起来</button>
+      <button class="opt" data-k="b">B. 视图上的任何插入都能唯一翻译成对底层表的插入</button>
+      <button class="opt" data-k="c">C. 视图本质保存的是一个表达式，查询时做视图展开</button>
+      <button class="opt" data-k="d">D. 含 group by 的视图通常也允许更新</button>
+      <div class="fb"></div>
+    </div>
+
+    <div class="quiz" id="q3">
+      <div class="q">3. 防止 SQL 注入，课件明确推荐的做法是？</div>
+      <button class="opt" data-k="a">A. 把用户输入拼进 SQL 字符串前先检查长度</button>
+      <button class="opt" data-k="b">B. 使用 PreparedStatement 占位符，把用户输入作为参数传入</button>
+      <button class="opt" data-k="c">C. 禁止用户输入任何含单引号的字符</button>
+      <button class="opt" data-k="d">D. 只在查询而不在更新语句中拼接输入</button>
+      <div class="fb"></div>
+    </div>
+  </section>
+
+
+  </div>
+</div>
+
+<button class="totop" id="totop" aria-label="回到顶部">
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4"><path d="M18 15l-6-6-6 6"/></svg>
+</button>
+<footer><div class="wrap">数据库系统学习资料（豆包版）· 第 03 单元 · 依据课程课件第 3、4、5 章整理，所有语法与数值均来自课件原文</div></footer>
+
+<script>
+var sidebar=document.getElementById('sidebar'),overlay=document.getElementById('overlay');
+function closeSidebar(){sidebar.classList.remove('open');overlay.classList.remove('show')}
+document.getElementById('hamburger').onclick=function(){sidebar.classList.add('open');overlay.classList.add('show')};
+overlay.onclick=closeSidebar;
+document.querySelectorAll('#nav a').forEach(function(a){a.addEventListener('click',closeSidebar)});
+var links=document.querySelectorAll('#nav a'),secs=document.querySelectorAll('section');
+var obs=new IntersectionObserver(function(entries){
+  entries.forEach(function(e){if(e.isIntersecting){
+    links.forEach(function(l){l.classList.toggle('active',l.getAttribute('href')==='#'+e.target.id)})
+  }})
+},{rootMargin:'-20% 0px -70% 0px'});
+secs.forEach(function(s){obs.observe(s)});
+var totop=document.getElementById('totop');
+window.addEventListener('scroll',function(){totop.classList.toggle('show',window.scrollY>500)});
+totop.onclick=function(){window.scrollTo({top:0,behavior:'smooth'})};
+function makeQuiz(id,answer,explain){
+  var box=document.getElementById(id);
+  box.querySelectorAll('.opt').forEach(function(btn){
+    btn.onclick=function(){
+      if(box.dataset.done)return;
+      box.dataset.done='1';
+      var pick=btn.dataset.k;
+      box.querySelectorAll('.opt').forEach(function(b){
+        if(b.dataset.k===answer)b.classList.add('right');
+      });
+      if(pick!==answer)btn.classList.add('wrong');
+      var fb=box.querySelector('.fb');fb.classList.add('show');
+      fb.innerHTML=(pick===answer?'<span style="color:#2e7d5b;font-weight:700">回答正确。</span> ':'<span style="color:#d9534f;font-weight:700">回答有误。</span> ')+explain;
+    }
+  });
+}
+makeQuiz('q1','b','课件明确：除 count(*) 外，所有聚集函数计算前都先丢弃 null；没有非空值时除 count 返回 0 外，其他函数返回 null。');
+makeQuiz('q2','c','视图保存的是表达式而非实体数据，查询时展开；含连接、聚集、group by 的视图往往无法唯一翻译更新，因此不允许更新。');
+makeQuiz('q3','b','预编译语句用占位符把用户输入当参数，驱动负责转义，注入片段被当作普通数据；拼接字符串是被明确禁止的做法。');
+</script>
+</body>
+</html>

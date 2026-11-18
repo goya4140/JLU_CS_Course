@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>07 并发控制（豆包版）</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath d='M16 3 5 8v9c0 6 4.5 10 11 12 6.5-2 11-6 11-12V8z' fill='%23173b5e'/%3E%3Cpath d='M11 16l4 4 7-8' fill='none' stroke='%23e8743b' stroke-width='2.5'/%3E%3C/svg%3E">
+<style>
+:root{
+  --ink:#173b5e; --ink2:#24527e; --org:#e8743b; --org-deep:#c95a24;
+  --blue-bg:#eef4f9; --org-bg:#fdf1e8; --line:#d8e2ec;
+  --text:#233242; --gray:#5f7185; --warn-bg:#fdeceb; --warn-line:#d9534f;
+  --ok:#2e7d5b; --shadow:0 6px 22px rgba(23,59,94,.10);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;color:var(--text);background:#fff;line-height:1.85;font-size:16px}
+h1,h2,h3,h4{font-family:Georgia,"Songti SC","SimSun",serif;color:var(--ink);line-height:1.4}
+a{color:var(--ink2);text-decoration:none}
+::selection{background:var(--org);color:#fff}
+.sidebar{position:fixed;left:0;top:0;bottom:0;width:262px;background:var(--ink);color:#cfe0f0;padding:26px 0;overflow-y:auto;z-index:60;transition:transform .3s}
+.sidebar .brand{padding:0 24px 20px;border-bottom:1px solid rgba(255,255,255,.14);margin-bottom:14px}
+.sidebar .brand .db{display:flex;align-items:center;gap:10px;font-family:Georgia,serif;font-size:19px;color:#fff;letter-spacing:.5px}
+.sidebar .brand small{display:block;margin-top:6px;font-size:12px;color:#9fb8d0;letter-spacing:1px}
+.sidebar nav a{display:flex;align-items:center;gap:10px;padding:9px 24px;color:#c4d6e8;font-size:14px;border-left:3px solid transparent;transition:all .2s}
+.sidebar nav a:hover{background:rgba(255,255,255,.08);color:#fff}
+.sidebar nav a.active{background:rgba(232,116,59,.18);border-left-color:var(--org);color:#fff}
+.sidebar nav a svg{flex:none;opacity:.85}
+.sidebar .unit-no{font-size:11px;color:#86a3bf;letter-spacing:1px;padding:16px 24px 4px}
+.main{margin-left:262px;min-height:100vh}
+.wrap{max-width:880px;margin:0 auto;padding:0 34px}
+.topbar{display:none;position:sticky;top:0;background:var(--ink);color:#fff;z-index:55;padding:12px 18px;align-items:center;gap:12px}
+.topbar button{background:none;border:none;cursor:pointer;padding:4px}
+.topbar span{font-family:Georgia,serif;font-size:16px}
+.overlay{display:none;position:fixed;inset:0;background:rgba(10,25,40,.45);z-index:55}
+.hero{background:linear-gradient(135deg,#173b5e 0%,#24527e 62%,#2f6494 100%);color:#fff;padding:64px 0 58px;margin-bottom:40px;position:relative;overflow:hidden}
+.hero::after{content:"";position:absolute;right:-60px;top:-60px;width:260px;height:260px;border:26px solid rgba(232,116,59,.25);border-radius:50%}
+.hero .kicker{font-size:13px;letter-spacing:3px;color:var(--org);font-weight:600;margin-bottom:14px}
+.hero h1{color:#fff;font-size:36px;margin-bottom:16px}
+.hero p{max-width:660px;color:#d6e4f2;font-size:16.5px}
+.hero .meta{margin-top:26px;display:flex;flex-wrap:wrap;gap:10px}
+.hero .meta span{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.22);padding:6px 14px;border-radius:20px;font-size:13px}
+section{padding:16px 0 28px;scroll-margin-top:20px}
+.sec-head{display:flex;align-items:center;gap:14px;margin-bottom:16px}
+.sec-num{flex:none;width:46px;height:46px;border-radius:12px;background:var(--org);color:#fff;display:flex;align-items:center;justify-content:center;font-family:Georgia,serif;font-size:20px;box-shadow:var(--shadow)}
+.sec-head h2{font-size:25px}
+h3{font-size:19.5px;margin:24px 0 9px;padding-left:12px;border-left:4px solid var(--org)}
+h4{font-size:16px;margin:16px 0 7px;color:var(--ink2)}
+p{margin:9px 0}
+.lead{font-size:17px;color:var(--ink)}
+ul,ol{margin:9px 0 9px 26px}
+li{margin:5px 0}
+strong{color:var(--ink)}
+.em{color:var(--org-deep);font-weight:700}
+.goal-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin:18px 0}
+.goal-card{background:var(--blue-bg);border:1px solid var(--line);border-radius:12px;padding:15px 18px;display:flex;gap:12px}
+.goal-card svg{flex:none;margin-top:3px}
+.goal-card b{color:var(--ink)}
+.tbl-scroll{overflow-x:auto;margin:15px 0;border-radius:10px;border:1px solid var(--line)}
+table{width:100%;border-collapse:collapse;font-size:14px;min-width:460px}
+thead th{background:var(--ink);color:#fff;padding:11px 13px;text-align:left;font-weight:600;letter-spacing:.5px}
+tbody td{padding:10px 13px;border-bottom:1px solid var(--line);vertical-align:top}
+tbody tr:nth-child(even){background:#f6f9fc}
+tbody tr:hover{background:var(--org-bg)}
+.callout{border-radius:12px;padding:15px 19px;margin:15px 0;display:flex;gap:14px;border:1px solid}
+.callout .ico{flex:none;margin-top:2px}
+.callout .ct{font-weight:700;margin-bottom:4px;font-family:Georgia,serif;letter-spacing:.5px}
+.callout p{margin:4px 0}
+.analogy{background:var(--org-bg);border-color:#f0c9ac}
+.analogy .ct{color:var(--org-deep)}
+.knowledge{background:var(--blue-bg);border-color:var(--line)}
+.knowledge .ct{color:var(--ink)}
+.warning{background:var(--warn-bg);border-color:#eeb4b2}
+.warning .ct{color:var(--warn-line)}
+.struct{display:flex;gap:0;margin:15px 0;border-radius:10px;overflow:hidden;flex-wrap:wrap}
+.struct .cell{flex:1;min-width:100px;padding:13px 10px;text-align:center;color:#fff;font-size:13px}
+.struct .cell small{display:block;font-size:11px;opacity:.82;margin-top:4px}
+.struct .c1{background:#173b5e}.struct .c2{background:#24527e}.struct .c3{background:#2f6494}.struct .c4{background:#3d78ad}.struct .c5{background:#5588bb}
+.code{background:#12283d;color:#dce9f5;border-radius:10px;padding:15px 18px;font-family:Consolas,"Courier New",monospace;font-size:13px;line-height:1.7;overflow-x:auto;margin:13px 0;white-space:pre}
+.inline-code{font-family:Consolas,monospace;background:var(--blue-bg);border:1px solid var(--line);border-radius:5px;padding:1px 7px;font-size:13px;color:var(--ink2)}
+.formula{background:var(--blue-bg);border:1px solid var(--line);border-left:4px solid var(--ink);border-radius:8px;padding:11px 18px;margin:10px 0;font-family:Georgia,serif;font-size:15px;color:var(--ink)}
+.card-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:13px;margin:15px 0}
+.mini-card{border:1px solid var(--line);border-radius:12px;padding:15px;background:#fff;box-shadow:0 2px 8px rgba(23,59,94,.06)}
+.mini-card h4{display:flex;align-items:center;gap:8px;margin:0 0 7px}
+.mini-card p{font-size:13.5px;margin:4px 0;color:var(--gray)}
+.quiz{background:var(--blue-bg);border:1px solid var(--line);border-radius:14px;padding:21px 23px;margin:17px 0}
+.quiz .q{font-weight:700;color:var(--ink);margin-bottom:11px}
+.quiz .opt{display:block;width:100%;text-align:left;border:1px solid var(--line);background:#fff;border-radius:9px;padding:10px 15px;margin:7px 0;cursor:pointer;font-size:14px;transition:.15s}
+.quiz .opt:hover{border-color:var(--org)}
+.quiz .opt.right{background:#e6f4ec;border-color:var(--ok);color:var(--ok);font-weight:700}
+.quiz .opt.wrong{background:var(--warn-bg);border-color:var(--warn-line);color:var(--warn-line)}
+.quiz .fb{margin-top:9px;font-size:13.5px;display:none}
+.quiz .fb.show{display:block}
+.summary-box{background:linear-gradient(135deg,var(--blue-bg),#fff);border:1px solid var(--line);border-radius:16px;padding:25px 27px;margin:23px 0}
+.oneline{background:var(--ink);color:#fff;border-radius:10px;padding:13px 19px;margin:13px 0;font-size:15px}
+.oneline b{color:var(--org)}
+.totop{position:fixed;right:26px;bottom:26px;width:46px;height:46px;border-radius:50%;background:var(--org);border:none;cursor:pointer;box-shadow:var(--shadow);display:none;align-items:center;justify-content:center;z-index:40}
+.totop.show{display:flex}
+footer{border-top:1px solid var(--line);padding:26px 0 40px;color:var(--gray);font-size:13px}
+@media (max-width:900px){
+  .sidebar{transform:translateX(-100%)}
+  .sidebar.open{transform:translateX(0)}
+  .main{margin-left:0}
+  .topbar{display:flex}
+  .overlay.show{display:block}
+  .wrap{padding:0 20px}
+  .hero{padding:44px 0 40px}
+  .hero h1{font-size:27px}
+  .goal-grid,.card-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<aside class="sidebar" id="sidebar">
+  <div class="brand">
+    <div class="db">
+      <svg width="26" height="26" viewBox="0 0 32 32"><path d="M16 3 5 8v9c0 6 4.5 10 11 12 6.5-2 11-6 11-12V8z" fill="#fff"/><path d="M11 16l4 4 7-8" stroke="#e8743b" stroke-width="2.5"/></svg>
+      数据库系统
+    </div>
+    <small>DATABASE SYSTEM CONCEPTS</small>
+  </div>
+  <div class="unit-no">第 07 单元 · 目录</div>
+  <nav id="nav">
+    <a href="#intro"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 8v5l3 2"/></svg>开篇导读</a>
+    <a href="#s1"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>锁与兼容矩阵</a>
+    <a href="#s2"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/></svg>两阶段封锁</a>
+    <a href="#s3"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="6" cy="6" r="3"/><circle cx="18" cy="6" r="3"/><circle cx="12" cy="18" r="3"/><path d="M9 9l3 6 3-6"/></svg>基于图的协议</a>
+    <a href="#s4"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/></svg>死锁处理</a>
+    <a href="#s5"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="M7 14l4-4 4 4 5-6"/></svg>多粒度与意向锁</a>
+    <a href="#s6"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>时间戳协议</a>
+    <a href="#s7"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>验证协议</a>
+    <a href="#s8"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/></svg>多版本与快照</a>
+    <a href="#s9"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2 2 7v10l10 5 10-5V7z"/></svg>幻像与索引封锁</a>
+    <a href="#s10"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>索引结构并发</a>
+    <a href="#sum"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/></svg>本章小结与自测</a>
+  </nav>
+</aside>
+<div class="overlay" id="overlay"></div>
+
+<div class="topbar">
+  <button id="hamburger" aria-label="打开目录">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+  </button>
+  <span>07 并发控制</span>
+</div>
+
+<div class="main">
+  <header class="hero">
+    <div class="wrap">
+      <div class="kicker">CHAPTER 15 · CONCURRENCY CONTROL</div>
+      <h1>并发控制</h1>
+      <p>上一单元我们知道了"什么是正确的调度"，这一单元回答"系统怎样只产生正确的调度"。课件依次介绍封锁协议、时间戳协议、验证协议、多粒度锁、多版本与快照隔离，还专门讨论了幻像现象和索引结构的并发。理解这些协议的关键，是看清它们在并发度和开销之间各自做了什么取舍。</p>
+      <div class="meta"><span>对应课件：第 15 章</span><span>课件页数：66 页</span><span>建议学习：6 小时</span><span>重点：两阶段封锁与死锁</span></div>
+    </div>
+  </header>
+
+  <div class="wrap">
+
+  <section id="intro">
+    <div class="sec-head"><div class="sec-num">0</div><h2>开篇导读</h2></div>
+    <p class="lead">并发控制协议是一套规则，所有事务在请求和释放数据访问权时都必须遵守，它限制了可能出现的调度集合，从而保证产生的调度都可串行化、可恢复。</p>
+    <p>课件把协议分成几大类：<strong>基于封锁</strong>的协议（最主流）、<strong>基于时间戳</strong>的协议、<strong>基于验证</strong>的协议，以及多粒度、多版本方案。学习时可以带着三个问题：它怎样保证可串行化？会不会死锁？并发度和开销如何？</p>
+    <div class="goal-grid">
+      <div class="goal-card"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="#e8743b" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/></svg><div><b>封锁与两阶段封锁</b><br><small>S/X 锁、兼容矩阵、2PL</small></div></div>
+      <div class="goal-card"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="#e8743b" stroke-width="2"><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17"/></svg><div><b>死锁</b><br><small>预防、检测、恢复</small></div></div>
+      <div class="goal-card"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="#e8743b" stroke-width="2"><circle cx="12" cy="12" r="9"/></svg><div><b>时间戳与验证</b><br><small>排序协议、乐观控制</small></div></div>
+      <div class="goal-card"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="#e8743b" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 8v8"/></svg><div><b>多版本与快照隔离</b><br><small>MVCC、写偏斜</small></div></div>
+    </div>
+  </section>
+
+  <section id="s1">
+    <div class="sec-head"><div class="sec-num">1</div><h2>锁与兼容矩阵</h2></div>
+    <p>锁（lock）是控制对数据项并发访问的机制。数据项可以按两种模式加锁：</p>
+    <div class="card-grid">
+      <div class="mini-card"><h4>排他锁 X（exclusive）</h4><p>用 lock-X 请求，持有后既可以读也可以写，相当于独占。</p></div>
+      <div class="mini-card"><h4>共享锁 S（shared）</h4><p>用 lock-S 请求，持有后只能读不能写，多个事务可以同时持有。</p></div>
+    </div>
+    <p>加锁请求发给并发控制管理器，获准后事务才能继续。兼容矩阵决定一个请求能否被批准：</p>
+    <div class="tbl-scroll">
+      <table>
+        <thead><tr><th>已有锁 / 请求锁</th><th>S</th><th>X</th></tr></thead>
+        <tbody>
+          <tr><td>S</td><td>兼容，可批准</td><td>冲突，等待</td></tr>
+          <tr><td>X</td><td>冲突，等待</td><td>冲突，等待</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>任意多个事务可以同时持有共享锁；但只要有一个事务持有排他锁，其他事务任何锁都拿不到，只能等待对方释放。注意：简单地"读完就解锁"并不能保证可串行化，若 A、B 在两次读取之间被其他事务更新，算出的总和就会出错。</p>
+  </section>
+
+  <section id="s2">
+    <div class="sec-head"><div class="sec-num">2</div><h2>两阶段封锁协议</h2></div>
+    <p>两阶段封锁（Two-Phase Locking，2PL）保证产生冲突可串行化的调度。它把事务分成两个阶段：</p>
+    <div class="struct">
+      <div class="cell c1">增长阶段 growing<small>可以获取锁，不能释放锁</small></div>
+      <div class="cell c2">收缩阶段 shrinking<small>可以释放锁，不能获取锁</small></div>
+    </div>
+    <p>可以证明，事务可以按它们的<strong>封锁点</strong>（获取最后一个锁的时刻）排序，这个顺序就是可串行化顺序。</p>
+    <h3>两个变体</h3>
+    <ul>
+      <li><strong>严格两阶段封锁</strong>：事务必须持有全部排他锁直到 commit/abort，避免级联回滚。</li>
+      <li><strong>严谨两阶段封锁（rigorous）</strong>：所有锁都持有到 commit/abort，事务按提交顺序串行化，实际系统最常用。</li>
+    </ul>
+    <p>2PL 不能避免死锁，也存在一些冲突可串行化的调度无法由 2PL 产生。但在没有额外信息（如数据访问顺序）时，2PL 是必要的：对任何不遵守 2PL 的事务，都能找到一个遵守 2PL 的事务，使两者的并发调度不可串行化。</p>
+    <h3>锁转换与自动加锁</h3>
+    <p>增长阶段允许把 S 锁升级为 X 锁（upgrade），收缩阶段允许把 X 降级为 S（downgrade）。系统还能自动加锁：执行 read(D) 时若没有锁就自动申请 S 锁，write(D) 时若持有 S 锁就升级为 X、否则申请 X 锁，commit/abort 后统一释放，程序员无需手写加锁指令。</p>
+  </section>
+
+  <section id="s3">
+    <div class="sec-head"><div class="sec-num">3</div><h2>基于图的协议</h2></div>
+    <p>图协议是 2PL 的替代方案：在所有数据项集合 D 上施加一个偏序，若 dᵢ→dⱼ，则同时访问两者的事务必须先访问 dᵢ。D 因此构成一个有向无环图，称为数据库图。最简单的是<strong>树协议</strong>，规则如下：</p>
+    <ol>
+      <li>只允许使用排他锁；</li>
+      <li>第一个锁可以加在任意数据项上，此后要锁 Q，必须当前持有 Q 的父节点的锁；</li>
+      <li>数据项可以随时解锁；</li>
+      <li>已被本事务加锁又解锁的数据项不能再次加锁。</li>
+    </ol>
+    <p>树协议保证冲突可串行化，而且<strong>不会死锁</strong>；解锁比 2PL 更早，等待更短、并发度更高。缺点是：不保证可恢复和无级联（需要引入提交依赖），事务可能被迫锁住自己并不访问的数据项，增加了加锁开销。</p>
+  </section>
+
+  <section id="s4">
+    <div class="sec-head"><div class="sec-num">4</div><h2>死锁处理</h2></div>
+    <p>如果存在一个事务集合，其中每个事务都在等待集合中的另一个事务，系统就进入了死锁。比如 T3 等 T4 释放 B、T4 等 T3 释放 A，谁也无法继续。处理死锁有预防、检测、超时三条路线。</p>
+    <h3>死锁预防</h3>
+    <p>两种基础策略：<strong>预声明</strong>，要求事务开始前一次性锁住全部数据项；<strong>偏序加锁</strong>，即图协议，规定只能按固定顺序加锁。利用时间戳还有两种方案：</p>
+    <div class="tbl-scroll">
+      <table>
+        <thead><tr><th>方案</th><th>规则</th><th>特点</th></tr></thead>
+        <tbody>
+          <tr><td>等待-死亡 wait-die（非抢占）</td><td>老事务可等年轻事务；年轻事务不等老事务，直接回滚</td><td>同一事务可能"死"好几次</td></tr>
+          <tr><td>受伤-等待 wound-wait（抢占）</td><td>老事务直接"刺伤"、回滚年轻事务；年轻事务可等老事务</td><td>回滚次数通常更少</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>两种方案中回滚的事务都用原时间戳重启，老事务始终优先，因此不会饥饿。<strong>超时方案</strong>让事务只等待指定时间，超时即回滚，实现简单、不可能死锁，但超时时间难以设定，也可能饥饿。</p>
+    <h3>死锁检测与恢复</h3>
+    <p>用<strong>等待图（wait-for graph）</strong>描述等待关系：Tᵢ→Tⱼ 表示 Tᵢ 正在等 Tⱼ。系统死锁当且仅当等待图有环，需周期性运行环检测算法。发现死锁后要选一个"牺牲品"回滚，选择代价最小的事务；回滚可以整体中止重启，也可以只回滚到足以打破死锁的位置。为避免同一事务总被选中而饥饿，应把回滚次数计入代价因子。</p>
+  </section>
+
+  <section id="s5">
+    <div class="sec-head"><div class="sec-num">5</div><h2>多粒度与意向锁</h2></div>
+    <p>多粒度允许数据项有不同大小，小粒度嵌套在大粒度中，形成一棵层次树（课件例子从粗到细是：数据库 → 区域 → 文件 → 记录）。显式锁住一个节点，就隐式地以同样模式锁住它的全部后代。</p>
+    <div class="formula">细粒度：并发度高、加锁开销大；粗粒度：开销小、并发度低</div>
+    <p>除 S、X 外还有三种意向锁模式：</p>
+    <div class="card-grid">
+      <div class="mini-card"><h4>意向共享 IS</h4><p>下层将用共享锁显式加锁。</p></div>
+      <div class="mini-card"><h4>意向排他 IX</h4><p>下层将用排他或共享锁显式加锁。</p></div>
+      <div class="mini-card"><h4>共享意向排他 SIX</h4><p>该节点子树以共享模式显式锁定，同时下层用排他锁加锁。</p></div>
+    </div>
+    <p>意向锁让高层节点加 S 或 X 锁时不必逐一检查所有后代。多粒度封锁规则要求：先锁根节点，按根到叶的顺序加锁、叶到根的顺序解锁，且整个事务遵守两阶段约束；加 S/IS 锁要求父节点持 IX 或 IS，加 X/SIX/IX 锁要求父节点持 IX 或 SIX。</p>
+  </section>
+
+  <section id="s6">
+    <div class="sec-head"><div class="sec-num">6</div><h2>时间戳协议</h2></div>
+    <p>每个事务进入系统时获得一个时间戳，老事务时间戳小、新事务时间戳大，时间戳直接决定可串行化顺序。系统为每个数据项 Q 维护两个时间戳：W-timestamp(Q) 是成功写过 Q 的最大事务时间戳，R-timestamp(Q) 是成功读过 Q 的最大事务时间戳。</p>
+    <h3>时间戳排序规则</h3>
+    <p><strong>事务 Tᵢ 读 Q</strong>：若 TS(Tᵢ) ≤ W-timestamp(Q)，它要读的值已被覆盖，读被拒绝、Tᵢ 回滚；否则执行读，并把 R-timestamp 设为两者较大值。</p>
+    <p><strong>事务 Tᵢ 写 Q</strong>：若 TS(Tᵢ) < R-timestamp(Q)，它要产生的值本来已被认为不会出现，拒绝并回滚；若 TS(Tᵢ) < W-timestamp(Q)，它在写一个过时值，拒绝并回滚；否则执行写并更新 W-timestamp。</p>
+    <p>该协议保证可串行化（优先图里所有边都从时间戳小的指向大的，不可能成环），且没有事务会等待，所以<strong>不会死锁</strong>；但可能不无级联、甚至不可恢复，需要靠"写操作集中到最后、原子提交"或有限加锁、提交依赖来补救。</p>
+    <h3>Thomas 写规则</h3>
+    <p>这是改进版：当 Tᵢ 写 Q 且 TS(Tᵢ) < W-timestamp(Q) 时，不再回滚，而是<strong>直接忽略</strong>这个过时而多余的写。它允许更大的并发度，能产生一些冲突不可串行化、但视图可串行化的调度。</p>
+  </section>
+
+  <section id="s7">
+    <div class="sec-head"><div class="sec-num">7</div><h2>验证协议（乐观并发控制）</h2></div>
+    <p>验证协议把事务执行分成三个阶段：</p>
+    <div class="struct">
+      <div class="cell c1">读与执行阶段<small>只写临时局部变量</small></div>
+      <div class="cell c2">验证阶段<small>做"验证测试"判断能否写入</small></div>
+      <div class="cell c3">写阶段<small>通过则更新数据库，否则回滚</small></div>
+    </div>
+    <p>它又称乐观并发控制，因为事务先完整执行、寄希望于验证时一切顺利。每个事务有三个时间戳：Start、Validation、Finish，可串行化顺序按验证时刻定，以提高并发度。</p>
+    <p>对所有 TS(Tᵢ) < TS(Tⱼ) 的事务，只要满足下列之一，Tⱼ 验证成功：finish(Tᵢ) < start(Tⱼ)（两者执行完全不重叠）；或 start(Tⱼ) < finish(Tᵢ) < validation(Tⱼ) 且 Tᵢ 写的数据项集合与 Tⱼ 读的集合不相交。冲突概率低时，这个协议回滚很少、并发度很高。</p>
+  </section>
+
+  <section id="s8">
+    <div class="sec-head"><div class="sec-num">8</div><h2>多版本方案与快照隔离</h2></div>
+    <p>多版本方案保留数据项的旧版本以提高并发度：每次成功写都产生一个新版本并用时间戳标记，读操作按事务时间戳选一个合适版本，因此读永远不必等待。</p>
+    <h3>两种多版本协议</h3>
+    <p><strong>多版本时间戳排序</strong>：每个版本含内容、写时间戳、读时间戳；读总成功，写若发现本应读它的事务已读了更老版本则回滚，否则覆盖或新建版本。</p>
+    <p><strong>多版本两阶段封锁</strong>：区分只读事务和更新事务，更新事务遵守严谨 2PL、写新版本（时间戳先记为 ∞，提交时才赋值），只读事务按时间戳读旧版本，只产生可串行化调度。多版本的代价是存储开销，但旧版本可在不再有活跃事务需要时被垃圾回收。</p>
+    <h3>快照隔离</h3>
+    <p>事务开始时对已提交数据拍一张快照，之后只在自己的快照里读写，并发事务的更新对它不可见；提交时遵守<strong>首个提交者获胜</strong>规则：若已有其他并发事务写了它想写的数据，就中止它（Oracle 用的是变体"首个更新者获胜"，在写入时就检查、更早回滚）。</p>
+    <p>快照隔离下读不被阻塞、也不阻塞别人，能避免脏读、丢失更新、不可重复读和幻像；但它并不保证可串行化：两个并发事务互相看不到对方，可能违反完整性约束，典型问题是<strong>写偏斜</strong>（如 T1 做 x:=y、T2 做 y:=x，结果与任何串行执行都不同）和插入偏斜。课件指出这类异常实践中并不常见，Oracle、PostgreSQL 在设为 serializable 时实际用的仍是快照隔离，可用 select ... for update 锁定所读数据来规避。</p>
+  </section>
+
+  <section id="s9">
+    <div class="sec-head"><div class="sec-num">9</div><h2>插入删除与幻像现象</h2></div>
+    <p>2PL 下删除元组必须持有该元组的排他锁，插入新元组的事务自动获得该元组的 X 锁。但插入、删除会引发<strong>幻像现象（phantom）</strong>：一个事务扫描关系（如统计某分行全部账户余额），另一个事务往里插入元组，两者虽然没有访问任何共同元组，逻辑上却冲突。若只对元组加锁，就会产生不可串行化的调度。</p>
+    <p>根源在于扫描事务读的是"关系里有哪些元组"这个信息，插入事务更新的正是同一信息。一种解决办法是给关系关联一个代表"元组构成"的数据项，扫描方加共享锁、插入删除方加排他锁，但并发度很低。</p>
+    <p>更好的是<strong>索引封锁协议</strong>：事务必须通过索引访问元组，查找时对访问到的所有索引叶节点加 S 锁（即使该叶节点没有满足条件的元组也要锁），插入、更新、删除时对受影响的叶节点加 X 锁，并遵守两阶段规则，从而保证幻像不发生。<strong>Next-Key 封锁</strong>进一步优化：只锁满足查找条件的值以及索引中的下一个键值，范围查询自然与并发插入冲突，避免锁住整个叶节点，提升插入并发度。</p>
+  </section>
+
+  <section id="s10">
+    <div class="sec-head"><div class="sec-num">10</div><h2>索引结构的并发</h2></div>
+    <p>索引的唯一职责是帮助访问数据，且访问频率远高于其他数据项，若像普通数据一样对索引节点做两阶段封锁，会严重降低并发度。因此索引并发协议允许内部节点的锁提前释放、不按两阶段方式管理：只要索引本身的准确性得到保证，对索引的不可串行化访问是可接受的，比如在 B+-树内部节点读到的具体值无关紧要，只要最终能落到正确的叶节点。</p>
+    <p>课件介绍了<strong>蟹行协议（crabbing）</strong>：先以共享模式锁根，锁住所需子节点后立即释放父节点；插入删除时把叶节点锁升级为排他锁，需要分裂或合并时再排他锁住父节点。它可能让下行的搜索与上行的更新发生死锁，可中止重启搜索；更优的 B-link 树协议通过"先释放父节点锁再取子节点锁"并处理期间变化来改进。</p>
+  </section>
+
+  <section id="sum">
+    <div class="sec-head"><div class="sec-num">11</div><h2>本章小结与自测</h2></div>
+    <div class="summary-box">
+      <h3 style="margin-top:0">协议家族全景</h3>
+      <p><strong>封锁类</strong>：S/X 锁加兼容矩阵，2PL 靠"先增长后收缩"保证冲突可串行化，严格/严谨变体避免级联回滚；树协议无死锁但可能锁多余数据。<strong>死锁</strong>可预防（wait-die、wound-wait、超时）、可检测（等待图有环）、恢复时选最小代价牺牲品。<strong>时间戳协议</strong>无死锁，Thomas 规则忽略过时写；<strong>验证协议</strong>适合低冲突场景；<strong>多版本与快照隔离</strong>让读不阻塞，却可能写偏斜。幻像靠索引封锁和 Next-Key 封锁解决，索引内部则用蟹行协议。</p>
+    </div>
+    <div class="oneline"><b>一句话记忆：</b>所有并发协议都是在"可串行化正确性"和"并发度、开销"之间找平衡点。</div>
+
+    <div class="quiz" id="q1">
+      <div class="q">1. 两阶段封锁协议中，"增长阶段"和"收缩阶段"各自的规则是？</div>
+      <button class="opt" data-k="a">A. 增长阶段只能释放锁，收缩阶段只能加锁</button>
+      <button class="opt" data-k="b">B. 增长阶段可加锁不能释放，收缩阶段可释放不能加锁</button>
+      <button class="opt" data-k="c">C. 两个阶段都可以随时加锁和释放</button>
+      <button class="opt" data-k="d">D. 增长阶段只加 S 锁，收缩阶段只加 X 锁</button>
+      <div class="fb"></div>
+    </div>
+
+    <div class="quiz" id="q2">
+      <div class="q">2. 死锁检测中，判断系统处于死锁状态的依据是？</div>
+      <button class="opt" data-k="a">A. 等待图中存在环</button>
+      <button class="opt" data-k="b">B. 等待图中边数等于事务数</button>
+      <button class="opt" data-k="c">C. 优先图中存在环</button>
+      <button class="opt" data-k="d">D. 任何事务持有了排他锁</button>
+      <div class="fb"></div>
+    </div>
+
+    <div class="quiz" id="q3">
+      <div class="q">3. 关于快照隔离和多版本，下列说法正确的是？</div>
+      <button class="opt" data-k="a">A. 快照隔离严格保证可串行化，不会出现任何异常</button>
+      <button class="opt" data-k="b">B. 多版本下读操作通常需要等待写事务释放锁</button>
+      <button class="opt" data-k="c">C. 快照隔离可能出现写偏斜，首个提交者获胜规则会中止冲突事务</button>
+      <button class="opt" data-k="d">D. 时间戳协议因为事务互相等待而容易死锁</button>
+      <div class="fb"></div>
+    </div>
+  </section>
+
+  </div>
+</div>
+
+<button class="totop" id="totop" aria-label="回到顶部">
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4"><path d="M18 15l-6-6-6 6"/></svg>
+</button>
+<footer><div class="wrap">数据库系统学习资料（豆包版）· 第 07 单元 · 依据课程课件第 15 章整理，所有概念、规则与示例均来自课件原文</div></footer>
+
+<script>
+var sidebar=document.getElementById('sidebar'),overlay=document.getElementById('overlay');
+function closeSidebar(){sidebar.classList.remove('open');overlay.classList.remove('show')}
+document.getElementById('hamburger').onclick=function(){sidebar.classList.add('open');overlay.classList.add('show')};
+overlay.onclick=closeSidebar;
+document.querySelectorAll('#nav a').forEach(function(a){a.addEventListener('click',closeSidebar)});
+var links=document.querySelectorAll('#nav a'),secs=document.querySelectorAll('section');
+var obs=new IntersectionObserver(function(entries){
+  entries.forEach(function(e){if(e.isIntersecting){
+    links.forEach(function(l){l.classList.toggle('active',l.getAttribute('href')==='#'+e.target.id)})
+  }})
+},{rootMargin:'-20% 0px -70% 0px'});
+secs.forEach(function(s){obs.observe(s)});
+var totop=document.getElementById('totop');
+window.addEventListener('scroll',function(){totop.classList.toggle('show',window.scrollY>500)});
+totop.onclick=function(){window.scrollTo({top:0,behavior:'smooth'})};
+function makeQuiz(id,answer,explain){
+  var box=document.getElementById(id);
+  box.querySelectorAll('.opt').forEach(function(btn){
+    btn.onclick=function(){
+      if(box.dataset.done)return;
+      box.dataset.done='1';
+      var pick=btn.dataset.k;
+      box.querySelectorAll('.opt').forEach(function(b){
+        if(b.dataset.k===answer)b.classList.add('right');
+      });
+      if(pick!==answer)btn.classList.add('wrong');
+      var fb=box.querySelector('.fb');fb.classList.add('show');
+      fb.innerHTML=(pick===answer?'<span style="color:#2e7d5b;font-weight:700">回答正确。</span> ':'<span style="color:#d9534f;font-weight:700">回答有误。</span> ')+explain;
+    }
+  });
+}
+makeQuiz('q1','b','2PL 增长阶段只加锁不释放、收缩阶段只释放不加锁，按封锁点顺序可串行化。');
+makeQuiz('q2','a','死锁检测看等待图（wait-for graph）是否有环；优先图是判断冲突可串行化的工具。');
+makeQuiz('q3','c','快照隔离不保证可串行化，可能写偏斜；多版本下读不等待，时间戳协议无事务等待故无死锁。');
+</script>
+</body>
+</html>

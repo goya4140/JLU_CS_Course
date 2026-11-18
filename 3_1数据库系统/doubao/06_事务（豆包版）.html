@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>06 事务（豆包版）</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath d='M16 3 5 8v9c0 6 4.5 10 11 12 6.5-2 11-6 11-12V8z' fill='%23173b5e'/%3E%3Cpath d='M11 16l4 4 7-8' fill='none' stroke='%23e8743b' stroke-width='2.5'/%3E%3C/svg%3E">
+<style>
+:root{
+  --ink:#173b5e; --ink2:#24527e; --org:#e8743b; --org-deep:#c95a24;
+  --blue-bg:#eef4f9; --org-bg:#fdf1e8; --line:#d8e2ec;
+  --text:#233242; --gray:#5f7185; --warn-bg:#fdeceb; --warn-line:#d9534f;
+  --ok:#2e7d5b; --shadow:0 6px 22px rgba(23,59,94,.10);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;color:var(--text);background:#fff;line-height:1.85;font-size:16px}
+h1,h2,h3,h4{font-family:Georgia,"Songti SC","SimSun",serif;color:var(--ink);line-height:1.4}
+a{color:var(--ink2);text-decoration:none}
+::selection{background:var(--org);color:#fff}
+.sidebar{position:fixed;left:0;top:0;bottom:0;width:262px;background:var(--ink);color:#cfe0f0;padding:26px 0;overflow-y:auto;z-index:60;transition:transform .3s}
+.sidebar .brand{padding:0 24px 20px;border-bottom:1px solid rgba(255,255,255,.14);margin-bottom:14px}
+.sidebar .brand .db{display:flex;align-items:center;gap:10px;font-family:Georgia,serif;font-size:19px;color:#fff;letter-spacing:.5px}
+.sidebar .brand small{display:block;margin-top:6px;font-size:12px;color:#9fb8d0;letter-spacing:1px}
+.sidebar nav a{display:flex;align-items:center;gap:10px;padding:9px 24px;color:#c4d6e8;font-size:14px;border-left:3px solid transparent;transition:all .2s}
+.sidebar nav a:hover{background:rgba(255,255,255,.08);color:#fff}
+.sidebar nav a.active{background:rgba(232,116,59,.18);border-left-color:var(--org);color:#fff}
+.sidebar nav a svg{flex:none;opacity:.85}
+.sidebar .unit-no{font-size:11px;color:#86a3bf;letter-spacing:1px;padding:16px 24px 4px}
+.main{margin-left:262px;min-height:100vh}
+.wrap{max-width:880px;margin:0 auto;padding:0 34px}
+.topbar{display:none;position:sticky;top:0;background:var(--ink);color:#fff;z-index:55;padding:12px 18px;align-items:center;gap:12px}
+.topbar button{background:none;border:none;cursor:pointer;padding:4px}
+.topbar span{font-family:Georgia,serif;font-size:16px}
+.overlay{display:none;position:fixed;inset:0;background:rgba(10,25,40,.45);z-index:55}
+.hero{background:linear-gradient(135deg,#173b5e 0%,#24527e 62%,#2f6494 100%);color:#fff;padding:64px 0 58px;margin-bottom:40px;position:relative;overflow:hidden}
+.hero::after{content:"";position:absolute;right:-60px;top:-60px;width:260px;height:260px;border:26px solid rgba(232,116,59,.25);border-radius:50%}
+.hero .kicker{font-size:13px;letter-spacing:3px;color:var(--org);font-weight:600;margin-bottom:14px}
+.hero h1{color:#fff;font-size:36px;margin-bottom:16px}
+.hero p{max-width:660px;color:#d6e4f2;font-size:16.5px}
+.hero .meta{margin-top:26px;display:flex;flex-wrap:wrap;gap:10px}
+.hero .meta span{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.22);padding:6px 14px;border-radius:20px;font-size:13px}
+section{padding:16px 0 28px;scroll-margin-top:20px}
+.sec-head{display:flex;align-items:center;gap:14px;margin-bottom:16px}
+.sec-num{flex:none;width:46px;height:46px;border-radius:12px;background:var(--org);color:#fff;display:flex;align-items:center;justify-content:center;font-family:Georgia,serif;font-size:20px;box-shadow:var(--shadow)}
+.sec-head h2{font-size:25px}
+h3{font-size:19.5px;margin:24px 0 9px;padding-left:12px;border-left:4px solid var(--org)}
+h4{font-size:16px;margin:16px 0 7px;color:var(--ink2)}
+p{margin:9px 0}
+.lead{font-size:17px;color:var(--ink)}
+ul,ol{margin:9px 0 9px 26px}
+li{margin:5px 0}
+strong{color:var(--ink)}
+.em{color:var(--org-deep);font-weight:700}
+.goal-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin:18px 0}
+.goal-card{background:var(--blue-bg);border:1px solid var(--line);border-radius:12px;padding:15px 18px;display:flex;gap:12px}
+.goal-card svg{flex:none;margin-top:3px}
+.goal-card b{color:var(--ink)}
+.tbl-scroll{overflow-x:auto;margin:15px 0;border-radius:10px;border:1px solid var(--line)}
+table{width:100%;border-collapse:collapse;font-size:14px;min-width:460px}
+thead th{background:var(--ink);color:#fff;padding:11px 13px;text-align:left;font-weight:600;letter-spacing:.5px}
+tbody td{padding:10px 13px;border-bottom:1px solid var(--line);vertical-align:top}
+tbody tr:nth-child(even){background:#f6f9fc}
+tbody tr:hover{background:var(--org-bg)}
+.callout{border-radius:12px;padding:15px 19px;margin:15px 0;display:flex;gap:14px;border:1px solid}
+.callout .ico{flex:none;margin-top:2px}
+.callout .ct{font-weight:700;margin-bottom:4px;font-family:Georgia,serif;letter-spacing:.5px}
+.callout p{margin:4px 0}
+.analogy{background:var(--org-bg);border-color:#f0c9ac}
+.analogy .ct{color:var(--org-deep)}
+.knowledge{background:var(--blue-bg);border-color:var(--line)}
+.knowledge .ct{color:var(--ink)}
+.warning{background:var(--warn-bg);border-color:#eeb4b2}
+.warning .ct{color:var(--warn-line)}
+.struct{display:flex;gap:0;margin:15px 0;border-radius:10px;overflow:hidden;flex-wrap:wrap}
+.struct .cell{flex:1;min-width:100px;padding:13px 10px;text-align:center;color:#fff;font-size:13px}
+.struct .cell small{display:block;font-size:11px;opacity:.82;margin-top:4px}
+.struct .c1{background:#173b5e}.struct .c2{background:#24527e}.struct .c3{background:#2f6494}.struct .c4{background:#3d78ad}.struct .c5{background:#5588bb}
+.code{background:#12283d;color:#dce9f5;border-radius:10px;padding:15px 18px;font-family:Consolas,"Courier New",monospace;font-size:13px;line-height:1.7;overflow-x:auto;margin:13px 0;white-space:pre}
+.inline-code{font-family:Consolas,monospace;background:var(--blue-bg);border:1px solid var(--line);border-radius:5px;padding:1px 7px;font-size:13px;color:var(--ink2)}
+.formula{background:var(--blue-bg);border:1px solid var(--line);border-left:4px solid var(--ink);border-radius:8px;padding:11px 18px;margin:10px 0;font-family:Georgia,serif;font-size:15px;color:var(--ink)}
+.card-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:13px;margin:15px 0}
+.mini-card{border:1px solid var(--line);border-radius:12px;padding:15px;background:#fff;box-shadow:0 2px 8px rgba(23,59,94,.06)}
+.mini-card h4{display:flex;align-items:center;gap:8px;margin:0 0 7px}
+.mini-card p{font-size:13.5px;margin:4px 0;color:var(--gray)}
+.quiz{background:var(--blue-bg);border:1px solid var(--line);border-radius:14px;padding:21px 23px;margin:17px 0}
+.quiz .q{font-weight:700;color:var(--ink);margin-bottom:11px}
+.quiz .opt{display:block;width:100%;text-align:left;border:1px solid var(--line);background:#fff;border-radius:9px;padding:10px 15px;margin:7px 0;cursor:pointer;font-size:14px;transition:.15s}
+.quiz .opt:hover{border-color:var(--org)}
+.quiz .opt.right{background:#e6f4ec;border-color:var(--ok);color:var(--ok);font-weight:700}
+.quiz .opt.wrong{background:var(--warn-bg);border-color:var(--warn-line);color:var(--warn-line)}
+.quiz .fb{margin-top:9px;font-size:13.5px;display:none}
+.quiz .fb.show{display:block}
+.summary-box{background:linear-gradient(135deg,var(--blue-bg),#fff);border:1px solid var(--line);border-radius:16px;padding:25px 27px;margin:23px 0}
+.oneline{background:var(--ink);color:#fff;border-radius:10px;padding:13px 19px;margin:13px 0;font-size:15px}
+.oneline b{color:var(--org)}
+.totop{position:fixed;right:26px;bottom:26px;width:46px;height:46px;border-radius:50%;background:var(--org);border:none;cursor:pointer;box-shadow:var(--shadow);display:none;align-items:center;justify-content:center;z-index:40}
+.totop.show{display:flex}
+footer{border-top:1px solid var(--line);padding:26px 0 40px;color:var(--gray);font-size:13px}
+@media (max-width:900px){
+  .sidebar{transform:translateX(-100%)}
+  .sidebar.open{transform:translateX(0)}
+  .main{margin-left:0}
+  .topbar{display:flex}
+  .overlay.show{display:block}
+  .wrap{padding:0 20px}
+  .hero{padding:44px 0 40px}
+  .hero h1{font-size:27px}
+  .goal-grid,.card-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<aside class="sidebar" id="sidebar">
+  <div class="brand">
+    <div class="db">
+      <svg width="26" height="26" viewBox="0 0 32 32"><path d="M16 3 5 8v9c0 6 4.5 10 11 12 6.5-2 11-6 11-12V8z" fill="#fff"/><path d="M11 16l4 4 7-8" stroke="#e8743b" stroke-width="2.5"/></svg>
+      数据库系统
+    </div>
+    <small>DATABASE SYSTEM CONCEPTS</small>
+  </div>
+  <div class="unit-no">第 06 单元 · 目录</div>
+  <nav id="nav">
+    <a href="#intro"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 8v5l3 2"/></svg>开篇导读</a>
+    <a href="#s1"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>ACID 四性</a>
+    <a href="#s2"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/></svg>事务状态</a>
+    <a href="#s3"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12h16M4 6v12M20 6v12"/></svg>并发执行与调度</a>
+    <a href="#s4"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-1.7 1.7"/></svg>冲突可串行化</a>
+    <a href="#s5"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>视图可串行化</a>
+    <a href="#s6"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="6" cy="6" r="3"/><circle cx="18" cy="6" r="3"/><circle cx="12" cy="18" r="3"/><path d="M9 9l3 6 3-6"/></svg>优先图与测试</a>
+    <a href="#s7"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 9-9 9.7 9.7 0 0 0-6.7 2.7L3 8"/><path d="M3 3v5h5"/></svg>可恢复与级联</a>
+    <a href="#s8"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v4M12 18v4M2 12h4M18 12h4"/></svg>并发控制与弱一致</a>
+    <a href="#s9"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>SQL 隔离级别</a>
+    <a href="#sum"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/></svg>本章小结与自测</a>
+  </nav>
+</aside>
+<div class="overlay" id="overlay"></div>
+
+<div class="topbar">
+  <button id="hamburger" aria-label="打开目录">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+  </button>
+  <span>06 事务</span>
+</div>
+
+<div class="main">
+  <header class="hero">
+    <div class="wrap">
+      <div class="kicker">CHAPTER 14 · TRANSACTIONS</div>
+      <h1>事务</h1>
+      <p>一次转账要扣一个账户、加另一个账户，中间任何一步出错都可能让钱"凭空消失"。事务就是把这样一组操作打包成一个不可分割的逻辑单元，用 ACID 四性保证它在故障和并发面前依然正确。这一单元还会引出可串行化、可恢复调度和 SQL 隔离级别，为下一章并发控制打基础。</p>
+      <div class="meta"><span>对应课件：第 14 章</span><span>课件页数：53 页</span><span>建议学习：5 小时</span><span>重点：ACID 与可串行化</span></div>
+    </div>
+  </header>
+
+  <div class="wrap">
+
+  <section id="intro">
+    <div class="sec-head"><div class="sec-num">0</div><h2>开篇导读：什么是事务</h2></div>
+    <p class="lead">事务是一段程序执行单元，它访问、也可能更新若干数据项。课件的经典例子是"从账户 A 转 50 元到账户 B"，一共六步：读 A、A 减 50、写 A、读 B、B 加 50、写 B。</p>
+    <p>围绕这组操作有两类必须处理的问题：<strong>各种故障</strong>（硬件故障、系统崩溃）和<strong>多个事务的并发执行</strong>。整章就是回答：在这两种情况下，系统怎样保证数据不出错。</p>
+    <div class="goal-grid">
+      <div class="goal-card"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="#e8743b" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg><div><b>理解 ACID</b><br><small>原子、一致、隔离、持久</small></div></div>
+      <div class="goal-card"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="#e8743b" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.5.5l3-3"/></svg><div><b>判断可串行化</b><br><small>冲突、视图、优先图</small></div></div>
+      <div class="goal-card"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="#e8743b" stroke-width="2"><path d="M3 12a9 9 0 1 0 9-9"/></svg><div><b>理解恢复</b><br><small>可恢复、级联回滚、无级联</small></div></div>
+      <div class="goal-card"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="#e8743b" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/></svg><div><b>掌握隔离级别</b><br><small>SQL-92 四个级别</small></div></div>
+    </div>
+  </section>
+
+  <section id="s1">
+    <div class="sec-head"><div class="sec-num">1</div><h2>ACID 四性</h2></div>
+    <p>为了维护数据完整性，数据库系统必须保证事务具备四个性质，首字母合起来就是 ACID。</p>
+    <div class="card-grid">
+      <div class="mini-card"><h4>原子性 Atomicity</h4><p>事务的全部操作要么都正确反映到数据库，要么一个都不反映。转账若在第 3 步后、第 6 步前失败，部分执行的更新不能留在库里。</p></div>
+      <div class="mini-card"><h4>一致性 Consistency</h4><p>孤立执行一个事务，会保持数据库的一致性。本例中 A 与 B 之和在执行前后不变。</p></div>
+      <div class="mini-card"><h4>隔离性 Isolation</h4><p>多个事务并发执行时，每个事务都感觉不到其他事务的存在，中间结果对其他事务隐藏。</p></div>
+      <div class="mini-card"><h4>持久性 Durability</h4><p>事务成功完成后，它对数据库的修改即使遇到系统故障也必须持久保留。</p></div>
+    </div>
+    <p>课件对隔离性的描述更具体：对任意一对事务 Tᵢ、Tⱼ，在 Tᵢ 看来，Tⱼ 要么在它开始前就已结束、要么在它结束后才开始。一致性要求既包括显式的主键、外键约束，也包括隐式约束（如全部账户余额之和减去贷款总额必须等于手头现金）。事务执行过程中数据库可能暂时不一致，但成功结束时必须恢复一致，错误的事务逻辑本身会导致不一致。</p>
+  </section>
+
+  <section id="s2">
+    <div class="sec-head"><div class="sec-num">2</div><h2>事务状态</h2></div>
+    <p>一个事务在生命周期里会在五种状态之间切换。</p>
+    <div class="struct">
+      <div class="cell c1">活动 active<small>初始状态，执行中</small></div>
+      <div class="cell c2">部分提交<small>最后一条语句执行完</small></div>
+      <div class="cell c3">失败 failed<small>无法继续正常执行</small></div>
+      <div class="cell c4">中止 aborted<small>已回滚、恢复到开始前</small></div>
+      <div class="cell c5">提交 committed<small>成功完成</small></div>
+    </div>
+    <p>为什么最后一条语句执行完只是"部分提交"而不是直接提交？因为此刻数据可能还在内存缓冲区，真正写入磁盘、确认无误后才转入提交。中止之后有两个选择：<strong>重启</strong>事务（仅当没有内部逻辑错误时可行）或<strong>杀掉</strong>事务。</p>
+  </section>
+
+  <section id="s3">
+    <div class="sec-head"><div class="sec-num">3</div><h2>并发执行与调度</h2></div>
+    <h3>为什么要并发</h3>
+    <p>让多个事务并发有两个好处：<strong>提高处理器和磁盘利用率</strong>，从而提升吞吐量（一个事务用 CPU 时另一个可以读磁盘）；<strong>缩短平均响应时间</strong>，短事务不必排在长事务后面干等。并发控制机制就是实现隔离性、防止并发事务破坏一致性的手段。</p>
+    <h3>调度（schedule）</h3>
+    <p>调度是一个指令序列，规定并发事务各指令按什么时间顺序执行。它必须包含这些事务的全部指令，并且保持每个事务内部指令的原有顺序。成功完成的事务最后一条是 commit，失败的最后一条是 abort。</p>
+    <p>所有事务一个接一个、互不交错的调度叫<strong>串行调度</strong>。基本假设是每个事务单独执行都保持一致性，所以串行调度必然保持一致。课件给出了 T1 在前、T2 在前两种串行调度，以及一个非串行、却与某个串行调度等价的并发调度；还给出一个破坏了 A+B 之和的坏调度，说明不是所有并发调度都正确。</p>
+  </section>
+
+  <section id="s4">
+    <div class="sec-head"><div class="sec-num">4</div><h2>冲突可串行化</h2></div>
+    <p>课件先做简化：只关注 read 和 write 两类指令，事务在两次读写之间可以在本地缓冲区做任意计算。</p>
+    <h3>什么是冲突指令</h3>
+    <p>事务 Tᵢ 的指令 lᵢ 和 Tⱼ 的指令 lⱼ 冲突，当且仅当它们访问同一个数据项 Q，且至少有一个是 write：</p>
+    <div class="tbl-scroll">
+      <table>
+        <thead><tr><th>指令组合</th><th>是否冲突</th></tr></thead>
+        <tbody>
+          <tr><td>read(Q) 与 read(Q)</td><td>不冲突</td></tr>
+          <tr><td>read(Q) 与 write(Q)</td><td>冲突</td></tr>
+          <tr><td>write(Q) 与 read(Q)</td><td>冲突</td></tr>
+          <tr><td>write(Q) 与 write(Q)</td><td>冲突</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>冲突会在两条指令之间强制一个逻辑上的先后顺序。反过来，如果两条相邻指令不冲突，交换它们结果不变。</p>
+    <h3>冲突等价与冲突可串行化</h3>
+    <p>如果调度 S 能通过一系列<strong>不冲突指令的交换</strong>变换成 S′，就说 S 和 S′ 冲突等价。若 S 能这样变换成某个串行调度，S 就是冲突可串行化的。课件的 Schedule 3 经过若干次交换变成 T1 在前的串行调度，所以它冲突可串行化；而有的调度怎么交换都无法变成任何串行调度，就不是冲突可串行化的。</p>
+  </section>
+
+  <section id="s5">
+    <div class="sec-head"><div class="sec-num">5</div><h2>视图可串行化</h2></div>
+    <p>两个调度 S、S′ 视图等价，需要对每个数据项 Q 同时满足三个条件：</p>
+    <ol>
+      <li>若 S 中 Tᵢ 读 Q 的初始值，S′ 中也必须由 Tᵢ 读初始值；</li>
+      <li>若 S 中 Tᵢ 读到的 Q 值是 Tⱼ 写出来的，S′ 中 Tᵢ 也必须读同一个 Tⱼ 写出的值；</li>
+      <li>S 中对 Q 做最终 write 的事务，在 S′ 中也必须做最终 write。</li>
+    </ol>
+    <p>若 S 与某个串行调度视图等价，它就是视图可串行化的。每个冲突可串行化的调度也视图可串行化，但反过来不成立：存在视图可串行化、却不冲突可串行化的调度，课件指出这类调度都含有<strong>盲写（blind write）</strong>，即事务没读过数据就直接写。</p>
+  </section>
+
+  <section id="s6">
+    <div class="sec-head"><div class="sec-num">6</div><h2>优先图与可串行化测试</h2></div>
+    <p><strong>优先图（precedence graph）</strong>是一个有向图，顶点是各个事务。如果 Tᵢ 比 Tⱼ 先访问了引发冲突的数据项，就画一条 Tᵢ → Tⱼ 的边，还可以用数据项给边做标注。</p>
+    <div class="formula">一个调度冲突可串行化 ⇔ 它的优先图无环</div>
+    <p>环检测算法耗时约 n²（更好的是 n+e）。若图无环，对它做<strong>拓扑排序</strong>就能得到一个可串行化顺序，比如 T5→T1→T3→T2→T4。</p>
+    <p>视图可串行化没法直接用优先图判断，其扩展测试的代价关于图规模是指数级的，判定问题属于 NP 完全类，所以不太可能存在高效算法；实践中只检查一些充分条件。</p>
+  </section>
+
+  <section id="s7">
+    <div class="sec-head"><div class="sec-num">7</div><h2>可恢复调度、级联回滚与无级联</h2></div>
+    <h3>可恢复调度</h3>
+    <p>如果 Tⱼ 读了 Tᵢ 之前写的数据项，那么 Tᵢ 的 commit 必须出现在 Tⱼ 的 commit 之前，这样的调度才是<strong>可恢复调度</strong>。否则 Tᵢ 一旦中止，Tⱼ 可能已经把读到的不一致结果展示给用户，无法收回。</p>
+    <h3>级联回滚</h3>
+    <p><strong>级联回滚（cascading rollback）</strong>指一个事务失败，引发一连串事务都要回滚。当 T10、T11、T12 都还没提交、且后者读了前者写的数据时，T10 失败会迫使 T11、T12 全部回滚，可能导致大量工作被撤销。</p>
+    <h3>无级联调度</h3>
+    <p>在<strong>无级联（cascadeless）</strong>调度里，若 Tⱼ 要读 Tᵢ 写的数据，Tᵢ 的 commit 必须出现在 Tⱼ 的读操作之前，这样级联回滚不可能发生。每个无级联调度都可恢复，最好把调度限制在无级联范围内。</p>
+  </section>
+
+  <section id="s8">
+    <div class="sec-head"><div class="sec-num">8</div><h2>并发控制目标与弱一致性</h2></div>
+    <p>数据库必须保证所有实际产生的调度都冲突或视图可串行化、可恢复，最好无级联。一次只运行一个事务的策略虽然生成串行调度，并发度却太差。等调度执行完再去测可串行化又为时已晚，所以目标是设计能<strong>提前保证</strong>可串行化的并发控制协议。</p>
+    <p>这类协议通常不会边执行边检查优先图，而是施加一套规则从根源上避免不可串行化的调度；不同协议在"允许的并发量"和"开销"之间做权衡。</p>
+    <p>有些应用愿意接受<strong>弱一致性</strong>，允许不可串行化的调度，比如只读事务想估算全账户总余额、查询优化器用的统计数据本来就允许近似。这是用准确性换性能。</p>
+  </section>
+
+  <section id="s9">
+    <div class="sec-head"><div class="sec-num">9</div><h2>SQL 隔离级别与事务定义</h2></div>
+    <h3>SQL-92 四个隔离级别</h3>
+    <div class="tbl-scroll">
+      <table>
+        <thead><tr><th>级别</th><th>能读到什么</th></tr></thead>
+        <tbody>
+          <tr><td>可串行化 serializable</td><td>默认，最强</td></tr>
+          <tr><td>可重复读 repeatable read</td><td>只读已提交记录，重复读同一记录值相同，但仍可能不可串行化</td></tr>
+          <tr><td>读已提交 read committed</td><td>只读已提交记录，但连续两次读可能得到不同的已提交值</td></tr>
+          <tr><td>读未提交 read uncommitted</td><td>连未提交的记录也可能读到</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>课件警告：有些数据库默认并不保证可串行化，比如 Oracle 和 PostgreSQL 默认采用 SQL 标准之外的"快照隔离"。</p>
+    <h3>SQL 中的事务定义</h3>
+    <p>事务隐式开始，以 <span class="inline-code">commit work</span>（提交并开启新事务）或 <span class="inline-code">rollback work</span>（中止当前事务）结束。多数系统默认每条 SQL 成功后也隐式提交，可以用指令关闭，比如 JDBC 里的 connection.setAutoCommit(false)。</p>
+  </section>
+
+  <section id="sum">
+    <div class="sec-head"><div class="sec-num">10</div><h2>本章小结与自测</h2></div>
+    <div class="summary-box">
+      <h3 style="margin-top:0">一条主线</h3>
+      <p><strong>事务</strong>是不可分割的执行单元，靠 <strong>ACID</strong> 四性在故障和并发面前保证正确。判断并发调度是否正确，看它是否等价于某个串行调度：冲突可串行化可用优先图无环快速判定，视图可串行化更宽松但判定是 NP 完全；恢复方面要求可恢复、最好无级联。SQL 提供四个隔离级别，在一致性和性能之间取舍。</p>
+    </div>
+    <div class="oneline"><b>一句话记忆：</b>事务把"一串操作"变成"一件事"，可串行化让"并发"看起来像"排队"。</div>
+
+    <div class="quiz" id="q1">
+      <div class="q">1. 转账事务在第 3 步写回 A、第 6 步写回 B 之间发生故障，系统保证部分更新不留在数据库，这体现的是？</div>
+      <button class="opt" data-k="a">A. 一致性</button>
+      <button class="opt" data-k="b">B. 原子性</button>
+      <button class="opt" data-k="c">C. 隔离性</button>
+      <button class="opt" data-k="d">D. 持久性</button>
+      <div class="fb"></div>
+    </div>
+
+    <div class="quiz" id="q2">
+      <div class="q">2. 一个调度冲突可串行化，当且仅当它的优先图满足什么条件？</div>
+      <button class="opt" data-k="a">A. 没有边</button>
+      <button class="opt" data-k="b">B. 无环</button>
+      <button class="opt" data-k="c">C. 每个顶点入度为 1</button>
+      <button class="opt" data-k="d">D. 边数等于事务数</button>
+      <div class="fb"></div>
+    </div>
+
+    <div class="quiz" id="q3">
+      <div class="q">3. 关于可恢复性与隔离级别，下列说法正确的是？</div>
+      <button class="opt" data-k="a">A. 无级联调度一定可恢复，且读操作前数据已被提交</button>
+      <button class="opt" data-k="b">B. read uncommitted 是 SQL-92 的默认级别</button>
+      <button class="opt" data-k="c">C. 级联回滚能节省大量工作</button>
+      <button class="opt" data-k="d">D. 视图可串行化判定存在线性时间高效算法</button>
+      <div class="fb"></div>
+    </div>
+  </section>
+
+  </div>
+</div>
+
+<button class="totop" id="totop" aria-label="回到顶部">
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4"><path d="M18 15l-6-6-6 6"/></svg>
+</button>
+<footer><div class="wrap">数据库系统学习资料（豆包版）· 第 06 单元 · 依据课程课件第 14 章整理，所有概念、规则与示例均来自课件原文</div></footer>
+
+<script>
+var sidebar=document.getElementById('sidebar'),overlay=document.getElementById('overlay');
+function closeSidebar(){sidebar.classList.remove('open');overlay.classList.remove('show')}
+document.getElementById('hamburger').onclick=function(){sidebar.classList.add('open');overlay.classList.add('show')};
+overlay.onclick=closeSidebar;
+document.querySelectorAll('#nav a').forEach(function(a){a.addEventListener('click',closeSidebar)});
+var links=document.querySelectorAll('#nav a'),secs=document.querySelectorAll('section');
+var obs=new IntersectionObserver(function(entries){
+  entries.forEach(function(e){if(e.isIntersecting){
+    links.forEach(function(l){l.classList.toggle('active',l.getAttribute('href')==='#'+e.target.id)})
+  }})
+},{rootMargin:'-20% 0px -70% 0px'});
+secs.forEach(function(s){obs.observe(s)});
+var totop=document.getElementById('totop');
+window.addEventListener('scroll',function(){totop.classList.toggle('show',window.scrollY>500)});
+totop.onclick=function(){window.scrollTo({top:0,behavior:'smooth'})};
+function makeQuiz(id,answer,explain){
+  var box=document.getElementById(id);
+  box.querySelectorAll('.opt').forEach(function(btn){
+    btn.onclick=function(){
+      if(box.dataset.done)return;
+      box.dataset.done='1';
+      var pick=btn.dataset.k;
+      box.querySelectorAll('.opt').forEach(function(b){
+        if(b.dataset.k===answer)b.classList.add('right');
+      });
+      if(pick!==answer)btn.classList.add('wrong');
+      var fb=box.querySelector('.fb');fb.classList.add('show');
+      fb.innerHTML=(pick===answer?'<span style="color:#2e7d5b;font-weight:700">回答正确。</span> ':'<span style="color:#d9534f;font-weight:700">回答有误。</span> ')+explain;
+    }
+  });
+}
+makeQuiz('q1','b','部分执行的更新不反映到数据库，正是原子性"要么全做、要么全不做"的要求。');
+makeQuiz('q2','b','冲突可串行化的充要条件是优先图无环；无环时拓扑排序得到可串行化顺序。');
+makeQuiz('q3','a','无级联调度必可恢复，读之前写入方已提交；SQL-92 默认是 serializable，视图可串行化判定是 NP 完全。');
+</script>
+</body>
+</html>

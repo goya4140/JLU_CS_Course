@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>04 实体-联系模型（豆包版）</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect x='3' y='3' width='10' height='10' rx='2' fill='%23173b5e'/%3E%3Crect x='19' y='3' width='10' height='10' rx='2' fill='%23173b5e'/%3E%3Crect x='3' y='19' width='10' height='10' rx='2' fill='%23e8743b'/%3E%3Cpath d='M13 8h6M8 13v6M19 24h6M19 13l-6 6' stroke='%2324527e' stroke-width='2'/%3E%3C/svg%3E">
+<style>
+:root{
+  --ink:#173b5e; --ink2:#24527e; --org:#e8743b; --org-deep:#c95a24;
+  --blue-bg:#eef4f9; --org-bg:#fdf1e8; --line:#d8e2ec;
+  --text:#233242; --gray:#5f7185; --warn-bg:#fdeceb; --warn-line:#d9534f;
+  --ok:#2e7d5b; --shadow:0 6px 22px rgba(23,59,94,.10);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;color:var(--text);background:#fff;line-height:1.85;font-size:16px}
+h1,h2,h3,h4{font-family:Georgia,"Songti SC","SimSun",serif;color:var(--ink);line-height:1.4}
+a{color:var(--ink2);text-decoration:none}
+::selection{background:var(--org);color:#fff}
+.sidebar{position:fixed;left:0;top:0;bottom:0;width:262px;background:var(--ink);color:#cfe0f0;padding:26px 0;overflow-y:auto;z-index:60;transition:transform .3s}
+.sidebar .brand{padding:0 24px 20px;border-bottom:1px solid rgba(255,255,255,.14);margin-bottom:14px}
+.sidebar .brand .db{display:flex;align-items:center;gap:10px;font-family:Georgia,serif;font-size:19px;color:#fff;letter-spacing:.5px}
+.sidebar .brand small{display:block;margin-top:6px;font-size:12px;color:#9fb8d0;letter-spacing:1px}
+.sidebar nav a{display:flex;align-items:center;gap:10px;padding:9px 24px;color:#c4d6e8;font-size:14px;border-left:3px solid transparent;transition:all .2s}
+.sidebar nav a:hover{background:rgba(255,255,255,.08);color:#fff}
+.sidebar nav a.active{background:rgba(232,116,59,.18);border-left-color:var(--org);color:#fff}
+.sidebar nav a svg{flex:none;opacity:.85}
+.sidebar .unit-no{font-size:11px;color:#86a3bf;letter-spacing:1px;padding:16px 24px 4px}
+.main{margin-left:262px;min-height:100vh}
+.wrap{max-width:880px;margin:0 auto;padding:0 34px}
+.topbar{display:none;position:sticky;top:0;background:var(--ink);color:#fff;z-index:55;padding:12px 18px;align-items:center;gap:12px}
+.topbar button{background:none;border:none;cursor:pointer;padding:4px}
+.topbar span{font-family:Georgia,serif;font-size:16px}
+.overlay{display:none;position:fixed;inset:0;background:rgba(10,25,40,.45);z-index:55}
+.hero{background:linear-gradient(135deg,#173b5e 0%,#24527e 62%,#2f6494 100%);color:#fff;padding:64px 0 58px;margin-bottom:40px;position:relative;overflow:hidden}
+.hero::after{content:"";position:absolute;right:-60px;top:-60px;width:260px;height:260px;border:26px solid rgba(232,116,59,.25);border-radius:50%}
+.hero .kicker{font-size:13px;letter-spacing:3px;color:var(--org);font-weight:600;margin-bottom:14px}
+.hero h1{color:#fff;font-size:36px;margin-bottom:16px}
+.hero p{max-width:660px;color:#d6e4f2;font-size:16.5px}
+.hero .meta{margin-top:26px;display:flex;flex-wrap:wrap;gap:10px}
+.hero .meta span{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.22);padding:6px 14px;border-radius:20px;font-size:13px}
+section{padding:16px 0 28px;scroll-margin-top:20px}
+.sec-head{display:flex;align-items:center;gap:14px;margin-bottom:16px}
+.sec-num{flex:none;width:46px;height:46px;border-radius:12px;background:var(--org);color:#fff;display:flex;align-items:center;justify-content:center;font-family:Georgia,serif;font-size:20px;box-shadow:var(--shadow)}
+.sec-head h2{font-size:25px}
+h3{font-size:19.5px;margin:24px 0 9px;padding-left:12px;border-left:4px solid var(--org)}
+h4{font-size:16px;margin:16px 0 7px;color:var(--ink2)}
+p{margin:9px 0}
+.lead{font-size:17px;color:var(--ink)}
+ul,ol{margin:9px 0 9px 26px}
+li{margin:5px 0}
+strong{color:var(--ink)}
+.em{color:var(--org-deep);font-weight:700}
+.goal-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin:18px 0}
+.goal-card{background:var(--blue-bg);border:1px solid var(--line);border-radius:12px;padding:15px 18px;display:flex;gap:12px}
+.goal-card svg{flex:none;margin-top:3px}
+.goal-card b{color:var(--ink)}
+.tbl-scroll{overflow-x:auto;margin:15px 0;border-radius:10px;border:1px solid var(--line)}
+table{width:100%;border-collapse:collapse;font-size:14px;min-width:460px}
+thead th{background:var(--ink);color:#fff;padding:11px 13px;text-align:left;font-weight:600;letter-spacing:.5px}
+tbody td{padding:10px 13px;border-bottom:1px solid var(--line);vertical-align:top}
+tbody tr:nth-child(even){background:#f6f9fc}
+tbody tr:hover{background:var(--org-bg)}
+.callout{border-radius:12px;padding:15px 19px;margin:15px 0;display:flex;gap:14px;border:1px solid}
+.callout .ico{flex:none;margin-top:2px}
+.callout .ct{font-weight:700;margin-bottom:4px;font-family:Georgia,serif;letter-spacing:.5px}
+.callout p{margin:4px 0}
+.analogy{background:var(--org-bg);border-color:#f0c9ac}
+.analogy .ct{color:var(--org-deep)}
+.knowledge{background:var(--blue-bg);border-color:var(--line)}
+.knowledge .ct{color:var(--ink)}
+.warning{background:var(--warn-bg);border-color:#eeb4b2}
+.warning .ct{color:var(--warn-line)}
+.struct{display:flex;gap:0;margin:15px 0;border-radius:10px;overflow:hidden;flex-wrap:wrap}
+.struct .cell{flex:1;min-width:110px;padding:13px 12px;text-align:center;color:#fff;font-size:13.5px}
+.struct .cell small{display:block;font-size:11px;opacity:.82;margin-top:4px}
+.struct .c1{background:#173b5e}.struct .c2{background:#24527e}.struct .c3{background:#2f6494}.struct .c4{background:#3d78ad}
+.code{background:#12283d;color:#dce9f5;border-radius:10px;padding:15px 18px;font-family:Consolas,"Courier New",monospace;font-size:13px;line-height:1.7;overflow-x:auto;margin:13px 0;white-space:pre}
+.inline-code{font-family:Consolas,monospace;background:var(--blue-bg);border:1px solid var(--line);border-radius:5px;padding:1px 7px;font-size:13px;color:var(--ink2)}
+.card-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:13px;margin:15px 0}
+.mini-card{border:1px solid var(--line);border-radius:12px;padding:15px;background:#fff;box-shadow:0 2px 8px rgba(23,59,94,.06)}
+.mini-card h4{display:flex;align-items:center;gap:8px;margin:0 0 7px}
+.mini-card p{font-size:13.5px;margin:4px 0;color:var(--gray)}
+.quiz{background:var(--blue-bg);border:1px solid var(--line);border-radius:14px;padding:21px 23px;margin:17px 0}
+.quiz .q{font-weight:700;color:var(--ink);margin-bottom:11px}
+.quiz .opt{display:block;width:100%;text-align:left;border:1px solid var(--line);background:#fff;border-radius:9px;padding:10px 15px;margin:7px 0;cursor:pointer;font-size:14px;transition:.15s}
+.quiz .opt:hover{border-color:var(--org)}
+.quiz .opt.right{background:#e6f4ec;border-color:var(--ok);color:var(--ok);font-weight:700}
+.quiz .opt.wrong{background:var(--warn-bg);border-color:var(--warn-line);color:var(--warn-line)}
+.quiz .fb{margin-top:9px;font-size:13.5px;display:none}
+.quiz .fb.show{display:block}
+.summary-box{background:linear-gradient(135deg,var(--blue-bg),#fff);border:1px solid var(--line);border-radius:16px;padding:25px 27px;margin:23px 0}
+.figure{margin:20px 0;border:1px solid var(--line);border-radius:14px;padding:18px 16px 14px;background:#fbfdff;box-shadow:0 2px 10px rgba(23,59,94,.07)}
+.figure svg{width:100%;height:auto;display:block}
+.diagram-scroll{overflow-x:auto}
+.diagram-scroll svg{min-width:460px;max-width:680px;margin-inline:auto}
+.diagram-scroll:focus-visible{outline:2px solid var(--ink2);outline-offset:3px}
+.diagram-hint{display:none;font-size:13px;color:var(--gray)}
+.figure .cap{text-align:center;font-size:13.5px;color:var(--gray);margin-top:10px;font-family:Georgia,serif}
+.figure .cap b{color:var(--ink)}
+.fig-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin:18px 0}
+.fig-grid .figure{margin:0}
+.oneline{background:var(--ink);color:#fff;border-radius:10px;padding:13px 19px;margin:13px 0;font-size:15px}
+.oneline b{color:var(--org)}
+.totop{position:fixed;right:26px;bottom:26px;width:46px;height:46px;border-radius:50%;background:var(--org);border:none;cursor:pointer;box-shadow:var(--shadow);display:none;align-items:center;justify-content:center;z-index:40}
+.totop.show{display:flex}
+footer{border-top:1px solid var(--line);padding:26px 0 40px;color:var(--gray);font-size:13px}
+@media (max-width:900px){
+  .sidebar{transform:translateX(-100%)}
+  .sidebar.open{transform:translateX(0)}
+  .main{margin-left:0}
+  .topbar{display:flex}
+  .overlay.show{display:block}
+  .wrap{padding:0 20px}
+  .hero{padding:44px 0 40px}
+  .hero h1{font-size:27px}
+  .goal-grid,.card-grid{grid-template-columns:1fr}
+}
+@media (max-width:580px){
+  .fig-grid{grid-template-columns:1fr}
+  .diagram-hint{display:block}
+}
+</style>
+</head>
+<body>
+
+<aside class="sidebar" id="sidebar">
+  <div class="brand">
+    <div class="db">
+      <svg width="26" height="26" viewBox="0 0 32 32"><rect x="3" y="3" width="10" height="10" rx="2" fill="#fff"/><rect x="19" y="3" width="10" height="10" rx="2" fill="#fff"/><rect x="3" y="19" width="10" height="10" rx="2" fill="#e8743b"/><path d="M13 8h6M8 13v6M19 24h6" stroke="#fff" stroke-width="2"/></svg>
+      数据库系统
+    </div>
+    <small>DATABASE SYSTEM CONCEPTS</small>
+  </div>
+  <div class="unit-no">第 04 单元 · 目录</div>
+  <nav id="nav">
+    <a href="#intro"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 8v5l3 2"/></svg>开篇导读</a>
+    <a href="#s1"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 9h6v6H9z"/></svg>实体与实体集</a>
+    <a href="#s2"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-1.7 1.7"/><path d="M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7 7l1.7-1.7"/></svg>联系与联系集</a>
+    <a href="#s3"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7h16M4 12h10M4 17h13"/></svg>属性的分类</a>
+    <a href="#s4"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17l10-10M17 17H7V7"/></svg>映射基数</a>
+    <a href="#s5"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="8" cy="8" r="4"/><path d="M10.5 10.5 19 19"/></svg>键与冗余属性</a>
+    <a href="#s6"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>ER 图符号与参与约束</a>
+    <a href="#s7"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2 2 7l10 5 10-5z"/><path d="M2 17l10 5 10-5M2 12l10 5 10-5"/></svg>弱实体集</a>
+    <a href="#s8"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18h6M10 22h4M12 2a7 7 0 0 0-4 12.7c.6.5 1 1.3 1 2.1V18h6v-1.2c0-.8.4-1.6 1-2.1A7 7 0 0 0 12 2z"/></svg>设计中的取舍</a>
+    <a href="#s9"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 18 9 6l6 12M14 18l6-12"/></svg>特化与泛化</a>
+    <a href="#s10"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="6" cy="6" r="3"/><circle cx="18" cy="18" r="3"/><path d="M8 8l8 8"/></svg>聚集</a>
+    <a href="#s11"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>转换为关系模式</a>
+    <a href="#s12"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7V4h16v3M9 20h6M12 4v16"/></svg>其他记号与 UML</a>
+    <a href="#sum"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>本章小结与自测</a>
+  </nav>
+</aside>
+<div class="overlay" id="overlay"></div>
+
+<div class="topbar">
+  <button id="hamburger" aria-label="打开目录">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+  </button>
+  <span>04 实体-联系模型</span>
+</div>
+
+<div class="main">
+  <header class="hero">
+    <div class="wrap">
+      <div class="kicker">CHAPTER 07 · ENTITY-RELATIONSHIP MODEL</div>
+      <h1>实体-联系模型</h1>
+      <p>前面学过用表保存数据。现在想象一下，要从头设计一个教务系统，你会先建哪张表？先把学生、教师、课程这些对象找出来，弄清楚它们之间有什么联系，再决定用哪些表来存。ER 模型就是帮我们把这一步画出来的工具。</p>
+      <div class="meta"><span>对应课件：第 7 章</span><span>课件页数：102 页</span><span>建议学习：5 小时</span><span>重点：基数约束与模式转换</span></div>
+    </div>
+  </header>
+
+  <div class="wrap">
+
+  <section id="intro">
+    <div class="sec-head"><div class="sec-num">0</div><h2>开篇导读：为什么需要 ER 模型</h2></div>
+    <p class="lead">拿“学生有导师”这句话试一试。学生和教师是两类对象，“指导”是它们之间的联系。接下来问细一点：一位学生最多有几位导师？每位学生都必须有导师吗？这些规则也可以画进 ER 图，转成表时再用主键、外键等约束把规则落实下来。</p>
+    <div class="goal-grid">
+      <div class="goal-card"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="#e8743b" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/></svg><div><b>概念建模</b><br><small>用实体、属性、联系描述现实世界</small></div></div>
+      <div class="goal-card"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="#e8743b" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.5.5l3-3"/></svg><div><b>表达约束</b><br><small>映射基数、参与约束、键</small></div></div>
+      <div class="goal-card"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="#e8743b" stroke-width="2"><path d="M12 2 2 7l10 5 10-5z"/></svg><div><b>处理复杂结构</b><br><small>弱实体、特化、聚集</small></div></div>
+      <div class="goal-card"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="#e8743b" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/></svg><div><b>落地成表</b><br><small>把 ER 图转换成关系模式</small></div></div>
+    </div>
+  </section>
+
+  <section id="s1">
+    <div class="sec-head"><div class="sec-num">1</div><h2>实体与实体集</h2></div>
+    <div class="callout analogy"><svg class="ico" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#c95a24" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg><div><div class="ct">生活类比</div><p>一个"实体"就是现实世界里一个具体、能和别的东西区分开的对象——某个具体的人、某家公司、某场活动、某棵植物。而"实体集"是同一类实体的集合，比如"所有人""所有公司"。</p></div></div>
+    <p>对象能不能单独认出来？拿教务系统举例，“数据库系统这门课”可以单独识别，就是一个<strong>实体（entity）</strong>；把系统里的所有课程放在一起，就是课程<strong>实体集（entity set）</strong>。课程用课号、课程名等属性来描述。</p>
+    <p>注意区分两个层次：实体集 instructor 是"教师这一类"，而其中的一个实体（比如 ID 为 22222 的 Einstein）才是具体的一位教师。等这一类对象转换成表以后，可以把 instructor 想成教师表，把 Einstein 的记录想成其中一行。</p>
+  </section>
+
+  <section id="s2">
+    <div class="sec-head"><div class="sec-num">2</div><h2>联系与联系集</h2></div>
+    <p><strong>联系（relationship）</strong>是几个实体之间的一次关联。比如学生 44553（Peltier）由教师 22222（Einstein）指导，(44553, 22222) 就是一条具体的指导联系。把所有这样的学生和教师配对放在一起，就得到 <strong>联系集（relationship set）</strong> advisor。</p>
+    <h3>联系也可以有属性</h3>
+    <p>假如我们想记下“Peltier 从哪一天开始跟随 Einstein”，这个 <strong>date</strong> 就写在 advisor 上。试想一下，同一位导师带了好几个学生，他们开始接受指导的日期可能各不相同。你得先知道是哪位学生和哪位导师，才能说清楚是哪一个日期。</p>
+    <h3>联系的度（degree）</h3>
+    <p>数一数一条联系里有几个参与角色。advisor 有学生和导师两个角色，是<strong>二元联系（binary）</strong>；“某位教师指导某位学生做某个项目”有教师、学生、项目三个角色，proj_guide 就是<strong>三元联系（ternary）</strong>。</p>
+    <h3>角色（role）</h3>
+    <p>同一个实体集也能在一条联系里出现两次。比如“数据库系统的先修课是程序设计”，两头都是 course，但一头是“要修的课程”（course_id），另一头是“先修课程”（prereq_id）。这两个标签在这里用来标明角色。它们各占一个位置，所以 prereq 仍是二元联系。</p>
+  </section>
+
+  <section id="s3">
+    <div class="sec-head"><div class="sec-num">3</div><h2>属性的分类</h2></div>
+    <p>同一实体集的成员用同一套属性来描述，各自填写自己的值。比如学生都有“学号”这个属性，每个人的学号可以不同。属性允许取哪些值，由它的<strong>域（domain）</strong>规定。要认识一个属性，可以挨个问下面三个问题。</p>
+    <div class="card-grid">
+      <div class="mini-card"><h4>还要继续拆吗？</h4><p>在当前设计里，简单属性当作一个整体使用。复合属性还要分成几项，比如把地址拆成街道、城市、邮编，查“住在哪个城市”时就能直接用城市这一项。</p></div>
+      <div class="mini-card"><h4>一人能填几个值？</h4><p>单值属性对一个实体至多取一个值，比如出生日期。多值属性可以取多个值，比如同一个人可以留下两个电话号码。</p></div>
+      <div class="mini-card"><h4>能从别的值算出来吗？</h4><p>能算出来的叫派生属性。比如知道出生日期，再给一个计算日期，就能算出当时的周岁。平时可以只存出生日期，查询时现算年龄。</p></div>
+    </div>
+    <p>这三个问题可以同时问。比如一个人可以登记多个地址，而每个地址又有街道、城市和邮编，那么“地址”既是多值属性，也是复合属性。</p>
+  </section>
+
+  <section id="s4">
+    <div class="sec-head"><div class="sec-num">4</div><h2>映射基数</h2></div>
+    <p><strong>映射基数约束（mapping cardinality）</strong>规定通过同一种联系，一个实体最多能关联几个对方。还是拿 advisor 举例，先问“一位教师最多能带几个学生？”，再反过来问“一个学生最多能有几位导师？”。</p>
+    <div class="tbl-scroll">
+      <table>
+        <thead><tr><th>类型（教师 → 学生）</th><th>一位教师能带几名学生？</th><th>一名学生能有几位导师？</th></tr></thead>
+        <tbody>
+          <tr><td>一对一</td><td>最多一名</td><td>最多一位</td></tr>
+          <tr><td>一对多</td><td>可以有多名</td><td>最多一位</td></tr>
+          <tr><td>多对一</td><td>最多一名</td><td>可以有多位</td></tr>
+          <tr><td>多对多</td><td>可以有多名</td><td>可以有多位</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>看图时，<strong>从菱形出发，箭头指向“一”的那一侧</strong>。例如一对多图里箭头指向教师，就从另一侧读：“拿定一名学生，他最多有一位导师。”至于能不能暂时没有导师，还要看第 6 节讲的参与约束。</p>
+    <div class="fig-grid">
+      <div class="figure">
+        <svg viewBox="0 0 360 78" role="img" aria-labelledby="card-11-title card-11-desc">
+          <title id="card-11-title">一对一</title>
+          <desc id="card-11-desc">一位教师最多指导一名学生，一名学生最多有一位导师。</desc>
+          <defs><marker id="card-11-arrow" viewBox="-1 -1 13 12" markerWidth="13" markerHeight="12" markerUnits="userSpaceOnUse" refX="11" refY="5" orient="auto"><path d="M0 0L11 5L0 10Z" fill="#173b5e"/></marker></defs>
+          <line x1="128" y1="39" x2="92" y2="39" stroke="#173b5e" stroke-width="1.8" marker-end="url(#card-11-arrow)"/>
+          <line x1="232" y1="39" x2="268" y2="39" stroke="#173b5e" stroke-width="1.8" marker-end="url(#card-11-arrow)"/>
+          <rect x="8" y="22" width="84" height="34" fill="#eef4f9" stroke="#173b5e" stroke-width="1.8"/>
+          <text x="50.0" y="44" text-anchor="middle" font-size="17" fill="#173b5e">教师</text>
+          <polygon points="180,10 232,39 180,68 128,39" fill="#fdf1e8" stroke="#c95a24" stroke-width="1.8"/>
+          <text x="180" y="44" text-anchor="middle" font-size="17" fill="#c95a24">advisor</text>
+          <rect x="268" y="22" width="84" height="34" fill="#eef4f9" stroke="#173b5e" stroke-width="1.8"/>
+          <text x="310.0" y="44" text-anchor="middle" font-size="17" fill="#173b5e">学生</text>
+        </svg>
+        <div class="cap"><b>一对一</b></div>
+      </div>
+      <div class="figure">
+        <svg viewBox="0 0 360 78" role="img" aria-labelledby="card-1n-title card-1n-desc">
+          <title id="card-1n-title">一对多</title>
+          <desc id="card-1n-desc">一位教师可以指导多名学生，一名学生最多有一位导师。</desc>
+          <defs><marker id="card-1n-arrow" viewBox="-1 -1 13 12" markerWidth="13" markerHeight="12" markerUnits="userSpaceOnUse" refX="11" refY="5" orient="auto"><path d="M0 0L11 5L0 10Z" fill="#173b5e"/></marker></defs>
+          <line x1="128" y1="39" x2="92" y2="39" stroke="#173b5e" stroke-width="1.8" marker-end="url(#card-1n-arrow)"/>
+          <line x1="232" y1="39" x2="268" y2="39" stroke="#173b5e" stroke-width="1.8"/>
+          <rect x="8" y="22" width="84" height="34" fill="#eef4f9" stroke="#173b5e" stroke-width="1.8"/>
+          <text x="50.0" y="44" text-anchor="middle" font-size="17" fill="#173b5e">教师</text>
+          <polygon points="180,10 232,39 180,68 128,39" fill="#fdf1e8" stroke="#c95a24" stroke-width="1.8"/>
+          <text x="180" y="44" text-anchor="middle" font-size="17" fill="#c95a24">advisor</text>
+          <rect x="268" y="22" width="84" height="34" fill="#eef4f9" stroke="#173b5e" stroke-width="1.8"/>
+          <text x="310.0" y="44" text-anchor="middle" font-size="17" fill="#173b5e">学生</text>
+        </svg>
+        <div class="cap"><b>一对多</b></div>
+      </div>
+      <div class="figure">
+        <svg viewBox="0 0 360 78" role="img" aria-labelledby="card-n1-title card-n1-desc">
+          <title id="card-n1-title">多对一</title>
+          <desc id="card-n1-desc">一位教师最多指导一名学生，一名学生可以有多位导师。</desc>
+          <defs><marker id="card-n1-arrow" viewBox="-1 -1 13 12" markerWidth="13" markerHeight="12" markerUnits="userSpaceOnUse" refX="11" refY="5" orient="auto"><path d="M0 0L11 5L0 10Z" fill="#173b5e"/></marker></defs>
+          <line x1="92" y1="39" x2="128" y2="39" stroke="#173b5e" stroke-width="1.8"/>
+          <line x1="232" y1="39" x2="268" y2="39" stroke="#173b5e" stroke-width="1.8" marker-end="url(#card-n1-arrow)"/>
+          <rect x="8" y="22" width="84" height="34" fill="#eef4f9" stroke="#173b5e" stroke-width="1.8"/>
+          <text x="50.0" y="44" text-anchor="middle" font-size="17" fill="#173b5e">教师</text>
+          <polygon points="180,10 232,39 180,68 128,39" fill="#fdf1e8" stroke="#c95a24" stroke-width="1.8"/>
+          <text x="180" y="44" text-anchor="middle" font-size="17" fill="#c95a24">advisor</text>
+          <rect x="268" y="22" width="84" height="34" fill="#eef4f9" stroke="#173b5e" stroke-width="1.8"/>
+          <text x="310.0" y="44" text-anchor="middle" font-size="17" fill="#173b5e">学生</text>
+        </svg>
+        <div class="cap"><b>多对一</b></div>
+      </div>
+      <div class="figure">
+        <svg viewBox="0 0 360 78" role="img" aria-labelledby="card-nn-title card-nn-desc">
+          <title id="card-nn-title">多对多</title>
+          <desc id="card-nn-desc">一位教师可以指导多名学生，一名学生也可以有多位导师。</desc>
+          <line x1="92" y1="39" x2="128" y2="39" stroke="#173b5e" stroke-width="1.8"/>
+          <line x1="232" y1="39" x2="268" y2="39" stroke="#173b5e" stroke-width="1.8"/>
+          <rect x="8" y="22" width="84" height="34" fill="#eef4f9" stroke="#173b5e" stroke-width="1.8"/>
+          <text x="50.0" y="44" text-anchor="middle" font-size="17" fill="#173b5e">教师</text>
+          <polygon points="180,10 232,39 180,68 128,39" fill="#fdf1e8" stroke="#c95a24" stroke-width="1.8"/>
+          <text x="180" y="44" text-anchor="middle" font-size="17" fill="#c95a24">advisor</text>
+          <rect x="268" y="22" width="84" height="34" fill="#eef4f9" stroke="#173b5e" stroke-width="1.8"/>
+          <text x="310.0" y="44" text-anchor="middle" font-size="17" fill="#173b5e">学生</text>
+        </svg>
+        <div class="cap"><b>多对多</b></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="s5">
+    <div class="sec-head"><div class="sec-num">5</div><h2>键与冗余属性</h2></div>
+    <h3>实体集上的键</h3>
+    <p>这几个概念在关系模型里见过，这里含义一致：<strong>超键</strong>是一个或多个属性的集合，其值能唯一确定每个实体；<strong>候选键</strong>是最小的超键（再删一个属性就不再唯一），比如 ID 是 instructor 的候选键、course_id 是 course 的候选键；候选键可能有多个，从中选出一个作为<strong>主键</strong>。</p>
+    <h3>联系集的键</h3>
+    <p>把各个参与角色的主键拼起来，就得到联系集的一个超键。比如 (s_id, i_id) 唯一标识一条 advisor 记录：同一个学生和同一位导师的组合只出现一次。想记他们多次见面的日期，可以把“会面日期”设成多值属性。如果每次会面还要记时间、地点或纪要，可以把“会面”单独建模。</p>
+    <p>能不能把键再缩短一点？如果一名学生最多有一位导师，光凭 s_id 就能确定是哪条指导联系，因此 s_id 是候选键。如果双方都可以关联多个对方，通常就要用 (s_id, i_id) 一起标识。</p>
+    <h3>冗余属性</h3>
+    <p>设想 instructor 实体里有 dept_name 属性，同时又有 inst_dept 联系把教师和部门关联起来。这时 instructor 里的 dept_name 就是<strong>冗余</strong>的——联系里已经包含了同样的信息，这个属性应该从 instructor 中删掉。</p>
+    <div class="callout knowledge"><svg class="ico" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#173b5e" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 8v5l3 2"/></svg><div><div class="ct">但转换时可能又回来</div><p>画 ER 图时，inst_dept 已经把“教师属于哪个系”说清楚了。到了建表时，如果每位教师只属于一个系，就可以用 instructor 表里的一列 dept_name 外键来实现这条联系。这样归属信息仍然只存一份。</p></div></div>
+  </section>
+
+  <section id="s6">
+    <div class="sec-head"><div class="sec-num">6</div><h2>ER 图符号与参与约束</h2></div>
+    <h3>基本符号</h3>
+    <p>这一节按第 7 章课件的画法来读。先认矩形和菱形，再看连线。</p>
+    <div class="tbl-scroll">
+      <table>
+        <thead><tr><th>看到什么？</th><th>怎么读？</th></tr></thead>
+        <tbody>
+          <tr><td>矩形</td><td>实体集，属性列在名称下面</td></tr>
+          <tr><td>菱形</td><td>联系集，联系属性用小框加虚线连到菱形</td></tr>
+          <tr><td>实线下划线</td><td>主键属性，联合主键的各个组成属性都画线</td></tr>
+          <tr><td>缩进、大括号、空括号</td><td>复合属性的组成部分缩进写，多值属性写成 {phone_number}，派生属性写成 age()</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <h3>基数约束与参与约束一起看</h3>
+    <p>先看<strong>箭头</strong>。从 advisor 指向 instructor，就固定另一侧的一名学生，读成“这名学生最多有一位导师”。另一侧没有箭头，所以一位教师可以指导多名学生。</p>
+    <p>再看<strong>单线还是双线</strong>。学生端画双线，表示<strong>完全参与</strong>，每名学生至少要有一位导师；教师端只有一条线，表示<strong>部分参与</strong>，允许有教师暂时不带学生。把学生的“至少一位”和“最多一位”合起来，就是“恰好一位”。</p>
+    <p class="diagram-hint">手机上可左右滑动查看较宽的图。</p>
+      <div class="figure">
+        <div class="diagram-scroll" tabindex="0" role="region" aria-label="图示，可横向滚动">
+        <svg viewBox="0 0 620 192" role="img" aria-labelledby="advisor-title advisor-desc">
+          <title id="advisor-title">指导联系的 ER 图</title>
+          <desc id="advisor-desc">advisor 菱形连接教师和学生。箭头指向教师，所以一名学生最多有一位导师；学生端双线，所以一名学生至少有一位导师。date 小框通过虚线连到菱形。</desc>
+          <defs><marker id="advisor-arrow" viewBox="-1 -1 13 12" markerWidth="13" markerHeight="12" markerUnits="userSpaceOnUse" refX="11" refY="5" orient="auto"><path d="M0 0L11 5L0 10Z" fill="#173b5e"/></marker></defs>
+          <line x1="224" y1="105" x2="156" y2="105" stroke="#173b5e" stroke-width="1.8" marker-end="url(#advisor-arrow)"/>
+          <line x1="394.5" y1="102" x2="464" y2="102" stroke="#173b5e" stroke-width="1.8"/>
+          <line x1="394.5" y1="108" x2="464" y2="108" stroke="#173b5e" stroke-width="1.8"/>
+          <line x1="310" y1="39" x2="310" y2="71" stroke="#173b5e" stroke-width="1.8" stroke-dasharray="4 3"/>
+          <rect x="26" y="64" width="130" height="120" fill="#eef4f9" stroke="#173b5e" stroke-width="1.8"/>
+          <rect x="27" y="98" width="128" height="85" fill="#fff"/>
+          <text x="91.0" y="86" text-anchor="middle" font-size="17" fill="#173b5e">instructor</text>
+          <line x1="26" y1="98" x2="156" y2="98" stroke="#173b5e" stroke-width="1.8"/>
+          <text x="38" y="118" text-anchor="start" font-size="17" fill="#173b5e">ID</text>
+          <line x1="38" y1="122" x2="55" y2="122" stroke="#173b5e" stroke-width="1.8"/>
+          <text x="38" y="144" text-anchor="start" font-size="17" fill="#173b5e">name</text>
+          <text x="38" y="170" text-anchor="start" font-size="17" fill="#173b5e">salary</text>
+          <polygon points="310,71 396,105 310,139 224,105" fill="#fdf1e8" stroke="#c95a24" stroke-width="1.8"/>
+          <text x="310" y="110" text-anchor="middle" font-size="16" fill="#c95a24">advisor</text>
+          <rect x="464" y="64" width="130" height="120" fill="#eef4f9" stroke="#173b5e" stroke-width="1.8"/>
+          <rect x="465" y="98" width="128" height="85" fill="#fff"/>
+          <text x="529.0" y="86" text-anchor="middle" font-size="17" fill="#173b5e">student</text>
+          <line x1="464" y1="98" x2="594" y2="98" stroke="#173b5e" stroke-width="1.8"/>
+          <text x="476" y="118" text-anchor="start" font-size="17" fill="#173b5e">ID</text>
+          <line x1="476" y1="122" x2="493" y2="122" stroke="#173b5e" stroke-width="1.8"/>
+          <text x="476" y="144" text-anchor="start" font-size="17" fill="#173b5e">name</text>
+          <text x="476" y="170" text-anchor="start" font-size="17" fill="#173b5e">tot_cred</text>
+          <rect x="270" y="5" width="80" height="34" fill="#eef4f9" stroke="#173b5e" stroke-width="1.8"/>
+          <text x="310.0" y="27" text-anchor="middle" font-size="17" fill="#173b5e">date</text>
+        </svg>
+        </div>
+        <div class="cap"><b>图 6-1</b>　每名学生恰好有一位导师，教师可以带多名学生，也可以暂时不带学生。</div>
+      </div>
+    <h3>换成数字怎么读？</h3>
+    <p>课件还有一种 <strong>min..max</strong> 写法，最少和最多一起标。数字靠近哪一侧，就数那一侧<strong>每个实体参与几次</strong>：教师端的 0..* 表示每位教师可以指导零名或多名学生；学生端的 1..1 表示每名学生恰好有一位导师。</p>
+      <div class="figure">
+        <div class="diagram-scroll" tabindex="0" role="region" aria-label="图示，可横向滚动">
+        <svg viewBox="0 0 620 102" role="img" aria-labelledby="er-limits-title er-limits-desc">
+          <title id="er-limits-title">课件 ER 图的上下限标注</title>
+          <desc id="er-limits-desc">教师一侧标 0..*，指每位教师可关联零名或多名学生。学生一侧标 1..1，指每名学生必须关联一位教师。</desc>
+          <rect x="26" y="44" width="130" height="34" fill="#eef4f9" stroke="#173b5e" stroke-width="1.8"/>
+          <text x="91.0" y="66" text-anchor="middle" font-size="17" fill="#173b5e">instructor</text>
+          <rect x="464" y="44" width="130" height="34" fill="#eef4f9" stroke="#173b5e" stroke-width="1.8"/>
+          <text x="529.0" y="66" text-anchor="middle" font-size="17" fill="#173b5e">student</text>
+          <line x1="156" y1="61" x2="224" y2="61" stroke="#173b5e" stroke-width="1.8"/>
+          <line x1="396" y1="61" x2="464" y2="61" stroke="#173b5e" stroke-width="1.8"/>
+          <polygon points="310,27 396,61 310,95 224,61" fill="#fdf1e8" stroke="#c95a24" stroke-width="1.8"/>
+          <text x="310" y="66" text-anchor="middle" font-size="16" fill="#c95a24">advisor</text>
+          <text x="190" y="53" text-anchor="middle" font-size="18" fill="#173b5e">0..*</text>
+          <text x="430" y="53" text-anchor="middle" font-size="18" fill="#173b5e">1..1</text>
+        </svg>
+        </div>
+        <div class="cap"><b>图 6-2</b>　同一个 advisor 例子，也可以用课件的 min..max 写法。</div>
+      </div>
+    <h3>三元联系上的基数约束</h3>
+    <p>读三元联系的箭头时，要先固定另外<strong>两方</strong>。比如 proj_guide 的箭头指向 instructor，就先选定一名学生和一个项目，再问“这名学生做这个项目，最多能有几位导师？”答案是至多一位。换成另一个项目，这名学生可以有另一位导师。按课件的约定，三元或更高元的联系最多画一个箭头，因为多个箭头在不同记法里有不同含义。</p>
+  </section>
+
+  <section id="s7">
+    <div class="sec-head"><div class="sec-num">7</div><h2>弱实体集</h2></div>
+    <div class="callout analogy"><svg class="ico" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#c95a24" stroke-width="2"><path d="M12 2 2 7l10 5 10-5z"/><path d="M2 17l10 5 10-5M2 12l10 5 10-5"/></svg><div><div class="ct">生活类比</div><p>同学说“我在 1 班”，你还得问：“哪门课？哪一年、哪个学期？”不同的课可以各有一个 1 班，同一门课到了下学期也可以再开一个 1 班。把这几项问齐，才能知道他说的是哪个教学班。</p></div></div>
+    <p><strong>弱实体集（weak entity set）</strong>光靠自己的属性无法唯一标识每个实体，要借助另一方的键。这里 section（教学班）要借 course（课程）的 course_id，因此 course 是它的<strong>标识实体集</strong>。图中用双菱形 sec_course 表示这条标识联系。</p>
+    <p><strong>分辨符（discriminator，也叫部分键）</strong>用来区分归属同一个标识实体的那些弱实体。把范围缩到一门课，再看班号 sec_id、学期 semester 和年份 year，这三项合起来才能分清班次。课件给这三项都加虚线下划线。</p>
+      <div class="figure">
+        <div class="diagram-scroll" tabindex="0" role="region" aria-label="图示，可横向滚动">
+        <svg viewBox="0 0 620 160" role="img" aria-labelledby="weak-title weak-desc">
+          <title id="weak-title">教学班 section 的标识联系</title>
+          <desc id="weak-desc">sec_course 是双菱形。指向 course 的箭头表示每个教学班最多对应一门课程，section 一侧的双线表示至少对应一门。section 的 sec_id、semester、year 都画虚线下划线。</desc>
+          <defs><marker id="weak-arrow" viewBox="-1 -1 13 12" markerWidth="13" markerHeight="12" markerUnits="userSpaceOnUse" refX="11" refY="5" orient="auto"><path d="M0 0L11 5L0 10Z" fill="#173b5e"/></marker></defs>
+          <line x1="214" y1="76" x2="164" y2="76" stroke="#173b5e" stroke-width="1.8" marker-end="url(#weak-arrow)"/>
+          <line x1="391" y1="73" x2="452" y2="73" stroke="#173b5e" stroke-width="1.8"/>
+          <line x1="391" y1="79" x2="452" y2="79" stroke="#173b5e" stroke-width="1.8"/>
+          <rect x="24" y="30" width="140" height="68" fill="#eef4f9" stroke="#173b5e" stroke-width="1.8"/>
+          <rect x="25" y="64" width="138" height="33" fill="#fff"/>
+          <text x="94.0" y="52" text-anchor="middle" font-size="17" fill="#173b5e">course</text>
+          <line x1="24" y1="64" x2="164" y2="64" stroke="#173b5e" stroke-width="1.8"/>
+          <text x="36" y="84" text-anchor="start" font-size="17" fill="#173b5e">course_id</text>
+          <line x1="36" y1="88" x2="110" y2="88" stroke="#173b5e" stroke-width="1.8"/>
+          <polygon points="304,36 398,76 304,116 210,76" fill="#fdf1e8" stroke="#c95a24" stroke-width="1.8"/>
+          <polygon points="304,42 389,76 304,110 219,76" fill="none" stroke="#c95a24" stroke-width="1.4"/>
+          <text x="304" y="81" text-anchor="middle" font-size="16" fill="#c95a24">sec_course</text>
+          <rect x="452" y="30" width="144" height="120" fill="#eef4f9" stroke="#173b5e" stroke-width="1.8"/>
+          <rect x="453" y="64" width="142" height="85" fill="#fff"/>
+          <text x="524.0" y="52" text-anchor="middle" font-size="17" fill="#173b5e">section</text>
+          <line x1="452" y1="64" x2="596" y2="64" stroke="#173b5e" stroke-width="1.8"/>
+          <text x="464" y="84" text-anchor="start" font-size="17" fill="#173b5e">sec_id</text>
+          <line x1="464" y1="88" x2="511" y2="88" stroke="#173b5e" stroke-width="1.8" stroke-dasharray="4 3"/>
+          <text x="464" y="110" text-anchor="start" font-size="17" fill="#173b5e">semester</text>
+          <line x1="464" y1="114" x2="533" y2="114" stroke="#173b5e" stroke-width="1.8" stroke-dasharray="4 3"/>
+          <text x="464" y="136" text-anchor="start" font-size="17" fill="#173b5e">year</text>
+          <line x1="464" y1="140" x2="497" y2="140" stroke="#173b5e" stroke-width="1.8" stroke-dasharray="4 3"/>
+        </svg>
+        </div>
+        <div class="cap"><b>图 7-1</b>　每个教学班恰好归属一门课程。一门课程可以暂时不开班，也可以开多个班。</div>
+      </div>
+    <p>画图时，沿着 sec_course 就能找到 course_id。等到第 11 节建表时，才把 course_id 加到 section 表里，与这三项一起组成主键 <strong>(course_id, sec_id, semester, year)</strong>。</p>
+  </section>
+
+  <section id="s8">
+    <div class="sec-head"><div class="sec-num">8</div><h2>设计中的取舍</h2></div>
+    <p>同一个需求，画法可能有好几种。拿不准时，可以先问问以后要存什么、查什么。</p>
+    <h3>用实体集还是属性</h3>
+    <p>如果只需要记下一位教师的多个电话号码，可以用多值属性；如果每个号码还要记类型，可以把每个值拆成“号码”和“类型”。等到要管理号码自己的记录，比如同一个办公号码由多位教师共用，还要单独维护它的分机信息，再考虑把电话号码建成实体集。</p>
+    <h3>用实体集还是联系集</h3>
+    <p>“小林选了数据库系统的 1 班”描述了学生和教学班之间的关联，可以画成选课联系。要是业务还要让审批记录、退课申请各自关联到某一次选课，也可以考虑把这次选课作为独立对象建模。</p>
+    <h3>二元还是多元联系</h3>
+    <p>如果只知道孩子的母亲是谁，也希望先存下来，就可以把 parents 分成“父亲”和“母亲”两条二元联系，分别登记。再看 proj_guide：小林做 A 项目由李老师指导，做 B 项目由王老师指导。光看“小林有哪些导师”和“小林做了哪些项目”，已经分不清谁指导哪个项目。再加一条“小周做 A 项目，由王老师指导”，试着拼三份名单：“小林有王老师做导师”“小林做 A 项目”“王老师指导 A 项目”都是真的，却会拼出原记录里没有的“小林做 A 项目，由王老师指导”。</p>
+    <p>真要用二元联系来表达，可以先把“某一次项目指导”建成一个实体，再从它分别连到学生、教师和项目。每条指导记录都要恰好连到这三方各一个，还要用约束防止重复或违反原来的基数规则。</p>
+    <h3>联系属性放在哪里</h3>
+    <p>拿日期问一句：“这是哪件事的日期？”如果是学生开始跟随这位导师的日期，就放在 advisor 联系上。如果是学生入学的日期，就放在 student 实体上。建表时若把 advisor 合并到 student 表里，指导开始日期也可以一起迁过去。</p>
+  </section>
+
+  <section id="s9">
+    <div class="sec-head"><div class="sec-num">9</div><h2>特化与泛化</h2></div>
+    <h3>自顶向下的特化</h3>
+    <p>先有 person，再问“这里有哪些人需要多记一些信息？”比如学生要记总学分，员工要记工资，就从 person 分出 student 和 employee。这个从一般到具体的过程叫<strong>特化（specialization）</strong>。</p>
+    <p>顺着空心箭头往上读，employee <strong>is a</strong> person，也就是“每位员工都是一个人”。同一位员工保有 person 的 ID、姓名等属性，也能以 person 的身份参与上层的联系。图里只需在 employee 下列出自己的工资 salary。</p>
+    <h3>自底向上的泛化</h3>
+    <p>如果一开始分别画了 student 和 employee，后来发现两边都要记 ID、姓名，就可以把共同部分提到 person 里。这个从具体到一般的过程叫<strong>泛化（generalization）</strong>。两条设计路线最后都能画成同一个 ISA 层级。</p>
+    <h3>特化上的约束</h3>
+    <div class="card-grid">
+      <div class="mini-card"><h4>按什么条件归类？</h4><p>可以由规则自动决定，比如“满 65 周岁就归入 senior_citizen”，也可以由业务人员指定成员。</p></div>
+      <div class="mini-card"><h4>最多能进几个子类？</h4><p>互斥（disjoint）表示在同一组特化里至多进一个子类。重叠（overlapping）允许进多个子类，比如同一个人既是学生又是员工。</p></div>
+      <div class="mini-card"><h4>至少要进几个子类？</h4><p>完全（total）要求每个上层实体至少进一个子类。部分（partial）允许留在上层，比如系统也登记既非学生、也非员工的校友。</p></div>
+      <div class="mini-card"><h4>怎么从图上看？</h4><p>按本课件的记号，同一组互斥子类共用一个空心箭头，允许重叠的子类各自画箭头。是否完全覆盖上层要另看 total 标注。</p></div>
+    </div>
+      <div class="figure">
+        <div class="diagram-scroll" tabindex="0" role="region" aria-label="图示，可横向滚动">
+        <svg viewBox="0 0 620 294" role="img" aria-labelledby="isa-title isa-desc">
+          <title id="isa-title">特化与泛化的两层 ISA 关系</title>
+          <desc id="isa-desc">employee 和 student 用各自的空心箭头指向 person，允许重叠。instructor 和 secretary 共用一个空心箭头指向 employee，表示互斥。各子类只列出自己特有的属性。</desc>
+          <defs><marker id="isa-arrow" viewBox="-1 -1 13 12" markerWidth="13" markerHeight="12" markerUnits="userSpaceOnUse" refX="11" refY="5" orient="auto"><path d="M0 1L10 5L0 9Z" fill="#fff" stroke="#173b5e" stroke-width="1.2"/></marker></defs>
+          <line x1="154" y1="115" x2="233" y2="74" stroke="#173b5e" stroke-width="1.8" marker-end="url(#isa-arrow)"/>
+          <line x1="466" y1="115" x2="387" y2="74" stroke="#173b5e" stroke-width="1.8" marker-end="url(#isa-arrow)"/>
+          <line x1="154" y1="198" x2="154" y2="183" stroke="#173b5e" stroke-width="1.8" marker-end="url(#isa-arrow)"/>
+          <line x1="86" y1="198" x2="222" y2="198" stroke="#173b5e" stroke-width="1.8"/>
+          <line x1="86" y1="198" x2="86" y2="218" stroke="#173b5e" stroke-width="1.8"/>
+          <line x1="222" y1="198" x2="222" y2="218" stroke="#173b5e" stroke-width="1.8"/>
+          <text x="310" y="135" text-anchor="middle" font-size="17" fill="#5f7185">可重叠</text>
+          <text x="267" y="203" text-anchor="middle" font-size="17" fill="#5f7185">互斥</text>
+          <rect x="233" y="5" width="154" height="94" fill="#eef4f9" stroke="#173b5e" stroke-width="1.8"/>
+          <rect x="234" y="39" width="152" height="59" fill="#fff"/>
+          <text x="310.0" y="27" text-anchor="middle" font-size="17" fill="#173b5e">person</text>
+          <line x1="233" y1="39" x2="387" y2="39" stroke="#173b5e" stroke-width="1.8"/>
+          <text x="245" y="59" text-anchor="start" font-size="17" fill="#173b5e">ID</text>
+          <line x1="245" y1="63" x2="262" y2="63" stroke="#173b5e" stroke-width="1.8"/>
+          <text x="245" y="85" text-anchor="start" font-size="17" fill="#173b5e">name</text>
+          <rect x="85" y="115" width="138" height="68" fill="#eef4f9" stroke="#173b5e" stroke-width="1.8"/>
+          <rect x="86" y="149" width="136" height="33" fill="#fff"/>
+          <text x="154.0" y="137" text-anchor="middle" font-size="17" fill="#173b5e">employee</text>
+          <line x1="85" y1="149" x2="223" y2="149" stroke="#173b5e" stroke-width="1.8"/>
+          <text x="97" y="169" text-anchor="start" font-size="17" fill="#173b5e">salary</text>
+          <rect x="397" y="115" width="138" height="68" fill="#eef4f9" stroke="#173b5e" stroke-width="1.8"/>
+          <rect x="398" y="149" width="136" height="33" fill="#fff"/>
+          <text x="466.0" y="137" text-anchor="middle" font-size="17" fill="#173b5e">student</text>
+          <line x1="397" y1="149" x2="535" y2="149" stroke="#173b5e" stroke-width="1.8"/>
+          <text x="409" y="169" text-anchor="start" font-size="17" fill="#173b5e">tot_cred</text>
+          <rect x="16" y="218" width="140" height="68" fill="#eef4f9" stroke="#173b5e" stroke-width="1.8"/>
+          <rect x="17" y="252" width="138" height="33" fill="#fff"/>
+          <text x="86.0" y="240" text-anchor="middle" font-size="17" fill="#173b5e">instructor</text>
+          <line x1="16" y1="252" x2="156" y2="252" stroke="#173b5e" stroke-width="1.8"/>
+          <text x="28" y="272" text-anchor="start" font-size="17" fill="#173b5e">rank</text>
+          <rect x="168" y="218" width="144" height="68" fill="#eef4f9" stroke="#173b5e" stroke-width="1.8"/>
+          <rect x="169" y="252" width="142" height="33" fill="#fff"/>
+          <text x="240.0" y="240" text-anchor="middle" font-size="17" fill="#173b5e">secretary</text>
+          <line x1="168" y1="252" x2="312" y2="252" stroke="#173b5e" stroke-width="1.8"/>
+          <text x="180" y="272" text-anchor="start" font-size="17" fill="#173b5e">hours_per_week</text>
+        </svg>
+        </div>
+        <div class="cap"><b>图 9-1</b>　一人可以既是学生又是员工。在员工这一组特化里，教师和秘书至多选其一。</div>
+      </div>
+    <p>这两种约束可以一起用。比如规定员工必须在“正式、临时”中选一个，这一组就是“完全且互斥”，合起来表示恰好属于其中一类。</p>
+  </section>
+
+  <section id="s10">
+    <div class="sec-head"><div class="sec-num">10</div><h2>聚集</h2></div>
+    <p>小林做 A 项目，由李老师指导。过了两周，李老师给了小林一条阶段评价。问一句：这条评价是给小林所有项目的，还是只针对这一次项目指导的？这里显然要指向后者。</p>
+    <p>如果另画一条联系，把学生、教师、项目和评价四方再连一次，就得再表达一遍“谁指导谁做哪个项目”。用<strong>聚集（aggregation）</strong>，可以把 proj_guide 和它连着的三个实体集框起来，让框外的 eval_for 直接指向框内的一条完整指导记录。</p>
+      <div class="figure">
+        <div class="diagram-scroll" tabindex="0" role="region" aria-label="图示，可横向滚动">
+        <svg viewBox="0 0 620 326" role="img" aria-labelledby="aggregation-title aggregation-desc">
+          <title id="aggregation-title">对一次项目指导进行评价</title>
+          <desc id="aggregation-desc">聚集边界框住学生、教师、项目和 proj_guide。内部箭头指向教师。框外 eval_for 连接聚集整体和 evaluation，箭头指向聚集整体，evaluation 端画双线。</desc>
+          <defs><marker id="guide-arrow" viewBox="-1 -1 13 12" markerWidth="13" markerHeight="12" markerUnits="userSpaceOnUse" refX="11" refY="5" orient="auto"><path d="M0 0L11 5L0 10Z" fill="#173b5e"/></marker></defs>
+          <rect x="22" y="8" width="576" height="166" rx="10" fill="none" stroke="#c95a24" stroke-width="1.8" stroke-dasharray="7 5"/>
+          <text x="40" y="36" text-anchor="start" font-size="17" fill="#c95a24">聚集边界</text>
+          <line x1="310" y1="66" x2="310" y2="90" stroke="#173b5e" stroke-width="1.8"/>
+          <line x1="224" y1="124" x2="168" y2="124" stroke="#173b5e" stroke-width="1.8" marker-end="url(#guide-arrow)"/>
+          <line x1="396" y1="124" x2="452" y2="124" stroke="#173b5e" stroke-width="1.8"/>
+          <line x1="310" y1="201" x2="310" y2="174" stroke="#173b5e" stroke-width="1.8" marker-end="url(#guide-arrow)"/>
+          <line x1="307" y1="256.7" x2="307" y2="280" stroke="#173b5e" stroke-width="1.8"/>
+          <line x1="313" y1="256.7" x2="313" y2="280" stroke="#173b5e" stroke-width="1.8"/>
+          <rect x="241" y="32" width="138" height="34" fill="#eef4f9" stroke="#173b5e" stroke-width="1.8"/>
+          <text x="310.0" y="54" text-anchor="middle" font-size="17" fill="#173b5e">project</text>
+          <rect x="42" y="107" width="126" height="34" fill="#eef4f9" stroke="#173b5e" stroke-width="1.8"/>
+          <text x="105.0" y="129" text-anchor="middle" font-size="17" fill="#173b5e">instructor</text>
+          <polygon points="310,90 396,124 310,158 224,124" fill="#fdf1e8" stroke="#c95a24" stroke-width="1.8"/>
+          <text x="310" y="129" text-anchor="middle" font-size="16" fill="#c95a24">proj_guide</text>
+          <rect x="452" y="107" width="126" height="34" fill="#eef4f9" stroke="#173b5e" stroke-width="1.8"/>
+          <text x="515.0" y="129" text-anchor="middle" font-size="17" fill="#173b5e">student</text>
+          <polygon points="310,201 386,230 310,259 234,230" fill="#fdf1e8" stroke="#c95a24" stroke-width="1.8"/>
+          <text x="310" y="235" text-anchor="middle" font-size="16" fill="#c95a24">eval_for</text>
+          <rect x="235" y="280" width="150" height="34" fill="#eef4f9" stroke="#173b5e" stroke-width="1.8"/>
+          <text x="310.0" y="302" text-anchor="middle" font-size="17" fill="#173b5e">evaluation</text>
+        </svg>
+        </div>
+        <div class="cap"><b>图 10-1</b>　每条评价恰好对应一条项目指导，一条项目指导可以还没有评价，也可以有多条评价。</div>
+      </div>
+    <p>顺着图读两遍。框内箭头指向 instructor，所以固定一名学生和一个项目，导师至多一位。框外箭头指向聚集框，评价端画双线，所以每条评价恰好对应一条已有的指导。小林刚开始做 A 项目时，即使一条评价也没有，他的指导记录也已经存在。</p>
+  </section>
+
+  <section id="s11">
+    <div class="sec-head"><div class="sec-num">11</div><h2>把 ER 图转换为关系模式</h2></div>
+    <p>图画好了，接下来给信息找个存放的位置。每一步都问两件事：<strong>哪几列能唯一找到一行？哪几列得引用别的表？</strong> 前者对应主键，后者对应外键。有的联系要单独建表，有的可以并到实体表里。</p>
+    <h3>强实体集</h3>
+    <p>先看最简单的 student：把学生的属性放进 student(ID, name, tot_cred)，用 ID 做主键。一行就是一名学生。</p>
+    <h3>弱实体集</h3>
+    <p>还记得“哪门课、哪个班、哪一学期、哪一年”吗？建 section(course_id, sec_id, semester, year) 时，<strong>四列一起做主键</strong>。course_id 还要做外键，引用 course 的主键，保证这个班确实属于一门已有的课程。section 表已经记下了每个班归属哪门课，图 7-1 的 sec_course 无须再建一张表。</p>
+    <h3>联系集</h3>
+    <p><strong>多对多</strong>：假如学校允许一名学生有多位导师，一位教师也可以带多名学生，就为 advisor 单独建表。每一行存一对学生和教师，以及他们开始建立指导关系的日期。</p>
+    <pre class="code">advisor(s_id, i_id, date)
+主键 (s_id, i_id)
+外键 s_id → student(ID)，i_id → instructor(ID)</pre>
+    <p><strong>多对一 / 一对多</strong>：换回图 6-1 的规则，每名学生恰好有一位导师。在 student 表中加 i_id，作为指向 instructor 的外键，再把联系上的 date 一起放进去。i_id 要设 <strong>NOT NULL</strong>，因为学生必须有导师；允许多名学生填同一个 i_id，因为导师可以带多人。若学生端改成部分参与，i_id 就可以允许 NULL，也可以另建 advisor 表并用 s_id 做主键，只为已配对的学生存一行。</p>
+    <p><strong>一对一</strong>：可以选一方放外键，通常优先选完全参与的一方，省去空值。比如规定每名学生都有一位导师、每位导师最多带一名学生，就在 student.i_id 上同时加 <strong>NOT NULL</strong> 和 <strong>UNIQUE</strong>。前者保证学生有导师，后者保证同一导师的 ID 至多出现一次。如果两边都要求完全参与，还得另外保证被引用的一方每行都能找到配对。</p>
+    <h3>复合属性与多值属性</h3>
+    <p>复合属性可以“摊平”，比如把地址的街道和城市分别存成列。多值属性则单独建表，比如 inst_phone(ID, phone_number)。一个教师有两个号码，就存两行，主键用 (ID, phone_number)，其中 ID 是指向 instructor 的外键。</p>
+    <p>课件里的 time_slot 还有个细节。一个时段编号可能对应多条上课时间。如果只保留时间明细表，同一个 time_slot_id 会出现多次，section 就不能只靠这一列做外键来引用明细表。要让教学班能引用时段编号，可以保留一张每个 time_slot_id 只出现一次的时段表，再用明细表记录星期和起止时间。</p>
+    <h3>特化的两种表示法</h3>
+    <div class="tbl-scroll">
+      <table>
+        <thead><tr><th>对照项</th><th>方法一：共用上层表</th><th>方法二：子类表存完整资料</th></tr></thead>
+        <tbody>
+          <tr><td>怎么建表？</td><td>person 存共同属性；子类表各自存 ID 和自己的属性，ID 同时是主键和指向上层的外键。</td><td>每张子类表同时存自己的属性和继承来的属性。</td></tr>
+          <tr><td>举个例子</td><td>person(ID, name)；student(ID, tot_cred)；employee(ID, salary)</td><td>student(ID, name, tot_cred)；employee(ID, name, salary)</td></tr>
+          <tr><td>各要留意什么？</td><td>查员工的姓名和工资，要把 person 和 employee 按 ID 连起来。</td><td>同一人既是学生又是员工，姓名会在两张表各存一份，修改时要保证一致。</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>用方法二时，如果每个 person 都属于至少一个子类，就可以从各子类表取出共同列 (ID, name) 再求并集，得到 person 视图。如果特化是部分的，就要给只属于 person 的成员保留存放位置。其他表需要通过外键引用 person 时，通常仍要保留一张以 ID 为主键的实体表。</p>
+    <h3>聚集对应的模式</h3>
+    <p>回到图 10-1。先存 proj_guide(s_id, project_id, i_id)，用 (s_id, project_id) 做主键，因为一个学生在一个项目上至多有一位导师。三个 ID 也分别是指向学生、项目和教师表的外键。再用 eval_for(evaluation_id, s_id, project_id) 记录“评价对应哪条指导”。evaluation_id 是主键，也是指向 evaluation 的外键；(s_id, project_id) 是<strong>一组外键</strong>，要一起引用 proj_guide，才能保证这条项目指导确实存在。</p>
+    <p>图里每条评价都必须对应一条指导。分开建表时，还要保证每条评价都能在 eval_for 里找到一行。也可以把这组非空外键直接放进 evaluation 表，这样每次存评价时都得指定它对应的指导记录。proj_guide 仍要保留，因为一条指导记录可以暂时没有评价。若业务改为允许同一学生在同一项目上有多位导师，就要把 i_id 加进指导记录的主键，评价引用的列也要一起调整。</p>
+  </section>
+
+  <section id="s12">
+    <div class="sec-head"><div class="sec-num">12</div><h2>其他记号与 UML</h2></div>
+    <h3>ER 的不同记号</h3>
+    <p>同样的业务规则可以用几套符号来画。比如常见的 Chen 记号把属性画成椭圆，课件的主图把实体属性写在矩形里；乌鸦脚记号用分叉表示“多”。遇到新图时，先找图例，再读每一端的含义。</p>
+    <h3>UML 类图</h3>
+    <p>UML 类图里，二元关联通常是连接两个类的一条线，关联名写在线旁边。要标角色名，就写在相应的关联端；要给关联加属性，可以用一条虚线把关联类的小框连到关联线上。</p>
+    <p>数字怎么读？<strong>先固定另一端的一个对象，再数标数字这端的对象</strong>。图 12-1 的 instructor 端标 1，意思是每名学生恰好有一位导师；student 端标 0..*，意思是每位导师可以指导零名或多名学生。把它和图 6-2 对照，两张图说的是同一回事，数字的位置刚好调过来了。</p>
+      <div class="figure">
+        <div class="diagram-scroll" tabindex="0" role="region" aria-label="图示，可横向滚动">
+        <svg viewBox="0 0 620 104" role="img" aria-labelledby="uml-limits-title uml-limits-desc">
+          <title id="uml-limits-title">UML 的关联端多重性</title>
+          <desc id="uml-limits-desc">instructor 和 student 之间的关联线名为 advisor。教师端标 1，学生端标 0..*。每名学生恰好有一位导师，每位导师可以指导零名或多名学生。</desc>
+          <rect x="26" y="44" width="130" height="34" fill="#eef4f9" stroke="#173b5e" stroke-width="1.8"/>
+          <text x="91.0" y="66" text-anchor="middle" font-size="17" fill="#173b5e">instructor</text>
+          <rect x="464" y="44" width="130" height="34" fill="#eef4f9" stroke="#173b5e" stroke-width="1.8"/>
+          <text x="529.0" y="66" text-anchor="middle" font-size="17" fill="#173b5e">student</text>
+          <line x1="156" y1="61" x2="464" y2="61" stroke="#173b5e" stroke-width="1.8"/>
+          <text x="310" y="50" text-anchor="middle" font-size="17" fill="#173b5e">advisor</text>
+          <text x="174" y="83" text-anchor="middle" font-size="18" fill="#173b5e">1</text>
+          <text x="440" y="83" text-anchor="middle" font-size="18" fill="#173b5e">0..*</text>
+        </svg>
+        </div>
+        <div class="cap"><b>图 12-1</b>　和图 6-2 表示同一条业务规则，UML 的数字写在另一侧。</div>
+      </div>
+    <p>看 UML 的泛化图时，互斥和重叠要看泛化集上的标注，如 {disjoint} 或 {overlapping}。几条空心箭头可以合画，也可以分开画。</p>
+  </section>
+
+  <section id="sum">
+    <div class="sec-head"><div class="sec-num">13</div><h2>本章小结与自测</h2></div>
+    <div class="summary-box">
+      <h3 style="margin-top:0">一条主线串起 ER 建模</h3>
+      <p><strong>先认对象和事实。</strong> 学生、教师是实体集，“某位教师指导某名学生”是一条联系，指导开始日期是联系属性。同一个属性可以从结构、取值个数、能否推导三个角度来看。</p>
+      <p><strong>再问最多和最少。</strong> 箭头帮你看“最多几个”，双线帮你看“至少一个”。弱实体还要问“先找到谁，才能找到它？”把标识实体的键和分辨符合起来，就能唯一找到它。</p>
+      <p><strong>最后把图落实到表里。</strong> 先定主键和外键，再想想是否需要 NOT NULL、UNIQUE 等约束。遇到特化，沿 ISA 往上找共同属性；遇到聚集，顺着框外的线找到它引用的是哪一整条联系。</p>
+    </div>
+    <div class="oneline"><b>一句话记忆：</b>ER 图是现实世界的"设计草图"，转换规则是把草图落成表的"施工图"。</div>
+
+    <div class="quiz" id="q1">
+      <div class="q">1. 关于弱实体集，下列说法正确的是？</div>
+      <button class="opt" data-k="a">A. 弱实体集自己拥有完整的主键，不依赖其他实体</button>
+      <button class="opt" data-k="b">B. 弱实体的主键由标识强实体的主键加上自己的分辨符构成</button>
+      <button class="opt" data-k="c">C. 弱实体与强实体之间是多对多的标识联系</button>
+      <button class="opt" data-k="d">D. 分辨符在 ER 图中用实线下划线表示</button>
+      <div class="fb"></div>
+    </div>
+
+    <div class="quiz" id="q2">
+      <div class="q">2. 多对一联系中，“多”方完全参与。把联系合并进实体表时，外键放在哪里？</div>
+      <button class="opt" data-k="a">A. 必须为联系单独建一个独立的关系表</button>
+      <button class="opt" data-k="b">B. 在“多”方表上加外键，引用“一”方的主键，并要求外键列非空</button>
+      <button class="opt" data-k="c">C. 把"一"方的全部属性复制到"多"方表</button>
+      <button class="opt" data-k="d">D. 该联系无法用关系模式表达</button>
+      <div class="fb"></div>
+    </div>
+
+    <div class="quiz" id="q3">
+      <div class="q">3. 关于特化与 ISA，下列哪一项正确？</div>
+      <button class="opt" data-k="a">A. 下层实体需要重复定义上层的全部属性</button>
+      <button class="opt" data-k="b">B. 下层实体继承上层的属性，也能以上层身份参与联系</button>
+      <button class="opt" data-k="c">C. 特化是自底向上、泛化是自顶向下</button>
+      <button class="opt" data-k="d">D. 完全性约束 total 表示实体不一定要属于任何下层集</button>
+      <div class="fb"></div>
+    </div>
+  </section>
+
+  </div>
+</div>
+
+<button class="totop" id="totop" aria-label="回到顶部">
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4"><path d="M18 15l-6-6-6 6"/></svg>
+</button>
+<footer><div class="wrap">数据库系统学习资料（豆包版）· 第 04 单元 · 依据《Database System Concepts》第 6 版课程课件第 7 章整理，图示与建表示例按文中规则改绘</div></footer>
+
+<script>
+var sidebar=document.getElementById('sidebar'),overlay=document.getElementById('overlay');
+function closeSidebar(){sidebar.classList.remove('open');overlay.classList.remove('show')}
+document.getElementById('hamburger').onclick=function(){sidebar.classList.add('open');overlay.classList.add('show')};
+overlay.onclick=closeSidebar;
+document.querySelectorAll('#nav a').forEach(function(a){a.addEventListener('click',closeSidebar)});
+var links=document.querySelectorAll('#nav a'),secs=document.querySelectorAll('section');
+var obs=new IntersectionObserver(function(entries){
+  entries.forEach(function(e){if(e.isIntersecting){
+    links.forEach(function(l){l.classList.toggle('active',l.getAttribute('href')==='#'+e.target.id)})
+  }})
+},{rootMargin:'-20% 0px -70% 0px'});
+secs.forEach(function(s){obs.observe(s)});
+var totop=document.getElementById('totop');
+window.addEventListener('scroll',function(){totop.classList.toggle('show',window.scrollY>500)});
+totop.onclick=function(){window.scrollTo({top:0,behavior:'smooth'})};
+function makeQuiz(id,answer,explain){
+  var box=document.getElementById(id);
+  box.querySelectorAll('.opt').forEach(function(btn){
+    btn.onclick=function(){
+      if(box.dataset.done)return;
+      box.dataset.done='1';
+      var pick=btn.dataset.k;
+      box.querySelectorAll('.opt').forEach(function(b){
+        if(b.dataset.k===answer)b.classList.add('right');
+      });
+      if(pick!==answer)btn.classList.add('wrong');
+      var fb=box.querySelector('.fb');fb.classList.add('show');
+      fb.innerHTML=(pick===answer?'<span style="color:#2e7d5b;font-weight:700">回答正确。</span> ':'<span style="color:#d9534f;font-weight:700">回答有误。</span> ')+explain;
+    }
+  });
+}
+makeQuiz('q1','b','先靠 course_id 找到是哪门课程，再用 sec_id、semester 和 year 找到这门课下的教学班。三项分辨符都画虚线下划线，完全参与的双线画在 section 端。');
+makeQuiz('q2','b','想想图 6-1：每名学生恰好有一位导师，所以学生表里的导师外键必须非空。多名学生可以填同一位导师的 ID。');
+makeQuiz('q3','b','例如员工是 person，所以同一位员工也有 person 的 ID、姓名，并能以 person 的身份参与联系。total 要求上层的每个实体至少属于一个子类。');
+</script>
+</body>
+</html>

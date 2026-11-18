@@ -228,6 +228,10 @@ def append_directory(lines: list[str], directory: Path, level: int) -> None:
                 relative = quote(html_file.relative_to(ROOT).as_posix(), safe="/")
                 reading = "https://goya4140.github.io/JLU_CS_Course/" + relative
                 lines.append(f"{indent}  - [{title}]({reading} ':ignore')")
+        doubao = directory / "doubao" / "index.html"
+        if doubao.is_file():
+            reading = "https://goya4140.github.io/JLU_CS_Course/" + quote(doubao.relative_to(ROOT).as_posix(), safe="/")
+            lines.append(f"{indent}- [豆包版学习资料]({reading} ':ignore')")
 
     for child_dir in child_dirs:
         lines.append(f"{indent}- **{display_name(child_dir.name)}**")

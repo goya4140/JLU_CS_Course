@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>02 关系模型与关系代数（豆包版）</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cellipse cx='16' cy='7' rx='12' ry='5' fill='%23173b5e'/%3E%3Cpath d='M4 7v9c0 2.8 5.4 5 12 5s12-2.2 12-5V7' fill='none' stroke='%23173b5e' stroke-width='2.5'/%3E%3Cpath d='M4 16v9c0 2.8 5.4 5 12 5s12-2.2 12-5v-9' fill='none' stroke='%23e8743b' stroke-width='2.5'/%3E%3C/svg%3E">
+<style>
+:root{
+  --ink:#173b5e; --ink2:#24527e; --org:#e8743b; --org-deep:#c95a24;
+  --blue-bg:#eef4f9; --org-bg:#fdf1e8; --line:#d8e2ec;
+  --text:#233242; --gray:#5f7185; --warn-bg:#fdeceb; --warn-line:#d9534f;
+  --ok:#2e7d5b; --shadow:0 6px 22px rgba(23,59,94,.10);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;color:var(--text);background:#fff;line-height:1.85;font-size:16px}
+h1,h2,h3,h4{font-family:Georgia,"Songti SC","SimSun",serif;color:var(--ink);line-height:1.4}
+a{color:var(--ink2);text-decoration:none}
+::selection{background:var(--org);color:#fff}
+.sidebar{position:fixed;left:0;top:0;bottom:0;width:262px;background:var(--ink);color:#cfe0f0;padding:26px 0;overflow-y:auto;z-index:60;transition:transform .3s}
+.sidebar .brand{padding:0 24px 20px;border-bottom:1px solid rgba(255,255,255,.14);margin-bottom:14px}
+.sidebar .brand .db{display:flex;align-items:center;gap:10px;font-family:Georgia,serif;font-size:19px;color:#fff;letter-spacing:.5px}
+.sidebar .brand small{display:block;margin-top:6px;font-size:12px;color:#9fb8d0;letter-spacing:1px}
+.sidebar nav a{display:flex;align-items:center;gap:10px;padding:10px 24px;color:#c4d6e8;font-size:14.5px;border-left:3px solid transparent;transition:all .2s}
+.sidebar nav a:hover{background:rgba(255,255,255,.08);color:#fff}
+.sidebar nav a.active{background:rgba(232,116,59,.18);border-left-color:var(--org);color:#fff}
+.sidebar nav a svg{flex:none;opacity:.85}
+.sidebar .unit-no{font-size:11px;color:#86a3bf;letter-spacing:1px;padding:16px 24px 4px}
+.main{margin-left:262px;min-height:100vh}
+.wrap{max-width:880px;margin:0 auto;padding:0 34px}
+.topbar{display:none;position:sticky;top:0;background:var(--ink);color:#fff;z-index:55;padding:12px 18px;align-items:center;gap:12px}
+.topbar button{background:none;border:none;cursor:pointer;padding:4px}
+.topbar span{font-family:Georgia,serif;font-size:16px}
+.overlay{display:none;position:fixed;inset:0;background:rgba(10,25,40,.45);z-index:55}
+.hero{background:linear-gradient(135deg,#173b5e 0%,#24527e 62%,#2f6494 100%);color:#fff;padding:64px 0 58px;margin-bottom:40px;position:relative;overflow:hidden}
+.hero::after{content:"";position:absolute;right:-60px;top:-60px;width:260px;height:260px;border:26px solid rgba(232,116,59,.25);border-radius:50%}
+.hero .kicker{font-size:13px;letter-spacing:3px;color:var(--org);font-weight:600;margin-bottom:14px}
+.hero h1{color:#fff;font-size:36px;margin-bottom:16px}
+.hero p{max-width:640px;color:#d6e4f2;font-size:16.5px}
+.hero .meta{margin-top:26px;display:flex;flex-wrap:wrap;gap:10px}
+.hero .meta span{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.22);padding:6px 14px;border-radius:20px;font-size:13px}
+section{padding:18px 0 30px;scroll-margin-top:20px}
+.sec-head{display:flex;align-items:center;gap:14px;margin-bottom:18px}
+.sec-num{flex:none;width:46px;height:46px;border-radius:12px;background:var(--org);color:#fff;display:flex;align-items:center;justify-content:center;font-family:Georgia,serif;font-size:20px;box-shadow:var(--shadow)}
+.sec-head h2{font-size:26px}
+h3{font-size:20px;margin:26px 0 10px;padding-left:12px;border-left:4px solid var(--org)}
+h4{font-size:16.5px;margin:18px 0 8px;color:var(--ink2)}
+p{margin:10px 0}
+.lead{font-size:17px;color:var(--ink)}
+ul,ol{margin:10px 0 10px 26px}
+li{margin:6px 0}
+strong{color:var(--ink)}
+.em{color:var(--org-deep);font-weight:700}
+.goal-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin:18px 0}
+.goal-card{background:var(--blue-bg);border:1px solid var(--line);border-radius:12px;padding:16px 18px;display:flex;gap:12px}
+.goal-card svg{flex:none;margin-top:3px}
+.goal-card b{color:var(--ink)}
+.tbl-scroll{overflow-x:auto;margin:16px 0;border-radius:10px;border:1px solid var(--line)}
+table{width:100%;border-collapse:collapse;font-size:14.5px;min-width:480px}
+thead th{background:var(--ink);color:#fff;padding:12px 14px;text-align:left;font-weight:600;letter-spacing:.5px}
+tbody td{padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+tbody tr:nth-child(even){background:#f6f9fc}
+tbody tr:hover{background:var(--org-bg)}
+.callout{border-radius:12px;padding:16px 20px;margin:16px 0;display:flex;gap:14px;border:1px solid}
+.callout .ico{flex:none;margin-top:2px}
+.callout .ct{font-weight:700;margin-bottom:4px;font-family:Georgia,serif;letter-spacing:.5px}
+.callout p{margin:4px 0}
+.analogy{background:var(--org-bg);border-color:#f0c9ac}
+.analogy .ct{color:var(--org-deep)}
+.knowledge{background:var(--blue-bg);border-color:var(--line)}
+.knowledge .ct{color:var(--ink)}
+.warning{background:var(--warn-bg);border-color:#eeb4b2}
+.warning .ct{color:var(--warn-line)}
+.struct{display:flex;gap:0;margin:16px 0;border-radius:10px;overflow:hidden;flex-wrap:wrap}
+.struct .cell{flex:1;min-width:120px;padding:14px 12px;text-align:center;color:#fff;font-size:14px}
+.struct .cell small{display:block;font-size:11.5px;opacity:.82;margin-top:4px}
+.struct .c1{background:#173b5e}.struct .c2{background:#24527e}.struct .c3{background:#2f6494}.struct .c4{background:#3d78ad}
+.code{background:#12283d;color:#dce9f5;border-radius:10px;padding:16px 18px;font-family:Consolas,"Courier New",monospace;font-size:13.5px;line-height:1.7;overflow-x:auto;margin:14px 0}
+.code .kw{color:#f0a06e}.code .st{color:#9ec98a}.code .cm{color:#7b94ab;font-style:italic}
+.inline-code{font-family:Consolas,monospace;background:var(--blue-bg);border:1px solid var(--line);border-radius:5px;padding:1px 7px;font-size:13.5px;color:var(--ink2)}
+.formula{background:var(--blue-bg);border:1px dashed var(--ink2);border-radius:10px;padding:14px 20px;margin:14px 0;font-family:Georgia,serif;font-size:17px;color:var(--ink);text-align:center}
+.stepbox{border:1px solid var(--line);border-radius:14px;overflow:hidden;margin:18px 0;box-shadow:var(--shadow)}
+.stepbox .sb-body{padding:22px 24px;min-height:150px;background:#fff}
+.stepbox .sb-body h4{margin-top:0;color:var(--org-deep);font-size:17px}
+.stepbox .sb-dots{display:flex;gap:8px;padding:14px 24px;background:var(--blue-bg);align-items:center;flex-wrap:wrap}
+.dot{width:30px;height:30px;border-radius:50%;border:2px solid var(--ink);background:#fff;color:var(--ink);font-weight:700;font-size:13px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.dot.on{background:var(--org);border-color:var(--org);color:#fff}
+.sb-btns{margin-left:auto;display:flex;gap:8px}
+.sb-btns button{border:1px solid var(--ink);background:#fff;color:var(--ink);padding:7px 18px;border-radius:8px;cursor:pointer;font-size:14px;transition:.2s}
+.sb-btns button:hover:not(:disabled){background:var(--ink);color:#fff}
+.sb-btns button:disabled{opacity:.4;cursor:not-allowed}
+.sb-progress{font-size:12.5px;color:var(--gray);margin-left:6px}
+details.fold{border:1px solid var(--line);border-radius:10px;margin:10px 0;background:#fff;overflow:hidden}
+details.fold summary{cursor:pointer;padding:13px 18px;font-weight:700;color:var(--ink);background:var(--blue-bg);list-style:none;display:flex;align-items:center;gap:10px}
+details.fold summary::-webkit-details-marker{display:none}
+details.fold summary .arrow{margin-left:auto;transition:transform .25s}
+details.fold[open] summary .arrow{transform:rotate(180deg)}
+details.fold .fold-body{padding:16px 20px}
+.card-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin:16px 0}
+.mini-card{border:1px solid var(--line);border-radius:12px;padding:16px;background:#fff;box-shadow:0 2px 8px rgba(23,59,94,.06)}
+.mini-card h4{display:flex;align-items:center;gap:8px;margin:0 0 8px}
+.mini-card p{font-size:14px;margin:4px 0;color:var(--gray)}
+.quiz{background:var(--blue-bg);border:1px solid var(--line);border-radius:14px;padding:22px 24px;margin:18px 0}
+.quiz .q{font-weight:700;color:var(--ink);margin-bottom:12px}
+.quiz .opt{display:block;width:100%;text-align:left;border:1px solid var(--line);background:#fff;border-radius:9px;padding:11px 16px;margin:8px 0;cursor:pointer;font-size:14.5px;transition:.15s}
+.quiz .opt:hover{border-color:var(--org)}
+.quiz .opt.right{background:#e6f4ec;border-color:var(--ok);color:var(--ok);font-weight:700}
+.quiz .opt.wrong{background:var(--warn-bg);border-color:var(--warn-line);color:var(--warn-line)}
+.quiz .fb{margin-top:10px;font-size:14px;display:none}
+.quiz .fb.show{display:block}
+.summary-box{background:linear-gradient(135deg,var(--blue-bg),#fff);border:1px solid var(--line);border-radius:16px;padding:26px 28px;margin:24px 0}
+.oneline{background:var(--ink);color:#fff;border-radius:10px;padding:14px 20px;margin:14px 0;font-size:15.5px}
+.oneline b{color:var(--org)}
+.totop{position:fixed;right:26px;bottom:26px;width:46px;height:46px;border-radius:50%;background:var(--org);border:none;cursor:pointer;box-shadow:var(--shadow);display:none;align-items:center;justify-content:center;z-index:40}
+.totop.show{display:flex}
+footer{border-top:1px solid var(--line);padding:26px 0 40px;color:var(--gray);font-size:13px}
+@media (max-width:900px){
+  .sidebar{transform:translateX(-100%)}
+  .sidebar.open{transform:translateX(0)}
+  .main{margin-left:0}
+  .topbar{display:flex}
+  .overlay.show{display:block}
+  .wrap{padding:0 20px}
+  .hero{padding:44px 0 40px}
+  .hero h1{font-size:27px}
+  .goal-grid,.card-grid{grid-template-columns:1fr}
+  .sb-btns{margin-left:0;width:100%}
+}
+</style>
+</head>
+<body>
+
+<aside class="sidebar" id="sidebar">
+  <div class="brand">
+    <div class="db">
+      <svg width="26" height="26" viewBox="0 0 32 32"><ellipse cx="16" cy="7" rx="12" ry="5" fill="#fff"/><path d="M4 7v9c0 2.8 5.4 5 12 5s12-2.2 12-5V7" fill="none" stroke="#fff" stroke-width="2.5"/><path d="M4 16v9c0 2.8 5.4 5 12 5s12-2.2 12-5v-9" fill="none" stroke="#e8743b" stroke-width="2.5"/></svg>
+      数据库系统
+    </div>
+    <small>DATABASE SYSTEM CONCEPTS</small>
+  </div>
+  <div class="unit-no">第 02 单元 · 目录</div>
+  <nav id="nav">
+    <a href="#intro"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 8v5l3 2"/></svg>开篇导读</a>
+    <a href="#s1"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>关系的基本结构</a>
+    <a href="#s2"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 2l-2 2m-7.6 7.6a5 5 0 1 1-7.07 7.07 5 5 0 0 1 7.07-7.07zm0 0L15 8m0 0l3 3 3-3-3-3"/></svg>键</a>
+    <a href="#s3"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>查询语言概览</a>
+    <a href="#s4"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>六大基本运算</a>
+    <a href="#s5"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-1.7 1.7"/><path d="M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7 7l1.7-1.7"/></svg>附加运算与连接</a>
+    <a href="#s6"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 12h8M12 8v8"/></svg>除运算与扩展代数</a>
+    <a href="#s7"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v4M12 18v4M4.9 4.9l2.8 2.8M16.3 16.3l2.8 2.8M2 12h4M18 12h4M4.9 19.1l2.8-2.8M16.3 7.7l2.8-2.8"/></svg>空值与三值逻辑</a>
+    <a href="#s8"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg>数据库修改</a>
+    <a href="#s9"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="M7 14l4-4 4 4 5-6"/></svg>元组关系演算</a>
+    <a href="#s10"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>域关系演算</a>
+    <a href="#sum"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>本章小结与自测</a>
+  </nav>
+</aside>
+<div class="overlay" id="overlay"></div>
+
+<div class="topbar">
+  <button id="hamburger" aria-label="打开目录">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+  </button>
+  <span>02 关系模型与关系代数</span>
+</div>
+
+<div class="main">
+  <header class="hero">
+    <div class="wrap">
+      <div class="kicker">CHAPTER 02 &amp; 06 · RELATIONAL MODEL &amp; FORMAL LANGUAGES</div>
+      <h1>关系模型与关系代数</h1>
+      <p>这一单元解决两件事：一是关系模型里的"表"在数学上到底是什么，二是怎么用一套严谨的符号语言对表提问。关系代数是过程化的"操作手册"，而元组、域关系演算是声明式的"提要求"，三种语言表达能力等价，却代表了两种不同的思维方式。</p>
+      <div class="meta"><span>对应课件：第 2、6 章</span><span>课件页数：17 + 88 页</span><span>建议学习：4 小时</span><span>难度：中</span></div>
+    </div>
+  </header>
+
+  <div class="wrap">
+
+  <section id="intro">
+    <div class="sec-head"><div class="sec-num">0</div><h2>开篇导读：这一单元学什么</h2></div>
+    <p class="lead">如果你用过 Excel，就已经在直觉上理解了"关系"：一张工作表有列标题、有一行行数据。但数据库里的关系比 Excel 表格更讲究——它有严格的数学定义，还配套了一套像代数公式一样可以层层组合的查询语言。</p>
+    <p>学完这一单元，你应该能达到下面几个目标：</p>
+    <div class="goal-grid">
+      <div class="goal-card"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#e8743b" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg><div><b>说清关系、域、原子性</b><br><small>能写出关系模式的形式化定义</small></div></div>
+      <div class="goal-card"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#e8743b" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg><div><b>区分四类键</b><br><small>超键、候选键、主键、外键</small></div></div>
+      <div class="goal-card"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#e8743b" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg><div><b>熟练运用关系代数符号</b><br><small>六大基本运算 + 连接、外连接、除、聚集</small></div></div>
+      <div class="goal-card"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#e8743b" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg><div><b>读懂两种关系演算</b><br><small>理解量词、安全性与三值逻辑</small></div></div>
+    </div>
+  </section>
+
+  <!-- 第一节 -->
+  <section id="s1">
+    <div class="sec-head"><div class="sec-num">1</div><h2>关系的基本结构</h2></div>
+
+    <h3>1.1 属性、元组与域</h3>
+    <p>一张关系表有两个观察方向：竖着看是一列列<strong>属性（attributes，也叫列）</strong>，横着看是一行行<strong>元组（tuples，也叫行）</strong>。每个属性都有自己的取值范围，这个范围就叫该属性的<strong>域（domain）</strong>。比如"工资"这个属性的域是某个数值集合，"姓名"的域是字符串集合。</p>
+    <p>课件同时强调了两个关键约定：属性值（通常）要求是<strong>原子的（atomic）</strong>，也就是不可再分；而特殊值 <span class="inline-code">null</span> 是每个域的成员，它会给很多运算的定义带来麻烦，这一点我们后面专门讲。</p>
+    <div class="callout analogy">
+      <svg class="ico" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#c95a24" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22V12h6v10"/></svg>
+      <div><div class="ct">生活类比</div><p>"原子性"可以理解成课程表上的一格：一个格子里只写一门课，你不能把两门课挤进同一个格子。如果一个字段里塞了"吉林省长春市"这种还能再拆的内容，在严格的关系模型看来就不够原子。当然，原子与否取决于用途——"地址"在只做整体寄送时可以算原子，要按省份统计时就得拆开。</p></div>
+    </div>
+
+    <h3>1.2 关系模式与关系实例：形式化定义</h3>
+    <p>设 <span class="inline-code">A1, A2, …, An</span> 是属性，那么 <strong>R = (A1, A2, …, An)</strong> 就是一个关系模式。课件给的例子是：</p>
+    <div class="formula">instructor = (ID, name, dept_name, salary)</div>
+    <p>形式化地说，给定集合 <span class="inline-code">D1, D2, …, Dn</span>（每个 Di 是对应属性的域），关系 r 是笛卡尔积 <strong>D1 × D2 × … × Dn 的一个子集</strong>。也就是说，关系是若干 n 元组 <span class="inline-code">(a1, a2, …, an)</span> 的集合，其中每个 ai 都属于 Di。</p>
+    <p>这里要分清两个概念：关系的当前取值（<strong>关系实例</strong>）由一张表给出；表中的每一个元素 t 就是一个元组，对应表里的一行。模式是"表头"，相对稳定；实例是"表里此刻装的数据"，会不断变化。</p>
+
+    <h3>1.3 元组是无序的</h3>
+    <p>关系在数学上是元组的<strong>集合</strong>，而集合没有顺序，所以元组的排列次序无关紧要，可以按任意顺序存储。课件展示了同一张 instructor 关系的不同行序，它们在关系模型里是完全相同的关系。这一点和 Excel 不同：Excel 的行号是有意义的，而关系表里你不能说"第 3 行"，只能用属性值来定位元组。</p>
+
+    <h3>1.4 一个数据库由多张关系组成</h3>
+    <p>一个组织的信息被拆成若干部分，分别放进不同的关系，比如大学数据库里有 instructor、student、advisor 等多张表。课件特意对比了一种<strong>坏设计</strong>：把所有信息塞进一张大表 <span class="inline-code">univ(instructor-ID, name, dept_name, salary, student_Id, …)</span>。这样做会带来两个直接后果：</p>
+    <ul>
+      <li><strong>信息重复</strong>：两个学生同属一位导师，导师的信息就要重复两遍；</li>
+      <li><strong>被迫使用 null</strong>：比如一个没有导师的学生，导师相关字段只能填 null。</li>
+    </ul>
+    <p>怎么设计"好"的关系模式，正是规范化理论（第 8 章）要解决的问题，这里先记住"拆表"的直觉。</p>
+  </section>
+
+  <!-- 第二节 -->
+  <section id="s2">
+    <div class="sec-head"><div class="sec-num">2</div><h2>键：怎么唯一认出一个元组</h2></div>
+    <p>现实里我们靠身份证号认人，靠学号认学生。关系模型里也需要这样的"识别字段"，而且分成好几个层次，这是考试特别爱考的概念辨析。</p>
+
+    <h3>2.1 超键、候选键、主键</h3>
+    <p>设 K 是关系模式 R 的属性子集（K ⊆ R）。</p>
+    <ul>
+      <li><strong>超键（superkey）</strong>：如果 K 的取值足以在任何可能的关系实例中<em>唯一识别一个元组</em>，K 就是超键。课件举例：{ID} 和 {ID, name} 都是 instructor 的超键——加了 name 之后当然还能唯一识别，只是有冗余。</li>
+      <li><strong>候选键（candidate key）</strong>：如果一个超键是<em>极小的（minimal）</em>，即再去掉任何一个属性就不再是超键，它就是候选键。比如 {ID} 是 instructor 的候选键，而 {ID, name} 不是候选键，因为去掉 name 后 {ID} 仍然够用。</li>
+      <li><strong>主键（primary key）</strong>：从候选键中<em>选一个</em>作为主键。为什么还要选？因为一张表可能有多个候选键（比如教师表同时有"工号"和"身份证号"两个候选），需要指定一个主要的、系统默认用来识别和建立外键引用的键。</li>
+    </ul>
+    <div class="callout warning">
+      <svg class="ico" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#d9534f" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
+      <div><div class="ct">易混点提醒</div><p>这三个概念是层层收窄的：<strong>候选键一定是超键，主键一定是候选键</strong>。判断"极小"时要逐个属性试：把该属性删掉，看剩下的字段还能不能唯一识别。能，就说明这个属性是多余的，整个集合就不是候选键。</p></div>
+    </div>
+
+    <h3>2.2 外键：跨表的引用</h3>
+    <p><strong>外键约束（foreign key constraint）</strong>说的是：一个关系里的某个取值，必须在另一个关系中真实出现。这里有两个角色：</p>
+    <ul>
+      <li><strong>参照关系（referencing relation）</strong>：持有外键、发出引用的表；</li>
+      <li><strong>被参照关系（referenced relation）</strong>：被引用的表，外键值要能在它的主键里找到。</li>
+    </ul>
+    <p>比如学生表的 dept_name 字段引用院系表的主键 dept_name，那么任何学生所在的系，都必须是院系表里真实存在的系，想填一个不存在的系名，系统会拒绝。这条约束是保证跨表数据一致的核心手段，课件还展示了大学数据库完整的模式图，表与表之间的连线就是外键关系。</p>
+    <div class="callout knowledge">
+      <svg class="ico" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#173b5e" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-1.7 1.7"/><path d="M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7 7l1.7-1.7"/></svg>
+      <div><div class="ct">知识点说明</div><p>外键通常引用对方的主键，但形式上它引用的是被参照关系上的"候选键"（实际系统几乎总是主键）。主键和外键配合，构成了关系模型表达"表与表之间联系"的方式——关系是独立的表，联系不靠单独的指针，而靠这些值的引用。</p></div>
+    </div>
+  </section>
+
+  <!-- 第三节 -->
+  <section id="s3">
+    <div class="sec-head"><div class="sec-num">3</div><h2>关系查询语言概览</h2></div>
+    <p>第 1 章已经埋过伏笔：查询语言分过程化和非过程化（声明式）两类。课件把三种"纯"理论语言列在一起，它们正是这一单元后半段的主角：</p>
+    <div class="tbl-scroll">
+      <table>
+        <thead><tr><th>语言</th><th>风格</th><th>基本思想</th></tr></thead>
+        <tbody>
+          <tr><td><b>关系代数</b></td><td>过程化</td><td>用一组运算逐步操作关系，输出新关系</td></tr>
+          <tr><td><b>元组关系演算</b></td><td>声明式</td><td>以元组为变量，描述"想要满足什么条件的元组"</td></tr>
+          <tr><td><b>域关系演算</b></td><td>声明式</td><td>以域（属性值）为变量，直接描述各列取值条件</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>这三种语言在表达能力上是等价的：任何一种语言能表达的查询，另外两种也能表达。关系代数是 SQL 的理论基础，理解了它，再看 SQL 就像看代数公式的"自然语言写法"。</p>
+  </section>
+
+  <!-- 第四节 -->
+  <section id="s4">
+    <div class="sec-head"><div class="sec-num">4</div><h2>关系代数：六大基本运算</h2></div>
+    <p>关系代数是过程化语言，它的运算以一个或两个关系为输入，产生一个新关系为结果。课件定义了六个基本运算，先记住这张总表，再逐个理解。</p>
+    <div class="tbl-scroll">
+      <table>
+        <thead><tr><th>运算</th><th>符号</th><th>一句话作用</th></tr></thead>
+        <tbody>
+          <tr><td>选择 select</td><td class="mono">σ</td><td>按条件挑行</td></tr>
+          <tr><td>投影 project</td><td class="mono">Π</td><td>挑列并去重</td></tr>
+          <tr><td>并 union</td><td class="mono">∪</td><td>合并两个相容关系</td></tr>
+          <tr><td>集合差 set difference</td><td class="mono">–</td><td>留下只在前者出现的元组</td></tr>
+          <tr><td>笛卡尔积 Cartesian product</td><td class="mono">×</td><td>把两表的元组两两配对</td></tr>
+          <tr><td>重命名 rename</td><td class="mono">ρ</td><td>给结果或关系起新名字</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>4.1 选择运算 σ</h3>
+    <p>记法是 <strong>σp(r)</strong>，其中 p 叫<strong>选择谓词（selection predicate）</strong>。形式化定义是：</p>
+    <div class="formula">σp(r) = { t | t ∈ r 且 p(t) }</div>
+    <p>谓词 p 是命题演算公式，由若干项通过 ∧（与）、∨（或）、¬（非）连接而成；每一项的形式是"属性 op 属性"或"属性 op 常量"，op 可以是 =、≠、&gt;、≥、&lt;、≤。课件给的例子是：</p>
+    <div class="formula">σdept_name = "Physics"(instructor)</div>
+    <p>意思是从教师表里挑出物理系的教师。选择运算只减少行数、不改变列，结果关系的模式和原关系相同。</p>
+
+    <h3>4.2 投影运算 Π</h3>
+    <p>记法是 <strong>ΠA1, A2, …, Ak(r)</strong>。它的结果是一个 k 列的关系，做法是把没列出的列全部抹掉。有一个关键细节：<em>因为关系是集合，结果里重复的行要去掉</em>。比如对教师表投影系名，即使有 50 位教师，同系名也只留一行。</p>
+    <p>课件给的例子是去掉 instructor 的 dept_name 属性：</p>
+    <div class="formula">ΠID, name, salary(instructor)</div>
+    <div class="callout warning">
+      <svg class="ico" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#d9534f" stroke-width="2"><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/><path d="M12 9v4M12 17h.01"/></svg>
+      <div><div class="ct">易混点提醒</div><p>理论关系代数里投影会自动去重，但 SQL 的 <span class="inline-code">select</span> 默认<em>保留重复</em>，要写 <span class="inline-code">select distinct</span> 才去重。这个差异后面讲多集关系代数时会解释，先建立"集合去重、SQL 留重"的印象。</p></div>
+    </div>
+
+    <h3>4.3 并运算 ∪</h3>
+    <p>记法 <strong>r ∪ s</strong>，定义为：</p>
+    <div class="formula">r ∪ s = { t | t ∈ r 或 t ∈ s }</div>
+    <p>并运算不是随便两个表都能做，必须满足两个条件：第一，r 和 s 有相同的<strong>目（arity，属性个数）</strong>；第二，对应属性的域要<strong>相容</strong>，比如 r 的第 2 列和 s 的第 2 列处理的是同一类值。课件给的例子是找出 2009 年秋季学期、或 2010 年春季学期、或两个学期都开设的课程：</p>
+    <div class="formula" style="font-size:15px">Πcourse_id(σsemester="Fall" ∧ year=2009(section)) ∪ Πcourse_id(σsemester="Spring" ∧ year=2010(section))</div>
+
+    <h3>4.4 集合差运算 –</h3>
+    <p>记法 <strong>r – s</strong>，定义为：</p>
+    <div class="formula">r – s = { t | t ∈ r 且 t ∉ s }</div>
+    <p>它同样要求两个关系相容（同目、域相容）。课件的例子是找出 2009 年秋季开设、但 2010 年春季不开的课程，把上面并运算例子里的 ∪ 换成 − 即可。</p>
+
+    <h3>4.5 笛卡尔积运算 ×</h3>
+    <p>记法 <strong>r × s</strong>，定义为：</p>
+    <div class="formula">r × s = { t q | t ∈ r 且 q ∈ s }</div>
+    <p>它把 r 的每个元组和 s 的每个元组两两拼接，结果行数是两表行数之积。课件假设 r 和 s 的属性互不相交（R ∩ S = ∅）；如果属性有重名，就必须先用重命名运算区分，否则会出现两个同名字段。</p>
+    <div class="callout knowledge">
+      <svg class="ico" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#173b5e" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+      <div><div class="ct">知识点说明</div><p>笛卡尔积本身常常产生大量"无意义配对"，所以它几乎总是和选择运算配合使用：先做积，再用选择把"对得上"的配对留下。这种"积 + 选择"的组合，其实就是后面要讲的连接运算的内部实现方式。</p></div>
+    </div>
+
+    <h3>4.6 重命名运算 ρ</h3>
+    <p>重命名有两个用途：给关系代数表达式的结果命名以便引用，以及让同一个关系以多个名字出现。基本形式是 <strong>ρx(E)</strong>，它以名字 X 返回表达式 E。如果 E 的目是 n，还可以连属性一起改名：</p>
+    <div class="formula">ρx(A1, A2, …, An)(E)</div>
+    <p>重命名最大的用武之地是<strong>让一张表和自己比较</strong>。课件讲"找全校最高工资"时，就把 instructor 复制一份命名为 d，再比较两份工资。</p>
+
+    <h3>4.7 运算的组合与形式化定义</h3>
+    <p>关系代数表达式可以像算术公式一样层层嵌套，比如 <span class="inline-code">σA=C(r × s)</span>。课件给出了表达式的形式化定义：基本表达式是数据库中的一个关系，或一个常量关系；在此基础上，若 E1、E2 是表达式，则 E1∪E2、E1–E2、E1×E2、σp(E1)、Πs(E1)、ρx(E1) 都是合法表达式。这保证了无论多复杂的查询，都能由六个基本运算搭建出来。</p>
+
+    <h3>4.8 经典例题：找最高工资</h3>
+    <p>这个例题非常能体现"重命名 + 差"的思路，分两步：</p>
+    <p><strong>第一步</strong>，找出"比某些教师工资低"的工资，也就是非最高工资。把 instructor 复制一份命名为 d，做积后选择满足 instructor.salary &lt; d.salary 的配对，再投影出工资：</p>
+    <div class="formula" style="font-size:14.5px">Πinstructor.salary(σinstructor.salary &lt; d.salary(instructor × ρd(instructor)))</div>
+    <p><strong>第二步</strong>，用全部工资减去非最高工资，剩下的就是最高工资：</p>
+    <div class="formula" style="font-size:14.5px">Πsalary(instructor) − Πinstructor.salary(σinstructor.salary &lt; d.salary(instructor × ρd(instructor)))</div>
+    <p>课件还给出另一个例题：找物理系教师的姓名和他们教过的课程 ID，两种写法等价——区别只在于"先选系再做积"还是"先做积再选"，结果相同。</p>
+  </section>
+
+  <!-- 第五节 -->
+  <section id="s5">
+    <div class="sec-head"><div class="sec-num">5</div><h2>附加运算：交集、连接、赋值、外连接</h2></div>
+    <p>这些运算<strong>不会增加关系代数的表达能力</strong>——它们都能用六个基本运算改写——但能让常见查询写起来简单得多。</p>
+
+    <h3>5.1 集合交集 ∩</h3>
+    <div class="formula">r ∩ s = { t | t ∈ r 且 t ∈ s }</div>
+    <p>同样要求同目、域相容。课件给出了它与基本运算的等价关系，记住这个式子就理解了"附加"的含义：</p>
+    <div class="formula">r ∩ s = r − (r − s)</div>
+
+    <h3>5.2 自然连接 ⋈</h3>
+    <p>设 r、s 的模式分别是 R、S。自然连接 r ⋈ s 的结果模式是 <strong>R ∪ S</strong>，做法是：对每一对元组 tr（来自 r）和 ts（来自 s），如果它们在公共属性 R ∩ S 上的取值<em>全部相同</em>，就把两元组拼成一个新元组 t，t 在 r 的属性上取 tr 的值、在 s 的属性上取 ts 的值。</p>
+    <p>课件给了一个形式化例子：R=(A,B,C,D)，S=(E,B,D)，结果模式是 (A,B,C,D,E)，自然连接等价于：</p>
+    <div class="formula" style="font-size:14.5px">Πr.A, r.B, r.C, r.D, s.E(σr.B=s.B ∧ r.D=s.D(r × s))</div>
+    <p>这正好印证了前面说的："自然连接 = 笛卡尔积 + 选择 + 投影"的组合。</p>
+    <h4>自然连接的两个性质</h4>
+    <ul>
+      <li><strong>结合律</strong>：(instructor ⋈ teaches) ⋈ course 等价于 instructor ⋈ (teaches ⋈ course)；</li>
+      <li><strong>交换律</strong>：instructor ⋈ teaches 等价于 teaches ⋈ instructor。</li>
+    </ul>
+    <h3>5.3 theta 连接</h3>
+    <p>theta 连接是带任意条件的连接，定义非常直接：</p>
+    <div class="formula">r ⋈θ s = σθ(r × s)</div>
+    <p>自然连接要求公共属性相等，而 theta 连接允许你写任意条件 θ（比如工资比较），适用范围更广。</p>
+    <div class="callout analogy">
+      <svg class="ico" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#c95a24" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-1.7 1.7"/><path d="M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7 7l1.7-1.7"/></svg>
+      <div><div class="ct">生活类比</div><p>自然连接像两个部门按"工号"对名单：工号相同的才是同一个人，把两边的信息并到一起；theta 连接则像"找出所有比自己组长工资高的员工"，比较条件不局限于相等，是更灵活的配对。</p></div>
+    </div>
+
+    <h3>5.4 赋值运算 ←</h3>
+    <p>赋值运算让复杂查询可以写成"顺序程序"：先把中间结果用一系列 <span class="inline-code">←</span> 赋给临时关系变量，最后再写一个表达式显示结果。注意<strong>赋值只能赋给临时关系变量</strong>，它类似于编程里把长表达式拆成带名字的中间变量，让查询更易读。</p>
+
+    <h3>5.5 外连接：避免信息丢失</h3>
+    <p>普通连接会把"配不上对"的元组直接丢掉，外连接则把这些元组补回来，缺失的列用 null 填充。课件用 instructor1 和 teaches1 两张表演示了三种外连接，对应三种信息保留策略：</p>
+    <div class="tbl-scroll">
+      <table>
+        <thead><tr><th>外连接</th><th>保留哪些元组</th><th>例子中的关键差异</th></tr></thead>
+        <tbody>
+          <tr><td><b>左外连接</b></td><td>左表所有元组都保留，右表配不上的填 null</td><td>没教课的 Mozart 保留，course_id 为 null</td></tr>
+          <tr><td><b>右外连接</b></td><td>右表所有元组都保留，左表配不上的填 null</td><td>没人教的 BIO-101 保留，姓名等为 null</td></tr>
+          <tr><td><b>全外连接</b></td><td>两边元组都保留，缺的都填 null</td><td>Mozart 和 BIO-101 同时保留</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>外连接也能用基本运算表达，比如左外连接可以写成"自然连接的结果，∪ 左表中没匹配上的元组（与全 null 元组做积）"。它的意义在于：<strong>连接之后信息不丢失</strong>，这在统计类查询里特别重要。</p>
+  </section>
+
+  <!-- 第六节 -->
+  <section id="s6">
+    <div class="sec-head"><div class="sec-num">6</div><h2>除运算与扩展关系代数</h2></div>
+
+    <h3>6.1 除运算 ÷：表达"所有"的利器</h3>
+    <p>给定关系 r(R) 和 s(S)，且 S ⊂ R，<strong>r ÷ s</strong> 是满足"t × s ⊆ r"的最大关系 t(R−S)。直觉上，它回答的是"<em>哪些主体与 s 里的每一个对象都建立了联系</em>"。</p>
+    <p>课件的例子：r(ID, course_id) 是学生选课记录，s(course_id) 是生物系开设的所有课程，那么 r ÷ s 给出的就是<strong>选了生物系全部课程的学生</strong>。注意"所有"这个词——这正是除运算区别于普通连接的地方。它可以用基本运算改写：</p>
+    <div class="code"><span class="cm">// temp1：所有可能的主体</span>
+temp1 ← ΠR−S(r)
+<span class="cm">// temp2：缺了至少一门的主体</span>
+temp2 ← ΠR−S((temp1 × s) − ΠR−S, S(r))
+result = temp1 − temp2</div>
+
+    <h3>6.2 广义投影</h3>
+    <p>广义投影把投影扩展为允许在投影列表里使用算术函数，形式为 <strong>ΠF1, F2, …, Fn(E)</strong>，每个 Fi 是由常量和 E 中属性组成的算术表达式。课件的例子：教师表存的是年薪，想得到月薪，就写：</p>
+    <div class="formula">ΠID, name, dept_name, salary/12(instructor)</div>
+
+    <h3>6.3 聚集函数与分组</h3>
+    <p>聚集函数接收一组值、返回一个值，课件列出五个：<strong>avg 平均、min 最小、max 最大、sum 求和、count 计数</strong>。关系代数里的聚集运算（有些书用 γ 表示）形式为：</p>
+    <div class="formula" style="font-size:15px">G1, G2, …, Gn  ℱ1(A1), F2(A2), …, Fm(Am)(E)</div>
+    <p>其中 G1…Gn 是分组属性（可以为空），Fi 是聚集函数。不分组时对整个关系做聚集（如求全部工资之和）；分组后每个组返回一行。课件给的例子：r 表 C 列四个值 7、7、3、10，sum(C) 得到 27；按系名分组求平均工资，每个系一行。聚集结果默认没有名字，可以用重命名（或在运算里直接用 as）命名，例如 <span class="inline-code">avg(salary) as avg_sal</span>。</p>
+
+    <h3>6.4 多集关系代数：向 SQL 语义靠拢</h3>
+    <p>纯关系代数基于集合、会去掉所有重复；但 SQL 保留重复（最初为效率，如今成为特性）。为此定义了<strong>多集（multiset）关系代数</strong>，重复元组按副本计数：</p>
+    <ul>
+      <li>选择：满足条件的元组保留与输入相同的副本数；</li>
+      <li>投影：每个输入元组对应一个输出元组，即使重复也保留；</li>
+      <li>笛卡尔积：r 中有 m 份 t1、s 中有 n 份 t2，结果就有 m×n 份；</li>
+      <li>并：m+n 份；交：min(m,n) 份；差：max(0, m−n) 份。</li>
+    </ul>
+    <p>课件还给出 SQL 与多集代数的对应：<span class="inline-code">select … from … where …</span> 等价于 <span class="inline-code">Π(σ(r1×r2×…))</span>；带 <span class="inline-code">group by</span> 的查询对应分组聚集运算，select 里的非聚集属性必须是 group by 属性的子集。这组对应关系把 SQL 彻底"翻译"成了代数。</p>
+  </section>
+
+  <!-- 第七节 -->
+  <section id="s7">
+    <div class="sec-head"><div class="sec-num">7</div><h2>空值与三值逻辑</h2></div>
+    <p><span class="inline-code">null</span> 表示<strong>值未知，或值不存在</strong>。它不是一个普通的"零"或"空字符串"，而是一个特殊标记，会让运算规则变得复杂。</p>
+
+    <h3>7.1 空值在运算中的规则</h3>
+    <ul>
+      <li>任何包含 null 的算术表达式，结果都是 null；</li>
+      <li>聚集函数（和 SQL 一样）直接忽略 null 值；</li>
+      <li>去重和分组时，null 被当作普通值，两个 null 视为相同（SQL 语义）。</li>
+    </ul>
+
+    <h3>7.2 为什么要引入 unknown：三值逻辑</h3>
+    <p>与 null 比较时，结果不是简单的真或假，而是第三个真值 <strong>unknown（未知）</strong>。课件解释了为什么必须这样：如果把 unknown 当成 false，那么 <span class="inline-code">not (A &lt; 5)</span> 就不再等价于 <span class="inline-code">A ≥ 5</span>，逻辑会自相矛盾。三值逻辑的运算规则如下：</p>
+    <div class="tbl-scroll">
+      <table>
+        <thead><tr><th>运算</th><th>规则</th></tr></thead>
+        <tbody>
+          <tr><td>OR</td><td>unknown OR true = true；unknown OR false = unknown；unknown OR unknown = unknown</td></tr>
+          <tr><td>AND</td><td>true AND unknown = unknown；false AND unknown = false；unknown AND unknown = unknown</td></tr>
+          <tr><td>NOT</td><td>not unknown = unknown</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>课件补充：SQL 里谓词 P 求值为 unknown 时，"P is unknown"为真；而<strong>选择谓词若求值为 unknown，结果按 false 处理</strong>——也就是含 null 的行不会被普通 where 条件选中，除非显式用 is null 判断。</p>
+    <div class="callout warning">
+      <svg class="ico" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#d9534f" stroke-width="2"><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/><path d="M12 9v4M12 17h.01"/></svg>
+      <div><div class="ct">易混点提醒</div><p>两个 null 用等号比较结果是 unknown，不是 true！所以判断空值必须写 <span class="inline-code">is null</span>，写 <span class="inline-code">= null</span> 永远选不出行。这是初学者最常踩的坑，也是查询结果莫名为空的常见原因。</p></div>
+    </div>
+  </section>
+
+  <!-- 第八节 -->
+  <section id="s8">
+    <div class="sec-head"><div class="sec-num">8</div><h2>数据库修改：删除、插入、更新</h2></div>
+    <p>关系代数不仅能查询，也能表达三类修改，它们都可以用赋值运算书写。</p>
+
+    <h3>8.1 删除</h3>
+    <p>删除请求的写法和查询类似，只是选中的元组不显示给用户，而是从数据库移除。注意<strong>只能删除整个元组，不能只删某几列上的值</strong>（那是更新）。关系代数表达为：</p>
+    <div class="formula">r ← r − E</div>
+    <p>课件的银行例子包括：删除 Perryridge 支行的全部账户；删除位于 Needham 各支行的全部账户（先连接找出相关账户，再从 account 和 depositor 中分别减去）；删除金额在 0 到 50 之间的贷款记录。</p>
+
+    <h3>8.2 插入</h3>
+    <p>插入有两种方式：直接指定一个元组，或写一个查询、把结果元组批量插入。关系代数表达为：</p>
+    <div class="formula">r ← r ∪ E</div>
+    <p>插入单个元组时，让 E 是含一个元组的常量关系。课件例子：记录 Smith 在 Perryridge 支行 A-973 账户有 1200 元（同时向 account 和 depositor 插入）；给 Perryridge 支行所有贷款客户赠送 200 元储蓄账户，用贷款号当账号——先选出贷款客户，再用投影批量生成新账户。</p>
+
+    <h3>8.3 更新</h3>
+    <p>更新在不改变整个元组的情况下修改其中某些值，用<strong>广义投影</strong>实现：没更新的属性取原属性，更新的属性写一个只含常量和原属性的表达式。课件例子：所有账户余额增加 5%（balance × 1.05）；余额超过 10000 的账户加 6%、其余加 5%，用两个选择分开处理再并起来。</p>
+    <div class="callout knowledge">
+      <svg class="ico" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#173b5e" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg>
+      <div><div class="ct">知识点说明</div><p>注意三类修改的代数形式有清晰的对应：删除是"减"，插入是"并"，更新是"广义投影覆盖"。它们都借助赋值 ← 完成，这也是为什么课件说所有修改都能用赋值运算表达。</p></div>
+    </div>
+  </section>
+
+  <!-- 第九节 -->
+  <section id="s9">
+    <div class="sec-head"><div class="sec-num">9</div><h2>元组关系演算</h2></div>
+    <p>关系代数是过程化的，你要一步步规定怎么取；元组关系演算反过来，是<strong>非过程化</strong>的，你只描述"想要的元组满足什么条件"。</p>
+
+    <h3>9.1 基本形式</h3>
+    <p>每个查询形如 <strong>{t | P(t)}</strong>，它是所有使谓词 P 为真的元组 t 的集合。几个记号约定：</p>
+    <ul>
+      <li>t 是元组变量，<strong>t[A]</strong> 表示元组 t 在属性 A 上的取值；</li>
+      <li><strong>t ∈ r</strong> 表示元组 t 属于关系 r；</li>
+      <li>P 是类似谓词演算的公式。</li>
+    </ul>
+
+    <h3>9.2 谓词公式的组成</h3>
+    <ul>
+      <li>属性和常量的集合；</li>
+      <li>比较运算符：&lt;、≤、=、≠、&gt;、≥；</li>
+      <li>连接词：and（∧）、or（∨）、not（¬）；</li>
+      <li>蕴含（⇒）：x ⇒ y 表示"若 x 为真则 y 为真"，等价于 ¬x ∨ y；</li>
+      <li>量词：
+        <ul>
+          <li><strong>存在量词 ∃</strong>：∃ t ∈ r (Q(t)) 表示关系 r 中存在一个使 Q 为真的元组；</li>
+          <li><strong>全称量词 ∀</strong>：∀ t ∈ r (Q(t)) 表示对 r 中所有元组，Q 都为真。</li>
+        </ul>
+      </li>
+    </ul>
+
+    <h3>9.3 例题：从简单到带量词</h3>
+    <p>找工资超过 80000 的教师（输出完整四列）：</p>
+    <div class="formula" style="font-size:15px">{t | t ∈ instructor ∧ t[salary] &gt; 80000}</div>
+    <p>同样的查询但只输出 ID 列，需要借助存在量词，并在模式 (ID) 上隐式定义一个关系：</p>
+    <div class="formula" style="font-size:15px">{t | ∃ s ∈ instructor (t[ID] = s[ID] ∧ s[salary] &gt; 80000)}</div>
+    <p>找所在系位于 Watson 楼的教师姓名，需要同时连接 instructor 和 department：</p>
+    <div class="formula" style="font-size:14.5px">{t | ∃ s ∈ instructor (t[name] = s[name] ∧ ∃ u ∈ department (u[dept_name] = s[dept_name] ∧ u[building] = "Watson"))}</div>
+    <p>课件还演示了学期组合查询：用 ∨ 表达"秋季或春季"，用 ∧ 表达"两个学期都有"，用 ¬∃ 表达"秋季有但春季没有"。</p>
+
+    <h3>9.4 表达式的安全性</h3>
+    <p>元组演算可能写出产生<strong>无限关系</strong>的表达式，比如 {t | ¬ t ∈ r}，如果某个属性的域是无限的，"不在 r 里的元组"就有无穷多个。为防止这种情况，只允许<strong>安全表达式</strong>：{t | P(t)} 中 t 的每个分量都必须出现在 P 所涉及的某个关系、元组或常量中。</p>
+    <div class="callout warning">
+      <svg class="ico" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#d9534f" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
+      <div><div class="ct">知识点说明</div><p>安全性不只是语法条件。课件举例：{t | t[A] = 5 ∨ true} 就不安全，因为 "∨ true" 让条件对任何元组都成立，定义了无限集合。判断时要看结果值是否都能在公式提到的有限数据里找到来源。</p></div>
+    </div>
+
+    <h3>9.5 全称量词例题</h3>
+    <p>找选了生物系全部课程的学生：</p>
+    <div class="formula" style="font-size:14px">{t | ∃ r ∈ student (t[ID] = r[ID]) ∧ (∀ u ∈ course (u[dept_name] = "Biology" ⇒ ∃ s ∈ takes (t[ID] = s[ID] ∧ s[course_id] = u[course_id])))}</div>
+    <p>课件特别提醒：如果不对 student 做存在量词限定，当生物系没开任何课时，这个查询会不安全。这也说明除运算和全称量词查询在语义上是对应的。</p>
+  </section>
+
+  <!-- 第十节 -->
+  <section id="s10">
+    <div class="sec-head"><div class="sec-num">10</div><h2>域关系演算</h2></div>
+    <p>元组演算的变量是整行元组，域关系演算的变量则是<strong>单个属性值（域变量）</strong>，它与元组演算表达能力等价，也是非过程化语言。</p>
+
+    <h3>10.1 基本形式</h3>
+    <div class="formula">{&lt; x1, x2, …, xn &gt; | P(x1, x2, …, xn)}</div>
+    <p>其中 x1…xn 是域变量，分别对应结果的各列；P 是类似谓词演算的公式。"<em>&lt; i, n, d, s &gt; ∈ instructor</em>"表示这四个域变量的取值组合构成 instructor 中的一行。</p>
+
+    <h3>10.2 例题</h3>
+    <p>找工资超过 80000 的教师（完整四列）：</p>
+    <div class="formula" style="font-size:15px">{&lt; i, n, d, s &gt; | &lt; i, n, d, s &gt; ∈ instructor ∧ s &gt; 80000}</div>
+    <p>只输出 ID：</p>
+    <div class="formula" style="font-size:15px">{&lt; i &gt; | &lt; i, n, d, s &gt; ∈ instructor ∧ s &gt; 80000}</div>
+    <p>找所在系在 Watson 楼的教师姓名，需要量词引入 department 的域变量：</p>
+    <div class="formula" style="font-size:14px">{&lt; n &gt; | ∃ i, d, s (&lt; i, n, d, s &gt; ∈ instructor ∧ ∃ b, a (&lt; d, b, a &gt; ∈ department ∧ b = "Watson"))}</div>
+    <p>学期组合查询同样用 ∨、∧ 连接，写法与元组演算平行，只是把元组变量拆成了逐个域变量。</p>
+
+    <h3>10.3 安全性与全称量词</h3>
+    <p>域演算的安全条件有三条：结果元组中的所有值都来自 dom(P)（出现在 P 或其涉及关系的元组中）；每个存在子公式 ∃x(P1(x)) 为真，当且仅当 dom(P1) 中存在使 P1 为真的值；每个全称子公式 ∀x(P1(x)) 为真，当且仅当 dom(P1) 中所有值都使 P1 为真。</p>
+    <p>找选了生物系全部课程的学生，域演算写法同样用 ∀ 加蕴含，并保留对 student 的存在限定；课件注明这一写法修正了原教材相应位置的一个查询缺陷。</p>
+    <div class="callout analogy">
+      <svg class="ico" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#c95a24" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+      <div><div class="ct">生活类比</div><p>元组演算像说"把符合条件的<em>整个人</em>给我"，域演算像说"我只要符合条件的<em>名字那一栏</em>"，并逐栏描述取值要求。后者变量更细、更接近 QBE（实例查询）这种按表格格子填写条件的查询方式。</p></div>
+    </div>
+  </section>
+
+  <!-- 小结 -->
+  <section id="sum">
+    <div class="sec-head"><div class="sec-num">11</div><h2>本章小结与自测</h2></div>
+    <div class="summary-box">
+      <h3 style="margin-top:0">把整单元串成一条线</h3>
+      <p>先认识关系的数学定义：关系是域笛卡尔积的子集，元组无序、属性要求原子；再用超键、候选键、主键、外键解决识别与引用问题。关系代数用六个基本运算（σ、Π、∪、–、×、ρ）层层组合表达查询，交集、连接、外连接、除、聚集都是它的简化或扩展；空值带来三值逻辑，修改靠减、并、广义投影。最后，元组演算和域演算用声明式方式描述同样的查询，并以安全性约束避免无限结果。</p>
+      <div class="oneline">一句话记忆：<b>关系代数告诉你"怎么算"，关系演算只说"要什么"，三种语言能力等价，而 SQL 就是建立在它们之上的工程实现。</b></div>
+    </div>
+
+    <h3>动手测一测</h3>
+    <div class="quiz" id="quiz1">
+      <div class="q">1. 在关系模式 R 中，关于候选键下列说法正确的是？</div>
+      <button class="opt" data-k="a">A. 候选键可以包含多余的属性，只要能唯一识别元组</button>
+      <button class="opt" data-k="b">B. 候选键是极小的超键，去掉任一属性后都不再能唯一识别</button>
+      <button class="opt" data-k="c">C. 一张关系表只能有一个候选键</button>
+      <button class="opt" data-k="d">D. 候选键必须由全部属性组成</button>
+      <div class="fb"></div>
+    </div>
+    <div class="quiz" id="quiz2">
+      <div class="q">2. 想表达"选了生物系全部课程的学生"，关系代数中最直接对应的运算是？</div>
+      <button class="opt" data-k="a">A. 自然连接</button>
+      <button class="opt" data-k="b">B. 投影</button>
+      <button class="opt" data-k="c">C. 除运算 ÷</button>
+      <button class="opt" data-k="d">D. 集合差</button>
+      <div class="fb"></div>
+    </div>
+    <div class="quiz" id="quiz3">
+      <div class="q">3. 下列关于空值 null 的说法，正确的是？</div>
+      <button class="opt" data-k="a">A. 两个 null 用等号比较结果为 true</button>
+      <button class="opt" data-k="b">B. 包含 null 的算术表达式结果为 null</button>
+      <button class="opt" data-k="c">C. 聚集函数会把 null 当作 0 参与计算</button>
+      <button class="opt" data-k="d">D. where 条件求值为 unknown 时按 true 处理</button>
+      <div class="fb"></div>
+    </div>
+
+    <details class="fold">
+      <summary>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#173b5e" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>
+        查看自测答案与解析
+        <svg class="arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#173b5e" stroke-width="2.4"><path d="M6 9l6 6 6-6"/></svg>
+      </summary>
+      <div class="fold-body">
+        <p><strong>第 1 题：B。</strong>候选键是极小超键；A 描述的是一般超键，C 错在候选键可以有多个，D 明显错误。</p>
+        <p><strong>第 2 题：C。</strong>"所有"语义正是除运算的标志，r ÷ s 得到与 s 中每个对象都有联系的主体。</p>
+        <p><strong>第 3 题：B。</strong>含 null 的算术结果为 null；等号比较两个 null 得 unknown，聚集函数忽略 null，unknown 在选择中按 false 处理。</p>
+      </div>
+    </details>
+  </section>
+  </div>
+</div>
+
+<button class="totop" id="totop" aria-label="回到顶部">
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4"><path d="M18 15l-6-6-6 6"/></svg>
+</button>
+<footer><div class="wrap">数据库系统学习资料（豆包版）· 第 02 单元 · 依据课程课件第 2、6 章整理，所有概念、符号与数值均来自课件原文</div></footer>
+
+<script>
+var sidebar=document.getElementById('sidebar'),overlay=document.getElementById('overlay');
+function closeSidebar(){sidebar.classList.remove('open');overlay.classList.remove('show')}
+document.getElementById('hamburger').onclick=function(){sidebar.classList.add('open');overlay.classList.add('show')};
+overlay.onclick=closeSidebar;
+document.querySelectorAll('#nav a').forEach(function(a){a.addEventListener('click',closeSidebar)});
+var links=document.querySelectorAll('#nav a'),secs=document.querySelectorAll('section');
+var obs=new IntersectionObserver(function(entries){
+  entries.forEach(function(e){if(e.isIntersecting){
+    links.forEach(function(l){l.classList.toggle('active',l.getAttribute('href')==='#'+e.target.id)})
+  }})
+},{rootMargin:'-20% 0px -70% 0px'});
+secs.forEach(function(s){obs.observe(s)});
+var totop=document.getElementById('totop');
+window.addEventListener('scroll',function(){totop.classList.toggle('show',window.scrollY>500)});
+totop.onclick=function(){window.scrollTo({top:0,behavior:'smooth'})};
+function makeStepper(id,steps){
+  var box=document.getElementById(id),idx=0;
+  var body=box.querySelector('.sb-body'),dots=box.querySelector('.sb-dots');
+  var prev=box.querySelector('.btn-prev'),next=box.querySelector('.btn-next'),prog=box.querySelector('.sb-progress');
+  var dotEls=[];
+  steps.forEach(function(_,i){
+    var d=document.createElement('div');d.className='dot';d.textContent=i+1;
+    d.onclick=function(){idx=i;render()};
+    dots.insertBefore(d,prev.parentNode);dotEls.push(d);
+  });
+  function render(){
+    body.innerHTML=steps[idx].html;
+    dotEls.forEach(function(d,i){d.classList.toggle('on',i===idx)});
+    prev.disabled=idx===0;next.disabled=idx===steps.length-1;
+    prog.textContent='第 '+(idx+1)+' / '+steps.length+' 步';
+  }
+  prev.onclick=function(){if(idx>0){idx--;render()}};
+  next.onclick=function(){if(idx<steps.length-1){idx++;render()}};
+  render();
+}
+function makeQuiz(id,answer,explain){
+  var box=document.getElementById(id);
+  box.querySelectorAll('.opt').forEach(function(btn){
+    btn.onclick=function(){
+      if(box.dataset.done)return;
+      box.dataset.done='1';
+      var pick=btn.dataset.k;
+      box.querySelectorAll('.opt').forEach(function(b){
+        if(b.dataset.k===answer)b.classList.add('right');
+      });
+      if(pick!==answer)btn.classList.add('wrong');
+      var fb=box.querySelector('.fb');fb.classList.add('show');
+      fb.innerHTML=(pick===answer?'<span style="color:#2e7d5b;font-weight:700">回答正确。</span> ':'<span style="color:#d9534f;font-weight:700">回答有误。</span> ')+explain;
+    }
+  });
+}
+makeQuiz('quiz1','b','候选键的核心是"极小"：它首先是超键，但删去任何一个属性都会失去唯一识别能力。');
+makeQuiz('quiz2','c','除运算专门表达"与集合中每个元素都有联系"的查询，对应全称量词语义。');
+makeQuiz('quiz3','b','null 参与算术结果为 null；其余选项分别违反了 unknown 比较、聚集忽略 null 和选择按 false 处理的规则。');
+</script>
+</body>
+</html>
